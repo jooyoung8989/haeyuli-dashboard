@@ -92,6 +92,8 @@ body.nofuri .ww .wl i{display:none;}
   pointer-events:none;
 }
 .brand{display:flex;align-items:center;gap:.55vh;min-width:0;position:relative;z-index:1;}
+.brand .flag{flex:0 0 auto;display:block;width:3.1vh;height:2.1vh;border-radius:.35vh;overflow:hidden;box-shadow:0 .15vh .4vh rgba(0,0,0,.35),inset 0 0 0 .12vh rgba(255,255,255,.25);}
+.brand .flag svg{width:100%;height:100%;display:block;}
 .brand .btxt{display:flex;flex-direction:column;line-height:1.12;min-width:0;}
 .brand b{font-size:1.92vh;font-weight:900;color:#fffdfb;letter-spacing:-.02em;white-space:nowrap;}
 .brand span.sub{font-size:1.0vh;font-weight:800;color:#9aa2cb;white-space:nowrap;margin-top:.25vh;letter-spacing:.02em;}
@@ -680,6 +682,7 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
   body.view-topics .left{display:flex;}
   .rptabs{display:none;}
   .mobiletabs{display:flex;}
+  .toast{bottom:12vh;max-width:86vw;}
   .left{overflow-y:auto;overflow-x:hidden;padding:.8vh;}
   .left::-webkit-scrollbar{width:.4vh;}
   .left::-webkit-scrollbar-thumb{background:#ddd6e4;border-radius:999px;}
@@ -745,7 +748,8 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
   <!-- ================= 상단 바 ================= -->
   <header class="topbar">
     <div class="brand">
-      <span class="btxt"><b>🇯🇵 아빠 일본어 대화 보드</b><span class="sub">アニメで学ぶ日本語 · 하루 한마디</span></span>
+      <span class="flag" aria-hidden="true"><svg viewBox="0 0 30 20"><rect width="30" height="20" rx="3" fill="#fffdfb"/><circle cx="15" cy="10" r="5.8" fill="#cf3350"/></svg></span>
+      <span class="btxt"><b>아빠 일본어 대화 보드</b><span class="sub">アニメで学ぶ日本語 · 하루 한마디</span></span>
     </div>
 
     <button class="pill fire" id="learnPill" type="button" title="오늘 배운 일본어 문장 보기">
