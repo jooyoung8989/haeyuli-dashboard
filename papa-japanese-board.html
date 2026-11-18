@@ -995,7 +995,8 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
         <datalist id="modelList">
           <option value="gpt-4o-mini"></option>
           <option value="gpt-4.1-mini"></option>
-          <option value="gemini-2.5-flash"></option>
+          <option value="gemini-3.8-flash"></option>
+          <option value="gemini-3.6-flash"></option>
         </datalist>
       </label>
       <p class="hintline" id="engineInfo">지금은 내장 선생님이 대화해요.</p>
@@ -1055,7 +1056,8 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
    0. 저장 키 & 도우미
    ========================================================= */
 var STORE_KEY = "papa.jpn.v1";
-var GEMINI_DEFAULT = "gemini-2.5-flash";   // gemini-2.0-flash는 2026-06-01 종료(404) — 지금 쓰는 기본 모델
+var GEMINI_DEFAULT = "gemini-3.8-flash";   // gemini-2.0-flash(2026-06-01 종료)·2.5-flash(2026-12-01 종료 예정) 대신 쓰는 현재 GA 모델
+var GEMINI_FALLBACKS = ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash"];
 var $ = function(id){ return document.getElementById(id); };
 function pad2(n){ return n < 10 ? "0" + n : "" + n; }
 function dateKey(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate()); }
@@ -2353,36 +2355,33 @@ function aiJSON(sys, user, maxTok){
       return (c && c.message && c.message.content) || "";
     });
   } else if (provider === "gemini"){
-    /* 2.5-flash는 사고(thinking) 토큰이 응답 분량을 잡아먹지 않도록 끈다 */
-    var geminiBody = function(mdl){
-      var gen = { temperature:0.7, maxOutputTokens:maxTok || 500, responseMimeType:"application/json" };
-      if (/^gemini-2\.5-flash/i.test(mdl)) gen.thinkingConfig = { thinkingBudget: 0 };
-      return JSON.stringify({
-        systemInstruction:{ parts:[{ text:sys }] },
-        contents:[{ role:"user", parts:[{ text:user }] }],
-        generationConfig: gen
-      });
-    };
-    /* AQ. 형식의 새 키도 동작하도록 ?key= 대신 x-goog-api-key 헤더로 보낸다 */
+    /* 모델은 되는 것부터 차례로 시도한다 — 종료된 모델은 404/400, 접근 제한은 403으로 돌아온다 */
+    var chain = [];
+    if (model) chain.push(model);
+    GEMINI_FALLBACKS.forEach(function(mm){ if (chain.indexOf(mm) < 0) chain.push(mm); });
     var callGemini = function(mdl){
       var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(mdl) + ":generateContent";
       return fetchJSON(url, {
         method:"POST",
-        headers:{ "Content-Type":"application/json", "x-goog-api-key":state.ai.key },
-        body: geminiBody(mdl)
+        headers:{ "Content-Type":"application/json", "x-goog-api-key":state.ai.key },   // AQ. 형식의 새 키도 이 헤더로 동작
+        body: JSON.stringify({
+          systemInstruction:{ parts:[{ text:sys }] },
+          contents:[{ role:"user", parts:[{ text:user }] }],
+          generationConfig:{ temperature:0.7, maxOutputTokens:(maxTok || 500) + 400, responseMimeType:"application/json" }
+        })
       }, 12000);
     };
-    p = callGemini(model).then(function(res){
-      if (res.ok && res.body) return res;
-      if (res.status === 404 && model !== GEMINI_DEFAULT){
-        return callGemini(GEMINI_DEFAULT).then(function(r2){
-          if (r2.ok && r2.body){ state.ai.model = GEMINI_DEFAULT; try { save(); } catch(e){} }   // 다음부터는 처음부터 새 모델로
-          return r2;
-        });
-      }
-      return res;
-    }).then(function(res){
+    var usedModel = "";
+    var tryAt = function(i){
+      return callGemini(chain[i]).then(function(res){
+        if (res.ok && res.body){ usedModel = chain[i]; return res; }
+        if ((res.status === 400 || res.status === 403 || res.status === 404) && i + 1 < chain.length) return tryAt(i + 1);
+        return res;
+      });
+    };
+    p = tryAt(0).then(function(res){
       if (!res.ok || !res.body){ aiLastErr = "Gemini " + (res.status || "연결 실패"); throw new Error("gemini " + res.status); }
+      if (usedModel && usedModel !== state.ai.model){ state.ai.model = usedModel; try { save(); } catch(e){} }   // 다음부터는 성공한 모델로 바로
       var cand = res.body.candidates && res.body.candidates[0];
       var parts = (cand && cand.content && cand.content.parts) || [];
       return parts.map(function(x){ return x.text || ""; }).join("");
