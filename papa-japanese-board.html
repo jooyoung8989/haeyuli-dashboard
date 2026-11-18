@@ -2541,7 +2541,7 @@ function updateEngineInfo(){
   if (provider === "none"){
     el.engineInfo.innerHTML = "지금은 <b>내장 선생님</b>이 대화해요 · 한국어→일본어 코칭 패턴 <b>" + PATTERN_COUNT + "개</b> · 인터넷 없이도 100% 동작해요.";
   } else {
-    el.engineInfo.innerHTML = (provider === "gemini" ? "Gemini" : "OpenAI") + "를 연결하면 한국어 설명을 AI가 더 자세히 만들어 줘요. 연결이 안 되면 내장 선생님이 대신해요.";
+    el.engineInfo.innerHTML = (provider === "gemini" ? "Gemini" : "OpenAI") + "를 연결하면 한국어 설명은 물론, **일본어로 말해도 AI가 반응하고 꼬리질문으로 대화를 이어 가요**. 연결이 안 되면 내장 선생님이 대신해요.";
   }
   el.aiModel.placeholder = provider === "gemini" ? GEMINI_DEFAULT : (provider === "openai" ? "gpt-4o-mini" : "기본 모델을 써도 좋아요");
 }
