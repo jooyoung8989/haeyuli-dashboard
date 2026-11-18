@@ -995,7 +995,6 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
         <datalist id="modelList">
           <option value="gpt-4o-mini"></option>
           <option value="gpt-4.1-mini"></option>
-          <option value="gemini-2.0-flash"></option>
           <option value="gemini-2.5-flash"></option>
         </datalist>
       </label>
@@ -1056,6 +1055,7 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
    0. 저장 키 & 도우미
    ========================================================= */
 var STORE_KEY = "papa.jpn.v1";
+var GEMINI_DEFAULT = "gemini-2.5-flash";   // gemini-2.0-flash는 2026-06-01 종료(404) — 지금 쓰는 기본 모델
 var $ = function(id){ return document.getElementById(id); };
 function pad2(n){ return n < 10 ? "0" + n : "" + n; }
 function dateKey(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate()); }
@@ -1889,6 +1889,8 @@ function loadState(){
   return d;
 }
 var state = loadState();
+/* 저장된 구모델 gemini-2.0-flash는 종료됐으므로 새 기본 모델로 올린다 */
+if (/^gemini-2\.0-flash/i.test(String((state.ai && state.ai.model) || ""))) state.ai.model = GEMINI_DEFAULT;
 var TODAY = dateKey();
 var cur = { type:"topic", id:state.topic, step:0, steps:(SCEN[state.topic] || SCEN.anime).steps };
 var LOG = [], lastCoach = null, hintOpen = false, curSay = { jp:"", ko:"" };
@@ -2216,21 +2218,24 @@ function handleUser(text, source){
   save();
 }
 function respondJapanese(t){
+  var prev = stepText(currentStep());   // 방금 선생님이 물어본 질문
+  var wrap = cur.step + 1 >= cur.steps.length;
+  cur.step = wrap ? 0 : cur.step + 1;
+  var step = stepText(currentStep());
+  if (aiOn()) aiTikiTaka(t, prev, step, wrap);   // AI가 있으면 진짜 티키타카
+  else builtinJapanese(t, prev, step, wrap);     // 없거나 실패하면 내장 선생님
+  touchStreak();
+  save();
+}
+function builtinJapanese(t, prev, step, wrap){
   var n = plain(t).length;
   var praise = n >= 18 ? "すごい！{自然|しぜん}な{日本語|にほんご}ですね！"
              : (n >= 8 ? "いいですね！じょうずです！" : "いい{一言|ひとこと}ですね！");
-  var stepNow = currentStep();
-  var wrap = cur.step + 1 >= cur.steps.length;
-  var next = wrap ? 0 : cur.step + 1;
-  cur.step = next;
-  var step = stepText(currentStep());
-  var lead = (stepNow && stepNow.react) ? stepNow.react + " " : "";
+  var lead = (prev && prev.react) ? prev.react + " " : "";
   var line = praise + " " + lead + (wrap ? "このテーマはひと{通|とお}りです！🎉 " : "") + step.jp;
   say(line, step.ko, { log:true, speak:true });
   renderHints();
   if (wrap) addLog("sys", "🎉 이 주제 대화를 한 바퀴 다 돌았어요! 이어서 또 해 볼 수 있어요.");
-  touchStreak();
-  save();
 }
 function respondKorean(t){
   var r = coach(t);
@@ -2292,9 +2297,14 @@ function confetti(){
    12. AI 선생님 (선택 연결 · 실패하면 내장 엔진)
    ========================================================= */
 function aiOn(){ return state.ai.provider !== "none" && !!state.ai.key; }
+var aiLastErr = "";
+function aiErrNote(){ return aiLastErr ? " (" + aiLastErr + ")" : ""; }
 function aiModelName(){
-  if (state.ai.model && state.ai.model.trim()) return state.ai.model.trim();
-  return state.ai.provider === "gemini" ? "gemini-2.0-flash" : "gpt-4o-mini";
+  var m = String(state.ai.model || "").trim();
+  /* Gemini는 구모델(2.0-flash)이 종료됐으니 자동으로 새 기본 모델을 쓴다 */
+  if (state.ai.provider === "gemini" && (!m || /^gemini-2\.0-flash/i.test(m))) return GEMINI_DEFAULT;
+  if (m) return m;
+  return "gpt-4o-mini";
 }
 function fetchJSON(url, opts, ms){
   return new Promise(function(resolve, reject){
@@ -2324,6 +2334,165 @@ function parseAI(raw){
   return { say:String(o.say || ("「" + jp + "」と{言|い}ってみましょう。")), jp:String(jp), pr:String(o.pr || ""),
            ko:String(o.ko || ""), coach:String(o.coach || ""), words:words };
 }
+/* --- AI 호출 공통 통로 (OpenAI / Gemini) --- */
+function aiJSON(sys, user, maxTok){
+  var provider = state.ai.provider, model = aiModelName(), p;
+  aiLastErr = "";
+  if (provider === "openai"){
+    p = fetchJSON("https://api.openai.com/v1/chat/completions", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "Authorization":"Bearer " + state.ai.key },
+      body: JSON.stringify({
+        model:model, temperature:0.7, max_tokens:maxTok || 500,
+        response_format:{ type:"json_object" },
+        messages:[{ role:"system", content:sys }, { role:"user", content:user }]
+      })
+    }, 12000).then(function(res){
+      if (!res.ok || !res.body){ aiLastErr = "OpenAI " + res.status; throw new Error("openai " + res.status); }
+      var c = res.body.choices && res.body.choices[0];
+      return (c && c.message && c.message.content) || "";
+    });
+  } else if (provider === "gemini"){
+    /* 2.5-flash는 사고(thinking) 토큰이 응답 분량을 잡아먹지 않도록 끈다 */
+    var geminiBody = function(mdl){
+      var gen = { temperature:0.7, maxOutputTokens:maxTok || 500, responseMimeType:"application/json" };
+      if (/^gemini-2\.5-flash/i.test(mdl)) gen.thinkingConfig = { thinkingBudget: 0 };
+      return JSON.stringify({
+        systemInstruction:{ parts:[{ text:sys }] },
+        contents:[{ role:"user", parts:[{ text:user }] }],
+        generationConfig: gen
+      });
+    };
+    /* AQ. 형식의 새 키도 동작하도록 ?key= 대신 x-goog-api-key 헤더로 보낸다 */
+    var callGemini = function(mdl){
+      var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(mdl) + ":generateContent";
+      return fetchJSON(url, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json", "x-goog-api-key":state.ai.key },
+        body: geminiBody(mdl)
+      }, 12000);
+    };
+    p = callGemini(model).then(function(res){
+      if (res.ok && res.body) return res;
+      if (res.status === 404 && model !== GEMINI_DEFAULT){
+        return callGemini(GEMINI_DEFAULT).then(function(r2){
+          if (r2.ok && r2.body){ state.ai.model = GEMINI_DEFAULT; try { save(); } catch(e){} }   // 다음부터는 처음부터 새 모델로
+          return r2;
+        });
+      }
+      return res;
+    }).then(function(res){
+      if (!res.ok || !res.body){ aiLastErr = "Gemini " + (res.status || "연결 실패"); throw new Error("gemini " + res.status); }
+      var cand = res.body.candidates && res.body.candidates[0];
+      var parts = (cand && cand.content && cand.content.parts) || [];
+      return parts.map(function(x){ return x.text || ""; }).join("");
+    });
+  } else {
+    return Promise.resolve("");
+  }
+  return p.catch(function(e){ try { console.warn("AI 연결 실패:", e && e.message); } catch(e2){} aiLastErr = aiLastErr || "연결 실패"; return ""; });
+}
+function looseJSON(raw){
+  if (!raw) return null;
+  var s = String(raw).trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  var o = null;
+  try { o = JSON.parse(s); } catch(e){
+    var m = s.match(/\{[\s\S]*\}/);
+    if (m){ try { o = JSON.parse(m[0]); } catch(e2){ o = null; } }
+  }
+  return (o && typeof o === "object") ? o : null;
+}
+function pickStr(o, keys){
+  for (var i = 0; i < keys.length; i++){
+    var v = o[keys[i]];
+    if (v != null && String(v).trim()) return String(v).trim();
+  }
+  return "";
+}
+/* 漢字(かんじ)·漢字[かんじ] 같은 표기를 {漢字|かんじ}로 바꿔 후리가나가 뜨게 한다 */
+function cleanJP(s){
+  var t = String(s == null ? "" : s).trim().replace(/^["']+|["']+$/g, "");
+  t = t.replace(/([\u4E00-\u9FFF\u3005]+)\s*[（(\[]\s*([\u3041-\u309F\u30A1-\u30FFー]+)\s*[)）\]]/g, "{$1|$2}");
+  t = t.replace(/\{\s*([^{}|]+?)\s*\|\s*([^{}]+?)\s*\}/g, "{$1|$2}");
+  return t.replace(/\s+/g, " ").trim();
+}
+function parseChat(raw){
+  var o = looseJSON(raw);
+  if (!o) return null;
+  var react = cleanJP(pickStr(o, ["react", "reaction", "reply"]));
+  var q = cleanJP(pickStr(o, ["question", "followup", "follow_up", "followup_question", "q"]));
+  if (!react && !q) react = cleanJP(pickStr(o, ["say", "text", "japanese"]));
+  if (!react && !q) return null;
+  if (!q){ q = react; react = ""; }
+  var rKo = pickStr(o, ["react_ko", "reactKo", "reaction_ko"]);
+  var qKo = pickStr(o, ["question_ko", "questionKo", "q_ko", "followup_ko"]);
+  var ko = (rKo && qKo) ? rKo + " " + qKo : (qKo || rKo || pickStr(o, ["ko", "meaning", "korean"]));
+  var words = Array.isArray(o.words) ? o.words.filter(function(x){ return x && (x.jp || x.japanese); }).slice(0, 3).map(function(x){
+    return { jp:cleanJP(String(x.jp || x.japanese)), ko:String(x.ko || ""), emoji:"💬" };
+  }) : [];
+  return { jp:(react ? react + " " : "") + q, ko:ko.trim(), react:react, reactKo:rKo, q:q, qKo:qKo,
+           hint:pickStr(o, ["hint", "tip", "coach"]), words:words };
+}
+/* 최근 대화(로그) 6~10턴을 맥락으로 만든다 */
+function dialogTail(n){
+  var rows = LOG.filter(function(m){ return m.who === "me" || m.who === "teacher"; });
+  if (rows.length && rows[rows.length - 1].who === "me") rows = rows.slice(0, -1);   // 방금 한 말은 따로 전달
+  return rows.slice(-(n || 8)).map(function(m){
+    return (m.who === "me" ? "Juyeong" : "Teacher") + ": " + plain(m.jp);
+  }).join("\n");
+}
+function interestLine(){
+  var top = rankedInterests().slice(0, 3).map(function(x){
+    return x.it.name + "(" + ((x.it.jp && x.it.jp[0]) || x.it.name) + ")";
+  });
+  return top.length ? top.join(", ") : "not known yet";
+}
+/* 일본어 티키타카: 반응 + 꼬리질문 1개 */
+function askAIChat(t, prev){
+  var pack = packOf(cur.type, cur.id);
+  var levelGuide = state.level <= 1 ? "Lv.1 - one short phrase only, very easy words, plain form is fine"
+    : (state.level === 2 ? "Lv.2 - one short polite です・ます sentence, easy words"
+    : "Lv.3 - natural everyday Japanese between friends; polite です・ます by default");
+  var sys = "You are a warm Japanese conversation partner for Juyeong, a Korean man in his late 30s who loves Japanese anime. "
+    + "He is talking WITH you in Japanese as a beginner (around JLPT N5). Keep a real back-and-forth: "
+    + "(1) react to what he actually said in one short, natural Japanese sentence - never a generic praise filled with flattery, "
+    + "(2) then ask exactly ONE easy follow-up question that grows out of HIS words so the talk keeps going. "
+    + "Difficulty " + levelGuide + ". "
+    + "Politeness: answer in polite です・ます (존댓말) by default; if he speaks casual (반말: だ・だよ・じゃん), you may answer casually at Lv.3 and say so in hint. "
+    + "His interests so far: " + interestLine() + " - use them naturally when they fit, never force them. "
+    + "Write EVERY kanji with furigana in the form {漢字|かんじ}; never leave kanji without furigana. "
+    + "Return ONLY minified JSON with keys: react (Japanese reaction, max 24 chars), react_ko (its Korean meaning), "
+    + "question (the ONE Japanese follow-up question), question_ko (its Korean meaning), "
+    + "hint (one short Korean tip about 반말/존댓말 or a useful word), words (2-3 items of {jp, ko}). No markdown, no extra text.";
+  var user = "Topic: " + (pack ? pack.name + " (" + pack.ja + ")" : "free talk") + "\n"
+    + "Level: " + state.level + "/3\n"
+    + "The teacher's last question was: " + (prev ? plain(prev.jp) : "-") + "\n"
+    + "Recent conversation:\n" + (dialogTail(8) || "(just started)") + "\n"
+    + "Juyeong just said in Japanese: 「" + plain(t) + "」";
+  return aiJSON(sys, user, 420).then(parseChat);
+}
+var aiSeq = 0;
+function aiTikiTaka(t, prev, step, wrap){
+  var seq = ++aiSeq;
+  el.aiBadge.hidden = false;
+  el.aiBadge.textContent = "🤖 생각 중…";
+  askAIChat(t, prev).then(function(r){
+    if (seq !== aiSeq) return;                        // 더 새로운 말이 있으면 이 응답은 버린다
+    if (!r){
+      el.aiBadge.textContent = "🤖 AI";
+      el.aiBadge.hidden = true;
+      builtinJapanese(t, prev, step, wrap);           // 실패하면 내장 선생님으로 부드럽게
+      toast("AI 연결이 안 돼서 내장 선생님이 대답했어요" + aiErrNote() + ". 그대로 이어서 해도 좋아요 🙂");
+      return;
+    }
+    el.aiBadge.textContent = "🤖 AI";
+    say(r.jp, r.ko, { log:true, ai:true, speak:true });
+    renderHints();
+    if (r.hint) toast("💡 " + r.hint);
+    if (wrap) addLog("sys", "🎉 이 주제 대화를 한 바퀴 다 돌았어요! 이어서 또 해 볼 수 있어요.");
+    save();
+  });
+}
 function askAI(text){
   var pack = packOf(cur.type, cur.id);
   var step = stepText(currentStep());
@@ -2338,41 +2507,7 @@ function askAI(text){
     + "words (2-3 items of {jp, ko}). No markdown, no extra text.";
   var user = "Topic: " + (pack ? pack.name : "free talk") + "\nTeacher's question: " + (step ? plain(step.jp) : "")
     + "\nHe said in Korean: " + text;
-  var provider = state.ai.provider, model = aiModelName(), p;
-  if (provider === "openai"){
-    p = fetchJSON("https://api.openai.com/v1/chat/completions", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json", "Authorization":"Bearer " + state.ai.key },
-      body: JSON.stringify({
-        model:model, temperature:0.6, max_tokens:500,
-        response_format:{ type:"json_object" },
-        messages:[{ role:"system", content:sys }, { role:"user", content:user }]
-      })
-    }, 12000).then(function(res){
-      if (!res.ok || !res.body) throw new Error("openai " + res.status);
-      var c = res.body.choices && res.body.choices[0];
-      return parseAI(c && c.message && c.message.content);
-    });
-  } else if (provider === "gemini"){
-    var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model)
-      + ":generateContent?key=" + encodeURIComponent(state.ai.key);
-    p = fetchJSON(url, {
-      method:"POST", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({
-        systemInstruction:{ parts:[{ text:sys }] },
-        contents:[{ role:"user", parts:[{ text:user }] }],
-        generationConfig:{ temperature:0.6, maxOutputTokens:500, responseMimeType:"application/json" }
-      })
-    }, 12000).then(function(res){
-      if (!res.ok || !res.body) throw new Error("gemini " + res.status);
-      var cand = res.body.candidates && res.body.candidates[0];
-      var parts = (cand && cand.content && cand.content.parts) || [];
-      return parseAI(parts.map(function(x){ return x.text || ""; }).join(""));
-    });
-  } else {
-    return Promise.resolve(null);
-  }
-  return p.catch(function(e){ try { console.warn("AI 연결 실패:", e && e.message); } catch(e2){} return null; });
+  return aiJSON(sys, user, 500).then(parseAI);
 }
 function enhanceWithAI(text){
   el.aiBadge.hidden = false;
@@ -2381,7 +2516,7 @@ function enhanceWithAI(text){
     if (!r){
       el.aiBadge.textContent = "🤖 AI";
       el.aiBadge.hidden = true;
-      toast("AI 연결이 안 돼서 내장 선생님이 대답했어요. 그대로 공부해도 좋아요 🙂");
+      toast("AI 연결이 안 돼서 내장 선생님이 대답했어요" + aiErrNote() + ". 그대로 공부해도 좋아요 🙂");
       return;
     }
     el.aiBadge.textContent = "🤖 AI";
@@ -2409,7 +2544,7 @@ function updateEngineInfo(){
   } else {
     el.engineInfo.innerHTML = (provider === "gemini" ? "Gemini" : "OpenAI") + "를 연결하면 한국어 설명을 AI가 더 자세히 만들어 줘요. 연결이 안 되면 내장 선생님이 대신해요.";
   }
-  el.aiModel.placeholder = provider === "gemini" ? "gemini-2.0-flash" : (provider === "openai" ? "gpt-4o-mini" : "기본 모델을 써도 좋아요");
+  el.aiModel.placeholder = provider === "gemini" ? GEMINI_DEFAULT : (provider === "openai" ? "gpt-4o-mini" : "기본 모델을 써도 좋아요");
 }
 function openSettings(){
   el.aiProvider.value = state.ai.provider;
@@ -2425,7 +2560,9 @@ function saveSettings(){
     toast("API 키를 넣어 주세요. 내장 선생님만 쓸 때는 '내장 선생님만 쓰기'를 골라 주세요.");
     el.aiKey.focus(); return;
   }
-  state.ai = { provider:provider, key:(provider === "none" ? "" : key), model:el.aiModel.value.trim() };
+  var model = el.aiModel.value.trim();
+  if (/^gemini-2\.0-flash/i.test(model)) model = GEMINI_DEFAULT;   // 종료된 구모델은 자동 대체
+  state.ai = { provider:provider, key:(provider === "none" ? "" : key), model:model };
   state.settings.dashUrl = el.dashUrl.value.trim() || "./index.html";
   save(); updateDashLink(); closeModal("settingsModal"); updateEngineInfo();
   toast(provider === "none" ? "내장 선생님으로 대화할게요!" : "AI 선생님을 연결했어요! 🤖");
