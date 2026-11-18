@@ -853,7 +853,8 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
 }
 /* ---------- 🔒 체험판 안내 ---------- */
 .trialnote{margin:10px 0 0;padding:11px 12px;border-radius:12px;background:linear-gradient(160deg,#fdf7e6,#fffdf6);border:1px solid #e8d59a;font-size:11px;line-height:1.6;font-weight:700;color:#6b5310;letter-spacing:-.01em}
-.trialnote b{display:block;font-size:10.5px;font-weight:900;color:#7a5a08;margin-bottom:3px}
+.trialnote>b:first-child{display:block;font-size:10.5px;font-weight:900;color:#7a5a08;margin-bottom:3px}
+.trialnote b{font-weight:900;color:#7a5a08}
 </style>
 </head>
 <body>
@@ -2152,6 +2153,7 @@ function renderCats(){
   var h = '<button type="button" class="cat'+(state.qCat==="all"?" on":"")+'" data-cat="all">전체 '+QUESTIONS.length+'</button>';
   QCATS.forEach(function(c){
     var n = QUESTIONS.filter(function(q){ return q.cat===c.id; }).length;
+    if (!n) return;   /* 문항이 없는 분류(체험판)는 숨김 */
     h += '<button type="button" class="cat'+(state.qCat===c.id?" on":"")+'" data-cat="'+c.id+'">'+esc(c.name)+' '+n+'</button>';
   });
   $("qCats").innerHTML = h;

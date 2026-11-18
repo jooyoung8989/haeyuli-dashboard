@@ -3523,6 +3523,7 @@ function renderCats(){
   var h = '<button type="button" class="cat'+(state.qCat==="all"?" on":"")+'" data-cat="all">전체 '+QUESTIONS.length+'</button>';
   QCATS.forEach(function(c){
     var n = QUESTIONS.filter(function(q){ return q.cat===c.id; }).length;
+    if (!n) return;   /* 문항이 없는 분류(체험판)는 숨김 */
     h += '<button type="button" class="cat'+(state.qCat===c.id?" on":"")+'" data-cat="'+c.id+'">'+esc(c.name)+' '+n+'</button>';
   });
   $("qCats").innerHTML = h;
