@@ -105,7 +105,8 @@ body.nofuri .ww .wl i{display:none;}
   font-size:1.3vh;font-weight:900;white-space:nowrap;
 }
 .pill b{font-size:1.6vh;font-weight:900;}
-.pill .lbl{font-size:1.15vh;font-weight:800;opacity:.85;}
+.pill .lbl{font-size:1.12vh;font-weight:800;opacity:.85;}
+.pill .unit{font-size:1.12vh;font-weight:800;opacity:.9;}
 .pill.fire{background:linear-gradient(135deg,rgba(247,166,189,.24),rgba(247,166,189,.09));color:#ffd9e3;box-shadow:inset 0 0 0 .16vh rgba(247,166,189,.42);}
 .pill.fire b{color:#fff;}
 .pill.fire:active{transform:scale(.97);}
@@ -471,7 +472,9 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
   box-shadow:inset 0 0 0 .18vh #f0d6e2, 0 .35vh .9vh rgba(180,110,150,.10);
   animation:lin .25s ease both;
 }
-.sc-top{display:flex;align-items:center;gap:.3vh;font-size:1vh;font-weight:900;color:#a8607f;letter-spacing:-.02em;}
+.sc-top .mini-flag{display:block;width:1.9vh;height:1.3vh;border-radius:.22vh;overflow:hidden;box-shadow:0 0 0 .1vh #f0d6e2;}
+.sc-top .mini-flag svg{width:100%;height:100%;display:block;}
+.sc-top{display:flex;align-items:center;gap:.35vh;font-size:1vh;font-weight:900;color:#a8607f;letter-spacing:-.02em;}
 .sc-jp{
   margin-top:.28vh;
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans CJK JP","Apple SD Gothic Neo",sans-serif;
@@ -573,7 +576,7 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
 
 /* ================= toast ================= */
 .toast{
-  position:fixed;left:50%;bottom:3.2vh;transform:translateX(-50%) translateY(1vh);
+  position:fixed;left:50%;bottom:16.6vh;transform:translateX(-50%) translateY(1vh);
   z-index:90;max-width:76vw;
   background:#1d2344;color:#fff;border-radius:999px;
   padding:.95vh 1.7vh;font-size:1.28vh;font-weight:900;
@@ -647,6 +650,12 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
   .helpboard{grid-area:panel;}
   body.rp-topics .left{display:flex;}
   body.rp-topics .helpboard{display:none;}
+  .mic{height:5.1vh;min-height:36px;font-size:1.3vh;}
+  #answerInput{height:4.5vh;min-height:32px;}
+  .btool{min-height:28px;}
+  .hint{min-height:28px;}
+  .ww{min-height:38px;}
+  .ww .wk{width:22px;height:22px;}
   .topic .tem{font-size:2.7vh;}
   .topic .tnm{font-size:1.3vh;}
   .left::-webkit-scrollbar{width:.45vh;}
@@ -682,7 +691,7 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
   body.view-topics .left{display:flex;}
   .rptabs{display:none;}
   .mobiletabs{display:flex;}
-  .toast{bottom:12vh;max-width:86vw;}
+  .toast{bottom:24vh;max-width:86vw;}
   .left{overflow-y:auto;overflow-x:hidden;padding:.8vh;}
   .left::-webkit-scrollbar{width:.4vh;}
   .left::-webkit-scrollbar-thumb{background:#ddd6e4;border-radius:999px;}
@@ -753,10 +762,10 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
     </div>
 
     <button class="pill fire" id="learnPill" type="button" title="오늘 배운 일본어 문장 보기">
-      <span>🔥</span><b id="todayNum">0</b><span class="lbl">문장 학습</span>
+      <span>🔥</span><span class="lbl">오늘 학습</span><b id="todayNum">0</b><span class="unit">문장</span>
     </button>
     <div class="pill streak" id="streakPill" type="button" title="연속으로 학습한 날">
-      <span>📅</span><b id="streakNum">0</b><span class="lbl">일 연속</span>
+      <span>📅</span><span class="lbl">연속 학습</span><b id="streakNum">0</b><span class="unit">일</span>
     </div>
 
     <div class="controls">
@@ -937,7 +946,7 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
       <div class="coach" id="coach" hidden>
         <div class="coach-ko" id="coachKo"></div>
         <div class="sentence-card">
-          <div class="sc-top"><span>🇯🇵 일본어로 이렇게 말해보자!</span></div>
+          <div class="sc-top"><span class="mini-flag" aria-hidden="true"><svg viewBox="0 0 30 20"><rect width="30" height="20" rx="3" fill="#fffdfb"/><circle cx="15" cy="10" r="5.8" fill="#cf3350"/></svg></span><span>일본어로 이렇게 말해보자!</span></div>
           <div class="sc-jp" id="scJp">—</div>
           <div class="sc-pr" id="scPr"></div>
           <div class="sc-ko" id="scKo"></div>
@@ -1061,6 +1070,15 @@ function furiOf(s){ var m = String(s || "").match(/\{([^{}|]+)\|([^{}]+)\}/); re
 function shortS(t){ t = String(t).replace(/\s+/g," ").trim(); return t.length > 18 ? t.slice(0,18) + "…" : t; }
 function boldTip(s){ return rb(esc(s)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>"); }
 function W(jp, ko, emoji){ return { jp:jp, ko:ko, emoji:emoji || "💬" }; }
+function hasBatchim(s){
+  s = String(s || "");
+  var c = s.charCodeAt(s.length - 1);
+  if (isNaN(c)) return false;
+  var t = c - 0xAC00;
+  if (t < 0 || t > 11171) return false;
+  return t % 28 !== 0;
+}
+function josa(word, pair){ var p = String(pair).split("/"); return word + (hasBatchim(word) ? p[0] : p[1]); }
 function res(t, jp, ko, pr, words, extra){
   return { tip:"'"+shortS(t)+"'는 **"+jp+"**라고 해요." + (extra ? " " + extra : ""),
            jp:jp, ko:ko, pr:pr, words:words || [] };
@@ -1275,7 +1293,10 @@ var NOUNS = [
   { re:/일본어/, jp:"{日本語|にほんご}", pr:"니혼고", ko:"일본어", emoji:"🇯🇵" },
   { re:/일본/, jp:"{日本|にほん}", pr:"니혼", ko:"일본", emoji:"🗾" },
   { re:/노래/, jp:"{歌|うた}", pr:"우타", ko:"노래", emoji:"🎤" },
-  { re:/책/, jp:"{本|ほん}", pr:"혼", ko:"책", emoji:"📚" }
+  { re:/책/, jp:"{本|ほん}", pr:"혼", ko:"책", emoji:"📚" },
+  { re:/강아지|댕댕/, jp:"{犬|いぬ}", pr:"이누", ko:"강아지", emoji:"🐶" },
+  { re:/고양이/, jp:"{猫|ねこ}", pr:"네코", ko:"고양이", emoji:"🐱" },
+  { re:/노래방/, jp:"カラオケ", pr:"카라오케", ko:"노래방", emoji:"🎤" }
 ];
 var VERBS = [
   { re:/먹/, jp:"{食|た}べます", pr:"타베마스", tai:"{食|た}べたい", taiPr:"타베타이", ko:"먹다", emoji:"🍚" },
@@ -1324,10 +1345,6 @@ var RULES = [
     return res(t, "このアニメ、マジで{名作|めいさく}だね！", "이 애니 진짜 명작이야!", "코노 아니메, 마지데 메이사쿠다네!",
       [W("このアニメ","이 애니","🎬"), W("{名作|めいさく}","명작","✨")],
       "친구에게는 반말 **だね**, 정중하게는 **このアニメは本当に名作ですね**라고 해요."); } },
-{ re:/애니/ , f:function(t){
-    return res(t, "アニメが{好|す}きです。", "애니를 좋아해요", "아니메가 스키데스",
-      [W("アニメ","애니메이션","🎬"), W("{好|す}き","좋아함","💛")],
-      "정중하게는 **好きです**, 친구끼리는 **好きだよ**라고 해요."); } },
 { re:/명대사|명대|세리후/, f:function(t){
     return res(t, "{名|めい}セリフですね！", "명대사네요!", "메이세리후데스네",
       [W("{名|めい}セリフ","명대사","💬"), W("セリフ","대사","🗣️")],
@@ -1369,6 +1386,9 @@ var RULES = [
       [W("{物語|ものがたり}","이야기","📖"), W("{面白|おもしろ}い","재밌다","😄")],
       "**物語**는 '이야기'. 회화에서는 **ストーリー**도 많이 써요."); } },
 { re:/주인공/, f:function(t){
+    if (/멋있|멋져/.test(t)) return res(t, "{主人公|しゅじんこう}がかっこいいです！", "주인공이 멋져요!", "슈진코오가 캇코이이데스",
+      [W("{主人公|しゅじんこう}","주인공","🦸"), W("かっこいい","멋있다","😎")],
+      "**かっこいい**는 '멋있다'. 친구끼리는 **かっこいい！**");
     return res(t, "{主人公|しゅじんこう}が{好|す}きです。", "주인공을 좋아해요", "슈진코오가 스키데스",
       [W("{主人公|しゅじんこう}","주인공","🦸"), W("{好|す}き","좋아함","💛")],
       "주인공은 **主人公**. 친구끼리는 **主人公が好き**라고 해요."); } },
@@ -1386,7 +1406,16 @@ var RULES = [
       "**もう一度**는 '한 번 더'. 정주행은 **一気見(いっきみ)**라고 해요."); } },
 
 /* ---------- 여행·맛집 ---------- */
+{ re:/맛있/, f:function(t){
+    var n = findNoun(t);
+    if (n) return res(t, n.jp + "が{美味|おい}しいです！", josa(n.ko, "이/가") + " 맛있어요!", n.pr + "가 오이시이데스",
+      [W("{美味|おい}しい","맛있다","😋"), W(n.jp,n.ko,n.emoji)],
+      "맛있을 때는 **美味しい！** 한마디면 충분해요. 반말은 おいしい！");
+    return res(t, "{美味|おい}しいです！", "맛있어요!", "오이시이데스",
+      [W("{美味|おい}しい","맛있다","😋"), W("です","~예요","🟰")],
+      "맛있을 때는 **美味しい！** 한마디면 충분해요. 반말은 おいしい！"); } },
 { re:/라멘/, f:function(t){
+    if (/맛있/.test(t)) return null;
     return res(t, "ラーメンを{食|た}べたいです。", "라멘을 먹고 싶어요", "라멘오 타베타이데스",
       [W("ラーメン","라멘","🍜"), W("{食|た}べたい","먹고 싶다","🍚")],
       "주문할 때는 **ラーメンをください**가 더 자연스러워요."); } },
@@ -1414,10 +1443,6 @@ var RULES = [
     return res(t, "メニューを{見|み}せてください。", "메뉴를 보여 주세요", "메뉴오 미세테 쿠다사이",
       [W("メニュー","메뉴","📋"), W("{見|み}せて","보여 주세요","👉")],
       "**見せてください**는 '보여 주세요'. 영어 메뉴는 **英語のメニュー**라고 해요."); } },
-{ re:/맛있/, f:function(t){
-    return res(t, "{美味|おい}しいです！", "맛있어요!", "오이시이데스",
-      [W("{美味|おい}しい","맛있다","😋"), W("です","~예요","🟰")],
-      "맛있을 때는 **美味しい！** 한마디면 충분해요. 반말은 おいしい！"); } },
 { re:/매워|맵다|맵/, f:function(t){
     return res(t, "{辛|から}いです。", "매워요", "카라이데스",
       [W("{辛|から}い","맵다","🌶️"), W("です","~예요","🟰")],
@@ -1430,7 +1455,7 @@ var RULES = [
     return res(t, "トイレはどこですか？", "화장실은 어디예요?", "토이레와 도코데스카",
       [W("トイレ","화장실","🚻"), W("どこ","어디","📍")],
       "일본에서는 **お手洗い**라고도 해요. 가게에서 물어보기 좋아요."); } },
-{ re:/길|어떻게 ?가|가는 ?길/, f:function(t){
+{ re:/길을|길이|가는 ?길|길 ?물어|어떻게 ?가|어떻게 ?가요/, f:function(t){
     return res(t, "{道|みち}を{教|おし}えてください。", "길을 알려 주세요", "미치오 오시에테 쿠다사이",
       [W("{道|みち}","길","🗺️"), W("{教|おし}えて","알려 주세요","🙏")],
       "처음엔 **すみません、**를 붙이면 훨씬 정중해요."); } },
@@ -1546,10 +1571,22 @@ var RULES = [
       "**目指しています**는 '목표로 하고 있어요'. 직업 이야기에 잘 어울려요."); } },
 
 /* ---------- 질문·요청 ---------- */
+{ re:/일본어로|일본말로/, f:function(t){
+    return res(t, "これは{日本語|にほんご}で{何|なん}と言いますか？", "이건 일본어로 뭐라고 해요?", "코레와 니혼고데 난토 이이마스카",
+      [W("これ","이것","👉"), W("{日本語|にほんご}","일본어","🇯🇵")],
+      "**〜と言いますか？**는 '〜라고 해요?'. 모르는 말이 나오면 바로 이 한마디!"); } },
+{ re:/그만|멈춰|하지 ?마|하지마/, f:function(t){
+    return res(t, "やめてください。", "그만해 주세요", "야메테 쿠다사이",
+      [W("やめる","그만두다","✋"), W("ください","주세요","🙏")],
+      "애니에서 자주 들리는 **やめて**. 반말은 **やめて！**"); } },
+{ re:/같이 ?가|함께 ?가|같이 ?갈/, f:function(t){
+    return res(t, "{一緒|いっしょ}に行きましょう。", "같이 가요", "잇쇼니 이키마쇼오",
+      [W("{一緒|いっしょ}に","함께","👫"), W("{行|い}きましょう","가요","🚶")],
+      "**〜ましょう**는 '〜해요(권유)'. 친구끼리는 **一緒に行こう**."); } },
 { re:/뭐야|뭐지|뭐예요|뭐가|무엇/, f:function(t){
     var n = findNoun(t);
     return res(t, n ? n.jp + "は{何|なん}ですか？" : "{何|なん}ですか？",
-      n ? n.ko + "은 뭐예요?" : "뭐예요?", n ? n.pr + "와 난데스카" : "난데스카",
+      n ? josa(n.ko, "은/는") + " 뭐예요?" : "뭐예요?", n ? n.pr + "와 난데스카" : "난데스카",
       [W("{何|なん}","무엇","❓"), n ? W(n.jp,n.ko,n.emoji) : W("これ","이것","👉")],
       "**〜は何ですか？**는 '〜은 뭐예요?'."); } },
 { re:/누구/, f:function(t){
@@ -1575,7 +1612,7 @@ var RULES = [
 { re:/몇 ?개|몇개|몇 ?명|몇 ?잔/, f:function(t){
     var n = findNoun(t);
     return res(t, n ? n.jp + "はいくつですか？" : "いくつですか？",
-      n ? n.ko + "은 몇 개예요?" : "몇 개예요?", n ? n.pr + "와 이쿠츠데스카" : "이쿠츠데스카",
+      n ? josa(n.ko, "은/는") + " 몇 개예요?" : "몇 개예요?", n ? n.pr + "와 이쿠츠데스카" : "이쿠츠데스카",
       [W("いくつ","몇 개","🔢"), W("ですか","~예요?","❓")],
       "**いくつ**는 '몇 개'. 사람은 **何人(なんにん)**이에요."); } },
 { re:/무슨 ?색|색깔/, f:function(t){
@@ -1692,17 +1729,23 @@ var RULES = [
     return res(t, "{悲|かな}しいです。", "슬퍼요", "카나시이데스",
       [W("{悲|かな}しい","슬프다","😢"), W("です","~예요","🟰")],
       "**悲しい**는 '슬프다'. **寂しい(さびしい)**는 '외롭다'예요."); } },
-{ re:/재밌|재미있|신나/, f:function(t){
+{ re:/재밌|재미있|신나|즐거/, f:function(t){
     return res(t, "{楽|たの}しいです！", "즐거워요!", "타노시이데스",
       [W("{楽|たの}しい","즐겁다","🎉"), W("{面白|おもしろ}い","재밌다","😄")],
       "**楽しい**는 즐거운 기분, **面白い**는 재밌는 내용에 써요."); } },
 { re:/멋있|멋져|쿨/, f:function(t){
-    return res(t, "かっこいいです！", "멋져요!", "캇코이이데스",
-      [W("かっこいい","멋있다","😎"), W("すごい","대단하다","✨")],
+    var n = findNoun(t);
+    return res(t, n ? n.jp + "がかっこいいです！" : "かっこいいです！",
+      n ? josa(n.ko, "이/가") + " 멋져요!" : "멋져요!",
+      n ? n.pr + "가 캇코이이데스" : "캇코이이데스",
+      [W("かっこいい","멋있다","😎"), n ? W(n.jp,n.ko,n.emoji) : W("すごい","대단하다","✨")],
       "남자에게도 여자에게도 **かっこいい**를 써요."); } },
-{ re:/귀엽/, f:function(t){
-    return res(t, "かわいいです！", "귀여워요!", "카와이이데스",
-      [W("かわいい","귀엽다","🥰"), W("ですね","~네요","💬")],
+{ re:/귀엽|귀여/, f:function(t){
+    var n = findNoun(t);
+    return res(t, n ? n.jp + "がかわいいです！" : "かわいいです！",
+      n ? josa(n.ko, "이/가") + " 귀여워요!" : "귀여워요!",
+      n ? n.pr + "가 카와이이데스" : "카와이이데스",
+      [W("かわいい","귀엽다","🥰"), n ? W(n.jp,n.ko,n.emoji) : W("ですね","~네요","💬")],
       "**かわいい**는 애니 팬이라면 하루에 몇 번도 쓰는 말이에요."); } },
 { re:/진짜|정말/, f:function(t){
     return res(t, "{本当|ほんとう}ですか？", "정말이에요?", "혼토오데스카",
@@ -1738,11 +1781,14 @@ var RULES = [
       "가족·친구에게는 **大好き**, 연인에게는 **愛してる**를 써요."); } },
 
 /* ---------- 하고 싶다 · 부탁 ---------- */
-{ re:/하고 ?싶|가고 ?싶|먹고 ?싶|사고 ?싶|보고 ?싶|자고 ?싶/, f:function(t){
+{ re:/하고 ?싶|가고 ?싶|먹고 ?싶|사고 ?싶|보고 ?싶|자고 ?싶|갈래|볼래|먹을래/, f:function(t){
     var v = findVerb(t), n = findNoun(t);
-    var jp = n ? n.jp + "がほしいです" : (v ? v.tai + "です。" : "{行|い}きたいです。");
-    var ko2 = n ? n.ko + "이 갖고 싶어요" : (v ? v.ko + "고 싶어요" : "가고 싶어요");
-    var pr = n ? n.pr + "가 호시이데스" : (v ? v.taiPr + "데스" : "이키타이데스");
+    var goVerb = /가고|갈래|가 ?싶/.test(t) && v && /{行|い}きます/.test(v.jp);
+    var jp, ko2, pr;
+    if (goVerb && n){ jp = n.jp + "に" + v.tai + "です。"; ko2 = josa(n.ko, "에/에") + " 가고 싶어요"; pr = n.pr + "니 " + v.taiPr + "데스"; }
+    else if (v && !n){ jp = v.tai + "です。"; ko2 = v.ko + "고 싶어요"; pr = v.taiPr + "데스"; }
+    else if (n){ jp = n.jp + "がほしいです"; ko2 = josa(n.ko, "이/가") + " 갖고 싶어요"; pr = n.pr + "가 호시이데스"; }
+    else { jp = "{行|い}きたいです。"; ko2 = "가고 싶어요"; pr = "이키타이데스"; }
     return res(t, jp, ko2, pr,
       [W(v ? v.tai : "{行|い}きたい","~하고 싶다","💭"), n ? W(n.jp,n.ko,n.emoji) : W("ほしい","갖고 싶다","🙏")],
       "**〜たいです**는 '〜하고 싶어요'. 물건은 **〜がほしいです**."); } },
@@ -1758,10 +1804,14 @@ var RULES = [
       v.pr.replace(/마스$/, "테 모라에마스카"),
       [W("〜てもらえますか","~해 주실 수 있나요","🙏"), W(v.jp, v.ko, v.emoji)],
       "부탁할 때 **〜てもらえますか**는 아주 공손하고 편해요."); } },
+{ re:/애니|애니메이션/ , f:function(t){
+    return res(t, "アニメが{好|す}きです。", "애니를 좋아해요", "아니메가 스키데스",
+      [W("アニメ","애니메이션","🎬"), W("{好|す}き","좋아함","💛")],
+      "정중하게는 **好きです**, 친구끼리는 **好きだよ**라고 해요."); } },
 { re:/좋아해|좋아하|좋아요|좋다/, f:function(t){
     var n = findNoun(t), v = findVerb(t);
     var jp = n ? n.jp + "が{好|す}きです。" : (v ? v.jp.replace(/ます$/, "るのが{好|す}きです。") : "それが{好|す}きです。");
-    var ko2 = n ? n.ko + "을 좋아해요" : (v ? v.ko.replace(/다$/, "") + "는 걸 좋아해요" : "그걸 좋아해요");
+    var ko2 = n ? josa(n.ko, "을/를") + " 좋아해요" : (v ? v.ko.replace(/다$/, "") + "는 걸 좋아해요" : "그걸 좋아해요");
     var pr = n ? n.pr + "가 스키데스" : (v ? v.ko + "노가 스키데스" : "소레가 스키데스");
     return res(t, jp, ko2, pr,
       [W("{好|す}き","좋아함","💛"), n ? W(n.jp,n.ko,n.emoji) : W("それが","그것이","👉")],
@@ -1769,7 +1819,7 @@ var RULES = [
 { re:/싫어해|싫다|싫은|별로/, f:function(t){
     var n = findNoun(t);
     return res(t, n ? n.jp + "は{苦手|にがて}です。" : "{苦手|にがて}です。",
-      n ? n.ko + "은 별로예요" : "별로예요", n ? n.pr + "와 니가테데스" : "니가테데스",
+      n ? josa(n.ko, "은/는") + " 별로예요" : "별로예요", n ? n.pr + "와 니가테데스" : "니가테데스",
       [W("{苦手|にがて}","서툴다·싫어함","😕"), n ? W(n.jp,n.ko,n.emoji) : W("それ","그것","👉")],
       "**苦手**는 '잘 못한다·별로다'. 강하게 싫으면 **嫌い(きらい)**."); } }
 ];
@@ -1777,9 +1827,9 @@ var RULES = [
 /* 마지막 단계: 명사·동사·형용사 하나만 말했을 때 */
 function coachFallback(t, hintText){
   var n = findNoun(t), v = findVerb(t), a = findAdj(t);
-  if (n && v) return res(t, n.jp + "を" + v.jp + "。", n.ko + "을 " + v.ko, n.pr + "오 " + v.pr,
+  if (n && v) return res(t, n.jp + "を" + v.jp + "。", josa(n.ko, "을/를") + " " + v.ko, n.pr + "오 " + v.pr,
     [W(v.jp, v.ko, v.emoji), W(n.jp, n.ko, n.emoji)], "주어 + **を** + 동사 순서로 말해요.");
-  if (n && a) return res(t, n.jp + "は" + a.jp + "です。", n.ko + "은 " + a.ko, n.pr + "와 " + a.pr + "데스",
+  if (n && a) return res(t, n.jp + "は" + a.jp + "です。", josa(n.ko, "은/는") + " " + a.ko, n.pr + "와 " + a.pr + "데스",
     [W(a.jp, a.ko, a.emoji), W(n.jp, n.ko, n.emoji)], "**〜は〜です** 틀에 넣으면 문장이 돼요.");
   if (n) return res(t, n.jp + "です。", n.ko + "이에요", n.pr + "데스",
     [W(n.jp, n.ko, n.emoji)], "명사만 말할 땐 **〜です**를 붙이면 문장이 돼요.");
@@ -2072,8 +2122,11 @@ function renderHints(){
     var step = currentStep();
     var list = (step && step.h && step.h[String(state.level)]) || [];
     list.slice(0, 3).forEach(function(h){
-      var p = String(h).split("|");
-      parts.push('<button class="hint choice" type="button" data-say="' + esc(p[0]) + '">💡 ' + esc(plain(p[0])) + (p[1] ? ' <span class="hk">' + esc(p[1]) + "</span>" : "") + "</button>");
+      var raw = String(h), cut = raw.lastIndexOf("|");
+      var jpRaw = cut >= 0 ? raw.slice(0, cut) : raw, gloss = cut >= 0 ? raw.slice(cut + 1) : "";
+      var jp = plain(jpRaw), long = jp.length > 18;
+      var label = long ? (jp.length > 24 ? jp.slice(0, 24) + "…" : jp) : jp;
+      parts.push('<button class="hint choice" type="button" data-say="' + esc(jpRaw) + '">💡 ' + esc(label) + (gloss && !long ? ' <span class="hk">' + esc(gloss) + "</span>" : "") + "</button>");
     });
   }
   el.hints.innerHTML = parts.join("");
