@@ -1,0 +1,2634 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="아빠 일본어 보드">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#151a33">
+<title>🇯🇵 아빠 일본어 대화 보드</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%87%AF%F0%9F%87%B5%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --navy:#141932;
+  --navy-2:#1d2344;
+  --navy-3:#2a3260;
+  --ink:#1d2340;
+  --ink-soft:#40466a;
+  --muted:#8188a4;
+  --line:#e8e3ee;
+  --paper:#fffdfb;
+  --paper-2:#f8f5f8;
+  --sakura:#f7a6bd;
+  --sakura-deep:#cc4d76;
+  --sakura-soft:#fdeef3;
+  --indigo:#4b57a4;
+  --indigo-deep:#2c356e;
+  --indigo-soft:#ecedfa;
+  --gold:#c1963f;
+  --gold-soft:#fbf2dd;
+  --r:1.9vh;
+  --shadow:0 .5vh 1.6vh rgba(38,38,76,.10);
+  --shadow-sm:0 .28vh .9vh rgba(38,38,76,.07);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;margin:0;padding:0;overflow:hidden;}
+body{
+  font-family:"Apple SD Gothic Neo","Pretendard","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans CJK JP","Noto Sans CJK KR","Yu Gothic",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(52vh 40vh at 92% -8%, #fde6ee 0%, rgba(253,230,238,0) 62%),
+    radial-gradient(48vh 38vh at 2% 104%, #e6e9fa 0%, rgba(230,233,250,0) 60%),
+    radial-gradient(40vh 30vh at 50% 50%, #fffdfa 0%, rgba(255,253,250,0) 70%),
+    linear-gradient(168deg,#faf7f8 0%,#f4f3fa 55%,#faf6f2 100%);
+  -webkit-font-smoothing:antialiased;
+  -webkit-user-select:none;user-select:none;
+  -webkit-text-size-adjust:100%;
+  touch-action:manipulation;
+}
+body::before,body::after{
+  content:"";position:fixed;border-radius:50%;pointer-events:none;z-index:0;
+}
+body::before{width:30vh;height:30vh;left:-11vh;top:10vh;background:rgba(255,255,255,.5);box-shadow:7vh -5vh 0 -.8vh rgba(255,255,255,.4);}
+body::after{width:22vh;height:22vh;right:-7vh;bottom:4vh;background:rgba(255,255,255,.42);box-shadow:-6vh 4vh 0 -1vh rgba(255,255,255,.3);}
+button{font-family:inherit;border:0;background:none;padding:0;margin:0;color:inherit;cursor:pointer;}
+input,select,textarea{font-family:inherit;}
+img,svg{display:block;}
+[hidden]{display:none !important;}
+:focus-visible{outline:.3vh solid #8e97d8;outline-offset:.2vh;}
+
+ruby{ruby-position:over;}
+ruby rt{
+  font-size:.52em;font-weight:700;color:var(--sakura-deep);letter-spacing:-.01em;
+  font-family:"Hiragino Sans","Noto Sans JP","Noto Sans CJK JP",sans-serif;
+}
+body.nofuri rt{display:none;}
+body.nofuri .ww .wl i{display:none;}
+
+/* ================= app shell ================= */
+.app{
+  position:relative;z-index:1;
+  height:100vh;height:100dvh;
+  display:flex;flex-direction:column;
+  padding:1.15vh 1.15vh;gap:1.05vh;
+}
+
+/* ================= top bar ================= */
+.topbar{
+  flex:0 0 auto;height:7.4vh;
+  display:flex;align-items:center;gap:.8vh;
+  padding:0 1.15vh 0 1.35vh;
+  background:linear-gradient(120deg,#131832 0%,#1b2145 58%,#262047 100%);
+  border-radius:2vh;
+  box-shadow:0 .6vh 1.8vh rgba(20,22,50,.28), inset 0 0 0 .12vh rgba(255,255,255,.08);
+  position:relative;overflow:hidden;
+}
+.topbar::after{
+  content:"";position:absolute;right:16%;top:-8vh;width:24vh;height:16vh;border-radius:50%;
+  background:radial-gradient(circle,rgba(247,166,189,.22) 0%,rgba(247,166,189,0) 70%);
+  pointer-events:none;
+}
+.brand{display:flex;align-items:center;gap:.55vh;min-width:0;position:relative;z-index:1;}
+.brand .btxt{display:flex;flex-direction:column;line-height:1.12;min-width:0;}
+.brand b{font-size:1.92vh;font-weight:900;color:#fffdfb;letter-spacing:-.02em;white-space:nowrap;}
+.brand span.sub{font-size:1.0vh;font-weight:800;color:#9aa2cb;white-space:nowrap;margin-top:.25vh;letter-spacing:.02em;}
+
+.pill{
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:.35vh;
+  height:4.3vh;padding:0 1.05vh;border-radius:999px;
+  font-size:1.3vh;font-weight:900;white-space:nowrap;
+}
+.pill b{font-size:1.6vh;font-weight:900;}
+.pill .lbl{font-size:1.15vh;font-weight:800;opacity:.85;}
+.pill.fire{background:linear-gradient(135deg,rgba(247,166,189,.24),rgba(247,166,189,.09));color:#ffd9e3;box-shadow:inset 0 0 0 .16vh rgba(247,166,189,.42);}
+.pill.fire b{color:#fff;}
+.pill.fire:active{transform:scale(.97);}
+.pill.streak{background:linear-gradient(135deg,rgba(193,150,63,.26),rgba(193,150,63,.09));color:#f3e0b4;box-shadow:inset 0 0 0 .16vh rgba(193,150,63,.42);}
+.pill.streak b{color:#fff;}
+.pill.pop{animation:starpop .55s cubic-bezier(.2,1.5,.4,1);}
+@keyframes starpop{0%{transform:scale(1)}38%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+.levels{
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:.22vh;
+  height:4.5vh;padding:.4vh .45vh;border-radius:999px;
+  background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 .16vh rgba(255,255,255,.13);
+  margin-left:auto;
+}
+.levels .lvt{font-size:1.05vh;font-weight:900;color:#8f97c2;padding:0 .5vh 0 .6vh;white-space:nowrap;}
+.lv{
+  height:3.65vh;padding:0 1vh;border-radius:999px;
+  font-size:1.22vh;font-weight:900;color:#b9bfdd;white-space:nowrap;
+  transition:background .18s,color .18s,box-shadow .18s,transform .12s;
+}
+.lv:active{transform:scale(.97);}
+.lv .mini{display:none;}
+.lv.on{background:#fffdfb;color:var(--indigo-deep);box-shadow:0 .3vh .8vh rgba(0,0,0,.28);}
+.lv.on[data-lv="1"]{color:#ab3f66;}
+.lv.on[data-lv="3"]{color:#6b4aae;}
+
+.autoread{
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:.4vh;height:4.2vh;padding:0 .85vh;
+  border-radius:999px;background:rgba(255,255,255,.08);
+  box-shadow:inset 0 0 0 .16vh rgba(255,255,255,.13);
+  font-size:1.2vh;font-weight:900;color:#a9b0d4;white-space:nowrap;
+}
+.autoread .ar-ico{font-size:1.45vh;line-height:1;}
+.autoread i{
+  position:relative;display:inline-block;width:3.1vh;height:1.85vh;border-radius:999px;
+  background:rgba(255,255,255,.22);transition:background .2s;
+}
+.autoread i::after{
+  content:"";position:absolute;left:.2vh;top:.2vh;width:1.45vh;height:1.45vh;border-radius:50%;
+  background:#fff;box-shadow:0 .15vh .4vh rgba(0,0,0,.3);transition:transform .2s;
+}
+.autoread.on{color:#ffd9e3;background:rgba(247,166,189,.16);box-shadow:inset 0 0 0 .16vh rgba(247,166,189,.55);}
+.autoread.on i{background:var(--sakura);}
+.autoread.on i::after{transform:translateX(1.25vh);}
+.settingsbtn{
+  position:relative;z-index:1;
+  flex:0 0 auto;width:4.2vh;height:4.2vh;border-radius:50%;
+  background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 .16vh rgba(255,255,255,.14);
+  font-size:1.9vh;line-height:1;display:grid;place-items:center;
+}
+.settingsbtn:active{transform:scale(.94);}
+
+/* ================= board ================= */
+.board{
+  flex:1 1 auto;min-height:0;
+  display:grid;
+  grid-template-columns:21.6% minmax(0,1fr) 27.4%;
+  gap:1.05vh;
+}
+.side{
+  min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:.75vh;
+  background:rgba(255,253,251,.9);
+  border-radius:var(--r);
+  box-shadow:var(--shadow-sm), inset 0 0 0 .1vh rgba(232,227,238,.9);
+  padding:.95vh;
+}
+.side-h{
+  flex:0 0 auto;display:flex;align-items:baseline;gap:.4vh;
+  font-size:1.32vh;font-weight:900;color:#3b4470;letter-spacing:-.02em;
+}
+.side-h .ja{
+  font-size:.95vh;font-weight:800;color:#b3b6cc;letter-spacing:.02em;
+  font-family:"Hiragino Sans","Noto Sans JP",sans-serif;
+}
+
+/* ---------- left: topics ---------- */
+.topics{flex:0 0 auto;height:30vh;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:.55vh;}
+.topic{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.1vh;
+  padding:.5vh .25vh .45vh;border-radius:1.35vh;
+  background:#f8f5fa;border:.22vh solid transparent;
+  transition:transform .15s,box-shadow .2s,background .2s,border-color .2s;
+  min-height:0;
+}
+.topic .tem{font-size:3.2vh;line-height:1.05;}
+.topic .tnm{font-size:1.42vh;font-weight:900;color:#333c62;letter-spacing:-.04em;white-space:nowrap;}
+.topic .ten{font-size:.92vh;font-weight:800;color:#a8adc4;letter-spacing:.02em;font-family:"Hiragino Sans","Noto Sans JP",sans-serif;}
+.topic[data-topic="anime"]{background:linear-gradient(158deg,#fff6f9,#fdeaf1);}
+.topic[data-topic="travel"]{background:linear-gradient(158deg,#fdf8ef,#fbf0dd);}
+.topic[data-topic="daily"]{background:linear-gradient(158deg,#f5f6fd,#eaecfa);}
+.topic[data-topic="phrases"]{background:linear-gradient(158deg,#f8f5fd,#f0eafb);}
+.topic:active{transform:scale(.97);}
+.topic.active{
+  background:#fffdfb;border-color:var(--sakura);
+  box-shadow:0 .5vh 1.2vh rgba(204,77,118,.16);
+  transform:translateY(-.12vh);
+}
+.topic.active .tnm{color:var(--sakura-deep);}
+
+/* ---------- left: interest ---------- */
+.interest{
+  flex:0 0 auto;
+  border-radius:1.4vh;padding:.75vh .8vh;
+  background:linear-gradient(135deg,#f6f4fe 0%,#eef3fd 100%);
+  box-shadow:inset 0 0 0 .18vh #e4e2f6;
+  display:flex;flex-direction:column;gap:.35vh;
+}
+.ic-head{display:flex;align-items:center;gap:.3vh;font-size:1.25vh;font-weight:900;color:#4a3f8f;}
+.ic-head .ic-go{
+  margin-left:auto;font-size:1vh;font-weight:900;color:#6a5db5;background:#fffdfb;
+  border-radius:999px;padding:.2vh .55vh;white-space:nowrap;
+}
+.ic-desc{font-size:1.02vh;font-weight:800;color:#77709c;line-height:1.4;letter-spacing:-.02em;}
+.ic-chips{display:flex;gap:.28vh;flex-wrap:wrap;}
+.ic-chip{
+  font-size:.98vh;font-weight:900;background:#fffdfb;border-radius:999px;
+  padding:.22vh .6vh;color:#5d5199;box-shadow:0 .15vh .4vh rgba(90,80,160,.12);white-space:nowrap;
+}
+.ic-chip b{color:#8a72dd;}
+.ic-btn{
+  height:3.4vh;border-radius:1.05vh;margin-top:.1vh;
+  background:linear-gradient(135deg,#8b7fe0,#6a58cf);color:#fff;
+  font-size:1.2vh;font-weight:900;
+  box-shadow:0 .35vh .9vh rgba(105,88,207,.26);
+}
+.ic-btn:active{transform:scale(.98);}
+.interest.on{box-shadow:inset 0 0 0 .28vh #a99bf0, 0 .5vh 1.3vh rgba(120,100,200,.18);}
+
+/* ---------- left: weekly words ---------- */
+.wordweek{
+  flex:0 0 auto;
+  border-radius:1.4vh;background:#fffdfb;padding:.6vh .6vh .55vh;
+  box-shadow:inset 0 0 0 .18vh #ece7f1;
+}
+.ww-head{display:flex;align-items:center;gap:.3vh;font-size:1.16vh;font-weight:900;color:#3b4470;letter-spacing:-.03em;}
+.ww-edit{
+  margin-left:auto;font-size:.95vh;font-weight:900;color:#8a5a72;
+  background:#fdf1f5;border-radius:999px;padding:.26vh .55vh;white-space:nowrap;
+}
+.ww-edit:active{transform:scale(.96);}
+.ww-grid{display:grid;grid-template-columns:1fr 1fr;gap:.28vh;margin-top:.4vh;}
+.ww{
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:.02vh;
+  padding:.3vh 1.75vh .28vh .5vh;border-radius:.8vh;
+  background:#fbf8fb;border:.16vh solid #ece6f0;text-align:left;
+  transition:background .18s,border-color .18s,transform .1s;
+  min-height:4.9vh;overflow:hidden;
+}
+.ww:active{transform:scale(.97);}
+.ww .wl{display:flex;align-items:baseline;gap:.22vh;max-width:100%;overflow:hidden;white-space:nowrap;}
+.ww .wl b{font-size:1.32vh;font-weight:900;color:#232b4d;letter-spacing:.01em;line-height:1.15;}
+.ww .wl i{font-size:.86vh;font-weight:800;color:var(--sakura-deep);font-style:normal;line-height:1.15;letter-spacing:-.01em;}
+.ww span.ko{
+  font-size:.92vh;font-weight:800;color:#9498b0;line-height:1.2;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+}
+.ww .wk{
+  position:absolute;right:.25vh;top:50%;transform:translateY(-50%);
+  width:1.75vh;height:1.75vh;border-radius:50%;
+  background:#fffdfb;border:.16vh solid #ded5e8;color:#c9bcd6;
+  font-size:.95vh;font-weight:900;line-height:1;display:grid;place-items:center;
+}
+.ww.learned{background:linear-gradient(135deg,#fdf1f6,#fdf9fb);border-color:#f3bed1;}
+.ww.learned b{color:#a53b62;}
+.ww.learned .wk{background:var(--sakura);border-color:var(--sakura);color:#fff;}
+.ww.playing{animation:wordpulse .55s ease;}
+@keyframes wordpulse{0%{box-shadow:0 0 0 0 rgba(204,77,118,.35)}60%{box-shadow:0 0 0 .85vh rgba(204,77,118,0)}100%{box-shadow:0 0 0 0 rgba(204,77,118,0)}}
+
+.dashlink{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:.3vh;
+  height:3.1vh;border-radius:.95vh;
+  font-size:1.08vh;font-weight:900;color:#5d6486;text-decoration:none;
+  background:#f7f4f8;box-shadow:inset 0 0 0 .16vh #ebe5ef;
+}
+.dashlink:active{transform:scale(.98);}
+
+/* ================= center stage ================= */
+.stage{min-height:0;display:flex;flex-direction:column;gap:.85vh;}
+
+.teacher-card{
+  flex:0 0 26vh;
+  display:flex;align-items:stretch;gap:1vh;
+  background:linear-gradient(130deg,#161c3b 0%,#232a52 55%,#2e2450 100%);
+  border-radius:var(--r);padding:1vh 1.1vh;
+  box-shadow:0 .7vh 1.9vh rgba(24,26,58,.26);
+  overflow:hidden;position:relative;
+}
+.teacher-card::before{
+  content:"";position:absolute;right:-6vh;top:-9vh;width:26vh;height:26vh;border-radius:50%;
+  background:radial-gradient(circle,rgba(247,166,189,.30) 0%,rgba(247,166,189,0) 68%);
+  pointer-events:none;
+}
+.teacher-card::after{
+  content:"";position:absolute;left:9vh;bottom:-12vh;width:22vh;height:22vh;border-radius:50%;
+  background:radial-gradient(circle,rgba(120,130,235,.22) 0%,rgba(120,130,235,0) 70%);
+  pointer-events:none;
+}
+.teacher-art{flex:0 0 auto;width:19vh;display:flex;align-items:flex-end;justify-content:center;position:relative;z-index:1;}
+.tsvg{height:100%;width:auto;overflow:visible;}
+.tsvg .shadow{fill:#0b0f24;opacity:.3;}
+.tsvg .head-g{transform-box:fill-box;transform-origin:center bottom;animation:bob 4.8s ease-in-out infinite;}
+.tsvg .eyes{transform-box:fill-box;transform-origin:center;animation:blink 5.6s infinite;}
+.tsvg .m-open{display:none;}
+.tsvg .arm-wave{transform-box:fill-box;transform-origin:bottom left;animation:wave 3s ease-in-out infinite;}
+.tsvg .glyphs text{animation:float 5.4s ease-in-out infinite;}
+.tsvg .glyphs text:nth-child(2){animation-delay:.8s;}
+.tsvg .glyphs text:nth-child(3){animation-delay:1.6s;}
+.tsvg .petal{transform-box:fill-box;transform-origin:center;animation:petal 7s ease-in-out infinite;}
+.tsvg .petal:nth-child(2){animation-delay:1.8s;}
+body.talking .tsvg .m-smile{display:none;}
+body.talking .tsvg .m-open{display:block;transform-box:fill-box;transform-origin:center top;animation:talk .26s infinite alternate;}
+body.talking .tsvg .head-g{animation-duration:1.6s;}
+@keyframes blink{0%,91%,100%{transform:scaleY(1)}93.5%{transform:scaleY(.08)}96%{transform:scaleY(1)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-.45vh)}}
+@keyframes wave{0%,100%{transform:rotate(0)}50%{transform:rotate(-12deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-.65vh)}}
+@keyframes talk{from{transform:scaleY(.3)}to{transform:scaleY(1.05)}}
+@keyframes petal{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(.4vh,-.5vh) rotate(12deg)}}
+
+.bubble-wrap{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.5vh;position:relative;z-index:1;}
+.bubble{
+  flex:1 1 auto;min-height:0;position:relative;
+  background:#fffdfb;border-radius:1.5vh;padding:.75vh 1.15vh;
+  box-shadow:0 .4vh 1.2vh rgba(10,14,40,.28);
+  display:flex;flex-direction:column;justify-content:center;gap:.2vh;
+}
+.bubble::before{
+  content:"";position:absolute;left:-.6vh;top:2.4vh;width:1.3vh;height:1.3vh;background:#fffdfb;
+  transform:rotate(45deg);border-radius:.2vh;
+}
+.bubble-top{display:flex;align-items:center;gap:.45vh;font-size:1vh;font-weight:900;color:#9aa0bb;letter-spacing:.02em;}
+.bubble-top .who{display:flex;align-items:center;gap:.28vh;}
+.bubble-top .jp-lbl{
+  margin-left:auto;font-size:.92vh;font-weight:800;color:#c0c4d6;letter-spacing:.06em;
+  font-family:"Hiragino Sans","Noto Sans JP",sans-serif;
+}
+.aibadge{background:#efe6fd;color:#6b4fc0;border-radius:999px;padding:.1vh .45vh;font-size:.9vh;font-weight:900;}
+.bubble-jp{
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans CJK JP","Apple SD Gothic Neo",sans-serif;
+  font-size:2.3vh;font-weight:900;line-height:1.5;color:#1b2244;letter-spacing:.005em;
+  word-break:normal;overflow-wrap:anywhere;
+}
+.bubble-jp rt{font-size:.5em;color:var(--sakura-deep);}
+.bubble-ko{font-size:1.24vh;font-weight:800;color:#8b90a8;line-height:1.35;word-break:keep-all;}
+.bubble-ko.hide{display:none;}
+.bubble-tools{flex:0 0 auto;display:flex;align-items:center;gap:.4vh;}
+.btool{
+  height:3vh;padding:0 .8vh;border-radius:999px;
+  background:rgba(255,255,255,.12);color:#dfe2f2;
+  font-size:1.12vh;font-weight:900;white-space:nowrap;
+  box-shadow:inset 0 0 0 .16vh rgba(255,255,255,.18);
+}
+.btool:active{transform:scale(.96);}
+.btool.on{background:rgba(247,166,189,.22);color:#ffd9e3;box-shadow:inset 0 0 0 .18vh rgba(247,166,189,.5);}
+
+.logwrap{
+  flex:1 1 auto;min-height:0;display:flex;
+  background:rgba(255,253,251,.84);border-radius:var(--r);
+  box-shadow:var(--shadow-sm), inset 0 0 0 .1vh rgba(232,227,238,.9);
+  padding:.65vh .5vh .65vh .65vh;
+}
+.log{
+  flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
+  display:flex;flex-direction:column;gap:.42vh;
+  padding-right:.3vh;scroll-behavior:smooth;
+}
+.log::-webkit-scrollbar{width:.5vh;}
+.log::-webkit-scrollbar-thumb{background:#ddd6e4;border-radius:999px;}
+.log::-webkit-scrollbar-track{background:transparent;}
+.li{display:flex;gap:.4vh;align-items:flex-end;max-width:100%;animation:lin .22s ease both;}
+@keyframes lin{from{opacity:0;transform:translateY(.4vh)}to{opacity:1;transform:none}}
+.li .ava{flex:0 0 auto;width:2.35vh;height:2.35vh;border-radius:50%;display:grid;place-items:center;font-size:1.3vh;background:#eef0fb;}
+.li .txt{
+  max-width:86%;padding:.45vh .85vh;border-radius:1.05vh;
+  font-size:1.3vh;font-weight:800;line-height:1.4;color:#2c3358;word-break:keep-all;
+  background:#fffdfb;box-shadow:0 .2vh .6vh rgba(60,60,110,.08), inset 0 0 0 .1vh #ece7f1;
+}
+.li .txt .ko{display:block;font-size:1vh;color:#9aa0bb;font-weight:800;margin-top:.12vh;}
+.li .txt rt{font-size:.5em;color:var(--sakura-deep);}
+.li.me{flex-direction:row-reverse;}
+.li.me .ava{background:#fdeef3;}
+.li.me .txt{background:#fdf1f5;color:#6d2a44;border-bottom-right-radius:.28vh;}
+.li.coach .txt{background:#eef0fb;color:#2f3567;box-shadow:inset 0 0 0 .1vh #dfe0f6;}
+.li.sys{justify-content:center;}
+.li.sys .txt{background:transparent;box-shadow:none;font-size:1.02vh;color:#9aa0bb;font-weight:800;padding:.12vh;}
+
+.inputbar{
+  flex:0 0 auto;
+  background:rgba(255,253,251,.96);border-radius:var(--r);
+  padding:.75vh .9vh .85vh;box-shadow:var(--shadow), inset 0 0 0 .1vh rgba(232,227,238,.9);
+  display:flex;flex-direction:column;gap:.5vh;
+}
+.hints{display:flex;gap:.35vh;overflow-x:auto;overflow-y:hidden;min-height:3vh;padding-bottom:.1vh;scrollbar-width:none;}
+.hints::-webkit-scrollbar{display:none;}
+.hint{
+  flex:0 0 auto;height:2.95vh;padding:0 .85vh;border-radius:999px;
+  background:#f7f4fb;border:.18vh solid #e8e2f2;color:#4b4076;
+  font-size:1.1vh;font-weight:900;white-space:nowrap;
+  display:flex;align-items:center;gap:.3vh;
+}
+.hint .hk{font-size:.95vh;font-weight:800;color:#9a93b8;}
+.hint:active{transform:scale(.96);}
+.hint.repeat{background:#fdf1f5;border-color:#f5c3d4;color:#a53b62;}
+.hint .hh{opacity:.6;}
+.inputrow{display:flex;gap:.45vh;}
+.typebox{
+  flex:1;min-width:0;display:flex;align-items:center;gap:.35vh;
+  background:#fcfafd;border:.22vh solid #e7e1ee;border-radius:999px;padding:0 .35vh 0 1.1vh;
+}
+.typebox:focus-within{border-color:#c9a4d6;background:#fff;box-shadow:0 0 0 .3vh rgba(190,140,200,.12);}
+#answerInput{
+  flex:1;min-width:0;height:4.1vh;border:0;background:transparent;outline:none;
+  font-size:1.45vh;font-weight:800;color:#2a3155;
+}
+#answerInput::placeholder{color:#b0b3c6;font-weight:700;}
+.sendbtn{
+  flex:0 0 auto;height:3.3vh;padding:0 1.1vh;border-radius:999px;
+  background:linear-gradient(135deg,#6a74c4,#414d9c);color:#fff;
+  font-size:1.2vh;font-weight:900;box-shadow:0 .3vh .8vh rgba(65,77,156,.25);
+}
+.sendbtn:active{transform:scale(.96);}
+.microw{display:grid;grid-template-columns:1fr 1.04fr 1fr;gap:.45vh;}
+.mic{
+  height:4.4vh;border-radius:1.1vh;
+  display:flex;align-items:center;justify-content:center;gap:.3vh;
+  font-size:1.26vh;font-weight:900;white-space:nowrap;
+  transition:transform .12s,box-shadow .2s,filter .2s;
+}
+.mic:active{transform:scale(.975);}
+.mic.jp{background:linear-gradient(135deg,#f9b6c9,#ef8fab);color:#5d1730;box-shadow:0 .4vh 1vh rgba(230,130,160,.26);}
+.mic.ko{background:linear-gradient(135deg,#cfd3f7,#a7aeea);color:#232a5c;box-shadow:0 .4vh 1vh rgba(120,130,220,.24);}
+.mic.hintbtn{background:linear-gradient(135deg,#fbe9c4,#f1d193);color:#6d4c0a;box-shadow:0 .4vh 1vh rgba(220,180,90,.24);}
+.mic.listening{animation:micpulse 1.1s infinite;filter:saturate(1.25);}
+@keyframes micpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,143,171,.4)}50%{box-shadow:0 0 0 .9vh rgba(239,143,171,0)}}
+
+/* ================= right: teacher help board ================= */
+.helpboard{overflow:hidden;}
+.coach-empty{
+  flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.65vh;text-align:center;padding:.8vh .4vh;
+}
+.coach-empty .ce-emoji{font-size:4.6vh;line-height:1;filter:drop-shadow(0 .5vh .8vh rgba(120,120,180,.22));animation:bob 5s ease-in-out infinite;}
+.coach-empty .ce-title{font-size:1.4vh;font-weight:900;color:#414a78;}
+.coach-empty .ce-sub{font-size:1.08vh;font-weight:800;color:#9aa0bb;line-height:1.6;}
+.coach{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:.65vh;padding-right:.25vh;}
+.coach::-webkit-scrollbar{width:.5vh;}
+.coach::-webkit-scrollbar-thumb{background:#ddd6e4;border-radius:999px;}
+.coach-ko{
+  background:linear-gradient(135deg,#fdf7ea,#fcf0d8);
+  border-left:.5vh solid var(--gold);
+  border-radius:1.15vh;padding:.8vh .9vh;
+  font-size:1.35vh;font-weight:800;color:#5f4a13;line-height:1.52;word-break:keep-all;
+  box-shadow:0 .25vh .7vh rgba(180,150,70,.12);
+  animation:lin .25s ease both;
+}
+.coach-ko b{color:#94601a;background:rgba(255,255,255,.72);padding:0 .28vh;border-radius:.3vh;font-weight:900;}
+.coach-ko rt{font-size:.55em;color:#b98a3f;}
+.sentence-card{
+  border-radius:1.35vh;padding:.8vh .9vh .9vh;
+  background:linear-gradient(140deg,#fdf1f5 0%,#f4f2fd 100%);
+  box-shadow:inset 0 0 0 .18vh #f0d6e2, 0 .35vh .9vh rgba(180,110,150,.10);
+  animation:lin .25s ease both;
+}
+.sc-top{display:flex;align-items:center;gap:.3vh;font-size:1vh;font-weight:900;color:#a8607f;letter-spacing:-.02em;}
+.sc-jp{
+  margin-top:.28vh;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans CJK JP","Apple SD Gothic Neo",sans-serif;
+  font-size:2.05vh;font-weight:900;line-height:1.62;color:#5c1f38;word-break:normal;overflow-wrap:anywhere;
+}
+.sc-jp rt{font-size:.5em;color:#c05c82;}
+.sc-pr{
+  display:flex;align-items:flex-start;gap:.3vh;margin-top:.2vh;
+  font-size:1.12vh;font-weight:800;color:#9a7d90;line-height:1.38;word-break:keep-all;
+}
+.sc-pr .sp-ico{font-size:.95vh;line-height:1.3;}
+.sc-ko{font-size:1.16vh;font-weight:800;color:#8b8fa6;margin-top:.15vh;word-break:keep-all;}
+.sc-tools{display:flex;gap:.35vh;margin-top:.55vh;flex-wrap:wrap;}
+.scbtn{
+  height:2.95vh;padding:0 .75vh;border-radius:999px;background:#fffdfb;color:#8c4b68;
+  font-size:1.06vh;font-weight:900;white-space:nowrap;
+  box-shadow:inset 0 0 0 .16vh #efd8e3;
+}
+.scbtn:active{transform:scale(.96);}
+.scbtn.star{background:linear-gradient(135deg,#fbc4d5,#f79ab6);color:#5d1730;box-shadow:inset 0 0 0 .16vh #f2a6be;}
+.scbtn.saved{background:#f4e6fb;color:#6b3f86;box-shadow:inset 0 0 0 .16vh #e0c6ee;}
+.words-h{font-size:1.1vh;font-weight:900;color:#9aa0bb;letter-spacing:.01em;margin-top:-.1vh;}
+.words{display:grid;grid-template-columns:1fr 1fr;gap:.35vh;}
+.wcard{
+  display:flex;align-items:center;gap:.4vh;text-align:left;
+  background:#fffdfb;border-radius:.9vh;padding:.45vh .5vh;
+  box-shadow:0 .2vh .6vh rgba(60,60,110,.07), inset 0 0 0 .15vh #ece7f1;
+  transition:transform .1s,box-shadow .2s;
+  min-width:0;overflow:hidden;
+}
+.wcard:active{transform:scale(.97);}
+.wcard .we{flex:0 0 1.75vh;font-size:1.25vh;line-height:1;text-align:center;opacity:.85;}
+.wcard .wt{flex:1;min-width:0;}
+.wcard b{display:block;font-size:1.28vh;font-weight:900;color:#232b4d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25;}
+.wcard b rt{font-size:.52em;}
+.wcard span{display:block;font-size:.98vh;font-weight:800;color:#9599b0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
+.help-note{
+  flex:0 0 auto;font-size:.96vh;font-weight:800;color:#a8adc4;text-align:center;line-height:1.4;
+}
+
+/* ================= modal ================= */
+.modal{
+  position:fixed;inset:0;z-index:50;
+  display:grid;place-items:center;
+  background:rgba(16,20,44,.5);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  padding:3vh;
+  animation:fade .16s ease both;
+}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{
+  width:min(62vh,92vw);
+  max-height:88vh;overflow:hidden;
+  background:#fffdfb;border-radius:2.2vh;
+  box-shadow:0 2vh 5vh rgba(10,14,40,.36);
+  display:flex;flex-direction:column;
+  animation:sheetin .2s cubic-bezier(.2,1.1,.4,1) both;
+}
+.sheet.wide{width:min(84vh,94vw);}
+@keyframes sheetin{from{transform:translateY(1.5vh) scale(.98);opacity:.6}to{transform:none;opacity:1}}
+.sheet-head{flex:0 0 auto;display:flex;align-items:center;gap:.8vh;padding:1.4vh 1.7vh .9vh;}
+.sheet-head h3{margin:0;font-size:1.85vh;font-weight:900;color:#232b52;}
+.sheet-head .close{margin-left:auto;width:3.4vh;height:3.4vh;border-radius:50%;background:#f6f3f8;color:#7b8099;font-size:1.5vh;font-weight:900;display:grid;place-items:center;}
+.sheet-body{flex:1;min-height:0;overflow-y:auto;padding:.3vh 1.7vh .9vh;display:flex;flex-direction:column;gap:1vh;}
+.frow{display:flex;align-items:center;gap:.9vh;}
+.frow > span{flex:0 0 11vh;font-size:1.28vh;font-weight:900;color:#4a5079;}
+.frow input,.frow select{
+  flex:1;min-width:0;height:4.2vh;border-radius:1.05vh;border:.22vh solid #e6e0ee;
+  background:#fcfafd;padding:0 1.1vh;font-size:1.28vh;font-weight:800;color:#2a3155;outline:none;
+}
+.frow input:focus,.frow select:focus{border-color:#c9a4d6;background:#fff;}
+.hintline{font-size:1.04vh;font-weight:800;color:#9599b0;line-height:1.55;margin:-.2vh 0 0;}
+.hintline b{color:#8c4b68;}
+.sheet-foot{flex:0 0 auto;display:flex;align-items:center;gap:.65vh;padding:1vh 1.7vh 1.4vh;flex-wrap:wrap;}
+.btn{
+  min-height:4.2vh;padding:0 1.6vh;border-radius:1.15vh;
+  font-size:1.28vh;font-weight:900;white-space:nowrap;
+}
+.btn.primary{background:linear-gradient(135deg,#6a74c4,#414d9c);color:#fff;box-shadow:0 .4vh 1vh rgba(65,77,156,.25);}
+.btn.ghost{background:#f7f4f8;color:#5d6486;box-shadow:inset 0 0 0 .18vh #e9e3ee;}
+.btn.pink{background:linear-gradient(135deg,#f9b6c9,#ef8fab);color:#5d1730;}
+.btn:active{transform:scale(.97);}
+.word-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5vh .8vh;}
+.werow{display:flex;align-items:center;gap:.4vh;}
+.werow .wn{flex:0 0 2vh;font-size:1.05vh;font-weight:900;color:#b0b3c6;text-align:center;}
+.werow input{
+  min-width:0;height:3.7vh;border-radius:.85vh;border:.18vh solid #e6e0ee;background:#fcfafd;
+  padding:0 .7vh;font-size:1.14vh;font-weight:800;color:#2a3155;outline:none;
+}
+.werow input.jp{flex:1.2;}
+.werow input.ko{flex:1;}
+.werow input:focus{border-color:#c9a4d6;background:#fff;}
+.learn-list{display:flex;flex-direction:column;gap:.55vh;}
+.learnitem{display:flex;align-items:center;gap:.55vh;background:#fbf7fa;border-radius:.95vh;padding:.6vh .75vh;box-shadow:inset 0 0 0 .16vh #eee6f0;}
+.learnitem .le{font-size:1.7vh;}
+.learnitem b{font-size:1.24vh;font-weight:900;color:#2a3155;}
+.learnitem b rt{font-size:.52em;}
+.learnitem span.ko{font-size:1.04vh;font-weight:800;color:#9599b0;margin-left:auto;}
+
+/* ================= toast ================= */
+.toast{
+  position:fixed;left:50%;bottom:3.2vh;transform:translateX(-50%) translateY(1vh);
+  z-index:90;max-width:76vw;
+  background:#1d2344;color:#fff;border-radius:999px;
+  padding:.95vh 1.7vh;font-size:1.28vh;font-weight:900;
+  box-shadow:0 1vh 2.4vh rgba(16,20,44,.34);
+  opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
+  text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.confetti{position:fixed;z-index:80;font-size:2.1vh;pointer-events:none;animation:conf .95s ease-out forwards;}
+@keyframes conf{0%{opacity:1;transform:translate(0,0) scale(.6) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.15) rotate(var(--rot))}}
+
+/* ================= panel switch (fold open / phone) ================= */
+.controls{display:contents;}
+.rptabs{display:none;flex:0 0 auto;height:4.2vh;border-radius:1.2vh;gap:.3vh;padding:.35vh;
+  background:rgba(255,253,251,.92);box-shadow:var(--shadow-sm), inset 0 0 0 .1vh rgba(232,227,238,.9);}
+.rptabs button{flex:1;border-radius:.95vh;font-size:1.12vh;font-weight:900;color:#8b90a8;display:flex;align-items:center;justify-content:center;gap:.25vh;}
+.rptabs button.on{background:#fdf1f5;color:var(--sakura-deep);box-shadow:inset 0 0 0 .16vh #f3bed1;}
+.mobiletabs{display:none;flex:0 0 auto;height:5.8vh;border-radius:1.6vh;gap:.35vh;padding:.45vh;
+  background:rgba(255,253,251,.97);box-shadow:var(--shadow), inset 0 0 0 .1vh rgba(232,227,238,.9);}
+.mobiletabs button{flex:1;border-radius:1.2vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.05vh;
+  font-size:1.02vh;font-weight:900;color:#9aa0bb;}
+.mobiletabs button .ic{font-size:1.85vh;line-height:1.1;}
+.mobiletabs button.on{background:#fdf1f5;color:var(--sakura-deep);box-shadow:inset 0 0 0 .18vh #f3bed1;}
+.mobiletabs button:active{transform:scale(.98);}
+
+/* ================= responsive ================= */
+@media (max-width:1120px){
+  .brand span.sub{display:none;}
+  .brand b{font-size:1.72vh;}
+  .levels .lvt{display:none;}
+  .lv .full{display:none;}
+  .lv .mini{display:inline;}
+  .lv{font-size:1.16vh;padding:0 .8vh;}
+  .pill .lbl{display:none;}
+  .pill{padding:0 .85vh;}
+  .autoread .ar-lbl{display:none;}
+  .autoread{width:4.2vh;justify-content:center;padding:0;gap:0;}
+  .autoread .ar-ico{font-size:1.55vh;}
+  .topic .tem{font-size:2.8vh;}
+  .topic .tnm{font-size:1.26vh;}
+  .topic .ten{font-size:.86vh;}
+  .teacher-art{width:16.5vh;}
+  .bubble-jp{font-size:2.05vh;}
+  .sc-jp{font-size:1.75vh;}
+  .ww .wl b{font-size:1.2vh;}
+  .ww .wl i{font-size:.8vh;}
+  .mic{font-size:1.14vh;}
+}
+@media (max-height:780px){
+  .teacher-card{flex-basis:24vh;}
+  .bubble-jp{font-size:2.05vh;}
+  .side{gap:.62vh;}
+  .wordweek{padding:.5vh .55vh .45vh;}
+  .ww{min-height:2.75vh;}
+  .ww-grid{gap:.24vh;}
+}
+
+/* ===== Galaxy Z Fold7 unfolded / tablet: 2 columns ===== */
+@media (min-width:700px) and (max-width:1023px){
+  .board{
+    grid-template-columns:minmax(0,1fr) minmax(228px,34.5%);
+    grid-template-rows:auto minmax(0,1fr);
+    grid-template-areas:"stage tabs" "stage panel";
+    gap:.75vh .8vh;
+  }
+  .stage{grid-area:stage;}
+  .rptabs{grid-area:tabs;display:flex;height:6vh;padding:.35vh;}
+  .rptabs button{font-size:clamp(10.5px,1.45vh,14px);}
+  .rptabs button.on{background:#fdf1f5;}
+  .left{grid-area:panel;display:none;overflow-y:auto;overflow-x:hidden;}
+  .helpboard{grid-area:panel;}
+  body.rp-topics .left{display:flex;}
+  body.rp-topics .helpboard{display:none;}
+  .topic .tem{font-size:2.7vh;}
+  .topic .tnm{font-size:1.3vh;}
+  .left::-webkit-scrollbar{width:.45vh;}
+  .left::-webkit-scrollbar-thumb{background:#ddd6e4;border-radius:999px;}
+}
+
+/* ===== Galaxy Z Fold7 cover / phone: 1 column + bottom tabs ===== */
+@media (max-width:699px){
+  .app{padding:.6vh;gap:.6vh;}
+  .topbar{height:auto;flex-wrap:wrap;padding:.55vh .65vh;gap:.4vh;border-radius:1.4vh;}
+  .brand{flex:1 1 auto;min-width:0;}
+  .brand b{font-size:1.5vh;letter-spacing:-.04em;}
+  .brand span.sub{display:none;}
+  .pill{height:3.8vh;padding:0 .6vh;font-size:clamp(9.5px,1.05vh,11.5px);gap:.25vh;}
+  .pill b{font-size:1.3vh;}
+  .pill.streak .lbl{display:none;}
+  .settingsbtn{order:8;width:3.8vh;height:3.8vh;font-size:1.65vh;}
+  .controls{order:9;display:flex;width:100%;align-items:center;gap:.35vh;}
+  .levels{order:1;flex:1 1 auto;margin-left:0;height:4.1vh;padding:.32vh;gap:.18vh;}
+  .levels .lvt{display:none;}
+  .lv{flex:1;height:3.45vh;padding:0 .15vh;font-size:clamp(9.5px,1.2vh,12.5px);text-align:center;}
+  .autoread{order:2;flex:0 0 auto;width:4.15vh;height:4.15vh;padding:0 .3vh;gap:.15vh;justify-content:center;}
+  .autoread .ar-lbl{display:none;}
+  .autoread .ar-ico{font-size:1.3vh;}
+  .autoread i{width:2.3vh;height:1.45vh;}
+  .autoread i::after{width:1.1vh;height:1.1vh;}
+  .autoread.on i::after{transform:translateX(.85vh);}
+
+  .board{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:0;}
+  .stage,.side.left,.helpboard{grid-column:1;grid-row:1;display:none;}
+  body.view-talk .stage{display:flex;}
+  body.view-coach .helpboard{display:flex;}
+  body.view-topics .left{display:flex;}
+  .rptabs{display:none;}
+  .mobiletabs{display:flex;}
+  .left{overflow-y:auto;overflow-x:hidden;padding:.8vh;}
+  .left::-webkit-scrollbar{width:.4vh;}
+  .left::-webkit-scrollbar-thumb{background:#ddd6e4;border-radius:999px;}
+  .topics{flex:0 0 auto;height:25vh;}
+  .topic .tem{font-size:3.3vh;}
+  .topic .tnm{font-size:1.45vh;}
+  .topic .ten{font-size:1vh;}
+  .ic-desc{font-size:1.16vh;}
+  .ic-btn{height:4.2vh;font-size:1.3vh;}
+  .wordweek{padding:.55vh .6vh .5vh;}
+  .ww-head{font-size:1.3vh;}
+  .ww{min-height:4.15vh;padding-right:2.9vh;}
+  .ww .wl b{font-size:1.55vh;}
+  .ww .wl i{font-size:1.02vh;}
+  .ww span.ko{font-size:1.1vh;}
+  .ww .wk{width:2.5vh;height:2.5vh;font-size:1.15vh;}
+  .dashlink{height:3.9vh;font-size:1.2vh;}
+
+  .teacher-card{flex-basis:26vh;gap:.7vh;padding:.8vh .85vh;}
+  .teacher-art{width:13.5vh;}
+  .bubble{padding:.6vh .9vh;}
+  .bubble-jp{font-size:2.15vh;}
+  .bubble-ko{font-size:1.3vh;}
+  .bubble-tools{gap:.3vh;}
+  .btool{height:3.5vh;padding:0 .65vh;font-size:1.18vh;}
+  .log .li .txt{font-size:1.5vh;}
+  .li .txt .ko{font-size:1.14vh;}
+  .li .ava{width:2.7vh;height:2.7vh;font-size:1.45vh;}
+  .inputbar{padding:.6vh .7vh .7vh;gap:.45vh;}
+  .hints{min-height:3.5vh;}
+  .hint{height:3.5vh;font-size:clamp(10px,1.2vh,13px);padding:0 .7vh;}
+  #answerInput{height:4.9vh;font-size:1.6vh;}
+  .sendbtn{height:3.9vh;font-size:1.3vh;padding:0 1vh;}
+  .microw{gap:.35vh;}
+  .mic{height:5.2vh;font-size:1.38vh;border-radius:1.2vh;}
+  .coach-ko{font-size:1.42vh;padding:.7vh .8vh;}
+  .coach-empty .ce-sub{font-size:1.22vh;}
+  .coach-empty .ce-title{font-size:1.6vh;}
+  .sc-jp{font-size:2.1vh;}
+  .sc-pr{font-size:1.2vh;}
+  .sc-ko{font-size:1.2vh;}
+  .scbtn{height:3.8vh;font-size:1.16vh;padding:0 .7vh;}
+  .words{grid-template-columns:1fr 1fr;}
+  .wcard{padding:.45vh .5vh;}
+  .wcard b{font-size:1.34vh;}
+  .wcard span{font-size:1.04vh;}
+  .help-note{font-size:1.1vh;}
+  .sheet{width:92vw;}
+  .sheet.wide{width:94vw;}
+  .frow > span{flex:0 0 9vh;font-size:1.2vh;}
+}
+@media (max-width:400px){
+  .brand b{font-size:1.36vh;}
+  .lv{font-size:.96vh;}
+  .mic{font-size:1.28vh;}
+}
+</style>
+</head>
+<body class="view-talk rp-coach">
+
+<div class="app">
+
+  <!-- ================= 상단 바 ================= -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="btxt"><b>🇯🇵 아빠 일본어 대화 보드</b><span class="sub">アニメで学ぶ日本語 · 하루 한마디</span></span>
+    </div>
+
+    <button class="pill fire" id="learnPill" type="button" title="오늘 배운 일본어 문장 보기">
+      <span>🔥</span><b id="todayNum">0</b><span class="lbl">문장 학습</span>
+    </button>
+    <div class="pill streak" id="streakPill" type="button" title="연속으로 학습한 날">
+      <span>📅</span><b id="streakNum">0</b><span class="lbl">일 연속</span>
+    </div>
+
+    <div class="controls">
+      <div class="levels" role="group" aria-label="일본어 난이도">
+        <span class="lvt">난이도</span>
+        <button class="lv" data-lv="1" type="button" aria-pressed="false" aria-label="Lv.1 한마디·생존"><span class="full">Lv.1 한마디·생존</span><span class="mini">Lv.1 생존</span></button>
+        <button class="lv on" data-lv="2" type="button" aria-pressed="true" aria-label="Lv.2 일상·애니 회화"><span class="full">Lv.2 일상·애니 회화</span><span class="mini">Lv.2 일상</span></button>
+        <button class="lv" data-lv="3" type="button" aria-pressed="false" aria-label="Lv.3 자연스러운 프리토킹"><span class="full">Lv.3 자연스러운 프리토킹</span><span class="mini">Lv.3 프리토킹</span></button>
+      </div>
+      <button class="autoread on" id="furiToggle" type="button" role="switch" aria-checked="true" title="한자 위에 후리가나(읽는 법) 보기">
+        <span class="ar-ico">あ</span><span class="ar-lbl">후리가나</span><i></i>
+      </button>
+      <button class="autoread on" id="autoRead" type="button" role="switch" aria-checked="true" title="선생님이 일본어를 자동으로 읽어줘요">
+        <span class="ar-ico">🔊</span><span class="ar-lbl">자동 읽기</span><i></i>
+      </button>
+    </div>
+    <button class="settingsbtn" id="btnSettings" type="button" aria-label="설정">⚙️</button>
+  </header>
+
+  <main class="board">
+
+    <!-- ================= 왼쪽: 주제 & 관심사 & 이번 주 단어 ================= -->
+    <aside class="side left">
+      <div class="side-h">무엇을 이야기할까? <span class="ja">話すテーマ</span></div>
+      <div class="topics" id="topics">
+        <button class="topic active" data-topic="anime" type="button" aria-pressed="true">
+          <span class="tem">🎬</span><span class="tnm">일본 애니</span><span class="ten">アニメ</span>
+        </button>
+        <button class="topic" data-topic="travel" type="button" aria-pressed="false">
+          <span class="tem">🍜</span><span class="tnm">여행·맛집</span><span class="ten">旅行・グルメ</span>
+        </button>
+        <button class="topic" data-topic="daily" type="button" aria-pressed="false">
+          <span class="tem">👮</span><span class="tnm">일상·취미</span><span class="ten">日常・趣味</span>
+        </button>
+        <button class="topic" data-topic="phrases" type="button" aria-pressed="false">
+          <span class="tem">💬</span><span class="tnm">애니 명표현</span><span class="ten">名セリフ</span>
+        </button>
+      </div>
+
+      <div class="interest" id="interestCard">
+        <div class="ic-head"><span>✨ 내 관심사</span><span class="ic-go" id="icTop">기록 중</span></div>
+        <div class="ic-desc" id="icDesc">대화할수록 아빠가 좋아하는 걸 기억해 둘게요.</div>
+        <div class="ic-chips" id="icChips"></div>
+        <button class="ic-btn" id="btnInterest" type="button">✨ 관심사로 대화하기</button>
+      </div>
+
+      <div class="wordweek">
+        <div class="ww-head"><span>📚 이번 주 일본어 단어 10개</span><button class="ww-edit" id="btnEditWords" type="button">✎ 단어 바꾸기</button></div>
+        <div class="ww-grid" id="wwGrid"></div>
+      </div>
+
+      <a class="dashlink" id="dashLink" href="./index.html">🏠 해율이네 대시보드</a>
+    </aside>
+
+    <!-- ================= 가운데: 일본어 대화 & 음성 ================= -->
+    <section class="stage">
+      <div class="teacher-card">
+        <div class="teacher-art" id="teacherArt">
+          <svg class="tsvg" viewBox="0 0 220 250" role="img" aria-label="일본어 선생님">
+            <defs><radialGradient id="tglow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#93a0e0" stop-opacity=".40"/>
+              <stop offset="100%" stop-color="#93a0e0" stop-opacity="0"/>
+            </radialGradient></defs>
+            <ellipse cx="112" cy="152" rx="88" ry="94" fill="url(#tglow)"/>
+            <ellipse class="shadow" cx="112" cy="241" rx="68" ry="8"/>
+            <g class="arm-back">
+              <path d="M146 150 L163 178" stroke="#3a4784" stroke-width="13" stroke-linecap="round" fill="none"/>
+              <path d="M164 179 L170 189" stroke="#f4cdb2" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <circle cx="172" cy="191" r="6.6" fill="#f4cdb2"/>
+              <path d="M174 192 L194 156" stroke="#d3ab55" stroke-width="3.2" stroke-linecap="round"/>
+              <circle cx="195" cy="153" r="4" fill="#f7a6bd"/>
+            </g>
+            <path d="M112 128 C86 128 70 150 66 196 C64.5 206 70 212 79 212 L145 212 C154 212 159.5 206 158 196 C154 150 138 128 112 128 Z" fill="#3a4784" stroke="#5865ab" stroke-width="1.6"/>
+            <path d="M112 130 C100 130 90 136 82 147 L96 159 L112 149 L128 159 L142 147 C134 136 124 130 112 130 Z" fill="#fff8f4"/>
+            <path d="M112 149 L112 212" stroke="#2f3a70" stroke-width="1.2" opacity=".45"/>
+            <g fill="#f7a6bd" opacity=".95">
+              <circle cx="112" cy="160" r="2.6"/><circle cx="117" cy="157" r="2.6"/><circle cx="117" cy="163" r="2.6"/>
+              <circle cx="112" cy="166" r="2.6"/><circle cx="107" cy="163" r="2.6"/>
+              <circle cx="112" cy="161.5" r="1.6" fill="#fff3f7"/>
+            </g>
+            <rect x="102" y="112" width="20" height="18" rx="9" fill="#f7d3b8"/>
+            <g class="head-g">
+              <circle cx="64" cy="92" r="7" fill="#f9dcc6"/>
+              <circle cx="160" cy="92" r="7" fill="#f9dcc6"/>
+              <ellipse cx="112" cy="84" rx="45" ry="42" fill="#fadfc9"/>
+              <path d="M67 84 C62 44 84 22 112 22 C142 22 162 44 158 86 C155 70 150 60 140 54 C126 64 96 66 82 58 C74 64 70 72 67 84 Z" fill="#241f33"/>
+              <path d="M67 84 C64 100 66 110 70 118 C66 106 66 94 68 84 Z" fill="#241f33"/>
+              <path d="M158 86 C160 102 158 112 154 120 C158 108 158 96 157 86 Z" fill="#241f33"/>
+              <path d="M140 54 C150 62 155 72 157 88 C158 74 152 60 140 54 Z" fill="#241f33"/>
+              <circle cx="150" cy="34" r="14" fill="#241f33"/>
+              <g class="petal"><path d="M150 24 c3 4 3 8 0 11 c-3 -3 -3 -7 0 -11 Z" fill="#f7a6bd"/></g>
+              <g class="petal"><path d="M156 30 c4 1 6 4 5 8 c-4 -1 -6 -4 -5 -8 Z" fill="#ffc2d3"/></g>
+              <path d="M87 74 q8 -4 15 0" stroke="#4a3a3f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <path d="M122 74 q8 -4 15 0" stroke="#4a3a3f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <g class="eyes">
+                <ellipse cx="95" cy="88" rx="5.2" ry="6" fill="#2a2233"/>
+                <ellipse cx="129" cy="88" rx="5.2" ry="6" fill="#2a2233"/>
+                <circle cx="93.5" cy="85.6" r="1.6" fill="#fff"/>
+                <circle cx="127.5" cy="85.6" r="1.6" fill="#fff"/>
+              </g>
+              <circle cx="95" cy="88" r="14.5" fill="rgba(255,255,255,.16)" stroke="#c9a24a" stroke-width="2.2"/>
+              <circle cx="129" cy="88" r="14.5" fill="rgba(255,255,255,.16)" stroke="#c9a24a" stroke-width="2.2"/>
+              <path d="M109.5 88 h5" stroke="#c9a24a" stroke-width="2.2"/>
+              <path d="M80.5 88 l-14 -4" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+              <path d="M143.5 88 l12 -4" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+              <ellipse cx="81" cy="104" rx="7.5" ry="4.6" fill="#f7a6a0" opacity=".6"/>
+              <ellipse cx="143" cy="104" rx="7.5" ry="4.6" fill="#f7a6a0" opacity=".6"/>
+              <path d="M111 96 q3 4 -1 5" stroke="#e5a98a" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+              <g class="mouth">
+                <path class="m-smile" d="M102 110 q10 8 20 0" stroke="#cf5f5a" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+                <ellipse class="m-open" cx="112" cy="114" rx="6.5" ry="5.5" fill="#cf5f5a"/>
+              </g>
+            </g>
+            <g class="arm-wave">
+              <path d="M80 150 L58 130" stroke="#3a4784" stroke-width="13" stroke-linecap="round"/>
+              <path d="M57 129 L50 121" stroke="#f4cdb2" stroke-width="9" stroke-linecap="round"/>
+              <circle cx="47" cy="118" r="7.2" fill="#f4cdb2"/>
+              <path d="M44 112 l-2 -5 M48 111 l0 -5 M52 113 l2 -5" stroke="#f4cdb2" stroke-width="2.4" stroke-linecap="round"/>
+            </g>
+            <g class="glyphs" font-family="'Hiragino Sans','Noto Sans JP',sans-serif" font-weight="900">
+              <text x="14" y="52" font-size="21" fill="#f7a6bd">あ</text>
+              <text x="182" y="76" font-size="18" fill="#9aa4e8">い</text>
+              <text x="166" y="24" font-size="15" fill="#d3ab55">う</text>
+            </g>
+          </svg>
+        </div>
+        <div class="bubble-wrap">
+          <div class="bubble" id="bubble">
+            <div class="bubble-top">
+              <span class="who">👩‍🏫 선생님</span>
+              <span class="aibadge" id="aiBadge" hidden>🤖 AI</span>
+              <span class="jp-lbl">日本語</span>
+            </div>
+            <div class="bubble-jp" id="bubbleJp">こんにちは！</div>
+            <div class="bubble-ko" id="bubbleKo">안녕하세요!</div>
+          </div>
+          <div class="bubble-tools">
+            <button class="btool" id="btnSpeak" type="button">🔊 보통 듣기</button>
+            <button class="btool" id="btnSlow" type="button">🐢 천천히 듣기</button>
+            <button class="btool on" id="btnKo" type="button" aria-pressed="true">💬 한국어 뜻 보기</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="logwrap"><div class="log" id="log" aria-live="polite"></div></div>
+
+      <div class="inputbar">
+        <div class="hints" id="hints"></div>
+        <div class="inputrow">
+          <div class="typebox">
+            <input id="answerInput" type="text" maxlength="160" autocomplete="off" autocapitalize="off"
+                   placeholder="일본어로 답해도, 한국어로 적어도 돼요 ✏️" aria-label="일본어나 한국어로 답하기">
+            <button class="sendbtn" id="btnSend" type="button">보내기</button>
+          </div>
+        </div>
+        <div class="microw">
+          <button class="mic jp" id="btnMicJp" type="button">🎤 일본어 말하기</button>
+          <button class="mic ko" id="btnMicKo" type="button">🇰🇷 한글로 말하기</button>
+          <button class="mic hintbtn" id="btnHint" type="button">🆘 모르겠어요</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 폴드 펼침: 오른쪽 패널 전환 탭 -->
+    <div class="rptabs" id="rpTabs" role="tablist" aria-label="오른쪽 패널">
+      <button type="button" data-panel="coach" class="on" role="tab" aria-selected="true">👩‍🏫 선생님</button>
+      <button type="button" data-panel="topics" role="tab" aria-selected="false">📚 주제·단어</button>
+    </div>
+
+    <!-- ================= 오른쪽: 선생님 도움 보드 ================= -->
+    <aside class="side right helpboard">
+      <div class="side-h">👩‍🏫 선생님 도움 보드 <span class="ja">先生のメモ</span></div>
+      <div class="coach-empty" id="coachEmpty">
+        <div class="ce-emoji">🍵</div>
+        <div class="ce-title">한국어로 말해도 괜찮아요</div>
+        <div class="ce-sub">하고 싶은 말을 한국어로 적으면<br>일본어로 어떻게 말하는지 알려드려요.<br>🆘 모르겠어요를 눌러도 도와드려요!</div>
+      </div>
+      <div class="coach" id="coach" hidden>
+        <div class="coach-ko" id="coachKo"></div>
+        <div class="sentence-card">
+          <div class="sc-top"><span>🇯🇵 일본어로 이렇게 말해보자!</span></div>
+          <div class="sc-jp" id="scJp">—</div>
+          <div class="sc-pr" id="scPr"></div>
+          <div class="sc-ko" id="scKo"></div>
+          <div class="sc-tools">
+            <button class="scbtn" id="scSpeak" type="button">🔊 들어보기</button>
+            <button class="scbtn" id="scSlow" type="button">🐢 천천히</button>
+            <button class="scbtn star" id="scSave" type="button">⭐ 따라하기</button>
+          </div>
+        </div>
+        <div class="words-h">단어 톡톡</div>
+        <div class="words" id="coachWords"></div>
+      </div>
+      <div class="help-note" id="helpNote">한국어로 말해도 선생님이 일본어로 알려드려요 🙂</div>
+    </aside>
+
+  </main>
+
+  <!-- 폰(커버 화면) 하단 탭 -->
+  <nav class="mobiletabs" id="mobileTabs" aria-label="화면 전환">
+    <button type="button" data-view="talk" class="on">💬<span>대화</span></button>
+    <button type="button" data-view="coach">👩‍🏫<span>선생님</span></button>
+    <button type="button" data-view="topics">📚<span>주제·단어</span></button>
+  </nav>
+</div>
+
+<!-- ================= 설정 모달 ================= -->
+<div class="modal" id="settingsModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+    <div class="sheet-head">
+      <h3 id="setTitle">⚙️ 설정</h3>
+      <button class="close" type="button" data-close="settingsModal" aria-label="닫기">✕</button>
+    </div>
+    <div class="sheet-body">
+      <label class="frow"><span>AI 선생님</span>
+        <select id="aiProvider">
+          <option value="none">내장 선생님만 쓰기 (추천)</option>
+          <option value="openai">OpenAI 연결</option>
+          <option value="gemini">Google Gemini 연결</option>
+        </select>
+      </label>
+      <label class="frow"><span>API 키</span>
+        <input id="aiKey" type="password" autocomplete="off" spellcheck="false" placeholder="AI를 쓸 때만 넣어 주세요">
+      </label>
+      <label class="frow"><span>모델</span>
+        <input id="aiModel" type="text" list="modelList" autocomplete="off" spellcheck="false" placeholder="기본 모델을 써도 좋아요">
+        <datalist id="modelList">
+          <option value="gpt-4o-mini"></option>
+          <option value="gpt-4.1-mini"></option>
+          <option value="gemini-2.0-flash"></option>
+          <option value="gemini-2.5-flash"></option>
+        </datalist>
+      </label>
+      <p class="hintline" id="engineInfo">지금은 내장 선생님이 대화해요.</p>
+      <label class="frow"><span>대시보드 주소</span>
+        <input id="dashUrl" type="text" autocomplete="off" spellcheck="false" placeholder="./index.html">
+      </label>
+      <p class="hintline">API 키는 <b>이 기기 브라우저에만</b> 저장되고 밖으로 보내지 않아요. 비워 두면 인터넷 없이도 내장 선생님이 100% 대화해요.</p>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn ghost" id="btnResetTalk" type="button">↺ 대화 처음부터</button>
+      <button class="btn primary" id="btnSaveSettings" type="button">저장</button>
+      <button class="btn ghost" type="button" data-close="settingsModal">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 이번 주 단어 편집 모달 ================= -->
+<div class="modal" id="wordsModal" hidden>
+  <div class="sheet wide" role="dialog" aria-modal="true" aria-labelledby="wordsTitle">
+    <div class="sheet-head">
+      <h3 id="wordsTitle">📚 이번 주 일본어 단어 바꾸기</h3>
+      <button class="close" type="button" data-close="wordsModal" aria-label="닫기">✕</button>
+    </div>
+    <div class="sheet-body">
+      <p class="hintline">일본어 10개를 직접 적거나 <b>🎲 추천 세트</b>로 바꿀 수 있어요. 후리가나는 <b>{漢字|かんじ}</b>처럼 적으면 위에 작게 보여요.</p>
+      <div class="word-edit-grid" id="wordEditGrid"></div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn pink" id="btnPreset" type="button">🎲 추천 세트</button>
+      <button class="btn primary" id="btnSaveWords" type="button">저장</button>
+      <button class="btn ghost" type="button" data-close="wordsModal">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 오늘 배운 문장 모달 ================= -->
+<div class="modal" id="learnModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="learnTitle">
+    <div class="sheet-head">
+      <h3 id="learnTitle">🔥 오늘 배운 일본어</h3>
+      <button class="close" type="button" data-close="learnModal" aria-label="닫기">✕</button>
+    </div>
+    <div class="sheet-body"><div class="learn-list" id="learnList"></div></div>
+    <div class="sheet-foot">
+      <span class="hintline" id="learnTotal" style="margin-right:auto">오늘 0문장 · 지금까지 0문장</span>
+      <button class="btn ghost" type="button" data-close="learnModal">닫기</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+<script>
+(function(){
+"use strict";
+
+/* =========================================================
+   0. 저장 키 & 도우미
+   ========================================================= */
+var STORE_KEY = "papa.jpn.v1";
+var $ = function(id){ return document.getElementById(id); };
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function dateKey(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate()); }
+function readJSON(k, fb){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; } }
+function writeJSON(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+/* {한자|よみ} → <ruby>한자<rt>よみ</rt></ruby> */
+function rb(s){ return String(s == null ? "" : s).replace(/\{([^{}|]+)\|([^{}]+)\}/g, "<ruby>$1<rt>$2</rt></ruby>"); }
+function html(s){ return rb(esc(s)); }
+function plain(s){ return String(s == null ? "" : s).replace(/\{([^{}|]+)\|[^{}]*\}/g, "$1"); }
+function furiOf(s){ var m = String(s || "").match(/\{([^{}|]+)\|([^{}]+)\}/); return m ? m[2] : ""; }
+function shortS(t){ t = String(t).replace(/\s+/g," ").trim(); return t.length > 18 ? t.slice(0,18) + "…" : t; }
+function boldTip(s){ return rb(esc(s)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>"); }
+function W(jp, ko, emoji){ return { jp:jp, ko:ko, emoji:emoji || "💬" }; }
+function res(t, jp, ko, pr, words, extra){
+  return { tip:"'"+shortS(t)+"'는 **"+jp+"**라고 해요." + (extra ? " " + extra : ""),
+           jp:jp, ko:ko, pr:pr, words:words || [] };
+}
+
+/* =========================================================
+   1. 이번 주 일본어 단어 (기본 + 추천 세트)
+   ========================================================= */
+var WORD_PRESETS = [
+  [ ["アニメ","애니메이션"], ["{名作|めいさく}","명작"], ["{主人公|しゅじんこう}","주인공"],
+    ["{声優|せいゆう}","성우"], ["{作画|さくが}","작화"], ["{主題歌|しゅだいか}","주제가"],
+    ["{名|めい}セリフ","명대사"], ["グッズ","굿즈"], ["{聖地|せいち}","성지"], ["{劇場版|げきじょうばん}","극장판"] ],
+  [ ["ラーメン","라멘"], ["{居酒屋|いざかや}","이자카야"], ["{注文|ちゅうもん}","주문"],
+    ["{会計|かいけい}","계산"], ["{駅|えき}","역"], ["{切符|きっぷ}","표·승차권"],
+    ["{免税|めんぜい}","면세"], ["{予約|よやく}","예약"], ["{荷物|にもつ}","짐"], ["{美味|おい}しい","맛있다"] ],
+  [ ["{仕事|しごと}","일·직장"], ["{疲|つか}れる","지치다"], ["{運動|うんどう}","운동"],
+    ["{家族|かぞく}","가족"], ["{週末|しゅうまつ}","주말"], ["{趣味|しゅみ}","취미"],
+    ["{散歩|さんぽ}","산책"], ["{料理|りょうり}","요리"], ["{眠|ねむ}い","졸리다"], ["{元気|げんき}","건강·기운"] ],
+  [ ["マジで","진짜?"], ["やばい","대박·큰일"], ["すごい","대단해"], ["なるほど","그렇구나"],
+    ["ちょっと","잠깐"], ["いいね","좋네"], ["{最高|さいこう}","최고"], ["{面白|おもしろ}い","재밌다"],
+    ["{感動|かんどう}","감동"], ["{泣|な}ける","울컥하다"] ]
+];
+function wordsFromPreset(i){
+  return WORD_PRESETS[i % WORD_PRESETS.length].map(function(p){ return { jp:p[0], ko:p[1] }; });
+}
+
+/* =========================================================
+   2. 관심사 사전 (대화에서 자동 누적)
+   ========================================================= */
+var INTERESTS = [
+  { id:"anime",  name:"일본 애니", emoji:"🎬", topic:"anime",   ko:["애니","만화","최애","작품"], jp:["アニメ","漫画"] },
+  { id:"action", name:"액션",     emoji:"⚔️", topic:"anime",   ko:["액션","전투","싸움","격투"], jp:["アクション","バトル"] },
+  { id:"moving", name:"감동",     emoji:"🥹", topic:"phrases", ko:["감동","눈물","울컥","울었"], jp:["感動","泣け"] },
+  { id:"ramen",  name:"라멘",     emoji:"🍜", topic:"travel",  ko:["라멘","국수","면"], jp:["ラーメン"] },
+  { id:"travel", name:"일본 여행", emoji:"🗾", topic:"travel",  ko:["여행","도쿄","오사카","교토","온천"], jp:["旅行","東京","大阪","京都"] },
+  { id:"goods",  name:"굿즈",     emoji:"🧸", topic:"anime",   ko:["굿즈","피규어"], jp:["グッズ","フィギュア"] },
+  { id:"seichi", name:"성지순례", emoji:"⛩️", topic:"anime",   ko:["성지","순례","아키하바라"], jp:["聖地","秋葉原"] },
+  { id:"line",   name:"명대사",   emoji:"💬", topic:"phrases", ko:["명대사","대사","세리후"], jp:["セリフ"] }
+];
+
+/* =========================================================
+   3. 대화 시나리오 (레벨별 질문 · 선택지)
+   ========================================================= */
+function Q(jp, ko, pr){ return { jp:jp, ko:ko, pr:pr }; }
+function ST(a, b, c, h){ return { q:[ Q(a[0],a[1],a[2]), Q(b[0],b[1],b[2]), Q(c[0],c[1],c[2]) ], h:h }; }
+
+var SCEN = {
+  anime: { name:"일본 애니", ja:"アニメ", emoji:"🎬", steps:[
+    ST(["アニメ、すき？","애니 좋아해요?","아니메, 스키?"],
+       ["{好|す}きなアニメは{何|なん}ですか？","좋아하는 애니는 뭐예요?","스키나 아니메와 난데스카?"],
+       ["{最近|さいきん}、{一番|いちばん}{好|す}きなアニメは{何|なん}ですか？どうして{好|す}きなんですか？","요즘 가장 좋아하는 애니는 뭐예요? 왜 좋아해요?","사이킨, 이치반 스키나 아니메와 난데스카? 도오시테 스키난데스카?"],
+       {"1":["はい、すき！|네, 좋아해요!","ワンピース！|원피스!","ちょっとだけ…|조금만요…"],
+        "2":["「{鬼滅|きめつ}の{刃|やいば}」が{好|す}きです。|「귀멸의 칼날」을 좋아해요.","アニメはあまり{見|み}ません。|애니는 별로 안 봐요.","{映画|えいが}のアニメが{好|す}きです。|극장 애니를 좋아해요."],
+        "3":["{最近|さいきん}は「{呪術廻戦|じゅじゅつかいせん}」にハマっています。{戦|たたか}いの{作画|さくが}がすごいからです。|요즘은 「주술회전」에 빠져 있어요. 전투 작화가 대단하거든요.","「{進撃|しんげき}の{巨人|きょじん}」が{一番|いちばん}です。{物語|ものがたり}が{深|ふか}いからです。|「진격의 거인」이 최고예요. 이야기가 깊거든요.","{子|こ}どものころから「ドラゴンボール」が{好|す}きです。いまも{全部|ぜんぶ}{見|み}ています。|어릴 때부터 「드래곤볼」을 좋아해요. 지금도 다 보고 있어요."]}),
+    ST(["{名言|めいげん}、ある？","명대사 있어요?","메이겐, 아루?"],
+       ["{好|す}きな{名言|めいげん}はありますか？","좋아하는 명대사가 있어요?","스키나 메이겐와 아리마스카?"],
+       ["{心|こころ}に{残|のこ}っている{名言|めいげん}を{教|おし}えてください。","마음에 남는 명대사를 알려 주세요.","코코로니 노콧테이루 메이겐오 오시에테 쿠다사이."],
+       {"1":["あるよ！|있어요!","「{諦|あきら}めない」！|「포기 안 해」!","むずかしい…|어려워요…"],
+        "2":["「{諦|あきら}めたらそこで{試合|しあい}{終了|しゅうりょう}ですよ」が{好|す}きです。|「포기하면 거기서 시합 종료예요」를 좋아해요.","「{前|まえ}を{向|む}け」というセリフが{好|す}きです。|「앞을 봐」라는 대사를 좋아해요.","あまり{覚|おぼ}えていません。|별로 기억하지 못해요."],
+        "3":["「{逃|に}げるのは{簡単|かんたん}だが、{逃|に}げたら{後悔|こうかい}する」というセリフが{心|こころ}に{残|のこ}っています。|「도망치는 건 쉽지만, 도망치면 후회한다」라는 대사가 마음에 남아요.","「{自分|じぶん}を{信|しん}じろ」という{言葉|ことば}が{力|ちから}になります。|「자신을 믿어라」라는 말이 힘이 돼요.","「まだ{早|はや}い」という{短|みじか}いセリフが{一番|いちばん}{好|す}きです。|「아직 이르다」라는 짧은 대사가 제일 좋아요."]}),
+    ST(["グッズ、{持|も}ってる？","굿즈 가지고 있어요?","굿즈, 못테루?"],
+       ["アニメのグッズは{何|なに}を{持|も}っていますか？","애니 굿즈는 뭘 가지고 있어요?","아니메노 굿즈와 나니오 못테이마스카?"],
+       ["{秋葉原|あきはばら}に行ったことはありますか？どんなグッズが{好|す}きですか？","아키하바라에 가 본 적 있어요? 어떤 굿즈를 좋아해요?","아키하바라니 잇타 코토와 아리마스카? 돈나 굿즈가 스키데스카?"],
+       {"1":["{持|も}ってる！|가지고 있어요!","フィギュア！|피규어!","あまり{無|な}いです。|별로 없어요."],
+        "2":["フィギュアとキーホルダーを{持|も}っています。|피규어랑 키홀더를 가지고 있어요.","{秋葉原|あきはばら}でよく{買|か}います。|아키하바라에서 자주 사요.","シールを{集|あつ}めています。|스티커를 모으고 있어요."],
+        "3":["{秋葉原|あきはばら}には{何度|なんど}か行きました。{限定|げんてい}フィギュアを{集|あつ}めるのが{好|す}きです。|아키하바라에 몇 번 갔어요. 한정 피규어 모으는 걸 좋아해요.","まだ{行|い}ったことはありませんが、{一度|いちど}行ってみたいです。|아직 가 본 적은 없지만 한 번 가 보고 싶어요.","ポスターやTシャツを{買|か}ったことがあります。{部屋|へや}に{飾|かざ}っています。|포스터나 티셔츠를 산 적이 있어요. 방에 걸어 두고 있어요."]}),
+    ST(["{聖地|せいち}、行きたい？","성지순례 가고 싶어요?","세이치, 이키타이?"],
+       ["アニメの{聖地|せいち}に行ってみたいですか？","애니 성지에 가 보고 싶어요?","아니메노 세이치니 잇테미타이데스카?"],
+       ["{一番|いちばん}行ってみたいアニメの{聖地|せいち}はどこですか？","가장 가 보고 싶은 애니 성지는 어디예요?","이치반 잇테미타이 아니메노 세이치와 도코데스카?"],
+       {"1":["はい！|네!","{東京|とうきょう}！|도쿄!","どこでも！|어디든요!"],
+        "2":["「{君|きみ}の{名|な}は」の{舞台|ぶたい}に行きたいです。|「너의 이름은」의 무대에 가고 싶어요.","{鎌倉|かまくら}に行ってみたいです。|가마쿠라에 가 보고 싶어요.","まだ{決|き}めていません。|아직 정하지 못했어요."],
+        "3":["「{君|きみ}の{名|な}は」の{舞台|ぶたい}になった{飛騨|ひだ}に行きたいです。{景色|けしき}がとてもきれいだそうです。|「너의 이름은」 무대가 된 히다에 가고 싶어요. 경치가 아주 아름답다고 해요.","{京都|きょうと}の{神社|じんじゃ}を{巡|めぐ}りたいです。アニメによく{出|で}てきますから。|교토의 신사를 돌아보고 싶어요. 애니에 자주 나오니까요.","{海|うみ}の{見|み}える{町|まち}に行って、{写真|しゃしん}を{撮|と}りたいです。|바다가 보이는 마을에 가서 사진을 찍고 싶어요."]}),
+    ST(["{映画|えいが}、{見|み}た？","극장판 봤어요?","에이가, 미타?"],
+       ["{最近|さいきん}、{劇場版|げきじょうばん}を{見|み}ましたか？","최근에 극장판 봤어요?","사이킨, 게키조오반오 미마시타카?"],
+       ["{最近見|さいきんみ}た{劇場版|げきじょうばん}の{感想|かんそう}を{聞|き}かせてください。","최근에 본 극장판 감상을 들려주세요.","사이킨 미타 게키조오반노 칸소오오 키카세테 쿠다사이."],
+       {"1":["{見|み}た！|봤어요!","まだ。|아직요.","{面白|おもしろ}かった！|재밌었어요!"],
+        "2":["{先週|せんしゅう}、{劇場版|げきじょうばん}を{見|み}ました。|지난주에 극장판을 봤어요.","まだ{見|み}ていません。|아직 안 봤어요.","とても{面白|おもしろ}かったです。|아주 재밌었어요."],
+        "3":["{先週|せんしゅう}「{鬼滅|きめつ}」の{劇場版|げきじょうばん}を{見|み}ました。{映像|えいぞう}がきれいで{感動|かんどう}しました。|지난주 「귀멸」 극장판을 봤어요. 영상이 아름답고 감동했어요.","{家族|かぞく}と{一緒|いっしょ}に{見|み}ました。{最後|さいご}は{泣|な}いてしまいました。|가족과 함께 봤어요. 마지막엔 울고 말았어요.","ストーリーはシンプルでしたが、{音楽|おんがく}がとてもよかったです。|이야기는 단순했지만 음악이 아주 좋았어요."]})
+  ]},
+  travel: { name:"여행·맛집", ja:"旅行・グルメ", emoji:"🍜", steps:[
+    ST(["ラーメン、すき？","라멘 좋아해요?","라멘, 스키?"],
+       ["ラーメンは{何味|なにあじ}が{好|す}きですか？","라멘은 무슨 맛을 좋아해요?","라멘와 나니아지가 스키데스카?"],
+       ["{日本|にほん}で{食|た}べたいラーメンはありますか？どんな{味|あじ}が{好|す}きですか？","일본에서 먹어 보고 싶은 라멘이 있어요? 어떤 맛을 좋아해요?","니혼데 타베타이 라멘와 아리마스카? 돈나 아지가 스키데스카?"],
+       {"1":["すき！|좋아해요!","{醤油|しょうゆ}！|간장!","からいの！|매운 거!"],
+        "2":["{醤油|しょうゆ}ラーメンが{好|す}きです。|간장 라멘이 좋아요.","{味噌|みそ}ラーメンが{好|す}きです。|미소 라멘이 좋아요.","{辛|から}いラーメンが{好|す}きです。|매운 라멘이 좋아요."],
+        "3":["{博多|はかた}のとんこつラーメンを{食|た}べてみたいです。|하카타의 돈코츠 라멘을 먹어 보고 싶어요.","{味噌|みそ}ラーメンが{一番好|いちばんす}きです。{北海道|ほっかいどう}で{食|た}べてみたいです。|미소 라멘이 제일 좋아요. 홋카이도에서 먹어 보고 싶어요.","{塩|しお}ラーメンが{好|す}きです。あっさりしていて{食|た}べやすいです。|시오 라멘이 좋아요. 담백해서 먹기 편해요."]}),
+    ST(["お{酒|さけ}、{飲|の}む？","술 마셔요?","오사케, 노무?"],
+       ["{何|なに}を{飲|の}みますか？","뭐 마실래요?","나니오 노미마스카?"],
+       ["{居酒屋|いざかや}で{頼|たの}みたい{料理|りょうり}はありますか？","이자카야에서 시켜 보고 싶은 음식 있어요?","이자카야데 타노미타이 료오리와 아리마스카?"],
+       {"1":["ビール！|맥주!","お{茶|ちゃ}。|차요.","あまり{飲|の}みません。|별로 안 마셔요."],
+        "2":["ビールを{飲|の}みます。|맥주를 마셔요.","お{茶|ちゃ}をお{願|ねが}いします。|차 주세요.","{日本酒|にほんしゅ}が{好|す}きです。|사케를 좋아해요."],
+        "3":["{焼|や}き{鳥|とり}と{枝豆|えだまめ}を{頼|たの}みたいです。ビールとよく{合|あ}いますから。|야키토리와 에다마메를 시키고 싶어요. 맥주와 잘 어울리니까요.","{刺身|さしみ}と{日本酒|にほんしゅ}を{楽|たの}しみたいです。|회와 사케를 즐기고 싶어요.","{一人|ひとり}でも{入|はい}りやすい{居酒屋|いざかや}を{教|おし}えてください。|혼자서도 들어가기 쉬운 이자카야를 알려 주세요."]}),
+    ST(["{駅|えき}、どこ？","역 어디예요?","에키, 도코?"],
+       ["{駅|えき}はどこですか？","역은 어디예요?","에키와 도코데스카?"],
+       ["{駅|えき}までの{行|い}き{方|かた}を{教|おし}えてもらえますか？","역까지 가는 길을 알려 줄 수 있어요?","에키마데노 이키카타오 오시에테 모라에마스카?"],
+       {"1":["あそこ！|저기요!","まっすぐ？|쭉?"], "2":["まっすぐですか？|쭉 가면 되나요?","{地下鉄|ちかてつ}はどこですか？|지하철은 어디예요?","ここから{近|ちか}いですか？|여기서 가까워요?"],
+        "3":["すみません、{駅|えき}までの{行|い}き{方|かた}を{教|おし}えてもらえますか？|실례합니다, 역까지 가는 길을 알려 주실 수 있나요?","{地図|ちず}を{見|み}せてもいいですか？{道|みち}に{迷|まよ}ってしまいました。|지도를 보여 드려도 될까요? 길을 잃었어요.","{電車|でんしゃ}で{二|ふた}つ{目|め}の{駅|えき}で{降|お}りればいいですか？|전철로 두 번째 역에서 내리면 되나요?"]}),
+    ST(["コンビニ、{行|い}く？","편의점 가요?","콘비니, 이쿠?"],
+       ["コンビニで{何|なに}を{買|か}いますか？","편의점에서 뭐 사요?","콘비니데 나니오 카이마스카?"],
+       ["{日本|にほん}のコンビニで{買|か}ってみたいものはありますか？","일본 편의점에서 사 보고 싶은 게 있어요?","니혼노 콘비니데 캇테미타이 모노와 아리마스카?"],
+       {"1":["おにぎり！|주먹밥!","コーヒー！|커피!","{何|なに}も。|아무것도요."],
+        "2":["おにぎりとお{茶|ちゃ}を{買|か}います。|주먹밥과 차를 사요.","{甘|あま}いものを{買|か}います。|단 걸 사요.","コーヒーをよく{買|か}います。|커피를 자주 사요."],
+        "3":["おでんとお{菓子|かし}を{買|か}ってみたいです。|오뎅과 과자를 사 보고 싶어요.","{限定|げんてい}のお{菓子|かし}とおにぎりを{買|か}いたいです。|한정 과자와 주먹밥을 사고 싶어요.","コンビニのコーヒーとホットスナックが{好|す}きです。|편의점 커피와 핫스낵을 좋아해요."]}),
+    ST(["ホテル、{着|つ}いた？","호텔 도착했어요?","호테루, 츠이타?"],
+       ["ホテルで{何|なに}を{言|い}いますか？","호텔에서 뭐라고 말해요?","호테루데 나니오 이이마스카?"],
+       ["ホテルのチェックインで{困|こま}ったことはありますか？","호텔 체크인에서 곤란했던 적 있어요?","호테루노 체쿠인데 코맛타 코토와 아리마스카?"],
+       {"1":["チェックイン！|체크인!","{予約|よやく}！|예약!"],
+        "2":["チェックインをお{願|ねが}いします。|체크인 부탁드려요.","{予約|よやく}しています。|예약했어요.","{荷物|にもつ}を{預|あず}けたいです。|짐을 맡기고 싶어요."],
+        "3":["{予約|よやく}した{者|もの}ですが、チェックインをお{願|ねが}いします。|예약한 사람인데 체크인 부탁드려요.","{部屋|へや}の{変更|へんこう}は{可能|かのう}ですか？|방 변경이 가능한가요?","{朝食|ちょうしょく}は{何時|なんじ}からですか？|조식은 몇 시부터예요?"]})
+  ]},
+  daily: { name:"일상·취미", ja:"日常・趣味", emoji:"👮", steps:[
+    ST(["お{疲|つか}れさま！","수고했어요!","오츠카레사마!"],
+       ["{仕事|しごと}のあと、{何|なに}をしますか？","일 끝나고 뭐 해요?","시고토노 아토, 나니오 시마스카?"],
+       ["{仕事|しごと}が{終|お}わったあと、{疲|つか}れを{取|と}るために{何|なに}をしていますか？","일이 끝난 뒤 피로를 풀려고 뭘 해요?","시고토가 오왓타 아토, 츠카레오 토루 타메니 나니오 시테이마스카?"],
+       {"1":["{休|やす}む。|쉬어요.","アニメ！|애니!","ビール！|맥주!"],
+        "2":["{家|いえ}でゆっくり{休|やす}みます。|집에서 푹 쉬어요.","アニメを{見|み}ます。|애니를 봐요.","お{風呂|ふろ}に{入|はい}ります。|목욕해요."],
+        "3":["{家|いえ}に{帰|かえ}ってから、アニメを{一|ひと}つ{見|み}ながら{休|やす}みます。|집에 돌아와서 애니 한 편 보면서 쉬어요.","{風呂|ふろ}に{入|はい}って、そのあと{家族|かぞく}と{話|はな}します。|목욕하고 나서 가족과 이야기해요.","{少|すこ}し{散歩|さんぽ}してから{晩|ばん}ご{飯|はん}を{食|た}べます。|조금 산책하고 나서 저녁을 먹어요."]}),
+    ST(["スポーツ、する？","운동해요?","스포츠, 스루?"],
+       ["{運動|うんどう}は{何|なに}をしていますか？","운동은 뭐 해요?","운도오와 나니오 시테이마스카?"],
+       ["{体力|たいりょく}づくりのために、どんな{運動|うんどう}をしていますか？","체력 관리로 어떤 운동을 해요?","타이료쿠즈쿠리노 타메니, 돈나 운도오오 시테이마스카?"],
+       {"1":["ジョギング！|조깅!","{筋|きん}トレ！|근력 운동!","あまり…|별로요…"],
+        "2":["{週|しゅう}に{二回|にかい}ジョギングします。|주 2회 조깅해요.","ジムに{通|かよ}っています。|헬스장에 다녀요.","{家|いえ}で{筋|きん}トレをします。|집에서 근력 운동해요."],
+        "3":["{週|しゅう}に{三回|さんかい}、{朝|あさ}{走|はし}るようにしています。{体|からだ}が{軽|かる}くなりました。|주 3회 아침에 뛰도록 해요. 몸이 가벼워졌어요.","ジムで{筋|きん}トレをしてから、{少|すこ}しプールで{泳|およ}ぎます。|헬스장에서 근력 운동 후 수영장에서 조금 수영해요.","{仕事|しごと}が{忙|いそが}しくて、{最近|さいきん}はあまり{運動|うんどう}できていません。|일이 바빠서 요즘은 운동을 별로 못 하고 있어요."]}),
+    ST(["{家族|かぞく}、{元気|げんき}？","가족 잘 지내요?","카조쿠, 겐키?"],
+       ["{家族|かぞく}は{元気|げんき}ですか？","가족은 잘 지내요?","카조쿠와 겐키데스카?"],
+       ["お{子|こ}さんと{一緒|いっしょ}に{何|なに}をして{遊|あそ}びますか？","아이와 함께 뭐 하면서 놀아요?","오코상토 잇쇼니 나니오 시테 아소비마스카?"],
+       {"1":["{元気|げんき}！|잘 지내요!","ゲーム！|게임!","いっしょに{遊|あそ}ぶ。|같이 놀아요."],
+        "2":["{家族|かぞく}はみんな{元気|げんき}です。|가족 모두 잘 지내요.","{子|こ}どもとゲームをします。|아이와 게임해요.","{公園|こうえん}に{行|い}きます。|공원에 가요."],
+        "3":["{娘|むすめ}と{一緒|いっしょ}にアニメを{見|み}たり、ゲームをしたりします。|딸과 함께 애니를 보거나 게임을 해요.","{休|やす}みの{日|ひ}は{家族|かぞく}で{出|で}かけて、{写真|しゃしん}をたくさん{撮|と}ります。|쉬는 날은 가족과 나가서 사진을 많이 찍어요.","{子|こ}どもに{日本語|にほんご}を{少|すこ}し{教|おし}えています。|아이에게 일본어를 조금 가르치고 있어요."]}),
+    ST(["{週末|しゅうまつ}、{何|なに}する？","주말에 뭐 해요?","슈마츠, 나니 스루?"],
+       ["{週末|しゅうまつ}は{何|なに}をしますか？","주말엔 뭐 해요?","슈마츠와 나니오 시마스카?"],
+       ["{最近|さいきん}の{週末|しゅうまつ}で{一番|いちばん}よかったことは{何|なん}ですか？","요즘 주말 중 가장 좋았던 건 뭐예요?","사이킨노 슈마츠데 이치반 요캇타 코토와 난데스카?"],
+       {"1":["{寝|ね}る！|자요!","{映画|えいが}！|영화!","{家族|かぞく}と！|가족과!"],
+        "2":["{家|いえ}でアニメを{見|み}ます。|집에서 애니를 봐요.","{家族|かぞく}と{出|で}かけます。|가족과 나가요.","{運動|うんどう}します。|운동해요."],
+        "3":["{先週|せんしゅう}は{家族|かぞく}と{近|ちか}くの{温泉|おんせん}に{行|い}きました。とてもよかったです。|지난주엔 가족과 근처 온천에 갔어요. 아주 좋았어요.","{土曜日|どようび}に{友達|ともだち}とラーメンを{食|た}べました。{新|あたら}しい{店|みせ}を{見|み}つけました。|토요일에 친구와 라멘을 먹었어요. 새 가게를 발견했어요.","{家|いえ}で{映画|えいが}を{三本|さんぼん}{見|み}ました。ゆっくりできました。|집에서 영화를 세 편 봤어요. 푹 쉬었어요."]}),
+    ST(["{趣味|しゅみ}は？","취미는요?","슈미와?"],
+       ["{趣味|しゅみ}は{何|なん}ですか？","취미가 뭐예요?","슈미와 난데스카?"],
+       ["{仕事|しごと}と{関係|かんけい}ない{趣味|しゅみ}はありますか？","일과 상관없는 취미가 있어요?","시고토토 칸케이나이 슈미와 아리마스카?"],
+       {"1":["アニメ！|애니!","ゲーム！|게임!","{旅行|りょこう}！|여행!"],
+        "2":["{趣味|しゅみ}はアニメ{鑑賞|かんしょう}です。|취미는 애니 감상이에요.","{音楽|おんがく}を{聞|き}くことです。|음악 듣는 거예요.","{料理|りょうり}をすることです。|요리하는 거예요."],
+        "3":["アニメ{鑑賞|かんしょう}と{音楽|おんがく}を{聞|き}くことが{趣味|しゅみ}です。{休|やす}みの{日|ひ}は{一日中|いちにちじゅう}アニメを{見|み}ています。|애니 감상과 음악 듣기가 취미예요. 쉬는 날은 하루 종일 애니를 봐요.","{仕事|しごと}の{合間|あいま}に{写真|しゃしん}を{撮|と}るのが{好|す}きです。{休|やす}みの{日|ひ}によく{外|そと}に{出|で}ます。|일 사이사이 사진 찍는 걸 좋아해요. 쉬는 날에 자주 밖에 나가요.","{料理|りょうり}と{旅行|りょこう}が{趣味|しゅみ}です。{日本|にほん}の{料理|りょうり}を{作|つく}るのが{楽|たの}しいです。|요리와 여행이 취미예요. 일본 요리를 만드는 게 즐거워요."]})
+  ]},
+  phrases: { name:"애니 명표현", ja:"名セリフ", emoji:"💬", steps:[
+    ST(["マジで？","진짜?","마지데?"],
+       ["{驚|おどろ}いたとき、{何|なん}て{言|い}いますか？","놀랐을 때 뭐라고 해요?","오도로이타 토키, 난테 이이마스카?"],
+       ["アニメでよく{聞|き}く{驚|おどろ}きの{表現|ひょうげん}を{使|つか}ってみましょう。","애니에서 자주 듣는 놀람 표현을 써 봐요.","아니메데 요쿠 키쿠 오도로키노 효오겐오 츠캇테 미마쇼오."],
+       {"1":["マジで？|진짜?","えっ！|엑!","うそ！|거짓말!"],
+        "2":["「マジで？」と{言|い}います。|「마지데?」라고 해요.","「えっ、{本当|ほんとう}？」と{言|い}います。|「엑, 진짜?」라고 해요.","「うそでしょ？」と{言|い}います。|「거짓말이지?」라고 해요."],
+        "3":["アニメだと「なにそれ、{面白|おもしろ}そう！」と{言|い}うことが{多|おお}いです。|애니에선 「뭐야 그거, 재밌겠다!」라고 말할 때가 많아요.","「{心臓|しんぞう}が{止|と}まるかと{思|おも}った」という{表現|ひょうげん}がかっこいいです。|「심장이 멈추는 줄 알았어」라는 표현이 멋있어요.","「{嘘|うそ}、{信|しん}じられない」と{言|い}ってしまうことがあります。|「거짓말, 믿을 수 없어」라고 말해 버릴 때가 있어요."]}),
+    ST(["{嬉|うれ}しい？","기뻐요?","우레시이?"],
+       ["{嬉|うれ}しいとき、{何|なん}て{言|い}いますか？","기쁠 때 뭐라고 해요?","우레시이 토키, 난테 이이마스카?"],
+       ["{感動|かんどう}したときの{気持|きも}ちを{日本語|にほんご}で{表|あらわ}してみてください。","감동했을 때의 기분을 일본어로 표현해 보세요.","칸도오시타 토키노 키모치오 니혼고데 아라와시테 미테 쿠다사이."],
+       {"1":["やったー！|야호!","うれしい！|기뻐!","{泣|な}いた！|울었어!"],
+        "2":["「やったー！」と{言|い}います。|「야호!」라고 해요.","「とても{嬉|うれ}しいです」と{言|い}います。|「아주 기뻐요」라고 해요.","「{泣|な}きそうになりました」と{言|い}います。|「울컥했어요」라고 해요."],
+        "3":["「{最後|さいご}のシーンで{涙|なみだ}が{止|と}まらなかった」と{伝|つた}えたいです。|「마지막 장면에서 눈물이 멈추지 않았어」라고 전하고 싶어요.","「{言葉|ことば}にできないほど{感動|かんどう}しました」と{言|い}います。|「말로 표현할 수 없을 만큼 감동했어요」라고 해요.","「{心|こころ}が{温|あたた}かくなりました」という{表現|ひょうげん}を{使|つか}いたいです。|「마음이 따뜻해졌어요」라는 표현을 쓰고 싶어요."]}),
+    ST(["タメ{口|ぐち}？","반말이에요?","타메구치?"],
+       ["{友達|ともだち}と{話|はな}すときは、{敬語|けいご}を{使|つか}いますか？","친구와 말할 때 존댓말 써요?","토모다치토 하나스 토키와, 케이고오 츠카이마스카?"],
+       ["アニメのキャラクターは、{友達|ともだち}に{敬語|けいご}を{使|つか}いますか？","애니 캐릭터는 친구에게 존댓말을 써요?","아니메노 캬라쿠타아와, 토모다치니 케이고오 츠카이마스카?"],
+       {"1":["タメ{口|ぐち}！|반말!","{敬語|けいご}！|존댓말!","ふつう。|보통이요."],
+        "2":["{友達|ともだち}にはタメ{口|ぐち}を{使|つか}います。|친구에겐 반말을 써요.","{目上|めうえ}の{人|ひと}には{敬語|けいご}を{使|つか}います。|윗사람에겐 존댓말을 써요.","{状況|じょうきょう}によって{変|か}えます。|상황에 따라 바꿔요."],
+        "3":["アニメでは{仲間|なかま}にはタメ{口|ぐち}、{初対面|しょたいめん}には{敬語|けいご}が{多|おお}いです。|애니에선 동료에겐 반말, 초면엔 존댓말이 많아요.","「{俺|おれ}」と「{僕|ぼく}」と「{私|わたし}」の{使|つか}い{分|わ}けが{面白|おもしろ}いです。|「오레」와 「보쿠」와 「와타시」의 구분이 재밌어요.","{大人|おとな}には{敬語|けいご}、{友達|ともだち}にはタメ{口|ぐち}が{自然|しぜん}だと思います。|어른에겐 존댓말, 친구에겐 반말이 자연스럽다고 생각해요."]}),
+    ST(["かっこいい？","멋져요?","캇코이이?"],
+       ["かっこいいセリフを{言|い}ってみてください。","멋진 대사를 말해 보세요.","캇코이이 세리후오 잇테미테 쿠다사이."],
+       ["{一番|いちばん}かっこいいと{思|おも}うセリフを、{声|こえ}に出して{言|い}ってみてください。","가장 멋있다고 생각하는 대사를 소리 내어 말해 보세요.","이치반 캇코이이토 오모우 세리후오, 코에니 다시테 잇테미테 쿠다사이."],
+       {"1":["「{行|い}くぞ！」|「간다!」","「{俺|おれ}が{守|まも}る」！|「내가 지킬게」!"],
+        "2":["「{行|い}くぞ！」と{言|い}います。|「간다!」라고 해요.","「{俺|おれ}が{守|まも}る」と{言|い}います。|「내가 지킬게」라고 해요.","「{諦|あきら}めない」と{言|い}います。|「포기하지 않아」라고 해요."],
+        "3":["「{逃|に}げるのは{簡単|かんたん}だ。でも{逃|に}げたら{後悔|こうかい}する」が{一番|いちばん}かっこいいと思います。|「도망치는 건 쉽다. 하지만 도망치면 후회한다」가 가장 멋있다고 생각해요.","「{強|つよ}くなれ、{自分|じぶん}の{弱|よわ}さに{勝|か}てるほど」というセリフが{好|す}きです。|「강해져라, 자기 약함을 이길 만큼」이라는 대사가 좋아요.","「まだ{終|お}わらない」という{短|みじか}いセリフが{心|こころ}に{残|のこ}ります。|「아직 끝나지 않았어」라는 짧은 대사가 마음에 남아요."]}),
+    ST(["おはよう！","좋은 아침!","오하요오!"],
+       ["アニメでよく{使|つか}うあいさつは{何|なん}ですか？","애니에서 자주 쓰는 인사는 뭐예요?","아니메데 요쿠 츠카우 아이사츠와 난데스카?"],
+       ["{日常|にちじょう}で{使|つか}えるアニメのフレーズを{一|ひと}つ{教|おし}えてください。","일상에서 쓸 수 있는 애니 문구를 하나 알려 주세요.","니치조오데 츠카에루 아니메노 후레에즈오 히토츠 오시에테 쿠다사이."],
+       {"1":["おはよう！|좋은 아침!","やあ！|야!","いただきます！|잘 먹겠습니다!"],
+        "2":["「おはようございます」をよく{使|つか}います。|「오하요오 고자이마스」를 자주 써요.","「いってきます」と「いってらっしゃい」です。|「다녀올게요」와 「다녀오세요」예요.","{食|た}べる{前|まえ}の「いただきます」です。|먹기 전 「잘 먹겠습니다」예요."],
+        "3":["「おつかれさまです」は{仕事|しごと}でもアニメでもよく{出|で}てきます。{色々|いろいろ}な{場面|ばめん}で{使|つか}えます。|「오츠카레사마데스」는 일에서도 애니에서도 자주 나와요. 여러 장면에서 쓸 수 있어요.","「よろしくお{願|ねが}いします」は{初対面|しょたいめん}でも{仲間|なかま}になるときも{使|つか}えます。|「요로시쿠 오네가이시마스」는 초면에도 동료가 될 때도 쓸 수 있어요.","「{行|い}ってきます」と「{行|い}ってらっしゃい」のやりとりが{日常|にちじょう}で{一番|いちばん}{使|つか}いやすいです。|「잇테키마스」와 「잇테랏샤이」의 주고받기가 일상에서 가장 쓰기 쉬워요."]})
+  ]}
+};
+
+/* =========================================================
+   4. 한국어 → 일본어 코칭 사전 (내장 엔진)
+   ========================================================= */
+var NOUNS = [
+  { re:/애니|만화/, jp:"アニメ", pr:"아니메", ko:"애니메이션", emoji:"🎬" },
+  { re:/영화|극장판/, jp:"{映画|えいが}", pr:"에이가", ko:"영화", emoji:"🎞️" },
+  { re:/라멘/, jp:"ラーメン", pr:"라멘", ko:"라멘", emoji:"🍜" },
+  { re:/초밥|스시/, jp:"お{寿司|すし}", pr:"오스시", ko:"초밥", emoji:"🍣" },
+  { re:/이자카야|술집/, jp:"{居酒屋|いざかや}", pr:"이자카야", ko:"이자카야", emoji:"🏮" },
+  { re:/커피/, jp:"コーヒー", pr:"코오히이", ko:"커피", emoji:"☕" },
+  { re:/물/, jp:"お{水|みず}", pr:"오미즈", ko:"물", emoji:"💧" },
+  { re:/맥주|비어/, jp:"ビール", pr:"비이루", ko:"맥주", emoji:"🍺" },
+  { re:/여행/, jp:"{旅行|りょこう}", pr:"료코오", ko:"여행", emoji:"✈️" },
+  { re:/도쿄/, jp:"{東京|とうきょう}", pr:"토오쿄오", ko:"도쿄", emoji:"🗼" },
+  { re:/오사카/, jp:"{大阪|おおさか}", pr:"오오사카", ko:"오사카", emoji:"🏯" },
+  { re:/교토/, jp:"{京都|きょうと}", pr:"쿄오토", ko:"교토", emoji:"⛩️" },
+  { re:/역/, jp:"{駅|えき}", pr:"에키", ko:"역", emoji:"🚉" },
+  { re:/공항/, jp:"{空港|くうこう}", pr:"쿠우코오", ko:"공항", emoji:"🛫" },
+  { re:/호텔/, jp:"ホテル", pr:"호테루", ko:"호텔", emoji:"🏨" },
+  { re:/편의점/, jp:"コンビニ", pr:"콘비니", ko:"편의점", emoji:"🏪" },
+  { re:/화장실/, jp:"トイレ", pr:"토이레", ko:"화장실", emoji:"🚻" },
+  { re:/굿즈/, jp:"グッズ", pr:"굿즈", ko:"굿즈", emoji:"🧸" },
+  { re:/피규어/, jp:"フィギュア", pr:"피규어", ko:"피규어", emoji:"🪆" },
+  { re:/게임/, jp:"ゲーム", pr:"게에무", ko:"게임", emoji:"🎮" },
+  { re:/음악/, jp:"{音楽|おんがく}", pr:"온가쿠", ko:"음악", emoji:"🎵" },
+  { re:/사진/, jp:"{写真|しゃしん}", pr:"샤신", ko:"사진", emoji:"📷" },
+  { re:/가족/, jp:"{家族|かぞく}", pr:"카조쿠", ko:"가족", emoji:"👨‍👩‍👧" },
+  { re:/아이|딸|아들|자녀/, jp:"{子|こ}ども", pr:"코도모", ko:"아이", emoji:"🧒" },
+  { re:/아내|와이프|부인/, jp:"{妻|つま}", pr:"츠마", ko:"아내", emoji:"👩" },
+  { re:/주말/, jp:"{週末|しゅうまつ}", pr:"슈우마츠", ko:"주말", emoji:"📅" },
+  { re:/취미/, jp:"{趣味|しゅみ}", pr:"슈미", ko:"취미", emoji:"🎨" },
+  { re:/운동/, jp:"{運動|うんどう}", pr:"운도오", ko:"운동", emoji:"🏃" },
+  { re:/경찰/, jp:"{警察官|けいさつかん}", pr:"케이사츠칸", ko:"경찰관", emoji:"👮" },
+  { re:/친구/, jp:"{友達|ともだち}", pr:"토모다치", ko:"친구", emoji:"🤝" },
+  { re:/선생님/, jp:"{先生|せんせい}", pr:"센세에", ko:"선생님", emoji:"👩‍🏫" },
+  { re:/일본어/, jp:"{日本語|にほんご}", pr:"니혼고", ko:"일본어", emoji:"🇯🇵" },
+  { re:/일본/, jp:"{日本|にほん}", pr:"니혼", ko:"일본", emoji:"🗾" },
+  { re:/노래/, jp:"{歌|うた}", pr:"우타", ko:"노래", emoji:"🎤" },
+  { re:/책/, jp:"{本|ほん}", pr:"혼", ko:"책", emoji:"📚" }
+];
+var VERBS = [
+  { re:/먹/, jp:"{食|た}べます", pr:"타베마스", tai:"{食|た}べたい", taiPr:"타베타이", ko:"먹다", emoji:"🍚" },
+  { re:/마시/, jp:"{飲|の}みます", pr:"노미마스", tai:"{飲|の}みたい", taiPr:"노미타이", ko:"마시다", emoji:"🥤" },
+  { re:/가다|가고|가요|갈래|갈 ?거/, jp:"{行|い}きます", pr:"이키마스", tai:"{行|い}きたい", taiPr:"이키타이", ko:"가다", emoji:"🚶" },
+  { re:/오다|오고|올래/, jp:"{来|き}ます", pr:"키마스", tai:"{来|き}たい", taiPr:"키타이", ko:"오다", emoji:"🙋" },
+  { re:/보다|보고|볼래|봤/, jp:"{見|み}ます", pr:"미마스", tai:"{見|み}たい", taiPr:"미타이", ko:"보다", emoji:"👀" },
+  { re:/사다|사고|살래|샀/, jp:"{買|か}います", pr:"카이마스", tai:"{買|か}いたい", taiPr:"카이타이", ko:"사다", emoji:"🛍️" },
+  { re:/자다|자고|잘래|잤/, jp:"{寝|ね}ます", pr:"네마스", tai:"{寝|ね}たい", taiPr:"네타이", ko:"자다", emoji:"😴" },
+  { re:/일하/, jp:"{働|はたら}きます", pr:"하타라키마스", tai:"{働|はたら}きたい", taiPr:"하타라키타이", ko:"일하다", emoji:"💼" },
+  { re:/만나/, jp:"{会|あ}います", pr:"아이마스", tai:"{会|あ}いたい", taiPr:"아이타이", ko:"만나다", emoji:"🤝" },
+  { re:/배우/, jp:"{習|なら}います", pr:"나라미마스", tai:"{習|なら}いたい", taiPr:"나라미타이", ko:"배우다", emoji:"📖" },
+  { re:/걷/, jp:"{歩|ある}きます", pr:"아루키마스", tai:"{歩|ある}きたい", taiPr:"아루키타이", ko:"걷다", emoji:"🚶" },
+  { re:/달리|뛰/, jp:"{走|はし}ります", pr:"하시리마스", tai:"{走|はし}りたい", taiPr:"하시리타이", ko:"달리다", emoji:"🏃" },
+  { re:/기다리/, jp:"{待|ま}ちます", pr:"마치마스", tai:"{待|ま}ちたい", taiPr:"마치타이", ko:"기다리다", emoji:"⏳" },
+  { re:/울/, jp:"{泣|な}きます", pr:"나키마스", tai:"{泣|な}きたい", taiPr:"나키타이", ko:"울다", emoji:"😢" },
+  { re:/웃/, jp:"{笑|わら}います", pr:"와라이마스", tai:"{笑|わら}いたい", taiPr:"와라이타이", ko:"웃다", emoji:"😄" },
+  { re:/노래 ?하|부르/, jp:"{歌|うた}います", pr:"우타이마스", tai:"{歌|うた}いたい", taiPr:"우타이타이", ko:"노래하다", emoji:"🎤" },
+  { re:/요리/, jp:"{料理|りょうり}します", pr:"료오리시마스", tai:"{料理|りょうり}したい", taiPr:"료오리시타이", ko:"요리하다", emoji:"🍳" },
+  { re:/공부/, jp:"{勉強|べんきょう}します", pr:"벤쿄오시마스", tai:"{勉強|べんきょう}したい", taiPr:"벤쿄오시타이", ko:"공부하다", emoji:"📚" },
+  { re:/하다|하고|할래|했/, jp:"します", pr:"시마스", tai:"したい", taiPr:"시타이", ko:"하다", emoji:"✅" }
+];
+var ADJS = [
+  { re:/맛있/, jp:"{美味|おい}しい", pr:"오이시이", ko:"맛있다", emoji:"😋" },
+  { re:/재밌|재미있/, jp:"{面白|おもしろ}い", pr:"오모시로이", ko:"재밌다", emoji:"😄" },
+  { re:/어렵/, jp:"{難|むずか}しい", pr:"무즈카시이", ko:"어렵다", emoji:"🧩" },
+  { re:/쉽/, jp:"{簡単|かんたん}", pr:"칸탄", ko:"쉽다", emoji:"🙂" },
+  { re:/비싸/, jp:"{高|たか}い", pr:"타카이", ko:"비싸다", emoji:"💰" },
+  { re:/예쁘|이쁘/, jp:"{綺麗|きれい}", pr:"키레이", ko:"예쁘다", emoji:"🌸" },
+  { re:/귀엽/, jp:"かわいい", pr:"카와이이", ko:"귀엽다", emoji:"🥰" },
+  { re:/멋있|멋져/, jp:"かっこいい", pr:"캇코이이", ko:"멋있다", emoji:"😎" },
+  { re:/춥/, jp:"{寒|さむ}い", pr:"사무이", ko:"춥다", emoji:"🥶" },
+  { re:/덥/, jp:"{暑|あつ}い", pr:"아츠이", ko:"덥다", emoji:"🥵" },
+  { re:/바쁘/, jp:"{忙|いそが}しい", pr:"이소가시이", ko:"바쁘다", emoji:"⏰" },
+  { re:/피곤/, jp:"{疲|つか}れた", pr:"츠카레타", ko:"지치다", emoji:"😮‍💨" },
+  { re:/크/, jp:"{大|おお}きい", pr:"오오키이", ko:"크다", emoji:"🐘" },
+  { re:/작/, jp:"{小|ちい}さい", pr:"치이사이", ko:"작다", emoji:"🐜" }
+];
+function findNoun(t){ for (var i=0;i<NOUNS.length;i++) if (NOUNS[i].re.test(t)) return NOUNS[i]; return null; }
+function findVerb(t){ for (var i=0;i<VERBS.length;i++) if (VERBS[i].re.test(t)) return VERBS[i]; return null; }
+function findAdj(t){ for (var i=0;i<ADJS.length;i++) if (ADJS[i].re.test(t)) return ADJS[i]; return null; }
+
+var RULES = [
+/* ---------- 애니 이야기 ---------- */
+{ re:/애니.*명작|명작.*애니/, f:function(t){
+    return res(t, "このアニメ、マジで{名作|めいさく}だね！", "이 애니 진짜 명작이야!", "코노 아니메, 마지데 메이사쿠다네!",
+      [W("このアニメ","이 애니","🎬"), W("{名作|めいさく}","명작","✨")],
+      "친구에게는 반말 **だね**, 정중하게는 **このアニメは本当に名作ですね**라고 해요."); } },
+{ re:/애니/ , f:function(t){
+    return res(t, "アニメが{好|す}きです。", "애니를 좋아해요", "아니메가 스키데스",
+      [W("アニメ","애니메이션","🎬"), W("{好|す}き","좋아함","💛")],
+      "정중하게는 **好きです**, 친구끼리는 **好きだよ**라고 해요."); } },
+{ re:/명대사|명대|세리후/, f:function(t){
+    return res(t, "{名|めい}セリフですね！", "명대사네요!", "메이세리후데스네",
+      [W("{名|めい}セリフ","명대사","💬"), W("セリフ","대사","🗣️")],
+      "애니에서 자주 듣는 **名セリフ**. 친구끼리는 **名セリフだね**라고 해요."); } },
+{ re:/최애|최고로 ?좋아/, f:function(t){
+    return res(t, "{推|お}しです！", "최애예요!", "오시데스",
+      [W("{推|お}し","최애·응원하는 것","💖"), W("いちばん","가장","1️⃣")],
+      "요즘 일본에서는 최애를 **推し**라고 해요. 아주 자연스러운 표현이에요."); } },
+{ re:/굿즈|피규어/, f:function(t){
+    return res(t, "グッズを{集|あつ}めています。", "굿즈를 모으고 있어요", "굿즈오 아츠메테이마스",
+      [W("グッズ","굿즈","🧸"), W("{集|あつ}める","모으다","🗃️")],
+      "**集めています**는 '모으고 있어요'. 친구끼리는 **集めてる**라고 줄여요."); } },
+{ re:/아키하바라|아키바/, f:function(t){
+    return res(t, "{秋葉原|あきはばら}に行きたいです。", "아키하바라에 가고 싶어요", "아키하바라니 이키타이데스",
+      [W("{秋葉原|あきはばら}","아키하바라","🗼"), W("{行|い}きたい","가고 싶다","🚶")],
+      "**〜たいです**는 '〜하고 싶어요'. 친구끼리는 **行きたい**라고 해요."); } },
+{ re:/성지|순례/, f:function(t){
+    return res(t, "{聖地巡礼|せいちじゅんれい}をしたいです。", "성지순례를 하고 싶어요", "세이치준레이오 시타이데스",
+      [W("{聖地巡礼|せいちじゅんれい}","성지순례","⛩️"), W("{巡|めぐ}る","돌다","🔄")],
+      "일본에서도 **聖地巡礼**라고 그대로 써요. 애니 팬에게 통하는 말이에요."); } },
+{ re:/극장판|극장 ?애니/, f:function(t){
+    return res(t, "{劇場版|げきじょうばん}を{見|み}ました。", "극장판을 봤어요", "게키조오반오 미마시타",
+      [W("{劇場版|げきじょうばん}","극장판","🎞️"), W("{見|み}ました","봤다","👀")],
+      "**見ました**는 '봤어요'. 친구끼리는 **見た**라고 해요."); } },
+{ re:/감동/, f:function(t){
+    return res(t, "{感動|かんどう}しました。", "감동했어요", "칸도오시마시타",
+      [W("{感動|かんどう}","감동","🥹"), W("しました","했어요","✅")],
+      "애니를 보고 감동했을 때 아주 잘 쓰는 말이에요. 반말은 **感動した**."); } },
+{ re:/눈물|울었|울컥/, f:function(t){
+    return res(t, "{泣|な}きました。", "울었어요", "나키마시타",
+      [W("{泣|な}く","울다","😢"), W("ました","했어요","✅")],
+      "**泣きました**는 '울었어요'. '울컥했다'는 **泣きそうになった**라고 해요."); } },
+{ re:/작화|그림이 ?좋|그림 ?예쁘/, f:function(t){
+    return res(t, "{作画|さくが}がきれいです。", "작화가 아름다워요", "사쿠가가 키레이데스",
+      [W("{作画|さくが}","작화","🎨"), W("きれい","아름답다","✨")],
+      "**作画**는 애니 팬이 정말 자주 쓰는 말이에요."); } },
+{ re:/스토리|이야기|줄거리/, f:function(t){
+    return res(t, "{物語|ものがたり}が{面白|おもしろ}いです。", "이야기가 재밌어요", "모노가타리가 오모시로이데스",
+      [W("{物語|ものがたり}","이야기","📖"), W("{面白|おもしろ}い","재밌다","😄")],
+      "**物語**는 '이야기'. 회화에서는 **ストーリー**도 많이 써요."); } },
+{ re:/주인공/, f:function(t){
+    return res(t, "{主人公|しゅじんこう}が{好|す}きです。", "주인공을 좋아해요", "슈진코오가 스키데스",
+      [W("{主人公|しゅじんこう}","주인공","🦸"), W("{好|す}き","좋아함","💛")],
+      "주인공은 **主人公**. 친구끼리는 **主人公が好き**라고 해요."); } },
+{ re:/주제가|오프닝|엔딩|ost/i, f:function(t){
+    return res(t, "{主題歌|しゅだいか}が{好|す}きです。", "주제가를 좋아해요", "슈다이가가 스키데스",
+      [W("{主題歌|しゅだいか}","주제가","🎵"), W("オープニング","오프닝","▶️")],
+      "오프닝은 **オープニング(OP)**, 엔딩은 **エンディング(ED)**라고 해요."); } },
+{ re:/추천/, f:function(t){
+    return res(t, "おすすめは{何|なん}ですか？", "추천은 뭐예요?", "오스스메와 난데스카",
+      [W("おすすめ","추천","👍"), W("{何|なん}","무엇","❓")],
+      "**おすすめ**는 '추천'. 가게에서도 애니 이야기에서도 그대로 써요."); } },
+{ re:/다시 ?보|정주행|또 ?보/, f:function(t){
+    return res(t, "もう{一度|いちど}{見|み}たいです。", "다시 보고 싶어요", "모오 이치도 미타이데스",
+      [W("もう{一度|いちど}","한 번 더","🔁"), W("{見|み}たい","보고 싶다","👀")],
+      "**もう一度**는 '한 번 더'. 정주행은 **一気見(いっきみ)**라고 해요."); } },
+
+/* ---------- 여행·맛집 ---------- */
+{ re:/라멘/, f:function(t){
+    return res(t, "ラーメンを{食|た}べたいです。", "라멘을 먹고 싶어요", "라멘오 타베타이데스",
+      [W("ラーメン","라멘","🍜"), W("{食|た}べたい","먹고 싶다","🍚")],
+      "주문할 때는 **ラーメンをください**가 더 자연스러워요."); } },
+{ re:/이자카야|술집/, f:function(t){
+    return res(t, "{居酒屋|いざかや}に行きたいです。", "이자카야에 가고 싶어요", "이자카야니 이키타이데스",
+      [W("{居酒屋|いざかや}","이자카야","🏮"), W("{行|い}きたい","가고 싶다","🚶")],
+      "**居酒屋**는 일본식 선술집. 간판에 居酒屋라고 쓰여 있어요."); } },
+{ re:/맥주/, f:function(t){
+    return res(t, "ビールを{一|ひと}つください。", "맥주 하나 주세요", "비이루오 히토츠 쿠다사이",
+      [W("ビール","맥주","🍺"), W("{一|ひと}つ","하나","1️⃣")],
+      "주문할 때 **〜をください**만 붙이면 돼요. 아주 편한 표현이에요."); } },
+{ re:/술|사케|니혼슈/, f:function(t){
+    return res(t, "お{酒|さけ}をください。", "술 주세요", "오사케오 쿠다사이",
+      [W("お{酒|さけ}","술","🍶"), W("ください","주세요","🙏")],
+      "일본에서 '술'은 보통 **お酒**. 사케는 **日本酒**라고 구분해요."); } },
+{ re:/물/, f:function(t){
+    return res(t, "お{水|みず}をください。", "물 주세요", "오미즈오 쿠다사이",
+      [W("お{水|みず}","물","💧"), W("ください","주세요","🙏")],
+      "식당에서는 **お水**라고 해요. 차가운 물이 기본으로 나와요."); } },
+{ re:/계산|계산서|얼마인지 ?계산/, f:function(t){
+    return res(t, "お{会計|かいけい}をお{願|ねが}いします。", "계산 부탁드려요", "오카이케이오 오네가이시마스",
+      [W("{会計|かいけい}","계산","🧾"), W("お{願|ねが}いします","부탁합니다","🙏")],
+      "가게에서 손을 들고 **すみません、お会計お願いします**라고 하면 돼요."); } },
+{ re:/메뉴/, f:function(t){
+    return res(t, "メニューを{見|み}せてください。", "메뉴를 보여 주세요", "메뉴오 미세테 쿠다사이",
+      [W("メニュー","메뉴","📋"), W("{見|み}せて","보여 주세요","👉")],
+      "**見せてください**는 '보여 주세요'. 영어 메뉴는 **英語のメニュー**라고 해요."); } },
+{ re:/맛있/, f:function(t){
+    return res(t, "{美味|おい}しいです！", "맛있어요!", "오이시이데스",
+      [W("{美味|おい}しい","맛있다","😋"), W("です","~예요","🟰")],
+      "맛있을 때는 **美味しい！** 한마디면 충분해요. 반말은 おいしい！"); } },
+{ re:/매워|맵다|맵/, f:function(t){
+    return res(t, "{辛|から}いです。", "매워요", "카라이데스",
+      [W("{辛|から}い","맵다","🌶️"), W("です","~예요","🟰")],
+      "**辛い**는 '맵다'. '조금 매워요'는 **少し辛いです**."); } },
+{ re:/역|전철|지하철/, f:function(t){
+    return res(t, "{駅|えき}はどこですか？", "역은 어디예요?", "에키와 도코데스카",
+      [W("{駅|えき}","역","🚉"), W("どこ","어디","📍")],
+      "**〜はどこですか？**는 '〜은 어디예요?'. 화장실·편의점에도 그대로 써요."); } },
+{ re:/화장실/, f:function(t){
+    return res(t, "トイレはどこですか？", "화장실은 어디예요?", "토이레와 도코데스카",
+      [W("トイレ","화장실","🚻"), W("どこ","어디","📍")],
+      "일본에서는 **お手洗い**라고도 해요. 가게에서 물어보기 좋아요."); } },
+{ re:/길|어떻게 ?가|가는 ?길/, f:function(t){
+    return res(t, "{道|みち}を{教|おし}えてください。", "길을 알려 주세요", "미치오 오시에테 쿠다사이",
+      [W("{道|みち}","길","🗺️"), W("{教|おし}えて","알려 주세요","🙏")],
+      "처음엔 **すみません、**를 붙이면 훨씬 정중해요."); } },
+{ re:/편의점/, f:function(t){
+    return res(t, "コンビニは{近|ちか}くにありますか？", "편의점이 근처에 있나요?", "콘비니와 치카쿠니 아리마스카",
+      [W("コンビニ","편의점","🏪"), W("{近|ちか}く","근처","📍")],
+      "**近くにありますか？**는 '근처에 있나요?'. 여행에서 제일 많이 쓰는 말이에요."); } },
+{ re:/체크인/, f:function(t){
+    return res(t, "チェックインをお{願|ねが}いします。", "체크인 부탁드려요", "체쿠인오 오네가이시마스",
+      [W("チェックイン","체크인","🏨"), W("お{願|ねが}いします","부탁합니다","🙏")],
+      "예약했다면 **予約した者ですが**를 먼저 붙이면 좋아요."); } },
+{ re:/예약/, f:function(t){
+    return res(t, "{予約|よやく}しています。", "예약했어요", "요야쿠시테이마스",
+      [W("{予約|よやく}","예약","📝"), W("しています","하고 있어요","✅")],
+      "이름을 말할 땐 **〇〇の予約です**라고 하면 돼요."); } },
+{ re:/짐|캐리어|수하물/, f:function(t){
+    return res(t, "{荷物|にもつ}を{預|あず}かってもらえますか？", "짐을 맡아 주실 수 있나요?", "니모츠오 아즈캇테 모라에마스카",
+      [W("{荷物|にもつ}","짐","🧳"), W("{預|あず}かる","맡다","🙌")],
+      "체크인 전후에 아주 유용한 말이에요. **〜てもらえますか**는 '〜해 주실 수 있나요'."); } },
+{ re:/사진 ?찍|사진/, f:function(t){
+    return res(t, "{写真|しゃしん}を{撮|と}ってもいいですか？", "사진 찍어도 될까요?", "샤신오 톳테모 이이데스카",
+      [W("{写真|しゃしん}","사진","📷"), W("{撮|と}る","찍다","📸")],
+      "**〜てもいいですか？**는 '〜해도 될까요?'. 허락을 구할 때 써요."); } },
+{ re:/얼마/, f:function(t){
+    return res(t, "いくらですか？", "얼마예요?", "이쿠라데스카",
+      [W("いくら","얼마","💰"), W("ですか","~예요?","❓")],
+      "가게에서 **これ、いくらですか？**처럼 쓰면 돼요."); } },
+{ re:/카드/, f:function(t){
+    return res(t, "カードで{払|はら}えますか？", "카드로 계산되나요?", "카아도데 하라에마스카",
+      [W("カード","카드","💳"), W("{払|はら}う","지불하다","💴")],
+      "**〜で払えますか？**는 '〜로 계산되나요?'. 현금은 **現金**이에요."); } },
+{ re:/면세/, f:function(t){
+    return res(t, "{免税|めんぜい}できますか？", "면세 되나요?", "멘제이데키마스카",
+      [W("{免税|めんぜい}","면세","🛍️"), W("できますか","될까요","❓")],
+      "여권이 필요해요. **パスポート**를 같이 보여 주세요."); } },
+{ re:/공항/, f:function(t){
+    return res(t, "{空港|くうこう}まで{行|い}きたいです。", "공항까지 가고 싶어요", "쿠우코오마데 이키타이데스",
+      [W("{空港|くうこう}","공항","🛫"), W("まで","~까지","➡️")],
+      "택시 기사에게 **空港までお願いします**라고도 해요."); } },
+{ re:/택시/, f:function(t){
+    return res(t, "タクシーを{呼|よ}んでください。", "택시를 불러 주세요", "타쿠시이오 욘데 쿠다사이",
+      [W("タクシー","택시","🚕"), W("{呼|よ}ぶ","부르다","📣")],
+      "호텔 프런트에서 이 한마디면 돼요."); } },
+{ re:/영어/, f:function(t){
+    return res(t, "{英語|えいご}は{話|はな}せますか？", "영어 할 수 있어요?", "에이고와 하나세마스카",
+      [W("{英語|えいご}","영어","🔤"), W("{話|はな}せる","말할 수 있다","🗣️")],
+      "**〜は話せますか？**는 '〜할 수 있어요?'. 한국어는 **韓国語(かんこくご)**."); } },
+
+/* ---------- 일상·취미 ---------- */
+{ re:/퇴근|일 ?끝|야근/, f:function(t){
+    return res(t, "{仕事|しごと}が{終|お}わりました。", "일이 끝났어요", "시고토가 오와리마시타",
+      [W("{仕事|しごと}","일","💼"), W("{終|お}わる","끝나다","🏁")],
+      "동료에게는 **お疲れさまです**가 가장 자연스러워요."); } },
+{ re:/출근|일하러|회사/, f:function(t){
+    return res(t, "{仕事|しごと}に{行|い}きます。", "일하러 가요", "시고토니 이키마스",
+      [W("{仕事|しごと}","일","💼"), W("{行|い}きます","가요","🚶")],
+      "'회사'는 **会社(かいしゃ)**. **会社に行きます**도 자주 써요."); } },
+{ re:/운동/, f:function(t){
+    return res(t, "{運動|うんどう}しています。", "운동하고 있어요", "운도오시테이마스",
+      [W("{運動|うんどう}","운동","🏃"), W("しています","하고 있어요","✅")],
+      "**しています**는 '하고 있어요'. 습관을 말할 때 딱이에요."); } },
+{ re:/헬스|짐| gym/i, f:function(t){
+    return res(t, "ジムに{通|かよ}っています。", "헬스장에 다녀요", "지무니 카욧테이마스",
+      [W("ジム","헬스장","🏋️"), W("{通|かよ}う","다니다","🔁")],
+      "**通っています**는 '다니고 있어요'. 학원·회사에도 써요."); } },
+{ re:/달리기|러닝|조깅/, f:function(t){
+    return res(t, "{走|はし}るのが{好|す}きです。", "달리기를 좋아해요", "하시루노가 스키데스",
+      [W("{走|はし}る","달리다","🏃"), W("{好|す}き","좋아함","💛")],
+      "**〜のが好きです**는 '〜하는 걸 좋아해요'."); } },
+{ re:/가족/, f:function(t){
+    return res(t, "{家族|かぞく}と{過|す}ごします。", "가족과 지내요", "카조쿠토 스고시마스",
+      [W("{家族|かぞく}","가족","👨‍👩‍👧"), W("{過|す}ごす","지내다","🕰️")],
+      "주말 이야기에서 **家族と過ごします**는 아주 자연스러운 표현이에요."); } },
+{ re:/아이|딸|아들|자녀/, f:function(t){
+    return res(t, "{子|こ}どもと{遊|あそ}びます。", "아이와 놀아요", "코도모토 아소비마스",
+      [W("{子|こ}ども","아이","🧒"), W("{遊|あそ}ぶ","놀다","🎮")],
+      "딸은 **娘(むすめ)**, 아들은 **息子(むすこ)**라고 해요."); } },
+{ re:/아내|와이프|부인/, f:function(t){
+    return res(t, "{妻|つま}と{出|で}かけます。", "아내와 외출해요", "츠마토 데카케마스",
+      [W("{妻|つま}","아내","👩"), W("{出|で}かける","외출하다","🚪")],
+      "남편은 **夫(おっと)**. 남에게는 **家内(かない)**도 써요."); } },
+{ re:/주말/, f:function(t){
+    return res(t, "{週末|しゅうまつ}は{家|いえ}で{休|やす}みます。", "주말엔 집에서 쉬어요", "슈우마츠와 이에데 야스미마스",
+      [W("{週末|しゅうまつ}","주말","📅"), W("{休|やす}む","쉬다","😌")],
+      "**は**는 주제를 꺼낼 때 써요. '주말에는'이라는 느낌이에요."); } },
+{ re:/취미/, f:function(t){
+    return res(t, "{趣味|しゅみ}はアニメ{鑑賞|かんしょう}です。", "취미는 애니 감상이에요", "슈미와 아니메 칸쇼오데스",
+      [W("{趣味|しゅみ}","취미","🎨"), W("{鑑賞|かんしょう}","감상","🎬")],
+      "**趣味は〜です**는 자기소개에서 자주 쓰는 틀이에요."); } },
+{ re:/요리/, f:function(t){
+    return res(t, "{料理|りょうり}をします。", "요리해요", "료오리오 시마스",
+      [W("{料理|りょうり}","요리","🍳"), W("します","해요","✅")],
+      "'요리하다'는 **料理を作ります**가 더 정확해요."); } },
+{ re:/커피/, f:function(t){
+    return res(t, "コーヒーを{飲|の}みます。", "커피 마셔요", "코오히이오 노미마스",
+      [W("コーヒー","커피","☕"), W("{飲|の}む","마시다","🥤")],
+      "편의점 커피는 **コンビニコーヒー**. 아주 유명해요."); } },
+{ re:/산책/, f:function(t){
+    return res(t, "{散歩|さんぽ}します。", "산책해요", "산포시마스",
+      [W("{散歩|さんぽ}","산책","🚶"), W("します","해요","✅")],
+      "**散歩します** 또는 **散歩に行きます** 둘 다 자연스러워요."); } },
+{ re:/게임/, f:function(t){
+    return res(t, "ゲームをします。", "게임해요", "게에무오 시마스",
+      [W("ゲーム","게임","🎮"), W("します","해요","✅")],
+      "**ゲームをします**가 기본. '게임에 빠졌어'는 **ハマっています**."); } },
+{ re:/음악/, f:function(t){
+    return res(t, "{音楽|おんがく}を{聞|き}きます。", "음악 들어요", "온가쿠오 키키마스",
+      [W("{音楽|おんがく}","음악","🎵"), W("{聞|き}く","듣다","👂")],
+      "**聞きます**는 '듣다'. 애니 노래는 **アニソン**이라고 해요."); } },
+{ re:/경찰|순경/, f:function(t){
+    return res(t, "{警察官|けいさつかん}を{目指|めざ}しています。", "경찰관을 목표로 하고 있어요", "케이사츠칸오 메자시테이마스",
+      [W("{警察官|けいさつかん}","경찰관","👮"), W("{目指|めざ}す","목표로 하다","🎯")],
+      "**目指しています**는 '목표로 하고 있어요'. 직업 이야기에 잘 어울려요."); } },
+
+/* ---------- 질문·요청 ---------- */
+{ re:/뭐야|뭐지|뭐예요|뭐가|무엇/, f:function(t){
+    var n = findNoun(t);
+    return res(t, n ? n.jp + "は{何|なん}ですか？" : "{何|なん}ですか？",
+      n ? n.ko + "은 뭐예요?" : "뭐예요?", n ? n.pr + "와 난데스카" : "난데스카",
+      [W("{何|なん}","무엇","❓"), n ? W(n.jp,n.ko,n.emoji) : W("これ","이것","👉")],
+      "**〜は何ですか？**는 '〜은 뭐예요?'."); } },
+{ re:/누구/, f:function(t){
+    return res(t, "{誰|だれ}ですか？", "누구예요?", "다레데스카",
+      [W("{誰|だれ}","누구","🙋"), W("ですか","~예요?","❓")],
+      "**誰ですか？**는 '누구예요?'. 친구끼리는 **誰？**만 써도 돼요."); } },
+{ re:/어디/, f:function(t){
+    return res(t, "どこですか？", "어디예요?", "도코데스카",
+      [W("どこ","어디","📍"), W("ですか","~예요?","❓")],
+      "**どこですか？**만으로 충분해요. 앞에 장소를 붙이면 더 좋아요."); } },
+{ re:/언제/, f:function(t){
+    return res(t, "いつですか？", "언제예요?", "이츠데스카",
+      [W("いつ","언제","⏰"), W("ですか","~예요?","❓")],
+      "**いつですか？**는 '언제예요?'. 시간을 물을 때 써요."); } },
+{ re:/왜|어째서/, f:function(t){
+    return res(t, "どうしてですか？", "왜요?", "도오시테데스카",
+      [W("どうして","왜","❓"), W("ですか","~예요?","❓")],
+      "**どうして？**는 반말, **どうしてですか？**는 정중한 말이에요."); } },
+{ re:/어떻게|어떡해/, f:function(t){
+    return res(t, "どうやって？", "어떻게?", "도오얏테",
+      [W("どうやって","어떻게","🤔"), W("どう","어떻게","❓")],
+      "방법을 물을 땐 **どうやって**. 기분을 물을 땐 **どうですか**."); } },
+{ re:/몇 ?개|몇개|몇 ?명|몇 ?잔/, f:function(t){
+    var n = findNoun(t);
+    return res(t, n ? n.jp + "はいくつですか？" : "いくつですか？",
+      n ? n.ko + "은 몇 개예요?" : "몇 개예요?", n ? n.pr + "와 이쿠츠데스카" : "이쿠츠데스카",
+      [W("いくつ","몇 개","🔢"), W("ですか","~예요?","❓")],
+      "**いくつ**는 '몇 개'. 사람은 **何人(なんにん)**이에요."); } },
+{ re:/무슨 ?색|색깔/, f:function(t){
+    return res(t, "{何色|なにいろ}ですか？", "무슨 색이에요?", "나니이로데스카",
+      [W("{何色|なにいろ}","무슨 색","🎨"), W("ですか","~예요?","❓")],
+      "대답은 **赤(あか)·青(あお)·黒(くろ)**처럼 말해요."); } },
+{ re:/무슨 ?뜻|뜻이|의미/, f:function(t){
+    return res(t, "どういう{意味|いみ}ですか？", "무슨 뜻이에요?", "도오이우 이미데스카",
+      [W("{意味|いみ}","뜻","💡"), W("どういう","어떤","🤔")],
+      "애니를 보다 모르는 말이 나오면 이 한마디! **どういう意味？**"); } },
+{ re:/일본어로 ?뭐|일본어로 ?어떻게|이거 ?일본어/, f:function(t){
+    return res(t, "これは{日本語|にほんご}で{何|なん}と言いますか？", "이건 일본어로 뭐라고 해요?", "코레와 니혼고데 난토 이이마스카",
+      [W("これ","이것","👉"), W("{日本語|にほんご}","일본어","🇯🇵")],
+      "**〜と言いますか？**는 '〜라고 해요?'. 정말 자주 쓰는 질문이에요."); } },
+{ re:/다시 ?말|한번 ?더|못 ?들었/, f:function(t){
+    return res(t, "もう{一度|いちど}{言|い}ってください。", "다시 한 번 말해 주세요", "모오 이치도 잇테 쿠다사이",
+      [W("もう{一度|いちど}","한 번 더","🔁"), W("{言|い}って","말해 주세요","🗣️")],
+      "**もう一度**는 회화에서 정말 많이 써요. 외워 두면 편해요."); } },
+{ re:/천천히/, f:function(t){
+    return res(t, "ゆっくり{話|はな}してください。", "천천히 말해 주세요", "윳쿠리 하나시테 쿠다사이",
+      [W("ゆっくり","천천히","🐢"), W("{話|はな}す","말하다","🗣️")],
+      "**ゆっくり**는 '천천히'. 듣기 힘들 때 꼭 필요한 말이에요."); } },
+{ re:/보고 ?싶|그리워|보고싶/, f:function(t){
+    return res(t, "{会|あ}いたいです。", "보고 싶어요", "아이타이데스",
+      [W("{会|あ}う","만나다","🤝"), W("いたい","하고 싶다","💭")],
+      "**会いたい**는 사람이 보고 싶을 때. 사물은 **〜が恋しい**라고 해요."); } },
+{ re:/같이|함께/, f:function(t){
+    return res(t, "{一緒|いっしょ}にしましょう。", "같이 해요", "잇쇼니 시마쇼오",
+      [W("{一緒|いっしょ}に","함께","👫"), W("しましょう","해요","🙌")],
+      "**一緒に**는 '함께'. 권할 때는 **一緒に行きませんか？**도 좋아요."); } },
+{ re:/도와|살려/, f:function(t){
+    return res(t, "{助|たす}けてください。", "도와주세요", "타스케테 쿠다사이",
+      [W("{助|たす}ける","돕다","🤲"), W("ください","주세요","🙏")],
+      "급할 때는 **助けて！** 한마디. 애니에서도 자주 나와요."); } },
+{ re:/가르쳐/, f:function(t){
+    return res(t, "{教|おし}えてください。", "알려 주세요", "오시에테 쿠다사이",
+      [W("{教|おし}える","가르치다","📖"), W("ください","주세요","🙏")],
+      "**教えてください**는 '알려 주세요'. 반말은 **教えて**."); } },
+{ re:/기다려/, f:function(t){
+    return res(t, "ちょっと{待|ま}ってください。", "잠깐 기다려 주세요", "춋토 맛테 쿠다사이",
+      [W("{待|ま}って","기다려","⏳"), W("ちょっと","잠깐","✋")],
+      "**ちょっと待って**는 애니에서 정말 자주 나오는 말이에요."); } },
+{ re:/물론/, f:function(t){
+    return res(t, "もちろんです。", "물론이죠", "모치론데스",
+      [W("もちろん","물론","✅"), W("です","~예요","🟰")],
+      "**もちろん**는 '물론'. 반말은 **もちろん！**"); } },
+{ re:/그렇구나|과연/, f:function(t){
+    return res(t, "なるほど。", "그렇구나", "나루호도",
+      [W("なるほど","그렇구나","💡"), W("そうですか","그렇군요","🟰")],
+      "**なるほど**는 맞장구의 기본. 애니에서도 자주 들려요."); } },
+
+/* ---------- 리액션·감정 ---------- */
+{ re:/몰라|모르겠|못 ?알아/, f:function(t){
+    return res(t, "わかりません。", "모르겠어요", "와카리마센",
+      [W("わかる","알다","💡"), W("わかりません","모르겠습니다","🌀")],
+      "정중하게는 **わかりません**, 친구끼리는 **わかんない**라고 해요."); } },
+{ re:/알겠|알았|오케이|오케/, f:function(t){
+    return res(t, "わかりました。", "알겠습니다", "와카리마시타",
+      [W("わかりました","알겠습니다","✅"), W("はい","네","🙆")],
+      "윗사람에게도 그대로. 친구끼리는 **わかった**."); } },
+{ re:/고마워|고맙|감사/, f:function(t){
+    return res(t, "ありがとうございます。", "감사합니다", "아리가토오 고자이마스",
+      [W("ありがとう","고마워","🙏"), W("ございます","정중한 말","✨")],
+      "친구끼리는 **ありがとう**, 애니에서는 **サンキュー**도 나와요."); } },
+{ re:/미안|죄송/, f:function(t){
+    return res(t, "すみません。", "죄송합니다", "스미마센",
+      [W("すみません","죄송합니다","🙇"), W("ごめんなさい","미안해요","😔")],
+      "가볍게 사과할 땐 **ごめんなさい**, 정중하게는 **申し訳ありません**."); } },
+{ re:/안녕|하이|헬로/, f:function(t){
+    return res(t, "こんにちは。", "안녕하세요", "콘니치와",
+      [W("こんにちは","안녕하세요","👋"), W("おはよう","좋은 아침","🌅")],
+      "아침엔 **おはようございます**, 저녁엔 **こんばんは**예요."); } },
+{ re:/잘 ?자|굿나잇/, f:function(t){
+    return res(t, "おやすみなさい。", "잘 자요", "오야스미나사이",
+      [W("おやすみなさい","잘 자요","🌙"), W("またね","또 봐","👋")],
+      "가족에게는 **おやすみ**만 해도 충분해요."); } },
+{ re:/처음|반가워|반갑/, f:function(t){
+    return res(t, "はじめまして。", "처음 뵙겠습니다", "하지메마시테",
+      [W("はじめまして","처음 뵙겠습니다","🤝"), W("よろしく","잘 부탁해","🙏")],
+      "**はじめまして** 다음엔 꼭 **よろしくお願いします**를 붙여요."); } },
+{ re:/잘 ?부탁/, f:function(t){
+    return res(t, "よろしくお{願|ねが}いします。", "잘 부탁합니다", "요로시쿠 오네가이시마스",
+      [W("よろしく","잘 부탁해","🙏"), W("お{願|ねが}いします","부탁합니다","✨")],
+      "만능 인사예요. 처음 만날 때도, 부탁할 때도 써요."); } },
+{ re:/배고파|배고프/, f:function(t){
+    return res(t, "お{腹|なか}がすきました。", "배고파요", "오나카가 스키마시타",
+      [W("お{腹|なか}","배","🍚"), W("すきました","비었어요","😋")],
+      "**お腹がすきました**는 정중한 말. 반말은 **お腹すいた**."); } },
+{ re:/목말라/, f:function(t){
+    return res(t, "{喉|のど}がかわきました。", "목말라요", "노도가 카와키마시타",
+      [W("{喉|のど}","목","💧"), W("かわきました","말랐어요","🥵")],
+      "**喉がかわきました**는 '목이 말라요'. 반말은 **喉かわいた**."); } },
+{ re:/피곤|지쳤|힘들/, f:function(t){
+    return res(t, "{疲|つか}れました。", "지쳤어요", "츠카레마시타",
+      [W("{疲|つか}れる","지치다","😮‍💨"), W("ました","했어요","✅")],
+      "퇴근 인사 **お疲れさまです**도 꼭 외워 두세요."); } },
+{ re:/졸려|졸리/, f:function(t){
+    return res(t, "{眠|ねむ}いです。", "졸려요", "네무이데스",
+      [W("{眠|ねむ}い","졸리다","😴"), W("です","~예요","🟰")],
+      "**眠い**는 '졸리다'. 반말은 **眠い**."); } },
+{ re:/행복|기분 ?좋|기뻐/, f:function(t){
+    return res(t, "{幸|しあわ}せです。", "행복해요", "시아와세데스",
+      [W("{幸|しあわ}せ","행복","😊"), W("{嬉|うれ}しい","기쁘다","💖")],
+      "**幸せ**는 크게 행복할 때, **嬉しい**는 기쁠 때 써요."); } },
+{ re:/화나|짜증|열받/, f:function(t){
+    return res(t, "{腹|はら}が立ちます。", "화나요", "하라가 타치마스",
+      [W("{腹|はら}が{立|た}つ","화나다","😠"), W("ムカつく","열받다","💢")],
+      "애니에서는 **ムカつく**도 자주 나와요. 반말투예요."); } },
+{ re:/무서워|무섭/, f:function(t){
+    return res(t, "{怖|こわ}いです。", "무서워요", "코와이데스",
+      [W("{怖|こわ}い","무섭다","😱"), W("です","~예요","🟰")],
+      "**怖い**는 '무섭다'. 반말은 **怖い！**"); } },
+{ re:/슬퍼|속상/, f:function(t){
+    return res(t, "{悲|かな}しいです。", "슬퍼요", "카나시이데스",
+      [W("{悲|かな}しい","슬프다","😢"), W("です","~예요","🟰")],
+      "**悲しい**는 '슬프다'. **寂しい(さびしい)**는 '외롭다'예요."); } },
+{ re:/재밌|재미있|신나/, f:function(t){
+    return res(t, "{楽|たの}しいです！", "즐거워요!", "타노시이데스",
+      [W("{楽|たの}しい","즐겁다","🎉"), W("{面白|おもしろ}い","재밌다","😄")],
+      "**楽しい**는 즐거운 기분, **面白い**는 재밌는 내용에 써요."); } },
+{ re:/멋있|멋져|쿨/, f:function(t){
+    return res(t, "かっこいいです！", "멋져요!", "캇코이이데스",
+      [W("かっこいい","멋있다","😎"), W("すごい","대단하다","✨")],
+      "남자에게도 여자에게도 **かっこいい**를 써요."); } },
+{ re:/귀엽/, f:function(t){
+    return res(t, "かわいいです！", "귀여워요!", "카와이이데스",
+      [W("かわいい","귀엽다","🥰"), W("ですね","~네요","💬")],
+      "**かわいい**는 애니 팬이라면 하루에 몇 번도 쓰는 말이에요."); } },
+{ re:/진짜|정말/, f:function(t){
+    return res(t, "{本当|ほんとう}ですか？", "정말이에요?", "혼토오데스카",
+      [W("{本当|ほんとう}","정말","❗"), W("マジで","진짜","😲")],
+      "애니 반말로는 **マジで？**가 훨씬 자주 나와요."); } },
+{ re:/대단|굉장|훌륭/, f:function(t){
+    return res(t, "すごいですね！", "대단하네요!", "스고이데스네",
+      [W("すごい","대단하다","✨"), W("ですね","~네요","💬")],
+      "**すごい**는 만능 감탄사. 반말은 **すごい！**"); } },
+{ re:/최고|베스트/, f:function(t){
+    return res(t, "{最高|さいこう}です！", "최고예요!", "사이코오데스",
+      [W("{最高|さいこう}","최고","🏆"), W("です","~예요","🟰")],
+      "**最高**는 '최고'. 애니 감상에 딱 맞는 한마디예요."); } },
+{ re:/아니야|아니요|싫어/, f:function(t){
+    return res(t, "いいえ、{結構|けっこう}です。", "아니요, 괜찮습니다", "이이에, 켓코오데스",
+      [W("いいえ","아니요","🙅"), W("{結構|けっこう}","괜찮습니다","✅")],
+      "권유를 정중히 거절할 때 **結構です**. 반말은 **いらない**."); } },
+{ re:/괜찮아|괜찮/, f:function(t){
+    return res(t, "{大丈夫|だいじょうぶ}です。", "괜찮아요", "다이조오부데스",
+      [W("{大丈夫|だいじょうぶ}","괜찮다","👍"), W("です","~예요","🟰")],
+      "**大丈夫です**는 '괜찮아요'. 거절로도 쓸 수 있어요."); } },
+{ re:/대박|미쳤다|말도 ?안/, f:function(t){
+    return res(t, "やばい！", "대박! 큰일!", "야바이",
+      [W("やばい","대박·큰일","😱"), W("すごい","대단해","✨")],
+      "**やばい**는 좋을 때도 나쁠 때도 써요. 애니 단골 표현이에요."); } },
+{ re:/놀랐|깜짝/, f:function(t){
+    return res(t, "{驚|おどろ}きました。", "놀랐어요", "오도로키마시타",
+      [W("{驚|おどろ}く","놀라다","😲"), W("びっくり","깜짝","❗")],
+      "**びっくりしました**도 자주 써요. 더 입에 붙어요."); } },
+{ re:/사랑해|좋아해.*너|너를 ?좋아/, f:function(t){
+    return res(t, "{大好|だいす}きです。", "정말 좋아해요", "다이스키데스",
+      [W("{大好|だいす}き","아주 좋아함","❤️"), W("愛してる","사랑해","💘")],
+      "가족·친구에게는 **大好き**, 연인에게는 **愛してる**를 써요."); } },
+
+/* ---------- 하고 싶다 · 부탁 ---------- */
+{ re:/하고 ?싶|가고 ?싶|먹고 ?싶|사고 ?싶|보고 ?싶|자고 ?싶/, f:function(t){
+    var v = findVerb(t), n = findNoun(t);
+    var jp = n ? n.jp + "がほしいです" : (v ? v.tai + "です。" : "{行|い}きたいです。");
+    var ko2 = n ? n.ko + "이 갖고 싶어요" : (v ? v.ko + "고 싶어요" : "가고 싶어요");
+    var pr = n ? n.pr + "가 호시이데스" : (v ? v.taiPr + "데스" : "이키타이데스");
+    return res(t, jp, ko2, pr,
+      [W(v ? v.tai : "{行|い}きたい","~하고 싶다","💭"), n ? W(n.jp,n.ko,n.emoji) : W("ほしい","갖고 싶다","🙏")],
+      "**〜たいです**는 '〜하고 싶어요'. 물건은 **〜がほしいです**."); } },
+{ re:/해 ?도 ?돼|해도 ?되|괜찮을까/, f:function(t){
+    var v = findVerb(t) || { jp:"{食|た}べます", ko:"먹다", emoji:"🍚", pr:"타베마스" };
+    return res(t, v.jp.replace(/ます$/, "てもいいですか？"), v.ko.replace(/다$/, "") + "도 될까요?",
+      v.pr.replace(/마스$/, "테모 이이데스카"),
+      [W("〜てもいいですか","~해도 될까요","❓"), W(v.jp, v.ko, v.emoji)],
+      "허락을 구할 때는 **〜てもいいですか？**. 정말 자주 써요."); } },
+{ re:/해 ?줄|줄 ?수 ?있|가능/, f:function(t){
+    var v = findVerb(t) || { jp:"{見|み}ます", ko:"보다", emoji:"👀", pr:"미마스" };
+    return res(t, v.jp.replace(/ます$/, "てもらえますか？"), v.ko.replace(/다$/, "") + " 주실 수 있나요?",
+      v.pr.replace(/마스$/, "테 모라에마스카"),
+      [W("〜てもらえますか","~해 주실 수 있나요","🙏"), W(v.jp, v.ko, v.emoji)],
+      "부탁할 때 **〜てもらえますか**는 아주 공손하고 편해요."); } },
+{ re:/좋아해|좋아하|좋아요|좋다/, f:function(t){
+    var n = findNoun(t), v = findVerb(t);
+    var jp = n ? n.jp + "が{好|す}きです。" : (v ? v.jp.replace(/ます$/, "るのが{好|す}きです。") : "それが{好|す}きです。");
+    var ko2 = n ? n.ko + "을 좋아해요" : (v ? v.ko.replace(/다$/, "") + "는 걸 좋아해요" : "그걸 좋아해요");
+    var pr = n ? n.pr + "가 스키데스" : (v ? v.ko + "노가 스키데스" : "소레가 스키데스");
+    return res(t, jp, ko2, pr,
+      [W("{好|す}き","좋아함","💛"), n ? W(n.jp,n.ko,n.emoji) : W("それが","그것이","👉")],
+      "**〜が好きです**는 '〜을 좋아해요'. 친구끼리는 **好きだよ**."); } },
+{ re:/싫어해|싫다|싫은|별로/, f:function(t){
+    var n = findNoun(t);
+    return res(t, n ? n.jp + "は{苦手|にがて}です。" : "{苦手|にがて}です。",
+      n ? n.ko + "은 별로예요" : "별로예요", n ? n.pr + "와 니가테데스" : "니가테데스",
+      [W("{苦手|にがて}","서툴다·싫어함","😕"), n ? W(n.jp,n.ko,n.emoji) : W("それ","그것","👉")],
+      "**苦手**는 '잘 못한다·별로다'. 강하게 싫으면 **嫌い(きらい)**."); } }
+];
+
+/* 마지막 단계: 명사·동사·형용사 하나만 말했을 때 */
+function coachFallback(t, hintText){
+  var n = findNoun(t), v = findVerb(t), a = findAdj(t);
+  if (n && v) return res(t, n.jp + "を" + v.jp + "。", n.ko + "을 " + v.ko, n.pr + "오 " + v.pr,
+    [W(v.jp, v.ko, v.emoji), W(n.jp, n.ko, n.emoji)], "주어 + **を** + 동사 순서로 말해요.");
+  if (n && a) return res(t, n.jp + "は" + a.jp + "です。", n.ko + "은 " + a.ko, n.pr + "와 " + a.pr + "데스",
+    [W(a.jp, a.ko, a.emoji), W(n.jp, n.ko, n.emoji)], "**〜は〜です** 틀에 넣으면 문장이 돼요.");
+  if (n) return res(t, n.jp + "です。", n.ko + "이에요", n.pr + "데스",
+    [W(n.jp, n.ko, n.emoji)], "명사만 말할 땐 **〜です**를 붙이면 문장이 돼요.");
+  if (v) return res(t, v.jp + "。", v.ko, v.pr,
+    [W(v.jp, v.ko, v.emoji)], "동작만 말할 때는 **ます** 형태로 말하면 정중해요.");
+  if (a) return res(t, a.jp + "です。", a.ko, a.pr + "데스",
+    [W(a.jp, a.ko, a.emoji)], "형용사 뒤에 **です**를 붙이면 정중한 말이 돼요.");
+  return { tip:"선생님이 잘 못 알아들었어요. 이렇게 말해볼까요? 😊",
+    jp:"すみません、もう{一度|いちど}{言|い}ってください。", ko:"죄송합니다, 다시 한 번 말해 주세요",
+    pr:"스미마센, 모오 이치도 잇테 쿠다사이",
+    words:[W("もう{一度|いちど}","한 번 더","🔁"), W("{言|い}う","말하다","🗣️")] };
+}
+function coach(text){
+  var t = String(text || "").replace(/\s+/g, " ").trim();
+  for (var i=0;i<RULES.length;i++){
+    if (RULES[i].re.test(t)) { try { return RULES[i].f(t); } catch(e){} }
+  }
+  return coachFallback(t);
+}
+var PATTERN_COUNT = RULES.length + NOUNS.length + VERBS.length + ADJS.length;
+
+/* =========================================================
+   5. 상태 & 저장
+   ========================================================= */
+function defaultState(){
+  return {
+    v:1, level:2, autoRead:true, furi:true, koView:true,
+    topic:"anime", mode:"topic",
+    words: wordsFromPreset(0), wordSet:0, wordDone:{},
+    interests:{}, learned:[],
+    streak:{ last:"", days:0, best:0 },
+    ai:{ provider:"none", key:"", model:"" },
+    settings:{ dashUrl:"./index.html" }
+  };
+}
+function loadState(){
+  var d = defaultState();
+  var s = readJSON(STORE_KEY, null);
+  if (!s || typeof s !== "object") return d;
+  d.level = [1,2,3].indexOf(s.level) >= 0 ? s.level : 2;
+  d.autoRead = s.autoRead !== false;
+  d.furi = s.furi !== false;
+  d.koView = s.koView !== false;
+  d.topic = (s.topic && SCEN[s.topic]) ? s.topic : "anime";
+  d.mode = s.mode === "interest" ? "interest" : "topic";
+  d.wordSet = (typeof s.wordSet === "number") ? s.wordSet : 0;
+  if (Array.isArray(s.words) && s.words.length === 10 && s.words.every(function(x){ return x && x.jp; })) {
+    d.words = s.words.map(function(x){ return { jp:String(x.jp).slice(0,32), ko:String(x.ko || "").slice(0,32) }; });
+  }
+  if (s.wordDone && typeof s.wordDone === "object") d.wordDone = s.wordDone;
+  if (s.interests && typeof s.interests === "object") d.interests = s.interests;
+  if (Array.isArray(s.learned)) d.learned = s.learned.slice(-400);
+  if (s.streak && typeof s.streak === "object")
+    d.streak = { last:String(s.streak.last || ""), days:Math.max(0, s.streak.days|0), best:Math.max(0, s.streak.best|0) };
+  if (s.ai && typeof s.ai === "object") d.ai = { provider:s.ai.provider || "none", key:s.ai.key || "", model:s.ai.model || "" };
+  if (s.settings && typeof s.settings === "object") d.settings.dashUrl = s.settings.dashUrl || "./index.html";
+  return d;
+}
+var state = loadState();
+var TODAY = dateKey();
+var cur = { type:"topic", id:state.topic, step:0, steps:(SCEN[state.topic] || SCEN.anime).steps };
+var LOG = [], lastCoach = null, hintOpen = false, curSay = { jp:"", ko:"" };
+
+function save(){
+  writeJSON(STORE_KEY, {
+    v:1, level:state.level, autoRead:state.autoRead, furi:state.furi, koView:state.koView,
+    topic:state.topic, mode:state.mode, words:state.words, wordSet:state.wordSet, wordDone:state.wordDone,
+    interests:state.interests, learned:state.learned, streak:state.streak, ai:state.ai, settings:state.settings,
+    session:{ type:cur.type, id:cur.id, step:cur.step, log:LOG.slice(-40), lastCoach:lastCoach, lastSay:curSay }
+  });
+}
+
+/* =========================================================
+   6. 엘리먼트
+   ========================================================= */
+var el = {};
+["bubble","bubbleJp","bubbleKo","aiBadge","log","hints","answerInput","coach","coachEmpty","coachKo",
+ "scJp","scPr","scKo","scSpeak","scSlow","scSave","coachWords","helpNote","todayNum","streakNum","learnPill","streakPill",
+ "topics","icTop","icDesc","icChips","btnInterest","wwGrid","dashLink","toast","furiToggle","autoRead",
+ "settingsModal","wordsModal","learnModal","learnList","learnTotal","aiProvider","aiKey","aiModel","engineInfo",
+ "dashUrl","btnSettings","btnEditWords","wordEditGrid","btnPreset","btnSaveWords","btnSaveSettings","btnResetTalk",
+ "btnMicJp","btnMicKo","btnHint","btnSend","btnSpeak","btnSlow","btnKo","rpTabs","mobileTabs","interestCard"
+].forEach(function(id){ el[id] = $(id); });
+
+/* =========================================================
+   7. 패널 전환 (폴드 펼침 2단 / 폰 1단)
+   ========================================================= */
+function isPhone(){ return window.matchMedia && window.matchMedia("(max-width:699px)").matches; }
+function setPanel(p){
+  if (p !== "talk" && p !== "coach" && p !== "topics") p = "talk";
+  var b = document.body;
+  b.classList.remove("view-talk","view-coach","view-topics","rp-coach","rp-topics");
+  b.classList.add("view-" + p);
+  b.classList.add(p === "topics" ? "rp-topics" : "rp-coach");
+  var i, on;
+  var rt = el.rpTabs.querySelectorAll("button");
+  for (i = 0; i < rt.length; i++){
+    on = rt[i].getAttribute("data-panel") === (p === "topics" ? "topics" : "coach");
+    rt[i].classList.toggle("on", on);
+    rt[i].setAttribute("aria-selected", on ? "true" : "false");
+  }
+  var mt = el.mobileTabs.querySelectorAll("button");
+  for (i = 0; i < mt.length; i++){
+    on = mt[i].getAttribute("data-view") === p;
+    mt[i].classList.toggle("on", on);
+    mt[i].setAttribute("aria-selected", on ? "true" : "false");
+  }
+}
+
+/* =========================================================
+   8. 이번 주 단어 · 관심사 · 학습 기록
+   ========================================================= */
+function wkey(jp){ return plain(jp); }
+function renderWords(){
+  el.wwGrid.innerHTML = state.words.map(function(wd, i){
+    var done = !!state.wordDone[wkey(wd.jp)];
+    var furi = furiOf(wd.jp);
+    return '<div class="ww' + (done ? " learned" : "") + '" role="button" tabindex="0" data-idx="' + i + '"'
+      + ' data-word="' + esc(plain(wd.jp)) + '" aria-label="' + esc(plain(wd.jp)) + ' ' + esc(wd.ko) + ' 발음 듣기">'
+      + '<span class="wl"><b>' + esc(plain(wd.jp)) + '</b>' + (furi ? '<i>' + esc(furi) + '</i>' : '') + '</span>'
+      + '<span class="ko">' + esc(wd.ko) + '</span>'
+      + '<button class="wk" type="button" data-check="' + i + '" aria-pressed="' + (done ? "true" : "false") + '"'
+      + ' aria-label="' + esc(plain(wd.jp)) + ' 외웠어요" title="외웠어요">✓</button></div>';
+  }).join("");
+}
+function toggleWord(i){
+  var wd = state.words[i]; if (!wd) return;
+  var k = wkey(wd.jp);
+  if (state.wordDone[k]) { delete state.wordDone[k]; toast("'" + plain(wd.jp) + "' 체크를 풀었어요"); }
+  else { state.wordDone[k] = 1; toast("'" + plain(wd.jp) + "' 외웠어요! 👏"); confetti(); }
+  save(); renderWords();
+}
+function bumpInterests(text){
+  var t = String(text || "").toLowerCase(), changed = false;
+  INTERESTS.forEach(function(it){
+    var hit = 0;
+    it.ko.forEach(function(k){ if (t.indexOf(k) >= 0) hit++; });
+    it.jp.forEach(function(k){ if (t.indexOf(k.toLowerCase()) >= 0) hit++; });
+    if (hit) { state.interests[it.id] = (state.interests[it.id] || 0) + Math.min(hit, 2); changed = true; }
+  });
+  if (changed) { save(); renderInterest(); }
+}
+function rankedInterests(){
+  return INTERESTS.map(function(it){ return { it:it, score:state.interests[it.id] || 0 }; })
+    .filter(function(x){ return x.score > 0; })
+    .sort(function(a,b){ return b.score - a.score; });
+}
+function renderInterest(){
+  var rank = rankedInterests(), top = rank[0];
+  el.icTop.textContent = top ? (top.it.emoji + " " + top.it.name) : "기록 중";
+  el.icDesc.textContent = top
+    ? "'" + top.it.name + "' 이야기를 " + top.score + "번이나 했어요. 이어서 이야기해 볼까요?"
+    : "대화할수록 아빠가 좋아하는 걸 기억해 둘게요.";
+  el.icChips.innerHTML = rank.slice(0,3).map(function(x){
+    return '<span class="ic-chip">' + x.it.emoji + " " + esc(x.it.name) + " <b>" + x.score + "</b></span>";
+  }).join("");
+  el.interestCard.classList.toggle("on", cur.type === "interest");
+}
+function learnedToday(){ return state.learned.filter(function(l){ return l.date === TODAY; }); }
+function renderCounts(){
+  el.todayNum.textContent = learnedToday().length;
+  el.streakNum.textContent = state.streak.days || 0;
+  el.learnPill.title = "오늘 배운 일본어 " + learnedToday().length + "문장 보기";
+}
+function touchStreak(){
+  var s = state.streak || { last:"", days:0, best:0 };
+  if (s.last === TODAY) return;
+  var y = dateKey(new Date(Date.now() - 86400000));
+  s.days = (s.last === y) ? (s.days || 0) + 1 : 1;
+  s.last = TODAY;
+  s.best = Math.max(s.best || 0, s.days);
+  state.streak = s;
+  save(); renderCounts();
+}
+
+/* =========================================================
+   9. 음성 (읽어주기 · 말하기)
+   ========================================================= */
+var voices = [], jaVoice = null;
+function pickVoices(){
+  try { voices = (window.speechSynthesis && speechSynthesis.getVoices()) || []; } catch(e){ voices = []; }
+  jaVoice = voices.filter(function(v){ return /^ja[-_]/i.test(v.lang); })
+    .sort(function(a,b){
+      var score = function(v){ return (/ja[-_]JP/i.test(v.lang) ? 2 : 0) + (/kyoko|otoya|google|natural|premium/i.test(v.name) ? 1 : 0); };
+      return score(b) - score(a);
+    })[0] || null;
+}
+if (window.speechSynthesis) {
+  pickVoices();
+  try { speechSynthesis.onvoiceschanged = pickVoices; } catch(e){}
+}
+var talkTimer = null;
+function speak(text, slow, lang){
+  var raw = plain(String(text || "")).replace(/[「」“”"]/g, "").trim();
+  if (!raw) return;
+  if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined"){
+    toast("이 브라우저는 읽어주기를 지원하지 않아요. 소리 없이도 공부할 수 있어요!");
+    return;
+  }
+  try {
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(raw);
+    u.lang = lang || "ja-JP";
+    if (jaVoice && /^ja/i.test(u.lang)) u.voice = jaVoice;
+    u.rate = slow ? 0.62 : 0.92;
+    u.pitch = 1.02;
+    u.onstart = function(){ document.body.classList.add("talking"); };
+    u.onend = function(){ document.body.classList.remove("talking"); };
+    u.onerror = function(){ document.body.classList.remove("talking"); };
+    speechSynthesis.speak(u);
+    clearTimeout(talkTimer);
+    talkTimer = setTimeout(function(){ document.body.classList.remove("talking"); }, 9000);
+  } catch(e){ document.body.classList.remove("talking"); }
+}
+var SRClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+function listen(lang, btn){
+  if (!SRClass){
+    toast("이 브라우저는 음성 인식을 지원하지 않아요. 아래 입력창에 적어 주세요 ✏️");
+    el.helpNote.textContent = "🎤 음성 인식이 안 되면 입력창에 적어 주세요. 선생님이 똑같이 도와드려요!";
+    try { el.answerInput.focus(); } catch(e){}
+    return;
+  }
+  try {
+    var r = new SRClass();
+    r.lang = lang; r.interimResults = false; r.maxAlternatives = 1; r.continuous = false;
+    btn.classList.add("listening");
+    r.onresult = function(ev){
+      btn.classList.remove("listening");
+      var t = "";
+      try { t = ev.results[0][0].transcript || ""; } catch(e){}
+      if (t) handleUser(t, "voice");
+    };
+    r.onerror = function(ev){
+      btn.classList.remove("listening");
+      var code = ev && ev.error;
+      if (code === "not-allowed" || code === "service-not-allowed") toast("마이크를 허용해 주세요! 설정에서 마이크를 켤 수 있어요.");
+      else if (code === "no-speech") toast("잘 안 들렸어요. 한 번 더 말해 보거나 입력창에 적어 주세요.");
+      else toast("음성 인식이 잠깐 안 됐어요. 입력창에 적어도 괜찮아요 ✏️");
+    };
+    r.onend = function(){ btn.classList.remove("listening"); };
+    r.start();
+  } catch(e){
+    btn.classList.remove("listening");
+    toast("마이크를 켤 수 없어요. 입력창에 적어 주세요 ✏️");
+  }
+}
+
+/* =========================================================
+   10. 화면 렌더
+   ========================================================= */
+function toast(msg){
+  el.toast.textContent = msg;
+  el.toast.hidden = false;
+  el.toast.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(function(){ el.toast.classList.remove("show"); }, 2800);
+}
+function currentStep(){ return cur.steps[Math.max(0, Math.min(cur.step, cur.steps.length - 1))]; }
+function stepText(step){ return (step && (step.q[state.level - 1] || step.q[1])) || null; }
+function addLog(who, jp, ko){
+  if (!jp) return;
+  LOG.push({ who:who, jp:String(jp), ko:ko || "", at:Date.now() });
+  if (LOG.length > 60) LOG = LOG.slice(-60);
+  renderLog();
+}
+function renderLog(){
+  el.log.innerHTML = LOG.map(function(m){
+    if (m.who === "sys") return '<div class="li sys"><div class="txt">' + esc(m.jp) + "</div></div>";
+    var ava = m.who === "me" ? "🧑" : (m.who === "coach" ? "✏️" : "👩‍🏫");
+    var ko = m.ko ? '<span class="ko">' + esc(m.ko) + "</span>" : "";
+    return '<div class="li ' + m.who + '"><div class="ava">' + ava + '</div><div class="txt">' + html(m.jp) + ko + "</div></div>";
+  }).join("");
+  el.log.scrollTop = el.log.scrollHeight;
+}
+function say(jp, ko, opts){
+  opts = opts || {};
+  curSay = { jp:jp, ko:ko || "" };
+  el.bubbleJp.innerHTML = html(jp);
+  el.bubbleKo.textContent = ko || "";
+  el.bubbleKo.classList.toggle("hide", !state.koView || !ko);
+  el.aiBadge.hidden = !opts.ai;
+  if (opts.log !== false) addLog("teacher", jp, ko);
+  if (opts.speak !== false && state.autoRead) speak(jp, !!opts.slow);
+  save();
+}
+function renderHints(){
+  var parts = [];
+  if (lastCoach) parts.push('<button class="hint repeat" type="button" data-repeat="1">🗣️ 「' + esc(shortS(plain(lastCoach.jp))) + '」 따라 말하기</button>');
+  if (hintOpen){
+    var step = currentStep();
+    var list = (step && step.h && step.h[String(state.level)]) || [];
+    list.slice(0, 3).forEach(function(h){
+      var p = String(h).split("|");
+      parts.push('<button class="hint choice" type="button" data-say="' + esc(p[0]) + '">💡 ' + esc(plain(p[0])) + (p[1] ? ' <span class="hk">' + esc(p[1]) + "</span>" : "") + "</button>");
+    });
+  }
+  el.hints.innerHTML = parts.join("");
+}
+function showHints(){
+  hintOpen = true; renderHints();
+  say("いくつか{言|い}い{方|かた}がありますよ。ひとつ{選|えら}んでみてください。", "몇 가지 말하는 방법이 있어요. 하나 골라 보세요.", { log:true, speak:true });
+}
+function applyCoach(r){
+  lastCoach = r;
+  el.coachEmpty.hidden = true;
+  el.coach.hidden = false;
+  el.coachKo.innerHTML = boldTip(r.tip);
+  el.scJp.innerHTML = html(r.jp);
+  el.scPr.innerHTML = '<span class="sp-ico">🗣</span><span>' + esc(r.pr || "") + "</span>";
+  el.scKo.textContent = r.ko || "";
+  el.coachWords.innerHTML = (r.words || []).map(function(x){
+    return '<button class="wcard" type="button" data-wspeak="' + esc(plain(x.jp)) + '">'
+      + '<span class="we">🔊</span><span class="wt"><b>' + html(x.jp) + "</b><span>" + esc(x.ko) + "</span></span></button>";
+  }).join("");
+  var already = state.learned.some(function(l){ return l.date === TODAY && l.jp.toLowerCase() === String(r.jp).toLowerCase(); });
+  el.scSave.classList.toggle("saved", already);
+  el.scSave.textContent = already ? "✅ 저장됨" : "⭐ 따라하기";
+  renderHints();
+}
+function clearCoach(){
+  lastCoach = null;
+  el.coach.hidden = true;
+  el.coachEmpty.hidden = false;
+  renderHints();
+}
+
+/* =========================================================
+   11. 대화 흐름
+   ========================================================= */
+function packOf(type, id){ return type === "interest" ? (SCEN[id] || null) : (SCEN[id] || null); }
+function renderTopics(){
+  var btns = el.topics.querySelectorAll(".topic");
+  Array.prototype.forEach.call(btns, function(b){
+    var on = (cur.type === "topic" && b.getAttribute("data-topic") === cur.id);
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+function renderLevels(){
+  var btns = document.querySelectorAll(".lv");
+  Array.prototype.forEach.call(btns, function(b){
+    var on = parseInt(b.getAttribute("data-lv"), 10) === state.level;
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+function startTalk(type, id, opts){
+  opts = opts || {};
+  var pack = packOf(type, id);
+  if (!pack) { type = "topic"; id = "anime"; pack = SCEN.anime; }
+  cur = { type:type, id:id, step:0, steps:pack.steps };
+  state.mode = type;
+  if (type === "topic") state.topic = id;
+  lastCoach = null; hintOpen = false;
+  el.coach.hidden = true; el.coachEmpty.hidden = false;
+  el.aiBadge.hidden = true;
+  if (!opts.keepLog) LOG = [];
+  if (opts.sys) addLog("sys", opts.sys);
+  var step = stepText(cur.steps[0]);
+  var line = (opts.preface ? opts.preface + " " : "") + step.jp;
+  say(line, step.ko, { log:true, speak:!opts.silent });
+  renderHints(); renderTopics(); renderInterest(); renderCounts();
+  save();
+}
+function sayStep(i, opts){
+  opts = opts || {};
+  cur.step = Math.max(0, Math.min(i, cur.steps.length - 1));
+  var step = stepText(currentStep());
+  say(step.jp, step.ko, { log:true, speak:true });
+  renderHints(); save();
+}
+function handleUser(text, source){
+  var t = String(text || "").replace(/\s+/g, " ").trim();
+  if (!t) return;
+  bumpInterests(t);
+  addLog("me", t);
+  hintOpen = false; renderHints();
+  try { el.answerInput.value = ""; } catch(e){}
+  if (/[가-힣]/.test(t)) respondKorean(t);
+  else respondJapanese(t);
+  save();
+}
+function respondJapanese(t){
+  var n = plain(t).length;
+  var praise = n >= 18 ? "すごい！{自然|しぜん}な{日本語|にほんご}ですね！"
+             : (n >= 8 ? "いいですね！じょうずです！" : "いい{一言|ひとこと}ですね！");
+  var stepNow = currentStep();
+  var wrap = cur.step + 1 >= cur.steps.length;
+  var next = wrap ? 0 : cur.step + 1;
+  cur.step = next;
+  var step = stepText(currentStep());
+  var lead = (stepNow && stepNow.react) ? stepNow.react + " " : "";
+  var line = praise + " " + lead + (wrap ? "このテーマはひと{通|とお}りです！🎉 " : "") + step.jp;
+  say(line, step.ko, { log:true, speak:true });
+  renderHints();
+  if (wrap) addLog("sys", "🎉 이 주제 대화를 한 바퀴 다 돌았어요! 이어서 또 해 볼 수 있어요.");
+  touchStreak();
+  save();
+}
+function respondKorean(t){
+  var r = coach(t);
+  applyCoach(r);
+  var line;
+  if (state.level === 1) line = "「" + r.jp + "」と{言|い}ってみましょう。";
+  else if (state.level === 2) line = "なるほど。「" + r.jp + "」と{言|い}ってみましょう。";
+  else line = "{自然|しぜん}な{言|い}い{方|かた}だと、「" + r.jp + "」になります。";
+  say(line, r.ko, { log:true, speak:false });
+  speak(r.jp);
+  touchStreak();
+  if (isPhone()) setPanel("coach");
+  else if (window.matchMedia("(max-width:1023px)").matches) setPanel("coach");
+  if (aiOn()) enhanceWithAI(t);
+  save();
+}
+function saveSentence(jp, ko, pr){
+  if (!jp) return;
+  var exists = state.learned.some(function(l){ return l.date === TODAY && String(l.jp).toLowerCase() === String(jp).toLowerCase(); });
+  if (exists){ toast("이미 오늘 배운 문장이에요! 😊"); return; }
+  state.learned.push({ date:TODAY, jp:String(jp), ko:String(ko || ""), pr:String(pr || ""), at:Date.now() });
+  if (state.learned.length > 400) state.learned = state.learned.slice(-400);
+  touchStreak();
+  save(); renderCounts(); renderLearnList();
+  el.scSave.classList.add("saved");
+  el.scSave.textContent = "✅ 저장됨";
+  el.learnPill.classList.add("pop");
+  setTimeout(function(){ el.learnPill.classList.remove("pop"); }, 600);
+  toast("오늘 배운 문장에 저장했어요! 🔥");
+  confetti();
+  if (isPhone()) setTimeout(function(){ setPanel("talk"); }, 650);
+}
+function renderLearnList(){
+  var today = learnedToday();
+  el.learnList.innerHTML = today.length ? today.map(function(l){
+    return '<div class="learnitem"><span class="le">🔥</span><b>' + html(l.jp) + '</b><span class="ko">' + esc(l.ko || "") + "</span></div>";
+  }).join("") : '<p class="hintline">오늘 배운 문장이 아직 없어요. 한국어로 말하고 ⭐ 따라하기를 눌러 보세요!</p>';
+  el.learnTotal.textContent = "오늘 " + today.length + "문장 · 지금까지 " + state.learned.length + "문장 · 연속 " + (state.streak.days || 0) + "일";
+}
+function confetti(){
+  var emojis = ["🌸","✨","🎌","⭐","💮"];
+  for (var i = 0; i < 12; i++){
+    (function(i){
+      var s = document.createElement("span");
+      s.className = "confetti";
+      s.textContent = emojis[i % emojis.length];
+      s.style.left = (44 + Math.random() * 12) + "vw";
+      s.style.top = "38vh";
+      s.style.setProperty("--dx", (Math.random() * 36 - 18) + "vw");
+      s.style.setProperty("--dy", (-12 - Math.random() * 22) + "vh");
+      s.style.setProperty("--rot", (Math.random() * 360 - 180) + "deg");
+      document.body.appendChild(s);
+      setTimeout(function(){ if (s.parentNode) s.parentNode.removeChild(s); }, 1050);
+    })(i);
+  }
+}
+
+/* =========================================================
+   12. AI 선생님 (선택 연결 · 실패하면 내장 엔진)
+   ========================================================= */
+function aiOn(){ return state.ai.provider !== "none" && !!state.ai.key; }
+function aiModelName(){
+  if (state.ai.model && state.ai.model.trim()) return state.ai.model.trim();
+  return state.ai.provider === "gemini" ? "gemini-2.0-flash" : "gpt-4o-mini";
+}
+function fetchJSON(url, opts, ms){
+  return new Promise(function(resolve, reject){
+    var done = false;
+    var timer = setTimeout(function(){ if (!done){ done = true; reject(new Error("timeout")); } }, ms || 12000);
+    fetch(url, opts).then(function(r){
+      return r.json().then(function(j){ return { ok:r.ok, status:r.status, body:j }; })
+        .catch(function(){ return { ok:r.ok, status:r.status, body:null }; });
+    }).then(function(x){ if (!done){ done = true; clearTimeout(timer); resolve(x); } })
+      .catch(function(e){ if (!done){ done = true; clearTimeout(timer); reject(e); } });
+  });
+}
+function parseAI(raw){
+  if (!raw) return null;
+  var s = String(raw).trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  var o = null;
+  try { o = JSON.parse(s); } catch(e){
+    var m = s.match(/\{[\s\S]*\}/);
+    if (m){ try { o = JSON.parse(m[0]); } catch(e2){ o = null; } }
+  }
+  if (!o || typeof o !== "object") return null;
+  var jp = o.jp || o.sentence || o.japanese;
+  if (!jp || typeof jp !== "string") return null;
+  var words = Array.isArray(o.words) ? o.words.filter(function(x){ return x && (x.jp || x.japanese); }).slice(0,3).map(function(x){
+    return { jp:String(x.jp || x.japanese), ko:String(x.ko || ""), emoji:"💬" };
+  }) : [];
+  return { say:String(o.say || ("「" + jp + "」と{言|い}ってみましょう。")), jp:String(jp), pr:String(o.pr || ""),
+           ko:String(o.ko || ""), coach:String(o.coach || ""), words:words };
+}
+function askAI(text){
+  var pack = packOf(cur.type, cur.id);
+  var step = stepText(currentStep());
+  var sys = "You are a warm, stylish Japanese tutor for Juyeong, a Korean man in his late 30s. "
+    + "He loves Japanese anime and is a beginner at Japanese (JLPT N5 level). "
+    + "Level " + state.level + " of 3 (1 = single words, 2 = short polite sentences, 3 = natural conversation). "
+    + "Explain in easy Korean, praise his attempt, and keep the Japanese short and natural. "
+    + "Write kanji with furigana in the form {漢字|かんじ} inside the jp field. "
+    + "Return ONLY minified JSON with keys: say (one short Japanese line the teacher says, max 20 chars, you may use {漢字|かんじ}), "
+    + "jp (the Japanese sentence he should try, with {漢字|かんじ} furigana markers), pr (Korean reading of jp), "
+    + "ko (Korean meaning), coach (Korean explanation, max 2 sentences, mention polite vs casual when useful), "
+    + "words (2-3 items of {jp, ko}). No markdown, no extra text.";
+  var user = "Topic: " + (pack ? pack.name : "free talk") + "\nTeacher's question: " + (step ? plain(step.jp) : "")
+    + "\nHe said in Korean: " + text;
+  var provider = state.ai.provider, model = aiModelName(), p;
+  if (provider === "openai"){
+    p = fetchJSON("https://api.openai.com/v1/chat/completions", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "Authorization":"Bearer " + state.ai.key },
+      body: JSON.stringify({
+        model:model, temperature:0.6, max_tokens:500,
+        response_format:{ type:"json_object" },
+        messages:[{ role:"system", content:sys }, { role:"user", content:user }]
+      })
+    }, 12000).then(function(res){
+      if (!res.ok || !res.body) throw new Error("openai " + res.status);
+      var c = res.body.choices && res.body.choices[0];
+      return parseAI(c && c.message && c.message.content);
+    });
+  } else if (provider === "gemini"){
+    var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model)
+      + ":generateContent?key=" + encodeURIComponent(state.ai.key);
+    p = fetchJSON(url, {
+      method:"POST", headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        systemInstruction:{ parts:[{ text:sys }] },
+        contents:[{ role:"user", parts:[{ text:user }] }],
+        generationConfig:{ temperature:0.6, maxOutputTokens:500, responseMimeType:"application/json" }
+      })
+    }, 12000).then(function(res){
+      if (!res.ok || !res.body) throw new Error("gemini " + res.status);
+      var cand = res.body.candidates && res.body.candidates[0];
+      var parts = (cand && cand.content && cand.content.parts) || [];
+      return parseAI(parts.map(function(x){ return x.text || ""; }).join(""));
+    });
+  } else {
+    return Promise.resolve(null);
+  }
+  return p.catch(function(e){ try { console.warn("AI 연결 실패:", e && e.message); } catch(e2){} return null; });
+}
+function enhanceWithAI(text){
+  el.aiBadge.hidden = false;
+  el.aiBadge.textContent = "🤖 생각 중…";
+  askAI(text).then(function(r){
+    if (!r){
+      el.aiBadge.textContent = "🤖 AI";
+      el.aiBadge.hidden = true;
+      toast("AI 연결이 안 돼서 내장 선생님이 대답했어요. 그대로 공부해도 좋아요 🙂");
+      return;
+    }
+    el.aiBadge.textContent = "🤖 AI";
+    var cr = {
+      tip: r.coach || ("이렇게 말해보자! **" + r.jp + "**"),
+      jp: r.jp, ko: r.ko, pr: r.pr,
+      words: (r.words && r.words.length) ? r.words : (lastCoach ? lastCoach.words : [])
+    };
+    applyCoach(cr);
+    say(r.say, r.ko || cr.ko, { log:true, ai:true, speak:false });
+    speak(r.jp);
+    toast("AI 선생님이 더 자세히 알려줬어요! 🤖");
+  }).catch(function(){ el.aiBadge.hidden = true; });
+}
+
+/* =========================================================
+   13. 설정 · 단어 편집 · 모달
+   ========================================================= */
+function openModal(id){ var m = $(id); if (m) m.hidden = false; }
+function closeModal(id){ var m = $(id); if (m) m.hidden = true; }
+function updateEngineInfo(){
+  var provider = el.aiProvider.value;
+  if (provider === "none"){
+    el.engineInfo.innerHTML = "지금은 <b>내장 선생님</b>이 대화해요 · 한국어→일본어 코칭 패턴 <b>" + PATTERN_COUNT + "개</b> · 인터넷 없이도 100% 동작해요.";
+  } else {
+    el.engineInfo.innerHTML = (provider === "gemini" ? "Gemini" : "OpenAI") + "를 연결하면 한국어 설명을 AI가 더 자세히 만들어 줘요. 연결이 안 되면 내장 선생님이 대신해요.";
+  }
+  el.aiModel.placeholder = provider === "gemini" ? "gemini-2.0-flash" : (provider === "openai" ? "gpt-4o-mini" : "기본 모델을 써도 좋아요");
+}
+function openSettings(){
+  el.aiProvider.value = state.ai.provider;
+  el.aiKey.value = state.ai.key;
+  el.aiModel.value = state.ai.model;
+  el.dashUrl.value = state.settings.dashUrl;
+  updateEngineInfo();
+  openModal("settingsModal");
+}
+function saveSettings(){
+  var provider = el.aiProvider.value, key = el.aiKey.value.trim();
+  if (provider !== "none" && !key){
+    toast("API 키를 넣어 주세요. 내장 선생님만 쓸 때는 '내장 선생님만 쓰기'를 골라 주세요.");
+    el.aiKey.focus(); return;
+  }
+  state.ai = { provider:provider, key:(provider === "none" ? "" : key), model:el.aiModel.value.trim() };
+  state.settings.dashUrl = el.dashUrl.value.trim() || "./index.html";
+  save(); updateDashLink(); closeModal("settingsModal"); updateEngineInfo();
+  toast(provider === "none" ? "내장 선생님으로 대화할게요!" : "AI 선생님을 연결했어요! 🤖");
+}
+function updateDashLink(){
+  var raw = state.settings.dashUrl || "./index.html", u;
+  try { u = new URL(raw, location.href); } catch(e){ u = new URL("./index.html", location.href); }
+  el.dashLink.setAttribute("href", u.href);
+}
+function resetTalk(){
+  closeModal("settingsModal");
+  clearCoach();
+  startTalk(cur.type === "interest" ? "topic" : cur.type, cur.id, { silent:false });
+  toast("대화를 처음부터 다시 시작해요!");
+}
+function openWords(){
+  el.wordEditGrid.innerHTML = state.words.map(function(wd, i){
+    return '<div class="werow"><span class="wn">' + (i+1) + "</span>"
+      + '<input class="jp" maxlength="32" value="' + esc(wd.jp) + '" aria-label="' + (i+1) + '번째 일본어">'
+      + '<input class="ko" maxlength="32" value="' + esc(wd.ko) + '" aria-label="' + (i+1) + '번째 한국어 뜻"></div>';
+  }).join("");
+  openModal("wordsModal");
+}
+function presetWords(){
+  state.wordSet = (state.wordSet + 1) % WORD_PRESETS.length;
+  var list = wordsFromPreset(state.wordSet);
+  var rows = el.wordEditGrid.querySelectorAll(".werow");
+  Array.prototype.forEach.call(rows, function(row, i){
+    row.querySelector(".jp").value = list[i].jp;
+    row.querySelector(".ko").value = list[i].ko;
+  });
+  toast("추천 단어 세트로 채웠어요! 저장을 눌러 주세요.");
+}
+function saveWords(){
+  var rows = el.wordEditGrid.querySelectorAll(".werow"), out = [], bad = false;
+  Array.prototype.forEach.call(rows, function(row){
+    var jp = row.querySelector(".jp").value.trim(), ko = row.querySelector(".ko").value.trim();
+    if (!jp) bad = true;
+    out.push({ jp:jp, ko:ko });
+  });
+  if (bad){ toast("일본어 단어를 10개 모두 적어 주세요 ✏️"); return; }
+  state.words = out.slice(0, 10);
+  save(); renderWords(); closeModal("wordsModal");
+  toast("이번 주 단어를 바꿨어요! 📚");
+}
+function startInterest(){
+  var rank = rankedInterests(), top = rank[0];
+  var it = top ? top.it : INTERESTS[0];
+  var pack = SCEN[it.topic] || SCEN.anime;
+  var sys = top
+    ? "✨ 요즘 '" + it.name + "' 이야기를 " + top.score + "번이나 했어요! 관심사 대화를 시작할게요."
+    : "아직 관심사 기록이 없어서 애니 이야기부터 시작할게요. 대화하다 보면 아빠 관심사를 기억해 둘게요!";
+  startTalk("interest", it.topic, { sys:sys, preface:"「" + pack.ja + "」の{話|はなし}が{好|す}きなんですね！" });
+  if (isPhone()) setPanel("talk");
+}
+function setLevel(n){
+  if ([1,2,3].indexOf(n) < 0 || n === state.level) return;
+  state.level = n;
+  renderLevels(); hintOpen = false;
+  var step = stepText(currentStep());
+  say(step.jp, step.ko, { log:false, speak:true });
+  renderHints(); save();
+  toast("일본어 난이도를 Lv." + n + "로 바꿨어요");
+}
+function setAutoRead(on){
+  state.autoRead = !!on;
+  el.autoRead.classList.toggle("on", state.autoRead);
+  el.autoRead.setAttribute("aria-checked", state.autoRead ? "true" : "false");
+  save();
+  toast(state.autoRead ? "선생님이 일본어를 자동으로 읽어드려요 🔊" : "자동 읽기를 껐어요. 🔊 버튼으로 들을 수 있어요.");
+  if (state.autoRead) speak(curSay.jp, false);
+}
+function setFuri(on){
+  state.furi = !!on;
+  document.body.classList.toggle("nofuri", !state.furi);
+  el.furiToggle.classList.toggle("on", state.furi);
+  el.furiToggle.setAttribute("aria-checked", state.furi ? "true" : "false");
+  save();
+  toast(state.furi ? "한자 위에 후리가나를 보여드려요 あ" : "후리가나를 숨겼어요. 한자만 읽어 볼까요?");
+}
+function setKoView(on){
+  state.koView = !!on;
+  el.bubbleKo.classList.toggle("hide", !state.koView || !el.bubbleKo.textContent);
+  el.btnKo.classList.toggle("on", state.koView);
+  el.btnKo.setAttribute("aria-pressed", state.koView ? "true" : "false");
+  save();
+}
+
+/* =========================================================
+   14. 이벤트
+   ========================================================= */
+function bind(){
+  el.topics.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest(".topic") : null;
+    if (!b) return;
+    startTalk("topic", b.getAttribute("data-topic"), {});
+    if (isPhone()) setPanel("talk");
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".lv"), function(b){
+    b.addEventListener("click", function(){ setLevel(parseInt(b.getAttribute("data-lv"), 10)); });
+  });
+
+  el.autoRead.addEventListener("click", function(){ setAutoRead(!state.autoRead); });
+  el.furiToggle.addEventListener("click", function(){ setFuri(!state.furi); });
+  el.btnKo.addEventListener("click", function(){ setKoView(!state.koView); });
+  el.btnSpeak.addEventListener("click", function(){ speak(curSay.jp, false); });
+  el.btnSlow.addEventListener("click", function(){ speak(curSay.jp, true); });
+
+  el.btnSettings.addEventListener("click", openSettings);
+  el.btnSaveSettings.addEventListener("click", saveSettings);
+  el.btnResetTalk.addEventListener("click", resetTalk);
+  el.aiProvider.addEventListener("change", updateEngineInfo);
+
+  el.btnEditWords.addEventListener("click", openWords);
+  el.btnSaveWords.addEventListener("click", saveWords);
+  el.btnPreset.addEventListener("click", presetWords);
+
+  el.btnInterest.addEventListener("click", startInterest);
+
+  el.learnPill.addEventListener("click", function(){
+    renderLearnList();
+    openModal("learnModal");
+  });
+  el.streakPill.addEventListener("click", function(){
+    toast("연속 " + (state.streak.days || 0) + "일 · 최고 기록 " + (state.streak.best || 0) + "일 🔥");
+  });
+
+  el.btnMicJp.addEventListener("click", function(){ listen("ja-JP", el.btnMicJp); });
+  el.btnMicKo.addEventListener("click", function(){ listen("ko-KR", el.btnMicKo); });
+  el.btnHint.addEventListener("click", showHints);
+
+  el.btnSend.addEventListener("click", function(){ handleUser(el.answerInput.value, "type"); });
+  el.answerInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter"){ e.preventDefault(); handleUser(el.answerInput.value, "type"); }
+  });
+
+  el.hints.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest(".hint") : null;
+    if (!b) return;
+    if (b.hasAttribute("data-repeat")) { if (lastCoach) handleUser(lastCoach.jp, "repeat"); }
+    else handleUser(b.getAttribute("data-say"), "hint");
+  });
+
+  el.wwGrid.addEventListener("click", function(e){
+    var chk = e.target.closest ? e.target.closest(".wk") : null;
+    if (chk){ e.stopPropagation(); toggleWord(parseInt(chk.getAttribute("data-check"), 10)); return; }
+    var card = e.target.closest ? e.target.closest(".ww") : null;
+    if (!card) return;
+    var i = parseInt(card.getAttribute("data-idx"), 10);
+    card.classList.remove("playing"); void card.offsetWidth; card.classList.add("playing");
+    speak(state.words[i] ? state.words[i].jp : card.getAttribute("data-word"), false);
+  });
+  el.wwGrid.addEventListener("keydown", function(e){
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var card = e.target.closest ? e.target.closest(".ww") : null;
+    if (!card) return;
+    e.preventDefault();
+    var i = parseInt(card.getAttribute("data-idx"), 10);
+    speak(state.words[i] ? state.words[i].jp : card.getAttribute("data-word"), false);
+  });
+
+  el.coachWords.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest(".wcard") : null;
+    if (b) speak(b.getAttribute("data-wspeak"), false);
+  });
+
+  el.scSpeak.addEventListener("click", function(){ if (lastCoach) speak(lastCoach.jp, false); });
+  el.scSlow.addEventListener("click", function(){ if (lastCoach) speak(lastCoach.jp, true); });
+  el.scSave.addEventListener("click", function(){
+    if (!lastCoach) return;
+    speak(lastCoach.jp, false);
+    saveSentence(lastCoach.jp, lastCoach.ko, lastCoach.pr);
+  });
+
+  el.rpTabs.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("button[data-panel]") : null;
+    if (b) setPanel(b.getAttribute("data-panel") === "topics" ? "topics" : "coach");
+  });
+  el.mobileTabs.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("button[data-view]") : null;
+    if (b) setPanel(b.getAttribute("data-view"));
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-close]"), function(b){
+    b.addEventListener("click", function(){ closeModal(b.getAttribute("data-close")); });
+  });
+  ["settingsModal","wordsModal","learnModal"].forEach(function(id){
+    $(id).addEventListener("click", function(e){ if (e.target === this) closeModal(id); });
+  });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape") ["settingsModal","wordsModal","learnModal"].forEach(closeModal);
+  });
+
+  window.addEventListener("resize", function(){
+    if (!isPhone() && (document.body.classList.contains("view-coach") || document.body.classList.contains("view-topics"))){
+      /* 데스크톱으로 돌아오면 패널 클래스는 그대로 두어도 무해 */
+    }
+  });
+}
+
+/* =========================================================
+   15. 시작
+   ========================================================= */
+function restoreOrStart(){
+  var s = readJSON(STORE_KEY, null);
+  var ss = s && s.session;
+  var pack = ss ? packOf(ss.type, ss.id) : null;
+  if (ss && pack && Array.isArray(ss.log) && ss.log.length){
+    cur = {
+      type: ss.type === "interest" ? "interest" : "topic",
+      id: ss.id,
+      step: Math.max(0, Math.min(parseInt(ss.step, 10) || 0, pack.steps.length - 1)),
+      steps: pack.steps
+    };
+    state.mode = cur.type;
+    if (cur.type === "topic") state.topic = cur.id;
+    LOG = ss.log.slice(-40).map(function(m){ return { who:m.who, jp:String(m.jp || ""), ko:m.ko || "", at:m.at || 0 }; });
+    renderLog();
+    var step = stepText(currentStep());
+    curSay = (ss.lastSay && ss.lastSay.jp) ? { jp:ss.lastSay.jp, ko:ss.lastSay.ko || "" } : { jp:step.jp, ko:step.ko };
+    el.bubbleJp.innerHTML = html(curSay.jp);
+    el.bubbleKo.textContent = curSay.ko;
+    el.bubbleKo.classList.toggle("hide", !state.koView);
+    if (ss.lastCoach && ss.lastCoach.jp){ lastCoach = ss.lastCoach; applyCoach(lastCoach); }
+    renderHints(); renderTopics(); renderInterest();
+  } else {
+    startTalk("topic", state.topic, { silent:true });
+  }
+}
+function init(){
+  renderLevels();
+  el.autoRead.classList.toggle("on", state.autoRead);
+  el.autoRead.setAttribute("aria-checked", state.autoRead ? "true" : "false");
+  el.furiToggle.classList.toggle("on", state.furi);
+  el.furiToggle.setAttribute("aria-checked", state.furi ? "true" : "false");
+  document.body.classList.toggle("nofuri", !state.furi);
+  el.bubbleKo.classList.toggle("hide", !state.koView);
+  el.btnKo.classList.toggle("on", state.koView);
+  el.btnKo.setAttribute("aria-pressed", state.koView ? "true" : "false");
+  renderWords();
+  renderInterest();
+  renderCounts();
+  updateDashLink();
+  bind();
+  restoreOrStart();
+  renderCounts();
+  setPanel(isPhone() ? "talk" : "coach");
+}
+
+window.JPN = {
+  state:state, coach:coach, RULES:RULES, NOUNS:NOUNS, VERBS:VERBS, ADJS:ADJS, PATTERN_COUNT:PATTERN_COUNT,
+  SCEN:SCEN, INTERESTS:INTERESTS, handleUser:handleUser, setLevel:setLevel, startTalk:startTalk,
+  setPanel:setPanel, setFuri:setFuri, today:function(){ return TODAY; }, cur:function(){ return cur; },
+  lastSay:function(){ return curSay; },
+  plain:plain, html:html
+};
+
+init();
+})();
+</script>
+</body>
+</html>
