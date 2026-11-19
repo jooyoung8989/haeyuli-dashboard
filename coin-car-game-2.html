@@ -6547,6 +6547,11 @@
         G.prevState = 'start';
         G.paused = false;
       }
+      var tEl = ov.querySelector('.lockTime');
+      if (tEl){
+        var tTxt = '지금 ' + clockText(st.d) + (st.kind === 'before' ? ' · 9:00에 열려요' : ' · 내일 9:00에 열려요');
+        if (tEl.textContent !== tTxt) tEl.textContent = tTxt;
+      }
       warnEl.classList.remove('on');
       return true;
     }
