@@ -10035,7 +10035,7 @@ function addHw(day, text){
   if (!t) return false;
   var w = hwWeek();
   w.days[String(day)] = w.days[String(day)] || [];
-  w.days[String(day)].push({ id:"h" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36), text:t, done:false, t:Date.now() });
+  w.days[String(day)].push({ id:"h" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36), text:t, done:false, t:Date.now(), c:Date.now() });
   saveHwWeek(w);
   render();
   return true;
@@ -11119,7 +11119,8 @@ function mergeTodo(lh, ch){
   Object.keys(lh.del || {}).forEach(function(id){ del[id] = Math.max(num(del[id]), num(lh.del[id])); });
   Object.keys(ch.del || {}).forEach(function(id){ del[id] = Math.max(num(del[id]), num(ch.del[id])); });
 
-  var out = { del: del };
+  var out = { del: {} };
+  Object.keys(del).sort().forEach(function(id){ out.del[id] = del[id]; });
   Object.keys(keys).sort().forEach(function(wk){
     var lw = (lh[wk] && typeof lh[wk] === "object") ? lh[wk] : {};
     var cw = (ch[wk] && typeof ch[wk] === "object") ? ch[wk] : {};
@@ -11132,13 +11133,14 @@ function mergeTodo(lh, ch){
         if (!it || !it.id) return;
         var prev = map[it.id];
         if (!prev){
-          map[it.id] = { id:it.id, text:String(it.text || ""), done:!!it.done, t:num(it.t) };
+          map[it.id] = { id:it.id, text:String(it.text || ""), done:!!it.done, t:num(it.t), c:num(it.c) };
           order.push(it.id);
           return;
         }
         var nt = num(it.t), pt = num(prev.t);
-        if (nt > pt){ prev.text = String(it.text || ""); prev.done = !!it.done; prev.t = nt; }
+        if (nt > pt){ prev.text = String(it.text || ""); prev.done = !!it.done; prev.t = nt; prev.c = num(it.c) || prev.c; }
         else if (nt === pt && it.done) prev.done = true;
+        if (!prev.c) prev.c = num(it.c);
       };
       lk.forEach(add); ck.forEach(add);
       var list = [];
@@ -11147,6 +11149,7 @@ function mergeTodo(lh, ch){
         if (num(del[id]) >= it.t && num(del[id]) > 0) return;   /* 지운 숙제 */
         list.push(it);
       });
+      list.sort(function(x, y){ return (num(x.c) - num(y.c)) || String(x.id).localeCompare(String(y.id)); });
       outW[String(d)] = list;
     }
     out[wk] = outW;
@@ -11178,9 +11181,14 @@ function mergeMoney(lm, cm, base){
   }
   arr(lm.log).forEach(putLog); arr(cm.log).forEach(putLog);
   var logs = lorder.map(function(k){ return log[k]; })
-    .sort(function(a, b){ return String(b.at || "").localeCompare(String(a.at || "")); })
+    .sort(function(a, b){
+      var ka = [a.at, a.t, a.why].join("|"), kb = [b.at, b.t, b.why].join("|");
+      return ka < kb ? 1 : (ka > kb ? -1 : 0);
+    })
     .slice(0, 20);
-  return { piggy:piggy, bank:border.map(function(id){ return bank[id]; }), log:logs };
+  var banks = border.map(function(id){ return bank[id]; });
+  banks.sort(function(a, b){ return String(a.at || "").localeCompare(String(b.at || "")) || String(a.id).localeCompare(String(b.id)); });
+  return { piggy:piggy, bank:banks, log:logs };
 }
 
 function mergeDone(ld, cd){
@@ -11188,7 +11196,7 @@ function mergeDone(ld, cd){
   var out = {}, keys = {};
   Object.keys(ld).forEach(function(k){ keys[k] = 1; });
   Object.keys(cd).forEach(function(k){ keys[k] = 1; });
-  Object.keys(keys).forEach(function(k){
+  Object.keys(keys).sort().forEach(function(k){
     var a = (ld[k] && typeof ld[k] === "object") ? ld[k] : null;
     var b = (cd[k] && typeof cd[k] === "object") ? cd[k] : null;
     if (!a && !b) return;
@@ -11204,7 +11212,7 @@ function mergeStudy(ls, cs){
   var out = {}, keys = {};
   Object.keys(ls).forEach(function(k){ keys[k] = 1; });
   Object.keys(cs).forEach(function(k){ keys[k] = 1; });
-  Object.keys(keys).forEach(function(k){ out[k] = Math.max(num(ls[k]), num(cs[k])); });
+  Object.keys(keys).sort().forEach(function(k){ out[k] = Math.max(num(ls[k]), num(cs[k])); });
   return out;
 }
 
