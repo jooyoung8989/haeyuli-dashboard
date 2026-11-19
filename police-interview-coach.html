@@ -104,6 +104,23 @@ b,strong{font-weight:800}
   background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.24);
   font-size:9px;font-weight:800;color:#efe2b4;white-space:nowrap;letter-spacing:-.02em;line-height:1.3;
 }
+.callbtn{
+  flex:0 0 auto;width:38px;height:38px;min-width:38px;border-radius:12px;display:grid;place-items:center;font-size:17px;line-height:1;
+  background:linear-gradient(160deg,#8ee0b0,#2f8f5b);color:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,255,255,.3);
+}
+.callbtn:active{transform:scale(.96)}
+.callhint{
+  position:fixed;left:12px;right:12px;bottom:calc(var(--tabh) + var(--sab) + 12px);z-index:950;
+  display:flex;align-items:flex-start;gap:9px;padding:12px 13px;border-radius:14px;
+  background:#fff;border:1px solid var(--line);box-shadow:0 12px 30px rgba(15,33,64,.24);
+  animation:fadeUp .2s ease both;
+}
+.callhint .chx{flex:0 0 auto;font-size:20px;line-height:1.15}
+.callhint .cht{flex:1 1 auto;min-width:0;font-size:11.5px;line-height:1.62;font-weight:700;color:var(--ink-2)}
+.callhint .cht .ct{display:block;font-size:12.5px;font-weight:900;color:var(--navy);margin-bottom:2px;line-height:1.4}
+.callhint .cht b{font-weight:900;color:var(--navy)}
+.callhint .chc{flex:0 0 auto;align-self:flex-start;font-size:11px;font-weight:900;color:var(--muted);padding:2px 6px;border-radius:8px;background:#f2f5fa}
 .appfoot{
   margin:16px 14px 6px;padding:12px 0 6px;text-align:center;
   border-top:1px solid var(--line);
@@ -401,6 +418,36 @@ h2.title{display:none}
 .kv .row .k{flex:0 0 62px;font-size:10.5px;font-weight:900;color:var(--gold-2);padding-top:2px;line-height:1.4}
 .kv .row .v{min-width:0;flex:1 1 auto;font-size:12px;line-height:1.6;color:var(--ink-2)}
 
+/* ---------- ⭐ 즐겨찾기 · 모범답안 전체 펼치기 ---------- */
+.favbtn{
+  flex:0 0 auto;display:inline-grid;place-items:center;width:44px;height:44px;min-width:44px;
+  border-radius:12px;background:#fff;border:1px solid var(--line);
+  color:#b6c0d0;font-size:19px;line-height:1;padding:0;
+}
+.favbtn.on{background:var(--gold-soft);border-color:#e6cf8f;color:#c19512}
+.favbtn:active{transform:scale(.94)}
+.qcard>.favbtn{position:absolute;top:6px;right:6px;z-index:2}
+.qcard{position:relative}
+.qhead{padding-right:58px}
+.favbar{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 9px;padding:9px 11px;
+  border-radius:12px;background:linear-gradient(160deg,#fdf7e6,#fffdf7);border:1px solid #eddfb4;
+}
+.favbar[hidden]{display:none}
+.favbar .fbt{flex:1 1 auto;min-width:0;font-size:10.5px;font-weight:900;color:#7a5a08;line-height:1.45}
+.favbar .fbt b{display:block;font-size:12.5px;color:var(--navy);letter-spacing:-.02em}
+.favbar .btn{flex:0 0 auto;min-height:44px;font-size:11.5px;padding:0 12px}
+.favempty{padding:22px 16px;border-radius:14px;background:#fff;border:1px dashed #d7c48c;text-align:center}
+.favempty .fe{font-size:30px;line-height:1;display:block;margin-bottom:8px}
+.favempty b{display:block;font-size:13px;font-weight:900;color:var(--navy);line-height:1.5;letter-spacing:-.02em}
+.favempty p{margin:5px 0 0;font-size:11.5px;font-weight:700;color:var(--muted);line-height:1.65}
+.favempty .btn{margin-top:10px;min-height:44px;font-size:12px}
+.dqrow{display:flex;align-items:stretch;gap:6px}
+.dqrow .dq{flex:1 1 auto}
+.dqrow .favbtn{height:44px;min-height:44px;align-self:center;border-radius:10px}
+#qList.ansall .qcard .qbody{display:block}
+#qList.ansall .ansrow{display:none}
+
 /* ---------- check mode ---------- */
 .rec-head{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
 .rec-head .ctxname{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px;font-weight:800;color:var(--navy)}
@@ -646,14 +693,24 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
 .ansbox p{margin:0;font-size:12.5px;line-height:1.75;color:#4a3d12;font-weight:600;letter-spacing:-.01em}
 
 /* ---------- 자료실 세그먼트 · 사회이슈 · 통계 ---------- */
-.lawseg{margin:2px 0 12px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;background:transparent;padding:0;border-radius:0}
+/* ---------- 🔊 자료실 듣기 ---------- */
+.listenbar{display:flex;align-items:center;gap:5px;margin:0 0 10px;padding:5px;border-radius:12px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.lb-play{flex:1 1 auto;min-width:0;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:5px;border-radius:10px;background:linear-gradient(160deg,var(--navy-2),var(--navy));color:#fff;font-size:12px;font-weight:900;letter-spacing:-.02em;padding:0 8px}
+.lb-play.on{background:#fff;color:var(--navy);border:1px solid var(--line);box-shadow:none}
+.lb-play:disabled{opacity:.55}
+.lb-prog{flex:0 0 auto;font-size:10.5px;font-weight:900;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;padding:0 1px}
+.lb-rate{flex:0 0 auto;display:inline-flex;gap:2px;padding:2px;border-radius:9px;background:#f2f5fa}
+.lb-rate button{min-height:38px;padding:0 6px;border-radius:7px;font-size:10.5px;font-weight:900;color:#5a6b85;white-space:nowrap}
+.lb-rate button.on{background:var(--navy);color:#fff}
+.lb-next{flex:0 0 auto;width:40px;height:44px;border-radius:10px;background:#f6f8fc;border:1px solid var(--line);font-size:15px;line-height:1}
+.lb-next:disabled{opacity:.45}
+.lawseg{margin:2px 0 12px;display:flex;gap:5px;overflow-x:auto;overflow-y:hidden;background:transparent;padding:0 0 4px;border-radius:0;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.lawseg::-webkit-scrollbar{display:none}
 .lawseg button{
-  min-height:44px;font-size:11px;gap:3px;padding:0 3px;letter-spacing:-.04em;border-radius:10px;
-  background:#fff;border:1px solid var(--line);color:#54637d;font-weight:800;white-space:nowrap;
+  flex:0 0 auto;min-height:44px;font-size:11px;gap:3px;padding:0 11px;letter-spacing:-.04em;border-radius:999px;
+  background:#fff;border:1px solid var(--line);color:#54637d;font-weight:800;white-space:nowrap;scroll-snap-align:start;
 }
 .lawseg button.on{background:linear-gradient(160deg,var(--navy-2),var(--navy));color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(15,33,64,.18)}
-.lawseg button:nth-child(3n+1):nth-last-child(2){grid-column:span 2}
-.lawseg button:nth-child(3n+1):nth-last-child(1){grid-column:1/-1}
 .pseg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin:2px 0 12px}
 .pseg button{min-height:44px;font-size:11px;padding:0 4px;letter-spacing:-.03em;white-space:nowrap}
 .notecard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;box-shadow:var(--shadow-sm)}
@@ -801,6 +858,8 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
   .appbar{border-radius:0 0 20px 20px}
 }
 @media (min-width:760px){
+  .lawseg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;overflow:visible;padding:0 0 2px}
+  .lawseg button{padding:0 6px;border-radius:12px}
   .grid2{grid-template-columns:290px minmax(0,1fr);gap:14px}
   .grid2.wide{grid-template-columns:290px minmax(0,1fr)}
   .chips{grid-template-columns:minmax(0,1fr)}
@@ -809,6 +868,8 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
   .qcard+.qcard{margin-top:0}
   .qcard{margin-top:0}
   .catrow{margin:0;padding:2px 0 10px;flex-wrap:wrap;overflow:visible}
+  .favbtn{width:38px;height:38px;min-width:38px;font-size:17px}
+  .qhead{padding-right:50px}
 }
 @media (min-width:900px){
   :root{--tabh:0px}
@@ -886,6 +947,7 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
       </span>
     </div>
     <span class="maker" title="만든이 박주영">만든이 박주영</span>
+    <button class="callbtn" id="callInterview" type="button" aria-label="전화 면접 시작" title="전화 면접 시작">📞</button>
     <button class="dday empty" id="ddayChip" type="button" aria-label="면접일 설정">
       <b id="ddayMain">면접일</b><span id="ddaySub">설정</span>
     </button>
@@ -1030,6 +1092,10 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
       <div id="dailyHost" style="margin-top:12px"></div>
 
       <div class="catrow" id="qCats" role="tablist" aria-label="질문 분류"></div>
+      <div class="favbar" id="favBar" hidden>
+        <div class="fbt"><b>⭐ 즐겨찾기 모아 보기</b><span id="favBarCount">0문항</span></div>
+        <button class="btn gold" type="button" id="favAllAns" aria-pressed="false">💡 모범답안 모두 펼치기</button>
+      </div>
       <div class="qgrid" id="qList"></div>
 
       <div id="personalConsoleHost" style="margin-top:12px"></div>
@@ -1048,7 +1114,23 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
         <button type="button" data-seg="misd">⚖️ 경범죄</button>
         <button type="button" data-seg="policeact">🛡️ 경직법</button>
         <button type="button" data-seg="officeract">👔 공무원법</button>
+        <button type="button" data-seg="force">🥊 물리력 규칙</button>
+        <button type="button" data-seg="traffic12">🚗 중과실·스쿨존</button>
+        <button type="button" data-seg="protect">🚨 응급·임시조치</button>
+        <button type="button" data-seg="arrest">⛓️ 현행범·긴급체포</button>
+        <button type="button" data-seg="search">🔍 불심검문</button>
+        <button type="button" data-seg="identity">🪪 신상공개·피의자인권</button>
+        <button type="button" data-seg="drunken">🍺 음주·차량추격</button>
         <button type="button" data-seg="concept">📖 개념·정의</button>
+      </div>
+      <div class="listenbar" id="listenBar" role="group" aria-label="자료 듣기">
+        <button class="lb-play" type="button" id="listenToggle" aria-pressed="false"><span id="listenIcon" aria-hidden="true">🔊</span><span id="listenLabel">이 자료 듣기</span></button>
+        <span class="lb-prog" id="listenProg">– / –</span>
+        <div class="lb-rate" id="listenRate" role="group" aria-label="배속">
+          <button type="button" data-rate="1" class="on">1.0x</button>
+          <button type="button" data-rate="1.2">1.2x</button>
+        </div>
+        <button class="lb-next" type="button" id="listenNext" aria-label="다음 카드" disabled>⏭️</button>
       </div>
       <div id="lawPane">
       <div class="hero">
@@ -1093,6 +1175,13 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
       <div id="misdPane" hidden></div>
       <div id="policeactPane" hidden></div>
       <div id="officeractPane" hidden></div>
+      <div id="forcePane" hidden></div>
+      <div id="traffic12Pane" hidden></div>
+      <div id="protectPane" hidden></div>
+      <div id="arrestPane" hidden></div>
+      <div id="searchPane" hidden></div>
+      <div id="identityPane" hidden></div>
+      <div id="drunkenPane" hidden></div>
       <div id="conceptPane" hidden></div>
     </section>
 
@@ -2384,6 +2473,87 @@ var TOPICS = [
     "가해 학생이 같은 학교에 계속 다니면 어떻게 하시겠습니까?",
     "선도심사위원회와 ‘사랑의 교실’은 각각 무엇입니까?"
   ]
+},
+{
+  id:"malicious", emoji:"😤", name:"악성민원 대응", short:"경청·고지·법적 조치",
+  hook:"악성민원은 ‘참는 일’이 아니라 ‘절차로 끝내는 일’입니다. 경청으로 시작해 고지·기록·법적 조치로 닫는 순서를 외우면, 감정에 휘말리지 않고 답할 수 있습니다.",
+  frame:{
+    conclusion:"악성민원 대응의 핵심은 ‘경청 → 고지 → 기록 → 법적 조치’의 순서를 지키면서, 민원인의 권리와 공무원의 안전을 함께 지키는 것입니다.",
+    status:"경찰관서의 위법행위 수반 민원은 2022년 5,218건에서 2023년 1만 393건으로 약 두 배(99.2%) 늘었고, 악의적 반복민원도 7만 1,957건에서 8만 5,236건으로 증가했습니다. 2024년 김포시청 공무원 사망 사건을 계기로 경찰청이 악성민원 대응 지침을 만들어 2024년 12월부터 시행했습니다.",
+    plan1:"제도를 먼저 세웁니다. 민원처리법 시행령 개정(2024.10.29 시행)으로 민원전화 전면 녹음, 통화·면담 권장시간 설정과 종결, 폭언·폭행·위험물 소지 시 퇴거·출입제한, 위법행위에 대한 기관 차원의 고발 의무화가 가능해졌습니다. 경찰청은 악성민원 대응 지침으로 반복 민원 수신 차단·무대응, 피해구제 전담 인력을 운영합니다.",
+    plan2:"현장에서는 2인 1조와 상급자 개입을 기본으로 합니다. 먼저 경청하고 공감을 표현한 뒤, 폭언이 이어지면 1차 경고와 중단 요청, 녹음·녹화 고지, 면담 종결·퇴거 순으로 처리하고, 폭행·협박·모욕·업무방해는 형법으로, 거짓신고는 과태료로 대응합니다. 피해 직원에게는 심리지원과 법률 지원을 연결합니다.",
+    closing:"민원인의 권리와 공무원의 안전은 대립하지 않습니다. 감정이 아니라 절차로 지키는 경찰이 되겠습니다."
+  },
+  laws:[
+    {name:"민원 처리에 관한 법률 및 같은 법 시행령", badge:"민원처리법", points:[
+      "<b>민원 처리 담당자 보호(법 §4)</b> — 안전장비 설치, 폭언·폭행 민원인 퇴거 조치, 고소·고발 대응 전담부서 지정",
+      "<b>시행령 개정(2024.10.29 시행)</b> — 민원전화 <b>전체 녹음</b>, 통화·면담 <b>1회당 권장시간</b> 설정과 종결, 위험한 물건 소지·반복 민원 시 <b>퇴거·일시적 출입제한</b>",
+      "<b>기관 차원의 고발 의무화</b> — 폭언·폭행 등 위법행위 발생 시 고발, 소송·수사 대응 비용(변호사 선임비 등) 지원"
+    ], amend:"악성민원 종결처리 근거 확대와 담당자 보호조치의 법률 상향은 2024.10.22. 국무회의를 통과해 국회에 제출됐고, 2026년 11월 현재 법률 개정은 아직 시행 전입니다(시행령 개정은 2024.10.29. 시행)."},
+    {name:"경찰청 「경찰관서 악성민원 대응 지침」", badge:"경찰청 지침", points:[
+      "2024.12. 시행 — 악성민원 전화는 요건·절차 위반 시 <b>수신 차단</b>",
+      "온라인·우편·문서 민원은 동일 내용 <b>3회 이상 반복</b> 시 무대응, 방문 시 사전 안내 후 <b>자리 이동</b>",
+      "피해구제 <b>전담 인력</b>(경찰청 4명, 서울청·경기남부청 각 1명)과 내부망 피해구제 신청 게시판 운영",
+      "민원실 <b>2인 1조 응대</b>와 상급자 개입 — 폭언 시 동료·상급자가 진정시키고 별도 공간으로 안내"
+    ]},
+    {name:"형법 — 공무집행방해·위계·모욕·업무방해", badge:"형법", points:[
+      "<b>제136조 공무집행방해</b> — 직무를 집행하는 공무원에 대한 폭행·협박은 <b>5년 이하 징역 또는 1천만원 이하 벌금</b>. 직무상 행위를 강요·저지할 목적의 폭행·협박도 같습니다.",
+      "<b>제137조 위계에 의한 공무집행방해</b> — 위계로 공무원의 직무집행을 방해하면 <b>5년 이하 징역 또는 1천만원 이하 벌금</b>",
+      "<b>제311조 모욕</b> — 공연히 사람을 모욕하면 <b>1년 이하 징역·금고 또는 200만원 이하 벌금</b>",
+      "<b>제314조 업무방해</b> — 위계 또는 위력으로 사람의 업무를 방해하면 <b>5년 이하 징역 또는 1천500만원 이하 벌금</b>"
+    ], amend:"모욕은 ‘공연성’이 요건이므로, 민원실처럼 여러 사람이 있는 장소에서의 욕설은 성립하기 쉽지만 1:1 전화 통화만으로는 공연성을 다투게 됩니다. 그래서 녹음이 중요합니다."},
+    {name:"112신고의 운영 및 처리에 관한 법률", badge:"112신고처리법", points:[
+      "2024.1.2. 제정, <b>2024.7.3. 시행</b>",
+      "<b>§4② 신고자의 의무</b> — 위급한 상황 대응 목적 외의 목적 또는 거짓으로 꾸며 112신고를 하지 않아야 함",
+      "<b>§18①</b> — 위급한 상황을 거짓으로 꾸며 신고하면 <b>500만원 이하 과태료</b>",
+      "<b>§8 긴급조치</b> — 생명·신체·재산에 대한 급박한 위해 방지를 위한 일시사용·출입·피난명령. 방해하면 300만원, 피난명령 위반은 100만원 이하 과태료"
+    ]},
+    {name:"경범죄 처벌법", badge:"경범죄처벌법", points:[
+      "<b>§3③2호(거짓신고)</b> — 있지 아니한 범죄나 재해 사실을 공무원에게 거짓으로 신고하면 <b>60만원 이하 벌금·구류 또는 과료</b>",
+      "<b>§3③1호(관공서 주취소란)</b> — 술에 취해 관공서에서 몹시 거친 말과 행동으로 주정하거나 시끄럽게 하면 같은 형",
+      "대법원 2025.4.3. 2025도4800 — 신고 내용 자체가 <b>범죄에 해당해야</b> 거짓신고죄가 성립하고, 범죄와 무관한 내용이면 죄형법정주의상 처벌할 수 없습니다."
+    ]}
+  ],
+  steps:[
+    {t:"112·182 접수", d:"신고·민원의 요지를 확인하고, 생명·신체 위험이 있는 급박한 사안인지 먼저 판단합니다.", law:"112신고처리법 §8"},
+    {t:"초기 응대(경청)", d:"끊지 않고 듣고, “말씀은 충분히 이해했습니다”처럼 공감을 표현한 뒤 처리 가능한 범위를 설명합니다."},
+    {t:"폭언 시작 → 경고", d:"공적인 업무 공간임을 알리고 폭언 중단을 정중히 요청합니다. 1차 경고와 함께 통화·면담 종결 가능성을 고지합니다.", law:"민원처리법 시행령"},
+    {t:"녹음·녹화 고지", d:"폭언이 지속되면 녹음·녹화 사실을 먼저 알리고 기록합니다. 2인 1조·상급자가 개입해 별도 공간으로 안내합니다."},
+    {t:"종결·퇴거·차단", d:"권장시간 초과, 폭언·폭행, 위험한 물건 소지 시 면담 종결·퇴거·출입제한, 반복 민원은 무대응·수신 차단으로 처리합니다.", law:"민원처리법 §4"},
+    {t:"법적 조치", d:"폭행·협박은 공무집행방해, 위계는 위계공무집행방해, 욕설은 모욕, 반복 방해는 업무방해로 고소하고, 거짓신고는 112신고처리법 과태료·경범죄처벌법으로 처리합니다.", law:"형법 §136·§137·§311·§314"},
+    {t:"사후 보호", d:"피해 직원에게 심리지원(마음동행센터)·법률 지원을 연결하고, 청문감사인권관에게 보고해 기록으로 남깁니다."}
+  ],
+  agencies:[
+    {ic:"☎️", name:"182 경찰민원콜센터", role:"경찰 민원 상담, 악성·강성민원 응대 기준에 따른 처리", tel:"182"},
+    {ic:"🧠", name:"경찰 마음동행센터", role:"트라우마·직무 스트레스 심리검사·상담·치료 연계(전국 18개소)", tel:"소속 청"},
+    {ic:"🛡️", name:"청문감사인권관", role:"직원 피해 신고 접수, 감사·인권 조사, 재발 방지 대책", tel:"경찰서"},
+    {ic:"⚖️", name:"대한법률구조공단", role:"고소·민사 대응 법률상담, 소송 구조", tel:"132"},
+    {ic:"🏛️", name:"국민권익위원회 국민신문고", role:"민원 처리 불만·고충 민원, 제도 개선 건의", tel:"110"}
+  ],
+  kw:[
+    {l:"경청·공감", p:["경청","공감","이해","먼저 듣"]},
+    {l:"1차 경고·중단 요청", p:["경고","중단","자제","요청"]},
+    {l:"녹음·녹화 고지", p:["녹음","녹화","녹취","고지"]},
+    {l:"2인 1조·상급자 개입", p:["2인 1조","2인1조","상급자","동료"]},
+    {l:"민원처리법 시행령", p:["민원처리법","민원 처리에 관한 법률","시행령"]},
+    {l:"악성민원 대응 지침", p:["지침","수신 차단","무대응","반복 민원"]},
+    {l:"공무집행방해", p:["공무집행방해","136"]},
+    {l:"모욕·업무방해", p:["모욕","업무방해","311","314"]},
+    {l:"거짓신고 과태료", p:["거짓신고","과태료","112신고처리법","경범죄"]},
+    {l:"심리지원·마음동행", p:["마음동행","심리","트라우마","청문감사"]}
+  ],
+  traps:[
+    "‘민원인은 왕’이라며 폭언을 참고 끝까지 응대하는 것 — 권장시간·종결·퇴거 근거가 마련되어 있으므로, 감정 노동을 당연시하면 직원 보호도 서비스도 무너집니다.",
+    "녹음·녹화 고지 없이 몰래 녹음하거나, 1차 경고 없이 바로 통화를 끊는 것 — 절차를 지켜야 증거와 정당성이 함께 남습니다.",
+    "욕설만 있었다며 모욕죄만 생각하는 것 — 폭행·협박이 있으면 공무집행방해, 반복 방해는 업무방해, 거짓신고는 과태료까지 함께 검토해야 합니다."
+  ],
+  followups:[
+    "민원인이 ‘너 경찰 맞냐’며 계속 욕설을 하면 어디까지 응대하고 어떻게 종결하시겠습니까?",
+    "같은 민원을 하루에 열 번씩 반복 제기하면 어떤 근거로 무대응할 수 있습니까?",
+    "민원실에서 민원인이 다른 민원인에게 폭언을 하면 어떻게 개입하시겠습니까?",
+    "악성민원에 시달린 동료가 상담을 거부하면 어떻게 도와주시겠습니까?",
+    "112에 거짓신고를 반복하는 사람에게는 어떤 처분이 가능합니까?"
+  ]
 }
 ];
 
@@ -3072,6 +3242,7 @@ var QUESTIONS = [
    ========================================================= */
 var STORE = "police.interview.v1";
 var DRAFT = "police.interview.drafts";
+var FAV_KEY = "police.favQ.v1";
 var GEMINI_DEFAULT = "gemini-3.8-flash";
 var GEMINI_FALLBACKS = ["gemini-3.8-flash","gemini-3.6-flash","gemini-3.5-flash-lite","gemini-2.5-flash"];
 var $ = function(id){ return document.getElementById(id); };
@@ -3104,7 +3275,9 @@ var state = {
   history: [],
   practice: {},
   dailyReroll: 0,
-  dailyAI: null
+  dailyAI: null,
+  fav: [],
+  allAns: false
 };
 var settings = readJSON(STORE, null);
 if (settings && typeof settings === "object"){
@@ -3116,6 +3289,13 @@ if (settings && typeof settings === "object"){
   if (settings.dailyAI && typeof settings.dailyAI === "object") state.dailyAI = settings.dailyAI;
 }
 if (/^gemini-2\.0-flash/i.test(String(state.ai.model||""))) state.ai.model = GEMINI_DEFAULT;
+/* ⭐ 즐겨찾기 — 질문 문장 기반 안정 ID 배열 (police.favQ.v1) */
+state.fav = (function(){
+  var a = readJSON(FAV_KEY, []), out = [];
+  if (!Array.isArray(a)) return out;
+  for (var i=0;i<a.length;i++){ var v = a[i]; if (typeof v === "string" && v && out.indexOf(v) < 0) out.push(v); }
+  return out;
+})();
 function saveState(){
   writeJSON(STORE, { ai: state.ai, profile: state.profile, history: state.history.slice(0,40),
     practice: state.practice, dailyReroll: state.dailyReroll, dailyAI: state.dailyAI });
@@ -3291,6 +3471,7 @@ function setView(v){
     b.classList.toggle("on", on);
     if (on) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
   });
+  if (v !== "law") listenStop();
   if (v === "personal") syncPersonalConsole();
   if (v === "speed") spPaint();
   if (v === "settings") fillSettings();
@@ -3417,6 +3598,7 @@ function scrollToPanel(el){
 function selectLawTopic(id, quiet){
   state.lawTopicId = id; renderChips(); renderLawPanel();
   if (!quiet && state.view !== "law") setView("law");
+  listenRefresh();
   scrollToPanel($("lawPanel"));
 }
 function renderLawPanel(){
@@ -3535,8 +3717,80 @@ Array.prototype.forEach.call(document.querySelectorAll("#phaseSeg button"), func
 /* =========================================================
    5. 인성·경험 질문
    ========================================================= */
+/* ---------- ⭐ 즐겨찾기 (police.favQ.v1) ---------- */
+function favIdOf(i){
+  var q = QUESTIONS[i]; if (!q) return "";
+  return q.id ? String(q.id) : "q"+hashSeed(q.q);
+}
+function favList(){ if (!Array.isArray(state.fav)) state.fav = []; return state.fav; }
+function isFav(i){ return favList().indexOf(favIdOf(i)) >= 0; }
+function saveFav(){ writeJSON(FAV_KEY, favList()); }
+function pruneFav(){
+  var known = {}, a = favList();
+  for (var i=0;i<QUESTIONS.length;i++) known[favIdOf(i)] = 1;
+  var keep = a.filter(function(id){ return !!known[id]; });
+  if (keep.length !== a.length){ state.fav = keep; saveFav(); }
+}
+function favBtnHTML(i, extraCls){
+  var on = isFav(i);
+  return '<button class="favbtn'+(on?" on":"")+(extraCls?" "+extraCls:"")+'" type="button" data-fav="'+i+'" aria-pressed="'+(on?"true":"false")+'" aria-label="'+(on?"즐겨찾기 해제":"즐겨찾기 추가")+'" title="즐겨찾기">'+(on?"★":"☆")+'</button>';
+}
+function paintFav(i){
+  var on = isFav(i);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-fav="'+i+'"]'), function(b){
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+    b.setAttribute("aria-label", on ? "즐겨찾기 해제" : "즐겨찾기 추가");
+    b.textContent = on ? "★" : "☆";
+  });
+}
+function toggleFav(i){
+  var id = favIdOf(i); if (!id) return;
+  var a = favList(), k = a.indexOf(id), on = k < 0;
+  if (on) a.push(id); else a.splice(k, 1);
+  saveFav();
+  renderCats();
+  if (state.qCat === "fav"){
+    if (!on && !favList().length) state.allAns = false;
+    renderQuestions();
+  } else {
+    paintFav(i);
+  }
+  toast(on ? "⭐ 즐겨찾기에 담았어요. 상단 ‘⭐ 즐겨찾기’에서 모아 볼 수 있어요." : "즐겨찾기에서 뺐어요.");
+}
+function updateFavBar(){
+  var bar = $("favBar");
+  var n = favList().length;
+  if (bar) bar.hidden = state.qCat !== "fav";
+  var cnt = $("favBarCount"); if (cnt) cnt.textContent = n + "문항";
+  var b = $("favAllAns");
+  if (b){
+    b.setAttribute("aria-pressed", state.allAns ? "true" : "false");
+    b.textContent = state.allAns ? "📕 모범답안 모두 접기" : "💡 모범답안 모두 펼치기";
+  }
+  var ql = $("qList");
+  if (ql){
+    ql.classList.toggle("ansall", !!(state.allAns && state.qCat === "fav"));
+    if (state.allAns && state.qCat === "fav"){
+      Array.prototype.forEach.call(ql.querySelectorAll(".ansbox"), function(box){ box.hidden = false; });
+    }
+  }
+}
+function setAnsAll(on){
+  state.allAns = !!on;
+  Array.prototype.forEach.call(document.querySelectorAll("#qList .ansbox"), function(box){
+    box.hidden = !state.allAns;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("#qList [data-ansbtn]"), function(btn){
+    btn.setAttribute("aria-expanded", state.allAns ? "true" : "false");
+    btn.textContent = state.allAns ? "💡 모범답안 닫기" : "💡 모범답안 보기";
+  });
+  updateFavBar();
+}
 function renderCats(){
+  pruneFav();
   var h = '<button type="button" class="cat'+(state.qCat==="all"?" on":"")+'" data-cat="all">전체 '+QUESTIONS.length+'</button>';
+  h += '<button type="button" class="cat favcat'+(state.qCat==="fav"?" on":"")+'" data-cat="fav">⭐ 즐겨찾기 ('+favList().length+')</button>';
   QCATS.forEach(function(c){
     var n = QUESTIONS.filter(function(q){ return q.cat===c.id; }).length;
     if (!n) return;   /* 문항이 없는 분류(체험판)는 숨김 */
@@ -3546,6 +3800,7 @@ function renderCats(){
   Array.prototype.forEach.call($("qCats").querySelectorAll(".cat"), function(b){
     b.addEventListener("click", function(){ state.qCat = b.getAttribute("data-cat"); renderCats(); renderQuestions(); });
   });
+  updateFavBar();
 }
 function qBodyHTML(q, i){
   q._i = i;
@@ -3564,17 +3819,36 @@ function qBodyHTML(q, i){
 }
 function renderQuestions(){
   var list = QUESTIONS.map(function(q,i){ return {q:q,i:i}; });
-  if (state.qCat !== "all") list = list.filter(function(x){ return x.q.cat === state.qCat; });
+  if (state.qCat === "fav") list = list.filter(function(x){ return isFav(x.i); });
+  else if (state.qCat !== "all") list = list.filter(function(x){ return x.q.cat === state.qCat; });
   var h = "";
+  if (state.qCat === "fav" && !list.length){
+    h = '<div class="favempty" data-favempty="1">'+
+        '<span class="fe" aria-hidden="true">⭐</span>'+
+        '<b>아직 즐겨찾기한 질문이 없어요.</b>'+
+        '<p>각 질문 카드의 ☆ 버튼을 눌러 모아 보세요!<br>모아 둔 문항은 모범답안까지 한 번에 펼쳐 복습할 수 있어요.</p>'+
+        '<button class="btn ghost" type="button" id="favEmptyAll">전체 질문 보기</button></div>';
+  }
   list.forEach(function(x){
     var q = x.q, i = x.i;
     h += '<div class="qcard'+(state.openQ===i?" open":"")+'" data-qi="'+i+'">'+
+      favBtnHTML(i) +
       '<button class="qhead" type="button" aria-expanded="'+(state.openQ===i?"true":"false")+'">'+
         '<span class="qn">'+(i+1)+'</span><span class="qt">'+esc(q.q)+(q.hot?'<em class="hotl">🔥 '+esc(q.hot)+'</em>':'')+'</span><span class="ar" aria-hidden="true">▼</span>'+
       '</button>'+
       '<div class="qbody">'+qBodyHTML(q, i)+'</div></div>';
   });
   $("qList").innerHTML = h;
+  Array.prototype.forEach.call($("qList").querySelectorAll("[data-fav]"), function(b){
+    b.addEventListener("click", function(e){
+      e.stopPropagation();
+      toggleFav(parseInt(b.getAttribute("data-fav"), 10));
+    });
+  });
+  var femp = $("favEmptyAll");
+  if (femp) femp.addEventListener("click", function(){
+    state.qCat = "all"; state.allAns = false; renderCats(); renderQuestions();
+  });
   Array.prototype.forEach.call($("qList").querySelectorAll(".qcard"), function(card){
     var i = parseInt(card.getAttribute("data-qi"),10);
     card.querySelector(".qhead").addEventListener("click", function(){
@@ -3602,6 +3876,7 @@ function renderQuestions(){
       if (open) setTimeout(function(){ try{ box.scrollIntoView({behavior:"smooth",block:"nearest"}); }catch(err){} }, 70);
     });
   });
+  updateFavBar();
   syncPersonalConsole();
 }
 function qcatName(id){
@@ -3697,18 +3972,26 @@ function renderDailyRows(){
   var h = "";
   ids.forEach(function(i, n){
     var q = QUESTIONS[i], pc = practiceCount(i), neg = q.cat === "pressure";
-    h += '<button type="button" class="dq'+(pc?' done':'')+'" data-dqi="'+i+'">'+
+    h += '<div class="dqrow">'+
+      '<button type="button" class="dq'+(pc?' done':'')+'" data-dqi="'+i+'">'+
       '<span class="num">'+(n+1)+'</span>'+
       '<span class="txt"><b>'+esc(q.q)+'</b><span class="meta">'+
         '<span class="'+(neg?'neg':'')+'">'+esc(qcatName(q.cat))+'</span>'+
         (q.hot ? '<span class="hot">🔥 '+esc(q.hot)+'</span>' : '')+
         (pc ? '<span class="done">✓ '+pc+'회 연습</span>' : '<span>미연습</span>')+
       '</span></span>'+
-      '<span class="go">연습</span></button>';
+      '<span class="go">연습</span></button>'+
+      favBtnHTML(i) + '</div>';
   });
   host.innerHTML = h;
   Array.prototype.forEach.call(host.querySelectorAll(".dq"), function(b){
     b.addEventListener("click", function(){ openQuestionFromDaily(parseInt(b.getAttribute("data-dqi"),10)); });
+  });
+  Array.prototype.forEach.call(host.querySelectorAll("[data-fav]"), function(b){
+    b.addEventListener("click", function(e){
+      e.stopPropagation();
+      toggleFav(parseInt(b.getAttribute("data-fav"), 10));
+    });
   });
   var negN = ids.filter(function(i){ return QUESTIONS[i].cat === "pressure"; }).length;
   var pill = $("dailyPill"); if (pill) pill.textContent = "6문항 · 압박 "+negN;
@@ -4375,7 +4658,19 @@ var ISSUES = [
  sum:"유튜브·인스타그램·틱톡에 경찰 바디캠 단속 영상이라며 올라온 콘텐츠 수십 개가 모두 AI로 만든 가짜로 확인됐습니다. 2025년 10월 초부터 올라와 한 달 만에 누적 조회수 1,200만 회를 넘겼고, 실제 상황으로 오인한 시민들이 경찰의 과잉 대응이라며 비판 댓글과 항의를 이어갔습니다. 경찰청은 채널 운영자 신원을 확인하며 전기통신기본법상 허위 통신, 경범죄처벌법상 관명 사칭 혐의 적용을 검토하고 채널 폐쇄도 검토했습니다. 이후 2026년 2월 제작자(30대)가 전기통신기본법 위반 혐의로 구속됐고, 누적 조회수는 3,400만 회에 달했습니다(AI 허위 영상물 제작·유포로 구속된 첫 사례).",
  point:"공권력 신뢰와 AI 허위정보 대응을 묻는 질문입니다. 단속·처벌만 말하면 절반이고, 바디캠과 공보처럼 경찰이 스스로 기록을 공개해 신뢰를 증명하는 노력이 함께 있어야 한다는 점을 말해야 합니다.",
  line:"AI로 만든 가짜 바디캠 영상이 수천만 회 조회되며 경찰에 대한 불신을 키웠습니다. 허위 영상은 법에 따라 엄정하게 대응하되, 실제 현장은 바디캠과 공개된 기록으로 스스로 증명하는 것이 신뢰 회복의 길이라고 생각합니다.",
- src:"SBS 2025.12.25 · 연합뉴스 2025.12.23 / SBS·YTN 2026.2.2"}
+ src:"SBS 2025.12.25 · 연합뉴스 2025.12.23 / SBS·YTN 2026.2.2"},
+{year:"2026", tag:"관계성 범죄", date:"2026.11.04",
+ title:"경찰, 관계성 범죄 4만 4,540건 전수점검 — 수사 중 사건 32% ‘고위험’",
+ sum:"경찰청이 관계성 범죄 4만 4,540건을 전수점검해, 수사 중인 사건 1만 5,840건 가운데 5,068건(32.0%)을 고위험으로 분류했습니다(2026.11.4 발표). 고위험 가해자에게 구속영장 376건·유치 506건·전자장치 부착 321건을 신청해 점검 기간 일평균 신청이 1~9월 대비 구속영장 334%, 유치 203%, 전자장치 193% 늘었고, 일평균 발부·결정 건수도 구속영장 86%, 유치 55%, 전자장치 171% 증가했습니다. 피해자 안전조치도 민간경호 154%(일 1.3→3.3건), 임시숙소 연계 247%(일 3.4→11.8건) 늘었고, 모니터링 A등급 2만 1,614명과 종결된 스토킹 신고 6,504건도 다시 점검했습니다.",
+ point:"‘스토킹·교제폭력 신고가 들어오면 어디까지 해야 하나’라는 질문에 바로 쓸 수 있는 근거입니다. 사후 처벌보다 ① 고위험 선별 ② 선제적 격리(구속·유치·전자장치) ③ 피해자 안전조치(민간경호·임시숙소)의 3단 대응이 왜 필요한지 말하고, 신청이 2~3배 늘면 발부율은 일시 낮아질 수 있지만 발부 ‘건수’는 늘었다는 점까지 짚으면 균형 잡힌 답이 됩니다.",
+ line:"경찰이 관계성 범죄 4만 4,540건을 전수점검해 수사 중 사건의 32%를 고위험으로 분류하고, 구속영장·유치·전자장치 신청을 2~3배 늘렸습니다. 저는 관계성 범죄는 첫 신고에서 위험도를 정확히 선별해 가해자를 먼저 격리하고, 피해자는 민간경호·임시숙소 같은 안전조치까지 이어지는 것이 핵심이라고 생각합니다.",
+ src:"경찰청 보도자료 · 대한민국 정책브리핑 2026.11.4"},
+{year:"2026", tag:"AI 부정행위", date:"2026.11.19",
+ title:"‘AI 부정행위’ 세무사 시험 수석 포렌식 참관 — 수능 부정행위 게시글 40건 삭제·차단",
+ sum:"2027학년도 수능을 하루 앞둔 11월 18일, 경찰청은 AI·스마트기기를 이용한 시험 부정행위 자백·예고 글과 관련 물품 제조·판매 글 13건을 입건 전 조사(내사)하고, 근거 없는 의혹 제기·음모성 게시글 40건을 관계부처·플랫폼과 협의해 삭제·차단했다고 밝혔습니다. 초소형 장비 반입을 예고한 20대 남성은 게시자를 특정해 작성 경위를 확인했습니다. 같은 사안의 원형인 제63회 세무사 시험 ‘AI 부정행위’ 수석 합격자 한모(34) 씨는 11월 15일 자수 후 17일 13시간 넘게 조사받았고, 18일 자택 압수수색(위계에 의한 공무집행방해·업무방해)과 출국금지에 이어 19일 압수물 포렌식 참관을 위해 2차 출석했습니다. 수정테이프에 붙인 초소형 카메라로 문제를 촬영해 개조한 계산기 버튼으로 자택 노트북에 보내면, 생성형 AI가 푼 답을 복대 속 스마트폰을 거쳐 초소형 모니터로 확인하는 수법이었고, 올해 1·2차 시험과 3월 공인회계사 시험에도 썼다고 진술했습니다.",
+ point:"생성형 AI·초소형 기기로 시험 부정행위 수법이 진화하는 상황에서 경찰의 대응을 ① 사전 차단(부정행위 예고·허위정보 삭제, 교육당국 핫라인·시험 부정행위 TF) ② 사후 입증(압수수색·디지털 포렌식·국과수 감정) ③ 주관기관 공조(고소인 조사)로 정리해 두세요. ‘기술을 악용한 범죄에는 수사 역량도 기술로 맞선다’는 메시지가 면접에서 강합니다.",
+ line:"세무사 시험 수석 합격자가 초소형 카메라와 개조한 계산기, 생성형 AI로 부정행위를 했다고 자수했고, 경찰은 압수수색과 포렌식으로 범행을 입증하고 있습니다. 수능을 앞두고는 부정행위 예고 글 13건을 내사하고 음모성 게시글 40건을 차단했는데, 저는 기술을 악용한 시험 부정행위는 포렌식 같은 수사 역량으로 엄정하게 대응하고, 교육당국·플랫폼과의 공조로 재발을 막는 것이 중요하다고 생각합니다.",
+ src:"연합뉴스 2026.11.19 · 경찰청 발표(연합뉴스·뉴스핌 2026.11.18) · YTN 2026.11.18~19"}
 ];
 
 var STATS = [
@@ -4532,11 +4827,28 @@ function lawSeg(name){
   $("misdPane").hidden = name !== "misd";
   $("policeactPane").hidden = name !== "policeact";
   $("officeractPane").hidden = name !== "officeract";
+  var onBtn = seg.querySelector('button[data-seg="' + name + '"]');
+  if (onBtn && onBtn.scrollIntoView) { try { onBtn.scrollIntoView({inline:"center", block:"nearest"}); } catch(e){} }
+  $("forcePane").hidden = name !== "force";
+  $("traffic12Pane").hidden = name !== "traffic12";
+  $("protectPane").hidden = name !== "protect";
+  $("arrestPane").hidden = name !== "arrest";
+  $("searchPane").hidden = name !== "search";
+  $("identityPane").hidden = name !== "identity";
+  $("drunkenPane").hidden = name !== "drunken";
   $("conceptPane").hidden = name !== "concept";
   if (name === "issue") renderIssues();
   if (name === "stat") renderStats();
   if (name === "misd" || name === "policeact" || name === "officeract") renderLawNotes(name);
   if (name === "concept") renderConcepts();
+  if (name === "force") renderForce();
+  if (name === "traffic12") renderTraffic12();
+  if (name === "protect") renderProtect();
+  if (name === "arrest") renderArrest();
+  if (name === "search") renderSearch();
+  if (name === "identity") renderIdentity();
+  if (name === "drunken") renderDrunken();
+  listenRefresh();
   if (name !== "law") window.scrollTo({top:0, behavior:"auto"});
 }
 function renderIssues(){
@@ -4686,6 +4998,845 @@ function renderConcepts(){
   '</ul></div>';
   host.innerHTML = h;
 }
+/* =========================================================
+   🥊 경찰 물리력 행사의 기준과 방법 (경찰청예규 제550호)
+   ========================================================= */
+var FORCE_PRINCIPLES = [
+ {no:"원칙 1", t:"객관적 합리성", b:"판단의 기준",
+  rows:[
+   {b:"무엇", d:"내가 처한 사실과 상황에 비추어 <b>합리적인 현장 경관</b>의 관점에서 가장 적절한 물리력을 선택합니다. ‘평균적 경관이라면 이 상황에서 어떻게 했을까’가 기준입니다."},
+   {b:"고려 요소", d:"범죄의 종류·피해의 경중, 위해의 급박성, 저항의 강약, 대상자와 경관의 수, 무기의 종류와 사용 태양, 대상자의 신체·건강 상태, 도주 여부, 주변 상황"}
+  ]},
+ {no:"원칙 2", t:"상응의 원칙(비례)", b:"수준의 조절",
+  rows:[
+   {b:"무엇", d:"대상자 행위의 위해 수준을 <b>계속 평가</b>해, 필요최소한으로 물리력을 높이거나 낮춥니다."},
+   {b:"핵심", d:"5단계는 기계적으로 맞추는 표가 아니라 <b>판단 기준</b>입니다. 위해가 줄면 즉시 낮추고, 목적을 달성했으면 즉시 중단합니다."}
+  ]},
+ {no:"원칙 3", t:"위해감소노력 우선", b:"먼저 낮추기",
+  rows:[
+   {b:"무엇", d:"현장이 안전하고 시간적 여유가 있으면 <b>설득·안정</b>으로 위해 수준을 떨어뜨려, 더 덜 위험한 물리력으로 상황을 끝내도록 노력합니다."},
+   {b:"예외", d:"그 노력이 오히려 상황을 악화시킬 가능성이 있거나 급박하면 적용하지 않을 수 있습니다."}
+  ]}
+];
+var FORCE_RULES = [
+ "경찰청이 <b>공인한 물리력 수단</b>만 사용한다.",
+ "성별·장애·인종·종교·성정체성 등에 대한 <b>선입견으로 차별</b>하지 않는다.",
+ "대상자의 신체·건강 상태와 <b>장애 유형</b>을 고려한다.",
+ "경찰목적을 달성해 더 쓸 필요가 없으면 <b>즉시 중단</b>한다.",
+ "<b>징벌·복수</b> 목적으로 사용하지 않는다.",
+ "상황의 <b>빠른 종결이나 직무 편의</b>만을 위한 목적으로 사용하지 않는다."
+];
+var FORCE_STEPS = [
+ {no:"①", t:"순응", b:"협조적 통제",
+  rows:[
+   {b:"🔎 이런 상황", d:"경관의 지시·통제에 따르는 상태. 요구에 즉시 응하지 않고 <b>약간 시간을 지체</b>하는 정도도 순응으로 봅니다."},
+   {b:"🛡️ 쓸 수 있는 물리력", d:"현장 임장 · 언어적 통제(대화·설득·지시·경고, 어깨를 다독이거나 손을 잡아 주는 가벼운 접촉 포함) · <b>체포를 위한 수갑</b> · 안내·체포에 수반한 신체적 물리력"},
+   {b:"⚠️ 주의", d:"손·팔은 <b>힘을 주지 않고</b> 잡고, 어깨 등도 힘을 주지 않고 밀거나 잡아끕니다. 임의동행은 동행의 임의성이 침해되지 않도록 신체 접촉에 유의합니다."}
+  ],
+  line:{b:"🎤 면접 한 줄", d:"“순응 단계에서는 말과 가벼운 접촉으로 끝냅니다. 힘을 쓰는 순간 단계가 올라간 것으로 봅니다.”"}},
+ {no:"②", t:"소극적 저항", b:"접촉 통제",
+  rows:[
+   {b:"🔎 이런 상황", d:"지시·통제를 따르지 않고 비협조적이지만 <b>직접적인 위해는 없음</b>. 이동명령에도 가만히 서 있거나 앉아 있음, 몸의 힘을 모두 빼거나 고정된 물체를 꽉 잡고 버팀, 팔짱을 끼고 버티는 경우."},
+   {b:"🛡️ 쓸 수 있는 물리력", d:"손·팔을 <b>힘을 주어</b> 잡기, 어깨 등 신체 일부를 힘을 주어 밀거나 잡아끌기, 쥐기·누르기·비틀기(물체를 놓게 하기), 경찰봉 양 끝이나 방패를 잡고 안전하게 밀착해 밀거나 당기기"},
+   {b:"⚠️ 주의", d:"부상 가능성이 <b>극히 낮은</b> 수준. 먼저 이동·해산 명령과 경고를 하고, 노약자·임산부·장애 등 건강 상태를 고려합니다."}
+  ],
+  line:{b:"🎤 면접 한 줄", d:"“버티는 것과 때리는 것은 다릅니다. 소극적 저항에는 접촉 통제까지, 장비는 쓰지 않습니다.”"}},
+ {no:"③", t:"적극적 저항", b:"저위험 물리력",
+  rows:[
+   {b:"🔎 이런 상황", d:"체포·연행 등 정당한 공무집행을 방해하지만 <b>위해 수준은 낮음</b>. 체포를 피해 이탈·도주 시도, 팔을 잡는 손을 뿌리치기, 경관을 밀고 잡아끌기, 침 뱉기, 밀치기."},
+   {b:"🛡️ 쓸 수 있는 물리력", d:"목을 압박해 제압, <b>관절 꺾기</b>, 팔·다리로 조르기, 다리를 걸거나 들쳐 매 넘어뜨리기, 넘어진 상태에서 눌러 제압 · <b>분사기</b>(다른 저위험 이하 수단으로 제압이 어렵고 경관·대상자의 부상 방지를 위해 필요할 때)"},
+   {b:"⚠️ 주의", d:"통증은 있으나 <b>부상 가능성은 낮은</b> 수준. 분사기는 밀폐공간, 결박 상태, 14세 미만·임산부·호흡기 질환을 인지한 경우, 급박하지 않은 소극적 저항에는 사용할 수 없습니다(사람을 향해 쏠 때는 원칙적으로 사전 구두 경고)."}
+  ],
+  line:{b:"🎤 면접 한 줄", d:"“적극적 저항은 ‘공무집행 방해’까지입니다. 통증은 주되 부상은 남기지 않는 선에서 멈춥니다.”"}},
+ {no:"④", t:"폭력적 공격", b:"중위험 물리력",
+  rows:[
+   {b:"🔎 이런 상황", d:"경관·제3자에게 <b>신체적 위해</b>를 가하거나 그 행사가 임박. 폭력을 행사하려는 자세, 주먹·발로 위해를 초래, 완력으로 체포에서 벗어나려는 상태."},
+   {b:"🛡️ 쓸 수 있는 물리력", d:"손바닥·주먹·발 등 신체 부위로 가격 · <b>경찰봉</b>으로 중요부위가 아닌 신체 부위를 찌르거나 가격 · 방패로 강하게 압박하거나 세게 밀기 · <b>전자충격기(테이저건)</b>"},
+   {b:"⚠️ 주의", d:"부상은 입을 수 있으나 생명·신체에 대한 중대한 위해 가능성은 낮은 수준. 경찰봉은 머리·얼굴·목·흉부·복부를 피하고, 전자충격기는 가연성·가스, 높은 곳·운전 중, 물·폭우, 14세 미만·임산부, 결박 상태, 2차 부상 위험이 큰 장애, 입에 삼킨 물건의 질식 위험에서는 사용 금지입니다."}
+  ],
+  line:{b:"🎤 면접 한 줄", d:"“주먹이 오면 장비를 쓸 수 있습니다. 다만 경찰봉은 급소를 피하고, 테이저건은 금지 상황을 먼저 확인합니다.”"}},
+ {no:"⑤", t:"치명적 공격", b:"고위험 물리력",
+  rows:[
+   {b:"🔎 이런 상황", d:"사망·심각한 부상을 초래할 수 있는 행위. 총기·흉기(칼·도끼·낫)·둔기(망치·쇠파이프)로 위력을 행사하거나 임박, 경관·제3자의 목을 세게 조르거나 무차별 폭행."},
+   {b:"🛡️ 쓸 수 있는 물리력", d:"<b>권총 등 총기류</b> · 경찰봉·방패·신체로 <b>중요부위·급소</b> 가격 · 목을 강하게 조르거나 강한 힘으로 압박 — 경관·제3자의 생명·신체에 급박하고 중대한 위해가 있고 <b>다른 수단으로 제지할 수 없을 때 최후의 수단</b>으로만."},
+   {b:"⚠️ 주의", d:"급박하지 않으면 낮은 수준을 먼저 시도합니다. 권총은 경고·겁주기 목적 발사, 제3자 위해가 예상되는 경우, 이동 차량 내 사격, 차량 정지 목적 사격, 14세 미만·임산부(총기·폭발물로 대항하는 예외)에 사용할 수 없습니다."}
+  ],
+  line:{b:"🎤 면접 한 줄", d:"“치명적 공격에도 시간이 있으면 낮은 단계부터, 시간이 없으면 곧바로 필요한 단계를 씁니다. 권총은 최후의 수단입니다.”"}}
+];
+var FORCE_MEANS = [
+ {b:"수갑", d:"도주·폭행·소요·자해 위험이 있을 때. 우려가 높으면 뒷수갑, 이중 잠금장치 사용. 고통을 호소하면 착용 상태를 확인해 재착용·앞수갑·한손 수갑으로 조정하고, 장애·질병·신체 상태상 불합리하면 사용하지 않을 수 있습니다. 급박해 수갑이 없으면 혁대 등으로 대용 가능."},
+ {b:"분사기", d:"적극적 저항 이상 + 다른 저위험 이하 수단으로 제압이 어렵고 부상 방지를 위해 필요할 때, 도주 방지에도 사용. 밀폐공간(순찰차 운행 방해 제압 등 예외), 결박 상태, 급박하지 않은 소극적 저항, 14세 미만·임산부·호흡기 질환 인지 시 금지."},
+ {b:"전자충격기", d:"폭력적 공격 이상, 도주 방지에도 사용. 사용 전 배터리·불꽃 확인, 3~4.5m에서 흉골 이하·후면부(후두부 제외) 조준, 1회 사용주기 뒤 상태 확인, 한 대상자에게 동시에 2대 이상 금지. 불발·효과 미발생에 대비한 다음 수단 준비."},
+ {b:"경찰봉·방패", d:"소극적 저항 이상이면 밀착해 밀거나 당기는 격리 도구, 폭력적 공격 이상이면 중요부위를 피해 찌르기·가격·강한 압박. 고위험 사용은 다른 모든 수단이 불가능·무력화되고 정당방위·긴급피난 요건을 갖출 때만."},
+ {b:"권총", d:"생명·신체에 대한 급박하고 중대한 위해를 다른 수단으로 제지할 수 없을 때. 단순 도주만으로는 체포·도주방지 목적 사용 금지, 대상자 본인의 자해만 있는 경우 금지, 재산 보호 목적 금지. 발사 전 구두·공포탄 경고(급박 시 생략), 조준은 가급적 대퇴부 이하."}
+];
+var FORCE_AFTER = [
+ "신체 접촉을 동반한 물리력을 쓰면 <b>부상 여부를 즉시 확인</b>하고, 부상 시 의료진 호출·응급조치·병원 후송·직근상급자 보고, 보호자 통지까지 합니다.",
+ "권총·전자충격기(스턴 포함)·분사기·중위험 이상의 경찰봉·방패 등은 <b>사용보고서</b>를 작성해 소속기관장에게 보고합니다.",
+ "수갑은 일시·장소·경위·방식·사용시간을 근무일지나 수사보고서에 기재하고, 수갑·신체적 물리력으로 부상이 생기면 사용보고서를 씁니다.",
+ "권총 사용이나 사망·심각한 부상이 발생하면 소속기관장이 <b>경찰청장까지 보고</b>합니다.",
+ "고위험 물리력을 사용한 경관에게는 공가·휴게·근무 지정 해제·의료·상담 연계 등 조치를 하고, 상급자가 사용보고서 작성을 대리합니다."
+];
+var FORCE_CASES = [
+ {no:"사례 1", t:"주취자 소란 · 귀가 거부", b:"소극적 저항",
+  rows:[
+   {b:"상황", d:"편의점 앞 주취자가 고성을 지르고 욕설을 하지만 사람을 때리지는 않고, 귀가를 권해도 앉아서 버팀."},
+   {b:"판단", d:"언어적 통제와 보호조치 안내 → 소극적 저항이면 접촉 통제(팔을 잡아 일으키기·어깨 밀기). 주먹·발·분사기는 단계 초과. 물건을 던지거나 때리기 시작하면 그때 <b>폭력적 공격으로 재평가</b>합니다. 주취 상태는 건강 위험이 크므로 119·주취자응급의료센터 연계도 함께 판단합니다."}
+  ],
+  line:{b:"🎤 면접 한 줄", d:"“위해가 없으면 장비도 없습니다. 다만 사람을 향해 던지는 순간 단계가 바뀝니다.”"}},
+ {no:"사례 2", t:"도주 · 몸싸움", b:"적극적 → 폭력적",
+  rows:[
+   {b:"상황", d:"절도범이 팔을 뿌리치고 도주하고, 붙잡자 경관을 밀치며 발길질을 함."},
+   {b:"판단", d:"뿌리치고 도주하는 단계는 적극적 저항 → <b>저위험 물리력</b>(관절·넘어뜨리기). 발길질로 신체 위해가 현실화되면 폭력적 공격 → <b>중위험 물리력</b>으로 즉시 상향. 체포 필요성(도주·증거인멸 우려)도 함께 판단합니다."}
+  ],
+  line:{b:"🎤 면접 한 줄", d:"“저항의 성질이 바뀌면 단계도 즉시 바뀝니다. 올릴 때보다 내릴 때를 놓치지 않는 게 더 어렵습니다.”"}},
+ {no:"사례 3", t:"흉기 위협", b:"치명적 공격",
+  rows:[
+   {b:"상황", d:"술집에서 손님이 식칼을 들고 다른 손님에게 다가가며 위협."},
+   {b:"판단", d:"치명적 공격 → <b>고위험 물리력</b>. 우선 대피·격리·지원 요청, 시간이 있으면 사전 구두 경고, 권총은 다른 수단으로 제지할 수 없을 때 최후의 수단. 칼을 내려놓으면 <b>즉시 하향</b>합니다."}
+  ],
+  line:{b:"🎤 면접 한 줄", d:"“칼이 있으면 권총을 쓸 수 있지만, 무조건 권총이 먼저는 아닙니다. 상황이 진정되는 즉시 힘을 낮춥니다.”"}}
+];
+function picNote(txt){ return '<div class="note tiny" style="margin-top:12px"><span>📌</span><div>'+txt+'</div></div>'; }
+function picCard(no, title, badge, rows, line){
+  var h = '<article class="bscard"><div class="bsh"><span class="bsno">'+no+'</span><span class="bst">'+esc(title)+'</span>'+(badge?'<span class="bsbdg">'+esc(badge)+'</span>':'')+'</div>';
+  (rows||[]).forEach(function(r){
+    h += '<div class="bsrow'+(r.co?' co':'')+'"><b>'+r.b+'</b><span>'+r.d+'</span></div>';
+  });
+  if (line) h += '<div class="bsline"><b>'+line.b+'</b><span>'+line.d+'</span></div>';
+  return h+'</article>';
+}
+function renderForce(){
+  var host = $("forcePane"); if (!host) return;
+  var h = '<div class="hero"><h1>🥊 경찰 물리력 행사의 기준과 방법</h1>' +
+    '<p>물리력은 <b style="color:#f4e3ac">“쓸 수 있느냐”보다 “어디까지 쓸 수 있느냐”</b>로 평가받습니다. 대상자 행위 5단계와 경관 대응 5단계를 짝으로 외우면, 어떤 상황 질문에도 같은 틀로 답할 수 있습니다.</p></div>';
+  h += picNote('근거는 <b>「경찰 물리력 행사의 기준과 방법에 관한 규칙」(경찰청예규 제550호, 2019.7.18. 발령 · 2019.11.24. 시행)</b>입니다. 국가법령정보센터 원문을 기준으로 정리했고, 현장에서는 이 규칙과 <b>경찰관직무집행법</b>(무기 사용)·<b>형사소송법</b>(체포·구속)을 함께 봅니다. 단계는 기계적으로 맞추는 표가 아니라 <b>판단의 틀</b>입니다.');
+  h += '<div class="sec"><div class="sec-h"><span class="no">1</span><b>3대 기본 원칙</b><span class="tag">먼저 외울 것</span></div></div>';
+  h += '<div class="bslist">';
+  FORCE_PRINCIPLES.forEach(function(p){ h += picCard(p.no, p.t, p.b, p.rows); });
+  h += picCard("유의", "사용할 때 지키는 6가지", "공통", FORCE_RULES.map(function(x, i){ return {b:"0"+(i+1), d:x}; }));
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">2</span><b>대상자 행위 5단계 × 경관 대응 5단계</b><span class="tag">핵심</span></div></div>';
+  h += '<div class="bslist">';
+  FORCE_STEPS.forEach(function(s){ h += picCard(s.no, s.t, s.b, s.rows, s.line); });
+  h += '</div>';
+  h += picCard("연속체", "단계는 오르내린다 — 상향·하향·건너뛰기", "전환 원칙", [
+    {b:"① 평가", d:"현장 상황을 종합해 대상자 행위를 다섯 단계 중 하나로 평가합니다."},
+    {b:"② 판단", d:"제압할 수 있는 적절한 수단을 고르되, 안전하고 시간이 있으면 위해를 낮추려 먼저 노력하고 <b>낮은 수준을 우선</b> 고려합니다."},
+    {b:"③ 행동", d:"경찰목적을 달성하는 한도에서 <b>최소한의 침해</b>로 사용합니다."},
+    {b:"④ 재평가", d:"상황 변화에 따라 수준을 <b>늘리거나 줄입니다</b>."},
+    {b:"건너뛰기", d:"급박하거나 대상자 행위의 위해 수준이 <b>불연속적으로 급변</b>하면 그 상황에 맞는 물리력을 곧바로 사용할 수 있습니다. 다만 ‘편하다’는 이유로 단계를 건너뛰면 과잉이 됩니다.", co:true},
+    {b:"즉시 하향·중단", d:"위해가 해소되거나 목적을 달성하면 <b>즉시</b> 낮추고 멈춥니다. 이 장면을 답변에 넣어야 ‘통제하는 경관’으로 보입니다.", co:true}
+  ]);
+  h += '<div class="sec"><div class="sec-h"><span class="no">3</span><b>수단별로 넘으면 안 되는 선</b><span class="tag">장비</span></div></div>';
+  h += '<div class="bslist">';
+  FORCE_MEANS.forEach(function(m){ h += picCard("수단", m.b, "", [{b:"사용 한계·주의", d:m.d}]); });
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">4</span><b>실전 상황별 빠른 판단</b><span class="tag">답변 연습</span></div></div>';
+  h += '<div class="bslist">';
+  FORCE_CASES.forEach(function(c){ h += picCard(c.no, c.t, c.b, c.rows, c.line); });
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">5</span><b>사용한 뒤까지가 물리력 행사</b><span class="tag">사후 조치</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("사후", "확인 · 조치 · 보고", "4장", FORCE_AFTER.map(function(x, i){ return {b:"0"+(i+1), d:x}; }));
+  h += '</div>';
+  h += picCard("답변", "면접 30초 핵심 답변", "그대로 연습", [], {b:"🎤 30초 답변", d:"“경찰 물리력은 먼저 설득하고, 대상자 행위를 다섯 단계로 평가해 그에 상응하는 수준 이하로만 사용합니다. 상황이 급변하면 단계를 건너뛸 수 있지만, 위해가 줄면 즉시 낮추고 목적을 달성하면 멈춥니다. 사용한 뒤에는 부상 확인과 응급조치, 상급자 보고와 사용보고서 작성까지 책임집니다. 힘을 쓰는 기준도 중요하지만, 힘을 거두는 기준이 더 중요하다고 생각합니다.”"});
+  host.innerHTML = h;
+}
+
+/* =========================================================
+   🚗 교통 12대 중과실 · 어린이 보호구역
+   ========================================================= */
+var T12_LIST = [
+ {no:"01", t:"신호·지시 위반", law:"교특법 §3②단서 1호 · 도로교통법 §5", d:"신호기의 신호, 교통정리를 하는 경찰공무원등의 신호, 통행금지·일시정지를 내용으로 하는 안전표지의 지시를 위반한 운전."},
+ {no:"02", t:"중앙선 침범 · 횡단 · 유턴 · 후진", law:"도로교통법 §13③ · §62", d:"중앙선을 침범하거나, 고속도로 등에서 횡단·유턴·후진을 한 경우. 중앙선 침범이 <b>사고의 직접 원인</b>이어야 합니다."},
+ {no:"03", t:"제한속도 20km/h 초과", law:"도로교통법 §17①·②", d:"도로의 제한속도를 <b>시속 20km 초과</b>해 운전. 스쿨존 30km/h도 이 조문과 함께 판단합니다."},
+ {no:"04", t:"앞지르기 · 끼어들기 위반", law:"도로교통법 §21① · §22 · §23 · §60②", d:"앞지르기의 방법·금지시기·금지장소를 위반하거나 끼어들기 금지를 위반한 경우, 고속도로 앞지르기 방법 위반."},
+ {no:"05", t:"철길건널목 통과방법 위반", law:"도로교통법 §24", d:"건널목 앞에서 일시정지하지 않거나, 신호·차단기를 무시하고 진입하는 등 통과방법을 위반."},
+ {no:"06", t:"횡단보도 보행자 보호의무 위반", law:"도로교통법 §27①", d:"횡단보도를 통행하는 보행자가 있을 때 일시정지 등 보행자 통행을 방해하지 않도록 하는 의무를 위반."},
+ {no:"07", t:"무면허 운전", law:"도로교통법 §43 · §96 · 건설기계관리법 §26", d:"면허 없이, 또는 면허 효력 정지·운전 금지 중에 운전. 국제운전면허증 미소지도 포함됩니다."},
+ {no:"08", t:"음주 · 약물 운전", law:"도로교통법 §44① · §45", d:"술에 취한 상태 또는 약물의 영향으로 정상적으로 운전하지 못할 우려가 있는 상태에서 운전. <b>음주측정 거부·방해</b>도 특례가 배제됩니다."},
+ {no:"09", t:"보도 침범 · 보도 횡단방법 위반", law:"도로교통법 §13①·②", d:"보도가 설치된 도로의 보도를 침범하거나, 보도 횡단방법을 위반해 운전."},
+ {no:"10", t:"승객 추락방지의무 위반", law:"도로교통법 §39③", d:"승객이 차에서 떨어지지 않도록 필요한 조치를 하지 않고 운전(개문발차 등)."},
+ {no:"11", t:"어린이 보호구역 안전운전의무 위반", law:"도로교통법 §12③·①", d:"어린이 보호구역에서 제한속도 준수 등 조치를 지키고 어린이 안전에 유의할 의무를 위반해 <b>어린이를 상해</b>에 이르게 한 경우."},
+ {no:"12", t:"화물 낙하 방지조치 위반", law:"도로교통법 §39④", d:"자동차의 화물이 떨어지지 않도록 필요한 조치를 하지 않고 운전."}
+];
+var T12_SKOOL = [
+ {no:"지정", t:"어린이 보호구역이란", b:"도로교통법 §12",
+  rows:[
+   {b:"누가·어디를", d:"시장·군수·구청장(시장등)이 유치원·초등학교·특수학교, 어린이집·학원 가운데 행정안전부령으로 정하는 시설, 그 밖에 어린이가 자주 왕래하는 곳의 <b>주변도로 일정 구간</b>을 지정합니다."},
+   {b:"속도", d:"지정 구역은 자동차등·노면전차의 통행속도를 <b>시속 30km 이내</b>로 제한할 수 있습니다. 운전자는 이 조치를 준수하고 어린이 안전에 유의해야 합니다."},
+   {b:"주정차", d:"<b>어린이 보호구역은 정차·주차 금지 장소</b>입니다(도로교통법 §32 제8호). 신호기가 없는 횡단보도 앞에서는 보행자 유무와 관계없이 일시정지해야 합니다."}
+  ]},
+ {no:"가중", t:"어린이 치사상 가중처벌", b:"특가법 §5의13",
+  rows:[
+   {b:"요건", d:"어린이 보호구역에서 안전운전의무를 위반해 <b>13세 미만 어린이</b>에게 교통사고처리 특례법 §3①의 죄(업무상·중과실 치사상)를 범한 경우."},
+   {b:"사망", d:"<b>무기 또는 3년 이상의 징역</b>."},
+   {b:"상해", d:"<b>1년 이상 15년 이하의 징역 또는 500만원 이상 3천만원 이하의 벌금</b>."},
+   {b:"합헌", d:"헌법재판소는 2023.2.23. 2020헌마460 결정으로 이 조항(이른바 ‘민식이법’)이 일반적 행동자유권을 침해하지 않는다며 합헌으로 판단했습니다."}
+  ]}
+];
+function renderTraffic12(){
+  var host = $("traffic12Pane"); if (!host) return;
+  var h = '<div class="hero"><h1>🚗 교통 12대 중과실 · 어린이 보호구역</h1>' +
+    '<p>면접에서 “<b style="color:#f4e3ac">합의하면 끝나는 사고와 아닌 사고</b>”를 구분해 물으면, 답은 12대 중과실입니다. 이 12가지에 스쿨존 가중처벌까지 붙여 외우면 교통 질문은 끝납니다.</p></div>';
+  h += picNote('근거는 <b>「교통사고처리 특례법」 §3②단서(2025.1.7. 개정 · 2025.6.4. 시행)</b>, <b>「특정범죄 가중처벌 등에 관한 법률」 §5의13</b>, <b>「도로교통법」 §12</b>입니다. 각 호는 도로교통법 조문을 끌어 쓰므로, 해당 여부는 그 조문의 요건으로 따집니다.');
+  h += '<div class="sec"><div class="sec-h"><span class="no">1</span><b>“공소권 없음”이 성립하지 않는 경우</b><span class="tag">결론</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("원칙", "치상은 원래 반의사불벌", "§3② 본문", [
+    {b:"원칙", d:"교통사고로 사람을 다치게 하면 <b>5년 이하의 금고 또는 2천만원 이하의 벌금</b>(§3①). 그중 업무상·중과실 치상은 피해자의 <b>명시적 의사에 반해 공소를 제기할 수 없습니다</b>."},
+    {b:"예외", d:"구호조치 없이 도주·유기, 음주측정 거부·방해, 그리고 <b>12대 중과실</b>이면 피해자가 처벌을 원하지 않아도 공소를 제기할 수 있습니다."}
+  ]);
+  h += picCard("보험", "종합보험이 있어도 특례 없음", "§4① 단서 1호", [
+    {b:"원칙", d:"보험·공제에 가입된 경우에도 §3② 본문의 죄는 공소를 제기할 수 없습니다(§4①)."},
+    {b:"예외", d:"<b>§3② 단서에 해당하면(12대 중과실·도주·음주측정 거부 등) 보험 특례도 배제</b>됩니다. 피해자가 생명 위험·불구·불치·난치의 상해를 입었거나 보험계약이 무효·해지·면책된 경우도 마찬가지입니다."},
+    {b:"정리", d:"“12대 중과실은 <b>합의해도, 종합보험이 있어도</b> 형사처벌 대상”이 정확한 표현입니다. 사망사고는 애초에 이 특례의 대상이 아닙니다.", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">2</span><b>12대 중과실 전체 항목</b><span class="tag">§3②단서 1~12호</span></div></div>';
+  h += '<div class="notecard" style="margin-top:10px"><div class="nh"><span class="nno">12</span><span class="nt">하나라도 해당하면 특례 없음</span><span class="nbdg">각 호 = 도로교통법 조문</span></div><ul class="nlist">';
+  T12_LIST.forEach(function(x){
+    h += '<li style="padding-left:0;margin-top:8px"><b style="color:var(--navy)">'+x.no+' '+esc(x.t)+'</b> <span style="font-size:10px;font-weight:800;color:#1d5a93">'+esc(x.law)+'</span><br>'+x.d+'</li>';
+  });
+  h += '</ul></div>';
+  h += picNote('12개 호와 별도로 <b>구호조치 없이 도주·유기</b>, <b>음주측정 요구 불응(채혈 측정 요청·동의 제외)·음주측정 방해</b>도 특례가 배제됩니다. 12개만 세다가 이 부분을 놓치는 답변이 많습니다.');
+  h += '<div class="sec"><div class="sec-h"><span class="no">3</span><b>어린이 보호구역(스쿨존)</b><span class="tag">가중처벌</span></div></div>';
+  h += '<div class="bslist">';
+  T12_SKOOL.forEach(function(s){ h += picCard(s.no, s.t, s.b, s.rows); });
+  h += picCard("11호", "12대 중과실 11호와의 관계", "두 겹", [
+    {b:"11호", d:"스쿨존에서 안전운전의무를 위반해 <b>어린이를 상해</b>에 이르게 하면 그 자체로 12대 중과실 → 공소권 없음 특례가 배제됩니다."},
+    {b:"가중", d:"같은 사고가 <b>특가법 §5의13</b>의 가중처벌 요건(13세 미만 어린이 치사상)에도 해당하면 법정형이 무기·3년 이상(사망), 1~15년(상해)으로 올라갑니다."},
+    {b:"다툼", d:"실무에서는 ① 지정 구역 안인지 ② 30km/h를 넘었는지 ③ 피해자가 13세 미만 어린이인지가 쟁점입니다. 요건을 못 갖추면 그 호로는 처벌할 수 없습니다.", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">4</span><b>현장·면접 포인트</b><span class="tag">말하기</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("포인트", "이렇게 말하면 정확하다", "정리", [
+    {b:"①", d:"“12대 중과실은 <b>피해자와 합의했는지, 종합보험에 가입했는지와 무관</b>하게 형사처벌 대상입니다.”"},
+    {b:"②", d:"“스쿨존에서 어린이를 다치게 하면 <b>특가법 §5의13</b>으로 가중처벌되고, 사망은 무기 또는 3년 이상입니다.”"},
+    {b:"③", d:"“현장에서는 30km/h 준수, 주정차 금지, 신호기 없는 횡단보도 일시정지가 사고 예방의 핵심입니다. 단속만이 아니라 <b>과속방지시설·안전표지·무인단속장비</b> 같은 시설 개선도 함께 가야 합니다.”"},
+    {b:"④", d:"“사고가 나면 즉시 정차해 <b>구호조치</b>를 하고 신고해야 합니다. 도주하면 그 자체로 특례가 배제됩니다.”"}
+  ]);
+  h += picCard("답변", "면접 30초 핵심 답변", "그대로 연습", [], {b:"🎤 30초 답변", d:"“교통사고는 원래 피해자가 처벌을 원하지 않으면 공소를 제기할 수 없지만, 12대 중과실은 예외입니다. 신호위반·중앙선 침범·20km 초과 과속·무면허·음주운전·보도 침범·스쿨존 안전운전의무 위반 등 12가지에 해당하면 합의나 종합보험과 무관하게 형사처벌 대상입니다. 특히 어린이 보호구역에서 13세 미만 어린이를 다치게 하면 특가법에 따라 상해는 1년 이상 15년 이하, 사망은 무기 또는 3년 이상으로 가중됩니다. 그래서 스쿨존에서는 30km/h 준수와 주정차 금지, 횡단보도 일시정지를 먼저 지키고, 사고 시에는 구호조치와 신고를 먼저 하겠습니다.”"});
+  h += '</div>';
+  host.innerHTML = h;
+}
+
+/* =========================================================
+   🚨 응급 · 긴급임시(응급) · 임시 · 잠정조치 비교
+   ========================================================= */
+var PROTECT_CARDS = [
+ {no:"가정폭력", t:"가정폭력처벌법", b:"3단계",
+  rows:[
+   {b:"① 응급조치 §5", d:"현장에 출동한 사법경찰관리가 <b>폭력행위를 제지</b>하고 가해자와 피해자를 분리하며, 현행범 체포, 상담소·보호시설 인도(피해자 동의), 의료기관 인도를 합니다."},
+   {b:"② 긴급임시조치 §8의2", d:"응급조치에도 <b>재발 우려 + 긴급</b>해 법원의 임시조치 결정을 받을 수 없을 때, 사법경찰관이 <b>직권 또는 피해자·법정대리인 신청</b>으로 §29①1~3호(퇴거·100m 접근금지·전기통신 접근금지)를 합니다. 결정서를 작성하고 시·도지사에게 통지합니다."},
+   {b:"사후 절차 §8의3", d:"지체 없이 검사에게 임시조치를 신청하고, 검사는 긴급임시조치를 한 때부터 <b>48시간 이내</b>에 법원에 청구해야 합니다. 청구하지 않거나 결정을 받지 못하면 <b>즉시 취소</b>합니다."},
+   {b:"③ 임시조치 §29", d:"판사가 결정합니다. 1호 퇴거·격리, 2호 100m 접근금지, 3호 전기통신 접근금지, 4호 의료기관 위탁, 5호 유치장·구치소 유치, 6호 상담소 상담위탁. 기간은 <b>1~3호 2개월(2회 연장 → 최장 6개월), 4~6호 1개월(1회 연장)</b>. 동행영장·인도된 경우 인치 때부터 24시간 내 결정."},
+   {b:"불이행", d:"긴급임시조치 불이행은 <b>300만원 이하 과태료</b>(임시조치 청구·결정이 없을 때는 제외). 임시조치 1~3호 불이행은 <b>1년 이하 징역 또는 1천만원 이하 벌금·구류</b>.", co:true}
+  ]},
+ {no:"스토킹", t:"스토킹처벌법", b:"3단계",
+  rows:[
+   {b:"① 응급조치 §3", d:"진행 중인 스토킹행위 신고를 받으면 <b>즉시 현장</b>에 나가 행위 제지, 중단 통보와 <b>서면경고</b>, 가해자·피해자 분리와 수사, 긴급응급조치·잠정조치 절차 안내, 상담소·보호시설 인도(피해자 동의)를 합니다."},
+   {b:"② 긴급응급조치 §4", d:"지속·반복 우려 + 긴급성이 있으면 사법경찰관이 <b>직권 또는 상대방·법정대리인·신고자 요청</b>으로 100m 접근금지·전기통신 접근금지를 합니다. 결정서를 즉시 작성합니다."},
+   {b:"사후 절차 §5", d:"지체 없이 검사에게 <b>사후승인</b> 청구를 신청하고, 검사는 긴급응급조치가 있었던 때부터 <b>48시간 이내</b> 법원에 청구합니다. 청구·승인이 없으면 즉시 취소하며, 기간은 <b>1개월</b>을 넘을 수 없습니다."},
+   {b:"③ 잠정조치 §9", d:"법원이 검사의 청구(경찰 신청)로 결정합니다. 1호 서면경고, 2호 100m 접근금지, 3호 전기통신 접근금지, 3호의2 위치추적 전자장치 부착, 4호 유치장·구치소 유치. 기간은 <b>2·3·3의2호 3개월(2회 각 3개월 연장 → 최장 9개월), 유치 1개월</b>."},
+   {b:"불이행", d:"긴급응급조치 불이행은 <b>1년 이하 징역 또는 1천만원 이하 벌금</b>, 잠정조치 2·3호 불이행은 <b>2년 이하 징역 또는 2천만원 이하 벌금</b>. 가정폭력·아동학대의 과태료와 달리 <b>처음부터 형사처벌</b>입니다.", co:true}
+  ]},
+ {no:"아동학대", t:"아동학대처벌법", b:"3단계",
+  rows:[
+   {b:"① 응급조치 §12", d:"사법경찰관리 또는 아동학대전담공무원이 즉시 <b>학대행위 제지·가해자 격리·보호시설 인도·의료기관 인도·연고자 인도</b>를 합니다. 기간은 <b>72시간</b>(토·공휴일이 포함되어 보호에 필요하면 48시간 연장), 검사가 임시조치를 청구하면 결정 때까지 연장됩니다. 결과보고서를 작성합니다."},
+   {b:"② 긴급임시조치 §13", d:"재발 우려 + 긴급해 임시조치 결정을 받을 수 없을 때, 사법경찰관이 <b>직권 또는 피해아동등·법정대리인·변호사·시·도지사·시장·군수·구청장·아동보호전문기관장 신청</b>으로 §19①1~3호(퇴거·100m·전기통신)를 합니다. 결정서 작성·지자체 통지."},
+   {b:"사후 절차 §15", d:"지체 없이 검사에게 임시조치 청구를 신청하고, 검사는 긴급임시조치를 한 때부터 <b>48시간 이내</b>에 청구합니다. 청구·결정이 없으면 즉시 취소합니다."},
+   {b:"③ 임시조치 §19", d:"판사가 결정합니다. 1호 퇴거·격리, 2호 100m 접근금지, 3호 전기통신 접근금지, 4호 친권·후견 권한 제한·정지, 5호 상담·교육 위탁, 6호 의료기관·요양시설 위탁, 7호 유치장·구치소 유치. 기간은 <b>2개월(1~3호 2회, 4~7호 1회 연장)</b>, 응급조치 후에는 청구 때부터 <b>24시간 내</b> 결정."},
+   {b:"불이행", d:"긴급임시조치 불이행은 <b>1천만원 이하 과태료</b>. 임시조치 1~4호 불이행은 <b>2년 이하 징역 또는 2천만원 이하 벌금·구류</b>, 5·6호 위탁 불이행은 1천만원 이하 과태료(2026.2.12. 시행).", co:true}
+  ]}
+];
+var PROTECT_2026 = [
+ "스토킹 <b>피해자보호명령제</b>가 2026.3.31. 국회를 통과해 <b>2027.4.22. 시행</b>을 앞두고 있습니다. 경찰·검사의 청구가 받아들여지지 않으면 피해자가 법원에 직접 접근금지 등 보호명령을 신청할 수 있게 됩니다.",
+ "2026.10.26. 국회 행정안전위원회 국정감사에서 <b>경찰이 검사를 거치지 않고 법원에 직접 잠정조치를 신청</b>해야 한다는 지적이 나왔고, 경찰청장 직무대행은 이에 동의하며 관계부처와 법 개정을 논의 중이라고 답했습니다. 검사를 경유하면 보호조치에 최소 수 시간이 걸린다는 문제입니다.",
+ "같은 자리에서 <b>잠정조치 전체 인용률은 80% 수준이지만 위치추적 전자장치 부착 인용률은 35% 안팎</b>이라는 답이 나왔습니다. 제도가 있어도 실제 결정까지 이어지지 않는 간극을 보여줍니다.",
+ "2026.7.13. 정부의 스토킹·교제폭력 대응 강화 방안에는 <b>교제폭력 처벌·보호 법제화(지배·통제행위 처벌, 잠정조치 도입)</b>, <b>스토킹 잠정조치 기간 연장(현행 최장 9개월)</b>, 고위험 피해자 <b>경호원 2인 밀착 경호·주거지 지능형 CCTV</b> 확대가 담겼습니다."
+];
+function renderProtect(){
+  var host = $("protectPane"); if (!host) return;
+  var h = '<div class="hero"><h1>🚨 응급 · 긴급 · 임시 · 잠정조치</h1>' +
+    '<p>현장 질문은 늘 “<b style="color:#f4e3ac">언제, 누가, 며칠 안에</b>”로 갈립니다. 세 법의 3단계를 나란히 놓고 <b>발동 주체 · 기간 · 사후 절차 · 불이행 제재</b>만 비교하면 헷갈리지 않습니다.</p></div>';
+  h += picNote('근거는 <b>가정폭력처벌법 · 스토킹처벌법 · 아동학대처벌법</b>의 현행 조문(2026.10.2. 시행본 기준)입니다. 세 법 모두 <b>응급조치(경찰 현장) → 긴급조치(경찰 직권·사후 통제) → 임시·잠정조치(법원)</b> 구조가 같고, <b>기간과 불이행 제재</b>가 다릅니다.');
+  h += '<div class="sec"><div class="sec-h"><span class="no">1</span><b>세 법 3단계 비교</b><span class="tag">핵심</span></div></div>';
+  h += '<div class="bslist">';
+  PROTECT_CARDS.forEach(function(c){ h += picCard(c.no, c.t, c.b, c.rows); });
+  h += '</div>';
+  h += picCard("한눈", "숫자만 따로 외우기", "시험용", [
+    {b:"가정폭력", d:"긴급임시조치 <b>48시간</b> 내 임시조치 청구 · 임시조치 1~3호 <b>2개월</b>(최장 6개월) · 불이행은 <b>과태료 300만원 / 임시조치 위반 1년·1천만원</b>"},
+    {b:"스토킹", d:"긴급응급조치 <b>1개월</b> · <b>48시간</b> 내 사후승인 · 잠정조치 <b>3개월</b>(최장 9개월), 유치 1개월 · 불이행은 <b>1년·1천만원 / 2년·2천만원</b>"},
+    {b:"아동학대", d:"응급조치 <b>72시간</b>(+48시간) · 긴급임시조치 <b>48시간</b> 내 청구 · 임시조치 <b>2개월</b>, 응급조치 후 <b>24시간</b> 내 결정 · 불이행은 <b>과태료 1천만원 / 1~4호 2년·2천만원</b>"},
+    {b:"공통", d:"긴급조치는 <b>경찰이 먼저 하고 법원·검사의 통제를 나중에 받는</b> 구조입니다. 그래서 결정서 작성과 사후 청구 기한을 놓치면 조치 자체가 취소됩니다.", co:true}
+  ]);
+  h += '<div class="sec"><div class="sec-h"><span class="no">2</span><b>현장 판단 포인트</b><span class="tag">면접</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("판단", "무엇부터 보는가", "순서", [
+    {b:"① 분리", d:"진행 중인 폭력·스토킹이면 설명보다 <b>제지와 분리</b>가 먼저입니다. 응급조치 단계에서 피해자와 물리적 거리를 만듭니다."},
+    {b:"② 재발 우려·긴급성", d:"긴급조치의 요건은 두 가지입니다. 재발 우려가 있고, 법원 결정을 기다릴 시간이 없어야 합니다. 과거 신고·위반 이력, 흉기·음주, 접근 빈도를 근거로 설명합니다."},
+    {b:"③ 사후 절차", d:"결정서 작성, 검사 청구(48시간), 피해자·가해자 고지, 지자체 통지까지가 한 묶음입니다. 이 고리를 끊으면 조치가 취소됩니다."},
+    {b:"④ 연계", d:"1366·해바라기센터·아동보호전문기관·보호시설, 스토킹 전담경찰관, 지자체 사례관리까지 연결해 <b>조치 이후의 안전</b>을 만듭니다.", co:true}
+  ]);
+  h += picCard("함정", "자주 틀리는 답", "감점", [
+    {b:"①", d:"세 법의 <b>기간을 바꿔 말하는 것</b>. 스토킹 긴급응급조치는 1개월, 잠정조치는 3개월(최장 9개월)입니다."},
+    {b:"②", d:"“경찰이 임시조치를 결정한다”고 말하는 것. <b>임시·잠정조치는 법원 결정</b>이고, 경찰은 긴급조치와 신청까지입니다."},
+    {b:"③", d:"불이행 제재를 모두 과태료로 뭉뚱그리는 것. <b>스토킹은 형사처벌</b>, 가정폭력·아동학대는 조치 종류에 따라 과태료와 형벌이 나뉩니다."}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">3</span><b>2026년 논의 — 어디로 가고 있나</b><span class="tag">최신</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("동향", "제도는 ‘더 빠르게, 더 직접’으로", "2026", PROTECT_2026.map(function(x, i){ return {b:"0"+(i+1), d:x}; }));
+  h += '</div>';
+  h += picCard("답변", "면접 30초 핵심 답변", "그대로 연습", [], {b:"🎤 30초 답변", d:"“세 법 모두 경찰이 현장에서 하는 응급조치와 긴급조치, 법원이 결정하는 임시·잠정조치로 이어집니다. 가정폭력은 긴급임시조치 후 48시간 안에 임시조치를 청구하고, 스토킹은 긴급응급조치 1개월에 48시간 안에 사후승인을 받으며 잠정조치는 최장 9개월까지 갑니다. 아동학대는 응급조치 72시간, 긴급임시조치 후 48시간, 임시조치 2개월이 기준입니다. 저는 현장에서 분리와 결정서 작성, 사후 청구 기한을 한 묶음으로 처리하고, 피해자를 1366과 보호시설로 연결해 조치 이후의 안전까지 확인하겠습니다.”"});
+  host.innerHTML = h;
+}
+
+/* =========================================================
+   ⛓️ 현행범 체포 · 긴급체포 (형사소송법)
+   ========================================================= */
+var ARREST_CARDS = [
+ {no:"현행범", t:"현행범인 · 준현행범인", b:"§211",
+  rows:[
+   {b:"현행범인", d:"<b>범죄를 실행하고 있거나 실행하고 난 직후</b>의 사람."},
+   {b:"준현행범인", d:"① 범인으로 불리며 <b>추적</b>되고 있을 때 ② <b>장물</b>이나 범죄에 사용되었다고 인정하기에 충분한 <b>흉기</b>나 그 밖의 물건을 소지할 때 ③ 신체나 의복에 <b>증거가 될 만한 뚜렷한 흔적</b>이 있을 때 ④ <b>누구냐고 묻자 도망</b>하려고 할 때 — 현행범인으로 봅니다."},
+   {b:"포인트", d:"‘실행 직후’와 ‘추적 중’은 시간적 접착성이 필요합니다. 며칠 지난 사건은 준현행범이 될 수 없습니다."}
+  ]},
+ {no:"체포", t:"현행범 체포와 필요성", b:"§212",
+  rows:[
+   {b:"근거", d:"현행범인은 <b>누구든지 영장 없이 체포</b>할 수 있습니다. 경찰관은 물론 일반인도 가능하고, 일반인이 체포하면 즉시 사법경찰관리에게 인도해야 합니다."},
+   {b:"요건", d:"판례는 ① 행위의 <b>가벌성</b> ② 범죄의 <b>현행성·시간적 접착성</b> ③ 범인·범죄의 <b>명백성</b>에 더해 ④ <b>체포의 필요성</b>, 즉 도망 또는 증거인멸의 염려가 있어야 한다고 봅니다. 체포 당시 상황을 기준으로 판단합니다."},
+   {b:"주의", d:"현행범 체포는 ‘편의’를 위한 수단이 아닙니다. 필요성 요건을 설명하지 못하면 위법 체포가 되고, 그 뒤의 압수·수색도 흔들립니다."}
+  ]},
+ {no:"경미", t:"경미사건의 예외", b:"§214",
+  rows:[
+   {b:"규정", d:"<b>다액 50만원 이하</b>의 벌금·구류 또는 과료에 해당하는 죄의 현행범인은 <b>주거가 분명하지 아니한 때</b>에만 현행범 체포 규정을 적용합니다."},
+   {b:"의미", d:"가벼운 위반은 주거가 확인되면 체포하지 않고, 신분 확인·범칙금·고발 등에 해당 사안의 절차로 처리합니다."}
+  ]},
+ {no:"고지", t:"체포할 때 반드시 말할 것", b:"§200조의5",
+  rows:[
+   {b:"네 가지", d:"<b>피의사실의 요지 · 체포의 이유 · 변호인을 선임할 수 있음 · 변명할 기회</b>를 주어야 합니다(미란다 원칙)."},
+   {b:"기록", d:"고지 여부와 시각을 기록으로 남겨야 합니다. 고지 없이 조사한 진술은 이후 다툼의 대상이 됩니다."},
+   {b:"포인트", d:"현행범·긴급체포 모두 적용됩니다. ‘체포부터 고지, 고지부터 기록’을 한 묶음으로 기억하세요."}
+  ]},
+ {no:"긴급", t:"긴급체포의 3대 요건", b:"§200조의3",
+  rows:[
+   {b:"① 중대성", d:"피의자가 <b>사형·무기 또는 장기 3년 이상의 징역이나 금고</b>에 해당하는 죄를 범하였다고 의심할 만한 상당한 이유."},
+   {b:"② 필요성", d:"피의자가 <b>증거를 인멸할 염려</b>가 있거나 <b>도망하거나 도망할 우려</b>가 있을 때."},
+   {b:"③ 긴급성", d:"<b>긴급을 요하여</b> 지방법원판사의 체포영장을 받을 수 없을 때. ‘우연히 발견한 경우 등과 같이 체포영장을 받을 시간적 여유가 없는 때’를 말합니다."},
+   {b:"절차", d:"체포 후 <b>즉시 검사의 승인</b>을 받고 <b>즉시 긴급체포서</b>를 작성합니다. 긴급체포서에는 범죄사실의 요지와 긴급체포의 사유 등을 적습니다.", co:true}
+  ]},
+ {no:"48시간", t:"체포 후 48시간과 석방", b:"§200조의4",
+  rows:[
+   {b:"구속영장", d:"구속하려면 피의자를 체포한 때부터 <b>48시간 이내</b>에 구속영장을 청구해야 하고, 긴급체포서를 첨부합니다. ‘48시간 안이면 언제든’이 아니라 <b>지체 없이</b> 청구해야 합니다."},
+   {b:"석방", d:"청구하지 않거나 발부받지 못하면 <b>즉시 석방</b>합니다. 석방된 사람은 <b>영장 없이 동일한 범죄사실로 다시 체포할 수 없습니다</b>."},
+   {b:"보고", d:"긴급체포 후 구속영장을 신청하지 않고 석방하면 즉시 검사에게 보고하고, 검사는 석방한 날부터 30일 이내에 법원에 통지합니다."}
+  ]}
+];
+var ARREST_CASES = [
+ {no:"가능", t:"이런 상황이면 할 수 있다", b:"현장",
+  rows:[
+   {b:"추적 중", d:"절도범이 도주하고 시민이 추적 중 → <b>준현행범(추적)</b> → 현행범 체포. 도주·증거인멸 염려를 함께 확인합니다."},
+   {b:"흉기 소지", d:"폭행 직후 현장에서 흉기를 소지 → <b>준현행범(흉기 소지)</b> → 현행범 체포와 안전 확보."},
+   {b:"우연 발견", d:"신고받고 출동했으나 이미 도주한 가해자를 골목에서 우연히 발견했고, 공무집행방해(장기 5년 이하)·상해(장기 7년 이하) 등 중대 범죄 + 도망 우려 + 영장 받을 시간 없음 → <b>긴급체포</b>."}
+  ]},
+ {no:"불가", t:"이럴 때는 안 된다", b:"주의",
+  rows:[
+   {b:"법정형 미달", d:"<b>모욕(1년 이하)·단순 폭행(2년 이하)</b>처럼 장기 3년 미만인 죄는 긴급체포 요건을 충족하지 못합니다. 현행범 요건이 되면 현행범 체포로, 아니면 고소·수사·임의동행으로 접근합니다."},
+   {b:"시간 여유", d:"이미 소재를 파악해 체포영장을 받을 시간이 있었다면 <b>긴급성</b>이 없습니다. ‘귀찮아서’ 영장을 생략하면 위법합니다."},
+   {b:"막연한 우려", d:"‘도망할 것 같다’는 막연한 느낌만으로는 필요성이 인정되지 않습니다. 구체적 정황을 기록해야 합니다."}
+  ]}
+];
+function renderArrest(){
+  var host = $("arrestPane"); if (!host) return;
+  var h = '<div class="hero"><h1>⛓️ 현행범 체포 · 긴급체포</h1>' +
+    '<p>둘 다 <b style="color:#f4e3ac">영장 없는 체포</b>지만 문이 다릅니다. 현행범은 <b>범행의 현행성</b>으로, 긴급체포는 <b>죄의 중대성 + 필요성 + 긴급성</b>으로 들어갑니다.</p></div>';
+  h += picNote('근거는 <b>「형사소송법」 §211(현행범인·준현행범인) · §212(현행범인의 체포) · §214(경미사건) · §200조의3(긴급체포) · §200조의4(48시간) · §200조의5(고지)</b> 현행 조문(2026.10.2. 시행본)입니다.');
+  h += '<div class="sec"><div class="sec-h"><span class="no">1</span><b>현행범 체포</b><span class="tag">§211 · §212 · §214</span></div></div>';
+  h += '<div class="bslist">';
+  ARREST_CARDS.slice(0,4).forEach(function(c){ h += picCard(c.no, c.t, c.b, c.rows); });
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">2</span><b>긴급체포</b><span class="tag">§200조의3 · §200조의4</span></div></div>';
+  h += '<div class="bslist">';
+  ARREST_CARDS.slice(4).forEach(function(c){ h += picCard(c.no, c.t, c.b, c.rows); });
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">3</span><b>현장에서 가르는 기준</b><span class="tag">가능 · 불가</span></div></div>';
+  h += '<div class="bslist">';
+  ARREST_CASES.forEach(function(c){ h += picCard(c.no, c.t, c.b, c.rows); });
+  h += '</div>';
+  h += picCard("비교", "한 줄 비교", "정리", [
+    {b:"현행범", d:"범행 실행 중·직후 + 범인·범죄의 명백성 + <b>도망·증거인멸 염려</b> → 영장 없이 체포. 경미사건은 주거 불명일 때만."},
+    {b:"긴급체포", d:"<b>장기 3년 이상</b> + 도망·증거인멸 염려 + <b>영장 받을 시간 없음</b> → 즉시 검사 승인·긴급체포서 → 48시간 내 구속영장."},
+    {b:"공통", d:"체포 즉시 <b>피의사실 요지·체포 이유·변호인 선임권·변명 기회</b>를 고지하고, 48시간 안에 영장을 청구하지 못하면 즉시 석방합니다.", co:true}
+  ]);
+  h += picCard("답변", "면접 30초 핵심 답변", "그대로 연습", [], {b:"🎤 30초 답변", d:"“현행범 체포는 범죄를 실행 중이거나 직후인 사람, 또는 추적·흉기 소지·증거 흔적·도망 등 준현행범 사유가 있는 사람을 영장 없이 체포하는 제도이고, 도망이나 증거인멸의 염려가 있어야 합니다. 긴급체포는 사형·무기 또는 장기 3년 이상의 죄를 범했다고 의심할 만한 상당한 이유, 도망이나 증거인멸의 염려, 영장을 받을 시간적 여유가 없다는 세 요건을 모두 갖출 때만 가능합니다. 체포하면 즉시 피의사실 요지와 체포 이유, 변호인 선임권, 변명할 기회를 고지하고, 긴급체포는 즉시 검사 승인과 긴급체포서 작성 후 48시간 안에 구속영장을 청구하며, 청구하지 못하면 즉시 석방하겠습니다.”"});
+  host.innerHTML = h;
+}
+
+/* =========================================================
+   🔍 불심검문 (경찰관 직무집행법 제3조)
+   ========================================================= */
+var SEARCH_STEPS = [
+ {no:"대상", t:"누구를 세울 수 있나", b:"§3①",
+  rows:[
+   {b:"1호", d:"<b>수상한 행동이나 그 밖의 주위 사정을 합리적으로 판단</b>해 볼 때, 어떠한 죄를 범하였거나 범하려 하고 있다고 <b>의심할 만한 상당한 이유</b>가 있는 사람."},
+   {b:"2호", d:"이미 행하여진 범죄나 행하여지려고 하는 범죄행위에 관한 <b>사실을 안다고 인정되는 사람</b> — 목격자·참고인도 대상입니다."},
+   {b:"한계", d:"‘수상하다’는 느낌만으로는 부족합니다. 시간·장소·복장·행동·소지품 같은 <b>객관적 사정</b>을 들어 설명할 수 있어야 합니다."}
+  ]},
+ {no:"질문", t:"정지·질문과 임의성", b:"§3①·⑦",
+  rows:[
+   {b:"할 수 있는 것", d:"그 자리에서 <b>정지시켜 질문</b>할 수 있습니다. 질문은 필요한 범위에서 짧게 합니다."},
+   {b:"임의성", d:"질문을 받은 사람은 <b>형사소송에 관한 법률에 따르지 아니하고는 신체를 구속당하지 않고</b>, 그 의사에 반해 <b>답변을 강요당하지 않습니다</b>. 답변을 거부해도 처벌할 수 없습니다."},
+   {b:"주의", d:"답변을 강요하거나 장시간 붙잡아 두는 것은 위법한 직무집행이 되어 이후 공무집행방해죄의 ‘적법한 공무집행’ 전제도 무너집니다."}
+  ]},
+ {no:"소지품", t:"흉기 소지 조사", b:"§3③",
+  rows:[
+   {b:"할 수 있는 것", d:"질문할 때 <b>흉기를 가지고 있는지를 조사</b>할 수 있습니다. 겉으로 드러난 부분을 확인하는 외표 검사, 소지품을 스스로 꺼내 보이게 하는 정도입니다."},
+   {b:"할 수 없는 것", d:"<b>강제 수색은 불가</b>합니다. 주머니·가방에 손을 넣어 뒤지거나 옷을 벗게 하는 것은 영장주의의 예외가 아니면 허용되지 않습니다."},
+   {b:"이어지는 조치", d:"흉기가 확인되면 위험 방지 조치(경직법 §5), 범죄 혐의가 확인되면 현행범 체포 등 <b>별도의 법적 근거</b>로 넘어갑니다."}
+  ]},
+ {no:"신분", t:"증표 제시·소속·성명·목적 설명", b:"§3④",
+  rows:[
+   {b:"반드시", d:"질문하거나 동행을 요구할 때 <b>신분을 표시하는 증표를 제시</b>하면서 <b>소속과 성명</b>을 밝히고, <b>질문·동행의 목적과 이유</b>를 설명해야 합니다."},
+   {b:"동행 시", d:"동행을 요구하면 <b>동행 장소</b>까지 밝혀야 합니다."},
+   {b:"포인트", d:"이 절차를 생략하면 상대방은 불심검문에 응할 의무가 없고, 이후 저항이 있더라도 공무집행방해로 보기 어렵습니다."}
+  ]},
+ {no:"동행", t:"경찰관서 동행 요구", b:"§3②·⑤·⑥",
+  rows:[
+   {b:"요건", d:"정지시킨 <b>그 장소에서 질문하는 것이 그 사람에게 불리</b>하거나 <b>교통에 방해</b>가 된다고 인정될 때, 가까운 경찰서·지구대·파출소·출장소로 동행을 요구할 수 있습니다."},
+   {b:"거절 가능", d:"동행을 요구받은 사람은 <b>그 요구를 거절할 수 있습니다</b>. 거절하면 강제로 끌고 갈 수 없고, 물리력을 쓸 근거도 없습니다."},
+   {b:"동행 후 의무", d:"가족·친지 등에게 <b>경관의 신분·동행 장소·목적과 이유</b>를 알리거나 본인이 <b>즉시 연락할 기회</b>를 주고, <b>변호인의 도움을 받을 권리</b>를 알려야 합니다."},
+   {b:"시간 한도", d:"동행한 사람을 <b>6시간을 초과</b>해 경찰관서에 머물게 할 수 없습니다.", co:true}
+  ]},
+ {no:"거부", t:"거부·도주·위협할 때", b:"현장 판단",
+  rows:[
+   {b:"단순 거부", d:"답변을 거부하거나 동행을 거절하는 것만으로는 <b>처벌할 수 없습니다</b>. 불심검문 거부에 대한 벌칙은 없습니다."},
+   {b:"폭행·협박", d:"적법한 불심검문을 폭행·협박으로 방해하면 <b>공무집행방해(형법 §136)</b>가 됩니다. 먼저 증표 제시와 목적 설명이 있었는지가 적법성의 출발점입니다."},
+   {b:"도주", d:"도주 자체로 체포할 수는 없고, <b>현행범 요건(형소법 §211·§212)</b>을 갖추었는지 확인합니다. 죄를 범하고 도주 중이거나 추적 중이면 준현행범이 될 수 있습니다."},
+   {b:"위험", d:"흉기로 위협하면 안전거리를 확보하고 지원을 요청한 뒤, 물리력 규칙의 <b>치명적 공격·고위험 물리력</b> 기준으로 판단합니다."}
+  ]}
+];
+function renderSearch(){
+  var host = $("searchPane"); if (!host) return;
+  var h = '<div class="hero"><h1>🔍 불심검문</h1>' +
+    '<p>불심검문은 <b style="color:#f4e3ac">“세울 수는 있지만 붙잡을 수는 없다”</b>가 핵심입니다. 대상·절차·한계를 조문 순서대로 외우면 상황판단 질문에서 바로 쓸 수 있습니다.</p></div>';
+  h += picNote('근거는 <b>「경찰관 직무집행법」 제3조(불심검문)</b> 현행 조문(2026.7.7. 시행본)입니다. 불심검문은 <b>임의처분</b>이라 답변 강요·강제연행이 안 되고, 동행은 <b>6시간</b>을 넘길 수 없습니다.');
+  h += '<div class="sec"><div class="sec-h"><span class="no">1</span><b>조문 순서로 보는 불심검문</b><span class="tag">§3</span></div></div>';
+  h += '<div class="bslist">';
+  SEARCH_STEPS.forEach(function(s){ h += picCard(s.no, s.t, s.b, s.rows); });
+  h += '</div>';
+  h += picCard("정리", "한 문장으로 외우기", "암기", [
+    {b:"대상", d:"수상한 행동 등 <b>합리적 판단</b>으로 죄를 범했거나 범하려 한다고 의심할 만한 상당한 이유가 있는 사람, 또는 범죄 사실을 안다고 인정되는 사람."},
+    {b:"절차", d:"<b>증표 제시 → 소속·성명 → 목적·이유 설명 → (동행 시) 동행 장소</b>. 동행 후에는 가족 통지·연락 기회·변호인 조력권 고지."},
+    {b:"한계", d:"<b>답변 강요 금지 · 강제 수색 금지 · 6시간 초과 금지</b>. 거절은 처벌 대상이 아니고, 폭행·협박은 공무집행방해입니다.", co:true}
+  ]);
+  h += picCard("답변", "면접 30초 핵심 답변", "그대로 연습", [], {b:"🎤 30초 답변", d:"“불심검문은 수상한 행동이나 주위 사정을 합리적으로 판단해 죄를 범했거나 범하려 한다고 의심할 만한 상당한 이유가 있는 사람, 또는 범죄 사실을 안다고 인정되는 사람을 정지시켜 질문하는 제도입니다. 질문 전에 증표를 제시하고 소속과 성명, 목적과 이유를 설명하며, 동행을 요구하면 동행 장소를 밝히고 거절할 수 있음을 알려야 합니다. 동행하면 가족에게 알리거나 연락할 기회를 주고 변호인 조력권을 고지하며, 6시간을 넘겨 머물게 할 수 없습니다. 답변을 강요하거나 강제로 수색할 수는 없고, 단순한 거부는 처벌할 수 없지만 폭행이나 협박으로 방해하면 공무집행방해로 대응합니다.”"});
+  host.innerHTML = h;
+}
+
+/* =========================================================
+   🪪 신상공개 · 피의자 인권 (중대범죄신상공개법 · 피의사실공표죄 · 공보규칙)
+   ========================================================= */
+var IDN_TARGETS = [
+ {b:"1호 내란·외환", d:"「형법」 제2편 제1장 <b>내란의 죄</b>, 같은 편 제2장 <b>외환의 죄</b>"},
+ {b:"2호 범죄단체", d:"「형법」 제114조(<b>범죄단체 등의 조직</b>)의 죄"},
+ {b:"3호 폭발물", d:"「형법」 제119조(<b>폭발물 사용</b>)의 죄"},
+ {b:"4호 현주건조물 방화", d:"「형법」 제164조 제2항(<b>현주건조물 등 방화</b>)의 죄 — 사람이 사는 건조물에 불을 질러 상해·사망에 이른 경우"},
+ {b:"5호 중상해류", d:"「형법」 제258조(중상해·존속중상해), 제258조의2(특수상해), 제259조(상해치사), 제262조(폭행치사상). <b>폭행치사상은 중상해 또는 사망에 이른 경우만</b>"},
+ {b:"6호 특정강력범죄", d:"「특정강력범죄의 처벌에 관한 특례법」 제2조의 <b>특정강력범죄</b> — 살인·강도·성폭력·방화·약취유인 등"},
+ {b:"7호 성폭력범죄", d:"「성폭력범죄의 처벌 등에 관한 특례법」 제2조의 <b>성폭력범죄</b>"},
+ {b:"8호 아동·청소년 성범죄", d:"「아동·청소년의 성보호에 관한 법률」 제2조제2호의 <b>아동·청소년대상 성범죄</b>. 같은 법 제13조, 제14조제3항, 제15조제2항·제3항, 제15조의2의 죄는 <b>제외</b>"},
+ {b:"9호 마약류", d:"「마약류 관리에 관한 법률」 제58조의 죄. <b>같은 조 제4항은 제외</b>"},
+ {b:"10호 마약 불법거래", d:"「마약류 불법거래 방지에 관한 특례법」 제6조 및 제9조제1항의 죄"},
+ {b:"11호 가중처벌", d:"1호부터 10호까지의 죄로서 <b>다른 법률에 따라 가중처벌되는 죄</b>", co:true}
+];
+var IDN_STEPS = [
+ {b:"① 심의", d:"검사·사법경찰관이 공개 여부를 판단하고, <b>신상정보공개심의위원회</b>가 심의·의결합니다. 위원회는 <b>검찰총장·중대범죄수사청장·경찰청장이 둘 수 있고</b>, 위원장 포함 <b>10인 이내</b>(시행령상 7~10명)로 구성하며 <b>공무원이 아닌 위원이 과반</b>입니다. 심의는 비공개, <b>재적위원 과반수 찬성</b>으로 의결합니다."},
+ {b:"② 의견진술", d:"공개 결정 <b>전에 피의자에게 의견을 진술할 기회</b>를 주어야 합니다. 위원회에서 피의자 의견을 들었으면 생략할 수 있습니다. 시행령은 심의위원회 개최일과 진술 기회를 <b>미리 고지</b>하도록 합니다."},
+ {b:"③ 결정·통지", d:"결정하면 <b>지체 없이 서면</b>으로 피의자에게 통지하고, 변호인이 있으면 <b>변호인에게도</b> 알립니다. 피의자가 서면으로 이의가 없다고 하면 유예 없이 공개하고 <b>확인서</b>를 받습니다."},
+ {b:"④ 5일 유예", d:"통지한 날부터 <b>5일 이상 유예기간</b>을 두고 공개합니다. 피의자가 다툴 시간을 주는 절차입니다."},
+ {b:"⑤ 촬영", d:"공개할 얼굴은 특별한 사정이 없으면 <b>공개 결정일 전후 30일 이내</b>의 모습이어야 합니다. 필요하면 <b>동의 없이 촬영</b>할 수 있고(정면·왼쪽·오른쪽 컬러사진), 적법하게 보관 중인 사진·영상물을 활용할 수도 있습니다. 피의자는 촬영에 따라야 합니다."},
+ {b:"⑥ 30일 게시", d:"검찰총장·중대범죄수사청장·경찰청장이 지정한 인터넷 홈페이지에 <b>30일간</b> 게시합니다. 게시 화면에는 <b>“유죄 판결이 확정될 때까지는 무죄로 추정된다”</b>는 내용을 명시해야 합니다(시행령 제5조)."},
+ {b:"⑦ 종료·보상", d:"공개기간이 지나거나 불기소·불송치 결정을 받으면 <b>지체 없이 삭제</b>합니다. 공개 뒤 불기소·불송치 또는 무죄가 확정되면 형사보상과 <b>별도로</b> 보상 청구가 가능하며, <b>1천만원 이내</b>에서 재산상 손실도 보상합니다."},
+ {b:"⑧ 피고인", d:"공소제기 때는 특정중대범죄가 아니었는데 재판 과정에서 <b>공소사실이 특정중대범죄로 변경</b>된 피고인은 검사가 법원에 공개를 청구할 수 있습니다. <b>항소심 변론종결 전</b>까지 청구하고, 해당 사건을 심리하지 않는 <b>별도 재판부</b>가 결정하며, 결정에는 <b>즉시항고</b>할 수 있습니다.", co:true}
+];
+var IDN_RIGHTS = [
+ {b:"헌법 §12", d:"신체의 자유, <b>적법절차</b>(①), 고문·자기 불리 진술 강요 금지(②), 영장 제시(③), <b>체포·구속 시 즉시 변호인 조력</b>(④), 체포 이유와 변호인 조력권 <b>고지</b>(⑤)."},
+ {b:"무죄추정", d:"<b>헌법 제27조 제4항</b>과 <b>형사소송법 제275조의2</b> — “피고인은 유죄의 판결이 확정될 때까지는 무죄로 추정된다.” 헌법 제12조가 아니라 <b>제27조 제4항</b>이라는 점을 정확히 말해야 합니다."},
+ {b:"형소법 제244조의3", d:"신문 전에 4가지를 고지합니다. ① 일체 또는 개개의 질문에 <b>진술을 거부</b>할 수 있다 ② 진술하지 않아도 <b>불이익이 없다</b> ③ 권리를 포기하고 한 진술은 <b>법정에서 유죄의 증거</b>로 쓰일 수 있다 ④ <b>변호인의 조력</b>을 받을 수 있다. 이어서 권리 행사 여부를 묻고 답변을 조서에 기재(자필 또는 서명)합니다."},
+ {b:"형소법 제243조의2", d:"사법경찰관은 피의자·변호인 등의 신청이 있으면 <b>변호인 접견</b>과 <b>신문 참여</b>를 정당한 사유 없이 거절할 수 없습니다. 참여 변호인은 신문 후 의견을 진술할 수 있고, 그 의견은 조서에 기재되어 변호인에게 열람·서명하게 합니다."},
+ {b:"공보 원칙", d:"「경찰 수사사건 등의 공보에 관한 규칙」은 <b>원칙적 비공개</b>입니다. 공개는 ① 범죄유형·수법을 알려 유사 범죄 재발 방지 ② 공개수배 ③ 급박한 위험·피해 확산 방지 ④ 오보·추측 보도로 인권 침해나 수사 지장이 명백할 때 사실관계 정정 — 네 경우만 예외입니다.", co:true},
+ {b:"공보 금지", d:"성명·얼굴 등 <b>신원을 알 수 있거나 유추할 수 있는 정보</b>, 신상·사생활, 구체적 수사진행·계획, 범죄경력·수사경력, 주관적 판단, 수사기법, 기록 원본, 잔혹한 수법·참혹한 피해상황, 모방자살 정보는 공개할 수 없습니다."},
+ {b:"익명·유의", d:"사건관계인은 <b>‘A○○’</b>처럼 익명으로 표기하고, 유죄를 단정하는 표현은 금지됩니다. 피의자가 <b>혐의를 부인하면 그 사실을 공보에 포함</b>해야 하고, 언론 인터뷰를 권유·유도해서는 안 됩니다."},
+ {b:"초상권·동선", d:"공보 과정에서 <b>사건관계인 얼굴이 공개되지 않도록</b> 해야 하고(§14), <b>출석·귀가·호송의 일시·장소</b>는 공개 금지(§15), 출석·조사·체포·구속 등 <b>수사과정의 촬영·녹화·중계</b>도 허용할 수 없습니다(§16). 신상공개 요건을 충족한 피의자만 얼굴·성명·나이를 공개할 수 있습니다(§17).", co:true},
+ {b:"§126 공표죄", d:"수사 직무를 수행·감독·보조하는 사람이 직무 중 알게 된 <b>피의사실을 공소제기 전에 공표</b>하면 <b>3년 이하 징역 또는 5년 이하 자격정지</b>입니다. 기자 한 명에게 알려도 불특정 다수에게 퍼질 것이 예견되면 ‘공표’에 해당합니다."},
+ {b:"장구(수갑·포승)", d:"「피의자 유치 및 호송 규칙」 §22·§50 — <b>호송주무관·유치인보호주무자의 승인</b>을 받아 필요한 한도에서만 사용하고, 사유와 시간을 근무일지에 적고 <b>사전 고지</b>합니다. 징벌·고통 목적, <b>뒷수갑+다리 묶기</b> 같은 비인도적 방법은 금지이며 사유가 없어지면 <b>즉시 해제</b>합니다."},
+ {b:"호송 인권", d:"§3은 유치인의 <b>인권 존중·무죄추정·차별 금지</b>를 규정하고, §63은 호송 중 <b>모습이 타인에게 노출되지 않도록</b> 유의하라고 합니다. 미체포 피의자가 구속 전 심문에 임의 출석하면 <b>원칙적으로 수갑·포승을 쓰지 않습니다</b>."}
+];
+function renderIdentity(){
+  var host = $("identityPane"); if (!host) return;
+  var h = '<div class="hero"><h1>🪪 신상공개 · 피의자 인권</h1>' +
+    '<p>국민의 알 권리와 무죄추정이 부딪히는 자리입니다. <b style="color:#f4e3ac">“어떤 사건을, 어떤 요건과 절차로, 어디까지 공개하는가”</b>를 숫자로 말할 수 있어야 하고, 그 밖의 사건은 <b style="color:#f4e3ac">원칙적 비공개</b>라는 선을 지켜야 합니다.</p></div>';
+  h += picNote('근거는 <b>2026년 11월 현행 법령 원문</b>입니다 — 「특정중대범죄 피의자 등 신상정보 공개에 관한 법률」(법률 제22004호, <b>2026.10.2. 시행</b>), 같은 법 시행령(2026.10.2. 시행), 형법 제126조·형사소송법(2026.10.2. 시행), 「경찰 수사사건 등의 공보에 관한 규칙」(경찰청훈령 제1119호, 2024.5.1. 시행), 「피의자 유치 및 호송 규칙」(경찰청훈령 제1164호, 2025.6.3. 시행). 2026.10.2.부터 <b>공소청·중대범죄수사청</b> 체계(수사·기소 분리)가 시행된 점도 반영했습니다.');
+  h += '<div class="sec"><div class="sec-h"><span class="no">1</span><b>대상 범죄 — ‘특정중대범죄’ 11개 호</b><span class="tag">범위</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("대상", "중대범죄신상공개법 제2조", "11개 호", IDN_TARGETS);
+  h += picCard("정리", "범위를 한 문장으로", "암기", [
+    {b:"공통", d:"<b>내란·외환, 범죄단체, 폭발물, 방화치사상, 중상해류</b>에 <b>특정강력범죄·성폭력·아동청소년성범죄·마약</b>을 더한 구조입니다."},
+    {b:"주의", d:"성범죄·살인·강도 등(6~8호)은 <b>‘범행수단이 잔인하고 중대한 피해’ 요건이 붙지 않습니다</b>. 그 요건은 <b>3호~6호에만</b> 적용됩니다(법 제4조①1호 괄호)."}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">2</span><b>공개 요건 — 셋을 모두 갖추고, 미성년자는 제외</b><span class="tag">요건</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("요건", "법 제4조 제1항", "필수", [
+    {b:"① 잔인·중대", d:"범행수단이 잔인하고 <b>중대한 피해</b>가 발생했을 것 — <b>제2조 제3호부터 제6호까지의 죄에 한정</b>"},
+    {b:"② 충분한 증거", d:"피의자가 그 죄를 범하였다고 <b>믿을 만한 충분한 증거</b>가 있을 것 — ‘유사 사건’이나 ‘여론’은 근거가 되지 못합니다."},
+    {b:"③ 공공의 이익", d:"국민의 알권리 보장, 피의자의 재범 방지 및 범죄예방 등 <b>오로지 공공의 이익</b>을 위하여 필요할 것"},
+    {b:"미성년자", d:"<b>피의자가 미성년자이면 공개하지 않습니다</b> — 이 법의 유일한 법정 제외 사유입니다.", co:true},
+    {b:"고려 요소", d:"결정할 때 <b>범죄의 중대성, 범행 후 정황, 피해자 보호 필요성, 피해자(사망 시 유족)의 의사</b>를 종합적으로 고려해야 하고, <b>피의자의 인권을 고려해 신중하게</b> 결정하며 남용해서는 안 됩니다.", co:true}
+  ]);
+  h += picCard("정확히", "면접에서 틀리기 쉬운 세 가지", "주의", [
+    {b:"심신장애", d:"법문상 공개 제외는 <b>‘미성년자’</b>뿐입니다. 심신장애는 법정 제외 사유가 아니라 <b>인권 고려(§4③)와 고려 요소</b>에서 다뤄지는 사정입니다."},
+    {b:"이의신청", d:"법에 <b>‘이의신청’이라는 별도 절차는 없습니다</b>. 보장은 ① 결정 전 <b>의견진술</b> ② 통지 후 <b>5일 이상 유예</b> 두 가지입니다. ‘이의신청 기간 5일’이라고 말하면 부정확합니다."},
+    {b:"무죄추정", d:"무죄추정은 <b>헌법 제27조 제4항·형소법 제275조의2</b>입니다(헌법 제12조는 적법절차·영장·진술거부권·변호인 조력)."}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">3</span><b>절차 — 심의 · 의견진술 · 통지 · 5일 · 30일</b><span class="tag">핵심</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("절차", "결정에서 게시·삭제까지", "8단계", IDN_STEPS, {b:"🎤 면접 한 줄", d:"“공개는 수사기관이 결정하되 심의위원회 심의, 피의자 의견진술, 서면 통지, 5일 이상 유예, 결정일 전후 30일 이내 얼굴, 30일 게시, 종료 시 즉시 삭제까지 절차가 법에 정해져 있습니다.”"});
+  h += picCard("숫자", "숫자만 따로 외우기", "시험용", [
+    {b:"5일", d:"공개 결정을 <b>통지한 날부터 5일 이상</b> 유예 (서면으로 이의 없으면 생략)"},
+    {b:"30일", d:"공개할 얼굴은 <b>결정일 전후 30일 이내</b> 모습 / 게시는 <b>30일간</b>"},
+    {b:"10인·7~10명", d:"법상 위원회는 <b>위원장 포함 10인 이내</b>, 시행령상 <b>7명 이상 10명 이하</b>, 민간위원 과반"},
+    {b:"1천만원", d:"불기소·불송치·무죄 확정 시 <b>1천만원 이내</b> 보상(재산상 손실은 별도 증명)"},
+    {b:"3년·5년", d:"피의사실공표죄는 <b>3년 이하 징역 또는 5년 이하 자격정지</b>", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">4</span><b>피의자 인권 — 공보와 신문, 호송</b><span class="tag">현장</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("인권", "근거 조문 한 묶음", "조문", IDN_RIGHTS);
+  h += picCard("포토라인", "지금은 세우지 않습니다", "실무", [
+    {b:"근거", d:"공보책임자 아닌 수사업무 종사자는 기자와 <b>개별 접촉</b>을 할 수 없고(§19), <b>출석·귀가·호송 일시·장소</b>를 미리 알리거나(§15), 수사과정을 <b>촬영·중계</b>하게 할 수 없습니다(§16)."},
+    {b:"예외", d:"신상공개 요건을 충족해 <b>공개가 결정된 피의자</b>는 공개된 범위(얼굴·성명·나이)에서 취재될 수 있습니다. 경찰이 시간을 맞춰 세워 주는 방식은 금지입니다."},
+    {b:"실무", d:"모자·마스크, 가림막·우산, 차량 진입로 변경과 취재 구역 지정으로 <b>얼굴과 동선을 분리</b>합니다. 조회·송치 시간을 외부에 흘리지 않는 것이 첫 단계입니다.", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">5</span><b>상황별 답변 — 그대로 말해 보기</b><span class="tag">연습</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("기출", "체포 피의자 호송 중 취재진 충돌 (11/17)", "30초", [
+    {b:"① 안전", d:"다중 충돌·도주 위험이 먼저입니다. 호송 차량 위치와 진입로를 바꾸고 <b>취재 구역과 피의자 동선을 분리</b>하며, 부상자가 생기지 않게 인원을 배치합니다."},
+    {b:"② 초상", d:"피의자에게 상황을 짧게 설명하고 <b>모자·마스크로 얼굴을 가리며</b>, 촬영이 불가피하면 가림막을 세웁니다. 무죄추정의 대상임을 잊지 않습니다."},
+    {b:"③ 공보", d:"현장에서 즉흥적으로 사건 내용을 말하지 않고 <b>공보책임자에게 일원화</b>합니다. 신상공개는 <b>법 제4조 요건과 심의·유예 절차</b>를 거친 경우에만 공개된 범위에서 안내합니다."},
+    {b:"④ 기록", d:"충돌·촬영·지시 경위를 근무일지와 보고로 남깁니다. 사후에 문제가 됐을 때 <b>절차를 지켰다는 증거</b>가 됩니다.", co:true}
+  ], {b:"🎤 핵심", d:"“취재진이 몰릴수록 먼저 지킬 것은 피의자의 안전과 초상입니다. 공보는 담당에게 일원화하고, 신상공개는 법정 요건과 절차를 확인한 뒤 공개된 범위에서만 말하겠습니다.”"});
+  h += picCard("민원", "“저 사람 얼굴 공개해 주세요”", "요구", [
+    {b:"답변", d:"“공개 여부는 제가 현장에서 정할 수 없습니다. <b>특정중대범죄</b>에 해당하는지, <b>세 가지 요건</b>이 갖춰졌는지, <b>심의위원회</b>와 <b>5일 이상 유예</b> 절차를 거쳤는지로 결정됩니다.”"},
+    {b:"이유", d:"여론이 크다는 이유만으로 공개하면 <b>무죄추정과 인격권</b>을 침해하고, 공개하지 않아야 할 사건을 공개하면 <b>국가배상·보상</b> 문제가 됩니다."},
+    {b:"연결", d:"공개된 신상정보가 있는 사건이면 <b>공식 게시 화면</b>을 안내하고, 없으면 수사 진행 상황은 <b>공보책임자</b>를 통해 확인하도록 안내합니다."}
+  ]);
+  h += picCard("지시", "상급자가 “얼굴 사진부터 보도자료에 넣자”", "판단", [
+    {b:"확인", d:"사건이 <b>특정중대범죄</b>인지, 공개 <b>결정</b>이 있었는지, <b>유예기간</b>이 지났는지, 공개할 얼굴이 <b>결정일 전후 30일 이내</b>인지 확인합니다."},
+    {b:"설명", d:"결정 없이 사진을 배포하면 <b>형법 제126조 피의사실공표죄</b>(3년 이하 징역 또는 5년 이하 자격정지)와 공보규칙 위반이 될 수 있다고 근거를 들어 설명합니다."},
+    {b:"대안", d:"공개가 필요하다고 판단되면 <b>공보책임자 승인과 서면 공보</b> 절차로 처리하고, 그 경위를 기록합니다. 상급자 지시만으로 예외를 만들지 않습니다.", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">6</span><b>30초 핵심 답변</b><span class="tag">마무리</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("답변", "알 권리와 인권의 균형", "30초", [], {b:"🎤 30초 답변", d:"“신상공개는 국민의 알 권리와 무죄추정 사이의 균형 문제라고 생각합니다. 중대범죄신상공개법은 내란·외환, 범죄단체, 폭발물, 방화치사상, 중상해, 특정강력범죄, 성폭력, 아동청소년 성범죄, 마약 등 특정중대범죄를 대상으로 하고, 범행수단의 잔인성과 중대한 피해, 범행을 믿을 만한 충분한 증거, 공공의 이익이라는 세 요건을 모두 갖추면서 피의자가 미성년자가 아닐 때 공개할 수 있습니다. 절차는 심의위원회 심의, 피의자 의견진술, 서면 통지, 5일 이상 유예, 결정일 전후 30일 이내 얼굴 촬영, 30일간 게시 순서이고, 불기소나 무죄가 확정되면 즉시 삭제하고 보상도 청구할 수 있습니다. 그 밖의 사건은 공보규칙상 원칙적으로 비공개이고, 피의사실을 공소제기 전에 공표하면 형법 제126조로 처벌됩니다. 현장에서는 얼굴과 동선을 먼저 보호하고, 공보는 공보책임자에게 일원화해 절차와 기록을 지키겠습니다.”"});
+  h += picCard("함정", "자주 틀리는 답", "감점", [
+    {b:"①", d:"“경찰이 판단해서 공개한다” — <b>법정 요건·심의위·유예</b>를 빼면 절차 위반입니다."},
+    {b:"②", d:"“신상공개 대상은 살인·성범죄뿐” — <b>11개 호</b>로 훨씬 넓습니다."},
+    {b:"③", d:"“심신장애면 공개 못 한다” — 법문상 제외는 <b>미성년자</b>입니다."},
+    {b:"④", d:"“5일은 이의신청 기간” — 법문은 <b>의견진술 + 5일 이상 유예</b>입니다."},
+    {b:"⑤", d:"“무죄추정은 헌법 제12조” — <b>제27조 제4항</b>입니다."},
+    {b:"⑥", d:"“머그샷은 동의받아야” — <b>2024.1.25.</b>부터 동의 없이 촬영·공개할 수 있습니다."}
+  ]);
+  h += '</div>';
+  host.innerHTML = h;
+}
+
+/* =========================================================
+   🍺 음주운전 단속 · 차량 추격
+   ========================================================= */
+var DRINK_LEVELS = [
+ {b:"0.03% 이상", d:"<b>운전 금지 기준</b>. 0.03~0.08%는 <b>면허 정지</b>(벌점 100점)이고, <b>1년 이하 징역 또는 500만원 이하 벌금</b>입니다."},
+ {b:"0.08% 이상", d:"<b>면허 취소</b>. <b>1년 이상 2년 이하 징역 또는 500만원 이상 1천만원 이하 벌금</b>입니다."},
+ {b:"0.2% 이상", d:"<b>면허 취소·가중처벌</b>. <b>2년 이상 5년 이하 징역 또는 1천만원 이상 2천만원 이하 벌금</b>입니다.", co:true}
+];
+function renderDrunken(){
+  var host = $("drunkenPane"); if (!host) return;
+  var h = '<div class="hero"><h1>🍺 음주운전 단속 · 차량 추격</h1>' +
+    '<p>음주 단속은 <b style="color:#f4e3ac">절차가 곧 증거</b>이고, 추격은 <b style="color:#f4e3ac">속도보다 판단</b>입니다. “어떤 순서로 측정하고, 언제 추격을 멈추는가”를 숫자와 근거로 말할 수 있어야 합니다.</p></div>';
+  h += picNote('근거는 <b>도로교통법</b>(법률 제22067호, 2026.10.13. 시행)·시행령·시행규칙, <b>경찰관직무집행법</b> 제10조의2·제10조의4, <b>「수사긴급배치규칙」</b>(경찰청훈령 제1006호, 2021.2.9. 시행), <b>「교통사고 조사규칙」</b> 제33조, 경찰청 <b>112 신고 접수·지령 매뉴얼과 도주차량 추격 지침</b>입니다. 법정형은 2026년 11월 현행 조문 기준입니다.');
+  h += '<div class="sec"><div class="sec-h"><span class="no">1</span><b>단속 기준과 처벌 — 숫자부터</b><span class="tag">기준</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("기준", "혈중알코올농도 3단계", "도로교통법 §44④", DRINK_LEVELS, {b:"🎤 한 줄", d:"“0.03%면 정지, 0.08%면 취소, 0.2% 이상은 가중처벌입니다. 0.03%만 넘어도 처벌 대상이라는 점을 먼저 말해야 합니다.”"});
+  h += picCard("처벌", "재범·측정거부·측정방해", "§148조의2", [
+    {b:"10년 내 재범", d:"벌금 이상의 형이 확정된 날부터 <b>10년 안에 다시</b> 음주운전·측정거부·측정방해를 하면 가중처벌합니다. 0.2% 이상은 <b>2년 이상 6년 이하 징역 또는 1천만원 이상 3천만원 이하 벌금</b>, 0.03~0.2%는 <b>1년 이상 5년 이하 징역 또는 500만원 이상 2천만원 이하 벌금</b>입니다."},
+    {b:"측정 거부", d:"술에 취했다고 인정할 만한 상당한 이유가 있는데 호흡측정에 응하지 않으면 <b>1년 이상 5년 이하 징역 또는 500만원 이상 2천만원 이하 벌금</b>이고 <b>면허는 취소</b>됩니다(§148조의2②1호)."},
+    {b:"측정 방해(술타기)", d:"음주운전 후 측정을 곤란하게 할 목적으로 <b>추가로 술을 마시거나</b> 혈중알코올농도에 영향을 주는 의약품을 사용하면 <b>측정거부와 같은 형</b>으로 처벌합니다(§44⑤·§148조의2②2호, <b>2025.6.4. 시행</b>)."},
+    {b:"행정제재", d:"측정거부·방해 모두 <b>필요적 면허 취소</b>와 <b>결격기간 2년</b>이 적용되고, <b>음주운전 방지장치 부착 조건부 면허</b> 대상이 됩니다.", co:true}
+  ]);
+  h += picCard("주의", "자전거·개인형 이동장치는 별도", "구분", [
+    {b:"이유", d:"제148조의2의 가중처벌 조항은 <b>자동차등·노면전차</b>를 운전한 경우를 전제로 하고, 개인형 이동장치는 일부 조항에서 제외됩니다."},
+    {b:"결론", d:"자전거·PM의 음주운전과 측정방해는 <b>제156조의 범칙금·벌칙</b>으로 다뤄지므로, 면접에서는 “자동차와 같은 기준이 아니다”라는 점을 정확히 말하고, 구체적 수치는 단정하지 않는 것이 안전합니다."}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">2</span><b>단속·측정 절차 — 순서를 지켜야 증거가 됩니다</b><span class="tag">절차</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("절차", "정지에서 채혈까지 6단계", "현장", [
+    {b:"① 안전 유도", d:"차량을 <b>안전한 장소</b>로 유도해 정지시킵니다. 후방에 경광등·삼각대를 두고, 2차 사고 위험이 큰 본선·터널 안에서는 측정하지 않고 안전지대로 이동합니다."},
+    {b:"② 신분 고지", d:"<b>경찰관 신분을 밝히고</b> 단속 목적과 측정 필요성을 설명합니다. 신분증 제시와 함께 “음주감지 결과 측정이 필요하다”는 점을 말합니다."},
+    {b:"③ 음주감지기", d:"1차 <b>음주감지기</b>로 선별합니다. 감지기에 반응하면 정식 호흡측정으로 넘어가고, 반응이 없어도 외관·언행상 의심되면 측정할 수 있습니다."},
+    {b:"④ 입 헹굼", d:"<b>구강 내 알코올을 제거</b>하기 위해 물로 입을 헹구게 한 뒤 측정합니다. 측정 전 흡연·구강 세정제 사용은 피하게 하고, 그 사실을 기록합니다."},
+    {b:"⑤ 정식 호흡측정", d:"호흡측정기로 측정해 <b>수치를 운전자에게 고지</b>하고, 결과를 확인·서명받습니다. 측정 시각·기기 번호·측정자·입회자를 기록합니다."},
+    {b:"⑥ 불복 시 채혈", d:"측정 결과에 불복하면 <b>운전자의 동의</b>를 받아 <b>혈액 채취</b>로 다시 측정할 수 있습니다(§44③). 동의가 없으면 강제 채혈은 별도의 영장 절차가 필요합니다.", co:true},
+    {b:"기록", d:"단속 장소·시각·측정값·고지 내용·운전자 태도를 <b>바디캠과 함께</b> 남깁니다. 절차의 흠은 그대로 증거능력 문제가 됩니다.", co:true}
+  ], {b:"🎤 30초 답변", d:"“음주 단속은 안전한 장소로 유도한 뒤 신분을 밝히고, 음주감지기로 선별해 입을 헹군 다음 정식 호흡측정을 합니다. 수치를 고지하고 서명을 받으며, 불복하면 동의를 받아 채혈합니다. 이 순서와 기록이 곧 증거가 됩니다.”"});
+  h += picCard("거부", "측정을 거부할 때", "대응", [
+    {b:"요건 확인", d:"<b>술에 취했다고 인정할 만한 상당한 이유</b>가 있는지(언행·냄새·운행 상태·사고 정황)를 정리하고, 그 이유를 고지합니다."},
+    {b:"3회 고지", d:"측정에 응하지 않으면 <b>처벌(1년 이상 5년 이하 징역 등)과 면허 취소</b>라는 불이익을 실무 지침에 따라 <b>3회 이상 명시</b>해 고지하고, <b>바디캠으로 녹화</b>하며 시각·장소·태도를 기록합니다."},
+    {b:"체포 판단", d:"그래도 거부하면 <b>측정거부죄의 현행범 체포 요건</b>(범죄의 실행 착수, 시간적·장소적 근접성)을 확인해 판단합니다. 체포하면 <b>미란다 원칙·변호인 조력·48시간 내 영장 청구</b>를 지킵니다."},
+    {b:"대체 증거", d:"거부 자체가 처벌 대상이므로 무리한 강제 측정보다 <b>거부 사실과 정황</b>을 증거로 확보합니다. 사고 사건이면 상대 진술·CCTV·블랙박스·주점 CCTV로 사고 전 음주를 입증합니다.", co:true}
+  ]);
+  h += picCard("술타기", "차 안에서 술을 마시며 버티면", "측정방해", [
+    {b:"근거", d:"음주운전 후 측정을 곤란하게 할 목적의 <b>추가 음주·의약품 사용</b>은 <b>음주측정방해행위</b>입니다(§44⑤). 시행규칙 제27의3은 베라파밀·에리트로마이신 등 혈중알코올농도에 영향을 주는 의약품을 정합니다."},
+    {b:"현장", d:"추가 음주를 제지하고 <b>그 행위 자체를 촬영·기록</b>합니다. “운전 후 측정을 방해할 목적으로 마셨는가”를 확인하기 위해 운전 종료 시점, 음주 시점, 목격자·CCTV를 확보합니다."},
+    {b:"효과", d:"2025.6.4.부터 측정거부와 <b>같은 법정형</b>으로 처벌되고 면허도 취소되므로, “술을 더 마시면 유리하다”는 계산이 성립하지 않게 되었습니다.", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">3</span><b>도주 차량 추격 — 출발과 중단</b><span class="tag">추격</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("출발", "추격을 시작할 때", "전파", [
+    {b:"특례 요건", d:"<b>경광등을 켜거나 사이렌을 울려야</b> 도로교통법 제30조의 특례(속도·앞지르기·끼어들기 제한 배제)를 적용받습니다. 특례를 받더라도 <b>교통안전에 특히 주의</b>해야 합니다(§29③·시행령 §3)."},
+    {b:"112 전파", d:"무전으로 <b>위치(도로명·교차로·진행방향), 차종·색상·번호판, 도주 방향, 속도, 위험 요소</b>를 실시간 전달합니다. 운전자는 운전에 집중하고 <b>동승자가 무전을 전담</b>합니다."},
+    {b:"경고 방송", d:"마이크로 <b>정차 명령</b>을 명확히 방송하고, 앞으로 끼어들 수 있음을 미리 알려 도주자가 예측하게 합니다. 급격한 진로 변경은 2차 사고를 만듭니다."},
+    {b:"지휘 보고", d:"추격 시작과 진행을 <b>상황실·지휘부에 계속 보고</b>하고, 관할을 넘어가도 임의로 중단하지 않고 인접 순찰차와 역할을 나눕니다.", co:true}
+  ]);
+  h += picCard("중단", "언제 멈추는가 — 2차 피해 위험", "판단", [
+    {b:"비교", d:"<b>추격으로 생길 2차 인명피해 위험</b>과 <b>검거로 얻는 이익</b>(범죄의 경중, 도주자의 위험성)을 비교합니다. 위험이 이익을 넘으면 추격을 멈춥니다."},
+    {b:"중단 신호", d:"<b>역주행·과속</b>, <b>보행자·차량 밀집</b>(학교 앞·시장·번화가), 터널·교량·공사 구간, 도주차의 난폭 운전으로 시민 위험이 커지는 상황입니다."},
+    {b:"전환", d:"추격 대신 <b>CCTV 관제</b>로 이동 경로를 추적하고, <b>인접 순찰차 긴급배치·차단검문</b>으로 전환합니다. 번호판으로 소유자·수배 여부를 확인해 <b>추적 수사</b>로 바꿉니다."},
+    {b:"긴급배치", d:"「수사긴급배치규칙」은 <b>갑호·을호</b>로 나눠 발령권자(경찰서장·시도청장·국가수사본부장)와 동원 기준(갑호 100%·을호 형사 100%·지구대 50%)을 정하고, <b>도주로 차단·검문검색</b>으로 범인을 잡도록 합니다. 「교통사고 조사규칙」 §33은 검문 시 <b>정지·유도·검사·질문·추적</b>의 분담과 검문 차량 기록을 요구합니다.", co:true}
+  ], {b:"🎤 30초 답변", d:"“추격은 검거 이익과 2차 피해 위험을 계속 비교하며 해야 합니다. 역주행이나 보행자 밀집 구간처럼 시민 위험이 커지면 추격을 중단하고, CCTV 관제와 인접 순찰차 긴급배치·차단검문으로 바꿔 잡겠습니다. 추격 중에는 경광등·사이렌을 켜고 위치·차종·번호판·도주 방향을 112에 실시간 전파하겠습니다.”"});
+  h += picCard("차단", "직접차단은 최후의 수단", "신중", [
+    {b:"의미", d:"순찰차로 도주차를 충격해 정지시키는 <b>직접차단</b>은 112 신고 접수·지령 매뉴얼에 방법이 있지만, 도주차가 전복되거나 2차 사고로 시민이 다칠 수 있습니다."},
+    {b:"원칙", d:"<b>민간인 피해 가능성, 도로 구조, 속도</b>를 확인해 상급자 판단 아래 최후에 검토하고, 실행 전 주변 차량·보행자를 통제합니다. 필요최소한의 물리력 원칙이 그대로 적용됩니다."},
+    {b:"비판", d:"직접차단을 위해성 경찰장비로 규정할 근거가 없다는 지적이 있어(법률유보 원칙), 현장에서는 <b>근거와 절차를 함께 설명</b>할 수 있어야 합니다."}
+  ]);
+  h += picCard("돌진", "차량을 흉기로 돌진할 때", "물리력", [
+    {b:"평가", d:"차량으로 경찰관·시민을 향해 돌진하는 것은 <b>치명적 공격</b>에 해당할 수 있습니다. 물리력 규칙의 5단계 중 최고 단계로 평가합니다."},
+    {b:"순서", d:"먼저 <b>대피와 차단</b>(시민 대피, 차량 통제)을 하고, 경찰관직무집행법 제10조의2(경찰장구)·제10조의4(무기)와 위해성 경찰장비 규정에 따라 <b>다른 수단이 없고 급박한 경우</b>에만 최소한으로 사용합니다."},
+    {b:"기록", d:"사용 사실과 이유, 상대의 위험성, 주변 피해를 즉시 보고·기록합니다. ‘차량 = 흉기’라는 판단을 <b>객관적 정황</b>으로 설명하는 것이 핵심입니다.", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">4</span><b>30초 핵심 답변 · 함정</b><span class="tag">마무리</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("답변", "적법절차 + 시민 안전 우선", "30초", [], {b:"🎤 30초 답변", d:"“음주 단속은 안전한 장소로 유도해 신분을 밝히고, 음주감지기로 선별한 뒤 입을 헹구고 정식 호흡측정을 하는 순서로 합니다. 수치를 고지하고 서명을 받으며, 불복하면 동의를 받아 채혈하고, 거부하면 처벌과 면허 취소를 3회 이상 고지한 뒤 바디캠으로 기록하고 체포 요건을 검토합니다. 도주 차량은 경광등과 사이렌을 켜고 위치·차종·번호판·도주 방향을 112에 전파하며 추격하되, 역주행이나 보행자 밀집처럼 2차 피해 위험이 검거 이익을 넘으면 추격을 중단하고 CCTV 관제와 긴급배치·차단검문으로 전환하겠습니다. 시민의 생명을 먼저 지키는 것이 결국 가장 좋은 검거라고 생각합니다.”"});
+  h += picCard("함정", "자주 틀리는 답", "감점", [
+    {b:"①", d:"“0.05%가 기준” — 현행 기준은 <b>0.03%</b>입니다."},
+    {b:"②", d:"“측정 거부하면 혈액을 강제로 뽑는다” — <b>동의</b>가 원칙이고, 강제 채혈은 <b>영장</b> 절차가 필요합니다."},
+    {b:"③", d:"“거부해도 음주운전보다 가볍다” — 거부는 <b>1년 이상 5년 이하</b>로 오히려 무겁고 면허도 취소됩니다."},
+    {b:"④", d:"“추격은 무조건 끝까지” — 역주행·보행자 밀집에서는 <b>중단·전환</b>이 원칙입니다."},
+    {b:"⑤", d:"“사이렌 없이도 추격 특례가 된다” — 특례 적용에는 <b>경광등·사이렌</b>이 필요합니다."},
+    {b:"⑥", d:"“술타기는 처벌 안 된다” — <b>2025.6.4.</b>부터 측정거부와 같은 형으로 처벌됩니다."}
+  ]);
+  h += '</div>';
+  host.innerHTML = h;
+}
+
+/* =========================================================
+   🔊 자료실 듣기 (Web Speech API · 카드 단위 낭독)
+   ========================================================= */
+/* 하위 탭 이름 + "Pane" = 패널 id (lawPane, identityPane …) */
+var listen = { on:false, idx:0, part:0, items:[], parts:[], rate:1, voice:null, current:null, token:0 };
+function listenActiveSeg(){
+  var b = document.querySelector("#lawSeg button.on");
+  return b ? b.getAttribute("data-seg") : "law";
+}
+function listenClean(t){
+  return String(t == null ? "" : t)
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}\u{25A0}-\u{25FF}]/gu, " ")
+    .replace(/[①-⑳]/g, "")
+    .replace(/[·•]/g, ", ")
+    .replace(/[“”"]/g, "")
+    .replace(/\s*\n\s*/g, ". ")
+    .replace(/\.\s*\.+/g, ".")
+    .replace(/\s{2,}/g, " ")
+    .replace(/^[\s.,]+/, "")
+    .trim();
+}
+function listenSplit(t){
+  var sents = [], cur = "";
+  for (var i = 0; i < t.length; i++){
+    cur += t.charAt(i);
+    if (".!?".indexOf(t.charAt(i)) >= 0){ sents.push(cur); cur = ""; }
+  }
+  if (cur.trim()) sents.push(cur);
+  var out = [], buf = "";
+  sents.forEach(function(s){
+    s = s.trim(); if (!s) return;
+    if ((buf + " " + s).length > 170 && buf){ out.push(buf); buf = s; }
+    else buf = buf ? buf + " " + s : s;
+  });
+  if (buf) out.push(buf);
+  return out.length ? out : [t];
+}
+function listenBuild(){
+  var name = listenActiveSeg();
+  var pane = $(name + "Pane") || $("lawPane");
+  var items = [];
+  if (!pane) return items;
+  var hero = pane.querySelector(".hero");
+  if (hero){ var ht = listenClean(hero.innerText); if (ht && ht.length > 8) items.push({ label:"도입", text:ht }); }
+  pane.querySelectorAll(".note.tiny").forEach(function(n){
+    var nt = listenClean(n.innerText);
+    if (nt && nt.length > 30) items.push({ label:"안내", text:nt });
+  });
+  var sel = ".bscard, .notecard, .issuecard, .statcard, .panel";
+  var cards = [];
+  pane.querySelectorAll(sel).forEach(function(el){
+    if (el.closest(".bscard") !== el && el.closest(".bscard")) return; /* 중복 방지 */
+    if (el.closest(".notecard") !== el && el.closest(".notecard")) return;
+    if (el.closest(".issuecard") !== el && el.closest(".issuecard")) return;
+    if (el.closest(".statcard") !== el && el.closest(".statcard")) return;
+    if (el.classList.contains("panel") && el.hidden) return;
+    cards.push(el);
+  });
+  cards.forEach(function(c){
+    if (c.closest(".panel") && c.closest(".panel") !== c) return;
+    var titleEl = c.querySelector(".bst, .sh h3, h3, .itag");
+    var label = titleEl ? listenClean(titleEl.innerText).slice(0, 28) : "";
+    var txt = listenClean(c.innerText);
+    if (txt && txt.length > 12) items.push({ label:label || "자료", text:txt });
+  });
+  return items;
+}
+function listenPaint(){
+  var btn = $("listenToggle"), ic = $("listenIcon"), lb = $("listenLabel"), pr = $("listenProg"), nx = $("listenNext");
+  if (!btn) return;
+  var n = listen.items.length;
+  btn.classList.toggle("on", listen.on);
+  btn.setAttribute("aria-pressed", listen.on ? "true" : "false");
+  if (ic) ic.textContent = listen.on ? "⏹️" : "🔊";
+  if (lb) lb.textContent = listen.on ? "정지" : "이 자료 듣기";
+  if (pr) pr.textContent = n ? ((listen.on ? Math.min(listen.idx + 1, n) : 0) + " / " + n) : "– / –";
+  if (nx) nx.disabled = !listen.on;
+  Array.prototype.forEach.call(document.querySelectorAll("#listenRate button"), function(b){
+    b.classList.toggle("on", parseFloat(b.getAttribute("data-rate")) === listen.rate);
+  });
+}
+function listenPickVoice(){
+  try {
+    var vs = window.speechSynthesis.getVoices() || [];
+    for (var i = 0; i < vs.length; i++){
+      if (/^ko([-_]|$)/i.test(vs[i].lang)){ listen.voice = vs[i]; break; }
+    }
+  } catch(e){}
+}
+function listenSpeak(){
+  if (!listen.on) return;
+  if (!listen.items.length){ listenStop(); return; }
+  if (listen.part >= listen.parts.length){
+    listen.idx++;
+    if (listen.idx >= listen.items.length){ listenStop(true); return; }
+    listen.parts = listenSplit(listen.items[listen.idx].text);
+    listen.part = 0;
+    listenPaint();
+    return listenSpeak();
+  }
+  var txt = listen.parts[listen.part];
+  if (!txt || !txt.trim()){ listen.part++; return listenSpeak(); }
+  var myToken = listen.token;
+  var u = new SpeechSynthesisUtterance(txt);
+  u.lang = "ko-KR"; u.rate = listen.rate; u.pitch = 1;
+  if (listen.voice) u.voice = listen.voice;
+  u.onend = function(){
+    if (!listen.on || myToken !== listen.token) return;
+    listen.part++;
+    setTimeout(function(){ if (listen.on && myToken === listen.token) listenSpeak(); }, 30);
+  };
+  u.onerror = function(){
+    if (!listen.on || myToken !== listen.token) return;
+    listen.part++;
+    setTimeout(function(){ if (listen.on && myToken === listen.token) listenSpeak(); }, 120);
+  };
+  listen.current = u;
+  try { window.speechSynthesis.speak(u); } catch(e){}
+  listenPaint();
+}
+function listenStart(){
+  if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined"){
+    toast("이 브라우저에서는 듣기 기능을 사용할 수 없어요."); return;
+  }
+  listen.items = listenBuild();
+  if (!listen.items.length){ toast("읽을 자료가 없어요. 주제를 먼저 선택해 주세요."); return; }
+  listenPickVoice();
+  listen.on = true; listen.idx = 0; listen.part = 0; listen.token++;
+  listen.parts = listenSplit(listen.items[0].text);
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  listenSpeak();
+}
+function listenStop(done){
+  var was = listen.on;
+  listen.on = false; listen.parts = []; listen.part = 0; listen.token++; listen.current = null;
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  listenPaint();
+  if (done && was) toast("자료 듣기를 마쳤어요.");
+}
+function listenNextItem(){
+  if (!listen.on) return;
+  listen.token++;
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  listen.idx++; listen.part = 0;
+  if (listen.idx >= listen.items.length){ listenStop(true); return; }
+  listen.parts = listenSplit(listen.items[listen.idx].text);
+  listenPaint();
+  var t = listen.token;
+  setTimeout(function(){ if (listen.on && t === listen.token) listenSpeak(); }, 60);
+}
+function listenSetRate(r){
+  listen.rate = r;
+  listenPaint();
+  if (listen.on){
+    listen.token++;
+    try { window.speechSynthesis.cancel(); } catch(e){}
+    var t = listen.token;
+    setTimeout(function(){ if (listen.on && t === listen.token) listenSpeak(); }, 60);
+  }
+}
+function listenRefresh(){
+  if (listen.on) listenStop();
+  listen.items = listenBuild();
+  listen.idx = 0;
+  listenPaint();
+}
+function initListen(){
+  var btn = $("listenToggle");
+  if (!btn) return;
+  if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined"){
+    btn.disabled = true;
+    var lb = $("listenLabel"); if (lb) lb.textContent = "듣기 미지원";
+    return;
+  }
+  btn.addEventListener("click", function(){
+    if (listen.on) listenStop(); else listenStart();
+  });
+  var nx = $("listenNext"); if (nx) nx.addEventListener("click", listenNextItem);
+  Array.prototype.forEach.call(document.querySelectorAll("#listenRate button"), function(b){
+    b.addEventListener("click", function(){ listenSetRate(parseFloat(b.getAttribute("data-rate")) || 1); });
+  });
+  listenPickVoice();
+  if (window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener("voiceschanged", listenPickVoice);
+  listen.items = listenBuild();
+  listenPaint();
+}
+if (typeof window !== "undefined" && window.speechSynthesis && window.speechSynthesis.addEventListener){
+  window.speechSynthesis.addEventListener("voiceschanged", function(){ try { listenPickVoice(); } catch(e){} });
+}
+
 Array.prototype.forEach.call(document.querySelectorAll("#lawSeg button"), function(b){
   b.addEventListener("click", function(){ lawSeg(b.getAttribute("data-seg")); });
 });
@@ -5092,6 +6243,34 @@ $("setClear").addEventListener("click", function(){
   toast("지웠어요.");
 });
 $("ddayChip").addEventListener("click", function(){ setView("settings"); $("setDate").focus(); });
+
+/* 📞 전화 면접 — 피클 앱의 통화 화면으로 넘기고, 안 열리면 안내 */
+(function(){
+  var btn = $("callInterview"); if (!btn) return;
+  var hint = null, timer = null;
+  function closeHint(){ if (hint && hint.parentNode) hint.parentNode.removeChild(hint); hint = null; if (timer) { clearTimeout(timer); timer = null; } }
+  function showHint(){
+    if (hint) return;
+    hint = document.createElement("div");
+    hint.className = "callhint";
+    hint.setAttribute("role", "status");
+    hint.innerHTML = '<span class="chx" aria-hidden="true">📞</span>' +
+      '<div class="cht"><span class="ct">전화 면접은 피클 앱에서 열립니다</span>' +
+      'Safari에서 바로 앱이 안 열리면 피클 채팅창의 <b>‘전화 면접’ 카드</b>를 눌러 주세요!</div>' +
+      '<button class="chc" type="button" aria-label="안내 닫기">닫기</button>';
+    document.body.appendChild(hint);
+    var close = hint.querySelector(".chc");
+    if (close) close.addEventListener("click", closeHint);
+    timer = setTimeout(closeHint, 9000);
+  }
+  btn.addEventListener("click", function(){
+    closeHint();
+    try { window.location.href = "pickle://call"; } catch (e) {}
+    setTimeout(function(){
+      if (document.visibilityState === "visible") showHint();
+    }, 1200);
+  });
+})();
 function paintDday(){
   var chip = $("ddayChip"), main = $("ddayMain"), sub = $("ddaySub");
   if (!state.profile.date){
@@ -5634,6 +6813,9 @@ Array.prototype.forEach.call(document.querySelectorAll("#personalSeg button"), f
    9. 시작
    ========================================================= */
 function init(){
+  var fa = $("favAllAns");
+  if (fa) fa.addEventListener("click", function(){ setAnsAll(!state.allAns); });
+  initListen();
   renderChips();
   renderCats();
   renderQuestions();
@@ -5661,6 +6843,10 @@ window.PIC = {
   topics: TOPICS, questions: QUESTIONS, qcats: QCATS,
   aiCall: aiCall, scanLegacyKeys: scanLegacyKeys,
   pickDaily: pickDaily, renderDaily: renderDaily, renderDailyRows: renderDailyRows,
+  fav: {key: FAV_KEY, list: favList, isFav: isFav, toggle: toggleFav, idOf: favIdOf, save: saveFav},
+  setAnsAll: setAnsAll, renderCats: renderCats, renderQuestions: renderQuestions,
+  listen: listen, listenBuild: listenBuild, listenStart: listenStart, listenStop: listenStop,
+  listenNext: listenNextItem, listenSetRate: listenSetRate, listenRefresh: listenRefresh,
   genDailyAI: genDailyAI, bumpPractice: bumpPractice, practiceCount: practiceCount,
   todayKey: todayKey,
   speed: sp, spBandOf: spBandOf, spCoachText: spCoachText, spScripts: SP_SCRIPTS,
