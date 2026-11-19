@@ -1860,6 +1860,10 @@
   function fuelRateFor(vid, n){
     return (0.070 + (vid - 1) * 0.004 + (n - 1) * 0.0012) * diffCfg().fuel;
   }
+  // 🌱 쉬운 난이도는 출발 연료도 넉넉하게
+  function startFuelFor(){
+    return Math.min(FUEL_MAX, Math.round(FUEL_START[clamp(save.fuelUp | 0, 0, 3)] * diffCfg().fuelStart));
+  }
   function raceCoinBonus(rank){
     return rank === 1 ? 40 : (rank === 2 ? 30 : (rank === 3 ? 22 : 16));
   }
@@ -4727,7 +4731,7 @@
     G.quiz = null; G.quizObstacle = null; G.quizGate = 0; G.quizCorrect = 0;
     // ⛽ 연료: 기본은 탱크의 1/3만 (업그레이드하면 더 든든하게 / 쉬운 난이도는 넉넉하게)
     G.fuelMax = FUEL_MAX;
-    G.fuel = Math.min(FUEL_MAX, Math.round(FUEL_START[clamp(save.fuelUp | 0, 0, 3)] * diffCfg().fuelStart));
+    G.fuel = startFuelFor();
     G.fuelPerM = fuelRateFor(vid, no);
     G.fuelUsed = 0;
     G.lowWarned = false;
@@ -5641,7 +5645,7 @@
       modeToggleHTML() +
       '<div class="howto">' +
         '<div class="hi"><span class="ico">👉</span><div><b>앞으로!</b><small>버튼을 꾹 누르면 달려요</small></div></div>' +
-        '<div class="hi"><span class="ico">⛽</span><div><b>연료는 1/3만 들고 출발</b><small>길의 연료통을 먹어야 끝까지 가요</small></div></div>' +
+        '<div class="hi"><span class="ico">⛽</span><div><b>연료는 넉넉히 들고 출발</b><small>길의 연료통을 먹어야 끝까지 가요</small></div></div>' +
         '<div class="hi"><span class="ico">🚧</span><div><b>라바콘·함정은 점프!</b><small>걸리면 잠깐 느려져요</small></div></div>' +
         '<div class="hi"><span class="ico">🧮</span><div><b>연산 정답은 보물</b><small>2배 코인 또는 연료통!</small></div></div>' +
       '</div>' +
@@ -5655,7 +5659,7 @@
       '<button class="softBtn" data-act="shop">🔧 튜닝샵 · ⛽ 연료</button>' +
       '<button class="softBtn" data-act="settings">⚙️ 설정 · 🎁 부모님 보상 룰렛</button>' +
       '<div style="text-align:center;font-size:11.5px;color:#a8b3bd;font-weight:700;margin-top:10px">' +
-        '보유 코인 ' + save.coins + '개 · ⛽ 출발 연료 ' + FUEL_START[clamp(save.fuelUp | 0, 0, 3)] + '% · 🔥 ' + save.boosters + ' · 🍌 ' + save.bananas +
+        '보유 코인 ' + save.coins + '개 · ⛽ 출발 연료 ' + startFuelFor() + '% · 🔥 ' + save.boosters + ' · 🍌 ' + save.bananas +
       '</div>'
     );
   }
