@@ -602,6 +602,211 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
 .mobiletabs button.on{background:#fdf1f5;color:var(--sakura-deep);box-shadow:inset 0 0 0 .18vh #f3bed1;}
 .mobiletabs button:active{transform:scale(.98);}
 
+/* ===== 📞 전화 일본어 (실시간 통화 화면 · 유키 선생님) ===== */
+.pill.call{background:linear-gradient(135deg,rgba(247,166,189,.30),rgba(247,166,189,.10));color:#ffe2ea;
+  box-shadow:inset 0 0 0 .16vh rgba(247,166,189,.5);}
+.pill.call:active{transform:scale(.97);}
+.pill.call.on{background:linear-gradient(135deg,#f7a6bd,#e2739a);color:#4a1226;box-shadow:0 .3vh .9vh rgba(204,77,118,.34);}
+.pill.call.on .lbl{opacity:1;}
+
+.callview{grid-column:1 / -1;grid-row:1 / -1;display:none;min-height:0;
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:1.05vh;}
+body.view-call .callview{display:grid;}
+body.view-call .stage,body.view-call .side.left,body.view-call .helpboard{display:none !important;}
+.ct-back{flex:0 0 auto;height:3vh;padding:0 .8vh;border-radius:999px;background:#f7f0f5;color:#8a5a72;
+  font-size:.98vh;font-weight:900;box-shadow:inset 0 0 0 .16vh #edd9e4;white-space:nowrap;}
+.ct-back:active{transform:scale(.96);}
+
+/* ---------- 왼쪽: 통화 화면 ---------- */
+.call-phone{position:relative;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  gap:.9vh;padding:5.2vh 1.3vh 1.3vh;border-radius:var(--r);overflow:hidden;
+  background:radial-gradient(125% 95% at 50% 0%,#3b4580 0%,#232a55 44%,#141932 100%);
+  color:#f4eefc;box-shadow:0 1.2vh 3vh rgba(20,22,50,.34);}
+.call-phone::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(58% 38% at 50% 14%,rgba(247,166,189,.26),transparent 72%);}
+.cp-top{position:absolute;z-index:2;top:1.4vh;left:1.5vh;right:1.5vh;display:flex;align-items:center;gap:.55vh;
+  font-size:1.05vh;font-weight:900;letter-spacing:.02em;color:rgba(233,226,252,.8);}
+.cp-top .cp-tag{background:rgba(255,255,255,.13);border-radius:999px;padding:.28vh .8vh;}
+.cp-top .cp-sig{margin-left:auto;letter-spacing:.08em;font-size:1.12vh;}
+.cp-body{flex:1 1 auto;width:100%;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.05vh;}
+.cp-avatar{position:relative;z-index:1;width:min(15.5vh,62%);aspect-ratio:1/1;display:grid;place-items:center;
+  border-radius:50%;font-size:min(8vh,4.2rem);line-height:1;
+  background:radial-gradient(circle at 35% 28%,#fff0f5,#f7b9cd 55%,#d97aa0);
+  box-shadow:0 0 0 .5vh rgba(247,166,189,.22),0 1.4vh 3vh rgba(10,12,34,.4);}
+.cp-avatar::after{content:"";position:absolute;inset:-1.3vh;border-radius:50%;
+  border:.28vh solid rgba(247,166,189,.55);opacity:0;}
+.call-phone[data-call="ringing"] .cp-avatar{animation:cpring 1.1s ease-in-out infinite;}
+.call-phone[data-call="ringing"] .cp-avatar::after{opacity:1;animation:cpwave 1.4s ease-out infinite;}
+.call-phone[data-call="live"] .cp-avatar::after{opacity:.5;animation:cpwave 2.6s ease-out infinite;}
+@keyframes cpring{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(4deg) scale(1.04)}}
+@keyframes cpwave{0%{transform:scale(.92);opacity:.55}70%{transform:scale(1.18);opacity:0}100%{opacity:0}}
+.call-phone[data-call="live"] .cp-ava-em{animation:cpbob 2.2s ease-in-out infinite;}
+@keyframes cpbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-.5vh)}}
+.cp-name{position:relative;z-index:1;text-align:center;min-width:0;}
+.cp-name b{display:block;font-size:2vh;font-weight:900;letter-spacing:-.02em;color:#fff;}
+.cp-ja{display:inline-block;margin-left:.25vh;font-style:normal;font-size:.6em;font-weight:800;color:#e9c8d9;
+  letter-spacing:.04em;font-family:"Hiragino Sans","Noto Sans JP",sans-serif;}
+.cp-name span{display:block;margin-top:.3vh;font-size:1.1vh;font-weight:900;color:#e2c3d3;}
+.call-phone[data-call="live"] .cp-name span{color:#9df0c6;}
+.cp-timer{position:relative;z-index:1;font-size:3.9vh;font-weight:900;letter-spacing:.05em;
+  font-variant-numeric:tabular-nums;color:#fdf6ff;text-shadow:0 .3vh 1.2vh rgba(10,10,40,.55);}
+.cp-wave{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:.42vh;height:3vh;}
+.cp-wave i{display:block;width:.5vh;height:.75vh;border-radius:999px;background:rgba(247,196,214,.45);}
+.call-phone[data-call="live"] .cp-wave i{background:#8ef0bd;animation:cpbar 1s ease-in-out infinite;}
+.call-phone[data-call="ringing"] .cp-wave i{background:#ffd479;animation:cpbar .7s ease-in-out infinite;}
+.cp-wave i:nth-child(2){animation-delay:.12s}
+.cp-wave i:nth-child(3){animation-delay:.24s}
+.cp-wave i:nth-child(4){animation-delay:.36s}
+.cp-wave i:nth-child(5){animation-delay:.48s}
+.cp-wave i:nth-child(6){animation-delay:.6s}
+.cp-wave i:nth-child(7){animation-delay:.72s}
+@keyframes cpbar{0%,100%{height:.85vh}50%{height:2.8vh}}
+.cp-acts{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:.8vh;width:100%;}
+.cp-btn{height:5.2vh;min-width:min(19vh,92%);padding:0 1.8vh;border-radius:999px;font-size:1.55vh;font-weight:900;
+  display:flex;align-items:center;justify-content:center;gap:.45vh;white-space:nowrap;transition:transform .12s;}
+.cp-btn:active{transform:scale(.97);}
+.cp-btn[hidden]{display:none !important;}
+.cp-start{background:linear-gradient(135deg,#6fe0a4,#17a76a);color:#03301e;box-shadow:0 .5vh 1.4vh rgba(20,150,95,.42);}
+.cp-end{background:linear-gradient(135deg,#ff9b9b,#df3f31);color:#fff;box-shadow:0 .5vh 1.4vh rgba(200,60,45,.42);}
+.cp-end.beat{animation:cpbeat 1.1s ease-in-out infinite;}
+@keyframes cpbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+.cp-note{position:relative;z-index:1;font-size:.98vh;font-weight:800;color:rgba(226,214,245,.75);text-align:center;line-height:1.45;}
+.cp-sum{position:relative;z-index:1;width:100%;border-radius:1.3vh;padding:.85vh .9vh;
+  background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 .16vh rgba(247,196,214,.3);
+  font-size:1.08vh;font-weight:900;color:#f7eeff;text-align:center;line-height:1.5;}
+.cp-sum[hidden]{display:none !important;}
+.cp-sum b{color:#ffd9e3;}
+
+/* ---------- 오른쪽: 통화 내용 ---------- */
+.call-talk{min-height:0;display:flex;flex-direction:column;overflow:hidden;
+  background:rgba(255,253,251,.96);border-radius:var(--r);box-shadow:var(--shadow-sm), inset 0 0 0 .1vh rgba(232,227,238,.9);}
+.ct-head{flex:0 0 auto;display:flex;align-items:center;gap:.55vh;padding:.85vh 1vh .55vh;min-width:0;flex-wrap:wrap;}
+.ct-head b{font-size:1.42vh;font-weight:900;color:#3b2a54;letter-spacing:-.03em;white-space:nowrap;}
+.ct-topic{font-size:.98vh;font-weight:900;color:#a05b7c;background:#fdf1f5;border-radius:999px;padding:.25vh .7vh;white-space:nowrap;}
+.ct-ai{font-size:.94vh;font-weight:900;color:#4a3f8f;background:#f0edfc;border-radius:999px;padding:.25vh .6vh;white-space:nowrap;}
+.ct-ai[hidden]{display:none !important;}
+.ct-tools{margin-left:auto;display:flex;align-items:center;gap:.35vh;min-width:0;flex-wrap:wrap;}
+.ct-mini{height:3vh;padding:0 .75vh;border-radius:999px;font-size:1vh;font-weight:900;color:#5d6486;
+  background:#f7f4f8;box-shadow:inset 0 0 0 .16vh #e6dfec;white-space:nowrap;}
+.ct-mini:active{transform:scale(.97);}
+.ct-mini.on,.ct-mini[aria-pressed="true"]{background:#fff;color:var(--sakura-deep);box-shadow:inset 0 0 0 .2vh #f3bed1;}
+.ct-log{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:.5vh;
+  padding:.25vh 1vh .55vh;scrollbar-width:thin;}
+.ct-log::-webkit-scrollbar{width:.45vh;}
+.ct-log::-webkit-scrollbar-thumb{background:#e2d7e6;border-radius:999px;}
+.ct-empty{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55vh;
+  text-align:center;color:#9a90ab;font-size:1.18vh;font-weight:900;line-height:1.55;}
+.ct-empty .em{font-size:3.8vh;width:8.4vh;height:8.4vh;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(135deg,#fdf1f6,#f8e3ed);box-shadow:inset 0 0 0 .2vh #f3c9d9,0 .6vh 1.6vh rgba(200,120,160,.14);}
+.ct-empty .ce-h{font-size:2.05vh;font-weight:900;color:#5c3350;letter-spacing:-.02em;}
+.ct-empty .ce-s{font-size:1.22vh;font-weight:800;color:#9a90ab;}
+.ct-steps{display:flex;flex-direction:column;gap:.45vh;margin-top:.8vh;width:min(42vh,94%);}
+.ct-steps span{display:flex;align-items:center;gap:.55vh;padding:.65vh .85vh;border-radius:.95vh;background:#fdf7fa;
+  box-shadow:inset 0 0 0 .16vh #f0e2ea;font-size:1.1vh;font-weight:900;color:#7d6070;text-align:left;}
+.ct-steps b{flex:0 0 auto;width:2vh;height:2vh;border-radius:50%;display:grid;place-items:center;
+  background:#d9739a;color:#fff;font-size:1.1vh;}
+.cl-row{display:flex;align-items:flex-end;gap:.45vh;max-width:100%;}
+.cl-row.c{flex-direction:row-reverse;}
+.cl-ava{flex:0 0 auto;width:3vh;height:3vh;border-radius:50%;display:grid;place-items:center;font-size:1.6vh;
+  background:#fbeef4;box-shadow:inset 0 0 0 .16vh #f2cede;}
+.cl-row.c .cl-ava{background:#eef7f2;box-shadow:inset 0 0 0 .16vh #cae8d8;}
+.cl-bub{max-width:84%;padding:.55vh .8vh;border-radius:1.15vh 1.15vh 1.15vh .35vh;background:#fdf3f8;
+  box-shadow:inset 0 0 0 .16vh #f2dce7;min-width:0;}
+.cl-row.c .cl-bub{border-radius:1.15vh 1.15vh .35vh 1.15vh;background:#f1f8ff;box-shadow:inset 0 0 0 .16vh #cfe5f6;}
+.cl-jp{font-size:1.42vh;font-weight:900;color:#3a2246;line-height:1.4;letter-spacing:-.01em;}
+.cl-row.c .cl-jp{color:#1f4a66;}
+.cl-jp rt{font-size:.5em;}
+.cl-hint{margin-top:.22vh;font-size:1.02vh;font-weight:800;color:#9b7d8e;line-height:1.45;}
+.callview.hintoff .cl-hint{display:none;}
+.cl-row.c .cl-hint{color:#7f95a6;}
+.cl-typing .cl-jp{color:#a08f9f;}
+
+.ct-quick{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:.35vh;padding:0 1vh .5vh;max-height:11vh;overflow-y:auto;}
+.ct-quick:empty{display:none;}
+.qb{height:3.3vh;padding:0 .9vh;border-radius:999px;background:linear-gradient(135deg,#fff8e6,#ffe9b3);
+  color:#7a5300;font-size:1.1vh;font-weight:900;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+  box-shadow:inset 0 0 0 .16vh #f0d78d;}
+.qb:active{transform:scale(.97);}
+
+.ct-input{flex:0 0 auto;display:flex;align-items:center;gap:.45vh;padding:0 1vh .5vh;}
+.ct-input input{flex:1 1 auto;min-width:0;height:3.9vh;border-radius:.95vh;padding:0 .85vh;font-size:1.24vh;font-weight:800;
+  color:#3a2246;background:#fbf7fa;box-shadow:inset 0 0 0 .18vh #ecdfe8;}
+.ct-input input::placeholder{color:#b39fae;font-weight:800;}
+.ct-mic{flex:0 0 auto;height:3.9vh;padding:0 1vh;border-radius:.95vh;background:linear-gradient(135deg,#fdeef4,#f9d9e6);
+  color:#a13d63;font-size:1.1vh;font-weight:900;box-shadow:inset 0 0 0 .18vh #f0bfd2;white-space:nowrap;}
+.ct-mic.listening{background:linear-gradient(135deg,#ffe0e0,#ffbdbd);color:#a32020;animation:cpbeat .9s ease-in-out infinite;}
+.ct-send{flex:0 0 auto;height:3.9vh;padding:0 1.1vh;border-radius:.95vh;background:linear-gradient(135deg,#8b7fe0,#6a58cf);
+  color:#fff;font-size:1.1vh;font-weight:900;box-shadow:0 .35vh 1vh rgba(105,88,207,.3);white-space:nowrap;}
+
+.ct-foot{flex:0 0 auto;display:flex;align-items:center;gap:.5vh;padding:0 1vh .8vh;}
+.pickle-call{flex:0 0 auto;height:4vh;padding:0 1.1vh;border-radius:1vh;
+  background:linear-gradient(135deg,#f0ecfd,#dcd4fb);color:#493a94;font-size:1.1vh;font-weight:900;
+  box-shadow:inset 0 0 0 .18vh #c8bdf2,0 .35vh 1vh rgba(110,90,200,.18);white-space:nowrap;}
+.pickle-call:active{transform:scale(.98);}
+.ct-foot .pickle-note{font-size:.94vh;font-weight:800;color:#a294a9;line-height:1.35;min-width:0;}
+
+/* 피클 앱 안내 배너 (브라우저에서 앱이 바로 안 열릴 때) */
+.pickle-hint{position:relative;flex:0 0 auto;z-index:3;margin:0 1vh .8vh;
+  display:flex;align-items:center;gap:1vh;padding:1.1vh 1.3vh;
+  border-radius:1.5vh;background:rgba(20,25,50,.97);color:#f6effc;
+  box-shadow:0 1.4vh 3.4vh rgba(10,12,34,.44),inset 0 0 0 .16vh rgba(247,166,189,.3);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
+.pickle-hint[hidden]{display:none !important;}
+.pickle-hint .phx{flex:0 0 auto;font-size:3.1vh;line-height:1;}
+.pickle-hint .pht{flex:1 1 auto;min-width:0;font-size:1.3vh;font-weight:900;line-height:1.55;letter-spacing:-.01em;
+  overflow-wrap:anywhere;word-break:break-word;}
+.pickle-hint .pht b{color:#ffd9e3;}
+.pickle-hint .phc{flex:0 0 auto;height:3.2vh;padding:0 1vh;border-radius:999px;background:rgba(255,255,255,.18);
+  color:#f6effc;font-size:1.05vh;font-weight:900;}
+
+/* 폴드 펼침: 전화 화면에서도 위쪽 패널 탭으로 나갈 수 있게 */
+@media (min-width:700px) and (max-width:1023px){
+  body.view-call .board{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"tabs" "call";}
+  body.view-call .rptabs{grid-area:tabs;display:flex;height:5vh;}
+  body.view-call .callview{grid-column:1;grid-row:2;}
+}
+@media (max-width:699px){
+  .pill.call{height:3.8vh;padding:0 .6vh;}
+  .ct-back{height:2.9vh;font-size:.9vh;}
+  .callview{grid-column:1;grid-row:1;display:none;gap:.6vh;overflow-y:auto;}
+  body.view-call .callview{display:flex;flex-direction:column;}
+  .call-phone{flex:0 0 auto;padding:.6vh .9vh 1vh;border-radius:1.3vh;gap:.6vh;min-height:0;}
+  .cp-top{position:static;width:100%;font-size:.92vh;order:0;}
+  .cp-body{flex:0 0 auto;gap:.55vh;}
+  .cp-avatar{width:8.2vh;font-size:4.4vh;}
+  .cp-name b{font-size:1.85vh;}
+  .cp-name span{font-size:1.05vh;}
+  .cp-timer{font-size:3vh;}
+  .cp-wave{height:2.2vh;}
+  .cp-wave i{width:.42vh;}
+  .cp-btn{height:5vh;font-size:1.35vh;min-width:76%;}
+  .cp-sum{font-size:1.02vh;padding:.7vh .8vh;}
+  .cp-note{font-size:.95vh;}
+  .call-talk{flex:1 1 auto;min-height:0;}
+  .ct-head{padding:.6vh .75vh .4vh;gap:.35vh;}
+  .ct-head b{font-size:1.25vh;}
+  .ct-topic,.ct-ai{font-size:.88vh;}
+  .ct-mini{height:2.9vh;font-size:.92vh;padding:0 .6vh;}
+  .ct-log{padding:.2vh .75vh .4vh;gap:.4vh;}
+  .ct-empty .em{width:6.4vh;height:6.4vh;font-size:3vh;}
+  .ct-empty .ce-h{font-size:1.65vh;}
+  .ct-empty .ce-s{font-size:1.05vh;}
+  .ct-steps span{font-size:.98vh;padding:.5vh .6vh;}
+  .cl-jp{font-size:1.32vh;}
+  .cl-hint{font-size:.96vh;}
+  .cl-ava{width:2.7vh;height:2.7vh;font-size:1.4vh;}
+  .qb{height:3.1vh;font-size:1vh;}
+  .ct-input{padding:0 .75vh .4vh;gap:.35vh;}
+  .ct-input input{height:4.4vh;font-size:1.4vh;}
+  .ct-mic,.ct-send{height:4.4vh;font-size:1.02vh;padding:0 .6vh;}
+  .ct-foot{padding:0 .75vh .6vh;gap:.4vh;flex-wrap:nowrap;}
+  .pickle-call{height:4.2vh;font-size:1vh;padding:0 .7vh;flex:1 1 auto;white-space:normal;text-align:center;line-height:1.25;}
+  .ct-foot .pickle-note{display:none;}
+  .pickle-hint{margin:0 .7vh .6vh;padding:.55rem .6rem;gap:.5rem;}
+  .pickle-hint .pht{font-size:.73rem;}
+  .pickle-hint .phc{height:2.3rem;min-width:2.6rem;}
+}
+
 /* ================= responsive ================= */
 @media (max-width:1120px){
   .brand span.sub{display:none;}
@@ -766,6 +971,9 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
     </button>
     <button class="pill streak" id="streakPill" type="button" title="연속으로 학습한 날">
       <span>📅</span><span class="lbl">연속 학습</span><b id="streakNum">0</b><span class="unit">일</span>
+    </button>
+    <button class="pill call" id="callPill" type="button" title="전화 일본어 하러 가기" aria-pressed="false" aria-label="전화 일본어">
+      <span>📞</span><span class="lbl">전화 일본어</span>
     </button>
 
     <div class="controls">
@@ -933,6 +1141,7 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
     <div class="rptabs" id="rpTabs" role="tablist" aria-label="오른쪽 패널">
       <button type="button" data-panel="coach" class="on" role="tab" aria-selected="true">👩‍🏫 선생님</button>
       <button type="button" data-panel="topics" role="tab" aria-selected="false">📚 주제·단어</button>
+      <button type="button" data-panel="call" role="tab" aria-selected="false">📞 전화 일본어</button>
     </div>
 
     <!-- ================= 오른쪽: 선생님 도움 보드 ================= -->
@@ -962,6 +1171,62 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
       <div class="help-note" id="helpNote">한국어로 말해도 선생님이 일본어로 알려드려요 🙂</div>
     </aside>
 
+
+    <!-- ================= 📞 전화 일본어 (실시간 통화 화면) ================= -->
+    <section class="callview" id="viewJpCall" aria-label="전화 일본어">
+      <!-- 왼쪽: 진짜 전화처럼 생긴 통화 화면 -->
+      <div class="call-phone" id="callPhone" data-call="idle">
+        <div class="cp-top">
+          <span class="cp-tag">📞 전화 일본어</span>
+          <span class="cp-sig" id="callNet">통화 대기</span>
+        </div>
+        <div class="cp-body">
+          <div class="cp-avatar" aria-hidden="true"><span class="cp-ava-em">👩‍🏫</span></div>
+          <div class="cp-name"><b id="callWho">유키 선생님 <i class="cp-ja">ゆき先生</i></b><span id="callStatus">전화를 걸어 볼까요?</span></div>
+          <div class="cp-timer" id="callTimer">00:00</div>
+          <div class="cp-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="cp-sum" id="callSummary" hidden></div>
+        <div class="cp-acts">
+          <button class="cp-btn cp-start" id="callStart" type="button">📞 통화 시작</button>
+          <button class="cp-btn cp-end" id="callEnd" type="button" hidden>📵 통화 종료</button>
+        </div>
+        <div class="cp-note" id="callNote">유키 선생님이 먼저 일본어로 말을 걸어요 · 🎧 이어폰을 끼면 더 잘 들려요</div>
+      </div>
+
+      <!-- 오른쪽: 자막 · 빠른 말풍선 · 말하기 -->
+      <div class="call-talk">
+        <div class="ct-head">
+          <button class="ct-back" id="callBack" type="button" aria-label="대화 화면으로 돌아가기">← 대화로</button>
+          <b>🎧 통화 내용</b>
+          <span class="ct-topic" id="callTopic">🎬 일본 애니 · Lv.2</span>
+          <span class="ct-ai" id="callAiBadge" hidden>🤖 AI 선생님</span>
+          <div class="ct-tools">
+            <button class="ct-mini on" id="callHint" type="button" aria-pressed="true">💬 발음·뜻</button>
+            <button class="ct-mini" id="callSlow" type="button" aria-pressed="false">🐢 천천히</button>
+            <button class="ct-mini" id="callAgain" type="button">🔊 다시 듣기</button>
+          </div>
+        </div>
+        <div class="ct-log" id="callLog" aria-live="polite"></div>
+        <div class="ct-quick" id="callQuick"></div>
+        <div class="ct-input">
+          <button class="ct-mic" id="callMic" type="button">🎙️ 말하기</button>
+          <input id="callInput" type="text" maxlength="90" autocomplete="off" autocapitalize="off"
+                 placeholder="일본어로 답해도, 한국어로 적어도 돼요 ✏️" aria-label="전화 일본어 답하기">
+          <button class="ct-send" id="callSend" type="button">보내기</button>
+        </div>
+        <div class="ct-foot">
+          <button class="pickle-call" id="pickleCall" type="button">📲 피클과 직접 전화 일본어 하기</button>
+          <span class="pickle-note">피클 앱을 열어 진짜 AI 선생님과<br>전화로 이어서 말해요</span>
+        </div>
+        <div class="pickle-hint" id="pickleHint" role="status" hidden>
+          <span class="phx" aria-hidden="true">📲</span>
+          <div class="pht">전화 일본어는 피클 앱에서 이어져요<br>Safari/브라우저에서 바로 앱이 안 열리면 피클 채팅창에서 <b>'전화 일본어'</b>라고 말하거나 전화 버튼을 눌러 주세요!</div>
+          <button class="phc" id="pickleHintClose" type="button" aria-label="안내 닫기">닫기</button>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- 폰(커버 화면) 하단 탭 -->
@@ -969,6 +1234,7 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
     <button type="button" data-view="talk" class="on">💬<span>대화</span></button>
     <button type="button" data-view="coach">👩‍🏫<span>선생님</span></button>
     <button type="button" data-view="topics">📚<span>주제·단어</span></button>
+    <button type="button" data-view="call">📞<span>전화</span></button>
   </nav>
 </div>
 
@@ -1923,15 +2189,17 @@ var el = {};
    ========================================================= */
 function isPhone(){ return window.matchMedia && window.matchMedia("(max-width:699px)").matches; }
 function setPanel(p){
-  if (p !== "talk" && p !== "coach" && p !== "topics") p = "talk";
+  if (p !== "talk" && p !== "coach" && p !== "topics" && p !== "call") p = "talk";
   var b = document.body;
-  b.classList.remove("view-talk","view-coach","view-topics","rp-coach","rp-topics");
+  var wasCall = b.classList.contains("view-call");
+  b.classList.remove("view-talk","view-coach","view-topics","view-call","rp-coach","rp-topics");
   b.classList.add("view-" + p);
   b.classList.add(p === "topics" ? "rp-topics" : "rp-coach");
+  var tab = (p === "topics" ? "topics" : (p === "call" ? "call" : "coach"));
   var i, on;
   var rt = el.rpTabs.querySelectorAll("button");
   for (i = 0; i < rt.length; i++){
-    on = rt[i].getAttribute("data-panel") === (p === "topics" ? "topics" : "coach");
+    on = rt[i].getAttribute("data-panel") === tab;
     rt[i].classList.toggle("on", on);
     rt[i].setAttribute("aria-selected", on ? "true" : "false");
   }
@@ -1941,6 +2209,8 @@ function setPanel(p){
     mt[i].classList.toggle("on", on);
     mt[i].setAttribute("aria-selected", on ? "true" : "false");
   }
+  if (p === "call") callEnter();
+  else if (wasCall) callLeave();
 }
 
 /* =========================================================
@@ -2739,7 +3009,9 @@ function bind(){
 
   el.rpTabs.addEventListener("click", function(e){
     var b = e.target.closest ? e.target.closest("button[data-panel]") : null;
-    if (b) setPanel(b.getAttribute("data-panel") === "topics" ? "topics" : "coach");
+    if (!b) return;
+    var pv = b.getAttribute("data-panel");
+    setPanel(pv === "topics" ? "topics" : (pv === "call" ? "call" : "coach"));
   });
   el.mobileTabs.addEventListener("click", function(e){
     var b = e.target.closest ? e.target.closest("button[data-view]") : null;
@@ -2762,6 +3034,517 @@ function bind(){
     }
   });
 }
+
+/* =========================================================
+   14.5 📞 전화 일본어 — 통화 화면(타이머·아바타) · 자동 일본어 질문(TTS)
+   유키 선생님이 일본어로 말을 걸고, 말하기·말풍선·입력으로 대답하면
+   칭찬 + 다음 질문으로 이어지는 실전 회화 (AI 키가 있으면 AI 통화)
+   ========================================================= */
+var CALL_KEY = "papa.jpn.call.v1";
+var CALL_PRAISE = ["いいですね！", "なるほど！", "すごい！", "そうなんですね！", "いいですね、"];
+var CALL_CLOSE = {
+  jp:"はい、じゃあ{今日|きょう}はここまで。よく{話|はな}せましたね。また{電話|でんわ}します。さようなら！",
+  ko:"네, 그럼 오늘은 여기까지. 잘 말했어요. 또 전화할게요. 안녕!",
+  pr:"하이, 쟈아 쿄오와 코코마데. 요쿠 하나세마시타네. 마타 덴와시마스. 사요오나라!"
+};
+
+/* 주제별 통화 질문 (짧고 바로 쓸 수 있는 실전 회화 · Lv.1/2/3) */
+var CALL_BANK = {
+  anime: [
+    { l1:"アニメ、すき？", l2:"アニメはすきですか？", l3:"アニメ、よく{見|み}る？",
+      ko:"애니 좋아해요?", pr:"아니메와 스키데스카?",
+      quick:[["はい、すきです。","네, 좋아해요."],["はい、大好きです。","네, 아주 좋아해요."],["まあまあです。","그럭저럭요."]] },
+    { l1:"いま、何{見|み}てる？", l2:"いま、何を見ていますか？", l3:"{最近|さいきん}、何を見てる？",
+      ko:"지금 뭐 보고 있어요?", pr:"이마, 나니오 미테이마스카?",
+      quick:[["アニメを見ています。","애니 보고 있어요."],["ドラマを見ています。","드라마 보고 있어요."],["何も見ていません。","아무것도 안 보고 있어요."]] },
+    { l1:"すきなキャラは？", l2:"すきなキャラクターはだれですか？", l3:"いちばん{好|す}きなキャラはだれ？",
+      ko:"좋아하는 캐릭터는 누구예요?", pr:"스키나 캬라쿠타아와 다레데스카?",
+      quick:[["「ルフィ」がすきです。","루피를 좋아해요."],["「ナルト」がすきです。","나루토를 좋아해요."],["ぜんぶすきです。","다 좋아해요."]] },
+    { l1:"きのう、{見|み}た？", l2:"きのう、アニメを見ましたか？", l3:"きのう、何か見た？",
+      ko:"어제 애니 봤어요?", pr:"키노오, 아니메오 미마시타카?",
+      quick:[["はい、見ました。","네, 봤어요."],["いいえ、見ませんでした。","아니요, 안 봤어요."],["ちょっとだけ見ました。","조금만 봤어요."]] },
+    { l1:"どこがすき？", l2:"アニメのどこがすきですか？", l3:"アニメのどんなところが{好|す}き？",
+      ko:"애니의 어떤 점이 좋아요?", pr:"아니메노 도코가 스키데스카?",
+      quick:[["{絵|え}がきれいです。","그림이 예뻐요."],["{話|はなし}がおもしろいです。","이야기가 재밌어요."],["{音楽|おんがく}がすきです。","음악이 좋아요."]] },
+    { l1:"{映画|えいが}も{見|み}る？", l2:"{劇場版|げきじょうばん}は見ますか？", l3:"{劇場版|げきじょうばん}は見た？",
+      ko:"극장판도 봐요?", pr:"게키조오반와 미마스카?",
+      quick:[["はい、見ます。","네, 봐요."],["ときどき見ます。","가끔 봐요."],["あまり見ません。","별로 안 봐요."]] }
+  ],
+  travel: [
+    { l1:"{日本|にほん}、行ったことある？", l2:"日本に{来|き}たことはありますか？", l3:"日本には何{回|かい}くらい行った？",
+      ko:"일본에 가 본 적 있어요?", pr:"니혼니 키타 코토와 아리마스카?",
+      quick:[["はい、あります。","네, 있어요."],["いいえ、ありません。","아니요, 없어요."],["{一度|いちど}だけあります。","한 번만 있어요."]] },
+    { l1:"何食べたい？", l2:"日本で何を食べたいですか？", l3:"日本で{一番|いちばん}食べたいものは？",
+      ko:"일본에서 뭐 먹고 싶어요?", pr:"니혼데 나니오 타베타이데스카?",
+      quick:[["ラーメンが食べたいです。","라멘이 먹고 싶어요."],["すしが食べたいです。","초밥이 먹고 싶어요."],["たこやきが食べたいです。","타코야키가 먹고 싶어요."]] },
+    { l1:"{日本|にほん}の食べ物、すき？", l2:"すきな日本の食べ物は何ですか？", l3:"日本の食べ物なら何がすき？",
+      ko:"좋아하는 일본 음식은 뭐예요?", pr:"스키나 니혼노 타베모노와 난데스카?",
+      quick:[["ラーメンがすきです。","라멘을 좋아해요."],["すしがすきです。","초밥을 좋아해요."],["カレーがすきです。","카레를 좋아해요."]] },
+    { l1:"{東京|とうきょう}と{大阪|おおさか}、どっち？", l2:"{東京|とうきょう}と{大阪|おおさか}、どちらがすきですか？", l3:"東京と大阪なら、どっちに行きたい？",
+      ko:"도쿄와 오사카, 어느 쪽이 좋아요?", pr:"토오쿄오토 오오사카, 도치라가 스키데스카?",
+      quick:[["{東京|とうきょう}がすきです。","도쿄가 좋아요."],["{大阪|おおさか}がすきです。","오사카가 좋아요."],["どちらもすきです。","둘 다 좋아요."]] },
+    { l1:"どこ行きたい？", l2:"日本でどこに行きたいですか？", l3:"次に日本に行ったら、どこへ行きたい？",
+      ko:"일본에서 어디 가고 싶어요?", pr:"니혼데 도코니 이키타이데스카?",
+      quick:[["{京都|きょうと}に行きたいです。","교토에 가고 싶어요."],["{北海道|ほっかいどう}に行きたいです。","홋카이도에 가고 싶어요."],["{沖縄|おきなわ}に行きたいです。","오키나와에 가고 싶어요."]] },
+    { l1:"{温泉|おんせん}、すき？", l2:"{温泉|おんせん}はすきですか？", l3:"{温泉|おんせん}と{海|うみ}、どっちがすき？",
+      ko:"온천 좋아해요?", pr:"온센와 스키데스카?",
+      quick:[["はい、すきです。","네, 좋아해요."],["{海|うみ}のほうがすきです。","바다가 더 좋아요."],["まだ{入|はい}ったことがありません。","아직 들어가 본 적 없어요."]] }
+  ],
+  daily: [
+    { l1:"{今日|きょう}、どうだった？", l2:"{今日|きょう}はどうでしたか？", l3:"今日、{仕事|しごと}はどうだった？",
+      ko:"오늘 어땠어요?", pr:"쿄오와 도오데시타카?",
+      quick:[["{忙|いそが}しかったです。","바빴어요."],["ふつうでした。","그럭저럭이었어요."],["{疲|つか}れました。","피곤했어요."]] },
+    { l1:"{週末|しゅうまつ}、何する？", l2:"{週末|しゅうまつ}は何をしますか？", l3:"今週の週末は何するの？",
+      ko:"주말에 뭐 해요?", pr:"슈우마츠와 나니오 시마스카?",
+      quick:[["{家|いえ}で休みます。","집에서 쉬어요."],["{運動|うんどう}します。","운동해요."],["アニメを見ます。","애니를 봐요."]] },
+    { l1:"{趣味|しゅみ}は？", l2:"{趣味|しゅみ}は何ですか？", l3:"{趣味|しゅみ}って何？",
+      ko:"취미가 뭐예요?", pr:"슈미와 난데스카?",
+      quick:[["アニメを見ることです。","애니 보는 거예요."],["{運動|うんどう}することです。","운동하는 거예요."],["{料理|りょうり}することです。","요리하는 거예요."]] },
+    { l1:"{朝|あさ}、何する？", l2:"{毎朝|まいあさ}、何をしますか？", l3:"朝はふつう何してる？",
+      ko:"매일 아침 뭐 해요?", pr:"마이아사, 나니오 시마스카?",
+      quick:[["コーヒーを飲みます。","커피를 마셔요."],["{散歩|さんぽ}します。","산책해요."],["アニメを見ます。","애니를 봐요."]] },
+    { l1:"コーヒーとお{茶|ちゃ}、どっち？", l2:"コーヒーとお{茶|ちゃ}、どちらがすきですか？", l3:"コーヒーとお茶、どっちがすき？",
+      ko:"커피와 차, 어느 쪽이 좋아요?", pr:"코오히이토 오차, 도치라가 스키데스카?",
+      quick:[["コーヒーがすきです。","커피를 좋아해요."],["お茶がすきです。","차를 좋아해요."],["{両方|りょうほう}すきです。","둘 다 좋아요."]] },
+    { l1:"{今夜|こんや}、何する？", l2:"{今夜|こんや}は何をしますか？", l3:"今夜、何する{予定|よてい}？",
+      ko:"오늘 밤 뭐 해요?", pr:"콘야와 나니오 시마스카?",
+      quick:[["{早|はや}く寝ます。","일찍 자요."],["アニメを見ます。","애니를 봐요."],["{家族|かぞく}と話します。","가족과 이야기해요."]] }
+  ],
+  phrases: [
+    { l1:"すきなセリフ、ある？", l2:"すきなセリフはありますか？", l3:"{心|こころ}に{残|のこ}ってるセリフはある？",
+      ko:"좋아하는 대사 있어요?", pr:"스키나 세리후와 아리마스카?",
+      quick:[["はい、あります。","네, 있어요."],["「{諦|あきら}めない」がすきです。","「포기 안 해」를 좋아해요."],["まだありません。","아직 없어요."]] },
+    { l1:"アニメでよく{聞|き}く言葉は？", l2:"アニメでよく{聞|き}く言葉は何ですか？", l3:"アニメでよく聞く日本語って何？",
+      ko:"애니에서 자주 듣는 말은 뭐예요?", pr:"아니메데 요쿠 키쿠 코토바와 난데스카?",
+      quick:[["「やばい」です。","「야바이」예요."],["「すごい」です。","「스고이」예요."],["「マジで」です。","「마지데」예요."]] },
+    { l1:"「やばい」、使う？", l2:"「やばい」は使いますか？", l3:"「やばい」、よく使う？",
+      ko:"「야바이」 써요?", pr:"야바이와 츠카이마스카?",
+      quick:[["はい、よく使います。","네, 자주 써요."],["たまに使います。","가끔 써요."],["あまり使いません。","별로 안 써요."]] },
+    { l1:"かっこいいセリフ、言ってみて", l2:"かっこいいセリフを{言|い}ってみてください。", l3:"かっこいいセリフ、ひとつ{聞|き}かせて。",
+      ko:"멋진 대사 하나 말해 보세요.", pr:"캇코이이 세리후오 잇테미테 쿠다사이.",
+      quick:[["「{前|まえ}を向け」です。","「앞을 봐」예요."],["「{諦|あきら}めない」です。","「포기 안 해」예요."],["ちょっと{恥|は}ずかしいです。","조금 부끄러워요."]] },
+    { l1:"ほめるとき、何て言う？", l2:"日本語でほめるとき、何と言いますか？", l3:"ほめるなら、どんな言葉を使う？",
+      ko:"일본어로 칭찬할 때 뭐라고 해요?", pr:"니혼고데 호메루 토키, 난토 이이마스카?",
+      quick:[["「すごい」です。","「스고이」예요."],["「{最高|さいこう}」です。","「사이코오」예요."],["「いいね」です。","「이이네」예요."]] },
+    { l1:"{今日|きょう}、何{覚|おぼ}えた？", l2:"{今日|きょう}、何を{覚|おぼ}えましたか？", l3:"今日、新しく{覚|おぼ}えた言葉は？",
+      ko:"오늘 뭐 배웠어요?", pr:"쿄오, 나니오 오보에마시타카?",
+      quick:[["「{頑張|がんば}って」です。","「간밧테」예요."],["「ありがとう」です。","「아리가토오」예요."],["まだです。","아직이요."]] }
+  ]
+};
+
+var CALL = { phase:"idle", step:0, turns:0, jpTurns:0, koTurns:0, sec:0, timer:null, slow:false, hint:true,
+             last:null, lastChild:"", lines:[], aiSeq:0, bound:false };
+
+function callPad2(n){ return n < 10 ? "0" + n : "" + n; }
+function callFmt(sec){ sec = Math.max(0, Math.round(sec || 0)); return callPad2(Math.floor(sec / 60)) + ":" + callPad2(sec % 60); }
+function callStore(){
+  var s = readJSON(CALL_KEY, {});
+  if (!s || typeof s !== "object" || Array.isArray(s)) s = {};
+  if (!s.days || typeof s.days !== "object") s.days = {};
+  return s;
+}
+function callRec(){
+  var all = callStore(), k = dateKey();
+  var d = all.days[k];
+  if (!d || typeof d !== "object") d = all.days[k] = { calls:0, turns:0, sec:0 };
+  return { all:all, day:d };
+}
+function callTopic(){ return SCEN[state.topic] || SCEN.anime; }
+function callBank(){ return CALL_BANK[state.topic] || CALL_BANK.anime; }
+function callCtx(){ var t = callTopic(); return t.emoji + " " + t.name + " · Lv." + state.level; }
+/* 지금 난이도에 맞는 질문 한 줄 */
+function callQ(item){
+  if (!item) return "";
+  if (state.level <= 1 && item.l1) return item.l1;
+  if (state.level >= 3 && item.l3) return item.l3;
+  return item.l2 || item.l1 || "";
+}
+
+/* ---------- 통화 기록(자막) ---------- */
+function callLogEl(){ return $("callLog"); }
+function callScroll(){ var b = callLogEl(); if (b) b.scrollTop = b.scrollHeight; }
+function callClearLog(){
+  var b = callLogEl(); if (!b) return;
+  CALL.lines = [];
+  b.innerHTML = '<div class="ct-empty" id="callEmpty">'
+    + '<span class="em">📞</span>'
+    + '<div class="ce-h">아직 통화가 없어요</div>'
+    + '<div class="ce-s">📞 통화 시작을 누르면 유키 선생님이 일본어로 전화를 걸어요</div>'
+    + '<div class="ct-steps"><span><b>1</b> 선생님이 짧은 일본어로 물어봐요</span>'
+    + '<span><b>2</b> 🎙️ 말하기·말풍선·입력으로 대답해요</span>'
+    + '<span><b>3</b> 칭찬과 다음 질문이 바로 이어져요</span></div></div>';
+}
+function callDropEmpty(){ var em = $("callEmpty"); if (em && em.parentNode) em.parentNode.removeChild(em); }
+function callAddLine(who, jp, ko, pr, opts){
+  opts = opts || {};
+  var b = callLogEl(); if (!b || !jp) return null;
+  callDropEmpty();
+  var row = document.createElement("div");
+  row.className = "cl-row " + who + (opts.typing ? " cl-typing" : "");
+  var hint = [pr || "", ko || ""].filter(function(x){ return String(x).trim(); }).join(" · ");
+  row.innerHTML = '<span class="cl-ava" aria-hidden="true">' + (who === "t" ? "👩‍🏫" : "🧑") + '</span>'
+    + '<div class="cl-bub"><div class="cl-jp">' + (who === "t" ? html(jp) : esc(jp)) + '</div>'
+    + (hint ? '<div class="cl-hint">' + esc(hint) + '</div>' : "") + '</div>';
+  b.appendChild(row);
+  CALL.lines.push({ who:who, jp:String(jp), ko:ko || "", pr:pr || "" });
+  while (CALL.lines.length > 40) CALL.lines.shift();
+  callScroll();
+  return row;
+}
+function callRemoveRow(row){ if (row && row.parentNode) row.parentNode.removeChild(row); if (CALL.lines.length) CALL.lines.pop(); }
+
+function callSay(jp, ko, pr){
+  CALL.last = { jp:jp, ko:ko || "", pr:pr || "" };
+  callAddLine("t", jp, ko, pr);
+  speak(jp, CALL.slow);
+}
+function callQuick(list){
+  var box = $("callQuick"); if (!box) return;
+  if (!list || !list.length) { box.innerHTML = ""; return; }
+  box.innerHTML = list.map(function(x){
+    return '<button class="qb" type="button" data-say="' + esc(x[0]) + '" title="' + esc(x[1] || "") + '">' + esc(plain(x[0])) + "</button>";
+  }).join("");
+}
+function callBeat(){ var b = $("callEnd"); if (b) b.classList.add("beat"); }
+function callSetStatus(txt){ var s = $("callStatus"); if (s) s.textContent = txt; }
+function callSetNet(txt){ var n = $("callNet"); if (n) n.textContent = txt; }
+
+function callSetPhase(p){
+  CALL.phase = p;
+  var card = $("callPhone"); if (card) card.setAttribute("data-call", p);
+  var st = $("callStart"), en = $("callEnd"), inp = $("callInput"), mic = $("callMic"), sd = $("callSend");
+  var live = (p === "live" || p === "ringing");
+  if (st){ st.hidden = live; st.textContent = (p === "ended" ? "📞 다시 걸기" : "📞 통화 시작"); }
+  if (en){ en.hidden = !live; if (p !== "live") en.classList.remove("beat"); }
+  [inp, mic, sd].forEach(function(x){ if (x) x.disabled = (p !== "live"); });
+  if (inp) inp.placeholder = (p === "live" ? "일본어로 답해도, 한국어로 적어도 돼요 ✏️" : "📞 통화 시작을 누르면 말할 수 있어요");
+  if (p === "idle"){ callSetStatus("전화를 걸어 볼까요?"); callSetNet("통화 대기"); }
+  else if (p === "ringing"){ callSetStatus("연결 중이에요…"); callSetNet("연결 중 📶"); }
+  else if (p === "live"){ callSetStatus("통화 중 · 일본어로 말해 봐요"); callSetNet("통화 중 ●"); }
+  else { callSetStatus("통화를 마쳤어요"); callSetNet("통화 종료"); }
+}
+function callPaintIdle(){
+  var d = callRec().day, sum = $("callSummary");
+  if (sum){
+    if (d.calls > 0){
+      sum.hidden = false;
+      sum.innerHTML = "오늘 전화 <b>" + d.calls + "번</b> · 일본어로 <b>" + d.turns + "문장</b> · 통화 <b>" + callFmt(d.sec) + "</b>";
+    } else sum.hidden = true;
+  }
+  var tp = $("callTopic"); if (tp) tp.textContent = callCtx();
+  var ai = $("callAiBadge"); if (ai){ ai.hidden = !aiOn(); ai.textContent = "🤖 AI 선생님"; }
+  var note = $("callNote");
+  if (note) note.textContent = (d.calls > 0 ? "잘했어요! 한 번 더 전화해 볼까요? · " : "유키 선생님이 먼저 일본어로 말을 걸어요 · ")
+    + callCtx() + " · 🎧 이어폰을 끼면 더 잘 들려요";
+}
+
+/* ---------- 통화 시작 / 진행 / 종료 ---------- */
+function callTick(){ CALL.sec++; var t = $("callTimer"); if (t) t.textContent = callFmt(CALL.sec); }
+
+function callStart(){
+  if (CALL.phase === "live" || CALL.phase === "ringing") return;
+  /* iOS Safari: 버튼을 누른 그 순간에 읽어주기를 한 번 깨워 둬야 1.3초 뒤 질문도 들린다 */
+  try {
+    if (window.speechSynthesis && typeof SpeechSynthesisUtterance !== "undefined"){
+      var unlock = new SpeechSynthesisUtterance(" ");
+      unlock.volume = 0; unlock.lang = "ja-JP";
+      speechSynthesis.speak(unlock);
+    }
+  } catch(e){}
+  CALL.step = 0; CALL.turns = 0; CALL.jpTurns = 0; CALL.koTurns = 0; CALL.sec = 0;
+  CALL.last = null; CALL.lastChild = ""; CALL.aiSeq++;
+  callClearLog();
+  var sum = $("callSummary"); if (sum) sum.hidden = true;
+  var t = $("callTimer"); if (t) t.textContent = "00:00";
+  callQuick([]);
+  callSetPhase("ringing");
+  setTimeout(function(){
+    if (CALL.phase !== "ringing") return;
+    callSetPhase("live");
+    if (CALL.timer) clearInterval(CALL.timer);
+    CALL.timer = setInterval(callTick, 1000);
+    callAsk(0);
+  }, 1300);
+}
+function callAsk(i){
+  var pack = callBank();
+  var item = pack[i] || null;
+  if (!item){ callSay(CALL_CLOSE.jp, CALL_CLOSE.ko, CALL_CLOSE.pr); callQuick([]); callBeat(); return; }
+  callSay(callQ(item), item.ko, item.pr);
+  callQuick(item.quick);
+}
+function callTail(n){
+  return CALL.lines.slice(-(n || 8)).map(function(l){
+    return (l.who === "t" ? "Yuki" : "Juyeong") + ": " + plain(l.jp);
+  }).join("\n") || "(just started)";
+}
+
+function callAnswer(text, src){
+  text = String(text || "").replace(/\s+/g, " ").trim();
+  if (CALL.phase !== "live"){ toast("먼저 📞 통화 시작을 눌러 주세요!"); return; }
+  if (!text) return;
+  callAddLine("c", text, "");
+  CALL.turns++; CALL.lastChild = text;
+  var inp = $("callInput"); if (inp) inp.value = "";
+  callQuick([]);
+  var pack = callBank();
+  var item = pack[Math.min(CALL.step, pack.length - 1)];
+  var next = pack[CALL.step + 1] || null;
+  CALL.step++;
+  if (/[가-힣]/.test(text)) CALL.koTurns++; else CALL.jpTurns++;
+  if (aiOn()) callAI(text, item, next);
+  else callBuiltin(text, next);
+}
+
+/* 내장 선생님: 칭찬 + 다음 질문 (한국어로 답하면 일본어 표현도 같이) */
+function callBuiltin(text, next){
+  var praise = CALL_PRAISE[(CALL.turns - 1) % CALL_PRAISE.length];
+  var lead = "", koLead = "";
+  if (/[가-힣]/.test(text)){
+    var r = coach(text);
+    lead = "なるほど。「" + r.jp + "」と{言|い}いますね。";
+    koLead = "그렇구나. 일본어로는 「" + plain(r.jp) + "」라고 해요. ";
+  }
+  var jp = (lead ? lead + " " : "") + praise + " " + (next ? callQ(next) : CALL_CLOSE.jp);
+  var ko = koLead + (next ? next.ko : CALL_CLOSE.ko);
+  var pr = next ? next.pr : CALL_CLOSE.pr;
+  setTimeout(function(){
+    if (CALL.phase !== "live") return;
+    callSay(jp, ko, pr);
+    callQuick(next ? next.quick : []);
+    if (!next) callBeat();
+  }, 300);
+}
+
+/* AI 통화: 대답을 듣고 짧은 반응 + 꼬리질문 (실패하면 내장 선생님) */
+function callParseQuick(q){
+  if (!Array.isArray(q)) return [];
+  var out = [];
+  for (var i = 0; i < q.length && out.length < 3; i++){
+    var x = q[i];
+    if (x == null) continue;
+    if (typeof x === "string"){
+      /* {漢字|かんじ} 안의 | 는 건너뛰고, 후리가나 밖의 첫 | 를 일본어/한국어 구분으로 쓴다 */
+      var cut = -1, depth = 0;
+      for (var k = 0; k < x.length; k++){
+        var ch = x.charAt(k);
+        if (ch === "{") depth++;
+        else if (ch === "}") depth = Math.max(0, depth - 1);
+        else if (ch === "|" && depth === 0){ cut = k; break; }
+      }
+      var jp = cleanJP(cut >= 0 ? x.slice(0, cut) : x);
+      if (jp) out.push([jp, cut >= 0 ? x.slice(cut + 1) : ""]);
+    } else if (typeof x === "object" && (x.jp || x.japanese || x.say)){
+      var jj = cleanJP(String(x.jp || x.japanese || x.say));
+      if (jj) out.push([jj, String(x.ko || "")]);
+    }
+  }
+  return out;
+}
+function callAI(text, item, next){
+  var seq = ++CALL.aiSeq;
+  var row = callAddLine("t", "…", "선생님이 대답을 듣고 있어요", "", { typing:true });
+  var sys = "You are Yuki (ゆき先生), a warm Japanese teacher on a phone call with Juyeong, a Korean man in his late 30s who loves Japanese anime and is a beginner (JLPT N5). "
+    + "Keep it a real phone conversation: ONE or TWO very short, natural Japanese sentences - a tiny reaction (max 8 characters) and exactly ONE easy question (max 24 characters). "
+    + "Total at most 40 characters: no long sentences, no explanations, no markdown. "
+    + "Difficulty Lv." + state.level + " of 3 (1 = one short phrase, 2 = short です・ます sentence, 3 = natural everyday Japanese). "
+    + "Polite です・ます by default; casual only if he spoke casually. He may answer in Korean - understand it and answer in easy Japanese. "
+    + "Write EVERY kanji with furigana in the form {漢字|かんじ}; never leave kanji without furigana. "
+    + "Return ONLY minified JSON with keys: say (Japanese), ko (Korean meaning of say), pr (Korean reading of say), "
+    + "quick (2-3 short Japanese answers he could say next, each \"Japanese|Korean\"). No extra text.";
+  var user = "Topic: " + callTopic().name + " (" + callTopic().ja + ")\n"
+    + "Level: " + state.level + "/3\n"
+    + "The teacher's last question was: " + plain(callQ(item)) + "\n"
+    + "Phone call so far:\n" + callTail(8) + "\n"
+    + "Juyeong just said: 「" + plain(text) + "」";
+  aiJSON(sys, user, 300).then(function(raw){
+    if (seq !== CALL.aiSeq) return;
+    callRemoveRow(row);
+    var o = looseJSON(raw);
+    var say = o ? cleanJP(String(o.say || o.jp || "")) : "";
+    if (!say || plain(say).length > 70){
+      if (!say) toast("AI 연결이 안 돼서 내장 선생님이 대답했어요" + aiErrNote() + ". 그대로 이어서 해도 좋아요 🙂");
+      callBuiltin(text, next);
+      return;
+    }
+    var qk = callParseQuick(o.quick);
+    callSay(say, String(o.ko || ""), String(o.pr || ""));
+    callQuick(qk);
+    if (!next) callBeat();
+  });
+}
+
+function callEnd(){
+  if (CALL.phase !== "live" && CALL.phase !== "ringing") return;
+  if (CALL.timer){ clearInterval(CALL.timer); CALL.timer = null; }
+  var turns = CALL.turns, jp = CALL.jpTurns, ko = CALL.koTurns, sec = CALL.sec;
+  callSetPhase("ended");
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){}
+  addLog("sys", "📞 전화 일본어 통화를 마쳤어요 (" + callFmt(sec) + " · " + turns + "문장)");
+  save();
+
+  /* 오늘 배운 문장에 내가 한 일본어 문장 저장 (최대 3개, 중복 제외) */
+  var added = 0;
+  var have = {};
+  state.learned.forEach(function(l){ if (l && l.date === TODAY) have[String(l.jp).toLowerCase()] = 1; });
+  CALL.lines.filter(function(l){ return l.who === "c"; }).forEach(function(l){
+    var jp = String(l.jp || "").trim();
+    if (!jp || added >= 3) return;
+    if (/[가-힣]/.test(jp)) return;                    /* 한국어로 말한 건 저장하지 않음 */
+    var k = jp.toLowerCase();
+    if (have[k]) return;
+    have[k] = 1; added++;
+    state.learned.push({ date:TODAY, jp:jp, ko:"", pr:"", at:Date.now() });
+  });
+  if (state.learned.length > 400) state.learned = state.learned.slice(-400);
+  if (added > 0){
+    touchStreak(); save(); renderCounts(); renderLearnList();
+    try { confetti(); } catch(e){}
+  }
+
+  var rec = callRec();
+  rec.day.calls++; rec.day.turns += turns; rec.day.sec += sec;
+  writeJSON(CALL_KEY, rec.all);
+
+  var sum = $("callSummary");
+  if (sum){
+    sum.hidden = false;
+    sum.innerHTML = "통화 <b>" + callFmt(sec) + "</b> · 일본어로 <b>" + jp + "문장</b>"
+      + (ko > 0 ? " · 한국어로 <b>" + ko + "번</b>" : "") + " 말했어요"
+      + (added > 0 ? " · 오늘 학습 <b>+" + added + "</b>" : "");
+  }
+  callSetStatus(turns >= 3 ? "정말 잘했어요! 🎉" : (turns >= 1 ? "잘했어요! 👏" : "다음에 다시 걸어 볼까요?"));
+  var note = $("callNote");
+  if (note) note.textContent = "통화를 마쳤어요! 📞 다시 걸기를 누르면 또 전화할 수 있어요";
+  callQuick([]);
+  if (added > 0) toast("📞 전화 일본어 완료! 오늘 학습 +" + added + " 🔥");
+  else if (turns > 0) toast("📞 전화 일본어 완료! 오늘 일본어 끝났어요 🎉");
+}
+
+/* ---------- 말하기(일본어 음성 인식) ---------- */
+function callMic(){
+  if (CALL.phase !== "live"){ toast("먼저 📞 통화 시작을 눌러 주세요!"); return; }
+  var btn = $("callMic");
+  if (!SRClass){
+    toast("이 브라우저는 음성 인식을 지원하지 않아요. 입력창에 적어 주세요 ✏️");
+    var i = $("callInput"); if (i) i.focus();
+    return;
+  }
+  try {
+    var r = new SRClass();
+    r.lang = "ja-JP"; r.interimResults = false; r.maxAlternatives = 1; r.continuous = false;
+    if (btn) btn.classList.add("listening");
+    r.onresult = function(ev){
+      var t = "";
+      try { t = ev.results[0][0].transcript || ""; } catch(e){}
+      if (t) callAnswer(t, "voice"); else toast("잘 안 들렸어요. 한 번 더 말해 봐요 🎙️");
+    };
+    r.onerror = function(ev){
+      if (btn) btn.classList.remove("listening");
+      var code = ev && ev.error;
+      if (code === "not-allowed" || code === "service-not-allowed") toast("마이크를 허용해 주세요! 설정에서 마이크를 켤 수 있어요.");
+      else if (code === "no-speech") toast("잘 안 들렸어요. 한 번 더 말하거나 입력창에 적어 주세요 ✏️");
+      else toast("음성 인식이 잠깐 안 됐어요. 입력창에 적어도 괜찮아요 ✏️");
+    };
+    r.onend = function(){ if (btn) btn.classList.remove("listening"); };
+    r.start();
+  } catch(e){
+    if (btn) btn.classList.remove("listening");
+    toast("마이크를 켤 수 없어요. 입력창에 적어 주세요 ✏️");
+  }
+}
+
+/* ---------- 📲 피클 앱 전화로 바로 연결 (pickle://call) ---------- */
+var callHintTimer = null;
+function callHideHint(){
+  var h = $("pickleHint"); if (h) h.hidden = true;
+  if (callHintTimer){ clearTimeout(callHintTimer); callHintTimer = null; }
+}
+function callShowHint(){
+  var h = $("pickleHint"); if (!h || !h.hidden) return;
+  h.hidden = false;
+  callHintTimer = setTimeout(callHideHint, 9000);
+}
+function callPickle(){
+  callHideHint();
+  try { window.location.href = "pickle://call"; } catch(e){}
+  setTimeout(function(){
+    try { if (document.visibilityState === "visible") callShowHint(); } catch(e){ callShowHint(); }
+  }, 1200);
+}
+
+/* ---------- 화면 진입 / 이탈 ---------- */
+function callEnter(){
+  callPaintIdle();
+  if (CALL.phase !== "live" && CALL.phase !== "ringing") callSetPhase("idle");
+  var hb = $("callHint"); if (hb) hb.setAttribute("aria-pressed", CALL.hint ? "true" : "false");
+  var v = $("viewJpCall"); if (v) v.classList.toggle("hintoff", !CALL.hint);
+  var t = $("callTimer"); if (t) t.textContent = callFmt(CALL.sec);
+  var pill = $("callPill");
+  if (pill){ pill.classList.add("on"); pill.setAttribute("aria-pressed", "true"); }
+}
+function callLeave(){
+  if (CALL.phase === "live" || CALL.phase === "ringing") callEnd();
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){}
+  callHideHint();
+  var pill = $("callPill");
+  if (pill){ pill.classList.remove("on"); pill.setAttribute("aria-pressed", "false"); }
+}
+
+/* ---------- 이벤트 ---------- */
+function callBind(){
+  var pill = $("callPill");
+  if (pill) pill.addEventListener("click", function(){ setPanel("call"); });
+  var back = $("callBack");
+  if (back) back.addEventListener("click", function(){ setPanel("talk"); });
+  var st = $("callStart"); if (st) st.addEventListener("click", callStart);
+  var en = $("callEnd"); if (en) en.addEventListener("click", callEnd);
+  var sd = $("callSend");
+  if (sd) sd.addEventListener("click", function(){ callAnswer($("callInput").value, "type"); });
+  var inp = $("callInput");
+  if (inp) inp.addEventListener("keydown", function(e){
+    if (e.key === "Enter" || e.keyCode === 13){ e.preventDefault(); callAnswer(inp.value, "type"); }
+  });
+  var micb = $("callMic"); if (micb) micb.addEventListener("click", callMic);
+  var qb = $("callQuick");
+  if (qb) qb.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest(".qb") : null;
+    if (b) callAnswer(b.getAttribute("data-say"), "quick");
+  });
+  var hb = $("callHint");
+  if (hb) hb.addEventListener("click", function(){
+    CALL.hint = !CALL.hint;
+    hb.setAttribute("aria-pressed", CALL.hint ? "true" : "false");
+    hb.classList.toggle("on", CALL.hint);
+    var v = $("viewJpCall"); if (v) v.classList.toggle("hintoff", !CALL.hint);
+  });
+  var slow = $("callSlow");
+  if (slow) slow.addEventListener("click", function(){
+    CALL.slow = !CALL.slow;
+    slow.setAttribute("aria-pressed", CALL.slow ? "true" : "false");
+    slow.classList.toggle("on", CALL.slow);
+    toast(CALL.slow ? "🐢 천천히 말할게요!" : "보통 속도로 말할게요!");
+  });
+  var again = $("callAgain");
+  if (again) again.addEventListener("click", function(){
+    if (CALL.last && CALL.last.jp) speak(CALL.last.jp, CALL.slow);
+    else toast("먼저 📞 통화를 시작해 주세요!");
+  });
+  var pk = $("pickleCall"); if (pk) pk.addEventListener("click", callPickle);
+  var pc = $("pickleHintClose"); if (pc) pc.addEventListener("click", callHideHint);
+  window.addEventListener("pagehide", callHideHint);
+}
+
+var callApi = {
+  enter:callEnter, leave:callLeave, start:callStart, end:callEnd, answer:callAnswer,
+  state:CALL, bank:function(){ return callBank(); }, q:callQ, fmt:callFmt, ctx:callCtx,
+  pickle:callPickle, showHint:callShowHint, hideHint:callHideHint
+};
+
+callBind();
+callClearLog();
+callSetPhase("idle");
+callPaintIdle();
 
 /* =========================================================
    15. 시작
@@ -2816,6 +3599,7 @@ window.JPN = {
   state:state, coach:coach, RULES:RULES, NOUNS:NOUNS, VERBS:VERBS, ADJS:ADJS, PATTERN_COUNT:PATTERN_COUNT,
   SCEN:SCEN, INTERESTS:INTERESTS, handleUser:handleUser, setLevel:setLevel, startTalk:startTalk,
   setPanel:setPanel, setFuri:setFuri, today:function(){ return TODAY; }, cur:function(){ return cur; },
+  call:callApi,
   lastSay:function(){ return curSay; },
   plain:plain, html:html
 };
