@@ -141,7 +141,7 @@
   .leftPads>.pad{ pointer-events:auto; }
   .itemPads{ display:flex; flex-direction:column; align-items:center; gap:8px; pointer-events:none; }
   .itemPads>.pad{ pointer-events:auto; }
-  .rightPads{ display:flex; align-items:flex-end; justify-content:flex-end; gap:10px; pointer-events:none; }
+  .rightPads{ display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; gap:8px; pointer-events:none; }
   .rightPads>.pad{ pointer-events:auto; }
   .pad{
     pointer-events:auto; border:none; cursor:pointer; color:#fff;
@@ -184,6 +184,21 @@
   #bananaBtn.active{ transform:translateY(4px); box-shadow: 0 2px 0 #b38f00, 0 3px 7px rgba(60,45,0,.2), inset 0 3px 0 rgba(255,255,255,.5); }
   #bananaBtn.empty{ filter: grayscale(.55); opacity:.78; }
 
+  #shieldBtn{
+    width: clamp(58px, 15vw, 82px); height: clamp(58px, 15vw, 82px);
+    border-radius:50%; color:#0e3f6b;
+    background: radial-gradient(circle at 36% 26%, #dff2ff, #7cc2ff 56%, #2f86d6);
+    font-weight:900; font-size: clamp(10px, 2.5vw, 13px);
+    box-shadow: 0 6px 0 #1f5f9c, 0 9px 16px rgba(0,35,70,.24), inset 0 3px 0 rgba(255,255,255,.5);
+    text-shadow: 0 1px 0 rgba(255,255,255,.45);
+  }
+  #shieldBtn small{ margin-top:0; font-size:.68em; }
+  #shieldBtn .cntNum{ color:#0a3155; }
+  #shieldBtn.active{ transform:translateY(4px); box-shadow: 0 2px 0 #1f5f9c, 0 3px 7px rgba(0,35,70,.2), inset 0 3px 0 rgba(255,255,255,.5); }
+  #shieldBtn.empty{ filter: grayscale(.55); opacity:.78; }
+  #shieldBtn.on{ animation: shieldGlow .8s ease-in-out infinite alternate; }
+  @keyframes shieldGlow{ from{ filter:brightness(1) } to{ filter:brightness(1.22) drop-shadow(0 0 8px #9fd4ff) } }
+
   #jumpBtn{
     width: clamp(82px, 22vw, 112px); height: clamp(82px, 22vw, 112px);
     border-radius:50%;
@@ -213,11 +228,16 @@
     place-items:center;
   }
   #modal.show{ display:grid; }
-  #modal.quiz{ place-items:start center; padding-top: calc(10px + env(safe-area-inset-top)); }
+  #modal.quiz{ place-items:center; padding: calc(8px + env(safe-area-inset-top)) 10px calc(8px + env(safe-area-inset-bottom)); }
   #modal.quiz .sheet{ width:min(440px, 100%); }
   @media (max-height: 520px){
-    #modal.quiz{ place-items:center end; padding-right: calc(8px + env(safe-area-inset-right)); }
-    #modal.quiz .sheet{ width:min(330px, 48%); max-height:94vh; }
+    #modal.quiz{ place-items:center; padding: 8px; }
+    #modal.quiz .sheet{ width:min(380px, 74%); max-height:86vh; padding:10px 12px 11px; }
+    #modal.quiz .qTitle{ font-size:14px; }
+    #modal.quiz .qEq{ font-size:clamp(24px, 7.4vh, 38px); margin:6px 0 2px; }
+    #modal.quiz .qHint{ font-size:11px; margin-bottom:8px; }
+    #modal.quiz .qBtn{ padding:12px 6px; font-size:clamp(22px, 6vh, 32px); }
+    #modal.quiz .qMsg{ font-size:12px; }
   }
   .sheet{
     width: min(560px, 100%);
@@ -626,6 +646,15 @@
   .modeBtn small{ display:block; font-size:10px; font-weight:800; color:#98a4ae; margin-top:2px; }
   .modeBtn.on{ border-color:#2dbd6e; background:#f2fff8; color:#1a7a48; box-shadow:0 4px 0 #bfe8cf; }
   .modeBtn.on small{ color:#5aa87a; }
+  .modeBox{
+    background:#fff; border-radius:16px; padding:8px 8px 9px; margin-bottom:11px;
+    box-shadow:0 3px 0 #f1e6cf;
+  }
+  .modeBox .modeRow{ margin-bottom:7px; }
+  .modeBox .modeRow:last-child{ margin-bottom:0; }
+  .modeBox .modeBtn{ padding:7px 4px; font-size:11.5px; border-width:2px; box-shadow:0 3px 0 #f1e0bb; border-radius:13px; }
+  .modeBox .modeBtn b{ font-size:13px; }
+  .modeBox .modeBtn small{ font-size:9.5px; margin-top:1px; }
 
   .quizWrap{ text-align:center; padding:6px 2px 2px; }
   .qTitle{ font-size:17px; font-weight:900; color:#e08b00; letter-spacing:-.4px; }
@@ -684,6 +713,7 @@
     #runBtn{ width:124px; height:66px; font-size:16px; }
     #runBtn small{ font-size:8.5px; margin-top:1px; }
     #boostBtn{ width:60px; height:60px; font-size:10px; }
+    #shieldBtn{ width:52px; height:52px; font-size:9px; }
     .itemPads{ gap:6px; }
     #bananaBtn{ width:54px; height:54px; font-size:9.5px; }
     .rightPads{ gap:8px; }
@@ -756,6 +786,7 @@
     #runBtn{ width:116px; height:70px; font-size:16px; }
     #jumpBtn{ width:74px; height:74px; }
     #boostBtn{ width:62px; height:62px; font-size:10.5px; }
+    #shieldBtn{ width:54px; height:54px; }
     #bananaBtn{ width:56px; height:56px; }
     .rightPads{ gap:7px; }
     .itemPads{ gap:6px; }
@@ -801,6 +832,7 @@
       <button class="pad" id="jumpBtn" aria-label="점프">점프!<small>위로 콕!</small></button>
     </div>
     <div class="rightPads">
+      <button class="pad" id="shieldBtn" aria-label="쉴드">🛡️<small>쉴드 <b class="cntNum" id="shieldNum">1</b></small></button>
       <button class="pad" id="runBtn" aria-label="앞으로 달리기">앞으로!<small>꾹 누르고 있어요</small></button>
     </div>
   </div>
@@ -1111,6 +1143,12 @@
     { n:3, price:15, label:'세 번이면 더 재밌어요' },
     { n:5, price:22, label:'다섯 번 미끌미끌' }
   ];
+  var SHIELD_PACKS = [
+    { n:1, price:10, label:'한 번 든든하게' },
+    { n:3, price:24, label:'세 번이면 안심' },
+    { n:5, price:36, label:'다섯 번 반짝반짝' }
+  ];
+  var SHIELD_SEC = 6;
   var TOP_SPEED = [0, 330, 392, 455];
   var JUMP_POWER = [0, 640, 720, 800];
   var WATER_SPEED = [0, 0.80, 0.90, 1.00];
@@ -1145,6 +1183,7 @@
     rewards: REWARD_DEFAULTS.slice(),
     rewardLog: [],
     mathLevel: 1,
+    raceMode: 'race',
     car: 'basic',
     color: '#e63946',
     ownedCars: ['basic'],
@@ -1152,6 +1191,7 @@
     upgrades: { engine:1, tires:1, booster:1 },
     boosters: 2,
     bananas: 2,
+    shields: 1,
     fuelUp: 0,
     fuelEff: 0,
     wheel: 'basic',
@@ -1246,6 +1286,7 @@
       }
       if (typeof o.boosters === 'number') save.boosters = clamp(o.boosters | 0, 0, 999);
       if (typeof o.bananas === 'number') save.bananas = clamp(o.bananas | 0, 0, 999);
+      if (typeof o.shields === 'number') save.shields = clamp(o.shields | 0, 0, 999);
       if (typeof o.fuelUp === 'number') save.fuelUp = clamp(o.fuelUp | 0, 0, 3);
       if (typeof o.fuelEff === 'number') save.fuelEff = clamp(o.fuelEff | 0, 0, 1);
       if (typeof o.wheel === 'string') save.wheel = o.wheel;
@@ -1265,7 +1306,8 @@
       if (Array.isArray(o.ownedClothes)) save.ownedClothes = o.ownedClothes;
       if (typeof o.bag === 'string') save.bag = o.bag;
       if (Array.isArray(o.ownedBags)) save.ownedBags = o.ownedBags;
-      if (o.mode === 'race' || o.mode === 'math') save.mode = 'math';
+      if (o.mode === 'math' || o.mode === 'free' || o.mode === 'race') save.mode = (o.mode === 'free' ? 'free' : 'math');
+      if (o.raceMode === 'solo' || o.raceMode === 'race') save.raceMode = o.raceMode;
       if (typeof o.bestStage === 'number') save.bestStage = Math.max(1, o.bestStage | 0);
       if (typeof o.muted === 'boolean') save.muted = o.muted;
       if (typeof o.raceBestRank === 'number') save.raceBestRank = clamp(o.raceBestRank | 0, 0, 4);
@@ -1313,7 +1355,8 @@
     if (save.ownedClothes.indexOf(save.clothes) === -1) save.clothes = 'basic';
     if (save.ownedBags.indexOf(save.bag) === -1) save.bag = 'none';
     if (!save.villageProgress) save.villageProgress = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0 };
-    save.mode = 'math';   // 이제 게임은 언제나 연산 모드!
+    save.mode = (save.mode === 'free' ? 'free' : 'math');
+    if (save.raceMode !== 'solo') save.raceMode = 'race';
     save.mathLevel = clamp(save.mathLevel | 0, 1, 3);
     save.fuelUp = clamp(save.fuelUp | 0, 0, 3);
     save.fuelEff = clamp(save.fuelEff | 0, 0, 1);
@@ -1343,6 +1386,8 @@
   var bananaNumEl = document.getElementById('bananaNum');
   var boostBtnEl = document.getElementById('boostBtn');
   var bananaBtnEl = document.getElementById('bananaBtn');
+  var shieldBtnEl = document.getElementById('shieldBtn');
+  var shieldNumEl = document.getElementById('shieldNum');
   var distTextEl = document.getElementById('distText');
   var fuelFillEl = document.getElementById('fuelFill');
   var fuelNumEl = document.getElementById('fuelNum');
@@ -1362,6 +1407,7 @@
     cans: [], cones: [], traps: [],
     fuel: 33, fuelMax: 100, fuelPerM: 0.07, fuelUsed: 0,
     slowT: 0, shake: 0, doubleCoinT: 0, hitCount: 0, lastSlowFx: 0,
+    shieldT: 0, shieldFlash: 0,
     quizAt: [0.35, 0.72], quizGate: 0, quizCorrect: 0, quiz: null, quizObstacle: null,
     parts: [], texts: [], bubbles: [], fireworks: [],
     rivals: [],
@@ -1383,6 +1429,7 @@
     jumpBuffer: 0,
     keys: { run: false },
     mode: 'math',
+    solo: false,
     car: { x: 0, y: 0, vx: 0, vy: 0, air: false, rot: 0, spin: 0, dist: 0, pondCool: 0, mudCool: 0, squash: 0, bump: 0 }
   };
 
@@ -2582,9 +2629,9 @@
   function drawCones(){
     for (var i = 0; i < G.cones.length; i++){
       var c = G.cones[i];
-      var sx = c.x - G.scrollX;
-      if (sx < -60 || sx > G.W + 60) continue;
-      drawConeShape(sx, groundRef(c.x), c);
+      var sx = c.x - G.scrollX + (c.fx || 0);
+      if (sx < -120 || sx > G.W + 120) continue;
+      drawConeShape(sx, groundRef(c.x) + (c.fy || 0), c);
     }
   }
 
@@ -2731,6 +2778,39 @@
     starPath(ctx, sx - w / 2 + 11, y + 1, 5.5, 2.4, 5); ctx.fill();
     ctx.fillStyle = '#2b3f4d';
     ctx.fillText(label, sx + 4, y + 1);
+    ctx.restore();
+  }
+
+  /* ---------- 🛡️ 쉴드 보호막 ---------- */
+  function drawShield(){
+    if (G.shieldT <= 0) return;
+    var car = G.car;
+    var sx = car.x - G.scrollX;
+    var cy = car.y - 52;
+    var r = 64 + Math.sin(G.t * 6) * 2.2;
+    var fade = G.shieldT < 0.9 ? clamp(G.shieldT / 0.9, 0, 1) : 1;
+    var flash = G.shieldFlash > 0;
+    ctx.save();
+    ctx.globalAlpha = (flash ? 0.62 : 0.42) * fade;
+    var g = ctx.createRadialGradient(sx, cy - 10, r * 0.22, sx, cy, r);
+    g.addColorStop(0, 'rgba(255,255,255,.14)');
+    g.addColorStop(0.6, 'rgba(130,200,255,.30)');
+    g.addColorStop(1, 'rgba(60,140,240,.60)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.ellipse(sx, cy, r * 0.94, r, 0, 0, TAU); ctx.fill();
+    ctx.globalAlpha = (flash ? 1 : 0.85) * fade;
+    ctx.strokeStyle = flash ? '#ffffff' : '#9fd4ff';
+    ctx.lineWidth = flash ? 5 : 3;
+    ctx.beginPath(); ctx.ellipse(sx, cy, r * 0.94, r, 0, 0, TAU); ctx.stroke();
+    // 반짝이는 점들
+    ctx.fillStyle = '#ffffff';
+    for (var i = 0; i < 3; i++){
+      var a = G.t * 2.1 + i * 2.1;
+      var px = sx + Math.cos(a) * r * 0.7;
+      var py = cy + Math.sin(a) * r * 0.78;
+      ctx.globalAlpha = 0.9 * fade;
+      ctx.beginPath(); ctx.arc(px, py, 2.4 + Math.sin(G.t * 8 + i) * 1.2, 0, TAU); ctx.fill();
+    }
     ctx.restore();
   }
 
@@ -3899,6 +3979,7 @@
 
   function computeRank(){
     if (G.state === 'start') return 1;
+    if (save.raceMode === 'solo' || G.solo || !G.rivals.length) return 1;
     var rank = 1;
     for (var i = 0; i < G.rivals.length; i++){
       var r = G.rivals[i];
@@ -3909,6 +3990,12 @@
   }
 
   function updateRankHUD(){
+    if (G.solo || save.raceMode === 'solo'){
+      var soloTxt = '🚗 혼자 달리기';
+      if (rankTextEl.textContent !== soloTxt) rankTextEl.textContent = soloTxt;
+      rankTextEl.classList.remove('lead');
+      return;
+    }
     if (G.state === 'start'){
       if (rankTextEl.textContent !== '🏁 출발 준비'){
         rankTextEl.textContent = '🏁 출발 준비';
@@ -3945,7 +4032,7 @@
   function updateHUD(){
     if (coinNumEl.textContent !== String(save.coins)) coinNumEl.textContent = save.coins;
     var v = villageBy(G.village);
-    var label = '🧮 ' + v.icon + ' ' + v.name + ' · ' + G.stageNo + '탄';
+    var label = (G.mode === 'free' ? '🎈 ' : '🧮 ') + v.icon + ' ' + v.name + ' · ' + G.stageNo + '탄';
     if (label !== hudStageText){ hudStageText = label; stageNameEl.textContent = label; }
     var prog = clamp(G.car.x / G.stageLen, 0, 1) * 100;
     barFillEl.style.width = prog.toFixed(1) + '%';
@@ -3979,6 +4066,13 @@
     boostBtnEl.classList.toggle('empty', save.boosters <= 0);
     bananaBtnEl.classList.toggle('empty', save.bananas <= 0);
     boostBtnEl.classList.toggle('hot', G.boostT > 0);
+    if (shieldNumEl && shieldNumEl.textContent !== String(save.shields)) shieldNumEl.textContent = save.shields;
+    if (shieldBtnEl){
+      var shOn = G.shieldT > 0;
+      shieldBtnEl.classList.toggle('empty', save.shields <= 0 && !shOn);
+      shieldBtnEl.classList.toggle('on', shOn);
+      if (shieldNumEl && shieldNumEl.textContent !== String(save.shields)) shieldNumEl.textContent = save.shields;
+    }
   }
 
   function popCoin(){
@@ -4085,6 +4179,45 @@
     return true;
   }
 
+  // 🛡️ 쉴드: 6초 동안 라바콘·함정을 만나도 안 느려지고 팅! 튕겨 냩니다
+  function useShield(){
+    if (G.state !== 'playing' || G.paused) return false;
+    if (G.shieldT > 0) return false;
+    if (save.shields <= 0){
+      A.fail();
+      addBubble(G.car.x, G.car.y - 96, '쉴드가 없어요! 🔧', '#fff0c9');
+      openShop('item');
+      return false;
+    }
+    save.shields -= 1;
+    saveSoon();
+    updateBoostHUD();
+    G.shieldT = SHIELD_SEC;
+    G.shieldFlash = 0.35;
+    A.fuel();
+    addBubble(G.car.x, G.car.y - 112, '🛡️ 쉴드 켜짐!', '#dff0ff');
+    rainbowBurst(G.car.x, G.car.y - 40);
+    return true;
+  }
+
+  function shieldBlock(x){
+    var car = G.car;
+    G.shieldFlash = 0.45;
+    A.pass();
+    addBubble(car.x, car.y - 118, '🛡️ 쉴드 방어!', '#dff0ff');
+    addText(car.x, car.y - 92, '팅!', '#1f6fb8');
+    for (var i = 0; i < 12; i++){
+      addPart({
+        x: x, y: groundRef(x) - 22,
+        vx: (Math.random() - 0.5) * 320, vy: -120 - Math.random() * 180,
+        life: 0.5 + Math.random() * 0.3, max: 0.85,
+        size: 2.5 + Math.random() * 3.5,
+        color: i % 2 ? '#9fd4ff' : '#ffffff',
+        grav: 900, front: true, shape: 'star'
+      });
+    }
+  }
+
   function fallInPond(p){
     var car = G.car;
     splash(car.x, groundRef(car.x) + 4);
@@ -4124,6 +4257,15 @@
   }
 
   function hitCone(c){
+    if (G.shieldT > 0){
+      // 쉴드 방어: 감속 없이 라바콘을 팅! 날려 버려요
+      c.hit = true;
+      c.flung = true; c.fvx = 210 + Math.random() * 180; c.fvy = -380 - Math.random() * 160;
+      c.fx = 0; c.fy = 0;
+      c.rot = (Math.random() < 0.5 ? -1 : 1) * 0.5;
+      shieldBlock(c.x);
+      return;
+    }
     var car = G.car;
     c.hit = true;
     c.rot = (Math.random() < 0.5 ? -1 : 1) * (0.45 + Math.random() * 0.3);
@@ -4157,6 +4299,11 @@
   };
 
   function hitTrap(t){
+    if (G.shieldT > 0){
+      t.hit = true;
+      shieldBlock(t.x);
+      return;
+    }
     var car = G.car;
     t.hit = true;
     G.hitCount++;
@@ -4389,6 +4536,11 @@
      15. 스테이지 진행
      ===================================================================== */
   function initRivals(){
+    if (G.solo){
+      G.rivals = [];
+      G.rank = 1;
+      return;
+    }
     var base = rivalSpeedFor(G.village, G.stageNo);
     G.rivals = RIVAL_DEFS.map(function(d, i){
       return {
@@ -4426,6 +4578,7 @@
     G.fireworks.length = 0;
     G.peels.length = 0;
     G.boostT = 0; G.rainbowT = 0; G.slipT = 0; G.slowT = 0; G.shake = 0; G.doubleCoinT = 0;
+    G.shieldT = 0; G.shieldFlash = 0;
     G.hitCount = 0;
     G.raceTime = 0;
     G.finishedCount = 0;
@@ -4438,11 +4591,15 @@
     G.fuelUsed = 0;
     G.lowWarned = false;
     // 🧮 연산 퀴즈 자리 (뒤 스테이지는 한 번 더)
-    G.quizAt = no >= 6 ? [0.26, 0.52, 0.78] : [0.35, 0.72];
+    G.quizAt = save.mode === 'free' ? [] : (no >= 6 ? [0.26, 0.52, 0.78] : [0.35, 0.72]);
     G.hintT = (vid === 1 && no === 1) ? 8 : 0;
     G.introT = 2.6;
     G.mode = save.mode;
+    G.solo = save.raceMode === 'solo';
     initRivals();
+    if (barDotsEl) barDotsEl.innerHTML = G.solo ? '' : RIVAL_DEFS.map(function(d){
+      return '<i style="background:' + d.color + '"></i>';
+    }).join('');
     G.state = 'playing';
     G.paused = false;
     G.prevState = 'playing';
@@ -4550,6 +4707,21 @@
     var mud = mudAt(car.x);
     if (mud && !car.air && G.boostT <= 0 && car.mudCool <= 0 && G.slipT <= 0){
       hitMud(mud);
+    }
+
+    // 🛡️ 쉴드 지속 시간 / 팅겨난 라바콘 움직임
+    var shWasOn = G.shieldT > 0;
+    if (G.shieldT > 0) G.shieldT = Math.max(0, G.shieldT - dt);
+    if (G.shieldFlash > 0) G.shieldFlash = Math.max(0, G.shieldFlash - dt);
+    if (shWasOn && G.shieldT <= 0) updateBoostHUD();
+    for (var cfI = 0; cfI < G.cones.length; cfI++){
+      var cf = G.cones[cfI];
+      if (!cf.flung) continue;
+      cf.fvy += 1500 * dt;
+      cf.fx += cf.fvx * dt;
+      cf.fy += cf.fvy * dt;
+      cf.rot += 5 * dt;
+      if (cf.fy >= 0 && cf.fvy > 0){ cf.fy = 0; cf.fvy = 0; cf.fvx *= 0.25; }
     }
 
     // 🚧 라바콘과 함정: 점프로 넘어가면 쌩~ 지나가요
@@ -4723,28 +4895,33 @@
 
   function finishStage(){
     if (G.state !== 'playing') return;
+    var solo = G.solo || save.raceMode === 'solo';
     var finished = G.rivals.filter(function(r){ return r.finished; })
       .sort(function(a, b){ return a.place - b.place; });
-    var myPlace = finished.length + 1;
+    var myPlace = solo ? 0 : finished.length + 1;
     var rest = G.rivals.filter(function(r){ return !r.finished; })
       .sort(function(a, b){ return b.x - a.x; });
 
     var rows = [];
-    finished.forEach(function(r){
-      rows.push({ place: r.place, name: r.name, emoji: r.emoji, time: r.time, me: false });
-    });
-    rows.push({ place: myPlace, name: playerLabel(), emoji: '🚗', time: G.raceTime, me: true });
-    var pp = myPlace + 1;
-    rest.forEach(function(r){
-      var est = G.raceTime + (G.stageLen - Math.max(r.x, 0)) / Math.max(150, r.vx);
-      rows.push({ place: pp++, name: r.name, emoji: r.emoji, time: est, me: false, est: true });
-    });
-    rows.sort(function(a, b){ return a.place - b.place; });
+    if (solo){
+      rows.push({ place: 0, name: playerLabel(), emoji: '🚗', time: G.raceTime, me: true });
+    } else {
+      finished.forEach(function(r){
+        rows.push({ place: r.place, name: r.name, emoji: r.emoji, time: r.time, me: false });
+      });
+      rows.push({ place: myPlace, name: playerLabel(), emoji: '🚗', time: G.raceTime, me: true });
+      var pp = myPlace + 1;
+      rest.forEach(function(r){
+        var est = G.raceTime + (G.stageLen - Math.max(r.x, 0)) / Math.max(150, r.vx);
+        rows.push({ place: pp++, name: r.name, emoji: r.emoji, time: est, me: false, est: true });
+      });
+      rows.sort(function(a, b){ return a.place - b.place; });
+    }
 
-    var rankBonus = raceCoinBonus(myPlace);
+    var rankBonus = solo ? 30 : raceCoinBonus(myPlace);
     var stageBonus = 20 + G.stageNo * 3 + (G.village - 1) * 5;
     var baseTotal = G.stageCoins + rankBonus + stageBonus;
-    var perfect = G.quizCorrect >= G.quizAt.length;
+    var perfect = G.quizAt.length > 0 && G.quizCorrect >= G.quizAt.length;
     var total = perfect ? baseTotal * 2 : baseTotal;
 
     save.coins += total;
@@ -4752,14 +4929,16 @@
 
     var key = stageKey(G.village, G.stageNo);
     var prevC = save.cleared[key];
-    if (!prevC || myPlace < prevC.rank){
+    if (!solo && (!prevC || myPlace < prevC.rank)){
       save.cleared[key] = { rank: myPlace, time: Math.round(G.raceTime * 10) / 10 };
+    } else if (solo && !prevC){
+      save.cleared[key] = { rank: 0, time: Math.round(G.raceTime * 10) / 10 };
     }
     if (G.stageNo > (save.villageProgress[G.village] | 0)) save.villageProgress[G.village] = G.stageNo;
 
     save.raceCount++;
-    if (myPlace === 1) save.raceWins++;
-    if (!save.raceBestRank || myPlace < save.raceBestRank) save.raceBestRank = myPlace;
+    if (!solo && myPlace === 1) save.raceWins++;
+    if (!solo && (!save.raceBestRank || myPlace < save.raceBestRank)) save.raceBestRank = myPlace;
     if (!save.raceBestTime || G.raceTime < save.raceBestTime) save.raceBestTime = Math.round(G.raceTime * 10) / 10;
     save.raceHistory.unshift({
       rank: myPlace, time: Math.round(G.raceTime * 10) / 10,
@@ -4775,7 +4954,7 @@
 
     G.state = 'clear';
     G.results = {
-      rows: rows, myPlace: myPlace, rankBonus: rankBonus, stageBonus: stageBonus,
+      rows: rows, myPlace: myPlace, rankBonus: rankBonus, stageBonus: stageBonus, solo: solo,
       stageCoins: G.stageCoins, total: total, perfect: perfect,
       fuelLeft: Math.round(G.fuel), hits: G.hitCount, meters: G.stageMeters,
       nextV: nextV,
@@ -4829,6 +5008,7 @@
     drawRivals();
     drawParts(false);
     drawPlayerCar();
+    drawShield();
     drawNameTag();
     drawParts(true);
     if (G.slowT > 0 && G.state === 'playing'){
@@ -5273,6 +5453,22 @@
     );
   }
 
+  /* ---------- 🎮 즐기는 방법 토글 (경재 / 혼자 · 연산 / 일반) ---------- */
+  function modeToggleHTML(){
+    var rm = save.raceMode === 'solo' ? 'solo' : 'race';
+    var mm = save.mode === 'free' ? 'free' : 'math';
+    return '<div class="modeBox">' +
+      '<div class="modeRow">' +
+        '<button class="modeBtn' + (rm === 'race' ? ' on' : '') + '" data-act="raceMode" data-rm="race"><b>🏆 경재</b><small>친구들과 1등 경재</small></button>' +
+        '<button class="modeBtn' + (rm === 'solo' ? ' on' : '') + '" data-act="raceMode" data-rm="solo"><b>🚗 혼자</b><small>여유롭게 완주</small></button>' +
+      '</div>' +
+      '<div class="modeRow" style="margin-bottom:0">' +
+        '<button class="modeBtn' + (mm === 'math' ? ' on' : '') + '" data-act="runMode" data-m="math"><b>🧮 연산</b><small>문제 맞히면 보물</small></button>' +
+        '<button class="modeBtn' + (mm === 'free' ? ' on' : '') + '" data-act="runMode" data-m="free"><b>🎈 일반</b><small>문제 없이 달리기</small></button>' +
+      '</div>' +
+    '</div>';
+  }
+
   function renderStart(){
     G.panel = 'start';
     var v = villageBy(save.lastVillage);
@@ -5281,6 +5477,7 @@
     showSheet(
       '<div class="logo"><div class="logoMain"><span class="logoCoin">★</span>코인 자동차</div></div>' +
       '<div class="sub">🧮 연산 퀴즈로 보물을 모으며 달려요!</div>' +
+      modeToggleHTML() +
       '<div class="howto">' +
         '<div class="hi"><span class="ico">👉</span><div><b>앞으로!</b><small>버튼을 꾹 누르면 달려요</small></div></div>' +
         '<div class="hi"><span class="ico">⛽</span><div><b>연료는 1/3만 들고 출발</b><small>길의 연료통을 먹어야 끝까지 가요</small></div></div>' +
@@ -5389,6 +5586,7 @@
     showSheet(
       '<div class="sheetHead"><h2>🗺️ 전체 월드맵</h2>' + walletHTML() +
         '<button class="xbtn" data-act="closeShop">✕</button></div>' +
+      modeToggleHTML() +
       '<div class="wMap' + (lay.compact ? ' compact' : '') + '">' + roadSVG(pts, segOn) + nodes + '</div>' +
       '<div class="pillNote">🔒 앞 단계를 먼저 성공하면 다음 길이 열려요 · 완주 ' + clearedCount() + '/60</div>' +
       '<button class="bigBtn" data-act="start">이어서 달리기 · ' + lv.icon + ' ' + save.lastStage + '탄</button>' +
@@ -5589,6 +5787,13 @@
         '</div></div>' +
         '<div class="packGrid">' + BANANA_PACKS.map(function(p){
           return packHTML('🍌', p.n + '개', p.label, 'buyBanana', p.n, p.price);
+        }).join('') + '</div>' +
+        '<div class="upRow"><div class="upIcon">🛡️</div><div class="upInfo">' +
+          '<div class="upName">내 쉴드 <span style="color:#1f6fb8">' + save.shields + '개</span></div>' +
+          '<div class="upDesc">주행 중 🛡️ 버튼을 누르면 ' + SHIELD_SEC + '초 동안 보호막이 켜져서 라바콘·함정을 팅! 튕겨 내요.</div>' +
+        '</div></div>' +
+        '<div class="packGrid">' + SHIELD_PACKS.map(function(p){
+          return packHTML('🛡️', p.n + '개', p.label, 'buyShield', p.n, p.price);
         }).join('') + '</div>';
     }
 
@@ -5714,19 +5919,22 @@
     for (var i = 0; i < r.rows.length; i++){
       var row = r.rows[i];
       rows += '<div class="rRow' + (row.me ? ' me' : '') + '">' +
-        '<div class="rMedal">' + medalOf(row.place) + '</div>' +
+        '<div class="rMedal">' + (row.place ? medalOf(row.place) : '🎉') + '</div>' +
         '<div class="rName">' + row.emoji + ' ' + escHTML(row.name) + (row.me ? '<small>나!</small>' : '') + '</div>' +
         '<div class="rTime">' + (row.time ? (row.est ? '~' : '') + row.time.toFixed(1) + '초' : '') + '</div>' +
       '</div>';
     }
     var v = villageBy(G.village);
     var perfect = r.perfect;
+    var solo = !!r.solo;
     var unlockedNext = G.stageNo === 10 && G.village < 6 && villageOpen(G.village + 1);
     var nextVil = villageBy(G.village + 1);
     showSheet(
-      '<div class="clearBig">' + (r.myPlace === 1 ? '🏆' : '🎉') + '</div>' +
-      '<div class="clearTitle">' + v.icon + ' ' + v.name + ' ' + G.stageNo + '탄 완주!</div>' +
-      '<div class="clearSub">' + medalOf(r.myPlace) + ' ' + r.myPlace + '등 · ' + escHTML(playerLabel()) + ' 정말 잘했어요!</div>' +
+      '<div class="clearBig">' + (solo ? '🏁' : (r.myPlace === 1 ? '🏆' : '🎉')) + '</div>' +
+      '<div class="clearTitle">' + v.icon + ' ' + v.name + ' ' + G.stageNo + '탄 ' + (solo ? '혼자 완주!' : '완주!') + '</div>' +
+      (solo
+        ? '<div class="clearSub">🎉 완주 축하! 끝까지 달렸어요 · ' + escHTML(playerLabel()) + ' 정말 잘했어요!</div>'
+        : '<div class="clearSub">' + medalOf(r.myPlace) + ' ' + r.myPlace + '등 · ' + escHTML(playerLabel()) + ' 정말 잘했어요!</div>') +
       (unlockedNext
         ? '<div class="pillNote" style="background:#e9fbf1;color:#1a7a48;justify-content:center">🎉 ' + v.name + ' 올클리어! ' + nextVil.icon + ' ' + nextVil.name + '이 열렸어요!</div>'
         : '') +
@@ -5734,7 +5942,7 @@
       '<div class="resultList">' + rows + '</div>' +
       '<div class="statRow">' +
         '<div class="stat"><b>' + (perfect ? r.stageCoins * 2 : r.stageCoins) + '</b><small>모은 코인</small></div>' +
-        '<div class="stat"><b>' + medalOf(r.myPlace) + ' ' + r.rankBonus + '</b><small>순위 보너스</small></div>' +
+        '<div class="stat"><b>' + (solo ? '🎉 ' : medalOf(r.myPlace) + ' ') + r.rankBonus + '</b><small>' + (solo ? '완주 보너스' : '순위 보너스') + '</small></div>' +
         '<div class="stat"><b>+' + r.total + '</b><small>모두 합쳐</small></div>' +
       '</div>' +
       '<div class="statRow">' +
@@ -5761,8 +5969,8 @@
       var h = save.raceHistory[i];
       var v = villageBy(h.v);
       hist += '<div class="recRow">' +
-        '<div class="rMedal">' + medalOf(h.rank) + '</div>' +
-        '<div class="rName">' + v.icon + ' ' + v.name + ' ' + h.n + '탄</div>' +
+        '<div class="rMedal">' + (h.rank ? medalOf(h.rank) : '🚗') + '</div>' +
+        '<div class="rName">' + v.icon + ' ' + v.name + ' ' + h.n + '탄' + (h.rank ? '' : ' · 혼자') + '</div>' +
         '<div class="rTime">' + (h.time ? h.time.toFixed(1) + '초' : '') + '</div>' +
       '</div>';
     }
@@ -5842,6 +6050,7 @@
   }
   tapAction(boostBtnEl, function(){ useBooster(); });
   tapAction(bananaBtnEl, function(){ dropBanana(); });
+  if (shieldBtnEl) tapAction(shieldBtnEl, function(){ useShield(); });
 
   document.getElementById('shopBtn').addEventListener('click', function(){
     A.ensure(); A.click();
@@ -5973,6 +6182,20 @@
     if (act === 'tab'){ G.shopTab = el.getAttribute('data-tab'); A.click(); renderShop(); return; }
     if (act === 'styleTab'){ G.styleTab = el.getAttribute('data-tab'); A.click(); renderShop(); return; }
     if (act === 'saveName'){ saveNameFromInput(); return; }
+    if (act === 'raceMode'){
+      save.raceMode = (el.getAttribute('data-rm') === 'solo' ? 'solo' : 'race');
+      saveGame(); A.click();
+      toast(save.raceMode === 'solo' ? '🚗 혼자 즐기기 모드로 바꿨어요' : '🏆 경재 모드로 바꿨어요');
+      if (G.panel === 'map') renderWorldMap(); else renderStart();
+      return;
+    }
+    if (act === 'runMode'){
+      save.mode = (el.getAttribute('data-m') === 'free' ? 'free' : 'math');
+      saveGame(); A.click();
+      toast(save.mode === 'free' ? '🎈 일반 모드 · 문제 없이 달려요' : '🧮 연산 모드 · 문제를 맞히면 보물!');
+      if (G.panel === 'map') renderWorldMap(); else renderStart();
+      return;
+    }
     if (act === 'settings'){ A.click(); openSettings(); return; }
     if (act === 'saveRewards'){
       readSettingsInputs();
@@ -6013,15 +6236,17 @@
     if (act === 'buyCloth' || act === 'equipCloth'){ buyOrEquip('Cloth', el.getAttribute('data-id')); return; }
     if (act === 'buyBag' || act === 'equipBag'){ buyOrEquip('Bag', el.getAttribute('data-id')); return; }
 
-    if (act === 'buyBoost' || act === 'buyBanana'){
+    if (act === 'buyBoost' || act === 'buyBanana' || act === 'buyShield'){
       var cnt = parseInt(el.getAttribute('data-n'), 10) || 1;
-      var packs = act === 'buyBoost' ? BOOST_PACKS : BANANA_PACKS;
+      var packs = act === 'buyBoost' ? BOOST_PACKS : (act === 'buyBanana' ? BANANA_PACKS : SHIELD_PACKS);
       var pk = null;
       for (var i = 0; i < packs.length; i++) if (packs[i].n === cnt) pk = packs[i];
       if (!pk) return;
       if (save.coins < pk.price){ A.fail(); return; }
       save.coins -= pk.price;
-      if (act === 'buyBoost') save.boosters += pk.n; else save.bananas += pk.n;
+      if (act === 'buyBoost') save.boosters += pk.n;
+      else if (act === 'buyBanana') save.bananas += pk.n;
+      else save.shields += pk.n;
       A.buy();
       saveGame();
       updateHUD();
@@ -6180,7 +6405,8 @@
     resize();
     A.setMuted(save.muted);
     buildStage(save.lastVillage, save.lastStage);
-    G.mode = save.mode = 'math';
+    G.mode = save.mode;
+    G.solo = save.raceMode === 'solo';
     G.fuel = FUEL_START[clamp(save.fuelUp | 0, 0, 3)];
     G.fuelPerM = fuelRateFor(save.lastVillage, save.lastStage);
     G.lowWarned = false;
@@ -6189,7 +6415,7 @@
     G.state = 'start';
     G.paused = false;
 
-    barDotsEl.innerHTML = RIVAL_DEFS.map(function(d){
+    barDotsEl.innerHTML = G.solo ? '' : RIVAL_DEFS.map(function(d){
       return '<i style="background:' + d.color + '"></i>';
     }).join('');
 
@@ -6206,7 +6432,7 @@
       villageOpen: villageOpen, villageDone: villageDone, nextChallenge: nextChallenge,
       renderWorldMap: renderWorldMap, toast: toast, normalizeUnlocks: normalizeUnlocks,
       openShop: openShop, openVillages: openVillages, renderStagePick: renderStagePick,
-      renderVillages: renderVillages, useBooster: useBooster, dropBanana: dropBanana,
+      renderVillages: renderVillages, useBooster: useBooster, dropBanana: dropBanana, useShield: useShield,
       takeReward: takeReward, hitCone: hitCone, hitTrap: hitTrap, collectCan: collectCan, collectCoin: collectCoin,
       fuelOut: fuelOut, canY: canY, coinY: coinY, fmtM: fmtM, trapH: trapH,
       renderFuelOut: renderFuelOut, render: render, makeQuiz: makeQuiz,
