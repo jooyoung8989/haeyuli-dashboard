@@ -136,9 +136,12 @@
     gap:10px; pointer-events:none;
     padding: 0 calc(14px + env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) calc(14px + env(safe-area-inset-left));
   }
+  /* 왼쪽: 아이템(바나나·부스터) 위 → 점프! 아래 / 오른쪽: 앞으로! */
+  .leftPads{ display:flex; flex-direction:column; align-items:center; gap:8px; pointer-events:none; }
+  .leftPads>.pad{ pointer-events:auto; }
   .itemPads{ display:flex; flex-direction:column; align-items:center; gap:8px; pointer-events:none; }
   .itemPads>.pad{ pointer-events:auto; }
-  .rightPads{ display:flex; align-items:flex-end; gap:10px; pointer-events:none; }
+  .rightPads{ display:flex; align-items:flex-end; justify-content:flex-end; gap:10px; pointer-events:none; }
   .rightPads>.pad{ pointer-events:auto; }
   .pad{
     pointer-events:auto; border:none; cursor:pointer; color:#fff;
@@ -308,6 +311,7 @@
     cursor:pointer; margin-top:6px;
   }
   .bigBtn:active{ transform:translateY(4px); box-shadow:0 2px 0 #14743f; }
+  .bigBtn:disabled{ filter:grayscale(.45); opacity:.9; transform:none; }
   .softBtn{
     width:100%; border:none; border-radius:18px; padding:13px;
     font-size:16px; font-weight:900; color:#7b5a1e; font-family:var(--font);
@@ -488,6 +492,102 @@
     display:flex; align-items:center; gap:7px; background:#fff; border-radius:16px;
     padding:9px 12px; box-shadow:0 3px 0 #f1e6cf; margin-bottom:10px;
     font-size:12px; font-weight:800; color:#7b8794; line-height:1.35;
+  }
+
+  /* ---------- 👤 내 이름 설정 ---------- */
+  .nameBox{
+    background:#fff; border-radius:18px; padding:11px 12px 12px; margin-bottom:11px;
+    border:3px solid #d5e9fb; box-shadow:0 4px 0 #e7f2fb;
+  }
+  .nameLabel{
+    display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+    font-size:13px; font-weight:900; color:#3f6a8c; letter-spacing:-.3px; margin-bottom:7px;
+  }
+  .nameLabel .nameNow{
+    margin-left:auto; font-size:11.5px; font-weight:900; color:#7d8b96;
+    background:#f2f8fd; border-radius:999px; padding:3px 9px; max-width:62%;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .nameRow{ display:flex; gap:7px; }
+  .nameInput{
+    flex:1 1 auto; min-width:0; height:46px; border-radius:14px;
+    border:2.5px solid #cfe3f5; background:#f8fcff; color:#22394d;
+    font-family:var(--font); font-weight:900; font-size:16px; line-height:1;
+    padding:0 12px; outline:none;
+    -webkit-appearance:none; appearance:none;
+    user-select:text; -webkit-user-select:text; touch-action:auto;
+  }
+  .nameInput::placeholder{ color:#a9bccd; font-weight:800; font-size:15px; }
+  .nameInput:focus{ border-color:#4da6ff; background:#fff; }
+  .nameSave{
+    flex:0 0 auto; min-width:76px; height:46px; border:none; border-radius:14px;
+    background:linear-gradient(#7fc4ff, #3d93e8); color:#fff; font-family:var(--font);
+    font-weight:900; font-size:15.5px; letter-spacing:-.3px; cursor:pointer;
+    box-shadow:0 4px 0 #2a6fb4;
+  }
+  .nameSave:active{ transform:translateY(3px); box-shadow:0 1px 0 #2a6fb4; }
+  .nameHint{ font-size:11px; font-weight:800; color:#93a5b5; margin-top:7px; line-height:1.4; }
+
+  /* ---------- ⚙️ 설정 / 🎡 룰렛 ---------- */
+  .setSec{
+    background:#fff; border-radius:18px; padding:11px 12px 12px; margin-bottom:11px;
+    border:3px solid #ffe6a8; box-shadow:0 4px 0 #f1e0bb;
+  }
+  .setHead{
+    display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+    font-size:13.5px; font-weight:900; color:#a35b00; letter-spacing:-.3px; margin-bottom:9px;
+  }
+  .setHead small{ margin-left:auto; font-size:10.5px; font-weight:800; color:#a8b3bd; }
+  .rwRow{ display:flex; align-items:center; gap:7px; margin-bottom:7px; }
+  .rwRow:last-child{ margin-bottom:0; }
+  .rwChip{
+    flex:0 0 auto; width:28px; height:28px; border-radius:9px; display:grid; place-items:center;
+    font-weight:900; font-size:13px; color:#5d4a3a;
+    box-shadow: inset 0 -2px 0 rgba(120,90,40,.1), inset 0 2px 0 rgba(255,255,255,.7);
+  }
+  .rwInput{
+    flex:1 1 auto; min-width:0; height:44px; border-radius:12px;
+    border:2.5px solid #ffe2a1; background:#fffdf6; color:#3a4c5c;
+    font-family:var(--font); font-weight:900; font-size:16px; line-height:1;
+    padding:0 11px; outline:none;
+    -webkit-appearance:none; appearance:none;
+    user-select:text; -webkit-user-select:text; touch-action:auto;
+  }
+  .rwInput::placeholder{ color:#bcc7d1; font-weight:800; font-size:15px; }
+  .rwInput:focus{ border-color:#ffb703; background:#fff; }
+
+  .roulWrap{ position:relative; width:min(288px, 74vw); aspect-ratio:1 / 1; margin:2px auto 10px; }
+  .roulWrap canvas{ width:100%; height:100%; display:block; }
+  .roulPointer{
+    position:absolute; left:50%; top:-6px; transform:translateX(-50%);
+    width:0; height:0; border-left:14px solid transparent; border-right:14px solid transparent;
+    border-top:24px solid #ff5d5d; filter: drop-shadow(0 3px 3px rgba(120,0,0,.35)); z-index:2;
+  }
+  .roulLeg{ background:#fff; border-radius:16px; padding:5px 10px; margin-bottom:10px; box-shadow:0 3px 0 #f1e6cf; }
+  .roulLegRow{
+    display:flex; align-items:center; gap:8px; padding:5px 2px; border-bottom:2px dashed #f4ecd9;
+    font-size:13.5px; font-weight:900; color:#33475a; letter-spacing:-.3px;
+  }
+  .roulLegRow:last-child{ border-bottom:none; }
+  .roulLegRow .rwChip{ width:24px; height:24px; font-size:12px; border-radius:8px; }
+  .roulLegRow .txt{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .roulPrize{
+    margin:10px auto 12px; padding:16px 14px; border-radius:20px; text-align:center;
+    font-size:clamp(20px, 5.6vw, 27px); font-weight:900; color:#7a4d00; line-height:1.25;
+    background:linear-gradient(#fff6c1, #ffd93d); box-shadow:0 6px 0 #e0ad00;
+    letter-spacing:-.6px; word-break:keep-all;
+  }
+  @media (max-height: 520px){
+    .roulWrap{ width:min(210px, 48vw); margin-bottom:6px; }
+    .roulLegRow{ padding:3px 2px; font-size:12px; }
+    .rwInput{ height:40px; }
+    .roulPrize{ margin:6px auto 8px; padding:11px 10px; }
+  }
+  @media (max-height: 520px){
+    .nameBox{ padding:8px 10px 9px; margin-bottom:9px; }
+    .nameLabel{ margin-bottom:5px; font-size:12px; }
+    .nameInput, .nameSave{ height:40px; }
+    .nameHint{ display:none; }
   }
 
   .resultList{
@@ -685,6 +785,7 @@
       </div>
     </div>
     <div class="topBtns">
+      <button class="iconBtn" id="setBtn" aria-label="설정">⚙️</button>
       <button class="iconBtn" id="mapBtn" aria-label="마을 고르기">🗺️</button>
       <button class="iconBtn" id="shopBtn" aria-label="튜닝샵">🔧</button>
       <button class="iconBtn" id="muteBtn" aria-label="소리 켜기/끄기">🔊</button>
@@ -692,12 +793,14 @@
   </div>
 
   <div id="controls">
-    <div class="itemPads">
-      <button class="pad" id="bananaBtn" aria-label="바나나 껍질 던지기">🍌<small>바나나 <b class="cntNum" id="bananaNum">2</b></small></button>
-      <button class="pad" id="boostBtn" aria-label="부스터"><span class="boostIco">🔥</span><small>부스터 <b class="cntNum" id="boostNum">1</b></small></button>
+    <div class="leftPads">
+      <div class="itemPads">
+        <button class="pad" id="bananaBtn" aria-label="바나나 껍질 던지기">🍌<small>바나나 <b class="cntNum" id="bananaNum">2</b></small></button>
+        <button class="pad" id="boostBtn" aria-label="부스터"><span class="boostIco">🔥</span><small>부스터 <b class="cntNum" id="boostNum">1</b></small></button>
+      </div>
+      <button class="pad" id="jumpBtn" aria-label="점프">점프!<small>위로 콕!</small></button>
     </div>
     <div class="rightPads">
-      <button class="pad" id="jumpBtn" aria-label="점프">점프!<small>위로 콕!</small></button>
       <button class="pad" id="runBtn" aria-label="앞으로 달리기">앞으로!<small>꾹 누르고 있어요</small></button>
     </div>
   </div>
@@ -1028,8 +1131,20 @@
   var QUIZ_FUEL = 25;              // 연산 정답 연료통 보상
   var DOUBLE_COIN_SEC = 10;        // 두배 코인 지속 시간
 
+  // 👤 이름을 비워 두었을 때 쓰는 기본 이름
+  var DEFAULT_PLAYER_NAME = '꼬마 드라이버';
+  var NAME_MAX = 12;
+  // 🎡 마을 완주 보상 룰렛 5칸 기본 보상
+  var REWARD_DEFAULTS = ['아이스크림 🍦', '칭찬 스티커 ⭐', '맛있는 간식 🍪', '안아주기 10초 🤗', '자유시간 10분 🎉'];
+  var ROUL_COLORS = ['#ffd1dc', '#ffe6a7', '#c8f0d4', '#cfe4ff', '#e6d4ff'];
+  var REWARD_MAX = 24;
+
   var save = {
     coins: 0,
+    playerName: '',
+    rewards: REWARD_DEFAULTS.slice(),
+    rewardLog: [],
+    mathLevel: 1,
     car: 'basic',
     color: '#e63946',
     ownedCars: ['basic'],
@@ -1041,8 +1156,8 @@
     fuelEff: 0,
     wheel: 'basic',
     ownedWheels: ['basic'],
-    avatar: 'haeyul',
-    ownedAvatars: ['haeyul'],
+    avatar: 'kid',
+    ownedAvatars: ['kid'],
     clothes: 'basic',
     ownedClothes: ['basic'],
     bag: 'none',
@@ -1135,6 +1250,15 @@
       if (typeof o.fuelEff === 'number') save.fuelEff = clamp(o.fuelEff | 0, 0, 1);
       if (typeof o.wheel === 'string') save.wheel = o.wheel;
       if (Array.isArray(o.ownedWheels)) save.ownedWheels = o.ownedWheels;
+      if (typeof o.playerName === 'string') save.playerName = cleanName(o.playerName);
+      if (Array.isArray(o.rewards)){
+        save.rewards = [];
+        for (var ri = 0; ri < 5; ri++){
+          save.rewards.push(typeof o.rewards[ri] === 'string' && cleanReward(o.rewards[ri]) ? cleanReward(o.rewards[ri]) : REWARD_DEFAULTS[ri]);
+        }
+      }
+      if (Array.isArray(o.rewardLog)) save.rewardLog = o.rewardLog.slice(0, 12);
+      if (typeof o.mathLevel === 'number') save.mathLevel = clamp(o.mathLevel | 0, 1, 3);
       if (typeof o.avatar === 'string') save.avatar = o.avatar;
       if (Array.isArray(o.ownedAvatars)) save.ownedAvatars = o.ownedAvatars;
       if (typeof o.clothes === 'string') save.clothes = o.clothes;
@@ -1177,19 +1301,20 @@
     if (save.ownedCars.indexOf(save.car) === -1) save.ownedCars.push(save.car);
     if (save.ownedColors.indexOf(save.color) === -1) save.ownedColors.push(save.color);
     if (!Array.isArray(save.ownedWheels)) save.ownedWheels = ['basic'];
-    if (!Array.isArray(save.ownedAvatars)) save.ownedAvatars = ['haeyul'];
+    if (!Array.isArray(save.ownedAvatars)) save.ownedAvatars = ['kid'];
     if (!Array.isArray(save.ownedClothes)) save.ownedClothes = ['basic'];
     if (!Array.isArray(save.ownedBags)) save.ownedBags = ['none'];
     if (save.ownedWheels.indexOf('basic') === -1) save.ownedWheels.unshift('basic');
-    if (save.ownedAvatars.indexOf('haeyul') === -1) save.ownedAvatars.unshift('haeyul');
+    if (save.ownedAvatars.indexOf('kid') === -1) save.ownedAvatars.unshift('kid');
     if (save.ownedClothes.indexOf('basic') === -1) save.ownedClothes.unshift('basic');
     if (save.ownedBags.indexOf('none') === -1) save.ownedBags.unshift('none');
     if (save.ownedWheels.indexOf(save.wheel) === -1) save.wheel = 'basic';
-    if (save.ownedAvatars.indexOf(save.avatar) === -1) save.avatar = 'haeyul';
+    if (save.ownedAvatars.indexOf(save.avatar) === -1) save.avatar = 'kid';
     if (save.ownedClothes.indexOf(save.clothes) === -1) save.clothes = 'basic';
     if (save.ownedBags.indexOf(save.bag) === -1) save.bag = 'none';
     if (!save.villageProgress) save.villageProgress = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0 };
     save.mode = 'math';   // 이제 게임은 언제나 연산 모드!
+    save.mathLevel = clamp(save.mathLevel | 0, 1, 3);
     save.fuelUp = clamp(save.fuelUp | 0, 0, 3);
     save.fuelEff = clamp(save.fuelEff | 0, 0, 1);
   }
@@ -1529,6 +1654,10 @@
     G.baseY = h * k;
     G.amp = clamp(h / 760, 0.5, 1.2);
     refreshWaterTops();
+    // 룰렛을 보고 있는 중에 화면을 돌리면 원판도 다시 맞춰 그려요
+    if (G.state === 'shop' && G.panel === 'roul' && roul && roul.canvas){
+      if (sizeRoulette()) drawRoulette();
+    }
   }
   window.addEventListener('resize', resize);
   window.addEventListener('orientationchange', function(){ setTimeout(resize, 120); });
@@ -2557,17 +2686,30 @@
     }
   }
 
-  /* ---------- 🏷️ 해율이 이름표 ---------- */
+  /* ---------- 👤 이름 ---------- */
+  // 입력한 이름을 다듬습니다 (태그 문자 제거, 공백 정리, 길이 제한)
+  function cleanName(s){
+    s = String(s == null ? '' : s).replace(/[\u0000-\u001f<>]/g, '');
+    s = s.replace(/\s+/g, ' ').trim();
+    return s.slice(0, NAME_MAX);
+  }
+  function playerLabel(){ return cleanName(save.playerName) || DEFAULT_PLAYER_NAME; }
+  function escHTML(s){
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* ---------- 🏷️ 내 차 이름표 ---------- */
   function drawNameTag(){
     if (G.state !== 'playing' && G.state !== 'fuelout') return;
     var car = G.car;
     var sx = car.x - G.scrollX;
-    var label = '해율이';
+    var label = playerLabel();
     var y = car.y - 114 + Math.sin(G.t * 2.6) * 2.5;
     ctx.save();
     ctx.font = '900 15px ' + FONT;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     var tw = ctx.measureText(label).width;
+    if (tw > 170){ ctx.font = '900 12.5px ' + FONT; tw = ctx.measureText(label).width; }
     var w = tw + 30, h = 27;
     ctx.shadowColor = 'rgba(20,50,70,.35)';
     ctx.shadowBlur = 8; ctx.shadowOffsetY = 3;
@@ -2645,7 +2787,7 @@
     { id:'spike',  name:'탱크 스파이크', price:18, scale:1.45, rim:'#8b98a4', hub:'spike',  desc:'뾰족뾰족 튼튼' }
   ];
   var AVATARS = [
-    { id:'haeyul', name:'해율 꼬마', price:0,  kind:'kid',   fur:'#ffdfc4', hair:'#3b2a20' },
+    { id:'kid',    name:'꼬마',      price:0,  kind:'kid',   fur:'#ffdfc4', hair:'#3b2a20' },
     { id:'rabbit', name:'토끼',      price:6,  kind:'rabbit',fur:'#ffffff', inner:'#ffb3c9' },
     { id:'puppy',  name:'강아지',    price:6,  kind:'puppy', fur:'#e8b06a' },
     { id:'cat',    name:'고양이',    price:8,  kind:'cat',   fur:'#ffd166' },
@@ -4038,31 +4180,69 @@
   /* =====================================================================
      14. 연산 퀴즈 — 7살도 바로 풀 수 있는 아주 쉬운 3지선다
      ===================================================================== */
+  // 🧮 연산 난이도 (1=쉬움, 2=보통, 3=도전)
+  function quizLevel(){ return clamp(save.mathLevel | 0, 1, 3); }
+  function ri(n){ return Math.floor(Math.random() * n); }
+
   function makeQuiz(){
-    // 한 자리 수 덧셈(합 10 이하) / 쉬운 한 자리 수 뺄셈만 나와요
+    var lv = quizLevel();
     var a, b, op, ans;
-    if (Math.random() < 0.55){
-      a = 1 + Math.floor(Math.random() * 5);
-      b = 1 + Math.floor(Math.random() * (10 - a));
-      op = '+'; ans = a + b;
+    if (lv <= 1){
+      // 1단계 · 쉬움: 합 10 이내 한 자리 덧셈 / 쉬운 한 자리 빨셈
+      if (Math.random() < 0.55){
+        a = 1 + ri(5);
+        b = 1 + ri(10 - a);
+        op = '+'; ans = a + b;
+      } else {
+        a = 3 + ri(7);
+        b = 1 + ri(a - 1);
+        op = '-'; ans = a - b;
+      }
+    } else if (lv === 2){
+      // 2단계 · 보통: 한 자리 덧셈(합 18 이내) / 두 자리 - 한 자리
+      if (Math.random() < 0.5){
+        a = 2 + ri(8);
+        b = 1 + ri(9);
+        op = '+'; ans = a + b;
+      } else {
+        a = 11 + ri(8);
+        b = 2 + ri(7);
+        op = '-'; ans = a - b;
+      }
     } else {
-      a = 3 + Math.floor(Math.random() * 7);
-      b = 1 + Math.floor(Math.random() * (a - 1));
-      op = '-'; ans = a - b;
+      // 3단계 · 도전: 두 자리 ± 한 자리, 간단한 곱셈
+      var r = Math.random();
+      if (r < 0.42){
+        a = 13 + ri(76);
+        b = 2 + ri(8);
+        op = '+'; ans = a + b;
+      } else if (r < 0.74){
+        a = 23 + ri(64);
+        b = 2 + ri(8);
+        op = '-'; ans = a - b;
+      } else {
+        a = 2 + ri(8);
+        b = 2 + ri(8);
+        op = '×'; ans = a * b;
+      }
     }
     var wrongs = [];
-    var cands = [ans + 1, ans - 1, ans + 2, ans - 2, ans + 3, ans - 3];
-    for (var i = 0; i < cands.length; i++){
-      var v = cands[i];
-      if (v >= 0 && v !== ans && wrongs.indexOf(v) === -1) wrongs.push(v);
+    var offs = ans > 20 ? [1, -1, 2, -2, 10, -10, 3, -3] : [1, -1, 2, -2, 3, -3];
+    for (var i = 0; i < offs.length; i++){
+      var v = ans + offs[i];
+      if (v >= 0 && v !== ans && wrongs.indexOf(v) === -1 && (op !== '×' || (v !== a && v !== b))) wrongs.push(v);
       if (wrongs.length === 2) break;
+    }
+    if (wrongs.length < 2){
+      var extra = ans + 4;
+      while (wrongs.length < 2){ if (extra !== ans && wrongs.indexOf(extra) === -1) wrongs.push(extra); extra++; }
     }
     var opts = [ans, wrongs[0], wrongs[1]];
     for (var j = opts.length - 1; j > 0; j--){
       var k = Math.floor(Math.random() * (j + 1));
       var tmp = opts[j]; opts[j] = opts[k]; opts[k] = tmp;
     }
-    return { a: a, b: b, op: op, ans: ans, options: opts };
+    return { a: a, b: b, op: op, ans: ans, options: opts, lv: lv };
   }
 
   function makeQuizObstacle(){
@@ -4553,7 +4733,7 @@
     finished.forEach(function(r){
       rows.push({ place: r.place, name: r.name, emoji: r.emoji, time: r.time, me: false });
     });
-    rows.push({ place: myPlace, name: '나', emoji: '🚗', time: G.raceTime, me: true });
+    rows.push({ place: myPlace, name: playerLabel(), emoji: '🚗', time: G.raceTime, me: true });
     var pp = myPlace + 1;
     rest.forEach(function(r){
       var est = G.raceTime + (G.stageLen - Math.max(r.x, 0)) / Math.max(150, r.vx);
@@ -4608,6 +4788,12 @@
     renderClear();
     for (var i = 0; i < 5; i++){
       burst(G.W * (0.2 + Math.random() * 0.6), G.H * (0.15 + Math.random() * 0.3));
+    }
+    // 🎡 마을 마지막 10탄이면 완주 보상 룰렛을 열어 줍니다
+    if (G.stageNo === 10){
+      setTimeout(function(){
+        if (G.state === 'clear') openRoulette({ village: G.village });
+      }, 950);
     }
   }
 
@@ -4810,6 +4996,283 @@
     return '<div class="wallet"><span class="coinIcon">★</span><b>' + save.coins + '</b></div>';
   }
 
+  /* ---------- 👤 이름 설정 카드 ---------- */
+  function nameBoxHTML(){
+    return '<div class="nameBox">' +
+      '<div class="nameLabel">👤 내 이름' +
+        '<span class="nameNow">지금: ' + escHTML(playerLabel()) + '</span>' +
+      '</div>' +
+      '<div class="nameRow">' +
+        '<input class="nameInput" id="playerNameInput" type="text" maxlength="' + NAME_MAX + '"' +
+          ' placeholder="' + escHTML(DEFAULT_PLAYER_NAME) + '" value="' + escHTML(cleanName(save.playerName)) + '"' +
+          ' autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"' +
+          ' aria-label="내 이름 입력">' +
+        '<button class="nameSave" data-act="saveName">저장</button>' +
+      '</div>' +
+      '<div class="nameHint">비워 두면 ‘' + escHTML(DEFAULT_PLAYER_NAME) + '’로 나와요. 이름은 내 차 위 이름표와 완주 순위표에 바로 나타나요.</div>' +
+    '</div>';
+  }
+
+  // 입력창의 이름을 저장하고 화면에 바로 반영합니다
+  function saveNameFromInput(){
+    var inp = sheet.querySelector('input.nameInput');
+    if (!inp) return;
+    save.playerName = cleanName(inp.value);
+    saveGame();
+    inp.value = save.playerName;
+    if (inp.blur) inp.blur();
+    A.click();
+    var now = sheet.querySelector('.nameNow');
+    if (now) now.textContent = '지금: ' + playerLabel();
+    toast(save.playerName ? '이름을 저장했어요 · ' + playerLabel() + ' 🏷️' : '이름을 비웠어요 · ' + DEFAULT_PLAYER_NAME);
+  }
+
+  /* ---------- 🎡 마을 완주 보상 룰렛 데이터 ---------- */
+  function cleanReward(s){
+    s = String(s == null ? '' : s).replace(/[\u0000-\u001f<>]/g, '');
+    s = s.replace(/\s+/g, ' ').trim();
+    return s.slice(0, REWARD_MAX);
+  }
+  function rouletteRewards(){
+    var out = [];
+    var cur = Array.isArray(save.rewards) ? save.rewards : [];
+    for (var i = 0; i < 5; i++){
+      var v = typeof cur[i] === 'string' ? cleanReward(cur[i]) : '';
+      out.push(v || REWARD_DEFAULTS[i]);
+    }
+    return out;
+  }
+
+  /* ---------- ⚙️ 설정 화면 ---------- */
+  var LEVEL_INFO = [
+    { t: '1단계', s: '쉬움', d: '합 10 이내 한 자리 덧셈·뺄셈 (2+3, 7-4)' },
+    { t: '2단계', s: '보통', d: '한 자리 덧셈·뺄셈 전체, 두 자리-한 자리 (8+7, 15-6)' },
+    { t: '3단계', s: '도전', d: '두 자리 ± 한 자리, 간단한 곱셈 (23+5, 18-9, 6×7)' }
+  ];
+
+  // 설정 화면에 지금 적혀 있는 값을 save 로 가져옵니다
+  function readSettingsInputs(){
+    if (!sheet) return;
+    var inp = sheet.querySelector('input.nameInput');
+    if (inp) save.playerName = cleanName(inp.value);
+    var rw = sheet.querySelectorAll('input.rwInput');
+    for (var i = 0; i < rw.length; i++){
+      var k = parseInt(rw[i].getAttribute('data-rw'), 10);
+      if (!isNaN(k) && k >= 0 && k < 5) save.rewards[k] = cleanReward(rw[i].value) || REWARD_DEFAULTS[k];
+    }
+  }
+
+  function renderSettings(){
+    G.panel = 'settings';
+    var keepScroll = sheet.scrollTop || 0;
+    var rewards = rouletteRewards();
+    var rows = '';
+    for (var i = 0; i < 5; i++){
+      rows += '<div class="rwRow">' +
+        '<span class="rwChip" style="background:' + ROUL_COLORS[i] + '">' + (i + 1) + '</span>' +
+        '<input class="rwInput" type="text" maxlength="' + REWARD_MAX + '" data-rw="' + i + '"' +
+          ' value="' + escHTML(rewards[i]) + '" placeholder="보상 ' + (i + 1) + '"' +
+          ' autocomplete="off" spellcheck="false" enterkeyhint="done" aria-label="보상 ' + (i + 1) + '">' +
+      '</div>';
+    }
+    var lv = quizLevel();
+    var lvBtns = '';
+    for (var j = 0; j < 3; j++){
+      lvBtns += '<button class="modeBtn' + (lv === j + 1 ? ' on' : '') + '" data-act="mathLevel" data-lv="' + (j + 1) + '">' +
+        '<b>' + LEVEL_INFO[j].t + '</b><small>' + LEVEL_INFO[j].s + '</small></button>';
+    }
+    showSheet(
+      '<div class="sheetHead"><h2>⚙️ 설정</h2>' + walletHTML() +
+        '<button class="xbtn" data-act="closeShop">✕</button></div>' +
+      nameBoxHTML() +
+      '<div class="setSec">' +
+        '<div class="setHead">🎁 부모님 보상 룰렛 설정<small>5칸</small></div>' +
+        rows +
+        '<div class="nameHint">마을 마지막 10탄을 완주하면 이 5칸 룰렛이 열려요. 부모님이 원하는 보상을 직접 적어 주세요.</div>' +
+        '<button class="softBtn" data-act="saveRewards" style="margin-top:9px">💾 보상 5칸 저장</button>' +
+        '<button class="softBtn" data-act="previewRoul">🎡 룰렛 미리 돌려보기</button>' +
+      '</div>' +
+      '<div class="setSec">' +
+        '<div class="setHead">🧮 연산 난이도<small>주행 중 문제</small></div>' +
+        '<div class="modeRow">' + lvBtns + '</div>' +
+        '<div class="nameHint">지금 난이도: ' + LEVEL_INFO[lv - 1].t + ' · ' + LEVEL_INFO[lv - 1].d + '</div>' +
+      '</div>' +
+      '<button class="softBtn" data-act="closeShop">닫기</button>'
+    );
+    sheet.scrollTop = keepScroll;
+  }
+
+  function openSettings(){
+    if (G.state === 'quiz') return;
+    if (G.state === 'playing'){ G.paused = true; G.prevState = 'playing'; }
+    else if (G.state === 'clear'){ G.prevState = 'clear'; }
+    else if (G.state === 'fuelout'){ G.prevState = 'fuelout'; }
+    else if (G.state === 'start'){ G.prevState = 'start'; }
+    G.state = 'shop';
+    renderSettings();
+  }
+
+  /* ---------- 🎡 룰렛 그리기 / 돌리기 ---------- */
+  var roul = {
+    canvas: null, ctx: null, w: 0, h: 0,
+    angle: -Math.PI / 2, spinning: false, spinT: 0, spinDur: 3.6,
+    from: 0, to: 0, last: 0, result: 0
+  };
+
+  function sizeRoulette(){
+    var cv = document.getElementById('roulWheel');
+    roul.canvas = cv || null;
+    roul.ctx = null;
+    if (!cv) return false;
+    var w = cv.clientWidth || 260;
+    var h = cv.clientHeight || w;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    roul.w = w; roul.h = h;
+    roul.ctx = cv.getContext('2d');
+    roul.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return true;
+  }
+
+  function drawRoulette(){
+    var c = roul.ctx;
+    if (!c) return;
+    var w = roul.w, h = roul.h, cx = w / 2, cy = h / 2;
+    var R = Math.min(w, h) / 2 - 7;
+    c.clearRect(0, 0, w, h);
+
+    // 밖 동그라미
+    c.beginPath(); c.arc(cx, cy, R, 0, TAU);
+    c.fillStyle = '#fff3cf'; c.fill();
+    c.lineWidth = Math.max(6, R * 0.07); c.strokeStyle = '#ffb703'; c.stroke();
+
+    var seg = TAU / 5;
+    for (var i = 0; i < 5; i++){
+      var a0 = i * seg + roul.angle, a1 = a0 + seg;
+      c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, R - 6, a0, a1); c.closePath();
+      c.fillStyle = ROUL_COLORS[i]; c.fill();
+      c.lineWidth = 2.5; c.strokeStyle = '#ffffff'; c.stroke();
+
+      var am = a0 + seg / 2;
+      var tx = cx + Math.cos(am) * R * 0.62, ty = cy + Math.sin(am) * R * 0.62;
+      c.save();
+      c.translate(tx, ty); c.rotate(am + Math.PI / 2);
+      c.fillStyle = '#6b4a2a';
+      c.font = '900 ' + Math.round(R * 0.17) + 'px ' + FONT;
+      c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.fillText(String(i + 1), 0, 0);
+      c.restore();
+    }
+
+    // 가운데 꼭지
+    c.beginPath(); c.arc(cx, cy, R * 0.17, 0, TAU);
+    c.fillStyle = '#ffffff'; c.fill();
+    c.lineWidth = Math.max(4, R * 0.045); c.strokeStyle = '#ffb703'; c.stroke();
+    c.fillStyle = '#ff5d5d';
+    c.font = '900 ' + Math.round(R * 0.16) + 'px ' + FONT;
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText('★', cx, cy + 1);
+  }
+
+  function renderRoulette(){
+    G.panel = 'roul';
+    var rewards = rouletteRewards();
+    var v = villageBy(G.roulVillage || G.village || 1);
+    var leg = '';
+    for (var i = 0; i < 5; i++){
+      leg += '<div class="roulLegRow">' +
+        '<span class="rwChip" style="background:' + ROUL_COLORS[i] + '">' + (i + 1) + '</span>' +
+        '<span class="txt">' + escHTML(rewards[i]) + '</span></div>';
+    }
+    showSheet(
+      '<div class="sheetHead"><h2>🎡 마을 완주 보상 룰렛</h2>' +
+        '<button class="xbtn" data-act="roulClose">✕</button></div>' +
+      '<div class="pillNote" style="justify-content:center">' + v.icon + ' ' + v.name + ' 완주 축하! 룰렛을 돌려 보상을 받아요</div>' +
+      '<div class="roulWrap"><div class="roulPointer"></div><canvas id="roulWheel" aria-label="보상 룰렛"></canvas></div>' +
+      '<div class="roulLeg">' + leg + '</div>' +
+      '<button class="bigBtn" data-act="roulSpin">돌리기! 🎡</button>'
+    );
+    roul.spinning = false;
+    if (sizeRoulette()) drawRoulette();
+  }
+
+  function openRoulette(opt){
+    opt = opt || {};
+    if (G.state === 'quiz') return;
+    G.roulPreview = !!opt.preview;
+    if (G.state === 'playing'){ G.paused = true; G.prevState = 'playing'; }
+    else if (G.state === 'clear'){ G.prevState = 'clear'; }
+    else if (G.state === 'fuelout'){ G.prevState = 'fuelout'; }
+    else if (G.state === 'start'){ G.prevState = 'start'; }
+    if (opt.village) G.roulVillage = opt.village;
+    G.state = 'shop';
+    renderRoulette();
+  }
+
+  function roulStep(ts){
+    if (!roul.spinning) return;
+    if (!roul.canvas || !document.body.contains(roul.canvas)){ roul.spinning = false; return; }
+    if (!roul.last) roul.last = ts;
+    var dt = Math.min((ts - roul.last) / 1000, 0.05);
+    roul.last = ts;
+    roul.spinT += dt;
+    var t = clamp(roul.spinT / roul.spinDur, 0, 1);
+    var e = t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
+    roul.angle = roul.from + (roul.to - roul.from) * e;
+    drawRoulette();
+    if (t >= 1){
+      roul.spinning = false;
+      roul.angle = roul.to;
+      drawRoulette();
+      showRoulResult(roul.result);
+      return;
+    }
+    requestAnimationFrame(roulStep);
+  }
+
+  function spinRoulette(){
+    if (roul.spinning || !roul.canvas) return;
+    var idx = ri(5);
+    var seg = TAU / 5;
+    var jitter = (Math.random() - 0.5) * seg * 0.55;
+    var need = -Math.PI / 2 - (idx * seg + seg / 2 + jitter);
+    var d = ((need - roul.angle) % TAU + TAU) % TAU;
+    roul.result = idx;
+    roul.from = roul.angle;
+    roul.to = roul.angle + TAU * (5 + ri(2)) + d;
+    roul.spinT = 0;
+    roul.spinDur = 3.6;
+    roul.last = 0;
+    roul.spinning = true;
+    var btn = sheet.querySelector('[data-act="roulSpin"]');
+    if (btn){ btn.disabled = true; btn.textContent = '돌아가는 중… 🎡'; }
+    A.click();
+    requestAnimationFrame(roulStep);
+  }
+
+  function showRoulResult(idx){
+    var rewards = rouletteRewards();
+    var prize = rewards[idx] || REWARD_DEFAULTS[idx];
+    save.lastPrize = prize;
+    if (!Array.isArray(save.rewardLog)) save.rewardLog = [];
+    save.rewardLog.unshift({
+      v: G.roulVillage || G.village || 1, prize: prize,
+      date: new Date().toISOString().slice(0, 10)
+    });
+    if (save.rewardLog.length > 12) save.rewardLog.length = 12;
+    saveGame();
+    A.clear();
+    showSheet(
+      '<div class="clearBig">🎉</div>' +
+      '<div class="clearTitle">축하해요, ' + escHTML(playerLabel()) + '!</div>' +
+      '<div class="clearSub">🎡 룰렛 ' + (idx + 1) + '번 칸에 당첨!</div>' +
+      '<div class="roulPrize">' + escHTML(prize) + '</div>' +
+      '<div class="pillNote" style="justify-content:center">부모님께 이 화면을 보여 주세요 😊</div>' +
+      '<button class="bigBtn" data-act="roulDone">받았어요! 🎁</button>'
+    );
+  }
+
   function renderStart(){
     G.panel = 'start';
     var v = villageBy(save.lastVillage);
@@ -4825,12 +5288,14 @@
         '<div class="hi"><span class="ico">🧮</span><div><b>연산 정답은 보물</b><small>2배 코인 또는 연료통!</small></div></div>' +
       '</div>' +
       '<button class="bigBtn" data-act="start">출발! 🚗</button>' +
+      nameBoxHTML() +
       '<div style="text-align:center;font-size:12.5px;color:#8b96a2;font-weight:800;margin-top:8px">' +
         '이어서 달릴 곳 · ' + v.icon + ' ' + v.name + ' · ' + n + '탄' +
       '</div>' +
       '<button class="softBtn" data-act="villages">🗺️ 전체 월드맵 <span style="color:#98a4ae">(' + done + '/60)</span></button>' +
       '<button class="softBtn" data-act="records">🏆 내 기록</button>' +
       '<button class="softBtn" data-act="shop">🔧 튜닝샵 · ⛽ 연료</button>' +
+      '<button class="softBtn" data-act="settings">⚙️ 설정 · 🎁 부모님 보상 룰렛</button>' +
       '<div style="text-align:center;font-size:11.5px;color:#a8b3bd;font-weight:700;margin-top:10px">' +
         '보유 코인 ' + save.coins + '개 · ⛽ 출발 연료 ' + FUEL_START[clamp(save.fuelUp | 0, 0, 3)] + '% · 🔥 ' + save.boosters + ' · 🍌 ' + save.bananas +
       '</div>'
@@ -5079,6 +5544,10 @@
         });
       }
       body += '</div>';
+    } else if (tab === 'name'){
+      body = nameBoxHTML() +
+        '<div class="pillNote">👤 이름을 입력하고 <b>저장</b>을 누르면<br>내 차 위 🏷️ 이름표와 완주 순위표에 바로 나타나요.</div>' +
+        '<div class="pillNote">이름을 비워 두면 ‘' + escHTML(DEFAULT_PLAYER_NAME) + '’로 표시되고,<br>이 이름은 이 기기에만 저장돼요.</div>';
     } else if (tab === 'fuel'){
       var fu = clamp(save.fuelUp | 0, 0, 3), fe = clamp(save.fuelEff | 0, 0, 1);
       var pipsU = '', pipsE = '';
@@ -5132,6 +5601,7 @@
         '<button class="tab' + (tab === 'style' ? ' on' : '') + '" data-act="tab" data-tab="style">🧸 꾸미기</button>' +
         '<button class="tab' + (tab === 'fuel' ? ' on' : '') + '" data-act="tab" data-tab="fuel">⛽ 연료</button>' +
         '<button class="tab' + (tab === 'item' ? ' on' : '') + '" data-act="tab" data-tab="item">🎒 아이템</button>' +
+        '<button class="tab' + (tab === 'name' ? ' on' : '') + '" data-act="tab" data-tab="name">👤 이름</button>' +
       '</div>' + body +
       '<button class="softBtn" data-act="closeShop" style="margin-top:12px">다음에 또 올게요</button>'
     );
@@ -5245,7 +5715,7 @@
       var row = r.rows[i];
       rows += '<div class="rRow' + (row.me ? ' me' : '') + '">' +
         '<div class="rMedal">' + medalOf(row.place) + '</div>' +
-        '<div class="rName">' + row.emoji + ' ' + row.name + (row.me ? '<small>나!</small>' : '') + '</div>' +
+        '<div class="rName">' + row.emoji + ' ' + escHTML(row.name) + (row.me ? '<small>나!</small>' : '') + '</div>' +
         '<div class="rTime">' + (row.time ? (row.est ? '~' : '') + row.time.toFixed(1) + '초' : '') + '</div>' +
       '</div>';
     }
@@ -5256,7 +5726,7 @@
     showSheet(
       '<div class="clearBig">' + (r.myPlace === 1 ? '🏆' : '🎉') + '</div>' +
       '<div class="clearTitle">' + v.icon + ' ' + v.name + ' ' + G.stageNo + '탄 완주!</div>' +
-      '<div class="clearSub">' + medalOf(r.myPlace) + ' ' + r.myPlace + '등 · 정말 잘했어요!</div>' +
+      '<div class="clearSub">' + medalOf(r.myPlace) + ' ' + r.myPlace + '등 · ' + escHTML(playerLabel()) + ' 정말 잘했어요!</div>' +
       (unlockedNext
         ? '<div class="pillNote" style="background:#e9fbf1;color:#1a7a48;justify-content:center">🎉 ' + v.name + ' 올클리어! ' + nextVil.icon + ' ' + nextVil.name + '이 열렸어요!</div>'
         : '') +
@@ -5278,6 +5748,7 @@
         '<button class="softBtn" data-act="villages">🗺️ 월드맵</button>' +
         '<button class="softBtn" data-act="retry">↻ 이번 스테이지 다시 하기</button>' +
         '<button class="softBtn" data-act="shop">🔧 튜닝샵</button>' +
+        (G.stageNo === 10 ? '<button class="softBtn" data-act="roulOpen" style="background:linear-gradient(#fff6c1,#ffd93d);box-shadow:0 4px 0 #e0ad00;color:#7a4d00">🎡 마을 완주 보상 룰렛</button>' : '') +
       '</div>'
     );
   }
@@ -5296,7 +5767,7 @@
       '</div>';
     }
     showSheet(
-      '<div class="sheetHead"><h2>🏆 내 기록</h2>' + walletHTML() +
+      '<div class="sheetHead"><h2>🏆 ' + escHTML(playerLabel()) + '의 기록</h2>' + walletHTML() +
         '<button class="xbtn" data-act="closeShop">✕</button></div>' +
       '<div class="recBig">' + (save.raceWins > 0 ? '🥇' : '🏁') + '</div>' +
       '<div class="statRow">' +
@@ -5375,6 +5846,10 @@
   document.getElementById('shopBtn').addEventListener('click', function(){
     A.ensure(); A.click();
     openShop('car');
+  });
+  document.getElementById('setBtn').addEventListener('click', function(){
+    A.ensure(); A.click();
+    openSettings();
   });
   document.getElementById('mapBtn').addEventListener('click', function(){
     A.ensure(); A.click();
@@ -5497,6 +5972,40 @@
 
     if (act === 'tab'){ G.shopTab = el.getAttribute('data-tab'); A.click(); renderShop(); return; }
     if (act === 'styleTab'){ G.styleTab = el.getAttribute('data-tab'); A.click(); renderShop(); return; }
+    if (act === 'saveName'){ saveNameFromInput(); return; }
+    if (act === 'settings'){ A.click(); openSettings(); return; }
+    if (act === 'saveRewards'){
+      readSettingsInputs();
+      saveGame();
+      A.click();
+      toast('보상 5칸을 저장했어요 🎁');
+      renderSettings();
+      return;
+    }
+    if (act === 'mathLevel'){
+      readSettingsInputs();
+      save.mathLevel = clamp(parseInt(el.getAttribute('data-lv'), 10) || 1, 1, 3);
+      saveGame();
+      A.click();
+      toast('연산 난이도 · ' + LEVEL_INFO[save.mathLevel - 1].t + ' ' + LEVEL_INFO[save.mathLevel - 1].s + ' 🧮');
+      renderSettings();
+      return;
+    }
+    if (act === 'previewRoul'){
+      readSettingsInputs();
+      saveGame();
+      A.click();
+      openRoulette({ preview: true });
+      return;
+    }
+    if (act === 'roulOpen'){ A.click(); openRoulette({ village: G.village || save.lastVillage }); return; }
+    if (act === 'roulSpin'){ spinRoulette(); return; }
+    if (act === 'roulDone' || act === 'roulClose'){
+      A.click();
+      if (G.roulPreview){ G.roulPreview = false; renderSettings(); }
+      else closeShop();
+      return;
+    }
 
     if (act === 'buyCar' || act === 'equipCar'){ buyOrEquip('Car', el.getAttribute('data-id')); return; }
     if (act === 'buyWheel' || act === 'equipWheel'){ buyOrEquip('Wheel', el.getAttribute('data-id')); return; }
@@ -5526,8 +6035,27 @@
     if (act === 'quizNext'){ A.click(); resumeFromQuiz(); return; }
   });
 
+  // 이름/보상 입력창에서 Enter → 저장 (게임이 시작되지 않도록 여기서 먼저 막습니다)
+  sheet.addEventListener('keydown', function(e){
+    var t = e.target;
+    if (!t || !t.classList) return;
+    if (e.key === 'Enter' || e.keyCode === 13){
+      if (t.classList.contains('nameInput')){
+        e.preventDefault(); e.stopPropagation();
+        saveNameFromInput();
+      } else if (t.classList.contains('rwInput')){
+        e.preventDefault(); e.stopPropagation();
+        readSettingsInputs(); saveGame(); A.click();
+        toast('보상 5칸을 저장했어요 🎁');
+        renderSettings();
+      }
+    }
+  });
+
   // 키보드
   window.addEventListener('keydown', function(e){
+    var tgt = e.target;
+    if (tgt && (tgt.tagName === 'INPUT' || tgt.tagName === 'TEXTAREA' || tgt.isContentEditable)) return;
     var k = e.key;
     if (k === 'ArrowRight' || k === 'd' || k === 'D'){
       G.keys.run = true;
@@ -5549,6 +6077,8 @@
     A.ensure();
   });
   window.addEventListener('keyup', function(e){
+    var tgt = e.target;
+    if (tgt && (tgt.tagName === 'INPUT' || tgt.tagName === 'TEXTAREA' || tgt.isContentEditable)) return;
     var k = e.key;
     if (k === 'ArrowRight' || k === 'd' || k === 'D') G.keys.run = false;
     if (k === ' ') e.preventDefault();
@@ -5681,6 +6211,7 @@
       fuelOut: fuelOut, canY: canY, coinY: coinY, fmtM: fmtM, trapH: trapH,
       renderFuelOut: renderFuelOut, render: render, makeQuiz: makeQuiz,
       renderRecords: renderRecords, renderShop: renderShop, renderStart: renderStart, renderClear: renderClear,
+      playerLabel: playerLabel, setName: function(v){ save.playerName = cleanName(v); saveGame(); updateHUD(); return playerLabel(); },
       setFuel: function(v){ G.fuel = clamp(v, 0, G.fuelMax); updateHUD(); return G.fuel; },
       autoQuiz: function(kind){
         if (!G.quiz) return null;
