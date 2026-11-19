@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffe9f2">
+<title>🥚 다마고치 파라다이스 도감 · 육성 가이드</title>
+<style>
+  :root{
+    --ink:#3b3350;
+    --ink-soft:#6b6383;
+    --line:rgba(120,100,160,.14);
+    --card:#ffffff;
+    --pink:#ff8fb1;
+    --pink-soft:#ffe3ee;
+    --blue:#7ab8f5;
+    --blue-soft:#e2f0ff;
+    --mint:#5fd0b0;
+    --mint-soft:#dcf7ee;
+    --gold:#f0b32e;
+    --gold-soft:#fff2d0;
+    --lav:#9b8cff;
+    --lav-soft:#ece8ff;
+    --sky:#8fa3b8;
+    --sky-soft:#eef2f7;
+    --r:20px;
+    --shadow:0 10px 30px rgba(94,74,132,.10), 0 2px 6px rgba(94,74,132,.05);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;overflow-x:hidden}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1100px 520px at 8% -8%, #ffe6f1 0%, rgba(255,230,241,0) 62%),
+      radial-gradient(900px 480px at 96% 4%, #e4f0ff 0%, rgba(228,240,255,0) 60%),
+      radial-gradient(900px 520px at 50% 104%, #e6fbef 0%, rgba(230,251,239,0) 62%),
+      #fbf9ff;
+    -webkit-text-size-adjust:100%;
+    line-height:1.55;
+    word-break:keep-all;
+  }
+  .wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 16px}
+  a{color:#5a54c8}
+
+  /* ---------- header ---------- */
+  header.hero{
+    position:relative;
+    padding:26px 0 0;
+    background:linear-gradient(180deg,#fff6fa 0%,rgba(255,246,250,0) 100%);
+  }
+  .hero-top{display:flex;align-items:center;gap:14px;min-width:0}
+  .egg{
+    flex:0 0 auto;width:66px;height:74px;border-radius:50% 50% 48% 48%/58% 58% 42% 42%;
+    background:radial-gradient(120% 100% at 32% 22%, #fff 0%, #fff4f8 42%, #ffe0ec 100%);
+    box-shadow:inset 0 -8px 16px rgba(233,161,190,.35), 0 10px 22px rgba(233,161,190,.30);
+    display:grid;place-items:center;font-size:26px;
+    animation:bob 3.6s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+  .eyebrow{margin:0;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#b98fae;font-weight:700}
+  h1{margin:2px 0 4px;font-size:clamp(21px,4.6vw,31px);line-height:1.24;letter-spacing:-.02em}
+  h1 em{font-style:normal;color:#e8607f}
+  .hero-sub{margin:0;color:var(--ink-soft);font-size:clamp(12.5px,2.9vw,14.5px)}
+  .hero-chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
+  .hero-chips span{
+    font-size:11.5px;font-weight:700;color:#7a6e93;background:#fff;border:1px solid var(--line);
+    padding:4px 10px;border-radius:999px;box-shadow:0 2px 6px rgba(94,74,132,.05)
+  }
+
+  /* ---------- tabs ---------- */
+  nav.tabs{
+    position:sticky;top:0;z-index:40;
+    display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;
+    padding:12px 16px;margin:16px 0 18px;
+    background:rgba(251,249,255,.86);
+    -webkit-backdrop-filter:saturate(160%) blur(14px);
+    backdrop-filter:saturate(160%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs button{
+    flex:0 0 auto;white-space:nowrap;
+    font:inherit;font-size:14px;font-weight:800;color:#7b7194;
+    background:#fff;border:1px solid var(--line);border-radius:999px;
+    padding:10px 15px;cursor:pointer;
+    box-shadow:0 2px 8px rgba(94,74,132,.06);
+    transition:transform .15s ease, background .2s ease, color .2s ease;
+  }
+  nav.tabs button[aria-selected="true"]{
+    background:linear-gradient(135deg,#ff9fbb,#ff8fb1);color:#fff;border-color:transparent;
+    box-shadow:0 8px 18px rgba(255,143,177,.38);transform:translateY(-1px)
+  }
+
+  /* ---------- generic blocks ---------- */
+  section.panel[hidden]{display:none}
+  .panel{padding-bottom:28px}
+  .sec{margin:0 0 22px}
+  .sec-head{display:flex;align-items:center;gap:9px;margin:0 0 10px;min-width:0}
+  .sec-head h2{margin:0;font-size:clamp(16px,3.6vw,19px);letter-spacing:-.01em}
+  .sec-head .dot{width:9px;height:9px;border-radius:50%;background:var(--pink);flex:0 0 auto}
+  .sec-head small{color:var(--ink-soft);font-size:12px;font-weight:600}
+  .card{background:var(--card);border:1px solid rgba(255,255,255,.85);border-radius:var(--r);box-shadow:var(--shadow);padding:16px;min-width:0}
+  .card h3{margin:0 0 8px;font-size:15px}
+  p{margin:.4em 0}
+  .muted{color:var(--ink-soft);font-size:13px}
+  .tiny{font-size:12px;color:var(--ink-soft)}
+  b,strong{font-weight:800}
+
+  .grid4{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(148px,1fr))}
+  .grid2{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+
+  /* zoom dial */
+  .zoom{position:relative;padding-left:0}
+  .zoom-card{
+    display:flex;gap:10px;align-items:flex-start;
+    background:linear-gradient(160deg,#fff,#fdf7ff);
+    border:1px solid var(--line);border-radius:16px;padding:12px;min-width:0;
+  }
+  .zoom-card .zi{font-size:22px;line-height:1;flex:0 0 auto;margin-top:2px}
+  .zoom-card b{display:block;font-size:13.5px}
+  .zoom-card .zt{font-size:11px;color:#a99bc4;font-weight:700;letter-spacing:.04em}
+  .zoom-card p{margin:3px 0 0;font-size:12.5px;color:var(--ink-soft)}
+
+  /* stage flow */
+  .flow{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:stretch}
+  .stage{
+    position:relative;border-radius:16px;padding:13px 13px 14px;min-width:0;
+    background:linear-gradient(170deg,#fff,#fff8fc);
+    border:1px solid var(--line);box-shadow:0 4px 14px rgba(94,74,132,.06);
+  }
+  .stage .sn{font-size:11px;font-weight:800;color:#b7a7d6;letter-spacing:.08em}
+  .stage h4{margin:2px 0 6px;font-size:15px}
+  .stage ul{margin:6px 0 0;padding-left:16px;font-size:12.5px;color:var(--ink-soft)}
+  .stage ul li{margin:2px 0}
+  .stage .badge{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:999px;background:var(--pink-soft);color:#c2507a;margin-bottom:4px}
+  .stage.s2 .badge{background:var(--blue-soft);color:#2f7fc4}
+  .stage.s3 .badge{background:var(--gold-soft);color:#a4761a}
+  .stage.s4 .badge{background:var(--mint-soft);color:#1f8a68}
+
+  .note{
+    display:flex;gap:9px;align-items:flex-start;
+    background:linear-gradient(120deg,#fff8e6,#fffdf6);
+    border:1px solid #ffe6ae;border-radius:14px;padding:11px 13px;font-size:12.5px;color:#7d6321;margin-top:10px
+  }
+  .note.warn{background:linear-gradient(120deg,#fff0f3,#fff9fa);border-color:#ffc9d6;color:#a03a58}
+  .note.ok{background:linear-gradient(120deg,#eafaf3,#f7fffb);border-color:#b6ecd8;color:#1d7a5c}
+  .note .ni{font-size:15px;line-height:1.2}
+
+  /* tier legend */
+  .tiers{display:grid;gap:9px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .tierbox{border-radius:14px;padding:11px 12px;border:1px solid var(--line);background:#fff;min-width:0}
+  .tierbox .th{display:flex;align-items:center;gap:7px;font-weight:800;font-size:13.5px}
+  .pill{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:8px;font-size:12px;font-weight:900;color:#fff;padding:0 6px}
+  .pill.S{background:linear-gradient(135deg,#ffc94d,#f0a41e)}
+  .pill.A{background:linear-gradient(135deg,#63dcc0,#2fb894)}
+  .pill.B{background:linear-gradient(135deg,#a99cff,#7f6ce0)}
+  .pill.C{background:linear-gradient(135deg,#a3b3c6,#7d8ea3)}
+  .tierbox p{margin:4px 0 0;font-size:12px;color:var(--ink-soft)}
+
+  ul.clean{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--ink-soft)}
+  ul.clean li{margin:4px 0}
+  ul.clean li b{color:var(--ink)}
+
+  .kbd{
+    display:inline-block;font-size:11.5px;font-weight:800;color:#6b5ea8;background:#f2efff;
+    border:1px solid #e0d9ff;border-bottom-width:2px;border-radius:6px;padding:1px 6px;margin:0 1px
+  }
+
+  /* ---------- evolution ---------- */
+  .fieldbar{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 14px}
+  .fieldbar button{
+    font:inherit;font-size:13.5px;font-weight:800;color:#6f6690;background:#fff;
+    border:1px solid var(--line);border-radius:14px;padding:9px 13px;cursor:pointer;
+    box-shadow:0 2px 8px rgba(94,74,132,.06);display:flex;align-items:center;gap:6px;
+    transition:transform .14s ease,box-shadow .2s ease,background .2s ease,color .2s ease
+  }
+  .fieldbar button[aria-pressed="true"]{color:#fff;border-color:transparent;transform:translateY(-1px)}
+  .field-sum{
+    border-radius:var(--r);padding:15px 16px;margin-bottom:14px;border:1px solid rgba(255,255,255,.7);
+    box-shadow:var(--shadow);position:relative;overflow:hidden
+  }
+  .field-sum::after{
+    content:"";position:absolute;right:-30px;top:-40px;width:150px;height:150px;border-radius:50%;
+    background:rgba(255,255,255,.45)
+  }
+  .field-sum h2{margin:0 0 2px;font-size:18px;display:flex;align-items:center;gap:8px}
+  .field-sum .fs-sub{font-size:12.5px;font-weight:700;color:rgba(60,40,70,.68);margin:0}
+  .field-sum .fs-grid{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-top:9px;position:relative;z-index:1}
+  .field-sum .fs-item{font-size:12px;background:rgba(255,255,255,.72);border-radius:10px;padding:7px 9px;min-width:0}
+  .field-sum .fs-item b{display:block;font-size:11px;color:#8b7ba6;letter-spacing:.03em;margin-bottom:1px}
+
+  .group{
+    background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+    padding:13px;margin-bottom:12px;min-width:0
+  }
+  .g-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
+  .g-emoji{
+    width:38px;height:38px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;font-size:19px;
+    background:var(--gsoft,#f7f4ff)
+  }
+  .g-name{font-size:14.5px;font-weight:900;line-height:1.2;min-width:0}
+  .g-name span{display:block;font-size:10.5px;font-weight:700;color:#a79bbe;letter-spacing:.02em}
+  .g-arrow{flex:1 1 100%;font-size:12px;font-weight:800;color:#7d70a3;display:flex;align-items:center;gap:6px}
+  .g-arrow em{font-style:normal;color:#c2507a;background:var(--pink-soft);border-radius:999px;padding:1px 8px;font-size:11.5px}
+  .foods{display:flex;gap:5px;flex-wrap:wrap;margin:9px 0 10px}
+  .foods span{
+    font-size:11.5px;font-weight:700;color:#6d6390;background:#f8f6ff;border:1px solid #ece7ff;
+    border-radius:999px;padding:3px 9px
+  }
+  .foods span i{font-style:normal;color:#a99fbe;font-weight:600;font-size:10.5px;margin-left:3px}
+  .adults{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(132px,1fr))}
+  .adult{
+    position:relative;border-radius:14px;padding:11px 10px 10px;min-width:0;
+    background:linear-gradient(175deg,#fff,#fbfaff);border:1px solid var(--line)
+  }
+  .adult .tl{
+    position:absolute;top:8px;right:8px;font-size:10.5px;font-weight:900;color:#fff;
+    border-radius:7px;padding:1px 6px
+  }
+  .adult.t-S{border-color:#ffe1a8;background:linear-gradient(175deg,#fffdf4,#fff8e8)}
+  .adult.t-S .tl{background:linear-gradient(135deg,#ffc94d,#efa11c)}
+  .adult.t-A{border-color:#bfeedd;background:linear-gradient(175deg,#f7fffc,#eefbf7)}
+  .adult.t-A .tl{background:linear-gradient(135deg,#63dcc0,#2ab48f)}
+  .adult.t-B{border-color:#dcd6ff;background:linear-gradient(175deg,#fbfaff,#f4f1ff)}
+  .adult.t-B .tl{background:linear-gradient(135deg,#a99cff,#7f6ce0)}
+  .adult.t-C{border-color:#dfe6ee;background:linear-gradient(175deg,#fbfcfe,#f2f5f9)}
+  .adult.t-C .tl{background:linear-gradient(135deg,#a3b3c6,#77899e)}
+  .adult .ae{font-size:20px;line-height:1.1}
+  .adult b{display:block;font-size:13px;margin-top:2px;line-height:1.25;overflow-wrap:anywhere}
+  .adult .en{display:block;font-size:10.5px;color:#a79bbe;font-weight:700;overflow-wrap:anywhere}
+  .adult .no{display:block;font-size:10.5px;color:#8f84ab;font-weight:800;margin-top:3px}
+  .adult .cond{display:block;font-size:10.5px;color:#8b7ba6;margin-top:2px}
+  .adult .stat{display:block;font-size:10.5px;color:#b0a6c4;margin-top:2px}
+
+  /* ---------- dex ---------- */
+  .dex-tools{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:13px;box-shadow:var(--shadow);margin-bottom:14px}
+  .searchrow{display:flex;gap:8px}
+  .searchrow input{
+    flex:1 1 auto;min-width:0;font:inherit;font-size:16px;color:var(--ink);
+    background:#faf9ff;border:1.5px solid #e8e3f8;border-radius:13px;padding:11px 13px;outline:none
+  }
+  .searchrow input:focus{border-color:#ffb3c9;background:#fff;box-shadow:0 0 0 4px rgba(255,179,201,.18)}
+  .searchrow button{
+    flex:0 0 auto;font:inherit;font-size:13.5px;font-weight:800;color:#6f6690;background:#fff;
+    border:1.5px solid var(--line);border-radius:13px;padding:0 13px;cursor:pointer
+  }
+  .filterline{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+  .filterline > span.lbl{font-size:11px;font-weight:900;color:#a99fbe;letter-spacing:.06em;margin-right:2px}
+  .chip{
+    font:inherit;font-size:12px;font-weight:800;color:#7a6f97;background:#f8f6ff;
+    border:1px solid #ece7ff;border-radius:999px;padding:5px 11px;cursor:pointer;transition:.16s
+  }
+  .chip[aria-pressed="true"]{background:linear-gradient(135deg,#ff9fbb,#ff8fb1);color:#fff;border-color:transparent;box-shadow:0 4px 10px rgba(255,143,177,.3)}
+  .chip.tier[aria-pressed="true"].S{background:linear-gradient(135deg,#ffc94d,#efa11c);box-shadow:0 4px 10px rgba(240,163,28,.3)}
+  .chip.tier[aria-pressed="true"].A{background:linear-gradient(135deg,#63dcc0,#2ab48f);box-shadow:0 4px 10px rgba(42,180,143,.3)}
+  .chip.tier[aria-pressed="true"].B{background:linear-gradient(135deg,#a99cff,#7f6ce0);box-shadow:0 4px 10px rgba(127,108,224,.3)}
+  .chip.tier[aria-pressed="true"].C{background:linear-gradient(135deg,#a3b3c6,#77899e);box-shadow:0 4px 10px rgba(119,137,158,.3)}
+  .countline{font-size:12px;font-weight:800;color:#8b7ba6;margin:12px 2px 8px}
+  .countline b{color:#e8607f;font-size:14px}
+
+  .dexgrid{display:grid;gap:9px;grid-template-columns:repeat(auto-fill,minmax(158px,1fr))}
+  .dc{
+    position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;padding:11px 11px 10px;
+    box-shadow:0 4px 14px rgba(94,74,132,.06);min-width:0;overflow:hidden
+  }
+  .dc::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--fc,#ffb7c9)}
+  .dc .top{display:flex;align-items:center;gap:7px;margin-top:2px}
+  .dc .de{font-size:21px;line-height:1}
+  .dc .no{font-size:10.5px;font-weight:900;color:#a99fbe;letter-spacing:.02em}
+  .dc .tl{margin-left:auto;font-size:10.5px;font-weight:900;color:#fff;border-radius:7px;padding:1px 6px}
+  .dc .tl.S{background:linear-gradient(135deg,#ffc94d,#efa11c)}
+  .dc .tl.A{background:linear-gradient(135deg,#63dcc0,#2ab48f)}
+  .dc .tl.B{background:linear-gradient(135deg,#a99cff,#7f6ce0)}
+  .dc .tl.C{background:linear-gradient(135deg,#a3b3c6,#77899e)}
+  .dc h4{margin:5px 0 0;font-size:14px;line-height:1.25;overflow-wrap:anywhere}
+  .dc .en{font-size:10.5px;color:#a79bbe;font-weight:700;overflow-wrap:anywhere}
+  .dc .jp{font-size:10.5px;color:#c2b8d4;overflow-wrap:anywhere}
+  .dc .tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
+  .dc .tags span{font-size:10px;font-weight:800;color:#7a6f97;background:#f7f5ff;border-radius:999px;padding:2px 7px}
+  .dc .route{font-size:11px;font-weight:700;color:#8b7ba6;margin-top:6px;line-height:1.4}
+  .dc .desc{font-size:11.5px;color:#6f6787;margin-top:5px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .dc .desc.open{-webkit-line-clamp:unset;overflow:visible}
+  .dc .more{font:inherit;font-size:10.5px;font-weight:900;color:#9b8cff;background:none;border:0;padding:4px 0 0;cursor:pointer}
+  .empty{padding:26px;text-align:center;color:var(--ink-soft);font-size:13.5px;background:#fff;border:1px dashed #e4dcf5;border-radius:16px}
+
+  /* ---------- predictor ---------- */
+  .predict{background:linear-gradient(165deg,#fffaff,#f7f4ff);border:1px solid var(--line);border-radius:var(--r);padding:15px;box-shadow:var(--shadow);min-width:0}
+  .pstep{margin-bottom:14px}
+  .pstep h3{margin:0 0 7px;font-size:13.5px;display:flex;align-items:center;gap:7px}
+  .pstep h3 .num{width:20px;height:20px;border-radius:50%;background:#ffd9e5;color:#c2507a;font-size:11px;display:grid;place-items:center;font-weight:900}
+  .opts{display:flex;flex-wrap:wrap;gap:6px}
+  .opt{
+    font:inherit;font-size:12.5px;font-weight:800;color:#6f6690;background:#fff;border:1.5px solid #ece7ff;
+    border-radius:12px;padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.16s
+  }
+  .opt[aria-pressed="true"]{border-color:#ff9fbb;background:#fff5f9;color:#c2507a;box-shadow:0 4px 12px rgba(255,143,177,.18)}
+  .opt .sm{font-size:10.5px;font-weight:700;color:#a99fbe}
+  .result{
+    margin-top:16px;border-radius:18px;padding:16px;position:relative;overflow:hidden;
+    background:radial-gradient(120% 90% at 90% 0%,#fff 0%,#fff5f9 55%,#f3efff 100%);
+    border:1.5px solid #ffd6e4;box-shadow:0 14px 34px rgba(214,120,160,.16);min-width:0
+  }
+  .result .lead{font-size:12px;font-weight:900;color:#b98fae;letter-spacing:.04em}
+  .result .who{display:flex;align-items:center;gap:12px;margin-top:6px;min-width:0}
+  .result .re{font-size:44px;line-height:1;flex:0 0 auto;animation:pop .5s ease}
+  @keyframes pop{0%{transform:scale(.6);opacity:.2}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+  .result .wn{min-width:0}
+  .result .wn b{display:block;font-size:clamp(20px,5.4vw,26px);line-height:1.15;overflow-wrap:anywhere}
+  .result .wn .en{display:block;font-size:12px;color:#b09fc5;font-weight:800}
+  .result .wn .nono{display:block;font-size:11.5px;font-weight:900;color:#e8607f}
+  .result .why{margin-top:10px;font-size:12.5px;color:#6f6787;background:rgba(255,255,255,.75);border-radius:12px;padding:9px 11px}
+  .result .why b{color:#c2507a}
+  .result .desc{margin-top:8px;font-size:12.5px;color:#5f5878;line-height:1.5}
+  .alts{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-top:11px}
+  .alt{background:rgba(255,255,255,.72);border-radius:11px;padding:7px 9px;font-size:11px;color:#8b7ba6;min-width:0}
+  .alt b{display:block;font-size:11.5px;color:#5f5878}
+
+  .srcs{font-size:11.5px;color:#8b7ba6;line-height:1.7}
+  .srcs a{color:#6f6699;text-decoration:none;border-bottom:1px dotted #c9bfe0}
+  footer{padding:26px 0 40px;border-top:1px solid var(--line);margin-top:18px}
+  footer .wrap{display:flex;flex-direction:column;gap:8px}
+  .fnote{font-size:11px;color:#a99fbe}
+
+  @media (max-width:640px){
+    nav.tabs{flex-wrap:wrap;overflow-x:visible;justify-content:center}
+    nav.tabs button{flex:0 1 auto}
+  }
+  @media (max-width:520px){
+    .wrap{padding:0 13px}
+    nav.tabs{padding:10px 13px;gap:5px}
+    nav.tabs button{font-size:13px;padding:9px 12px}
+    .card,.predict{padding:13px}
+    .egg{width:56px;height:63px;font-size:22px}
+    .dexgrid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px}
+  }
+  @media (min-width:900px){
+    .dexgrid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="egg" aria-hidden="true">🥚</div>
+      <div style="min-width:0">
+        <p class="eyebrow">Tamagotchi Paradise</p>
+        <h1>다마고치 파라다이스 <em>도감 &amp; 육성 가이드</em></h1>
+        <p class="hero-sub">뭘 먹이면 어떤 영이 되고, 케어미스를 몇 번 하면 누가 나오는지 — 한 장에 정리했어요.</p>
+      </div>
+    </div>
+    <div class="hero-chips">
+      <span>🥚 도감 133종</span><span>🌿 필드 6곳</span><span>🍽️ 음식 진화표</span><span>🧮 진화 예측기</span>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="가이드 탭">
+    <button role="tab" id="tab-how" aria-controls="panel-how" aria-selected="true" data-tab="how">📖 사용법 &amp; 원리</button>
+    <button role="tab" id="tab-evo" aria-controls="panel-evo" aria-selected="false" data-tab="evo">🍽️ 음식별 진화표</button>
+    <button role="tab" id="tab-dex" aria-controls="panel-dex" aria-selected="false" data-tab="dex">🔎 전체 도감</button>
+    <button role="tab" id="tab-sim" aria-controls="panel-sim" aria-selected="false" data-tab="sim">🧮 진화 예측기</button>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ============ 사용법 ============ -->
+<section class="panel" id="panel-how" role="tabpanel" aria-labelledby="tab-how">
+
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>줌 다이얼 4단계</h2><small>돌리는 배율마다 할 일이 달라요</small></div>
+    <div class="grid4">
+      <div class="zoom-card"><div class="zi">🌌</div><div><span class="zt">ZOOM 1</span><b>다마 우주</b><p>뉴 다마고치 별 전체 상태와 발전도 확인. 잠시 두면 시계 화면이 나와요.</p></div></div>
+      <div class="zoom-card"><div class="zi">🏞️</div><div><span class="zt">ZOOM 2</span><b>다마 필드</b><p>필드에 떨어진 <b>똥 치우기</b>, 풀어놓은 다마고치 구경. 여기 풀어놓은 개체는 밥·목욕을 못 시켜요.</p></div></div>
+      <div class="zoom-card"><div class="zi">🐣</div><div><span class="zt">ZOOM 3</span><b>다마고치</b><p>실제 돌보기 화면. 밥 주기, 놀기, 재우기 — 케어미스가 쌓이는 곳이에요.</p></div></div>
+      <div class="zoom-card"><div class="zi">🔬</div><div><span class="zt">ZOOM 4</span><b>다마 세포</b><p>몸속 상태 = <b>진화 조건 확인창</b>. 소용돌이·주먹밥·해 아이콘을 여기서 읽어요. 병 난 세포도 여기서 치료.</p></div></div>
+    </div>
+    <div class="note"><span class="ni">🔧</span><div><b>연구소 모드</b>는 줌 다이얼을 <b>길게</b> 누르면 열려요. 미니게임·쇼핑·도감(다마 현미경)·교배·설정이 모두 여기 있어요.</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>성장 4단계 — 결정 요인이 매번 바뀝니다</h2></div>
+    <div class="flow">
+      <div class="stage s1">
+        <span class="badge">STEP 1</span>
+        <span class="sn">BABY</span>
+        <h4>베이비 → 키즈</h4>
+        <ul>
+          <li>알이 부화하면 <b>베이비마루치</b>.</li>
+          <li>머무는 <b>필드</b>가 키즈를 결정.</li>
+          <li>15분마다 그 필드 세포 1칸 → <b>같은 필드 4칸</b>이면 진화.</li>
+        </ul>
+      </div>
+      <div class="stage s2">
+        <span class="badge">STEP 2</span>
+        <span class="sn">KID · 24~28시간</span>
+        <h4>키즈 → 영</h4>
+        <ul>
+          <li>키즈 때 <b>먹인 음식</b>이 영을 결정.</li>
+          <li>음식 5포인트 = <b>음식 아이콘 1개</b>(최대 4칸).</li>
+          <li>가장 많은 아이콘의 영으로. 동률·기본식이면 기본 영.</li>
+        </ul>
+      </div>
+      <div class="stage s3">
+        <span class="badge">STEP 3</span>
+        <span class="sn">YOUNG · 약 24시간</span>
+        <h4>영 → 어덜트</h4>
+        <ul>
+          <li><b>키즈+영 누적 케어미스</b>가 어덜트를 결정.</li>
+          <li>S / A / B / C 네 갈래.</li>
+          <li>음식은 이 단계에서 더 이상 영향 없음.</li>
+        </ul>
+      </div>
+      <div class="stage s4">
+        <span class="badge">GOAL</span>
+        <span class="sn">ADULT</span>
+        <h4>어덜트</h4>
+        <ul>
+          <li>여기서 교배·통신으로 다음 세대.</li>
+          <li>눈 모양과 몸 색은 <b>베이비에게 유전</b>.</li>
+          <li>죽기 전 30일 이상 키우면 별이 되어 다음 다마를 살려줘요.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note ok"><span class="ni">✅</span><div><b>필드를 옮기면 그때까지 쌓은 음식 아이콘이 초기화돼요.</b> 키즈 때 필드를 바꾸면 영이 달라지니, "이 필드에서 이 음식"을 정했으면 옮기지 마세요.</div></div>
+    <div class="note"><span class="ni">🥚</span><div><b>필드 세포 4칸이 차면</b> 다마 세포 위에 아이콘이 떠요. 그때 다마 세포를 눌러 진화를 걸어주세요. 3~4시간 안에 걸지 않으면 자동으로 진화하면서 <b>모아둔 칸이 사라질 수</b> 있어요.
+    <br><b>행성 레벨 빨리 올리기</b>: 12~14분마다 필드를 바꾸면 4칸이 안 모여서 키즈 대신 <b>비비마루치</b>(No.516)가 돼요. 어덜트로 인정돼 레벨업이 빠르지만 교배는 못 해요.</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>케어미스 — 어덜트를 가르는 하나의 숫자</h2></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>미스 1회가 되는 순간</h3>
+        <p class="muted">배고픔 또는 행복이 <b>0</b>이 되어 알림이 울린 뒤 <b>15분</b> 동안 그대로 두면 1회. 알림이 사라지면 되돌릴 수 없어요.</p>
+        <ul class="clean">
+          <li>배고픔 0 → 방치 15분 = 1미스</li>
+          <li>행복 0 → 방치 15분 = 1미스</li>
+          <li>아픈데 치료 안 하고 15분 = 1미스</li>
+          <li><b>키즈 + 영 누적</b>으로 계산 (단계가 바뀌어도 초기화 안 됨)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>다마 세포에서 읽는 법</h3>
+        <div class="tiers" style="grid-template-columns:1fr">
+          <div class="tierbox"><div class="th">🌀 소용돌이</div><p>하나 = 케어미스 1회. 개수만 세면 현재 티어를 알 수 있어요.</p></div>
+          <div class="tierbox"><div class="th">🍙 주먹밥</div><p>배고픔을 <b>최대치까지</b> 채운 횟수. S 티어는 5개 이상 필요.</p></div>
+          <div class="tierbox"><div class="th">☀️ 해</div><p>행복을 최대치까지 채운 횟수. S 티어는 5개 이상 필요.</p></div>
+          <div class="tierbox"><div class="th">😖 가시 난 얼굴</div><p>지금까지 병에 걸린 횟수. 한 단계에서 5번이면 죽어요.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="tiers" style="margin-top:10px">
+      <div class="tierbox"><div class="th"><span class="pill S">S</span> 완벽 케어</div><p>누적 미스 <b>0회</b> + 영 시기에 배고픔을 <b>최대치까지 5회 이상</b> &amp; 행복을 <b>최대치까지 5회 이상</b>. 둘 다 필요!</p></div>
+      <div class="tierbox"><div class="th"><span class="pill A">A</span> 거의 완벽</div><p>누적 미스 <b>0~1회</b>. S 조건(5회·5회)을 못 채우면 미스 0이어도 여기로 와요.</p></div>
+      <div class="tierbox"><div class="th"><span class="pill B">B</span> 보통</div><p>누적 미스 <b>2~5회</b>. 대부분의 플레이가 여기로 흘러가요.</p></div>
+      <div class="tierbox"><div class="th"><span class="pill C">C</span> 심한 방치</div><p>누적 미스 <b>6회 이상</b>. 표시는 6에서 멈추니 6까지만 세면 돼요.</p></div>
+    </div>
+    <div class="note warn"><span class="ni">⚠️</span><div><b>병은 미스 횟수가 2·3의 배수가 아닐 때</b>(1·5·7회차 등) 30~35% 확률로 옵니다. <b>검은 똥 6개</b>를 그대로 두어도 병에 걸려요. 한 단계에서 병 5번 = 사망.</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>S 티어(완벽 케어) 노리는 순서</h2></div>
+    <div class="card">
+      <ul class="clean">
+        <li><b>1. 시간이 넉넉한 날 새 세대로 시작</b> — 미스는 키즈부터 누적되니 두 단계를 한 번에 관리해야 해요.</li>
+        <li><b>2. 행복은 UFO 미니게임으로</b> — 가장 효율이 좋아요. 행복을 자주 최대치로 채워 ☀️를 5개 이상.</li>
+        <li><b>3. 배고픔도 "최대치까지" 채워야</b> 🍙로 세어져요. 조금씩 채우면 카운트되지 않아요.</li>
+        <li><b>4. 자리를 비울 땐 타마 시터</b> — 고치 포인트를 쓰지만 미스가 쌓이지 않아요.</li>
+        <li><b>5. 영이 어덜트가 되기 전 다마 세포 점검</b> — 🌀 0개, 🍙 5개 이상, ☀️ 5개 이상이면 합격.</li>
+      </ul>
+    </div>
+    <div class="note"><span class="ni">🧪</span><div><b>비타민 세포</b>를 미리 먹여두면 병 1회를 막아줘요(금색 육각형 V 표시). 신나는 팝콘은 확정, 랜덤 젤리·랜덤 버블티는 확률로 나와요. 병은 미스 0을 깨뜨리는 주범이라 S 도전 전에 쟁여두면 좋아요.</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>질병 · 똥 · 교배 · 통신</h2></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>질병과 똥</h3>
+        <ul class="clean">
+          <li>아픈 세포는 <b>다마 세포</b>에서 바로 치료. 15분 넘기면 미스 1회.</li>
+          <li>배변은 필드에 떨어져요. <b>10분마다</b> 배변하고, 물결무늬가 뜰 때 아무 버튼이나 누르면 잡아요(필드·다마 뷰 모두 가능).</li>
+          <li><b>검은 똥 6개</b>를 두면 병 위험. 똥은 치워서 <b>바이오 연료</b>로도 써요.</li>
+          <li>죽으면 <span class="kbd">C</span> 누른 채 <span class="kbd">A</span> → "알 받기"로 새 알을 받아요.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>교배와 시크릿 캐릭터</h3>
+        <ul class="clean">
+          <li>본체 1대로도 교배 가능 — 연구소 모드 → <b>도움 → 알 상담 → 교배</b>.</li>
+          <li>눈 모양과 몸 색이 베이비에게 <b>유전</b>. 그래서 5만 종이 넘는 모습이 나와요.</li>
+          <li>배고픔·행복을 가득 채우면 교배 성공률이 올라가고, <b>러브러브 아이스크림</b>은 성공 확정.</li>
+          <li>천적·먹이 관계는 교배가 안 되고, 상성에 따라 다치거나 잡아먹히기도 해요.</li>
+          <li><b>시크릿 캐릭터</b>는 영 시기에 <b>다른 색 본체 2종</b>과 통신하면 해금 — 같은 색 2번은 안 세요.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note"><span class="ni">🔒</span><div>시크릿은 본체 색마다 1종씩: <b>육지=초도라치(릭 영 한정)</b>, <b>수중=머마린치(플로트 영 제외)</b>, <b>하늘=야야콘치(로키 영 제외)</b>, <b>숲=타츠치(숲 스프라우트 영 제외)</b>, <b>트로피컬=마나파치</b>, <b>얼음=호보혼치</b>.</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>알아두면 편한 생활 팁</h2></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>먹이 구하기</h3>
+        <ul class="clean">
+          <li><b>에그 헌트</b>: 화산·샘에서 알을 캐요. 최대 3마리까지 보내고, <b>지금 키우는 다마고치를 꼭 포함</b>하면 알이 확 늘어요(하루 1회, 19시 마감).</li>
+          <li>보내기 전 <b>행복을 가득</b> 채우세요. 0이면 알이 적고 유령이 나와요.</li>
+          <li><b>요리</b>: 연구소 모드 → 상점 → 식사에서 재료를 조합해요. 조리한 음식이 음식 포인트를 더 많이 줘서 영을 빨리 고정할 수 있어요.</li>
+          <li>음식·간식은 <b>5·15·25일 50% 세일</b>, 장난감·꾸미기는 <b>10·20·30일</b> 세일.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>하루 리듬</h3>
+        <ul class="clean">
+          <li><b>기상 06:00~09:59</b>, <b>재우기 19:00~21:59</b>. 한 번 잠들면 아침까지 못 깨워요.</li>
+          <li>잠자기 알림을 놓쳤으면 전원이 꺼질 때까지 두었다가 다시 켜고 다마고치 화면에서 <span class="kbd">A</span>.</li>
+          <li>베이비는 배고픔이 <b>3분</b>, 행복이 <b>5분</b>마다 줄어요 — 제일 바쁜 시기.</li>
+          <li>행복 올리기: UFO 게임 &gt; 화살 게임(+5) &gt; 깃발 게임(+10, 비효율).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>본체 색별 필드 해금 순서</h2><small>시작 필드가 다르고, 순서대로 열려요</small></div>
+    <div class="card">
+      <div class="tiers">
+        <div class="tierbox"><div class="th">🌸 Pink Land</div><p>육지 → 수중 → 하늘</p></div>
+        <div class="tierbox"><div class="th">💙 Blue Water</div><p>수중 → 하늘 → 육지</p></div>
+        <div class="tierbox"><div class="th">💜 Purple Sky</div><p>하늘 → 육지 → 수중</p></div>
+        <div class="tierbox"><div class="th">🌳 Jade Forest</div><p>숲 → 육지 → 수중</p></div>
+        <div class="tierbox"><div class="th">🌴 Orange Tropics</div><p>트로피컬 → 얼음 → 숲</p></div>
+        <div class="tierbox"><div class="th">❄️ White Glacier</div><p>얼음 → 트로피컬 → 숲</p></div>
+      </div>
+      <p class="tiny" style="margin-top:9px">본체 색에 따라 키울 수 있는 <b>시크릿(희귀) 캐릭터 1종</b>도 달라져요. 통신은 모든 색끼리 가능하지만, 숲에서만 나오는 다마고치는 다른 색 본체에서는 키울 수 없어요.</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>기기 주의사항</h2></div>
+    <div class="card">
+      <ul class="clean">
+        <li><b>하늘 필드 이름 버그</b>: 초기 3색 본체(블루 워터·핑크 랜드·퍼플 스카이)에서는 <b>플랩 영과 처프 영의 이름이 뒤바뀌어</b> 표시돼요. 진화 자체는 정상이니 화면 이름은 무시하세요. (숲 본체는 정상 표기)</li>
+        <li><b>언어는 한 번 정하면 못 바꿔요</b> — 바꾸려면 리셋. 한국어 지원 됨.</li>
+        <li>방수·방적 기능 없음. 건전지는 새 것으로 약 <b>10시간</b>.</li>
+        <li>사라진 데이터는 복구 불가. 한 필드에 풀어놓을 수 있는 건 4마리(필드 확장 시 8마리).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 진화표 ============ -->
+<section class="panel" id="panel-evo" role="tabpanel" aria-labelledby="tab-evo" hidden>
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>"뭐 주면 뭐 나와요?"</h2><small>필드 → 음식 → 영 → 어덜트</small></div>
+    <p class="muted" style="margin-top:-2px">필드를 고르면 그 필드에서 먹일 수 있는 음식군과, 그 음식으로 자란 영이 케어미스에 따라 갈라지는 어덜트 4종을 보여줘요. <b>음식은 '키즈' 때만</b> 의미가 있어요.</p>
+  </div>
+  <div class="fieldbar" id="fieldbar" role="group" aria-label="필드 선택"></div>
+  <div id="evoBody"></div>
+  <div class="note warn" style="margin-top:6px"><span class="ni">⚠️</span><div><b>하늘 필드 이름 버그</b> — 초기 3색 본체에서는 기기 화면의 플랩 영/처프 영 이름이 서로 바뀌어 나와요. 아래 표는 <b>정상 표기</b>이고, 알맹이(진화 결과)는 기기에서도 똑같이 동작해요.</div></div>
+  <p class="fnote" style="margin-top:8px">배고픔/행복 수치는 그 어덜트가 밥·놀이를 달라고 조르는 간격(분)이에요. 숫자가 클수록 손이 덜 가요. 표시되지 않은 수치는 아직 공개 자료로 확인되지 않아 비워뒀어요.</p>
+</section>
+
+<!-- ============ 도감 ============ -->
+<section class="panel" id="panel-dex" role="tabpanel" aria-labelledby="tab-dex" hidden>
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>전체 도감</h2><small>공식 도감 번호 No.500~No.632</small></div>
+  </div>
+  <div class="dex-tools">
+    <div class="searchrow">
+      <input id="q" type="search" placeholder="이름으로 찾기 (한글·영어)" aria-label="캐릭터 이름 검색" autocomplete="off">
+      <button id="qclear" type="button">지우기</button>
+    </div>
+    <div class="filterline" id="fieldFilter"><span class="lbl">필드</span></div>
+    <div class="filterline" id="stageFilter"><span class="lbl">단계</span></div>
+    <div class="filterline" id="tierFilter"><span class="lbl">티어</span></div>
+  </div>
+  <div class="countline" id="countline"></div>
+  <div class="dexgrid" id="dexgrid"></div>
+</section>
+
+<!-- ============ 예측기 ============ -->
+<section class="panel" id="panel-sim" role="tabpanel" aria-labelledby="tab-sim" hidden>
+  <div class="sec">
+    <div class="sec-head"><span class="dot"></span><h2>내 다마고치 진화 예측기</h2><small>지금 이대로 크면 누가 될까?</small></div>
+  </div>
+  <div class="predict">
+    <div class="pstep">
+      <h3><span class="num">1</span> 지금 있는 필드</h3>
+      <div class="opts" id="simField"></div>
+    </div>
+    <div class="pstep">
+      <h3><span class="num">2</span> 키즈 때 가장 많이 먹인 음식</h3>
+      <div class="opts" id="simFood"></div>
+    </div>
+    <div class="pstep">
+      <h3><span class="num">3</span> 지금까지 누적 케어미스</h3>
+      <div class="opts" id="simTier"></div>
+    </div>
+    <div class="result" id="simResult" aria-live="polite"></div>
+  </div>
+  <div class="note"><span class="ni">🧮</span><div>결과는 <b>키즈+영 누적 미스</b> 기준이에요. S는 "미스 0 + 배고픔 5회·행복 5회 최대"까지 모두 채워야 나오고, 하나라도 못 채우면 A가 나와요.</div></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="srcs">
+      <b>자료</b> · <a href="https://tamalog.xyz/" target="_blank" rel="noopener">타마로그 도감</a>(공식 도감 이미지 기준 133종·케어 티어) ·
+      <a href="https://tamavault.com/paradise/evolution-chart/" target="_blank" rel="noopener">Tamavault 진화표</a> /
+      <a href="https://tamavault.com/paradise/food-guide/" target="_blank" rel="noopener">음식 가이드</a> /
+      <a href="https://tamavault.com/paradise/care-mistakes/" target="_blank" rel="noopener">케어미스</a> /
+      <a href="https://tamavault.com/paradise/character-database/" target="_blank" rel="noopener">캐릭터 DB</a> ·
+      <a href="https://tamagotchi-official.com/kr/series/paradise/howto/" target="_blank" rel="noopener">다마고치 공식 사이트(한국)</a> ·
+      네이버 블로그 <a href="https://blog.naver.com/cherry_blossom_93/224101564524" target="_blank" rel="noopener">윤슬님의 다마고치 파라다이스 공략</a>
+    </div>
+    <p class="fnote">캐릭터 설명은 공식 사이트(한국) 도감 문구를 그대로 옮겼어요. 한국어 이름은 국내 도감 표기를 따랐고, 공식 설명에 나오는 표기(미야오치·호호치 등)를 우선했어요. 기기 한글판 표기와 조금 다를 수 있습니다. 음식 이름은 영문 자료를 한국어로 옮긴 표기예요.</p>
+    <p class="fnote">Tamagotchi는 Bandai의 등록상표입니다. 이 페이지는 개인 육성 참고용 비공식 가이드이며, 확인된 자료만 담았습니다.</p>
+  </div>
+</footer>
+
+<script>
+const DATA = {"fields": [{"id": "land", "ko": "육지", "en": "Land", "emoji": "🌿", "color": "#ffb7c9", "deep": "#e8607f", "kid": 501, "groups": [{"ko": "고기", "en": "Meat", "emoji": "🥩", "foods": [{"ko": "큰 고기", "en": "Big Meat"}, {"ko": "작은 고기", "en": "Small Meat"}, {"ko": "스테이크", "en": "Steak"}], "young": 504, "adults": {"S": 517, "A": 518, "B": 519, "C": 520}}, {"ko": "당근", "en": "Carrot", "emoji": "🥕", "foods": [{"ko": "사과", "en": "Apple"}, {"ko": "당근", "en": "Carrot"}, {"ko": "사과파이", "en": "Apple Pie"}, {"ko": "채 썬 당근", "en": "Shredded Carrots"}], "young": 505, "adults": {"S": 521, "A": 522, "B": 523, "C": 524}}, {"ko": "벌레", "en": "Worm", "emoji": "🐛", "foods": [{"ko": "벌레밥", "en": "Meal Bugs"}, {"ko": "지렁이밥", "en": "Meal Worms"}, {"ko": "벌레쿠키", "en": "Bug Cookies"}], "young": 506, "adults": {"S": 526, "A": 525, "B": 527, "C": 528}}, {"ko": "기본식 / 혼합", "en": "Pellets", "emoji": "⚪", "foods": [{"ko": "기본 사료(펠릿)", "en": "Pellets"}], "young": 507, "adults": {"S": 529, "A": 531, "B": 530, "C": 532}}], "secret": 565, "secretKo": "초도라치", "secretEn": "Chodracotchi", "secretReq": "릭 영일 때 다른 색 본체 2종과 통신", "secretNote": "Pink Land 전용 · 벌레(릭 영)만 가능"}, {"id": "water", "ko": "수중", "en": "Water", "emoji": "🌊", "color": "#a9d6ff", "deep": "#2f7fc4", "kid": 502, "groups": [{"ko": "해산물", "en": "Seafood", "emoji": "🦐", "foods": [{"ko": "해산물", "en": "Seafood"}, {"ko": "튀긴 생선", "en": "Fried Fish"}, {"ko": "조개", "en": "Shellfish"}, {"ko": "구운 조개", "en": "Grilled Shellfish"}], "young": 508, "adults": {"S": 533, "A": 534, "B": 536, "C": 540}}, {"ko": "해조류", "en": "Seaweed", "emoji": "🌿", "foods": [{"ko": "파래", "en": "Green Seaweed"}, {"ko": "김", "en": "Red Seaweed"}, {"ko": "해초 샐러드", "en": "Seaweed Salad"}], "young": 509, "adults": {"S": 537, "A": 538, "B": 539, "C": 535}}, {"ko": "플랑크톤", "en": "Plankton", "emoji": "🦠", "foods": [{"ko": "새우밥", "en": "Meal Shrimp"}, {"ko": "플랑크톤밥", "en": "Meal Plankton"}, {"ko": "플랑크톤 만두", "en": "Plankton Dumplings"}], "young": 510, "adults": {"S": 541, "A": 542, "B": 543, "C": 544}}, {"ko": "기본식 / 혼합", "en": "Pellets", "emoji": "⚪", "foods": [{"ko": "기본 사료(펠릿)", "en": "Pellets"}], "young": 511, "adults": {"S": 545, "A": 546, "B": 547, "C": 548}}], "secret": 566, "secretKo": "머마린치", "secretEn": "Mermarintchi", "secretReq": "글라이드·리프·패들 영일 때 다른 색 본체 2종과 통신", "secretNote": "Blue Water 전용 · 플로트 영은 제외"}, {"id": "sky", "ko": "하늘", "en": "Sky", "emoji": "☁️", "color": "#c9b8ff", "deep": "#7a5cd6", "kid": 503, "groups": [{"ko": "닭고기", "en": "Chicken", "emoji": "🍗", "foods": [{"ko": "통닭", "en": "Whole Chicken"}, {"ko": "닭고기 조각", "en": "Piece of Chicken"}, {"ko": "치킨 스테이크", "en": "Chicken Steak"}], "young": 513, "adults": {"S": 549, "A": 550, "B": 551, "C": 552}}, {"ko": "옥수수", "en": "Corn", "emoji": "🌽", "foods": [{"ko": "옥수수", "en": "Corn"}, {"ko": "체리", "en": "Cherry"}, {"ko": "옥수수 조각", "en": "Piece of Corn"}, {"ko": "콘플레이크", "en": "Corn Flakes"}], "young": 512, "adults": {"S": 559, "A": 558, "B": 557, "C": 560}}, {"ko": "꿀", "en": "Honey", "emoji": "🍯", "foods": [{"ko": "꽃시럽", "en": "Flower Syrup"}, {"ko": "꿀시럽", "en": "Honey Syrup"}, {"ko": "꽃방울", "en": "Flower Drops"}], "young": 514, "adults": {"S": 553, "A": 554, "B": 555, "C": 556}}, {"ko": "기본식 / 혼합", "en": "Pellets", "emoji": "⚪", "foods": [{"ko": "기본 사료(펠릿)", "en": "Pellets"}], "young": 515, "adults": {"S": 561, "A": 562, "B": 563, "C": 564}}], "secret": 567, "secretKo": "야야콘치", "secretEn": "Yayacorntchi", "secretReq": "플랩·처프·범블 영일 때 다른 색 본체 2종과 통신", "secretNote": "Purple Sky 전용 · 로키 영은 제외"}, {"id": "forest", "ko": "숲", "en": "Forest", "emoji": "🌲", "color": "#a8e6b8", "deep": "#2f8b52", "kid": 584, "groups": [{"ko": "북경 고기", "en": "Peking Meat", "emoji": "🦆", "foods": [{"ko": "차슈", "en": "Chashu Pork"}, {"ko": "북경 고기", "en": "Peking Meat"}, {"ko": "따뜻한 찐빵", "en": "Warm Buns"}], "young": 585, "adults": {"S": 582, "A": 568, "B": 569, "C": 570}}, {"ko": "대나무 잎", "en": "Bamboo Grass", "emoji": "🎋", "foods": [{"ko": "대나무 잎", "en": "Bamboo Grass"}, {"ko": "깻잎", "en": "Sesame Leaves"}, {"ko": "대나무잎 떡", "en": "Bamboo Leaf Rice Cake"}, {"ko": "깨전병", "en": "Sesame Pancake"}], "young": 586, "adults": {"S": 571, "A": 572, "B": 573, "C": 574}}, {"ko": "석류", "en": "Pomegranate", "emoji": "🍎", "foods": [{"ko": "감", "en": "Persimmon"}, {"ko": "석류", "en": "Pomegranate"}, {"ko": "첸타이", "en": "Che Thai"}], "young": 587, "adults": {"S": 575, "A": 576, "B": 557, "C": 577}}, {"ko": "기본식 / 혼합", "en": "Pellets", "emoji": "⚪", "foods": [{"ko": "기본 사료(펠릿)", "en": "Pellets"}], "young": 588, "adults": {"S": 578, "A": 579, "B": 580, "C": 581}}], "secret": 583, "secretKo": "타츠치", "secretEn": "Tatsutchi", "secretReq": "숲 로어·토들·처프 영일 때 다른 색 본체 2종과 통신", "secretNote": "Jade Forest 전용 · 숲 스프라우트 영은 제외"}, {"id": "tropical", "ko": "트로피컬", "en": "Tropical", "emoji": "🌴", "color": "#ffd28a", "deep": "#d07a12", "kid": 589, "groups": [{"ko": "트로피컬 고기", "en": "Tropical Meat", "emoji": "🍖", "foods": [{"ko": "트로피컬 스테이크", "en": "Tropical Steak"}, {"ko": "트로피컬 패티", "en": "Tropical Patty"}, {"ko": "하와이안 버거", "en": "Hawaiian Burger"}], "young": 590, "adults": {"S": 594, "A": 595, "B": 596, "C": 597}}, {"ko": "바나나", "en": "Banana", "emoji": "🍌", "foods": [{"ko": "트로피컬 과일", "en": "Tropical Fruits"}, {"ko": "바나나", "en": "Bananas"}, {"ko": "과일 젤리", "en": "Fruit Jelly"}, {"ko": "바나나 꼬치", "en": "Banana on a Stick"}], "young": 591, "adults": {"S": 598, "A": 599, "B": 600, "C": 601}}, {"ko": "나비", "en": "Butterflies", "emoji": "🦋", "foods": [{"ko": "나비 과자", "en": "Butterfly Snacks"}, {"ko": "곤충밥", "en": "Meal Critters"}, {"ko": "나비 샐러드", "en": "Butterfly Salad"}], "young": 592, "adults": {"S": 602, "A": 603, "B": 604, "C": 605}}, {"ko": "기본식 / 혼합", "en": "Pellets", "emoji": "⚪", "foods": [{"ko": "기본 사료(펠릿)", "en": "Pellets"}], "young": 593, "adults": {"S": 606, "A": 607, "B": 608, "C": 609}}], "secret": 631, "secretKo": "마나파치", "secretEn": "Manapatchi", "secretReq": "트로피컬·얼음 필드에서 다른 색 본체와 통신", "secretNote": "Orange Tropics 전용(2026)"}, {"id": "ice", "ko": "얼음", "en": "Ice", "emoji": "❄️", "color": "#bfe9f2", "deep": "#1f8fa6", "kid": 610, "groups": [{"ko": "얼린 고기", "en": "Frozen Meat", "emoji": "🧊", "foods": [{"ko": "얼린 고기", "en": "Frozen Meat"}, {"ko": "통조림 고기", "en": "Canned Meat"}, {"ko": "비프 스트로가노프", "en": "Beef Stroganoff"}], "young": 611, "adults": {"S": 616, "A": 615, "B": 617, "C": 618}}, {"ko": "붉은 열매", "en": "Red Berries", "emoji": "🍒", "foods": [{"ko": "비트", "en": "Beets"}, {"ko": "붉은 열매", "en": "Red Berries"}, {"ko": "보르시", "en": "Borscht"}, {"ko": "잼 홍차", "en": "Hot Tea with Jam"}], "young": 612, "adults": {"S": 624, "A": 623, "B": 625, "C": 626}}, {"ko": "북방 해산물", "en": "Northern Seafood", "emoji": "🐟", "foods": [{"ko": "북방 해산물", "en": "Northern Seafood"}, {"ko": "연어알", "en": "Salmon Roe"}, {"ko": "블리니", "en": "Blinis"}], "young": 613, "adults": {"S": 619, "A": 620, "B": 622, "C": 621}}, {"ko": "기본식 / 혼합", "en": "Pellets", "emoji": "⚪", "foods": [{"ko": "기본 사료(펠릿)", "en": "Pellets"}], "young": 614, "adults": {"S": 627, "A": 628, "B": 629, "C": 630}}], "secret": 632, "secretKo": "호보혼치", "secretEn": "Hobohorntchi", "secretReq": "트로피컬·얼음 필드에서 다른 색 본체와 통신", "secretNote": "White Glacier 전용(2026)"}], "chars": [{"no": 500, "ko": "베이비마루치", "en": "Babymarutchi", "jp": "ベビーマルっち", "desc": "뉴 다마고치 별에서 태어난 아기 다마고치. 과연 어떤 다마고치로 자랄까? 그 동그란 몸속에는 꿈과 희망이 가득 차 있다.", "fields": [], "stage": "baby", "tier": null, "food": null, "young": null, "emoji": "🥚", "h": null, "hap": null, "routes": []}, {"no": 501, "ko": "랜드 키드", "en": "Land kid", "jp": "ランドキッド", "desc": "다리가 생긴 키즈 다마고치. 아장아장 걸어 다니다가 배가 고파졌을 때 맛있는 밥을 먹는 것을 아주 좋아한다♪", "fields": ["land"], "stage": "kid", "tier": null, "food": null, "young": null, "emoji": "🦶", "h": null, "hap": null, "routes": []}, {"no": 502, "ko": "워터 키드", "en": "Water kid", "jp": "ウォーターキッド", "desc": "지느러미가 생긴 키즈 다마고치. 조금만 헤엄쳐도 피곤해서인지 어느새 곤히 잠들어 버린다♪", "fields": ["water"], "stage": "kid", "tier": null, "food": null, "young": null, "emoji": "🫧", "h": null, "hap": null, "routes": []}, {"no": 503, "ko": "스카이 키드", "en": "Sky kid", "jp": "スカイキッド", "desc": "날개가 생긴 키즈 다마고치. 파닥거리며 돌아다녔던 즐거운 기억을 떠올리면서 간식을 먹는 시간을 제일 좋아한다♪", "fields": ["sky"], "stage": "kid", "tier": null, "food": null, "young": null, "emoji": "☁️", "h": null, "hap": null, "routes": []}, {"no": 504, "ko": "로어 영", "en": "Roar young", "jp": "ロアヤング", "desc": "손발이 모두 완전한 형태로 자란 영 다마고치. 성격이 매우 밝고 긍정적이라 감정이 풍부한 다마고치로 성장할 것 같다.", "fields": ["land"], "stage": "young", "tier": null, "food": "고기", "young": 504, "emoji": "🦁", "h": null, "hap": null, "routes": []}, {"no": 505, "ko": "토들 영", "en": "Toddle young", "jp": "トドルヤング", "desc": "네 발로 걷는 모습으로 자란 영 다마고치. 움직임과 행동 모두 차분해서 똑똑한 다마고치로 성장할 것 같다.", "fields": ["land"], "stage": "young", "tier": null, "food": "당근", "young": 505, "emoji": "🐰", "h": null, "hap": null, "routes": []}, {"no": 506, "ko": "릭 영", "en": "Lick young", "jp": "リックヤング", "desc": "손과 꼬리가 자란 영 다마고치. 뜻밖의 행동을 할 때도 있어 조금 독특한 다마고치로 성장할 것 같다.", "fields": ["land"], "stage": "young", "tier": null, "food": "벌레", "young": 506, "emoji": "🐛", "h": null, "hap": null, "routes": []}, {"no": 507, "ko": "스프라우트 영", "en": "Sprout young", "jp": "スプラウトヤング", "desc": "머리에 잎사귀가 돋아난 영 다마고치. 날마다 성장하는 모습을 보면 풍부한 재능을 꽃피울 것 같다.", "fields": ["land"], "stage": "young", "tier": null, "food": "기본식 / 혼합", "young": 507, "emoji": "🌱", "h": null, "hap": null, "routes": []}, {"no": 508, "ko": "글라이드 영", "en": "Glide young", "jp": "グライドヤング", "desc": "수영을 잘하게 된 영 다마고치. 성장 과정도 순탄해서 마음에 여유가 있는 다마고치로 성장할 것 같다.", "fields": ["water"], "stage": "young", "tier": null, "food": "해산물", "young": 508, "emoji": "🐬", "h": null, "hap": null, "routes": []}, {"no": 509, "ko": "리프 영", "en": "Leap young", "jp": "リープヤング", "desc": "물속 산책을 아주 좋아하게 된 영 다마고치. 아주 밝고 붙임성 좋아서 사랑스러운 성격의 다마고치로 성장할 것 같다.", "fields": ["water"], "stage": "young", "tier": null, "food": "해조류", "young": 509, "emoji": "🌿", "h": null, "hap": null, "routes": []}, {"no": 510, "ko": "패들 영", "en": "Paddle young", "jp": "パドルヤング", "desc": "기운차게 헤엄치는 영 다마고치. 커서도 지금의 순수한 마음을 간직할 것 같다.", "fields": ["water"], "stage": "young", "tier": null, "food": "플랑크톤", "young": 510, "emoji": "🦐", "h": null, "hap": null, "routes": []}, {"no": 511, "ko": "플로트 영", "en": "Float young", "jp": "フロートヤング", "desc": "물에 뜨는 것이 능숙해진 영 다마고치. 모습과 행동 모두 귀여워서 주변에 주목받는 존재로 성장할 것 같다.", "fields": ["water"], "stage": "young", "tier": null, "food": "기본식 / 혼합", "young": 511, "emoji": "🫧", "h": null, "hap": null, "routes": []}, {"no": 512, "ko": "처프 영", "en": "Chirp young", "jp": "チャープヤング", "desc": "날개가 멋지게 자란 영 다마고치. 이대로 순탄히 성장해서 하늘을 날아다니며 어찌 보면 자유로운 다마고치로 성장할 것 같다.", "fields": ["sky"], "stage": "young", "tier": null, "food": "옥수수", "young": 512, "emoji": "🐦", "h": null, "hap": null, "routes": []}, {"no": 513, "ko": "플랩 영", "en": "Flap young", "jp": "フラップヤング", "desc": "하늘 산책을 즐기는 영 다마고치. 체형 면에서든 성격 면에서든 주관이 뚜렷한 다마고치로 성장할 것 같다.", "fields": ["sky"], "stage": "young", "tier": null, "food": "닭고기", "young": 513, "emoji": "🐔", "h": null, "hap": null, "routes": []}, {"no": 514, "ko": "범블 영", "en": "Bumble young", "jp": "バンブルヤング", "desc": "총총대며 돌아다닐 수 있는 다리가 자란 영 다마고치. 뜻밖의 모습을 보이기도 하지만, 어떤 일에 최선을 다하는 다마고치로 성장할 것 같다.", "fields": ["sky"], "stage": "young", "tier": null, "food": "꿀", "young": 514, "emoji": "🐝", "h": null, "hap": null, "routes": []}, {"no": 515, "ko": "로키 영", "en": "Rocky young", "jp": "ロッキーヤング", "desc": "높은 곳에서 자라 단단한 몸을 갖게 된 영 다마고치. 어딘가 아름다움이 느껴지는 면모를 가진 다마고치로 성장할 것 같다.", "fields": ["sky"], "stage": "young", "tier": null, "food": "기본식 / 혼합", "young": 515, "emoji": "🪨", "h": null, "hap": null, "routes": []}, {"no": 516, "ko": "비비마루치", "en": "Bbmarutchi", "jp": "ビビマルっち", "desc": "자유롭게 살다 보니 그대로 몸집이 커진 아기 다마고치. 매일 밥을 잔뜩 먹는 것이 일상의 즐거움이라고 한다♪", "fields": [], "stage": "adult", "tier": null, "food": null, "young": null, "emoji": "🟡", "h": null, "hap": null, "routes": []}, {"no": 517, "ko": "미야오치", "en": "Meowtchi", "jp": "ミャオっち", "desc": "표정이 풍부한 다마고치. 경계심이 강하고 조금 욱하는 면도 있지만, 사실은 엄청난 어리광쟁이다.", "fields": ["land"], "stage": "adult", "tier": "S", "food": "고기", "young": 504, "emoji": "🐱", "h": 70, "hap": 60, "routes": [{"field": "land", "food": "고기"}]}, {"no": 518, "ko": "포치치", "en": "Pochitchi", "jp": "ポチっち", "desc": "감정 표현이 풍부한 다마고치. 희로애락에 따른 다양한 감정 변화를 귀부터 꼬리까지 온몸으로 보여 줘서 알기 쉽다.", "fields": ["land"], "stage": "adult", "tier": "A", "food": "고기", "young": 504, "emoji": "🐶", "h": 80, "hap": 50, "routes": [{"field": "land", "food": "고기"}]}, {"no": 519, "ko": "구맥스", "en": "Gumax", "jp": "グマックス", "desc": "긴장감이 감도는 분위기를 자아내는 다마고치. 항상 화나 있는 것은 아니지만, 언제나 잔뜩 날카로운 표정을 유지하고 있다.", "fields": ["land"], "stage": "adult", "tier": "B", "food": "고기", "young": 504, "emoji": "🐻", "h": 90, "hap": 30, "routes": [{"field": "land", "food": "고기"}]}, {"no": 520, "ko": "라치", "en": "Ratchi", "jp": "ラっち", "desc": "졸려 보이는 모습과 달리 움직임이 재빠른 다마고치. 다툼이 일어나는 곳에도 자주 달려가서 사고뭉치로 오해를 받곤 한다.", "fields": ["land"], "stage": "adult", "tier": "C", "food": "고기", "young": 504, "emoji": "🐭", "h": 40, "hap": 50, "routes": [{"field": "land", "food": "고기"}]}, {"no": 521, "ko": "마메치", "en": "Mametchi", "jp": "まめっち", "desc": "성격과 행동 모두 차분한 다마고치. \"마메치에 비해 ○○\"… 이런 식으로 자주 다른 다마고치의 비교 대상이 되곤 한다.", "fields": ["land"], "stage": "adult", "tier": "S", "food": "당근", "young": 505, "emoji": "🫘", "h": 60, "hap": 80, "routes": [{"field": "land", "food": "당근"}]}, {"no": 522, "ko": "미미치", "en": "Mimitchi", "jp": "みみっち", "desc": "기다란 귀가 매력 포인트인 다마고치. 귀가 너무 길다 보니 나뭇가지에 부딪치기도 하고 난처할 때도 있다. 계절 변화에 무척 민감하다.", "fields": ["land"], "stage": "adult", "tier": "A", "food": "당근", "young": 505, "emoji": "🐰", "h": 50, "hap": 70, "routes": [{"field": "land", "food": "당근"}]}, {"no": 523, "ko": "몰모치", "en": "Molmotchi", "jp": "モルモっち", "desc": "체격과 표정에서 위엄이 넘치는 다마고치. 누군가와 함께 있을 때가 많은 것을 보아 사실은 외로움을 많이 타는 성격일지도 모른다.", "fields": ["land"], "stage": "adult", "tier": "B", "food": "당근", "young": 505, "emoji": "🐹", "h": 40, "hap": 50, "routes": [{"field": "land", "food": "당근"}]}, {"no": 524, "ko": "쉽치", "en": "Sheeptchi", "jp": "シープっち", "desc": "주변을 잘 살피고 누구에게나 친절한 다마고치. 복슬복슬한 외형 그대로 평온하고 힐링되는 분위기를 풍긴다.", "fields": ["land"], "stage": "adult", "tier": "C", "food": "당근", "young": 505, "emoji": "🐑", "h": null, "hap": null, "routes": [{"field": "land", "food": "당근"}]}, {"no": 525, "ko": "세비레치", "en": "Sebiretchi", "jp": "セビレっち", "desc": "선명한 빛깔의 등지느러미가 특징인 다마고치. 평소에는 부드러운 성격이지만 화가 나면 입에서 불을 뿜는 역동적인 모습을 보여 준다.", "fields": ["land"], "stage": "adult", "tier": "A", "food": "벌레", "young": 506, "emoji": "🦎", "h": 60, "hap": 70, "routes": [{"field": "land", "food": "벌레"}]}, {"no": 526, "ko": "레오파치", "en": "Leopatchi", "jp": "レオパっち", "desc": "꼬리의 무늬와 걱정스러운 표정이 귀여운 다마고치. 가까워지고 친해진 것 같다가도 갑자기 토라지는 변덕꾸러기이다.", "fields": ["land"], "stage": "adult", "tier": "S", "food": "벌레", "young": 506, "emoji": "🐆", "h": null, "hap": null, "routes": [{"field": "land", "food": "벌레"}]}, {"no": 527, "ko": "엘리자도치", "en": "Elizardotchi", "jp": "エリザドっち", "desc": "얼굴 주변에 있는 주름 장식이 인상적인 다마고치. 자칫하면 남들이 자기 존재를 잊어버리기 일쑤라 항상 존재감을 어필하고 있다고 한다.", "fields": ["land"], "stage": "adult", "tier": "B", "food": "벌레", "young": 506, "emoji": "🦎", "h": 50, "hap": 60, "routes": [{"field": "land", "food": "벌레"}]}, {"no": 528, "ko": "헤비치", "en": "Heavytchi", "jp": "ヘビーっち", "desc": "모두에게 강렬한 인상을 안겨 주는 다마고치. 자존감이 강하며, 거만하다거나 고집이 세고 부담스럽다는 오해를 사도 신경 쓰지 않는다.", "fields": ["land"], "stage": "adult", "tier": "C", "food": "벌레", "young": 506, "emoji": "🐍", "h": 90, "hap": 30, "routes": [{"field": "land", "food": "벌레"}]}, {"no": 529, "ko": "후라와치", "en": "Furawatchi", "jp": "フラワっち", "desc": "꽃을 아주 좋아하는 다마고치. 계절마다 좋아하는 꽃이 있어서 일 년 내내 기분 좋고 행복하게 지낸다♪", "fields": ["land"], "stage": "adult", "tier": "S", "food": "기본식 / 혼합", "young": 507, "emoji": "🌸", "h": 40, "hap": 90, "routes": [{"field": "land", "food": "기본식 / 혼합"}]}, {"no": 530, "ko": "투스투스치", "en": "Tustustchi", "jp": "ツスツスっち", "desc": "매우 긍정적인 다마고치. 배가 고프거나 덥거나 추워도 태연해 보일 정도로 씩씩하게 살아가고 있다.", "fields": ["land"], "stage": "adult", "tier": "B", "food": "기본식 / 혼합", "young": 507, "emoji": "🌿", "h": 50, "hap": 80, "routes": [{"field": "land", "food": "기본식 / 혼합"}]}, {"no": 531, "ko": "포츠넨치", "en": "Potsunentchi", "jp": "ポツネンっち", "desc": "조용하고 소극적인 다마고치. 혼자 있어도 아무렇지 않을 만큼 마음이 강인하고 자기주장도 확실하다.", "fields": ["land"], "stage": "adult", "tier": "A", "food": "기본식 / 혼합", "young": 507, "emoji": "🌷", "h": 70, "hap": 80, "routes": [{"field": "land", "food": "기본식 / 혼합"}]}, {"no": 532, "ko": "시게미상", "en": "Shigemi-san", "jp": "シゲミさん", "desc": "무심코 별명으로 부르고 싶어지는 다마고치. 무뚝뚝하지만 복슬복슬한 머리카락 속에 다정함과 따뜻함을 품고 있다.", "fields": ["land"], "stage": "adult", "tier": "C", "food": "기본식 / 혼합", "young": 507, "emoji": "🌳", "h": 90, "hap": 90, "routes": [{"field": "land", "food": "기본식 / 혼합"}]}, {"no": 533, "ko": "이루카치", "en": "Irukatchi", "jp": "いるかっち", "desc": "노는 걸 무척 좋아하는 장난꾸러기 다마고치. 매끈매끈하고 반들반들한 몸엔 활력이 가득하며, 누구하고든 금세 친해진다.", "fields": ["water"], "stage": "adult", "tier": "S", "food": "해산물", "young": 508, "emoji": "🐬", "h": 70, "hap": 60, "routes": [{"field": "water", "food": "해산물"}]}, {"no": 534, "ko": "카메치", "en": "Kametchi", "jp": "かめっち", "desc": "발걸음과 성장 모두 한 걸음씩 착실하게 나아가는 다마고치. 무슨 일이 있어도 \"괜찮거북\"이라는 정신으로 사소한 일은 신경 쓰지 않는 대범한 면이 있다.", "fields": ["water"], "stage": "adult", "tier": "A", "food": "해산물", "young": 508, "emoji": "🐢", "h": 80, "hap": 70, "routes": [{"field": "water", "food": "해산물"}]}, {"no": 535, "ko": "비버치", "en": "Beavertchi", "jp": "ビーバーっち", "desc": "걱정거리가 많은 다마고치. 부드러운 것만 먹으면 이가 너무 자라기 때문에 가끔 단단한 것을 먹고 싶어 한다.", "fields": ["water"], "stage": "adult", "tier": "C", "food": "해조류", "young": 509, "emoji": "🦫", "h": 90, "hap": 30, "routes": [{"field": "water", "food": "해조류"}]}, {"no": 536, "ko": "쿠지라치", "en": "Kujiratchi", "jp": "くじらっち", "desc": "항상 즐겁게 지내는 다마고치. 생각보다 몸이 크게 자라지는 않지만, 마음은 바다처럼 넓고 너그럽다.", "fields": ["water"], "stage": "adult", "tier": "B", "food": "해산물", "young": 508, "emoji": "🐋", "h": 90, "hap": 80, "routes": [{"field": "water", "food": "해산물"}]}, {"no": 537, "ko": "악솔로파치", "en": "Axolopatchi", "jp": "アクソロパっち", "desc": "머리 쪽에 자란 큰 지느러미와 꼬리가 매력 포인트인 다마고치. 성격은 매우 명랑하며 친구들과도 잘 어울린다고 한다♪", "fields": ["water"], "stage": "adult", "tier": "S", "food": "해조류", "young": 509, "emoji": "🦎", "h": 60, "hap": 80, "routes": [{"field": "water", "food": "해조류"}]}, {"no": 538, "ko": "이모리치", "en": "Imoritchi", "jp": "イモリっち", "desc": "얼굴과 배가 열정적인 색으로 물든 다마고치. 마음에 드는 상대를 찾으면 친해지고 싶어서 열렬하게 어필하곤 한다.", "fields": ["water"], "stage": "adult", "tier": "A", "food": "해조류", "young": 509, "emoji": "🦎", "h": 50, "hap": 60, "routes": [{"field": "water", "food": "해조류"}]}, {"no": 539, "ko": "카와즈치", "en": "Kawazutchi", "jp": "カワズっち", "desc": "살짝 청개구리 같은 면모를 가진 다마고치. 비가 오면 신나서 노래를 부르기 시작하지만, 모두가 함께 노래해 주면 갑자기 부르던 노래를 멈추고 시치미를 뗀다.", "fields": ["water"], "stage": "adult", "tier": "B", "food": "해조류", "young": 509, "emoji": "🐸", "h": 40, "hap": 70, "routes": [{"field": "water", "food": "해조류"}]}, {"no": 540, "ko": "우루오치", "en": "Uruotchi", "jp": "ウルオっち", "desc": "보습을 가장 중요하게 여기는 다마고치. 대자연 속에서 몸과 마음을 촉촉하게 적시는 스킨케어 루틴을 지키고자 한다.", "fields": ["water"], "stage": "adult", "tier": "C", "food": "해산물", "young": 508, "emoji": "💧", "h": 40, "hap": 90, "routes": [{"field": "water", "food": "해산물"}]}, {"no": 541, "ko": "타치우치", "en": "Tachutchi", "jp": "タチウっち", "desc": "어린 시절의 마음을 계속 간직하고 있는 다마고치. 완전히 성장한 지금도 \"이런 어른이 되고 싶다!\"라는 꿈을 품고 있다.", "fields": ["water"], "stage": "adult", "tier": "S", "food": "플랑크톤", "young": 510, "emoji": "🐠", "h": 60, "hap": 70, "routes": [{"field": "water", "food": "플랑크톤"}]}, {"no": 542, "ko": "샤크치", "en": "Sharktchi", "jp": "シャークっち", "desc": "무엇이든 씹어 부술 것만 같은 멋진 입이 특징인 다마고치. 함께 있으면 겉모습만큼 무섭지 않다는 것을 금방 알 수 있고 친구도 많은 편이다.", "fields": ["water"], "stage": "adult", "tier": "A", "food": "플랑크톤", "young": 510, "emoji": "🦈", "h": 90, "hap": 20, "routes": [{"field": "water", "food": "플랑크톤"}]}, {"no": 543, "ko": "안코치", "en": "Ankotchi", "jp": "アンコっち", "desc": "촉수 끝이 밝게 빛나는 다마고치. 마음에 드는 상대에게 어필할 때나 기운이 없는 아이를 응원할 때 촉수 끝을 반짝반짝 빛낸다.", "fields": ["water"], "stage": "adult", "tier": "B", "food": "플랑크톤", "young": 510, "emoji": "🐟", "h": 50, "hap": 60, "routes": [{"field": "water", "food": "플랑크톤"}]}, {"no": 544, "ko": "오토토치", "en": "Otototchi", "jp": "オトトっち", "desc": "조금 덜렁거리는 다마고치. 일이 잘 안 풀려도 말끔히 잊고 새로운 마음으로 시작하기 때문에 같은 실수를 반복하곤 한다…", "fields": ["water"], "stage": "adult", "tier": "C", "food": "플랑크톤", "young": 510, "emoji": "🐡", "h": null, "hap": null, "routes": [{"field": "water", "food": "플랑크톤"}]}, {"no": 545, "ko": "쿠라라치", "en": "Kuraratchi", "jp": "クララっち", "desc": "둥실둥실 떠다니는 모습이 사랑스러운 다마고치. 그 모습에 푹 빠져 정신을 못 차리게 되는 모두의 아이돌 같은 존재다♪", "fields": ["water"], "stage": "adult", "tier": "S", "food": "기본식 / 혼합", "young": 511, "emoji": "🪼", "h": 40, "hap": 90, "routes": [{"field": "water", "food": "기본식 / 혼합"}]}, {"no": 546, "ko": "멘다코치", "en": "Mendakotchi", "jp": "メンダコっち", "desc": "자기 의견을 내세우지 않고 주변의 생각을 따라가는 다마고치. 그런 성격이나 팔랑팔랑한 움직임 덕분에 곁에 있으면 마음이 편안해진다.", "fields": ["water"], "stage": "adult", "tier": "A", "food": "기본식 / 혼합", "young": 511, "emoji": "🐙", "h": 50, "hap": 80, "routes": [{"field": "water", "food": "기본식 / 혼합"}]}, {"no": 547, "ko": "아메후라치", "en": "Amefuratchi", "jp": "アメフラっち", "desc": "몸과 더듬이를 흔드는 춤이 특기인 다마고치. 춤추면 비가 온다는 소문이 있지만, 정작 본인은 춤추고 싶을 때 춤을 출 뿐이다.", "fields": ["water"], "stage": "adult", "tier": "B", "food": "기본식 / 혼합", "young": 511, "emoji": "🐌", "h": 70, "hap": 80, "routes": [{"field": "water", "food": "기본식 / 혼합"}]}, {"no": 548, "ko": "구소쿠치", "en": "Gusokutchi", "jp": "グソクっち", "desc": "깨끗한 걸 무척 좋아하는 다마고치. 쓰레기를 모아 두었다가 응가를 청소할 때 함께 처리하는 것을 잊지 않는다.", "fields": ["water"], "stage": "adult", "tier": "C", "food": "기본식 / 혼합", "young": 511, "emoji": "🦐", "h": 80, "hap": 40, "routes": [{"field": "water", "food": "기본식 / 혼합"}]}, {"no": 549, "ko": "호호치", "en": "Horhotchi", "jp": "ホルホーっち", "desc": "겉보기엔 멍해 보이지만 날카로운 감각을 가진 다마고치. 머리를 많이 써서 그런지 먹는 걸 엄청나게 좋아한다.", "fields": ["sky"], "stage": "adult", "tier": "S", "food": "닭고기", "young": 513, "emoji": "🦉", "h": 70, "hap": 60, "routes": [{"field": "sky", "food": "닭고기"}]}, {"no": 550, "ko": "몽가치", "en": "Mongatchi", "jp": "モンガっち", "desc": "동그랗고 초롱초롱한 눈에 애교가 넘치는 다마고치. 하늘을 날고 있으면 모두의 관심을 받을 수 있어 자주 하늘을 날곤 한다.", "fields": ["sky"], "stage": "adult", "tier": "A", "food": "닭고기", "young": 513, "emoji": "🐦", "h": 80, "hap": 50, "routes": [{"field": "sky", "food": "닭고기"}]}, {"no": 551, "ko": "이글치", "en": "Eagletchi", "jp": "イーグルっち", "desc": "소리 없이 날아다니는 것이 특기인 다마고치. 모르는 사이에 험상궂은 얼굴로 옆에 서 있기도 해서 깜짝 놀라게 된다.", "fields": ["sky"], "stage": "adult", "tier": "B", "food": "닭고기", "young": 513, "emoji": "🦅", "h": null, "hap": null, "routes": [{"field": "sky", "food": "닭고기"}]}, {"no": 552, "ko": "바치", "en": "Batchi", "jp": "バっち", "desc": "어두운 곳을 좋아하는 다마고치. 동그란 몸으로 좁은 틈에 들어가고 싶어 해서 가끔 코와 엉덩이가 더러워져 있다.", "fields": ["sky"], "stage": "adult", "tier": "C", "food": "닭고기", "young": 513, "emoji": "🦇", "h": 40, "hap": 50, "routes": [{"field": "sky", "food": "닭고기"}]}, {"no": 553, "ko": "파피요치", "en": "Papillotchi", "jp": "パピヨっち", "desc": "예쁜 꽃을 찾아 산책하는 것이 취미인 다마고치. 의외로 바다 저편의 꽃밭까지 날아갈 수 있는 체력이 있다.", "fields": ["sky"], "stage": "adult", "tier": "S", "food": "꿀", "young": 514, "emoji": "🦋", "h": 60, "hap": 80, "routes": [{"field": "sky", "food": "꿀"}]}, {"no": 554, "ko": "카부토치", "en": "Kabutotchi", "jp": "カブトっち", "desc": "조금 자존심이 강한 다마고치. 자신의 자랑거리인 뿔을 손질하거나 체력 단련을 하는 등, 몸을 멋지게 보이기 위한 노력을 게을리하지 않는다.", "fields": ["sky"], "stage": "adult", "tier": "A", "food": "꿀", "young": 514, "emoji": "🪲", "h": 50, "hap": 70, "routes": [{"field": "sky", "food": "꿀"}]}, {"no": 555, "ko": "텐토치", "en": "Tentotchi", "jp": "テントっち", "desc": "등에 예쁜 별무늬가 새겨진 다마고치. 본인도 그 무늬가 보고 싶어서 물웅덩이에 비친 무늬를 보려고 온몸을 비틀 때가 있다.", "fields": ["sky"], "stage": "adult", "tier": "B", "food": "꿀", "young": 514, "emoji": "🐞", "h": null, "hap": null, "routes": [{"field": "sky", "food": "꿀"}]}, {"no": 556, "ko": "하치치", "en": "Hatchitchi", "jp": "ハチっち", "desc": "마음씨가 무척 고운 다마고치. 주변을 항상 배려하며 친구들과 아기 다마고치를 위해 행동하는 모습도 자주 보인다.", "fields": ["sky"], "stage": "adult", "tier": "C", "food": "꿀", "young": 514, "emoji": "🐝", "h": null, "hap": null, "routes": [{"field": "sky", "food": "꿀"}]}, {"no": 557, "ko": "쿠치파치", "en": "Kuchipatchi", "jp": "くちぱっち", "desc": "식탐이 무척 많은 다마고치. 모처럼 경치 좋은 곳에 놀러 나가도 거기서 바로 낮잠을 자버리는 느긋한 성격을 가지고 있다.", "fields": ["sky", "forest"], "stage": "adult", "tier": "B", "food": "옥수수", "young": 512, "emoji": "😙", "h": 30, "hap": 90, "routes": [{"field": "sky", "food": "옥수수"}, {"field": "forest", "food": "석류"}]}, {"no": 558, "ko": "바타치", "en": "Batatchi", "jp": "バタっち", "desc": "조금 응석꾸러기인 다마고치. 겁이 많은 면도 있어서 큰 소리가 나면 깜짝 놀라 날개를 퍼덕이곤 한다.", "fields": ["sky"], "stage": "adult", "tier": "A", "food": "옥수수", "young": 512, "emoji": "🦜", "h": 70, "hap": 60, "routes": [{"field": "sky", "food": "옥수수"}]}, {"no": 559, "ko": "피코치", "en": "Peacotchi", "jp": "ピーコっち", "desc": "부채 모양의 날개가 특징인 다마고치. 친해지고 싶은 상대에게는 자랑스러운 날개를 힘껏 펴서 어필한다.", "fields": ["sky"], "stage": "adult", "tier": "S", "food": "옥수수", "young": 512, "emoji": "🦚", "h": 50, "hap": 60, "routes": [{"field": "sky", "food": "옥수수"}]}, {"no": 560, "ko": "키위치", "en": "Kiwitchi", "jp": "キーウィっち", "desc": "동글동글한 몸매와 삐쭉 솟은 머리털이 사랑스러운 다마고치. 느긋해 보여도 달릴 때는 엄청나게 빠르다.", "fields": ["sky"], "stage": "adult", "tier": "C", "food": "옥수수", "young": 512, "emoji": "🥝", "h": 60, "hap": 70, "routes": [{"field": "sky", "food": "옥수수"}]}, {"no": 561, "ko": "젬치", "en": "Gemtchi", "jp": "ジェムっち", "desc": "복슬복슬한 몸에서 뻗어 나온 딱딱한 뿔이 특징인 다마고치. 보석처럼 반짝반짝 빛나는 뿔과 이마, 다리가 무척이나 예쁘다♪", "fields": ["sky"], "stage": "adult", "tier": "S", "food": "기본식 / 혼합", "young": 515, "emoji": "💎", "h": 60, "hap": 90, "routes": [{"field": "sky", "food": "기본식 / 혼합"}]}, {"no": 562, "ko": "오레타치", "en": "Oretatchi", "jp": "オレタっち", "desc": "\"언제 어디서나 함께야!\"라는 말처럼 깊은 인연으로 이어진 다마고치. 광석과도 같은 반짝임과 성격에서 순수한 매력을 느낄 수 있다.", "fields": ["sky"], "stage": "adult", "tier": "A", "food": "기본식 / 혼합", "young": 515, "emoji": "🪨", "h": 50, "hap": 80, "routes": [{"field": "sky", "food": "기본식 / 혼합"}]}, {"no": 563, "ko": "이시코로치", "en": "Ishikorotchi", "jp": "イシコロっち", "desc": "인내심이 아주 강한 다마고치. 넘어져서 몸이 뒤집혀도 바람이 불어 원래 자세로 돌아올 때까지 가만히 있을 수 있다.", "fields": ["sky"], "stage": "adult", "tier": "B", "food": "기본식 / 혼합", "young": 515, "emoji": "🗿", "h": 90, "hap": 80, "routes": [{"field": "sky", "food": "기본식 / 혼합"}]}, {"no": 564, "ko": "마그마치", "en": "Magmatchi", "jp": "マグマっち", "desc": "움직임이 느릿느릿한 다마고치. 몸이 변형될 정도로 입을 크게 벌려 웃거나 충격을 받기도 하는 등… 감정 표현이 아주 화끈하다!", "fields": ["sky"], "stage": "adult", "tier": "C", "food": "기본식 / 혼합", "young": 515, "emoji": "🌋", "h": 50, "hap": 90, "routes": [{"field": "sky", "food": "기본식 / 혼합"}]}, {"no": 565, "ko": "초도라치", "en": "Chodracotchi", "jp": "チョドラっち", "desc": "뿔, 날개, 꼬리가 모두 멋진 다마고치. 겉모습에서 느껴지는 풍격과 어울리지 않을 정도로 실수가 많고 덤벙대는 엉뚱한 면이 있다.", "fields": ["land"], "stage": "secret", "tier": null, "food": null, "young": null, "emoji": "🐉", "h": null, "hap": null, "routes": []}, {"no": 566, "ko": "머마린치", "en": "Mermarintchi", "jp": "マーマリンっち", "desc": "넓은 마음으로 자연을 사랑하는 다마고치. 친구들을 마치 자기 아이처럼 깊은 애정을 담아 대한다.", "fields": ["water"], "stage": "secret", "tier": null, "food": null, "young": null, "emoji": "🧜", "h": null, "hap": null, "routes": []}, {"no": 567, "ko": "야야콘치", "en": "Yayacorntchi", "jp": "ヤヤコーンっち", "desc": "구름 위에서 느긋하게 살고 있는 다마고치. 언젠가 멋진 날개가 돋아 넓은 하늘을 누비는 모습을 꿈꾸고 있다고 한다.", "fields": ["sky"], "stage": "secret", "tier": null, "food": null, "young": null, "emoji": "🌽", "h": 90, "hap": 80, "routes": []}, {"no": 568, "ko": "콘코치", "en": "Konkotchi", "jp": "コンコっち", "desc": "영리하고 무엇이든 요령 있게 척척 해내는 다마고치. 타눈치와는 단짝 친구이며 만날 때마다 배를 쓰다듬어 주곤 한다.", "fields": ["forest"], "stage": "adult", "tier": "A", "food": "북경 고기", "young": 585, "emoji": "🦊", "h": null, "hap": null, "routes": [{"field": "forest", "food": "북경 고기"}]}, {"no": 569, "ko": "티가오치", "en": "Tigaotchi", "jp": "ティガオっち", "desc": "커다란 몸집에 눈매도 날카로워 노려보면 살짝 무서운 다마고치. 진심으로 울부짖으면 대나무 숲이 흔들릴 정도의 압도감이 느껴진다.", "fields": ["forest"], "stage": "adult", "tier": "B", "food": "북경 고기", "young": 585, "emoji": "🐯", "h": 90, "hap": 30, "routes": [{"field": "forest", "food": "북경 고기"}]}, {"no": 570, "ko": "타눈치", "en": "Tanoontchi", "jp": "タヌーンっち", "desc": "차분하고 느긋한 다마고치. 동그란 달치가 뜬 밤에는 통통한 배를 두드리며 춤추는 걸 아주 좋아한다.", "fields": ["forest"], "stage": "adult", "tier": "C", "food": "북경 고기", "young": 585, "emoji": "🦝", "h": 40, "hap": 50, "routes": [{"field": "forest", "food": "북경 고기"}]}, {"no": 571, "ko": "레서판치", "en": "Lessapantchi", "jp": "レッサーパンっち", "desc": "줄무늬가 있는 커다란 꼬리가 특징인 다마고치. 의외로 날카로운 이빨과 발톱으로 위협해도 평소 모습이 귀여워서 무섭지는 않다.", "fields": ["forest"], "stage": "adult", "tier": "S", "food": "대나무 잎", "young": 586, "emoji": "🐾", "h": 60, "hap": 80, "routes": [{"field": "forest", "food": "대나무 잎"}]}, {"no": 572, "ko": "카노코치", "en": "Kanokotchi", "jp": "カノコっち", "desc": "기품이 느껴지는 이마의 무늬가 매력 포인트인 다마고치. 사실은 숲속에 파묻힐 정도로 자주 놀러 다닌다.", "fields": ["forest"], "stage": "adult", "tier": "A", "food": "대나무 잎", "young": 586, "emoji": "🦌", "h": 50, "hap": 70, "routes": [{"field": "forest", "food": "대나무 잎"}]}, {"no": 573, "ko": "스이규치", "en": "Suigyutchi", "jp": "スイギュっち", "desc": "상냥하고 힘이 센 다마고치. 천천히 식사하는 걸 좋아해서 깨어 있는 동안에는 거의 항상 무언가를 먹고 있는 것처럼 보인다.", "fields": ["forest"], "stage": "adult", "tier": "B", "food": "대나무 잎", "young": 586, "emoji": "🐃", "h": null, "hap": null, "routes": [{"field": "forest", "food": "대나무 잎"}]}, {"no": 574, "ko": "판부치", "en": "Panbootchi", "jp": "パンブーっち", "desc": "얼굴과 몸에 여러 가지 특징이 있는 다마고치. 외모도 성격도 친근해서인지 모두에게 인기가 너무 많아, 본인은 조금 당황스러워하는 눈치이다…", "fields": ["forest"], "stage": "adult", "tier": "C", "food": "대나무 잎", "young": 586, "emoji": "🐼", "h": null, "hap": null, "routes": [{"field": "forest", "food": "대나무 잎"}]}, {"no": 575, "ko": "카치치", "en": "Kachitchi", "jp": "カチっち", "desc": "시원시원한 얼굴에 노래 부르는 것도 아주 좋아하는 다마고치. 겉모습과는 달리, 놀이든 식사량이든… 뭐든 이기는 것에 집착한다.", "fields": ["forest"], "stage": "adult", "tier": "S", "food": "석류", "young": 587, "emoji": "🐦", "h": null, "hap": null, "routes": [{"field": "forest", "food": "석류"}]}, {"no": 576, "ko": "토키파치", "en": "Tokipatchi", "jp": "トキパっち", "desc": "친구들을 소중히 여기는 다마고치. 자신과 닮은 다마고치를 만나면 마음이 놓여 평소보다 볏과 꼬리를 더 꼿꼿하게 세운다.", "fields": ["forest"], "stage": "adult", "tier": "A", "food": "석류", "young": 587, "emoji": "🦩", "h": 70, "hap": 60, "routes": [{"field": "forest", "food": "석류"}]}, {"no": 577, "ko": "스파로치", "en": "Sparrotchi", "jp": "スパロっち", "desc": "배짱이 두둑하고 당찬 다마고치. 그런 성격이 얼굴에 그대로 드러나서인지 종종 싸움을 거는 것처럼 보이기도 한다.", "fields": ["forest"], "stage": "adult", "tier": "C", "food": "석류", "young": 587, "emoji": "🐤", "h": null, "hap": null, "routes": [{"field": "forest", "food": "석류"}]}, {"no": 578, "ko": "시이타케치", "en": "Shiitaketchi", "jp": "シイタケっち", "desc": "우산 같은 모양의 머리가 마음에 쏙 든 다마고치. 누구보다 햇볕을 듬뿍 쬐어 더 폭신하고 두툼해지려는 계획을 은밀하게 꾸미고 있는 듯하다.", "fields": ["forest"], "stage": "adult", "tier": "S", "food": "기본식 / 혼합", "young": 588, "emoji": "🍄", "h": null, "hap": null, "routes": [{"field": "forest", "food": "기본식 / 혼합"}]}, {"no": 579, "ko": "피치", "en": "Peatchi", "jp": "ピーっち", "desc": "피부가 탱글탱글하고 윤기가 흐르는 다마고치. 성격도 섬세한 면이 있어서 가끔 피~피~ 하고 울 때가 있다.", "fields": ["forest"], "stage": "adult", "tier": "A", "food": "기본식 / 혼합", "young": 588, "emoji": "🍑", "h": 50, "hap": 80, "routes": [{"field": "forest", "food": "기본식 / 혼합"}]}, {"no": 580, "ko": "나파치", "en": "Nappatchi", "jp": "ナパっち", "desc": "아주 건강해 보이는 다마고치. 싱싱하게 잘 자란 머리의 잎사귀와 새하얗고 가지런한 이빨을 관리하는 시간을 아주 좋아한다♪", "fields": ["forest"], "stage": "adult", "tier": "B", "food": "기본식 / 혼합", "young": 588, "emoji": "🥬", "h": 70, "hap": 80, "routes": [{"field": "forest", "food": "기본식 / 혼합"}]}, {"no": 581, "ko": "러시라디치", "en": "Rushraditchi", "jp": "ラシュラディっち", "desc": "매우 덤벙거리는 다마고치. 서둘러야 할 일을 깨닫고 짧은 다리로 허둥지둥 달려가는 모습을 자주 볼 수 있다.", "fields": ["forest"], "stage": "adult", "tier": "C", "food": "기본식 / 혼합", "young": 588, "emoji": "🥕", "h": null, "hap": null, "routes": [{"field": "forest", "food": "기본식 / 혼합"}]}, {"no": 582, "ko": "포레스트 호호치", "en": "Forest Horhotchi", "jp": "フォレストホルホーっち", "desc": "숲속에서 자라 분홍색을 띤 모습으로 성장한 호호치. 겉보기엔 멍해 보이지만 날카로운 감각을 가지고 있고 먹는 걸 엄청나게 좋아한다.", "fields": ["forest"], "stage": "adult", "tier": "S", "food": "북경 고기", "young": 585, "emoji": "🦉", "h": 70, "hap": 60, "routes": [{"field": "forest", "food": "북경 고기"}]}, {"no": 583, "ko": "타츠치", "en": "Tatsutchi", "jp": "タツっち", "desc": "대나무 숲 깊은 곳, 안개 속에 떠 있는 듯한 모습이 아름다운 다마고치. 뿔과 돌기, 긴 목과 꼬리의 균형을 절묘하게 유지하고 있다.", "fields": ["forest"], "stage": "secret", "tier": null, "food": null, "young": null, "emoji": "🐲", "h": 90, "hap": 80, "routes": []}, {"no": 584, "ko": "포레스트 키드", "en": "Forest Kid", "jp": "フォレストキッド", "desc": "머리가 뾰족뾰족해진 키즈 다마고치. 방긋 웃는 얼굴의 오동통한 볼을 살짝만 찔러도 눈물을 왈칵 쏟는 등 감정 변화가 잦다♪", "fields": ["forest"], "stage": "kid", "tier": null, "food": null, "young": null, "emoji": "🌲", "h": null, "hap": null, "routes": []}, {"no": 585, "ko": "로어 영", "en": "Roar Young", "jp": "ロアヤング", "desc": "손발이 모두 완전한 형태로 자란 영 다마고치. 어딘가에서 본 것 같은 친근한 다마고치로 성장할 것 같다.", "fields": ["forest"], "stage": "young", "tier": null, "food": "북경 고기", "young": 585, "emoji": "🦁", "h": null, "hap": null, "routes": []}, {"no": 586, "ko": "토들 영", "en": "Toddle Young", "jp": "トドルヤング", "desc": "네발로 걷는 모습으로 자란 영 다마고치. 조금 허세를 부리기도 하지만 미워할 수 없는 인기쟁이로 성장할 것 같다.", "fields": ["forest"], "stage": "young", "tier": null, "food": "대나무 잎", "young": 586, "emoji": "🐼", "h": null, "hap": null, "routes": []}, {"no": 587, "ko": "처프 영", "en": "Chirp Young", "jp": "チャープヤング", "desc": "하늘 산책을 즐기는 영 다마고치. 자신만의 신념을 소중히 여기는 매우 개성 넘치는 다마고치로 성장할 것 같다.", "fields": ["forest"], "stage": "young", "tier": null, "food": "석류", "young": 587, "emoji": "🐦", "h": null, "hap": null, "routes": []}, {"no": 588, "ko": "스프라우트 영", "en": "Sprout Young", "jp": "スプラウトヤング", "desc": "뿌리 같은 발이 돋아난 영 다마고치. 자신을 잘 어필할 줄 아는 씩씩한 다마고치로 성장할 것 같다.", "fields": ["forest"], "stage": "young", "tier": null, "food": "기본식 / 혼합", "young": 588, "emoji": "🌱", "h": null, "hap": null, "routes": []}, {"no": 589, "ko": "트로피컬 키드", "en": "Tropical Kid", "jp": "トロピカルキッド", "desc": "머리 모양에서 자연의 생명력이 느껴지는 키즈 다마고치. 트로피컬 필드의 무더운 환경 속에서도 무럭무럭 잘 자랄 것 같다♪", "fields": ["tropical"], "stage": "kid", "tier": null, "food": null, "young": null, "emoji": "🌴", "h": null, "hap": null, "routes": []}, {"no": 590, "ko": "로어 영", "en": "Roar Young", "jp": "ロアヤング", "desc": "손발이 모두 완전한 형태로 자란 영 다마고치. 트로피컬 특유의 강렬한 햇살을 듬뿍 받으며 기운찬 다마고치로 성장할 것 같다.", "fields": ["tropical"], "stage": "young", "tier": null, "food": "트로피컬 고기", "young": 590, "emoji": "🦁", "h": null, "hap": null, "routes": []}, {"no": 591, "ko": "토들 영", "en": "Toddle Young", "jp": "トドルヤング", "desc": "네 발로 걷는 모습으로 자란 영 다마고치. 단순히 느긋하게 시간을 보내는 걸 수도 있지만… 이다음 차분한 다마고치로 성장할 것 같다.", "fields": ["tropical"], "stage": "young", "tier": null, "food": "바나나", "young": 591, "emoji": "🐰", "h": null, "hap": null, "routes": []}, {"no": 592, "ko": "릭 영", "en": "Lick Young", "jp": "リックヤング", "desc": "손과 꼬리도 자란 영 다마고치. 외모와는 전혀 다른 일면을 보일 때가 있어 이다음 개성 넘치는 다마고치로 성장할 것 같다.", "fields": ["tropical"], "stage": "young", "tier": null, "food": "나비", "young": 592, "emoji": "🦋", "h": null, "hap": null, "routes": []}, {"no": 593, "ko": "스프라우트 영", "en": "Sprout Young", "jp": "スプラウトヤング", "desc": "뿌리 같은 발이 돋아난 영 다마고치. 자신을 야무지게 어필할 줄 아는 다마고치로 성장할 것 같다.", "fields": ["tropical"], "stage": "young", "tier": null, "food": "기본식 / 혼합", "young": 593, "emoji": "🌱", "h": null, "hap": null, "routes": []}, {"no": 594, "ko": "트로피컬 미야오치", "en": "Tropical Meowtchi", "jp": "トロピカルミャオっち", "desc": "트로피컬 필드에서 자라 활기찬 자연환경이 물씬 느껴지는 색으로 성장한 미야오치. 바짝 경계할 때의 눈빛은 이글거리면서도 늠름하다.", "fields": ["tropical"], "stage": "adult", "tier": "S", "food": "트로피컬 고기", "young": 590, "emoji": "🐱", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "트로피컬 고기"}]}, {"no": 595, "ko": "마딜로치", "en": "Madillotchi", "jp": "マディロっち", "desc": "등과 꼬리가 갑옷처럼 튼튼한 다마고치. 몸을 공처럼 동그랗게 말 수 있어서 누가 실수로 위에 올라타도 끄떡없다♪", "fields": ["tropical"], "stage": "adult", "tier": "A", "food": "트로피컬 고기", "young": 590, "emoji": "🦡", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "트로피컬 고기"}]}, {"no": 596, "ko": "타란티치", "en": "Tarantytchi", "jp": "タランティっち", "desc": "눈을 마주치면 표적이 된 듯한 긴장감이 느껴지는 다마고치. 가끔 장난스러운 표정을 지으면 왠지 모르게 다들 안도의 한숨을 내쉰다.", "fields": ["tropical"], "stage": "adult", "tier": "B", "food": "트로피컬 고기", "young": 590, "emoji": "🕷️", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "트로피컬 고기"}]}, {"no": 597, "ko": "크로코치", "en": "Crocotchi", "jp": "クロコっち", "desc": "표정과 행동이 무척 익살맞은 다마고치. 필드의 제왕처럼 위압감 넘치는 첫인상과 다른 반전 매력으로 큰 인기를 끌고 있다.", "fields": ["tropical"], "stage": "adult", "tier": "C", "food": "트로피컬 고기", "young": 590, "emoji": "🐊", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "트로피컬 고기"}]}, {"no": 598, "ko": "트로피컬 마메치", "en": "Tropical Mametchi", "jp": "トロピカルまめっち", "desc": "트로피컬 필드에서 자라 뜨거운 햇살과 잘 어울리는 색으로 성장한 마메치. 성격과 행동도 원래 마메치보다 조금 더 열정적이다.", "fields": ["tropical"], "stage": "adult", "tier": "S", "food": "바나나", "young": 591, "emoji": "🫘", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "바나나"}]}, {"no": 599, "ko": "파로로치", "en": "Parorotchi", "jp": "パロロっち", "desc": "다른 친구들의 목소리를 흉내 내는 게 특기인 다마고치. 맛있는 걸 너무 많이 먹어서인지 날아다니는 건 조금 서툰 모양이다…", "fields": ["tropical"], "stage": "adult", "tier": "A", "food": "바나나", "young": 591, "emoji": "🦜", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "바나나"}]}, {"no": 600, "ko": "테나치", "en": "Tenatchi", "jp": "テナっち", "desc": "길고 튼튼한 팔이 특징인 다마고치. 나무에 매달린 모습을 관찰하다 보면 몸집이 워낙 커서 툭하면 머리를 부딪치곤 한다…", "fields": ["tropical"], "stage": "adult", "tier": "B", "food": "바나나", "young": 591, "emoji": "🐒", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "바나나"}]}, {"no": 601, "ko": "나마케모치", "en": "Namakemotchi", "jp": "ナマケモっち", "desc": "의외로 나무 타기가 특기인 다마고치. 나뭇가지에 매달려 있으면서도 표정이 워낙 여유로워 항상 나무늘보로 오해받곤 한다…", "fields": ["tropical"], "stage": "adult", "tier": "C", "food": "바나나", "young": 591, "emoji": "🦥", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "바나나"}]}, {"no": 602, "ko": "쿠이쿠이치", "en": "Kuikuitchi", "jp": "クイクイっち", "desc": "긴 발톱으로 브이 자를 그리며 까딱까딱 움직이는 모습이 귀여운 다마고치. 하품할 때 보이는 혀가 무척 가늘고 길어 다들 깜짝 놀란다!", "fields": ["tropical"], "stage": "adult", "tier": "S", "food": "나비", "young": 592, "emoji": "🦗", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "나비"}]}, {"no": 603, "ko": "포이즈치", "en": "Poizutchi", "jp": "ポイズっち", "desc": "초롱초롱한 눈망울이 인상적인 다마고치. 귀여운 겉모습과는 다르게 상대가 너무 많이 장난치면 독기 품은 표정을 짓기도 한다…", "fields": ["tropical"], "stage": "adult", "tier": "A", "food": "나비", "young": 592, "emoji": "🐍", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "나비"}]}, {"no": 604, "ko": "카멜레오치", "en": "Chameleotchi", "jp": "カメレオっち", "desc": "돌돌 말린 긴 꼬리와 혀를 가진 다마고치. 신체 변화를 관찰하던 중, 3일에 한 번꼴로 꼬리와 혀가 엉킨다는 사실이 밝혀졌다!", "fields": ["tropical"], "stage": "adult", "tier": "B", "food": "나비", "young": 592, "emoji": "🦎", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "나비"}]}, {"no": 605, "ko": "이구아나치", "en": "Iguanatchi", "jp": "イグアナっち", "desc": "강렬한 인상의 외모를 지닌 다마고치. 실제로는 움직임이 느릿느릿하고 일광욕을 좋아해 트로피컬 필드에 딱 어울리는 존재다.", "fields": ["tropical"], "stage": "adult", "tier": "C", "food": "나비", "young": 592, "emoji": "🦎", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "나비"}]}, {"no": 606, "ko": "야시키치", "en": "Yashikitchi", "jp": "ヤシキっち", "desc": "머리에 야자수가 자라나 있는 다마고치. 조그마한 친구들이 머리 위에서 낮잠을 자는 등 트로피컬 필드의 힐링 스폿으로 자리매김했다♪", "fields": ["tropical"], "stage": "adult", "tier": "S", "food": "기본식 / 혼합", "young": 593, "emoji": "🌴", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "기본식 / 혼합"}]}, {"no": 607, "ko": "트로피컬 포츠넨치", "en": "Tropical Potsunentchi", "jp": "トロピカルポツネンっち", "desc": "트로피컬 필드의 공기를 들이마시며 씩씩하게 자란 포츠넨치. 혼자 있을 때 오히려 더 신나게 논다고 한다♪", "fields": ["tropical"], "stage": "adult", "tier": "A", "food": "기본식 / 혼합", "young": 593, "emoji": "🌺", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "기본식 / 혼합"}]}, {"no": 608, "ko": "아나나치", "en": "Ananatchi", "jp": "アナナっち", "desc": "성격이 명랑하고 춤추는 게 특기인 다마고치♪ 뒷모습은 과일과 똑 닮았다! 누군가 덥석 베어 물지 않도록 잘 때는 꼭 얼굴이 보이게 잔다.", "fields": ["tropical"], "stage": "adult", "tier": "B", "food": "기본식 / 혼합", "young": 593, "emoji": "🍍", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "기본식 / 혼합"}]}, {"no": 609, "ko": "아보보치", "en": "Avovotchi", "jp": "アボボっち", "desc": "트로피컬 과일처럼 피부가 촉촉한 다마고치. 하지만 얼굴은 딱딱해서 종종 볼을 땅에 대고 비비적거리곤 한다.", "fields": ["tropical"], "stage": "adult", "tier": "C", "food": "기본식 / 혼합", "young": 593, "emoji": "🥑", "h": null, "hap": null, "routes": [{"field": "tropical", "food": "기본식 / 혼합"}]}, {"no": 610, "ko": "프로즌 키드", "en": "Frozen Kid", "jp": "フローズンキッド", "desc": "머리 모양에서 자연의 신비로움이 느껴지는 키즈 다마고치. 얼음 필드의 추운 환경 속에서도 무럭무럭 잘 자랄 것 같다♪", "fields": ["ice"], "stage": "kid", "tier": null, "food": null, "young": null, "emoji": "❄️", "h": null, "hap": null, "routes": []}, {"no": 611, "ko": "로어 영", "en": "Roar Young", "jp": "ロアヤング", "desc": "손발이 모두 완전한 형태로 자란 영 다마고치. 자기만의 개성과 뚜렷한 주관을 가진 다마고치로 성장할 것 같다.", "fields": ["ice"], "stage": "young", "tier": null, "food": "얼린 고기", "young": 611, "emoji": "🦁", "h": null, "hap": null, "routes": []}, {"no": 612, "ko": "토들 영", "en": "Toddle Young", "jp": "トドルヤング", "desc": "네 발로 걷는 모습으로 자란 영 다마고치. 자신은 물론 주변 모두가 사랑할 만큼 존재감 넘치는 다마고치로 성장할 것 같다.", "fields": ["ice"], "stage": "young", "tier": null, "food": "붉은 열매", "young": 612, "emoji": "🐰", "h": null, "hap": null, "routes": []}, {"no": 613, "ko": "글라이드 영", "en": "Glide Young", "jp": "グライドヤング", "desc": "수영을 잘하게 된 영 다마고치. 꽁꽁 얼어붙은 얼음 필드에서도 활력 충만! 명랑한 다마고치로 성장할 것 같다.", "fields": ["ice"], "stage": "young", "tier": null, "food": "북방 해산물", "young": 613, "emoji": "🐬", "h": null, "hap": null, "routes": []}, {"no": 614, "ko": "플로트 영", "en": "Float Young", "jp": "フロートヤング", "desc": "차가운 물에 뜨는 것이 능숙해진 영 다마고치. 어딘가 신비로운 매력을 풍기는 다마고치로 성장할 것 같다.", "fields": ["ice"], "stage": "young", "tier": null, "food": "기본식 / 혼합", "young": 614, "emoji": "🫧", "h": null, "hap": null, "routes": []}, {"no": 615, "ko": "울프치", "en": "Wolftchi", "jp": "ウルフっち", "desc": "기쁠 때면 길게 울부짖는 버릇이 있는 다마고치. 빙산에 메아리쳐 돌아온 제 목소리에 맞장구 치며 점점 소리를 키워가는 셀프 울부짖기 대결을 좋아한다♪", "fields": ["ice"], "stage": "adult", "tier": "A", "food": "얼린 고기", "young": 611, "emoji": "🐺", "h": null, "hap": null, "routes": [{"field": "ice", "food": "얼린 고기"}]}, {"no": 616, "ko": "오코조치", "en": "Okojotchi", "jp": "オコジョっち", "desc": "새하얀 풍경에 어울리는 외모로 눈과 얼음의 세상을 누비는 다마고치. 길고 푹신푹신한 꼬리를 소중한 베개 삼아 잠들곤 한다.", "fields": ["ice"], "stage": "adult", "tier": "S", "food": "얼린 고기", "young": 611, "emoji": "🐾", "h": null, "hap": null, "routes": [{"field": "ice", "food": "얼린 고기"}]}, {"no": 617, "ko": "폴라쿠마치", "en": "Polakumatchi", "jp": "ポラクマっち", "desc": "빙수를 무척 좋아하는 다마고치. 필드 곳곳의 얼음을 날카로운 발톱으로 부수면서 시럽을 뿌리지 않아도 맛있는 얼음을 골라낸다♪", "fields": ["ice"], "stage": "adult", "tier": "B", "food": "얼린 고기", "young": 611, "emoji": "🐻‍❄️", "h": null, "hap": null, "routes": [{"field": "ice", "food": "얼린 고기"}]}, {"no": 618, "ko": "아자라치", "en": "Azaratchi", "jp": "アザラっち", "desc": "신비로운 눈빛을 지닌 다마고치. 맑은 눈망울로 빤히 바라보면 저절로 도와주고 싶어져 남에게 뭐든 곧잘 나누어 받곤 한다.", "fields": ["ice"], "stage": "adult", "tier": "C", "food": "얼린 고기", "young": 611, "emoji": "🦭", "h": null, "hap": null, "routes": [{"field": "ice", "food": "얼린 고기"}]}, {"no": 619, "ko": "아이시 이루카치", "en": "Icy Irukatchi", "jp": "アイシーいるかっち", "desc": "얼음 필드의 바다에서 자라 새하얀 모습으로 성장한 이루카치. 아무리 추워도 기운이 넘쳐 친구들에게 장난을 치고 다닌다♪", "fields": ["ice"], "stage": "adult", "tier": "S", "food": "북방 해산물", "young": 613, "emoji": "🐬", "h": null, "hap": null, "routes": [{"field": "ice", "food": "북방 해산물"}]}, {"no": 620, "ko": "긴지로치", "en": "Ginjirotchi", "jp": "ギンジローっち", "desc": "추위 속에서도 쾌활하고 기운이 넘치는 다마고치. 주변을 잘 챙겨주는 성격이라 아이들과 친구들의 사랑을 듬뿍 받으며 지낸다.", "fields": ["ice"], "stage": "adult", "tier": "A", "food": "북방 해산물", "young": 613, "emoji": "🐟", "h": null, "hap": null, "routes": [{"field": "ice", "food": "북방 해산물"}]}, {"no": 621, "ko": "호펜치", "en": "Hoppentchi", "jp": "ホッペンっち", "desc": "말랑말랑한 볼이 귀여운 다마고치. 발과 엉덩이도 말랑말랑해서 얼음 위에서 걷거나 털썩 앉아도 동상 걱정이 없다♪", "fields": ["ice"], "stage": "adult", "tier": "C", "food": "북방 해산물", "young": 613, "emoji": "🦭", "h": null, "hap": null, "routes": [{"field": "ice", "food": "북방 해산물"}]}, {"no": 622, "ko": "라코치", "en": "Rakkotchi", "jp": "ラッコっち", "desc": "바다 위에 둥둥 떠서 하늘 보는 걸 좋아하는 다마고치. 배 위에 조개껍데기를 올려두는 건 중심을 잡기 위한 거라, 조개를 깰 때는 다른 친구에게 부탁하곤 한다.", "fields": ["ice"], "stage": "adult", "tier": "B", "food": "북방 해산물", "young": 613, "emoji": "🦦", "h": null, "hap": null, "routes": [{"field": "ice", "food": "북방 해산물"}]}, {"no": 623, "ko": "무스치", "en": "Moosetchi", "jp": "ムースっち", "desc": "행동력 넘치는 씩씩한 다마고치. 한번 목적지를 정하면 아무리 험난한 길이라도 뚱한 표정을 지은 채 곧장 돌진한다.", "fields": ["ice"], "stage": "adult", "tier": "A", "food": "붉은 열매", "young": 612, "emoji": "🫎", "h": null, "hap": null, "routes": [{"field": "ice", "food": "붉은 열매"}]}, {"no": 624, "ko": "레밍치", "en": "Lemmingtchi", "jp": "レミングっち", "desc": "춥고 차가운 곳을 좋아하는 다마고치. 눈이나 얼음에 찰싹 붙어 있을 때의 표정은 구치파치가 온천에 들어갔을 때처럼 행복해 보인다♪", "fields": ["ice"], "stage": "adult", "tier": "S", "food": "붉은 열매", "young": 612, "emoji": "🐹", "h": null, "hap": null, "routes": [{"field": "ice", "food": "붉은 열매"}]}, {"no": 625, "ko": "라이치", "en": "Raichotchi", "jp": "ライっち", "desc": "사랑스러운 통통한 몸매의 다마고치. 친구를 아끼는 성격이라 주변 모두가 애정 어린 시선으로 지켜봐 주고 있다♪", "fields": ["ice"], "stage": "adult", "tier": "B", "food": "붉은 열매", "young": 612, "emoji": "🦌", "h": null, "hap": null, "routes": [{"field": "ice", "food": "붉은 열매"}]}, {"no": 626, "ko": "유키우사치", "en": "Yukiusatchi", "jp": "ユキウサっち", "desc": "고운 피부와 예쁜 다리, 아름다운 귀가 자랑인 다마고치. 거울처럼 매끄러운 얼음에 비친 자기 외모를 보며 넋을 잃고 감탄하곤 한다.", "fields": ["ice"], "stage": "adult", "tier": "C", "food": "붉은 열매", "young": 612, "emoji": "🐰", "h": null, "hap": null, "routes": [{"field": "ice", "food": "붉은 열매"}]}, {"no": 627, "ko": "네리네치", "en": "Nerinetchi", "jp": "ネリネっち", "desc": "\"유빙이 떠다니는 바다의 텐시치\"처럼 앙증맞은 모습의 다마고치. 밥을 먹을 때 달라지는 모습이나 화났을 때 보이는 의외의 면모에 주목하자!", "fields": ["ice"], "stage": "adult", "tier": "S", "food": "기본식 / 혼합", "young": 614, "emoji": "🌸", "h": null, "hap": null, "routes": [{"field": "ice", "food": "기본식 / 혼합"}]}, {"no": 628, "ko": "단고우오치", "en": "Dangouotchi", "jp": "ダンゴウオっち", "desc": "동글동글한 몸이 특징인 다마고치. 귀찮은 표정을 지으면서도 곤경에 처한 친구를 꼭 도와주며 상황을 어떻게든 원만하게 해결해 준다.", "fields": ["ice"], "stage": "adult", "tier": "A", "food": "기본식 / 혼합", "young": 614, "emoji": "🐡", "h": null, "hap": null, "routes": [{"field": "ice", "food": "기본식 / 혼합"}]}, {"no": 629, "ko": "야이티치", "en": "Yaytytchi", "jp": "ヤイティっち", "desc": "무척 긍정적인 다마고치. 위압감이 약간 강하게 느껴지지만 양손은 언제나 브이♪, 기분은 언제나 예이♪ 하며 신나 있다.", "fields": ["ice"], "stage": "adult", "tier": "B", "food": "기본식 / 혼합", "young": 614, "emoji": "🐠", "h": null, "hap": null, "routes": [{"field": "ice", "food": "기본식 / 혼합"}]}, {"no": 630, "ko": "유키라라치", "en": "Yukiraratchi", "jp": "ユキララっち", "desc": "눈 결정처럼 신비롭고 덧없는 매력이 있는 다마고치. 마음이 뜨거워져서 몸의 균형이 깨지지 않도록 쿨한 성격을 유지하려는 걸지도 모른다.", "fields": ["ice"], "stage": "adult", "tier": "C", "food": "기본식 / 혼합", "young": 614, "emoji": "🪼", "h": null, "hap": null, "routes": [{"field": "ice", "food": "기본식 / 혼합"}]}, {"no": 631, "ko": "마나파치", "en": "Manapatchi", "jp": "マナパっち", "desc": "따뜻한 물가에서 노는 걸 좋아하는 다마고치. 물속에서 올라왔을 때 머리에 달린 잎사귀가 수면 위로 모습을 드러내면 모두 기뻐한다♪", "fields": ["tropical"], "stage": "secret", "tier": null, "food": null, "young": null, "emoji": "🌱", "h": null, "hap": null, "routes": []}, {"no": 632, "ko": "호보혼치", "en": "Hobohorntchi", "jp": "ホボホーンっち", "desc": "머리의 무늬와 꼬리 모양이 독특한 다마고치. 유빙을 깨고 가끔 모습을 드러내지만 대체로 커다란 뿔만 인상에 남는다…", "fields": ["ice"], "stage": "secret", "tier": null, "food": null, "young": null, "emoji": "🦌", "h": null, "hap": null, "routes": []}], "stageOrder": ["baby", "kid", "young", "adult", "secret"]};
+(function(){
+  "use strict";
+  const byNo = {};
+  DATA.chars.forEach(function(c){ byNo[c.no] = c; });
+  const STAGE = {baby:"베이비", kid:"키즈", young:"영", adult:"어덜트", secret:"시크릿"};
+  const TIERLABEL = {S:"완벽 케어", A:"거의 완벽", B:"보통", C:"심한 방치"};
+  const TIERCOND = {S:"0회 + 배고픔·행복 5회↑", A:"누적 0~1회", B:"누적 2~5회", C:"누적 6회↑"};
+  const FIELDMAP = {};
+  DATA.fields.forEach(function(f){ FIELDMAP[f.id] = f; });
+
+  /* ---------- tabs ---------- */
+  const tabs = Array.prototype.slice.call(document.querySelectorAll("nav.tabs button"));
+  function showTab(name){
+    tabs.forEach(function(b){
+      const on = b.dataset.tab === name;
+      b.setAttribute("aria-selected", on ? "true" : "false");
+      document.getElementById("panel-" + b.dataset.tab).hidden = !on;
+    });
+  }
+  tabs.forEach(function(b){
+    b.addEventListener("click", function(){
+      showTab(b.dataset.tab);
+      try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){ window.scrollTo(0,0); }
+    });
+  });
+
+  /* ---------- evolution ---------- */
+  const fieldbar = document.getElementById("fieldbar");
+  const evoBody = document.getElementById("evoBody");
+  let activeField = "land";
+
+  function fieldBtn(f){
+    const b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("aria-pressed", f.id === activeField ? "true" : "false");
+    b.style.background = f.id === activeField ? "linear-gradient(135deg," + f.color + "," + f.deep + ")" : "#fff";
+    b.innerHTML = "<span>" + f.emoji + "</span><span>" + f.ko + "</span>";
+    b.addEventListener("click", function(){
+      activeField = f.id;
+      Array.prototype.forEach.call(fieldbar.children, function(x, i){
+        const ff = DATA.fields[i];
+        x.setAttribute("aria-pressed", ff.id === activeField ? "true" : "false");
+        x.style.background = ff.id === activeField ? "linear-gradient(135deg," + ff.color + "," + ff.deep + ")" : "#fff";
+      });
+      renderEvo();
+    });
+    return b;
+  }
+  DATA.fields.forEach(function(f){ fieldbar.appendChild(fieldBtn(f)); });
+
+  function statLine(c){
+    if(c.h && c.hap) return "배고픔 " + c.h + "분 · 행복 " + c.hap + "분";
+    return "수치 미확인";
+  }
+
+  function adultTile(no, tier){
+    const c = byNo[no];
+    const d = document.createElement("div");
+    d.className = "adult t-" + tier;
+    d.innerHTML =
+      '<span class="tl">' + tier + '</span>' +
+      '<span class="ae">' + c.emoji + '</span>' +
+      '<b>' + c.ko + '</b>' +
+      '<span class="en">' + c.en + '</span>' +
+      '<span class="no">No.' + c.no + '</span>' +
+      '<span class="cond">' + TIERCOND[tier] + '</span>' +
+      '<span class="stat">' + statLine(c) + '</span>';
+    return d;
+  }
+
+  function renderEvo(){
+    const f = FIELDMAP[activeField];
+    const kid = byNo[f.kid];
+    let html = "";
+    html += '<div class="field-sum" style="background:linear-gradient(150deg,' + f.color + '55,' + f.color + '22 55%,#ffffff 100%)">';
+    html += '<h2><span>' + f.emoji + '</span>' + f.ko + ' 필드 <span style="font-size:12px;font-weight:700;color:#8b7ba6">' + f.en + ' Field</span></h2>';
+    html += '<p class="fs-sub">이 필드에서 태어나는 키즈는 <b>No.' + kid.no + " " + kid.ko + '</b> — 베이비를 여기 두면 이 키즈가 돼요.</p>';
+    html += '<div class="fs-grid">';
+    html += '<div class="fs-item"><b>어덜트 갈래</b>' + f.groups.length + '가지 음식군 × S/A/B/C 4종</div>';
+    html += '<div class="fs-item"><b>시크릿 캐릭터</b>No.' + f.secret + ' ' + f.secretKo + '</div>';
+    html += '<div class="fs-item"><b>해금 조건</b>' + f.secretReq + '</div>';
+    html += '</div></div>';
+
+    f.groups.forEach(function(g){
+      const y = byNo[g.young];
+      html += '<article class="group">';
+      html += '<div class="g-head"><span class="g-emoji">' + g.emoji + '</span>';
+      html += '<span class="g-name">' + g.ko + '<span>' + g.en + '</span></span>';
+      html += '<span class="g-arrow">→ <em>' + y.ko + '</em> No.' + y.no + '<span style="color:#b0a6c4;font-weight:600">(' + y.en + ')</span></span></div>';
+      html += '<div class="foods">' + g.foods.map(function(x){
+        return '<span>' + x.ko + '<i>' + x.en + '</i></span>';
+      }).join("") + '</div>';
+      html += '<div class="adults" data-group="' + g.young + '"></div>';
+      html += '</article>';
+    });
+    evoBody.innerHTML = html;
+
+    f.groups.forEach(function(g){
+      const holder = evoBody.querySelector('.adults[data-group="' + g.young + '"]');
+      ["S", "A", "B", "C"].forEach(function(t){
+        holder.appendChild(adultTile(g.adults[t], t));
+      });
+    });
+  }
+  renderEvo();
+
+  /* ---------- dex ---------- */
+  const q = document.getElementById("q");
+  const qclear = document.getElementById("qclear");
+  const dexgrid = document.getElementById("dexgrid");
+  const countline = document.getElementById("countline");
+  const state = {field: "all", stage: "all", tier: "all"};
+
+  function buildFilters(el, label, key, items, cls){
+    if(label){
+      const s = document.createElement("span");
+      s.className = "lbl"; s.textContent = label;
+      el.appendChild(s);
+    }
+    items.forEach(function(it){
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip" + (cls ? " " + cls + (it.v !== "all" ? " " + it.v : "") : "");
+      b.textContent = it.t;
+      b.setAttribute("aria-pressed", state[key] === it.v ? "true" : "false");
+      b.addEventListener("click", function(){
+        state[key] = it.v;
+        Array.prototype.forEach.call(el.querySelectorAll(".chip"), function(x){ x.setAttribute("aria-pressed", "false"); });
+        b.setAttribute("aria-pressed", "true");
+        renderDex();
+      });
+      el.appendChild(b);
+    });
+  }
+  buildFilters(document.getElementById("fieldFilter"), null, "field",
+    [{v:"all", t:"전체"}].concat(DATA.fields.map(function(f){ return {v:f.id, t:f.emoji + " " + f.ko}; })));
+  buildFilters(document.getElementById("stageFilter"), null, "stage",
+    [{v:"all", t:"전체"}, {v:"baby", t:"베이비"}, {v:"kid", t:"키즈"}, {v:"young", t:"영"}, {v:"adult", t:"어덜트"}, {v:"secret", t:"시크릿"}]);
+  buildFilters(document.getElementById("tierFilter"), null, "tier",
+    [{v:"all", t:"전체"}, {v:"S", t:"S"}, {v:"A", t:"A"}, {v:"B", t:"B"}, {v:"C", t:"C"}], "tier");
+
+  function match(c){
+    if(state.field !== "all" && c.fields.indexOf(state.field) < 0) return false;
+    if(state.stage !== "all" && c.stage !== state.stage) return false;
+    if(state.tier !== "all" && c.tier !== state.tier) return false;
+    const kw = q.value.trim().toLowerCase();
+    if(kw){
+      const hay = (c.ko + " " + c.en + " " + c.jp + " " + c.no + " " + (c.food || "")).toLowerCase();
+      if(hay.indexOf(kw) < 0) return false;
+    }
+    return true;
+  }
+
+  function routeOf(c){
+    if(c.stage === "secret") return "시크릿 · " + c.fields.map(function(f){ return FIELDMAP[f].ko; }).join("·") + " 전용";
+    if(c.stage === "adult"){
+      if(c.no === 516) return "필드를 계속 바꿔 키즈 진화를 피하면 등장 · 교배 불가";
+      if(c.routes && c.routes.length > 1){
+        return c.routes.map(function(r){ return FIELDMAP[r.field].ko + " " + r.food; }).join(" / ") + " · " + (TIERCOND[c.tier] || "");
+      }
+      return (c.food || "-") + " · " + (TIERCOND[c.tier] || "");
+    }
+    if(c.stage === "young") return (c.food || "-") + " → " + FIELDMAP[c.fields[0]].ko + " 필드 영";
+    if(c.stage === "kid") return FIELDMAP[c.fields[0]].ko + " 필드에서 베이비가 자라면";
+    return "부화 직후의 아기 다마고치";
+  }
+
+  function renderDex(){
+    const list = DATA.chars.filter(match);
+    countline.innerHTML = "<b>" + list.length + "</b>마리";
+    dexgrid.innerHTML = "";
+    if(!list.length){
+      dexgrid.innerHTML = '<div class="empty" style="grid-column:1/-1">조건에 맞는 다마고치가 없어요. 검색어나 필터를 바꿔보세요 🥚</div>';
+      return;
+    }
+    list.forEach(function(c){
+      const f = c.fields[0] ? FIELDMAP[c.fields[0]] : null;
+      const d = document.createElement("article");
+      d.className = "dc";
+      d.style.setProperty("--fc", c.tier === "S" ? "#ffc94d" : c.tier === "A" ? "#63dcc0" : c.tier === "B" ? "#a99cff" : c.tier === "C" ? "#a3b3c6" : (f ? f.color : "#e6e0f5"));
+      let tags = "";
+      c.fields.forEach(function(fid){ const ff = FIELDMAP[fid]; tags += '<span>' + ff.emoji + " " + ff.ko + "</span>"; });
+      tags += '<span>' + STAGE[c.stage] + "</span>";
+      if(c.tier) tags += '<span>' + c.tier + " 티어</span>";
+      d.innerHTML =
+        '<div class="top"><span class="de">' + c.emoji + "</span>" +
+        '<span class="no">No.' + c.no + "</span>" +
+        (c.tier ? '<span class="tl ' + c.tier + '">' + c.tier + "</span>" : "") +
+        "</div>" +
+        "<h4>" + c.ko + "</h4>" +
+        '<div class="en">' + c.en + "</div>" +
+        '<div class="jp">' + c.jp + "</div>" +
+        '<div class="tags">' + tags + "</div>" +
+        '<div class="route">' + routeOf(c) + "</div>" +
+        '<div class="desc">' + (c.desc || "") + "</div>" +
+        '<button class="more" type="button">더 보기</button>';
+      d.querySelector(".more").addEventListener("click", function(){
+        const dd = d.querySelector(".desc");
+        dd.classList.toggle("open");
+        this.textContent = dd.classList.contains("open") ? "접기" : "더 보기";
+      });
+      dexgrid.appendChild(d);
+    });
+  }
+  q.addEventListener("input", renderDex);
+  qclear.addEventListener("click", function(){ q.value = ""; renderDex(); q.focus(); });
+  renderDex();
+
+  /* ---------- predictor ---------- */
+  const simField = document.getElementById("simField");
+  const simFood = document.getElementById("simFood");
+  const simTier = document.getElementById("simTier");
+  const simResult = document.getElementById("simResult");
+  const sim = {field: "land", group: 0, tier: "A"};
+
+  function optButton(label, sub, on, fn){
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt";
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+    b.innerHTML = label + (sub ? '<span class="sm">' + sub + "</span>" : "");
+    b.addEventListener("click", fn);
+    return b;
+  }
+
+  function renderSimFields(){
+    simField.innerHTML = "";
+    DATA.fields.forEach(function(f){
+      simField.appendChild(optButton(f.emoji + " " + f.ko, "", sim.field === f.id, function(){
+        sim.field = f.id; sim.group = 0; renderSimFoods(); renderSimResult();
+        Array.prototype.forEach.call(simField.children, function(x){ x.setAttribute("aria-pressed", "false"); });
+        this.setAttribute("aria-pressed", "true");
+      }));
+    });
+  }
+  function renderSimFoods(){
+    const f = FIELDMAP[sim.field];
+    simFood.innerHTML = "";
+    f.groups.forEach(function(g, i){
+      simFood.appendChild(optButton(g.emoji + " " + g.ko, "→ " + byNo[g.young].ko, sim.group === i, function(){
+        sim.group = i; renderSimFoods(); renderSimResult();
+      }));
+    });
+  }
+  function renderSimTiers(){
+    simTier.innerHTML = "";
+    [["S", "완벽 케어", "미스 0 + 5·5회"], ["A", "거의 완벽", "0~1회"], ["B", "보통", "2~5회"], ["C", "심한 방치", "6회↑"]].forEach(function(t){
+      simTier.appendChild(optButton('<span class="pill ' + t[0] + '">' + t[0] + "</span> " + t[1], t[2], sim.tier === t[0], function(){
+        sim.tier = t[0]; renderSimTiers(); renderSimResult();
+      }));
+    });
+  }
+  function renderSimResult(){
+    const f = FIELDMAP[sim.field];
+    const g = f.groups[sim.group];
+    const y = byNo[g.young];
+    const target = byNo[g.adults[sim.tier]];
+    const sameYoung = ["S", "A", "B", "C"].filter(function(t){ return t !== sim.tier; }).map(function(t){
+      const c = byNo[g.adults[t]];
+      return '<div class="alt"><b>' + c.emoji + " " + c.ko + "</b>" + t + " · " + TIERLABEL[t] + "</div>";
+    }).join("");
+    simResult.innerHTML =
+      '<div class="lead">지금 이대로 크면 →</div>' +
+      '<div class="who"><span class="re">' + target.emoji + "</span>" +
+      '<span class="wn"><b>' + target.ko + "</b>" +
+      '<span class="en">' + target.en + "</span>" +
+      '<span class="nono">No.' + target.no + " · " + sim.tier + " 티어</span></span></div>" +
+      '<div class="why"><b>' + f.ko + " 필드</b>에서 <b>" + g.ko + "</b>를 가장 많이 먹이면 <b>" + y.ko + '</b>(No.' + y.no + ")가 되고, 누적 케어미스 <b>" + TIERCOND[sim.tier] + "</b>이면 여기로 와요." +
+      (target.h ? " <br>배고픔 " + target.h + "분마다 · 행복 " + target.hap + "분마다 줄어드는 타입이에요." : "") +
+      "</div>" +
+      '<div class="desc">' + (target.desc || "") + "</div>" +
+      '<div class="alts">' + sameYoung + "</div>";
+  }
+  if(sim) { renderSimFields(); renderSimFoods(); renderSimTiers(); renderSimResult(); }
+})();
+</script>
+</body>
+</html>
