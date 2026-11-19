@@ -418,6 +418,36 @@ h2.title{display:none}
 .kv .row .k{flex:0 0 62px;font-size:10.5px;font-weight:900;color:var(--gold-2);padding-top:2px;line-height:1.4}
 .kv .row .v{min-width:0;flex:1 1 auto;font-size:12px;line-height:1.6;color:var(--ink-2)}
 
+/* ---------- ⭐ 즐겨찾기 · 모범답안 전체 펼치기 ---------- */
+.favbtn{
+  flex:0 0 auto;display:inline-grid;place-items:center;width:44px;height:44px;min-width:44px;
+  border-radius:12px;background:#fff;border:1px solid var(--line);
+  color:#b6c0d0;font-size:19px;line-height:1;padding:0;
+}
+.favbtn.on{background:var(--gold-soft);border-color:#e6cf8f;color:#c19512}
+.favbtn:active{transform:scale(.94)}
+.qcard>.favbtn{position:absolute;top:6px;right:6px;z-index:2}
+.qcard{position:relative}
+.qhead{padding-right:58px}
+.favbar{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 9px;padding:9px 11px;
+  border-radius:12px;background:linear-gradient(160deg,#fdf7e6,#fffdf7);border:1px solid #eddfb4;
+}
+.favbar[hidden]{display:none}
+.favbar .fbt{flex:1 1 auto;min-width:0;font-size:10.5px;font-weight:900;color:#7a5a08;line-height:1.45}
+.favbar .fbt b{display:block;font-size:12.5px;color:var(--navy);letter-spacing:-.02em}
+.favbar .btn{flex:0 0 auto;min-height:44px;font-size:11.5px;padding:0 12px}
+.favempty{padding:22px 16px;border-radius:14px;background:#fff;border:1px dashed #d7c48c;text-align:center}
+.favempty .fe{font-size:30px;line-height:1;display:block;margin-bottom:8px}
+.favempty b{display:block;font-size:13px;font-weight:900;color:var(--navy);line-height:1.5;letter-spacing:-.02em}
+.favempty p{margin:5px 0 0;font-size:11.5px;font-weight:700;color:var(--muted);line-height:1.65}
+.favempty .btn{margin-top:10px;min-height:44px;font-size:12px}
+.dqrow{display:flex;align-items:stretch;gap:6px}
+.dqrow .dq{flex:1 1 auto}
+.dqrow .favbtn{height:44px;min-height:44px;align-self:center;border-radius:10px}
+#qList.ansall .qcard .qbody{display:block}
+#qList.ansall .ansrow{display:none}
+
 /* ---------- check mode ---------- */
 .rec-head{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
 .rec-head .ctxname{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px;font-weight:800;color:var(--navy)}
@@ -663,6 +693,17 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
 .ansbox p{margin:0;font-size:12.5px;line-height:1.75;color:#4a3d12;font-weight:600;letter-spacing:-.01em}
 
 /* ---------- 자료실 세그먼트 · 사회이슈 · 통계 ---------- */
+/* ---------- 🔊 자료실 듣기 ---------- */
+.listenbar{display:flex;align-items:center;gap:5px;margin:0 0 10px;padding:5px;border-radius:12px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.lb-play{flex:1 1 auto;min-width:0;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:5px;border-radius:10px;background:linear-gradient(160deg,var(--navy-2),var(--navy));color:#fff;font-size:12px;font-weight:900;letter-spacing:-.02em;padding:0 8px}
+.lb-play.on{background:#fff;color:var(--navy);border:1px solid var(--line);box-shadow:none}
+.lb-play:disabled{opacity:.55}
+.lb-prog{flex:0 0 auto;font-size:10.5px;font-weight:900;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;padding:0 1px}
+.lb-rate{flex:0 0 auto;display:inline-flex;gap:2px;padding:2px;border-radius:9px;background:#f2f5fa}
+.lb-rate button{min-height:38px;padding:0 6px;border-radius:7px;font-size:10.5px;font-weight:900;color:#5a6b85;white-space:nowrap}
+.lb-rate button.on{background:var(--navy);color:#fff}
+.lb-next{flex:0 0 auto;width:40px;height:44px;border-radius:10px;background:#f6f8fc;border:1px solid var(--line);font-size:15px;line-height:1}
+.lb-next:disabled{opacity:.45}
 .lawseg{margin:2px 0 12px;display:flex;gap:5px;overflow-x:auto;overflow-y:hidden;background:transparent;padding:0 0 4px;border-radius:0;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
 .lawseg::-webkit-scrollbar{display:none}
 .lawseg button{
@@ -829,6 +870,8 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
   .qcard+.qcard{margin-top:0}
   .qcard{margin-top:0}
   .catrow{margin:0;padding:2px 0 10px;flex-wrap:wrap;overflow:visible}
+  .favbtn{width:38px;height:38px;min-width:38px;font-size:17px}
+  .qhead{padding-right:50px}
 }
 @media (min-width:900px){
   :root{--tabh:0px}
@@ -1031,6 +1074,10 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
       <div id="dailyHost" style="margin-top:12px"></div>
 
       <div class="catrow" id="qCats" role="tablist" aria-label="질문 분류"></div>
+      <div class="favbar" id="favBar" hidden>
+        <div class="fbt"><b>⭐ 즐겨찾기 모아 보기</b><span id="favBarCount">0문항</span></div>
+        <button class="btn gold" type="button" id="favAllAns" aria-pressed="false">💡 모범답안 모두 펼치기</button>
+      </div>
       <div class="qgrid" id="qList"></div>
 
       <div id="personalConsoleHost" style="margin-top:12px"></div>
@@ -1054,8 +1101,19 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
         <button type="button" data-seg="protect">🚨 응급·임시조치</button>
         <button type="button" data-seg="arrest">⛓️ 현행범·긴급체포</button>
         <button type="button" data-seg="search">🔍 불심검문</button>
+        <button type="button" data-seg="identity">🪪 신상공개·피의자인권</button>
+        <button type="button" data-seg="drunken">🍺 음주·차량추격</button>
         <button type="button" data-seg="busan">🌊 부산청</button>
         <button type="button" data-seg="concept">📖 개념·정의</button>
+      </div>
+      <div class="listenbar" id="listenBar" role="group" aria-label="자료 듣기">
+        <button class="lb-play" type="button" id="listenToggle" aria-pressed="false"><span id="listenIcon" aria-hidden="true">🔊</span><span id="listenLabel">이 자료 듣기</span></button>
+        <span class="lb-prog" id="listenProg">– / –</span>
+        <div class="lb-rate" id="listenRate" role="group" aria-label="배속">
+          <button type="button" data-rate="1" class="on">1.0x</button>
+          <button type="button" data-rate="1.2">1.2x</button>
+        </div>
+        <button class="lb-next" type="button" id="listenNext" aria-label="다음 카드" disabled>⏭️</button>
       </div>
       <div id="lawPane">
       <div class="hero">
@@ -1105,6 +1163,8 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
       <div id="protectPane" hidden></div>
       <div id="arrestPane" hidden></div>
       <div id="searchPane" hidden></div>
+      <div id="identityPane" hidden></div>
+      <div id="drunkenPane" hidden></div>
       <div id="busanPane" hidden></div>
       <div id="conceptPane" hidden></div>
     </section>
@@ -3166,6 +3226,7 @@ var QUESTIONS = [
    ========================================================= */
 var STORE = "police.interview.v1";
 var DRAFT = "police.interview.drafts";
+var FAV_KEY = "police.favQ.v1";
 var GEMINI_DEFAULT = "gemini-3.8-flash";
 var GEMINI_FALLBACKS = ["gemini-3.8-flash","gemini-3.6-flash","gemini-3.5-flash-lite","gemini-2.5-flash"];
 var $ = function(id){ return document.getElementById(id); };
@@ -3198,7 +3259,9 @@ var state = {
   history: [],
   practice: {},
   dailyReroll: 0,
-  dailyAI: null
+  dailyAI: null,
+  fav: [],
+  allAns: false
 };
 var settings = readJSON(STORE, null);
 if (settings && typeof settings === "object"){
@@ -3210,6 +3273,13 @@ if (settings && typeof settings === "object"){
   if (settings.dailyAI && typeof settings.dailyAI === "object") state.dailyAI = settings.dailyAI;
 }
 if (/^gemini-2\.0-flash/i.test(String(state.ai.model||""))) state.ai.model = GEMINI_DEFAULT;
+/* ⭐ 즐겨찾기 — 질문 문장 기반 안정 ID 배열 (police.favQ.v1) */
+state.fav = (function(){
+  var a = readJSON(FAV_KEY, []), out = [];
+  if (!Array.isArray(a)) return out;
+  for (var i=0;i<a.length;i++){ var v = a[i]; if (typeof v === "string" && v && out.indexOf(v) < 0) out.push(v); }
+  return out;
+})();
 function saveState(){
   writeJSON(STORE, { ai: state.ai, profile: state.profile, history: state.history.slice(0,40),
     practice: state.practice, dailyReroll: state.dailyReroll, dailyAI: state.dailyAI });
@@ -3385,6 +3455,7 @@ function setView(v){
     b.classList.toggle("on", on);
     if (on) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
   });
+  if (v !== "law") listenStop();
   if (v === "personal") syncPersonalConsole();
   if (v === "speed") spPaint();
   if (v === "settings") fillSettings();
@@ -3511,6 +3582,7 @@ function scrollToPanel(el){
 function selectLawTopic(id, quiet){
   state.lawTopicId = id; renderChips(); renderLawPanel();
   if (!quiet && state.view !== "law") setView("law");
+  listenRefresh();
   scrollToPanel($("lawPanel"));
 }
 function renderLawPanel(){
@@ -3629,8 +3701,80 @@ Array.prototype.forEach.call(document.querySelectorAll("#phaseSeg button"), func
 /* =========================================================
    5. 인성·경험 질문
    ========================================================= */
+/* ---------- ⭐ 즐겨찾기 (police.favQ.v1) ---------- */
+function favIdOf(i){
+  var q = QUESTIONS[i]; if (!q) return "";
+  return q.id ? String(q.id) : "q"+hashSeed(q.q);
+}
+function favList(){ if (!Array.isArray(state.fav)) state.fav = []; return state.fav; }
+function isFav(i){ return favList().indexOf(favIdOf(i)) >= 0; }
+function saveFav(){ writeJSON(FAV_KEY, favList()); }
+function pruneFav(){
+  var known = {}, a = favList();
+  for (var i=0;i<QUESTIONS.length;i++) known[favIdOf(i)] = 1;
+  var keep = a.filter(function(id){ return !!known[id]; });
+  if (keep.length !== a.length){ state.fav = keep; saveFav(); }
+}
+function favBtnHTML(i, extraCls){
+  var on = isFav(i);
+  return '<button class="favbtn'+(on?" on":"")+(extraCls?" "+extraCls:"")+'" type="button" data-fav="'+i+'" aria-pressed="'+(on?"true":"false")+'" aria-label="'+(on?"즐겨찾기 해제":"즐겨찾기 추가")+'" title="즐겨찾기">'+(on?"★":"☆")+'</button>';
+}
+function paintFav(i){
+  var on = isFav(i);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-fav="'+i+'"]'), function(b){
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+    b.setAttribute("aria-label", on ? "즐겨찾기 해제" : "즐겨찾기 추가");
+    b.textContent = on ? "★" : "☆";
+  });
+}
+function toggleFav(i){
+  var id = favIdOf(i); if (!id) return;
+  var a = favList(), k = a.indexOf(id), on = k < 0;
+  if (on) a.push(id); else a.splice(k, 1);
+  saveFav();
+  renderCats();
+  if (state.qCat === "fav"){
+    if (!on && !favList().length) state.allAns = false;
+    renderQuestions();
+  } else {
+    paintFav(i);
+  }
+  toast(on ? "⭐ 즐겨찾기에 담았어요. 상단 ‘⭐ 즐겨찾기’에서 모아 볼 수 있어요." : "즐겨찾기에서 뺐어요.");
+}
+function updateFavBar(){
+  var bar = $("favBar");
+  var n = favList().length;
+  if (bar) bar.hidden = state.qCat !== "fav";
+  var cnt = $("favBarCount"); if (cnt) cnt.textContent = n + "문항";
+  var b = $("favAllAns");
+  if (b){
+    b.setAttribute("aria-pressed", state.allAns ? "true" : "false");
+    b.textContent = state.allAns ? "📕 모범답안 모두 접기" : "💡 모범답안 모두 펼치기";
+  }
+  var ql = $("qList");
+  if (ql){
+    ql.classList.toggle("ansall", !!(state.allAns && state.qCat === "fav"));
+    if (state.allAns && state.qCat === "fav"){
+      Array.prototype.forEach.call(ql.querySelectorAll(".ansbox"), function(box){ box.hidden = false; });
+    }
+  }
+}
+function setAnsAll(on){
+  state.allAns = !!on;
+  Array.prototype.forEach.call(document.querySelectorAll("#qList .ansbox"), function(box){
+    box.hidden = !state.allAns;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("#qList [data-ansbtn]"), function(btn){
+    btn.setAttribute("aria-expanded", state.allAns ? "true" : "false");
+    btn.textContent = state.allAns ? "💡 모범답안 닫기" : "💡 모범답안 보기";
+  });
+  updateFavBar();
+}
 function renderCats(){
+  pruneFav();
   var h = '<button type="button" class="cat'+(state.qCat==="all"?" on":"")+'" data-cat="all">전체 '+QUESTIONS.length+'</button>';
+  h += '<button type="button" class="cat favcat'+(state.qCat==="fav"?" on":"")+'" data-cat="fav">⭐ 즐겨찾기 ('+favList().length+')</button>';
   QCATS.forEach(function(c){
     var n = QUESTIONS.filter(function(q){ return q.cat===c.id; }).length;
     if (!n) return;   /* 문항이 없는 분류(체험판)는 숨김 */
@@ -3640,6 +3784,7 @@ function renderCats(){
   Array.prototype.forEach.call($("qCats").querySelectorAll(".cat"), function(b){
     b.addEventListener("click", function(){ state.qCat = b.getAttribute("data-cat"); renderCats(); renderQuestions(); });
   });
+  updateFavBar();
 }
 function qBodyHTML(q, i){
   q._i = i;
@@ -3658,17 +3803,36 @@ function qBodyHTML(q, i){
 }
 function renderQuestions(){
   var list = QUESTIONS.map(function(q,i){ return {q:q,i:i}; });
-  if (state.qCat !== "all") list = list.filter(function(x){ return x.q.cat === state.qCat; });
+  if (state.qCat === "fav") list = list.filter(function(x){ return isFav(x.i); });
+  else if (state.qCat !== "all") list = list.filter(function(x){ return x.q.cat === state.qCat; });
   var h = "";
+  if (state.qCat === "fav" && !list.length){
+    h = '<div class="favempty" data-favempty="1">'+
+        '<span class="fe" aria-hidden="true">⭐</span>'+
+        '<b>아직 즐겨찾기한 질문이 없어요.</b>'+
+        '<p>각 질문 카드의 ☆ 버튼을 눌러 모아 보세요!<br>모아 둔 문항은 모범답안까지 한 번에 펼쳐 복습할 수 있어요.</p>'+
+        '<button class="btn ghost" type="button" id="favEmptyAll">전체 질문 보기</button></div>';
+  }
   list.forEach(function(x){
     var q = x.q, i = x.i;
     h += '<div class="qcard'+(state.openQ===i?" open":"")+'" data-qi="'+i+'">'+
+      favBtnHTML(i) +
       '<button class="qhead" type="button" aria-expanded="'+(state.openQ===i?"true":"false")+'">'+
         '<span class="qn">'+(i+1)+'</span><span class="qt">'+esc(q.q)+(q.hot?'<em class="hotl">🔥 '+esc(q.hot)+'</em>':'')+'</span><span class="ar" aria-hidden="true">▼</span>'+
       '</button>'+
       '<div class="qbody">'+qBodyHTML(q, i)+'</div></div>';
   });
   $("qList").innerHTML = h;
+  Array.prototype.forEach.call($("qList").querySelectorAll("[data-fav]"), function(b){
+    b.addEventListener("click", function(e){
+      e.stopPropagation();
+      toggleFav(parseInt(b.getAttribute("data-fav"), 10));
+    });
+  });
+  var femp = $("favEmptyAll");
+  if (femp) femp.addEventListener("click", function(){
+    state.qCat = "all"; state.allAns = false; renderCats(); renderQuestions();
+  });
   Array.prototype.forEach.call($("qList").querySelectorAll(".qcard"), function(card){
     var i = parseInt(card.getAttribute("data-qi"),10);
     card.querySelector(".qhead").addEventListener("click", function(){
@@ -3696,6 +3860,7 @@ function renderQuestions(){
       if (open) setTimeout(function(){ try{ box.scrollIntoView({behavior:"smooth",block:"nearest"}); }catch(err){} }, 70);
     });
   });
+  updateFavBar();
   syncPersonalConsole();
 }
 function qcatName(id){
@@ -3791,18 +3956,26 @@ function renderDailyRows(){
   var h = "";
   ids.forEach(function(i, n){
     var q = QUESTIONS[i], pc = practiceCount(i), neg = q.cat === "pressure";
-    h += '<button type="button" class="dq'+(pc?' done':'')+'" data-dqi="'+i+'">'+
+    h += '<div class="dqrow">'+
+      '<button type="button" class="dq'+(pc?' done':'')+'" data-dqi="'+i+'">'+
       '<span class="num">'+(n+1)+'</span>'+
       '<span class="txt"><b>'+esc(q.q)+'</b><span class="meta">'+
         '<span class="'+(neg?'neg':'')+'">'+esc(qcatName(q.cat))+'</span>'+
         (q.hot ? '<span class="hot">🔥 '+esc(q.hot)+'</span>' : '')+
         (pc ? '<span class="done">✓ '+pc+'회 연습</span>' : '<span>미연습</span>')+
       '</span></span>'+
-      '<span class="go">연습</span></button>';
+      '<span class="go">연습</span></button>'+
+      favBtnHTML(i) + '</div>';
   });
   host.innerHTML = h;
   Array.prototype.forEach.call(host.querySelectorAll(".dq"), function(b){
     b.addEventListener("click", function(){ openQuestionFromDaily(parseInt(b.getAttribute("data-dqi"),10)); });
+  });
+  Array.prototype.forEach.call(host.querySelectorAll("[data-fav]"), function(b){
+    b.addEventListener("click", function(e){
+      e.stopPropagation();
+      toggleFav(parseInt(b.getAttribute("data-fav"), 10));
+    });
   });
   var negN = ids.filter(function(i){ return QUESTIONS[i].cat === "pressure"; }).length;
   var pill = $("dailyPill"); if (pill) pill.textContent = "6문항 · 압박 "+negN;
@@ -4633,6 +4806,8 @@ function lawSeg(name){
   $("protectPane").hidden = name !== "protect";
   $("arrestPane").hidden = name !== "arrest";
   $("searchPane").hidden = name !== "search";
+  $("identityPane").hidden = name !== "identity";
+  $("drunkenPane").hidden = name !== "drunken";
   $("busanPane").hidden = name !== "busan";
   $("conceptPane").hidden = name !== "concept";
   if (name === "issue") renderIssues();
@@ -4645,6 +4820,9 @@ function lawSeg(name){
   if (name === "protect") renderProtect();
   if (name === "arrest") renderArrest();
   if (name === "search") renderSearch();
+  if (name === "identity") renderIdentity();
+  if (name === "drunken") renderDrunken();
+  listenRefresh();
   if (name !== "law") window.scrollTo({top:0, behavior:"auto"});
 }
 function renderIssues(){
@@ -4753,12 +4931,58 @@ var BUSAN = [
   line:"부산은 2022년부터 중고거래 안전지대를 10곳으로 늘려, 사람들이 만나는 장소를 CCTV가 있는 곳으로 자연스럽게 유도했습니다. 범죄예방은 사람의 습관을 바꾸는 환경 설계라는 것을 보여줍니다.",
   src:"부산시자치경찰위원회·부산경찰청 · 국민일보 2024.10.1 / 부산일보 2023.12.25"}
 ];
+/* =========================================================
+   🌊 부산 지역 치안 특색 → 맞춤형 치안 방안
+   ========================================================= */
+var BUSAN_TRAITS = [
+ {no:"01", t:"초고령사회 — 광역시 중 고령인구 비중 1위", tag:"고령",
+  rows:[
+   {b:"① 현황·문제", d:"2025년 부산 65세 이상은 <b>79만 2,000명, 전체의 24.5%</b>로 8대 특별·광역시 중 가장 높습니다(통계청 「2025 고령자 통계」). 2028년 28.1%, 2030년 29.7%로 더 높아집니다. 어르신이 <b>보이스피싱·노인학대·실종·고독사·보행 중 교통사고</b>에 동시에 노출되고, 신고를 받아도 가족 연락·병력 확인이 늦어지는 구조입니다."},
+   {b:"② 부산경찰청 방안", d:"경로당으로 찾아가는 <b>맞춤형 범죄예방교실</b>(보이스피싱·교통안전)을 상시 운영하고, 치매환자·발달장애인에게 <b>배회감지기를 무상 보급</b>합니다. 2022년 BNK부산은행·부산항만공사·한국해양진흥공사·부산시민재단·부산광역치매센터 협약으로 140대와 2년치 통신비를 지원했고, <b>실종자 발견 시간이 평균 11시간에서 55분으로</b> 줄었습니다. 고령운전자 <b>면허 자진반납</b>과 <b>보행신호 연장</b>도 함께 추진합니다."},
+   {b:"③ 협업", d:"부산광역치매센터·독거노인종합지원센터·노인복지관·대한노인회 부산연합회, 지자체 스마트 태그(부산진구)와 119·지역 의료기관. 경찰은 <b>발견과 연결</b>, 지자체는 <b>돌봄과 사례관리</b>로 역할을 나눕니다."},
+  ],
+  line:{b:"🎤 30초 답변", d:"“부산은 65세 이상이 24.5%로 광역시 중 가장 높은 초고령 도시입니다. 그래서 경로당으로 찾아가는 보이스피싱 교육, 치매환자 배회감지기 무상 보급, 고령운전자 면허 자진반납과 보행신호 연장을 함께 추진하고 있습니다. 배회감지기 보급 뒤 실종자 발견 시간이 11시간에서 55분으로 줄었다는 점을 근거로, 어르신 안전은 단속보다 <b>연결과 예방</b>이라고 말씀드리고 싶습니다.”"},
+  src:"통계청 「2025 고령자 통계」 / 부산경찰청 배회감지기 보급 보도(2022.10) / 부산경찰청장 대한노인회 간담회(2026.9)"},
+ {no:"02", t:"산복도로·원도심·노후 주거지 — 골목과 계단의 치안", tag:"주거",
+  rows:[
+   {b:"① 현황·문제", d:"부산 원도심은 산비탈에 형성된 <b>노후 단독주택 밀집지</b>로, 서구만 해도 계단길·골목길이 <b>1,800여 개소(약 81km)</b>이고 주민 상당수가 고령자입니다. 폭이 좁고 경사가 심해 <b>순찰차 진입이 어렵고</b>, 담장·적치물·가로등 음영으로 사각지대가 생깁니다."},
+   {b:"② 부산경찰청 방안", d:"노후 주거지에 <b>방범용 CCTV</b>를 우선 확충하고(사하구는 2022~2026년 191개소), <b>안심 비상벨·스마트 알림이·안심귀갓길</b>을 지자체와 함께 설치합니다. 순찰은 <b>도보·이륜차·드론 탄력순찰</b>로 바꾸고, <b>치안리빙랩</b>으로 주민이 직접 동선과 필요 지점을 설계하게 합니다."},
+   {b:"③ 협업", d:"구·군 도시재생·15분도시 사업(서구 이음길 147개소 정비)과 <b>공사 구간·우회 동선 정보를 공유</b>하고, 조명·CCTV 설치 시 경찰 관제와 연동합니다. 부산진구는 안심 비상벨·CCTV·사각지대 알림이로 2026년 <b>자치경찰 동행 대상</b>을 받았습니다."},
+  ],
+  line:{b:"🎤 30초 답변", d:"“부산 원도심은 계단과 골목이 이어진 노후 주거지라 순찰차가 들어가기 어렵습니다. 그래서 CCTV와 안심 비상벨을 우선 보강하고, 도보·이륜차·드론으로 탄력순찰을 하며, 치안리빙랩으로 주민이 직접 위험 지점을 짚게 하는 방식이 맞다고 생각합니다. 지자체 도시재생·조명 사업과 동선을 맞추면 같은 예산으로 사각지대를 더 줄일 수 있습니다.”"},
+  src:"부산 서구 산복도로 이음길 정비(2025.5) / 부산 사하구 CCTV 구축계획(2022~2026) / 부산시 자치경찰 동행 대상(2026.11)"},
+ {no:"03", t:"해수욕장·관광지·대규모 축제 — 100만 인파", tag:"행사",
+  rows:[
+   {b:"① 현황·문제", d:"2026년 제21회 부산불꽃축제에는 <b>120만 5,951명</b>이 몰려 3년 연속 100만 명을 넘었습니다(2024년 103만, 2025년 117만). 해운대·광안리는 여름이면 전국·외국인 관광객이 겹치고, 인파 밀집 구간에서 <b>압사 위험·불법촬영·주취폭력·암표</b>가 함께 늘어납니다."},
+   {b:"② 부산경찰청 방안", d:"불꽃축제에 경찰 <b>2,200여 명</b>과 기동대·특공대를 투입하고, 관람거점 5곳에 <b>총경급 구역장</b>을 지정해 지휘 책임을 고정했습니다. 사각지대에는 <b>무선 CCTV 15대</b>를 추가 운용하고, 42곳 중점관리구역과 <b>단계별 총량제</b>로 진입을 차단하며, 종료 후 지하철역 계단·골목 병목에 인력을 배치합니다. 여름 해수욕장은 <b>여름경찰서</b>로 성범죄·실종 대응을 상시화합니다."},
+   {b:"③ 협업", d:"부산시·수영구·소방·해경·부산교통공사(열차 212회 증편, 안전인력 1,341명)가 한 몸으로 움직이고, 관광경찰·다국어 안내로 외국인 동선을 안내합니다. 암표·자릿세는 경범죄처벌법으로 단속했습니다(8건 중 7건 범칙금)."},
+  ],
+  line:{b:"🎤 30초 답변", d:"“부산 축제는 규모가 곧 위험입니다. 불꽃축제에는 경찰 2,200여 명과 총경급 구역장 5명을 배치하고, 무선 CCTV와 단계별 총량제로 진입을 통제했습니다. 인파는 <b>들어올 때보다 나갈 때</b> 위험하므로 지하철역 계단과 골목 병목에 인력을 두고, 지자체·소방·교통공사와 같은 지휘 체계로 움직이겠습니다.”"},
+  src:"부산시·부산경찰청 불꽃축제 안전대책(2026.11) / 부산일보 관람객 120만 집계(2026.11.8)"},
+ {no:"04", t:"항만·국제공항·외국인 — 국경의 치안", tag:"국경",
+  rows:[
+   {b:"① 현황·문제", d:"부산항은 2025년 입국자 <b>72만 6,000명</b>인데 여행자 통관 전담인력은 36명으로, 1인당 2만 명이 넘습니다. 김해공항 입국자는 546만 명이고, 마약 적발은 2023년 7건에서 2025년 <b>23건·46kg</b>으로 3.3배 늘었습니다. 국제우편·특송을 이용한 소량 밀반입과 <b>불법체류 외국인</b>의 유통·투약이 겹칩니다."},
+   {b:"② 부산경찰청 방안", d:"2026년 9월 국제우편으로 케타민·엑스터시를 들여와 불법체류 외국인에게 판매한 일당 <b>35명을 검거하고 15명을 구속</b>했습니다. 외국인 마약류 범죄 <b>집중단속</b>과 유흥가·외국인 밀집지역 점검을 이어가고, 외사 기능으로 체류·신원 정보를 확인하며 다국어 범죄예방 안내를 병행합니다."},
+   {b:"③ 협업", d:"부산본부세관(밀리미터파 검색·수중드론·통제배달 수사), 부산해양경찰서(선저검사·해상 검문), 출입국·외국인사무소(불법체류 단속·강제퇴거), 국정원·관세청 정보, 지자체 외국인 지원센터가 <b>정보–단속–처분</b>을 나눠 맡습니다."},
+  ],
+  line:{b:"🎤 30초 답변", d:"“부산은 항만과 공항이 함께 있는 도시라 마약과 불법체류가 한 사건에서 겹칩니다. 실제로 국제우편 마약을 불법체류 외국인에게 유통한 일당 35명을 검거한 사례가 있습니다. 경찰은 외사·마약수사로 유통을 추적하고, 세관·해경·출입국과 정보를 공유해 <b>국경에서 막고 유통에서 끊는</b> 두 겹의 대응을 하겠습니다.”"},
+  src:"국회 국정감사 관세청 자료(2026.10) / 부산경찰청 국제우편 마약 35명 검거(2026.9) / 관세청 마약단속 점검회의(2026.11)"},
+ {no:"05", t:"해상 교량·해안가·태풍·호우 — 물과 이어진 도시", tag:"재난",
+  rows:[
+   {b:"① 현황·문제", d:"광안대교는 수면에서 <b>상판 50m·하판 45m</b>로, 투신 신고가 반복되고 구조는 해경·소방과의 합동 작전이 됩니다. 부산 자살률은 2025년 <b>10만 명당 29.9명(968명)</b>으로 전국 평균을 웃돕니다. 여름철에는 하천 산책로·하상도로가 침수되고(2026.8.30. 온천천·좌광천·덕천천 통제, 소방활동 36건), 태풍 때는 방파제 월파·저지대 침수 위험이 커집니다."},
+   {b:"② 부산경찰청 방안", d:"교량·해안 CCTV 관제와 순찰로 <b>투신 징후를 조기에 발견</b>하고, 신고 접수 시 119·해경·정신건강복지센터와 즉시 연결합니다. 부산시가 2026년 <b>‘생명존중 원년’</b>으로 예산을 32억→<b>72억</b>으로 늘려 80개 읍·면·동 생명이음 생활권, 생명이음 실천가 300명, 자살 응급대응센터 5곳을 운영하는 체계에 경찰이 함께 섭니다."},
+   {b:"③ 협업", d:"호우·태풍에는 하상도로·지하차도 <b>사전 통제와 주민 대피</b>가 핵심입니다. 부산진구는 2026년 7월 경찰·소방·구청 <b>재난안전 실무협의체</b>를 만들어 지하차도 4곳을 합동점검했고, 해경은 연안 위험예보(관심·주의보·경보)로 출입을 통제합니다."},
+  ],
+  line:{b:"🎤 30초 답변", d:"“부산은 바다와 강, 높은 교량이 일상 동선에 있습니다. 교량 투신은 발견과 연결이 생사를 가르기 때문에 CCTV 관제와 순찰로 징후를 먼저 잡고, 119·해경·정신건강복지센터로 바로 연결하겠습니다. 호우 때는 하상도로와 지하차도를 미리 막는 것이 인명피해를 줄이는 가장 확실한 방법이라, 지자체·소방과 사전 통제 기준을 맞추겠습니다.”"},
+  src:"KOSIS·한국생명존중희망재단 부산 자살통계(2026.9) / 부산시 생명존중 대책(2026.3) / 부산진구 재난안전 실무협의체(2026.7) / 부산 호우 통제 보도(2026.8)"}
+];
+
 function renderBusan(){
   var host = $("busanPane"); if (!host) return;
-  var h = '<div class="hero"><h1>🌊 부산경찰청 특색치안 10선</h1>' +
-    '<p>“우리 지역 경찰청은 어떤 일을 하나요”, “부산 치안의 특징은 무엇인가요”는 지역 이해와 지원동기를 보는 질문입니다. 카드마다 <b style="color:#f4e3ac">① 무엇인가 ② 협업 지자체·기관 ③ 면접관 앞 인용 한 줄</b> 순서로 읽으면 바로 말할 수 있습니다.</p></div>';
+  var h = '<div class="hero"><h1>🌊 부산경찰청 특색치안 10선 · 지역 맞춤 치안 5대 과제</h1>' +
+    '<p>“우리 지역 경찰청은 어떤 일을 하나요”, “부산 치안의 특징은 무엇인가요”는 지역 이해와 지원동기를 보는 질문입니다. 카드마다 <b style="color:#f4e3ac">① 무엇인가 ② 협업 지자체·기관 ③ 면접관 앞 인용 한 줄</b> 순서로 읽으면 바로 말할 수 있고, 아래 <b style="color:#f4e3ac">지역 치안 특색 5가지</b>는 <b>현황 → 부산경찰청 방안 → 30초 답변</b>으로 이어집니다.</p></div>';
   h += '<div class="note tiny" style="margin-top:12px"><span>📌</span><div>부산경찰청·부산시자치경찰위원회가 <b>실제 발표한 보도자료와 보도</b>로 확인된 사업만 담았습니다. 카드마다 출처와 시점을 적었고, <b>사업 기간·인원·노선은 이후 바뀔 수 있으니</b> 면접 전 한 번 더 확인하세요.</div></div>';
-  h += '<div class="bslist">';
+  h += '<div class="bslist" id="busanProgs">';
   BUSAN.forEach(function(b, i){
     var no = (i + 1) < 10 ? "0" + (i + 1) : "" + (i + 1);
     h += '<article class="bscard">' +
@@ -4768,6 +4992,18 @@ function renderBusan(){
       '<div class="bsline"><b>🎤 면접관 앞 인용 한 줄</b><span>'+esc(b.line)+'</span></div>' +
       '<div class="bssrc">출처 · '+esc(b.src)+'</div>' +
     '</article>';
+  });
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">2</span><b>부산 지역 치안 특색 → 맞춤형 치안 방안</b><span class="tag">지역이해</span></div></div>';
+  h += '<div class="note tiny" style="margin-top:2px"><span>📍</span><div>통계·정책은 <b>2025~2026년 공식 발표와 보도</b>로 확인한 값입니다. 카드마다 <b>① 현황·문제 ② 부산경찰청 방안 ③ 협업</b>과 <b>🎤 30초 답변</b>, 출처·시점을 붙였습니다.</div></div>';
+  h += '<div class="bslist bslist-traits">';
+  BUSAN_TRAITS.forEach(function(x){
+    h += '<article class="bscard trait">' +
+      '<div class="bsh"><span class="bsno">'+esc(x.no)+'</span><span class="bst">'+esc(x.t)+'</span><span class="bsbdg">'+esc(x.tag)+'</span></div>';
+    x.rows.forEach(function(r){ h += '<div class="bsrow'+(r.co?' co':'')+'"><b>'+r.b+'</b><span>'+r.d+'</span></div>'; });
+    h += '<div class="bsline"><b>'+x.line.b+'</b><span>'+x.line.d+'</span></div>';
+    h += '<div class="bssrc">출처 · '+esc(x.src)+'</div>';
+    h += '</article>';
   });
   h += '</div>';
   h += '<div class="bstop"><b>🎤 이렇게 연결하면 점수가 됩니다</b><ul>' +
@@ -5310,6 +5546,407 @@ function renderSearch(){
   ]);
   h += picCard("답변", "면접 30초 핵심 답변", "그대로 연습", [], {b:"🎤 30초 답변", d:"“불심검문은 수상한 행동이나 주위 사정을 합리적으로 판단해 죄를 범했거나 범하려 한다고 의심할 만한 상당한 이유가 있는 사람, 또는 범죄 사실을 안다고 인정되는 사람을 정지시켜 질문하는 제도입니다. 질문 전에 증표를 제시하고 소속과 성명, 목적과 이유를 설명하며, 동행을 요구하면 동행 장소를 밝히고 거절할 수 있음을 알려야 합니다. 동행하면 가족에게 알리거나 연락할 기회를 주고 변호인 조력권을 고지하며, 6시간을 넘겨 머물게 할 수 없습니다. 답변을 강요하거나 강제로 수색할 수는 없고, 단순한 거부는 처벌할 수 없지만 폭행이나 협박으로 방해하면 공무집행방해로 대응합니다.”"});
   host.innerHTML = h;
+}
+
+/* =========================================================
+   🪪 신상공개 · 피의자 인권 (중대범죄신상공개법 · 피의사실공표죄 · 공보규칙)
+   ========================================================= */
+var IDN_TARGETS = [
+ {b:"1호 내란·외환", d:"「형법」 제2편 제1장 <b>내란의 죄</b>, 같은 편 제2장 <b>외환의 죄</b>"},
+ {b:"2호 범죄단체", d:"「형법」 제114조(<b>범죄단체 등의 조직</b>)의 죄"},
+ {b:"3호 폭발물", d:"「형법」 제119조(<b>폭발물 사용</b>)의 죄"},
+ {b:"4호 현주건조물 방화", d:"「형법」 제164조 제2항(<b>현주건조물 등 방화</b>)의 죄 — 사람이 사는 건조물에 불을 질러 상해·사망에 이른 경우"},
+ {b:"5호 중상해류", d:"「형법」 제258조(중상해·존속중상해), 제258조의2(특수상해), 제259조(상해치사), 제262조(폭행치사상). <b>폭행치사상은 중상해 또는 사망에 이른 경우만</b>"},
+ {b:"6호 특정강력범죄", d:"「특정강력범죄의 처벌에 관한 특례법」 제2조의 <b>특정강력범죄</b> — 살인·강도·성폭력·방화·약취유인 등"},
+ {b:"7호 성폭력범죄", d:"「성폭력범죄의 처벌 등에 관한 특례법」 제2조의 <b>성폭력범죄</b>"},
+ {b:"8호 아동·청소년 성범죄", d:"「아동·청소년의 성보호에 관한 법률」 제2조제2호의 <b>아동·청소년대상 성범죄</b>. 같은 법 제13조, 제14조제3항, 제15조제2항·제3항, 제15조의2의 죄는 <b>제외</b>"},
+ {b:"9호 마약류", d:"「마약류 관리에 관한 법률」 제58조의 죄. <b>같은 조 제4항은 제외</b>"},
+ {b:"10호 마약 불법거래", d:"「마약류 불법거래 방지에 관한 특례법」 제6조 및 제9조제1항의 죄"},
+ {b:"11호 가중처벌", d:"1호부터 10호까지의 죄로서 <b>다른 법률에 따라 가중처벌되는 죄</b>", co:true}
+];
+var IDN_STEPS = [
+ {b:"① 심의", d:"검사·사법경찰관이 공개 여부를 판단하고, <b>신상정보공개심의위원회</b>가 심의·의결합니다. 위원회는 <b>검찰총장·중대범죄수사청장·경찰청장이 둘 수 있고</b>, 위원장 포함 <b>10인 이내</b>(시행령상 7~10명)로 구성하며 <b>공무원이 아닌 위원이 과반</b>입니다. 심의는 비공개, <b>재적위원 과반수 찬성</b>으로 의결합니다."},
+ {b:"② 의견진술", d:"공개 결정 <b>전에 피의자에게 의견을 진술할 기회</b>를 주어야 합니다. 위원회에서 피의자 의견을 들었으면 생략할 수 있습니다. 시행령은 심의위원회 개최일과 진술 기회를 <b>미리 고지</b>하도록 합니다."},
+ {b:"③ 결정·통지", d:"결정하면 <b>지체 없이 서면</b>으로 피의자에게 통지하고, 변호인이 있으면 <b>변호인에게도</b> 알립니다. 피의자가 서면으로 이의가 없다고 하면 유예 없이 공개하고 <b>확인서</b>를 받습니다."},
+ {b:"④ 5일 유예", d:"통지한 날부터 <b>5일 이상 유예기간</b>을 두고 공개합니다. 피의자가 다툴 시간을 주는 절차입니다."},
+ {b:"⑤ 촬영", d:"공개할 얼굴은 특별한 사정이 없으면 <b>공개 결정일 전후 30일 이내</b>의 모습이어야 합니다. 필요하면 <b>동의 없이 촬영</b>할 수 있고(정면·왼쪽·오른쪽 컬러사진), 적법하게 보관 중인 사진·영상물을 활용할 수도 있습니다. 피의자는 촬영에 따라야 합니다."},
+ {b:"⑥ 30일 게시", d:"검찰총장·중대범죄수사청장·경찰청장이 지정한 인터넷 홈페이지에 <b>30일간</b> 게시합니다. 게시 화면에는 <b>“유죄 판결이 확정될 때까지는 무죄로 추정된다”</b>는 내용을 명시해야 합니다(시행령 제5조)."},
+ {b:"⑦ 종료·보상", d:"공개기간이 지나거나 불기소·불송치 결정을 받으면 <b>지체 없이 삭제</b>합니다. 공개 뒤 불기소·불송치 또는 무죄가 확정되면 형사보상과 <b>별도로</b> 보상 청구가 가능하며, <b>1천만원 이내</b>에서 재산상 손실도 보상합니다."},
+ {b:"⑧ 피고인", d:"공소제기 때는 특정중대범죄가 아니었는데 재판 과정에서 <b>공소사실이 특정중대범죄로 변경</b>된 피고인은 검사가 법원에 공개를 청구할 수 있습니다. <b>항소심 변론종결 전</b>까지 청구하고, 해당 사건을 심리하지 않는 <b>별도 재판부</b>가 결정하며, 결정에는 <b>즉시항고</b>할 수 있습니다.", co:true}
+];
+var IDN_RIGHTS = [
+ {b:"헌법 §12", d:"신체의 자유, <b>적법절차</b>(①), 고문·자기 불리 진술 강요 금지(②), 영장 제시(③), <b>체포·구속 시 즉시 변호인 조력</b>(④), 체포 이유와 변호인 조력권 <b>고지</b>(⑤)."},
+ {b:"무죄추정", d:"<b>헌법 제27조 제4항</b>과 <b>형사소송법 제275조의2</b> — “피고인은 유죄의 판결이 확정될 때까지는 무죄로 추정된다.” 헌법 제12조가 아니라 <b>제27조 제4항</b>이라는 점을 정확히 말해야 합니다."},
+ {b:"형소법 제244조의3", d:"신문 전에 4가지를 고지합니다. ① 일체 또는 개개의 질문에 <b>진술을 거부</b>할 수 있다 ② 진술하지 않아도 <b>불이익이 없다</b> ③ 권리를 포기하고 한 진술은 <b>법정에서 유죄의 증거</b>로 쓰일 수 있다 ④ <b>변호인의 조력</b>을 받을 수 있다. 이어서 권리 행사 여부를 묻고 답변을 조서에 기재(자필 또는 서명)합니다."},
+ {b:"형소법 제243조의2", d:"사법경찰관은 피의자·변호인 등의 신청이 있으면 <b>변호인 접견</b>과 <b>신문 참여</b>를 정당한 사유 없이 거절할 수 없습니다. 참여 변호인은 신문 후 의견을 진술할 수 있고, 그 의견은 조서에 기재되어 변호인에게 열람·서명하게 합니다."},
+ {b:"공보 원칙", d:"「경찰 수사사건 등의 공보에 관한 규칙」은 <b>원칙적 비공개</b>입니다. 공개는 ① 범죄유형·수법을 알려 유사 범죄 재발 방지 ② 공개수배 ③ 급박한 위험·피해 확산 방지 ④ 오보·추측 보도로 인권 침해나 수사 지장이 명백할 때 사실관계 정정 — 네 경우만 예외입니다.", co:true},
+ {b:"공보 금지", d:"성명·얼굴 등 <b>신원을 알 수 있거나 유추할 수 있는 정보</b>, 신상·사생활, 구체적 수사진행·계획, 범죄경력·수사경력, 주관적 판단, 수사기법, 기록 원본, 잔혹한 수법·참혹한 피해상황, 모방자살 정보는 공개할 수 없습니다."},
+ {b:"익명·유의", d:"사건관계인은 <b>‘A○○’</b>처럼 익명으로 표기하고, 유죄를 단정하는 표현은 금지됩니다. 피의자가 <b>혐의를 부인하면 그 사실을 공보에 포함</b>해야 하고, 언론 인터뷰를 권유·유도해서는 안 됩니다."},
+ {b:"초상권·동선", d:"공보 과정에서 <b>사건관계인 얼굴이 공개되지 않도록</b> 해야 하고(§14), <b>출석·귀가·호송의 일시·장소</b>는 공개 금지(§15), 출석·조사·체포·구속 등 <b>수사과정의 촬영·녹화·중계</b>도 허용할 수 없습니다(§16). 신상공개 요건을 충족한 피의자만 얼굴·성명·나이를 공개할 수 있습니다(§17).", co:true},
+ {b:"§126 공표죄", d:"수사 직무를 수행·감독·보조하는 사람이 직무 중 알게 된 <b>피의사실을 공소제기 전에 공표</b>하면 <b>3년 이하 징역 또는 5년 이하 자격정지</b>입니다. 기자 한 명에게 알려도 불특정 다수에게 퍼질 것이 예견되면 ‘공표’에 해당합니다."},
+ {b:"장구(수갑·포승)", d:"「피의자 유치 및 호송 규칙」 §22·§50 — <b>호송주무관·유치인보호주무자의 승인</b>을 받아 필요한 한도에서만 사용하고, 사유와 시간을 근무일지에 적고 <b>사전 고지</b>합니다. 징벌·고통 목적, <b>뒷수갑+다리 묶기</b> 같은 비인도적 방법은 금지이며 사유가 없어지면 <b>즉시 해제</b>합니다."},
+ {b:"호송 인권", d:"§3은 유치인의 <b>인권 존중·무죄추정·차별 금지</b>를 규정하고, §63은 호송 중 <b>모습이 타인에게 노출되지 않도록</b> 유의하라고 합니다. 미체포 피의자가 구속 전 심문에 임의 출석하면 <b>원칙적으로 수갑·포승을 쓰지 않습니다</b>."}
+];
+function renderIdentity(){
+  var host = $("identityPane"); if (!host) return;
+  var h = '<div class="hero"><h1>🪪 신상공개 · 피의자 인권</h1>' +
+    '<p>국민의 알 권리와 무죄추정이 부딪히는 자리입니다. <b style="color:#f4e3ac">“어떤 사건을, 어떤 요건과 절차로, 어디까지 공개하는가”</b>를 숫자로 말할 수 있어야 하고, 그 밖의 사건은 <b style="color:#f4e3ac">원칙적 비공개</b>라는 선을 지켜야 합니다.</p></div>';
+  h += picNote('근거는 <b>2026년 11월 현행 법령 원문</b>입니다 — 「특정중대범죄 피의자 등 신상정보 공개에 관한 법률」(법률 제22004호, <b>2026.10.2. 시행</b>), 같은 법 시행령(2026.10.2. 시행), 형법 제126조·형사소송법(2026.10.2. 시행), 「경찰 수사사건 등의 공보에 관한 규칙」(경찰청훈령 제1119호, 2024.5.1. 시행), 「피의자 유치 및 호송 규칙」(경찰청훈령 제1164호, 2025.6.3. 시행). 2026.10.2.부터 <b>공소청·중대범죄수사청</b> 체계(수사·기소 분리)가 시행된 점도 반영했습니다.');
+  h += '<div class="sec"><div class="sec-h"><span class="no">1</span><b>대상 범죄 — ‘특정중대범죄’ 11개 호</b><span class="tag">범위</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("대상", "중대범죄신상공개법 제2조", "11개 호", IDN_TARGETS);
+  h += picCard("정리", "범위를 한 문장으로", "암기", [
+    {b:"공통", d:"<b>내란·외환, 범죄단체, 폭발물, 방화치사상, 중상해류</b>에 <b>특정강력범죄·성폭력·아동청소년성범죄·마약</b>을 더한 구조입니다."},
+    {b:"주의", d:"성범죄·살인·강도 등(6~8호)은 <b>‘범행수단이 잔인하고 중대한 피해’ 요건이 붙지 않습니다</b>. 그 요건은 <b>3호~6호에만</b> 적용됩니다(법 제4조①1호 괄호)."}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">2</span><b>공개 요건 — 셋을 모두 갖추고, 미성년자는 제외</b><span class="tag">요건</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("요건", "법 제4조 제1항", "필수", [
+    {b:"① 잔인·중대", d:"범행수단이 잔인하고 <b>중대한 피해</b>가 발생했을 것 — <b>제2조 제3호부터 제6호까지의 죄에 한정</b>"},
+    {b:"② 충분한 증거", d:"피의자가 그 죄를 범하였다고 <b>믿을 만한 충분한 증거</b>가 있을 것 — ‘유사 사건’이나 ‘여론’은 근거가 되지 못합니다."},
+    {b:"③ 공공의 이익", d:"국민의 알권리 보장, 피의자의 재범 방지 및 범죄예방 등 <b>오로지 공공의 이익</b>을 위하여 필요할 것"},
+    {b:"미성년자", d:"<b>피의자가 미성년자이면 공개하지 않습니다</b> — 이 법의 유일한 법정 제외 사유입니다.", co:true},
+    {b:"고려 요소", d:"결정할 때 <b>범죄의 중대성, 범행 후 정황, 피해자 보호 필요성, 피해자(사망 시 유족)의 의사</b>를 종합적으로 고려해야 하고, <b>피의자의 인권을 고려해 신중하게</b> 결정하며 남용해서는 안 됩니다.", co:true}
+  ]);
+  h += picCard("정확히", "면접에서 틀리기 쉬운 세 가지", "주의", [
+    {b:"심신장애", d:"법문상 공개 제외는 <b>‘미성년자’</b>뿐입니다. 심신장애는 법정 제외 사유가 아니라 <b>인권 고려(§4③)와 고려 요소</b>에서 다뤄지는 사정입니다."},
+    {b:"이의신청", d:"법에 <b>‘이의신청’이라는 별도 절차는 없습니다</b>. 보장은 ① 결정 전 <b>의견진술</b> ② 통지 후 <b>5일 이상 유예</b> 두 가지입니다. ‘이의신청 기간 5일’이라고 말하면 부정확합니다."},
+    {b:"무죄추정", d:"무죄추정은 <b>헌법 제27조 제4항·형소법 제275조의2</b>입니다(헌법 제12조는 적법절차·영장·진술거부권·변호인 조력)."}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">3</span><b>절차 — 심의 · 의견진술 · 통지 · 5일 · 30일</b><span class="tag">핵심</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("절차", "결정에서 게시·삭제까지", "8단계", IDN_STEPS, {b:"🎤 면접 한 줄", d:"“공개는 수사기관이 결정하되 심의위원회 심의, 피의자 의견진술, 서면 통지, 5일 이상 유예, 결정일 전후 30일 이내 얼굴, 30일 게시, 종료 시 즉시 삭제까지 절차가 법에 정해져 있습니다.”"});
+  h += picCard("숫자", "숫자만 따로 외우기", "시험용", [
+    {b:"5일", d:"공개 결정을 <b>통지한 날부터 5일 이상</b> 유예 (서면으로 이의 없으면 생략)"},
+    {b:"30일", d:"공개할 얼굴은 <b>결정일 전후 30일 이내</b> 모습 / 게시는 <b>30일간</b>"},
+    {b:"10인·7~10명", d:"법상 위원회는 <b>위원장 포함 10인 이내</b>, 시행령상 <b>7명 이상 10명 이하</b>, 민간위원 과반"},
+    {b:"1천만원", d:"불기소·불송치·무죄 확정 시 <b>1천만원 이내</b> 보상(재산상 손실은 별도 증명)"},
+    {b:"3년·5년", d:"피의사실공표죄는 <b>3년 이하 징역 또는 5년 이하 자격정지</b>", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">4</span><b>피의자 인권 — 공보와 신문, 호송</b><span class="tag">현장</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("인권", "근거 조문 한 묶음", "조문", IDN_RIGHTS);
+  h += picCard("포토라인", "지금은 세우지 않습니다", "실무", [
+    {b:"근거", d:"공보책임자 아닌 수사업무 종사자는 기자와 <b>개별 접촉</b>을 할 수 없고(§19), <b>출석·귀가·호송 일시·장소</b>를 미리 알리거나(§15), 수사과정을 <b>촬영·중계</b>하게 할 수 없습니다(§16)."},
+    {b:"예외", d:"신상공개 요건을 충족해 <b>공개가 결정된 피의자</b>는 공개된 범위(얼굴·성명·나이)에서 취재될 수 있습니다. 경찰이 시간을 맞춰 세워 주는 방식은 금지입니다."},
+    {b:"실무", d:"모자·마스크, 가림막·우산, 차량 진입로 변경과 취재 구역 지정으로 <b>얼굴과 동선을 분리</b>합니다. 조회·송치 시간을 외부에 흘리지 않는 것이 첫 단계입니다.", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">5</span><b>상황별 답변 — 그대로 말해 보기</b><span class="tag">연습</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("기출", "체포 피의자 호송 중 취재진 충돌 (11/17)", "30초", [
+    {b:"① 안전", d:"다중 충돌·도주 위험이 먼저입니다. 호송 차량 위치와 진입로를 바꾸고 <b>취재 구역과 피의자 동선을 분리</b>하며, 부상자가 생기지 않게 인원을 배치합니다."},
+    {b:"② 초상", d:"피의자에게 상황을 짧게 설명하고 <b>모자·마스크로 얼굴을 가리며</b>, 촬영이 불가피하면 가림막을 세웁니다. 무죄추정의 대상임을 잊지 않습니다."},
+    {b:"③ 공보", d:"현장에서 즉흥적으로 사건 내용을 말하지 않고 <b>공보책임자에게 일원화</b>합니다. 신상공개는 <b>법 제4조 요건과 심의·유예 절차</b>를 거친 경우에만 공개된 범위에서 안내합니다."},
+    {b:"④ 기록", d:"충돌·촬영·지시 경위를 근무일지와 보고로 남깁니다. 사후에 문제가 됐을 때 <b>절차를 지켰다는 증거</b>가 됩니다.", co:true}
+  ], {b:"🎤 핵심", d:"“취재진이 몰릴수록 먼저 지킬 것은 피의자의 안전과 초상입니다. 공보는 담당에게 일원화하고, 신상공개는 법정 요건과 절차를 확인한 뒤 공개된 범위에서만 말하겠습니다.”"});
+  h += picCard("민원", "“저 사람 얼굴 공개해 주세요”", "요구", [
+    {b:"답변", d:"“공개 여부는 제가 현장에서 정할 수 없습니다. <b>특정중대범죄</b>에 해당하는지, <b>세 가지 요건</b>이 갖춰졌는지, <b>심의위원회</b>와 <b>5일 이상 유예</b> 절차를 거쳤는지로 결정됩니다.”"},
+    {b:"이유", d:"여론이 크다는 이유만으로 공개하면 <b>무죄추정과 인격권</b>을 침해하고, 공개하지 않아야 할 사건을 공개하면 <b>국가배상·보상</b> 문제가 됩니다."},
+    {b:"연결", d:"공개된 신상정보가 있는 사건이면 <b>공식 게시 화면</b>을 안내하고, 없으면 수사 진행 상황은 <b>공보책임자</b>를 통해 확인하도록 안내합니다."}
+  ]);
+  h += picCard("지시", "상급자가 “얼굴 사진부터 보도자료에 넣자”", "판단", [
+    {b:"확인", d:"사건이 <b>특정중대범죄</b>인지, 공개 <b>결정</b>이 있었는지, <b>유예기간</b>이 지났는지, 공개할 얼굴이 <b>결정일 전후 30일 이내</b>인지 확인합니다."},
+    {b:"설명", d:"결정 없이 사진을 배포하면 <b>형법 제126조 피의사실공표죄</b>(3년 이하 징역 또는 5년 이하 자격정지)와 공보규칙 위반이 될 수 있다고 근거를 들어 설명합니다."},
+    {b:"대안", d:"공개가 필요하다고 판단되면 <b>공보책임자 승인과 서면 공보</b> 절차로 처리하고, 그 경위를 기록합니다. 상급자 지시만으로 예외를 만들지 않습니다.", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">6</span><b>30초 핵심 답변</b><span class="tag">마무리</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("답변", "알 권리와 인권의 균형", "30초", [], {b:"🎤 30초 답변", d:"“신상공개는 국민의 알 권리와 무죄추정 사이의 균형 문제라고 생각합니다. 중대범죄신상공개법은 내란·외환, 범죄단체, 폭발물, 방화치사상, 중상해, 특정강력범죄, 성폭력, 아동청소년 성범죄, 마약 등 특정중대범죄를 대상으로 하고, 범행수단의 잔인성과 중대한 피해, 범행을 믿을 만한 충분한 증거, 공공의 이익이라는 세 요건을 모두 갖추면서 피의자가 미성년자가 아닐 때 공개할 수 있습니다. 절차는 심의위원회 심의, 피의자 의견진술, 서면 통지, 5일 이상 유예, 결정일 전후 30일 이내 얼굴 촬영, 30일간 게시 순서이고, 불기소나 무죄가 확정되면 즉시 삭제하고 보상도 청구할 수 있습니다. 그 밖의 사건은 공보규칙상 원칙적으로 비공개이고, 피의사실을 공소제기 전에 공표하면 형법 제126조로 처벌됩니다. 현장에서는 얼굴과 동선을 먼저 보호하고, 공보는 공보책임자에게 일원화해 절차와 기록을 지키겠습니다.”"});
+  h += picCard("함정", "자주 틀리는 답", "감점", [
+    {b:"①", d:"“경찰이 판단해서 공개한다” — <b>법정 요건·심의위·유예</b>를 빼면 절차 위반입니다."},
+    {b:"②", d:"“신상공개 대상은 살인·성범죄뿐” — <b>11개 호</b>로 훨씬 넓습니다."},
+    {b:"③", d:"“심신장애면 공개 못 한다” — 법문상 제외는 <b>미성년자</b>입니다."},
+    {b:"④", d:"“5일은 이의신청 기간” — 법문은 <b>의견진술 + 5일 이상 유예</b>입니다."},
+    {b:"⑤", d:"“무죄추정은 헌법 제12조” — <b>제27조 제4항</b>입니다."},
+    {b:"⑥", d:"“머그샷은 동의받아야” — <b>2024.1.25.</b>부터 동의 없이 촬영·공개할 수 있습니다."}
+  ]);
+  h += '</div>';
+  host.innerHTML = h;
+}
+
+/* =========================================================
+   🍺 음주운전 단속 · 차량 추격
+   ========================================================= */
+var DRINK_LEVELS = [
+ {b:"0.03% 이상", d:"<b>운전 금지 기준</b>. 0.03~0.08%는 <b>면허 정지</b>(벌점 100점)이고, <b>1년 이하 징역 또는 500만원 이하 벌금</b>입니다."},
+ {b:"0.08% 이상", d:"<b>면허 취소</b>. <b>1년 이상 2년 이하 징역 또는 500만원 이상 1천만원 이하 벌금</b>입니다."},
+ {b:"0.2% 이상", d:"<b>면허 취소·가중처벌</b>. <b>2년 이상 5년 이하 징역 또는 1천만원 이상 2천만원 이하 벌금</b>입니다.", co:true}
+];
+function renderDrunken(){
+  var host = $("drunkenPane"); if (!host) return;
+  var h = '<div class="hero"><h1>🍺 음주운전 단속 · 차량 추격</h1>' +
+    '<p>음주 단속은 <b style="color:#f4e3ac">절차가 곧 증거</b>이고, 추격은 <b style="color:#f4e3ac">속도보다 판단</b>입니다. “어떤 순서로 측정하고, 언제 추격을 멈추는가”를 숫자와 근거로 말할 수 있어야 합니다.</p></div>';
+  h += picNote('근거는 <b>도로교통법</b>(법률 제22067호, 2026.10.13. 시행)·시행령·시행규칙, <b>경찰관직무집행법</b> 제10조의2·제10조의4, <b>「수사긴급배치규칙」</b>(경찰청훈령 제1006호, 2021.2.9. 시행), <b>「교통사고 조사규칙」</b> 제33조, 경찰청 <b>112 신고 접수·지령 매뉴얼과 도주차량 추격 지침</b>입니다. 법정형은 2026년 11월 현행 조문 기준입니다.');
+  h += '<div class="sec"><div class="sec-h"><span class="no">1</span><b>단속 기준과 처벌 — 숫자부터</b><span class="tag">기준</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("기준", "혈중알코올농도 3단계", "도로교통법 §44④", DRINK_LEVELS, {b:"🎤 한 줄", d:"“0.03%면 정지, 0.08%면 취소, 0.2% 이상은 가중처벌입니다. 0.03%만 넘어도 처벌 대상이라는 점을 먼저 말해야 합니다.”"});
+  h += picCard("처벌", "재범·측정거부·측정방해", "§148조의2", [
+    {b:"10년 내 재범", d:"벌금 이상의 형이 확정된 날부터 <b>10년 안에 다시</b> 음주운전·측정거부·측정방해를 하면 가중처벌합니다. 0.2% 이상은 <b>2년 이상 6년 이하 징역 또는 1천만원 이상 3천만원 이하 벌금</b>, 0.03~0.2%는 <b>1년 이상 5년 이하 징역 또는 500만원 이상 2천만원 이하 벌금</b>입니다."},
+    {b:"측정 거부", d:"술에 취했다고 인정할 만한 상당한 이유가 있는데 호흡측정에 응하지 않으면 <b>1년 이상 5년 이하 징역 또는 500만원 이상 2천만원 이하 벌금</b>이고 <b>면허는 취소</b>됩니다(§148조의2②1호)."},
+    {b:"측정 방해(술타기)", d:"음주운전 후 측정을 곤란하게 할 목적으로 <b>추가로 술을 마시거나</b> 혈중알코올농도에 영향을 주는 의약품을 사용하면 <b>측정거부와 같은 형</b>으로 처벌합니다(§44⑤·§148조의2②2호, <b>2025.6.4. 시행</b>)."},
+    {b:"행정제재", d:"측정거부·방해 모두 <b>필요적 면허 취소</b>와 <b>결격기간 2년</b>이 적용되고, <b>음주운전 방지장치 부착 조건부 면허</b> 대상이 됩니다.", co:true}
+  ]);
+  h += picCard("주의", "자전거·개인형 이동장치는 별도", "구분", [
+    {b:"이유", d:"제148조의2의 가중처벌 조항은 <b>자동차등·노면전차</b>를 운전한 경우를 전제로 하고, 개인형 이동장치는 일부 조항에서 제외됩니다."},
+    {b:"결론", d:"자전거·PM의 음주운전과 측정방해는 <b>제156조의 범칙금·벌칙</b>으로 다뤄지므로, 면접에서는 “자동차와 같은 기준이 아니다”라는 점을 정확히 말하고, 구체적 수치는 단정하지 않는 것이 안전합니다."}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">2</span><b>단속·측정 절차 — 순서를 지켜야 증거가 됩니다</b><span class="tag">절차</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("절차", "정지에서 채혈까지 6단계", "현장", [
+    {b:"① 안전 유도", d:"차량을 <b>안전한 장소</b>로 유도해 정지시킵니다. 후방에 경광등·삼각대를 두고, 2차 사고 위험이 큰 본선·터널 안에서는 측정하지 않고 안전지대로 이동합니다."},
+    {b:"② 신분 고지", d:"<b>경찰관 신분을 밝히고</b> 단속 목적과 측정 필요성을 설명합니다. 신분증 제시와 함께 “음주감지 결과 측정이 필요하다”는 점을 말합니다."},
+    {b:"③ 음주감지기", d:"1차 <b>음주감지기</b>로 선별합니다. 감지기에 반응하면 정식 호흡측정으로 넘어가고, 반응이 없어도 외관·언행상 의심되면 측정할 수 있습니다."},
+    {b:"④ 입 헹굼", d:"<b>구강 내 알코올을 제거</b>하기 위해 물로 입을 헹구게 한 뒤 측정합니다. 측정 전 흡연·구강 세정제 사용은 피하게 하고, 그 사실을 기록합니다."},
+    {b:"⑤ 정식 호흡측정", d:"호흡측정기로 측정해 <b>수치를 운전자에게 고지</b>하고, 결과를 확인·서명받습니다. 측정 시각·기기 번호·측정자·입회자를 기록합니다."},
+    {b:"⑥ 불복 시 채혈", d:"측정 결과에 불복하면 <b>운전자의 동의</b>를 받아 <b>혈액 채취</b>로 다시 측정할 수 있습니다(§44③). 동의가 없으면 강제 채혈은 별도의 영장 절차가 필요합니다.", co:true},
+    {b:"기록", d:"단속 장소·시각·측정값·고지 내용·운전자 태도를 <b>바디캠과 함께</b> 남깁니다. 절차의 흠은 그대로 증거능력 문제가 됩니다.", co:true}
+  ], {b:"🎤 30초 답변", d:"“음주 단속은 안전한 장소로 유도한 뒤 신분을 밝히고, 음주감지기로 선별해 입을 헹군 다음 정식 호흡측정을 합니다. 수치를 고지하고 서명을 받으며, 불복하면 동의를 받아 채혈합니다. 이 순서와 기록이 곧 증거가 됩니다.”"});
+  h += picCard("거부", "측정을 거부할 때", "대응", [
+    {b:"요건 확인", d:"<b>술에 취했다고 인정할 만한 상당한 이유</b>가 있는지(언행·냄새·운행 상태·사고 정황)를 정리하고, 그 이유를 고지합니다."},
+    {b:"3회 고지", d:"측정에 응하지 않으면 <b>처벌(1년 이상 5년 이하 징역 등)과 면허 취소</b>라는 불이익을 실무 지침에 따라 <b>3회 이상 명시</b>해 고지하고, <b>바디캠으로 녹화</b>하며 시각·장소·태도를 기록합니다."},
+    {b:"체포 판단", d:"그래도 거부하면 <b>측정거부죄의 현행범 체포 요건</b>(범죄의 실행 착수, 시간적·장소적 근접성)을 확인해 판단합니다. 체포하면 <b>미란다 원칙·변호인 조력·48시간 내 영장 청구</b>를 지킵니다."},
+    {b:"대체 증거", d:"거부 자체가 처벌 대상이므로 무리한 강제 측정보다 <b>거부 사실과 정황</b>을 증거로 확보합니다. 사고 사건이면 상대 진술·CCTV·블랙박스·주점 CCTV로 사고 전 음주를 입증합니다.", co:true}
+  ]);
+  h += picCard("술타기", "차 안에서 술을 마시며 버티면", "측정방해", [
+    {b:"근거", d:"음주운전 후 측정을 곤란하게 할 목적의 <b>추가 음주·의약품 사용</b>은 <b>음주측정방해행위</b>입니다(§44⑤). 시행규칙 제27의3은 베라파밀·에리트로마이신 등 혈중알코올농도에 영향을 주는 의약품을 정합니다."},
+    {b:"현장", d:"추가 음주를 제지하고 <b>그 행위 자체를 촬영·기록</b>합니다. “운전 후 측정을 방해할 목적으로 마셨는가”를 확인하기 위해 운전 종료 시점, 음주 시점, 목격자·CCTV를 확보합니다."},
+    {b:"효과", d:"2025.6.4.부터 측정거부와 <b>같은 법정형</b>으로 처벌되고 면허도 취소되므로, “술을 더 마시면 유리하다”는 계산이 성립하지 않게 되었습니다.", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">3</span><b>도주 차량 추격 — 출발과 중단</b><span class="tag">추격</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("출발", "추격을 시작할 때", "전파", [
+    {b:"특례 요건", d:"<b>경광등을 켜거나 사이렌을 울려야</b> 도로교통법 제30조의 특례(속도·앞지르기·끼어들기 제한 배제)를 적용받습니다. 특례를 받더라도 <b>교통안전에 특히 주의</b>해야 합니다(§29③·시행령 §3)."},
+    {b:"112 전파", d:"무전으로 <b>위치(도로명·교차로·진행방향), 차종·색상·번호판, 도주 방향, 속도, 위험 요소</b>를 실시간 전달합니다. 운전자는 운전에 집중하고 <b>동승자가 무전을 전담</b>합니다."},
+    {b:"경고 방송", d:"마이크로 <b>정차 명령</b>을 명확히 방송하고, 앞으로 끼어들 수 있음을 미리 알려 도주자가 예측하게 합니다. 급격한 진로 변경은 2차 사고를 만듭니다."},
+    {b:"지휘 보고", d:"추격 시작과 진행을 <b>상황실·지휘부에 계속 보고</b>하고, 관할을 넘어가도 임의로 중단하지 않고 인접 순찰차와 역할을 나눕니다.", co:true}
+  ]);
+  h += picCard("중단", "언제 멈추는가 — 2차 피해 위험", "판단", [
+    {b:"비교", d:"<b>추격으로 생길 2차 인명피해 위험</b>과 <b>검거로 얻는 이익</b>(범죄의 경중, 도주자의 위험성)을 비교합니다. 위험이 이익을 넘으면 추격을 멈춥니다."},
+    {b:"중단 신호", d:"<b>역주행·과속</b>, <b>보행자·차량 밀집</b>(학교 앞·시장·번화가), 터널·교량·공사 구간, 도주차의 난폭 운전으로 시민 위험이 커지는 상황입니다."},
+    {b:"전환", d:"추격 대신 <b>CCTV 관제</b>로 이동 경로를 추적하고, <b>인접 순찰차 긴급배치·차단검문</b>으로 전환합니다. 번호판으로 소유자·수배 여부를 확인해 <b>추적 수사</b>로 바꿉니다."},
+    {b:"긴급배치", d:"「수사긴급배치규칙」은 <b>갑호·을호</b>로 나눠 발령권자(경찰서장·시도청장·국가수사본부장)와 동원 기준(갑호 100%·을호 형사 100%·지구대 50%)을 정하고, <b>도주로 차단·검문검색</b>으로 범인을 잡도록 합니다. 「교통사고 조사규칙」 §33은 검문 시 <b>정지·유도·검사·질문·추적</b>의 분담과 검문 차량 기록을 요구합니다.", co:true}
+  ], {b:"🎤 30초 답변", d:"“추격은 검거 이익과 2차 피해 위험을 계속 비교하며 해야 합니다. 역주행이나 보행자 밀집 구간처럼 시민 위험이 커지면 추격을 중단하고, CCTV 관제와 인접 순찰차 긴급배치·차단검문으로 바꿔 잡겠습니다. 추격 중에는 경광등·사이렌을 켜고 위치·차종·번호판·도주 방향을 112에 실시간 전파하겠습니다.”"});
+  h += picCard("차단", "직접차단은 최후의 수단", "신중", [
+    {b:"의미", d:"순찰차로 도주차를 충격해 정지시키는 <b>직접차단</b>은 112 신고 접수·지령 매뉴얼에 방법이 있지만, 도주차가 전복되거나 2차 사고로 시민이 다칠 수 있습니다."},
+    {b:"원칙", d:"<b>민간인 피해 가능성, 도로 구조, 속도</b>를 확인해 상급자 판단 아래 최후에 검토하고, 실행 전 주변 차량·보행자를 통제합니다. 필요최소한의 물리력 원칙이 그대로 적용됩니다."},
+    {b:"비판", d:"직접차단을 위해성 경찰장비로 규정할 근거가 없다는 지적이 있어(법률유보 원칙), 현장에서는 <b>근거와 절차를 함께 설명</b>할 수 있어야 합니다."}
+  ]);
+  h += picCard("돌진", "차량을 흉기로 돌진할 때", "물리력", [
+    {b:"평가", d:"차량으로 경찰관·시민을 향해 돌진하는 것은 <b>치명적 공격</b>에 해당할 수 있습니다. 물리력 규칙의 5단계 중 최고 단계로 평가합니다."},
+    {b:"순서", d:"먼저 <b>대피와 차단</b>(시민 대피, 차량 통제)을 하고, 경찰관직무집행법 제10조의2(경찰장구)·제10조의4(무기)와 위해성 경찰장비 규정에 따라 <b>다른 수단이 없고 급박한 경우</b>에만 최소한으로 사용합니다."},
+    {b:"기록", d:"사용 사실과 이유, 상대의 위험성, 주변 피해를 즉시 보고·기록합니다. ‘차량 = 흉기’라는 판단을 <b>객관적 정황</b>으로 설명하는 것이 핵심입니다.", co:true}
+  ]);
+  h += '</div>';
+  h += '<div class="sec"><div class="sec-h"><span class="no">4</span><b>30초 핵심 답변 · 함정</b><span class="tag">마무리</span></div></div>';
+  h += '<div class="bslist">';
+  h += picCard("답변", "적법절차 + 시민 안전 우선", "30초", [], {b:"🎤 30초 답변", d:"“음주 단속은 안전한 장소로 유도해 신분을 밝히고, 음주감지기로 선별한 뒤 입을 헹구고 정식 호흡측정을 하는 순서로 합니다. 수치를 고지하고 서명을 받으며, 불복하면 동의를 받아 채혈하고, 거부하면 처벌과 면허 취소를 3회 이상 고지한 뒤 바디캠으로 기록하고 체포 요건을 검토합니다. 도주 차량은 경광등과 사이렌을 켜고 위치·차종·번호판·도주 방향을 112에 전파하며 추격하되, 역주행이나 보행자 밀집처럼 2차 피해 위험이 검거 이익을 넘으면 추격을 중단하고 CCTV 관제와 긴급배치·차단검문으로 전환하겠습니다. 시민의 생명을 먼저 지키는 것이 결국 가장 좋은 검거라고 생각합니다.”"});
+  h += picCard("함정", "자주 틀리는 답", "감점", [
+    {b:"①", d:"“0.05%가 기준” — 현행 기준은 <b>0.03%</b>입니다."},
+    {b:"②", d:"“측정 거부하면 혈액을 강제로 뽑는다” — <b>동의</b>가 원칙이고, 강제 채혈은 <b>영장</b> 절차가 필요합니다."},
+    {b:"③", d:"“거부해도 음주운전보다 가볍다” — 거부는 <b>1년 이상 5년 이하</b>로 오히려 무겁고 면허도 취소됩니다."},
+    {b:"④", d:"“추격은 무조건 끝까지” — 역주행·보행자 밀집에서는 <b>중단·전환</b>이 원칙입니다."},
+    {b:"⑤", d:"“사이렌 없이도 추격 특례가 된다” — 특례 적용에는 <b>경광등·사이렌</b>이 필요합니다."},
+    {b:"⑥", d:"“술타기는 처벌 안 된다” — <b>2025.6.4.</b>부터 측정거부와 같은 형으로 처벌됩니다."}
+  ]);
+  h += '</div>';
+  host.innerHTML = h;
+}
+
+/* =========================================================
+   🔊 자료실 듣기 (Web Speech API · 카드 단위 낭독)
+   ========================================================= */
+/* 하위 탭 이름 + "Pane" = 패널 id (lawPane, identityPane …) */
+var listen = { on:false, idx:0, part:0, items:[], parts:[], rate:1, voice:null, current:null, token:0 };
+function listenActiveSeg(){
+  var b = document.querySelector("#lawSeg button.on");
+  return b ? b.getAttribute("data-seg") : "law";
+}
+function listenClean(t){
+  return String(t == null ? "" : t)
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}\u{25A0}-\u{25FF}]/gu, " ")
+    .replace(/[①-⑳]/g, "")
+    .replace(/[·•]/g, ", ")
+    .replace(/[“”"]/g, "")
+    .replace(/\s*\n\s*/g, ". ")
+    .replace(/\.\s*\.+/g, ".")
+    .replace(/\s{2,}/g, " ")
+    .replace(/^[\s.,]+/, "")
+    .trim();
+}
+function listenSplit(t){
+  var sents = [], cur = "";
+  for (var i = 0; i < t.length; i++){
+    cur += t.charAt(i);
+    if (".!?".indexOf(t.charAt(i)) >= 0){ sents.push(cur); cur = ""; }
+  }
+  if (cur.trim()) sents.push(cur);
+  var out = [], buf = "";
+  sents.forEach(function(s){
+    s = s.trim(); if (!s) return;
+    if ((buf + " " + s).length > 170 && buf){ out.push(buf); buf = s; }
+    else buf = buf ? buf + " " + s : s;
+  });
+  if (buf) out.push(buf);
+  return out.length ? out : [t];
+}
+function listenBuild(){
+  var name = listenActiveSeg();
+  var pane = $(name + "Pane") || $("lawPane");
+  var items = [];
+  if (!pane) return items;
+  var hero = pane.querySelector(".hero");
+  if (hero){ var ht = listenClean(hero.innerText); if (ht && ht.length > 8) items.push({ label:"도입", text:ht }); }
+  pane.querySelectorAll(".note.tiny").forEach(function(n){
+    var nt = listenClean(n.innerText);
+    if (nt && nt.length > 30) items.push({ label:"안내", text:nt });
+  });
+  var sel = ".bscard, .notecard, .issuecard, .statcard, .panel";
+  var cards = [];
+  pane.querySelectorAll(sel).forEach(function(el){
+    if (el.closest(".bscard") !== el && el.closest(".bscard")) return; /* 중복 방지 */
+    if (el.closest(".notecard") !== el && el.closest(".notecard")) return;
+    if (el.closest(".issuecard") !== el && el.closest(".issuecard")) return;
+    if (el.closest(".statcard") !== el && el.closest(".statcard")) return;
+    if (el.classList.contains("panel") && el.hidden) return;
+    cards.push(el);
+  });
+  cards.forEach(function(c){
+    if (c.closest(".panel") && c.closest(".panel") !== c) return;
+    var titleEl = c.querySelector(".bst, .sh h3, h3, .itag");
+    var label = titleEl ? listenClean(titleEl.innerText).slice(0, 28) : "";
+    var txt = listenClean(c.innerText);
+    if (txt && txt.length > 12) items.push({ label:label || "자료", text:txt });
+  });
+  return items;
+}
+function listenPaint(){
+  var btn = $("listenToggle"), ic = $("listenIcon"), lb = $("listenLabel"), pr = $("listenProg"), nx = $("listenNext");
+  if (!btn) return;
+  var n = listen.items.length;
+  btn.classList.toggle("on", listen.on);
+  btn.setAttribute("aria-pressed", listen.on ? "true" : "false");
+  if (ic) ic.textContent = listen.on ? "⏹️" : "🔊";
+  if (lb) lb.textContent = listen.on ? "정지" : "이 자료 듣기";
+  if (pr) pr.textContent = n ? ((listen.on ? Math.min(listen.idx + 1, n) : 0) + " / " + n) : "– / –";
+  if (nx) nx.disabled = !listen.on;
+  Array.prototype.forEach.call(document.querySelectorAll("#listenRate button"), function(b){
+    b.classList.toggle("on", parseFloat(b.getAttribute("data-rate")) === listen.rate);
+  });
+}
+function listenPickVoice(){
+  try {
+    var vs = window.speechSynthesis.getVoices() || [];
+    for (var i = 0; i < vs.length; i++){
+      if (/^ko([-_]|$)/i.test(vs[i].lang)){ listen.voice = vs[i]; break; }
+    }
+  } catch(e){}
+}
+function listenSpeak(){
+  if (!listen.on) return;
+  if (!listen.items.length){ listenStop(); return; }
+  if (listen.part >= listen.parts.length){
+    listen.idx++;
+    if (listen.idx >= listen.items.length){ listenStop(true); return; }
+    listen.parts = listenSplit(listen.items[listen.idx].text);
+    listen.part = 0;
+    listenPaint();
+    return listenSpeak();
+  }
+  var txt = listen.parts[listen.part];
+  if (!txt || !txt.trim()){ listen.part++; return listenSpeak(); }
+  var myToken = listen.token;
+  var u = new SpeechSynthesisUtterance(txt);
+  u.lang = "ko-KR"; u.rate = listen.rate; u.pitch = 1;
+  if (listen.voice) u.voice = listen.voice;
+  u.onend = function(){
+    if (!listen.on || myToken !== listen.token) return;
+    listen.part++;
+    setTimeout(function(){ if (listen.on && myToken === listen.token) listenSpeak(); }, 30);
+  };
+  u.onerror = function(){
+    if (!listen.on || myToken !== listen.token) return;
+    listen.part++;
+    setTimeout(function(){ if (listen.on && myToken === listen.token) listenSpeak(); }, 120);
+  };
+  listen.current = u;
+  try { window.speechSynthesis.speak(u); } catch(e){}
+  listenPaint();
+}
+function listenStart(){
+  if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined"){
+    toast("이 브라우저에서는 듣기 기능을 사용할 수 없어요."); return;
+  }
+  listen.items = listenBuild();
+  if (!listen.items.length){ toast("읽을 자료가 없어요. 주제를 먼저 선택해 주세요."); return; }
+  listenPickVoice();
+  listen.on = true; listen.idx = 0; listen.part = 0; listen.token++;
+  listen.parts = listenSplit(listen.items[0].text);
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  listenSpeak();
+}
+function listenStop(done){
+  var was = listen.on;
+  listen.on = false; listen.parts = []; listen.part = 0; listen.token++; listen.current = null;
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  listenPaint();
+  if (done && was) toast("자료 듣기를 마쳤어요.");
+}
+function listenNextItem(){
+  if (!listen.on) return;
+  listen.token++;
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  listen.idx++; listen.part = 0;
+  if (listen.idx >= listen.items.length){ listenStop(true); return; }
+  listen.parts = listenSplit(listen.items[listen.idx].text);
+  listenPaint();
+  var t = listen.token;
+  setTimeout(function(){ if (listen.on && t === listen.token) listenSpeak(); }, 60);
+}
+function listenSetRate(r){
+  listen.rate = r;
+  listenPaint();
+  if (listen.on){
+    listen.token++;
+    try { window.speechSynthesis.cancel(); } catch(e){}
+    var t = listen.token;
+    setTimeout(function(){ if (listen.on && t === listen.token) listenSpeak(); }, 60);
+  }
+}
+function listenRefresh(){
+  if (listen.on) listenStop();
+  listen.items = listenBuild();
+  listen.idx = 0;
+  listenPaint();
+}
+function initListen(){
+  var btn = $("listenToggle");
+  if (!btn) return;
+  if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined"){
+    btn.disabled = true;
+    var lb = $("listenLabel"); if (lb) lb.textContent = "듣기 미지원";
+    return;
+  }
+  btn.addEventListener("click", function(){
+    if (listen.on) listenStop(); else listenStart();
+  });
+  var nx = $("listenNext"); if (nx) nx.addEventListener("click", listenNextItem);
+  Array.prototype.forEach.call(document.querySelectorAll("#listenRate button"), function(b){
+    b.addEventListener("click", function(){ listenSetRate(parseFloat(b.getAttribute("data-rate")) || 1); });
+  });
+  listenPickVoice();
+  if (window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener("voiceschanged", listenPickVoice);
+  listen.items = listenBuild();
+  listenPaint();
+}
+if (typeof window !== "undefined" && window.speechSynthesis && window.speechSynthesis.addEventListener){
+  window.speechSynthesis.addEventListener("voiceschanged", function(){ try { listenPickVoice(); } catch(e){} });
 }
 
 Array.prototype.forEach.call(document.querySelectorAll("#lawSeg button"), function(b){
@@ -6288,6 +6925,9 @@ Array.prototype.forEach.call(document.querySelectorAll("#personalSeg button"), f
    9. 시작
    ========================================================= */
 function init(){
+  var fa = $("favAllAns");
+  if (fa) fa.addEventListener("click", function(){ setAnsAll(!state.allAns); });
+  initListen();
   renderChips();
   renderCats();
   renderQuestions();
@@ -6315,6 +6955,10 @@ window.PIC = {
   topics: TOPICS, questions: QUESTIONS, qcats: QCATS,
   aiCall: aiCall, scanLegacyKeys: scanLegacyKeys,
   pickDaily: pickDaily, renderDaily: renderDaily, renderDailyRows: renderDailyRows,
+  fav: {key: FAV_KEY, list: favList, isFav: isFav, toggle: toggleFav, idOf: favIdOf, save: saveFav},
+  setAnsAll: setAnsAll, renderCats: renderCats, renderQuestions: renderQuestions,
+  listen: listen, listenBuild: listenBuild, listenStart: listenStart, listenStop: listenStop,
+  listenNext: listenNextItem, listenSetRate: listenSetRate, listenRefresh: listenRefresh,
   genDailyAI: genDailyAI, bumpPractice: bumpPractice, practiceCount: practiceCount,
   todayKey: todayKey,
   speed: sp, spBandOf: spBandOf, spCoachText: spCoachText, spScripts: SP_SCRIPTS,
