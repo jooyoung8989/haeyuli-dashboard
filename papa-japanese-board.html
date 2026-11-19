@@ -3217,7 +3217,8 @@ function callSetPhase(p){
   if (st){ st.hidden = live; st.textContent = (p === "ended" ? "📞 다시 걸기" : "📞 통화 시작"); }
   if (en){ en.hidden = !live; if (p !== "live") en.classList.remove("beat"); }
   [inp, mic, sd].forEach(function(x){ if (x) x.disabled = (p !== "live"); });
-  if (inp) inp.placeholder = (p === "live" ? "일본어로 답해도, 한국어로 적어도 돼요 ✏️" : "📞 통화 시작을 누르면 말할 수 있어요");
+  if (inp) inp.placeholder = (p === "live" ? "일본어로 답해도, 한국어로 적어도 돼요 ✏️"
+    : (p === "ended" ? "📞 다시 걸기를 누르면 또 말할 수 있어요" : "📞 통화 시작을 누르면 말할 수 있어요"));
   if (p === "idle"){ callSetStatus("전화를 걸어 볼까요?"); callSetNet("통화 대기"); }
   else if (p === "ringing"){ callSetStatus("연결 중이에요…"); callSetNet("연결 중 📶"); }
   else if (p === "live"){ callSetStatus("통화 중 · 일본어로 말해 봐요"); callSetNet("통화 중 ●"); }
