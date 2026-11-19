@@ -43,6 +43,18 @@
   .wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 16px}
   a{color:#5a54c8}
 
+  /* ---------- character images ---------- */
+  .cim{position:relative;display:block;flex:0 0 auto;overflow:hidden}
+  .thumb{
+    position:relative;display:block;width:100%;padding-top:100%;overflow:hidden;border-radius:14px;
+    background:radial-gradient(92% 88% at 50% 16%,#ffffff 0%,#faf7ff 56%,#f0ebff 100%);
+    box-shadow:inset 0 0 0 1px rgba(120,100,160,.09)
+  }
+  .cim img,.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+  .cim .ph,.thumb .ph{position:absolute;inset:0;display:none;place-items:center;font-style:normal;line-height:1}
+  .cim.noimg img,.thumb.noimg img{display:none}
+  .cim.noimg .ph,.thumb.noimg .ph{display:grid}
+
   /* ---------- header ---------- */
   header.hero{
     position:relative;
@@ -227,6 +239,10 @@
   .adult.t-C{border-color:#dfe6ee;background:linear-gradient(175deg,#fbfcfe,#f2f5f9)}
   .adult.t-C .tl{background:linear-gradient(135deg,#a3b3c6,#77899e)}
   .adult .ae{font-size:20px;line-height:1.1}
+  .adult .cim{width:58px;height:58px;margin:0 auto 3px}
+  .adult .cim .ph{font-size:27px;opacity:.55}
+  .g-arrow .cim{width:42px;height:42px;border-radius:12px;background:#fbf8ff;box-shadow:inset 0 0 0 1px rgba(120,100,160,.08)}
+  .g-arrow .cim .ph{font-size:20px;opacity:.55}
   .adult b{display:block;font-size:13px;margin-top:2px;line-height:1.25;overflow-wrap:anywhere}
   .adult .en{display:block;font-size:10.5px;color:#a79bbe;font-weight:700;overflow-wrap:anywhere}
   .adult .no{display:block;font-size:10.5px;color:#8f84ab;font-weight:800;margin-top:3px}
@@ -282,6 +298,8 @@
   .dc .desc{font-size:11.5px;color:#6f6787;margin-top:5px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
   .dc .desc.open{-webkit-line-clamp:unset;overflow:visible}
   .dc .more{font:inherit;font-size:10.5px;font-weight:900;color:#9b8cff;background:none;border:0;padding:4px 0 0;cursor:pointer}
+  .dc .thumb{margin:8px 0 2px}
+  .dc .thumb .ph{font-size:46px;opacity:.55}
   .empty{padding:26px;text-align:center;color:var(--ink-soft);font-size:13.5px;background:#fff;border:1px dashed #e4dcf5;border-radius:16px}
 
   /* ---------- predictor ---------- */
@@ -303,7 +321,11 @@
   }
   .result .lead{font-size:12px;font-weight:900;color:#b98fae;letter-spacing:.04em}
   .result .who{display:flex;align-items:center;gap:12px;margin-top:6px;min-width:0}
-  .result .re{font-size:44px;line-height:1;flex:0 0 auto;animation:pop .5s ease}
+  .result .re{
+    width:88px;height:88px;border-radius:20px;background:#fff;
+    box-shadow:inset 0 0 0 1px rgba(120,100,160,.09),0 8px 20px rgba(214,120,160,.16);animation:pop .5s ease
+  }
+  .result .re .ph{font-size:42px;opacity:.5}
   @keyframes pop{0%{transform:scale(.6);opacity:.2}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
   .result .wn{min-width:0}
   .result .wn b{display:block;font-size:clamp(20px,5.4vw,26px);line-height:1.15;overflow-wrap:anywhere}
@@ -315,6 +337,8 @@
   .alts{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-top:11px}
   .alt{background:rgba(255,255,255,.72);border-radius:11px;padding:7px 9px;font-size:11px;color:#8b7ba6;min-width:0}
   .alt b{display:block;font-size:11.5px;color:#5f5878}
+  .alt .cim{display:inline-block;width:26px;height:26px;vertical-align:-7px;margin-right:4px}
+  .alt .cim .ph{font-size:15px;opacity:.6}
 
   .srcs{font-size:11.5px;color:#8b7ba6;line-height:1.7}
   .srcs a{color:#6f6699;text-decoration:none;border-bottom:1px dotted #c9bfe0}
@@ -573,7 +597,7 @@
   </div>
   <div class="dex-tools">
     <div class="searchrow">
-      <input id="q" type="search" placeholder="이름으로 찾기 (한글·영어)" aria-label="캐릭터 이름 검색" autocomplete="off">
+      <input id="q" type="search" placeholder="이름·도감번호로 찾기 (모르면 그림으로 찾아보세요)" aria-label="캐릭터 이름 검색" autocomplete="off">
       <button id="qclear" type="button">지우기</button>
     </div>
     <div class="filterline" id="fieldFilter"><span class="lbl">필드</span></div>
@@ -612,7 +636,7 @@
 <footer>
   <div class="wrap">
     <div class="srcs">
-      <b>자료</b> · <a href="https://tamalog.xyz/" target="_blank" rel="noopener">타마로그 도감</a>(공식 도감 이미지 기준 133종·케어 티어) ·
+      <b>자료</b> · <a href="https://tamalog.xyz/" target="_blank" rel="noopener">타마로그 도감</a>(공식 도감 이미지 기준 133종·케어 티어·캐릭터 그림) ·
       <a href="https://tamavault.com/paradise/evolution-chart/" target="_blank" rel="noopener">Tamavault 진화표</a> /
       <a href="https://tamavault.com/paradise/food-guide/" target="_blank" rel="noopener">음식 가이드</a> /
       <a href="https://tamavault.com/paradise/care-mistakes/" target="_blank" rel="noopener">케어미스</a> /
@@ -621,6 +645,7 @@
       네이버 블로그 <a href="https://blog.naver.com/cherry_blossom_93/224101564524" target="_blank" rel="noopener">윤슬님의 다마고치 파라다이스 공략</a>
     </div>
     <p class="fnote">캐릭터 설명은 공식 사이트(한국) 도감 문구를 그대로 옮겼어요. 한국어 이름은 국내 도감 표기를 따랐고, 공식 설명에 나오는 표기(미야오치·호호치 등)를 우선했어요. 기기 한글판 표기와 조금 다를 수 있습니다. 음식 이름은 영문 자료를 한국어로 옮긴 표기예요.</p>
+    <p class="fnote">캐릭터 그림은 타마로그 도감에 실린 공식 도감 이미지(No.500~632)를 288px로 줄여 이 페이지와 같은 폴더(<code>tama-img/</code>)에 함께 담았어요. 외부 사이트에서 실시간으로 불러오지 않기 때문에 느리거나 막혀도 깨지지 않고, 혹시 그림을 못 불러오면 그 자리에 이모지가 대신 나옵니다.</p>
     <p class="fnote">Tamagotchi는 Bandai의 등록상표입니다. 이 페이지는 개인 육성 참고용 비공식 가이드이며, 확인된 자료만 담았습니다.</p>
   </div>
 </footer>
@@ -682,13 +707,21 @@ const DATA = {"fields": [{"id": "land", "ko": "육지", "en": "Land", "emoji": "
     return "수치 미확인";
   }
 
+  function imgHTML(c, cls){
+    return '<span class="' + cls + '">' +
+      '<img src="tama-img/' + c.no + '.webp" alt="' + c.ko + '" loading="lazy" decoding="async"' +
+      ' onload="this.parentNode.classList.remove(\'noimg\')" onerror="this.parentNode.classList.add(\'noimg\')">' +
+      '<i class="ph" aria-hidden="true">' + c.emoji + '</i>' +
+      '</span>';
+  }
+
   function adultTile(no, tier){
     const c = byNo[no];
     const d = document.createElement("div");
     d.className = "adult t-" + tier;
     d.innerHTML =
       '<span class="tl">' + tier + '</span>' +
-      '<span class="ae">' + c.emoji + '</span>' +
+      imgHTML(c, "cim") +
       '<b>' + c.ko + '</b>' +
       '<span class="en">' + c.en + '</span>' +
       '<span class="no">No.' + c.no + '</span>' +
@@ -715,7 +748,7 @@ const DATA = {"fields": [{"id": "land", "ko": "육지", "en": "Land", "emoji": "
       html += '<article class="group">';
       html += '<div class="g-head"><span class="g-emoji">' + g.emoji + '</span>';
       html += '<span class="g-name">' + g.ko + '<span>' + g.en + '</span></span>';
-      html += '<span class="g-arrow">→ <em>' + y.ko + '</em> No.' + y.no + '<span style="color:#b0a6c4;font-weight:600">(' + y.en + ')</span></span></div>';
+      html += '<span class="g-arrow">→ ' + imgHTML(y, "cim") + '<em>' + y.ko + '</em> No.' + y.no + '<span style="color:#b0a6c4;font-weight:600">(' + y.en + ')</span></span></div>';
       html += '<div class="foods">' + g.foods.map(function(x){
         return '<span>' + x.ko + '<i>' + x.en + '</i></span>';
       }).join("") + '</div>';
@@ -816,6 +849,7 @@ const DATA = {"fields": [{"id": "land", "ko": "육지", "en": "Land", "emoji": "
         '<span class="no">No.' + c.no + "</span>" +
         (c.tier ? '<span class="tl ' + c.tier + '">' + c.tier + "</span>" : "") +
         "</div>" +
+        imgHTML(c, "thumb") +
         "<h4>" + c.ko + "</h4>" +
         '<div class="en">' + c.en + "</div>" +
         '<div class="jp">' + c.jp + "</div>" +
@@ -886,11 +920,11 @@ const DATA = {"fields": [{"id": "land", "ko": "육지", "en": "Land", "emoji": "
     const target = byNo[g.adults[sim.tier]];
     const sameYoung = ["S", "A", "B", "C"].filter(function(t){ return t !== sim.tier; }).map(function(t){
       const c = byNo[g.adults[t]];
-      return '<div class="alt"><b>' + c.emoji + " " + c.ko + "</b>" + t + " · " + TIERLABEL[t] + "</div>";
+      return '<div class="alt"><b>' + imgHTML(c, "cim") + c.ko + "</b>" + t + " · " + TIERLABEL[t] + "</div>";
     }).join("");
     simResult.innerHTML =
       '<div class="lead">지금 이대로 크면 →</div>' +
-      '<div class="who"><span class="re">' + target.emoji + "</span>" +
+      '<div class="who">' + imgHTML(target, "re cim") +
       '<span class="wn"><b>' + target.ko + "</b>" +
       '<span class="en">' + target.en + "</span>" +
       '<span class="nono">No.' + target.no + " · " + sim.tier + " 티어</span></span></div>" +
