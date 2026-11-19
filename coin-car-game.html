@@ -880,7 +880,9 @@
   function clearedCount(){
     var k = Object.keys(save.cleared), n = 0;
     for (var i = 0; i < k.length; i++) if (save.cleared[k[i]]) n++;
-    return n;
+    var p = 0;
+    for (var v = 1; v <= 6; v++) p += clamp(save.villageProgress[v] | 0, 0, 10);
+    return Math.max(n, p);
   }
 
   function loadGame(){
