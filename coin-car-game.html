@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#8ee3ff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>코인 자동차 🚗</title>
+<style>
+  :root{
+    --font: system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Segoe UI", sans-serif;
+  }
+  *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body{
+    margin:0; padding:0; width:100%; height:100%;
+    overflow:hidden; background:#8ee3ff;
+    font-family: var(--font);
+    user-select:none; -webkit-user-select:none;
+    overscroll-behavior:none; touch-action:none;
+    -webkit-text-size-adjust:100%;
+  }
+  #app{ position:fixed; inset:0; overflow:hidden; }
+  canvas#game{ display:block; width:100%; height:100%; touch-action:none; }
+
+  /* ---------- HUD ---------- */
+  #hud{
+    position:absolute; left:0; right:0; top:0;
+    display:flex; align-items:flex-start; gap:8px;
+    padding: calc(10px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) 0 calc(10px + env(safe-area-inset-left));
+    pointer-events:none; z-index:5;
+  }
+  .coinPill{
+    display:flex; align-items:center; gap:7px;
+    background:#fff; border-radius:999px; padding:4px 14px 4px 5px;
+    box-shadow: 0 4px 0 #e3cfa4, 0 7px 14px rgba(30,50,70,.16);
+    flex:0 0 auto;
+  }
+  .coinIcon{
+    width:34px; height:34px; border-radius:50%;
+    background: radial-gradient(circle at 34% 28%, #fff6b8, #ffd93d 52%, #e2a100);
+    display:grid; place-items:center;
+    color:#a86a00; font-size:19px; font-weight:900; line-height:1;
+    box-shadow: inset 0 -2px 0 rgba(150,90,0,.28), inset 0 2px 0 rgba(255,255,255,.6);
+  }
+  #coinNum{
+    font-weight:900; font-size:21px; color:#8a5a00; min-width:32px; text-align:center;
+    transition: transform .12s ease-out;
+  }
+  #coinNum.pop{ transform: scale(1.4) rotate(-4deg); }
+
+  .stageBox{ flex:1 1 auto; min-width:40px; padding-top:1px; }
+  .stageLabel{
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:13px; font-weight:900; color:#fff;
+    text-shadow: 0 2px 3px rgba(20,50,70,.45), 0 0 2px rgba(20,50,70,.5);
+    margin-bottom:4px; letter-spacing:-.2px;
+  }
+  #stageName{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bar{
+    height:13px; border-radius:99px; background:rgba(255,255,255,.62);
+    box-shadow: inset 0 2px 4px rgba(30,60,80,.18), 0 1px 0 rgba(255,255,255,.5);
+    overflow:hidden;
+  }
+  .barFill{
+    height:100%; width:0%; border-radius:99px;
+    background: linear-gradient(90deg,#ffe066,#ffb703);
+    transition: width .18s linear;
+  }
+  .topBtns{ display:flex; gap:7px; pointer-events:auto; flex:0 0 auto; }
+  .iconBtn{
+    width:46px; height:46px; border-radius:16px; border:none;
+    background:#fff; font-size:22px; line-height:1;
+    display:grid; place-items:center; cursor:pointer;
+    box-shadow: 0 4px 0 #cfd8dc, 0 6px 12px rgba(30,50,70,.14);
+    transition: transform .06s;
+  }
+  .iconBtn:active{ transform: translateY(3px); box-shadow: 0 1px 0 #cfd8dc; }
+
+  /* ---------- controls ---------- */
+  #controls{
+    position:absolute; left:0; right:0; bottom:0; z-index:6;
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:12px; pointer-events:none;
+    padding: 0 calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+  }
+  .pad{
+    pointer-events:auto; border:none; cursor:pointer; color:#fff;
+    display:grid; place-items:center; line-height:1.05; font-family:var(--font);
+    transition: transform .06s, box-shadow .06s, filter .06s;
+    position:relative;
+  }
+  .pad small{ display:block; font-size:.62em; font-weight:800; opacity:.92; margin-top:3px; letter-spacing:-.3px; }
+  #jumpBtn{
+    width: clamp(86px, 23vw, 116px); height: clamp(86px, 23vw, 116px);
+    border-radius:50%;
+    background: radial-gradient(circle at 38% 26%, #ffd166, #ffb703 62%, #ef8c00);
+    color:#5b3600; font-weight:900; font-size: clamp(17px, 4.4vw, 21px);
+    box-shadow: 0 8px 0 #c27400, 0 12px 20px rgba(40,30,0,.25), inset 0 3px 0 rgba(255,255,255,.45);
+    text-shadow: 0 1px 0 rgba(255,255,255,.4);
+  }
+  #runBtn{
+    width: clamp(150px, 40vw, 226px); height: clamp(88px, 22vw, 110px);
+    border-radius: 999px;
+    background: radial-gradient(circle at 38% 22%, #86f0a7, #2dbd6e 60%, #1a9a54);
+    font-weight:900; font-size: clamp(20px, 5vw, 26px);
+    box-shadow: 0 8px 0 #14743f, 0 12px 22px rgba(0,40,20,.28), inset 0 3px 0 rgba(255,255,255,.35);
+    text-shadow: 0 2px 0 rgba(0,0,0,.16);
+  }
+  .pad.active{ transform: translateY(6px); filter: brightness(1.07); }
+  #jumpBtn.active{ box-shadow: 0 2px 0 #c27400, 0 4px 10px rgba(40,30,0,.25), inset 0 3px 0 rgba(255,255,255,.45); }
+  #runBtn.active{ box-shadow: 0 2px 0 #14743f, 0 4px 10px rgba(0,40,20,.28), inset 0 3px 0 rgba(255,255,255,.35); }
+
+  /* ---------- modal ---------- */
+  #modal{
+    position:absolute; inset:0; z-index:20; display:none;
+    background: rgba(18,40,60,.42);
+    -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+    padding: 10px;
+    place-items:center;
+  }
+  #modal.show{ display:grid; }
+  .sheet{
+    width: min(560px, 100%);
+    max-height: min(90vh, 780px);
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+    touch-action: pan-y; overscroll-behavior: contain;
+    background: linear-gradient(#fffdf6, #fff5df);
+    border-radius: 26px;
+    padding: 14px 14px 16px;
+    box-shadow: 0 10px 0 rgba(120,90,40,.18), 0 22px 44px rgba(10,30,50,.35);
+    animation: popIn .18s ease-out;
+  }
+  @keyframes popIn{ from{ transform: scale(.94); opacity:.4 } to{ transform: scale(1); opacity:1 } }
+
+  .sheetHead{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .sheetHead h2{ margin:0; font-size:21px; color:#2b3f4d; letter-spacing:-.5px; }
+  .wallet{
+    margin-left:auto; display:flex; align-items:center; gap:6px;
+    background:#fff3cf; border-radius:999px; padding:4px 12px 4px 5px;
+    box-shadow: inset 0 0 0 2px #ffe2a1;
+  }
+  .wallet .coinIcon{ width:26px; height:26px; font-size:15px; }
+  .wallet b{ font-size:18px; color:#8a5a00; }
+  .xbtn{
+    width:40px; height:40px; border-radius:14px; border:none; background:#f0e7d6;
+    font-size:19px; color:#6b5a45; cursor:pointer;
+    box-shadow: 0 3px 0 #ddd0ba;
+  }
+
+  .tabs{ display:flex; gap:7px; margin-bottom:12px; }
+  .tab{
+    flex:1; border:none; border-radius:14px; padding:10px 4px;
+    background:#f1e8d8; color:#7b6a55; font-weight:900; font-size:14px;
+    cursor:pointer; font-family:var(--font); box-shadow:0 3px 0 #e0d3bf;
+  }
+  .tab.on{ background:#ffb703; color:#5b3600; box-shadow:0 3px 0 #c27400; }
+
+  .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(132px,1fr)); gap:10px; }
+  .card{
+    background:#fff; border-radius:18px; padding:8px 8px 9px;
+    border:3px solid #ffe6a8;
+    box-shadow: 0 4px 0 #f1e0bb;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    text-align:center;
+  }
+  .card.on{ border-color:#2dbd6e; background:#f3fff8; box-shadow:0 4px 0 #bfe8cf; }
+  .card canvas.prev{ width:100%; height:70px; display:block; }
+  .cardName{ font-weight:900; font-size:14.5px; color:#33475a; letter-spacing:-.4px; }
+  .cardDesc{ font-size:11px; color:#8b96a2; line-height:1.25; min-height:26px; }
+  .buy{
+    width:100%; margin-top:2px; border:none; border-radius:12px; padding:9px 4px;
+    font-weight:900; font-size:14px; font-family:var(--font);
+    background:#ffb703; color:#5b3600; cursor:pointer;
+    box-shadow:0 3px 0 #c27400;
+  }
+  .buy:active{ transform:translateY(2px); box-shadow:0 1px 0 #c27400; }
+  .buy.owned{ background:#2dbd6e; color:#fff; box-shadow:0 3px 0 #14743f; }
+  .buy:disabled{ background:#e8e8e8; color:#a2adb6; box-shadow:0 3px 0 #d5d5d5; cursor:default; transform:none; }
+
+  .swatch{
+    width:60px; height:60px; border-radius:50%;
+    box-shadow: inset 0 -5px 0 rgba(0,0,0,.18), inset 0 4px 0 rgba(255,255,255,.45), 0 3px 6px rgba(0,0,0,.12);
+    margin:4px 0 2px;
+  }
+
+  .upRow{
+    display:flex; align-items:center; gap:10px;
+    background:#fff; border-radius:18px; padding:10px;
+    border:3px solid #ffe6a8; box-shadow:0 4px 0 #f1e0bb; margin-bottom:9px;
+  }
+  .upIcon{ font-size:26px; width:38px; text-align:center; }
+  .upInfo{ flex:1; min-width:0; text-align:left; }
+  .upName{ font-weight:900; color:#33475a; font-size:15px; }
+  .upDesc{ font-size:11.5px; color:#8b96a2; margin-top:1px; }
+  .pips{ display:flex; gap:4px; margin-top:5px; }
+  .pip{ width:22px; height:8px; border-radius:99px; background:#e8e2d5; }
+  .pip.on{ background:#2dbd6e; }
+  .upBuy{ width:96px; flex:0 0 auto; margin:0; }
+
+  .bigBtn{
+    width:100%; border:none; border-radius:20px; padding:16px;
+    font-size:22px; font-weight:900; color:#fff; font-family:var(--font);
+    background: radial-gradient(circle at 40% 20%, #86f0a7, #2dbd6e 65%, #1a9a54);
+    box-shadow: 0 6px 0 #14743f, 0 10px 18px rgba(0,40,20,.22);
+    cursor:pointer; margin-top:6px;
+  }
+  .bigBtn:active{ transform:translateY(4px); box-shadow:0 2px 0 #14743f; }
+  .softBtn{
+    width:100%; border:none; border-radius:18px; padding:13px;
+    font-size:16px; font-weight:900; color:#7b5a1e; font-family:var(--font);
+    background:#fff0c9; box-shadow: 0 4px 0 #ecd9a6; cursor:pointer; margin-top:9px;
+  }
+  .softBtn:active{ transform:translateY(3px); box-shadow:0 1px 0 #ecd9a6; }
+
+  .logo{ text-align:center; margin:6px 0 2px; }
+  .logoMain{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size: clamp(26px, 7.6vw, 36px); font-weight:900; color:#2b3f4d;
+    letter-spacing:-1.4px;
+  }
+  .logoCoin{
+    width:38px; height:38px; border-radius:50%;
+    background: radial-gradient(circle at 34% 28%, #fff6b8, #ffd93d 52%, #e2a100);
+    display:grid; place-items:center; color:#a86a00; font-size:21px;
+    box-shadow: inset 0 -3px 0 rgba(150,90,0,.25), 0 2px 5px rgba(150,100,0,.3);
+  }
+  .sub{ text-align:center; color:#7d8b96; font-size:14px; font-weight:700; margin:6px 0 14px; letter-spacing:-.3px; }
+  .howto{ display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
+  .hi{
+    display:flex; align-items:center; gap:10px; background:#fff;
+    border-radius:16px; padding:9px 12px; box-shadow:0 3px 0 #f1e6cf;
+  }
+  .hi span.ico{ font-size:22px; }
+  .hi b{ font-size:14.5px; color:#33475a; display:block; }
+  .hi small{ font-size:11.5px; color:#98a4ae; }
+
+  .clearBig{ font-size:54px; text-align:center; line-height:1; margin-top:6px; animation: bounce .8s ease-in-out infinite alternate; }
+  @keyframes bounce{ from{ transform: translateY(0) } to{ transform: translateY(-8px) } }
+  .clearTitle{ text-align:center; font-size:24px; font-weight:900; color:#2b3f4d; margin:8px 0 2px; letter-spacing:-.8px; }
+  .clearSub{ text-align:center; color:#7d8b96; font-size:14px; font-weight:700; margin-bottom:14px; }
+  .statRow{ display:flex; gap:8px; margin-bottom:14px; }
+  .stat{
+    flex:1; background:#fff; border-radius:16px; padding:10px 6px; text-align:center;
+    box-shadow:0 3px 0 #f1e6cf;
+  }
+  .stat b{ display:block; font-size:20px; color:#e08b00; letter-spacing:-.5px; }
+  .stat small{ font-size:11px; color:#98a4ae; font-weight:800; }
+  .rowBtns{ display:flex; flex-direction:column; gap:9px; }
+
+  .spWrap{ margin: 0 0 12px; }
+  .spTitle{ font-size:12px; font-weight:900; color:#98a4ae; margin: 0 0 6px 2px; }
+  .spRow{ display:flex; gap:7px; overflow-x:auto; padding-bottom:3px; }
+  .chip{
+    flex:0 0 auto; width:44px; height:44px; border-radius:14px; border:none;
+    background:#fff; color:#7b6a55; font-weight:900; font-size:16px; font-family:var(--font);
+    cursor:pointer; box-shadow:0 3px 0 #e6dac4;
+  }
+  .chip:active{ transform:translateY(2px); box-shadow:0 1px 0 #e6dac4; }
+
+  /* small landscape phones */
+  @media (max-height: 430px){
+    #hud{ padding-top: calc(6px + env(safe-area-inset-top)); }
+    .iconBtn{ width:40px; height:40px; font-size:19px; border-radius:13px; }
+    .coinIcon{ width:29px; height:29px; font-size:16px; }
+    #coinNum{ font-size:18px; }
+    .stageLabel{ font-size:11px; margin-bottom:2px; }
+    .bar{ height:10px; }
+    #controls{ padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+    #jumpBtn{ width:78px; height:78px; font-size:15px; }
+    #runBtn{ width:146px; height:76px; font-size:18px; }
+    .sheet{ max-height: 96vh; padding:10px; }
+    .sheetHead h2{ font-size:18px; }
+    .card canvas.prev{ height:56px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <canvas id="game" aria-label="자동차 게임 화면"></canvas>
+
+  <div id="hud">
+    <div class="coinPill">
+      <div class="coinIcon">★</div>
+      <div id="coinNum">0</div>
+    </div>
+    <div class="stageBox">
+      <div class="stageLabel"><span id="stageName">스테이지 1</span><span>🏁</span></div>
+      <div class="bar"><div class="barFill" id="barFill"></div></div>
+    </div>
+    <div class="topBtns">
+      <button class="iconBtn" id="shopBtn" aria-label="튜닝샵">🔧</button>
+      <button class="iconBtn" id="muteBtn" aria-label="소리 켜기/끄기">🔊</button>
+    </div>
+  </div>
+
+  <div id="controls">
+    <button class="pad" id="jumpBtn" aria-label="점프">점프!<small>위로 콕!</small></button>
+    <button class="pad" id="runBtn" aria-label="앞으로 달리기">앞으로!<small>꾹 누르고 있어요</small></button>
+  </div>
+
+  <div id="modal"><div class="sheet" id="sheet"></div></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* =====================================================================
+     0. 작은 도구들
+     ===================================================================== */
+  var TAU = Math.PI * 2;
+  var FONT = 'system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Segoe UI", sans-serif';
+
+  function clamp(v, a, b){ return v < a ? a : (v > b ? b : v); }
+  function lerp(a, b, t){ return a + (b - a) * t; }
+  function hash(n){ var s = Math.sin(n * 12.9898) * 43758.5453; return s - Math.floor(s); }
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function shade(hex, amt){
+    var n = parseInt(hex.slice(1), 16);
+    var r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+    if (amt > 0){
+      r += (255 - r) * amt; g += (255 - g) * amt; b += (255 - b) * amt;
+    } else {
+      r *= (1 + amt); g *= (1 + amt); b *= (1 + amt);
+    }
+    return 'rgb(' + (r | 0) + ',' + (g | 0) + ',' + (b | 0) + ')';
+  }
+  function rr(c, x, y, w, h, r){
+    r = Math.min(r, w / 2, h / 2);
+    c.beginPath();
+    if (c.roundRect){ c.roundRect(x, y, w, h, r); return; }
+    c.moveTo(x + r, y);
+    c.arcTo(x + w, y, x + w, y + h, r);
+    c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r);
+    c.arcTo(x, y, x + w, y, r);
+    c.closePath();
+  }
+  function starPath(c, x, y, R, r, n){
+    n = n || 5;
+    c.beginPath();
+    for (var i = 0; i < n * 2; i++){
+      var rad = (i % 2) ? r : R;
+      var a = -Math.PI / 2 + i * Math.PI / n;
+      var px = x + Math.cos(a) * rad, py = y + Math.sin(a) * rad;
+      if (i === 0) c.moveTo(px, py); else c.lineTo(px, py);
+    }
+    c.closePath();
+  }
+
+  /* =====================================================================
+     1. 소리 (Web Audio) - 파일 없이 직접 만듭니다
+     ===================================================================== */
+  var A = {
+    ctx: null, master: null, muted: false,
+    engOsc: null, engGain: null, engFilter: null,
+    ensure: function(){
+      if (this.ctx){
+        if (this.ctx.state === 'suspended') this.ctx.resume().catch(function(){});
+        return;
+      }
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      try {
+        this.ctx = new AC();
+        this.master = this.ctx.createGain();
+        this.master.gain.value = this.muted ? 0 : 0.5;
+        this.master.connect(this.ctx.destination);
+
+        var o = this.ctx.createOscillator();
+        o.type = 'sawtooth';
+        o.frequency.value = 58;
+        var f = this.ctx.createBiquadFilter();
+        f.type = 'lowpass'; f.frequency.value = 300;
+        var g = this.ctx.createGain();
+        g.gain.value = 0;
+        o.connect(f); f.connect(g); g.connect(this.master);
+        o.start();
+        this.engOsc = o; this.engFilter = f; this.engGain = g;
+      } catch (e) { /* 소리를 못 켜도 게임은 계속 */ }
+    },
+    setMuted: function(m){
+      this.muted = m;
+      if (this.master) this.master.gain.value = m ? 0 : 0.5;
+      var b = document.getElementById('muteBtn');
+      if (b) b.textContent = m ? '🔇' : '🔊';
+    },
+    note: function(freq, dur, type, vol, delay, slideTo){
+      if (!this.ctx || this.muted) return;
+      var t0 = this.ctx.currentTime + (delay || 0);
+      var o = this.ctx.createOscillator();
+      o.type = type || 'sine';
+      var g = this.ctx.createGain();
+      o.frequency.setValueAtTime(freq, t0);
+      if (slideTo) o.frequency.exponentialRampToValueAtTime(Math.max(24, slideTo), t0 + dur);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0002, vol || 0.2), t0 + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g); g.connect(this.master);
+      o.start(t0); o.stop(t0 + dur + 0.03);
+    },
+    noise: function(dur, vol, freq, delay){
+      if (!this.ctx || this.muted) return;
+      var sr = this.ctx.sampleRate;
+      var len = Math.max(1, Math.floor(sr * dur));
+      var buf = this.ctx.createBuffer(1, len, sr);
+      var d = buf.getChannelData(0);
+      for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+      var src = this.ctx.createBufferSource();
+      src.buffer = buf;
+      var bf = this.ctx.createBiquadFilter();
+      bf.type = 'bandpass'; bf.frequency.value = freq || 900; bf.Q.value = 0.9;
+      var g = this.ctx.createGain();
+      var t0 = this.ctx.currentTime + (delay || 0);
+      g.gain.setValueAtTime(vol || 0.2, t0);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      src.connect(bf); bf.connect(g); g.connect(this.master);
+      src.start(t0);
+    },
+    coin: function(){
+      this.note(1046, 0.07, 'triangle', 0.16, 0);
+      this.note(1568, 0.11, 'triangle', 0.14, 0.06);
+    },
+    jump: function(){ this.note(300, 0.16, 'sine', 0.16, 0, 780); },
+    splash: function(){
+      this.noise(0.32, 0.22, 1100, 0);
+      this.note(240, 0.22, 'sine', 0.09, 0, 110);
+    },
+    click: function(){ this.note(620, 0.05, 'square', 0.07, 0); },
+    buy: function(){
+      var self = this;
+      [523, 659, 784, 1046].forEach(function(f, i){ self.note(f, 0.13, 'triangle', 0.14, i * 0.07); });
+    },
+    clear: function(){
+      var self = this;
+      [523, 659, 784, 1046, 1318].forEach(function(f, i){ self.note(f, 0.22, 'square', 0.1, i * 0.11); });
+      self.note(1568, 0.5, 'triangle', 0.1, 0.58);
+    },
+    fail: function(){ this.note(300, 0.18, 'square', 0.08, 0, 180); }
+  };
+
+  /* =====================================================================
+     2. 저장 데이터
+     ===================================================================== */
+  var SAVE_KEY = 'coin_car_game_save_v1';
+
+  var CARS = [
+    { id:'basic',   name:'기본 자동차', price:0,  desc:'씩씩하고 든든해요' },
+    { id:'monster', name:'몬스터 트럭', price:15, desc:'큰 바퀴로 산을 척척' },
+    { id:'police',  name:'경찰차',     price:25, desc:'삐뽀삐뽀 달려요' },
+    { id:'fire',    name:'소방차',     price:35, desc:'사다리 달린 멋쟁이' },
+    { id:'rocket',  name:'로켓 카',    price:45, desc:'불꽃을 내뿜어요' }
+  ];
+  var COLORS = [
+    { hex:'#e63946', name:'빨강',  price:0 },
+    { hex:'#ffc233', name:'노랑',  price:0 },
+    { hex:'#2a6fdb', name:'파랑',  price:0 },
+    { hex:'#2dbd6e', name:'초록',  price:4 },
+    { hex:'#ff78b7', name:'분홍',  price:5 },
+    { hex:'#9b5de5', name:'보라',  price:6 },
+    { hex:'#42cdbd', name:'민트',  price:6 },
+    { hex:'#4a4e69', name:'먹색',  price:6 }
+  ];
+  var UPS = [
+    { key:'engine',  name:'엔진',   icon:'🏎️', desc:'더 빨리 달려요',        prices:[0, 12, 26] },
+    { key:'tires',   name:'타이어', icon:'🛞', desc:'더 높이 점프해요',      prices:[0, 10, 22] },
+    { key:'booster', name:'부스터', icon:'💨', desc:'물에서도 씽씽 달려요', prices:[0, 10, 22] }
+  ];
+  var TOP_SPEED = [0, 330, 392, 455];   // 엔진 단계별 최고 속도
+  var JUMP_POWER = [0, 560, 645, 735];  // 타이어 단계별 점프 힘
+  var WATER_SPEED = [0, 0.70, 0.82, 0.94]; // 부스터 단계별 물 위 속도
+  var GRAVITY = 1500;
+
+  var save = {
+    coins: 0,
+    car: 'basic',
+    color: '#e63946',
+    ownedCars: ['basic'],
+    ownedColors: ['#e63946', '#ffc233', '#2a6fdb'],
+    upgrades: { engine:1, tires:1, booster:1 },
+    bestStage: 1,
+    muted: false,
+    totalCoins: 0
+  };
+
+  function loadGame(){
+    try {
+      var raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) return;
+      var o = JSON.parse(raw);
+      if (!o || typeof o !== 'object') return;
+      if (typeof o.coins === 'number') save.coins = Math.max(0, Math.floor(o.coins));
+      if (typeof o.totalCoins === 'number') save.totalCoins = Math.max(0, Math.floor(o.totalCoins));
+      if (typeof o.car === 'string') save.car = o.car;
+      if (typeof o.color === 'string') save.color = o.color;
+      if (Array.isArray(o.ownedCars)) save.ownedCars = o.ownedCars;
+      if (Array.isArray(o.ownedColors)) save.ownedColors = o.ownedColors;
+      if (o.upgrades && typeof o.upgrades === 'object'){
+        save.upgrades.engine = clamp(o.upgrades.engine | 0 || 1, 1, 3);
+        save.upgrades.tires = clamp(o.upgrades.tires | 0 || 1, 1, 3);
+        save.upgrades.booster = clamp(o.upgrades.booster | 0 || 1, 1, 3);
+      }
+      if (typeof o.bestStage === 'number') save.bestStage = Math.max(1, o.bestStage | 0);
+      if (typeof o.muted === 'boolean') save.muted = o.muted;
+    } catch (e) { /* 저장된 값이 이상하면 새로 시작 */ }
+
+    // 안전 장치: 목록에 없는 값이면 기본값으로
+    if (!CARS.some(function(c){ return c.id === save.car; })) save.car = 'basic';
+    if (!COLORS.some(function(c){ return c.hex === save.color; })) save.color = '#e63946';
+    if (save.ownedCars.indexOf(save.car) === -1) save.ownedCars.push(save.car);
+    if (save.ownedColors.indexOf(save.color) === -1) save.ownedColors.push(save.color);
+  }
+  var saveTimer = null;
+  function saveGame(){
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {}
+  }
+  function saveSoon(){
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){ saveTimer = null; saveGame(); }, 250);
+  }
+
+  /* =====================================================================
+     3. 게임 상태
+     ===================================================================== */
+  var canvas = document.getElementById('game');
+  var ctx = canvas.getContext('2d');
+  var modal = document.getElementById('modal');
+  var sheet = document.getElementById('sheet');
+  var coinNumEl = document.getElementById('coinNum');
+  var stageNameEl = document.getElementById('stageName');
+  var barFillEl = document.getElementById('barFill');
+
+  var G = {
+    W: 0, H: 0, dpr: 1,
+    baseY: 0, amp: 1, pal: null,
+    state: 'start',      // start | playing | clear | shop
+    prevState: 'start',
+    paused: false,
+    t: 0,
+    scrollX: 0,
+    stage: 1,
+    stageLen: 9000,
+    waters: [],
+    coins: [],
+    parts: [],
+    texts: [],
+    fireworks: [],
+    stageCoins: 0,
+    hintT: 0,
+    introT: 0,
+    lastBonus: 0,
+    waterIdx: -1,
+    jumpBuffer: 0,
+    jumpCool: 0,
+    keys: { run: false },
+    shopTab: 'car',
+    car: { x: 0, y: 0, vx: 0, vy: 0, air: false, rot: 0, spin: 0, dist: 0 }
+  };
+
+  var PALS = [
+    // 0. 초원 언덕
+    { sky:['#7fd8ff', '#c9f1ff', '#fff4d8'], sun:'#fff5b0', sunGlow:'rgba(255,245,176,.55)',
+      far:'#b9e6d6', mid:'#8ed3b4', grassTop:'#8ce45f', grassBot:'#57be3c', grassEdge:'#3f9c2c',
+      dirt:'#c2945c', dirt2:'#a87b48', water:['#a9ecff', '#2f9fd8'], waterDeep:'#1f7fb4' },
+    // 1. 강과 다리
+    { sky:['#8fe3ff', '#d4f6ff', '#eefff8'], sun:'#fffbd0', sunGlow:'rgba(240,255,220,.6)',
+      far:'#a9dfd0', mid:'#75c6a8', grassTop:'#8eea72', grassBot:'#4fc25a', grassEdge:'#35a04a',
+      dirt:'#c19464', dirt2:'#a1794b', water:['#b6f2ff', '#2aa8d8'], waterDeep:'#1786b4' },
+    // 2. 높은 산과 호수
+    { sky:['#b6d6ff', '#e2eeff', '#fdf9ff'], sun:'#fffde5', sunGlow:'rgba(255,255,235,.6)',
+      far:'#b3c4ea', mid:'#8aa2cf', grassTop:'#86dd8a', grassBot:'#46ac68', grassEdge:'#2f8b52',
+      dirt:'#b48f68', dirt2:'#96744e', water:['#a8ecff', '#3a9fd8'], waterDeep:'#1f7da8' },
+    // 3. 노을 산길
+    { sky:['#ffb877', '#ffd9a6', '#fff1dc'], sun:'#fff0a0', sunGlow:'rgba(255,214,140,.65)',
+      far:'#e8b2a0', mid:'#cf8f80', grassTop:'#9adf74', grassBot:'#57b23f', grassEdge:'#3d9530',
+      dirt:'#bd8b58', dirt2:'#9c7040', water:['#bae6ff', '#3a92c9'], waterDeep:'#26709c' }
+  ];
+
+  // 스테이지마다 다른 풍경 (4개가 번갈아 나옵니다)
+  var THEMES = [
+    { name:'초원 언덕',      icon:'🌼', pal:0, hill:0.80, mount:1.00, waterN:2, waterW:[260, 400], bridge:0, pines:0.18, lake:false },
+    { name:'강과 다리',      icon:'🌉', pal:1, hill:0.72, mount:0.85, waterN:4, waterW:[300, 440], bridge:2, pines:0.10, lake:false },
+    { name:'높은 산과 호수', icon:'🏔️', pal:2, hill:1.28, mount:1.40, waterN:2, waterW:[320, 440], bridge:0, pines:0.85, lake:true  },
+    { name:'노을 산길',      icon:'🌅', pal:3, hill:1.05, mount:1.10, waterN:3, waterW:[300, 420], bridge:0, pines:0.45, lake:false }
+  ];
+
+  /* ---------- 지형 ---------- */
+  function hillOffset(wx){
+    return -(Math.sin(wx * 0.00200) * 0.62
+           + Math.sin(wx * 0.00091 + 1.9) * 0.95
+           + Math.sin(wx * 0.00470 + 0.7) * 0.18) * 62;
+  }
+  function groundRef(wx){
+    return G.baseY + hillOffset(wx) * G.amp * (G.hillMul || 1);
+  }
+  function waterSegAt(wx){
+    for (var i = 0; i < G.waters.length; i++){
+      var w = G.waters[i];
+      if (wx >= w.x0 && wx <= w.x1) return w;
+    }
+    return null;
+  }
+  function waterSurfaceY(w, wx){
+    var t = clamp((wx - w.x0) / (w.x1 - w.x0), 0, 1);
+    return w.top + Math.sin(wx * 0.012 + G.t * 1.6) * 1.5 * t * (1 - t) * 4;
+  }
+  function surfaceY(wx){
+    var w = waterSegAt(wx);
+    if (w) return w.bridge ? (w.top - 16) : (w.top + 5);
+    return groundRef(wx);
+  }
+
+  /* =====================================================================
+     4. 스테이지 만들기
+     ===================================================================== */
+  function buildStage(stage){
+    var rnd = mulberry32(1337 + stage * 911);
+    var len = Math.min(18000, 8600 + (stage - 1) * 1500);
+    var th = THEMES[(stage - 1) % THEMES.length];
+    G.stage = stage;
+    G.stageLen = len;
+    G.theme = th;
+    G.pal = PALS[th.pal];
+    G.hillMul = th.hill;
+
+    // 물(강/호수) 구간
+    var waters = [];
+    var x = 1900 + rnd() * 500;
+    var wantN = th.waterN + Math.min(3, Math.floor((stage - 1) / THEMES.length));
+    for (var wi = 0; wi < wantN && x < len - 1100; wi++){
+      var wid = lerp(th.waterW[0], th.waterW[1], rnd());
+      if (th.lake && wi === 0) wid = 760 + rnd() * 320;
+      waters.push({ x0: x, x1: x + wid, top: 0, bridge: false });
+      x += wid + 1400 + rnd() * 1200;
+    }
+    // 다리 구간 표시
+    if (th.bridge){
+      for (var bi = 0; bi < waters.length && bi < th.bridge; bi++) waters[bi].bridge = true;
+    }
+    G.waters = waters;
+
+    function inW(v){
+      for (var i = 0; i < waters.length; i++){
+        if (v >= waters[i].x0 - 30 && v <= waters[i].x1 + 30) return true;
+      }
+      return false;
+    }
+
+    // 코인
+    var coins = [];
+    function addCoin(cx, dy){
+      coins.push({ x: cx, dy: dy, got: false, ph: rnd() * 6.28, live: true });
+    }
+
+    var cx = 480;
+    var guard = 0;
+    while (cx < len - 350 && guard++ < 400){
+      if (inW(cx)){ cx += 140; continue; }
+      var n = 3 + Math.floor(rnd() * 4);
+      var gap = 66;
+      var baseDy = 44 + rnd() * 30;
+      for (var i = 0; i < n; i++){
+        var px = cx + i * gap;
+        if (!inW(px)) addCoin(px, baseDy + Math.sin(i / Math.max(1, n - 1) * Math.PI) * 16);
+      }
+      cx += n * gap + 300 + rnd() * 280;
+    }
+
+    // 물 위 아치 코인
+    waters.forEach(function(w){
+      var span = w.x1 - w.x0;
+      var cnt = 5;
+      for (var i = 0; i < cnt; i++){
+        var t = (i + 0.5) / cnt;
+        addCoin(w.x0 + t * span, 58 + Math.sin(t * Math.PI) * 62);
+      }
+    });
+
+    // 가끔 나오는 높은 점프 아치
+    var ax = 1200;
+    while (ax < len - 600){
+      if (!inW(ax) && rnd() < 0.55){
+        for (var k = 0; k < 5; k++){
+          var t2 = (k + 0.5) / 5;
+          addCoin(ax + t2 * 300, 60 + Math.sin(t2 * Math.PI) * 96);
+        }
+      }
+      ax += 1800 + rnd() * 900;
+    }
+
+    coins.sort(function(a, b){ return a.x - b.x; });
+    G.coins = coins;
+    G.waterIdx = -1;
+
+    // 물 표면 높이 계산 (양쪽 둑의 평균)
+    waters.forEach(function(w){
+      w.top = (groundRef(w.x0) + groundRef(w.x1)) / 2 + 1;
+    });
+  }
+
+  // 창 크기가 바뀌면 물 표면 높이 다시 계산
+  function refreshWaterTops(){
+    G.waters.forEach(function(w){
+      w.top = (groundRef(w.x0) + groundRef(w.x1)) / 2 + 1;
+    });
+  }
+
+  /* =====================================================================
+     5. 캔버스 크기
+     ===================================================================== */
+  function resize(){
+    var w = window.innerWidth, h = window.innerHeight;
+    G.dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    G.W = w; G.H = h;
+    canvas.width = Math.round(w * G.dpr);
+    canvas.height = Math.round(h * G.dpr);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    // 화면이 낮으면 길을 조금 위로 올려 버튼과 겹치지 않게
+    var k = h >= 700 ? 0.665 : (h >= 520 ? 0.60 : 0.56);
+    G.baseY = h * k;
+    G.amp = clamp(h / 760, 0.5, 1.2);
+    refreshWaterTops();
+  }
+  window.addEventListener('resize', resize);
+  window.addEventListener('orientationchange', function(){ setTimeout(resize, 120); });
+  if (window.visualViewport){
+    window.visualViewport.addEventListener('resize', function(){ setTimeout(resize, 60); });
+  }
+
+  /* =====================================================================
+     6. 그리기 - 풍경
+     ===================================================================== */
+  function drawSky(){
+    var p = G.pal;
+    var g = ctx.createLinearGradient(0, 0, 0, G.H);
+    g.addColorStop(0, p.sky[0]);
+    g.addColorStop(0.55, p.sky[1]);
+    g.addColorStop(1, p.sky[2]);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, G.W, G.H);
+
+    // 해
+    var sx = G.W * 0.82, sy = G.H * 0.14, sr = Math.min(G.W, G.H) * 0.075;
+    var rg = ctx.createRadialGradient(sx, sy, sr * 0.4, sx, sy, sr * 3);
+    rg.addColorStop(0, p.sunGlow);
+    rg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = rg;
+    ctx.beginPath(); ctx.arc(sx, sy, sr * 3, 0, TAU); ctx.fill();
+    ctx.fillStyle = p.sun;
+    ctx.beginPath(); ctx.arc(sx, sy, sr, 0, TAU); ctx.fill();
+  }
+
+  function drawCloud(x, y, s){
+    ctx.save();
+    ctx.translate(x, y); ctx.scale(s, s);
+    ctx.fillStyle = 'rgba(255,255,255,.92)';
+    ctx.beginPath();
+    ctx.arc(-30, 0, 22, 0, TAU);
+    ctx.arc(0, -12, 28, 0, TAU);
+    ctx.arc(30, 2, 20, 0, TAU);
+    ctx.arc(4, 10, 22, 0, TAU);
+    ctx.fill();
+    ctx.restore();
+  }
+  function drawClouds(){
+    var span = G.W + 260;
+    for (var i = 0; i < 6; i++){
+      var drift = G.t * (5 + i * 2.2) + i * 220;
+      var raw = (i * 173 + drift - G.scrollX * 0.055) % span;
+      if (raw < 0) raw += span;
+      var cx = raw - 130;
+      var cy = G.H * 0.12 + (i % 3) * G.H * 0.055 + Math.sin(i * 2.2) * 8;
+      drawCloud(cx, cy, 0.55 + (i % 3) * 0.22);
+    }
+  }
+
+  function mountainPath(par, base, amp){
+    ctx.beginPath();
+    ctx.moveTo(-20, G.H + 20);
+    for (var px = -20; px <= G.W + 20; px += 14){
+      var wx = (G.scrollX * par + px) * 0.0017;
+      var y = base - (Math.sin(wx) * 0.55 + Math.sin(wx * 0.43 + 2.1) * 0.34 + Math.sin(wx * 1.7 + 0.9) * 0.12 + 1.05) * amp;
+      ctx.lineTo(px, y);
+    }
+    ctx.lineTo(G.W + 20, G.H + 20);
+    ctx.closePath();
+  }
+
+  function drawMountains(par, base, amp, color, snow){
+    mountainPath(par, base, amp);
+    ctx.fillStyle = color;
+    ctx.fill();
+    if (snow){
+      ctx.fillStyle = '#f7fbff';
+      mountainPath(par, base, amp);
+      ctx.fill();
+      ctx.save();
+      ctx.translate(0, 24);
+      mountainPath(par, base, amp);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  /* ---------- 땅 ---------- */
+  function drawGround(){
+    var p = G.pal;
+    var edgeStep = 10;
+
+    // 흙(아래)
+    ctx.beginPath();
+    ctx.moveTo(-20, G.H + 30);
+    for (var px = -20; px <= G.W + 20; px += edgeStep){
+      ctx.lineTo(px, groundRef(G.scrollX + px));
+    }
+    ctx.lineTo(G.W + 20, G.H + 30);
+    ctx.closePath();
+    var dg = ctx.createLinearGradient(0, G.baseY - 80, 0, G.H);
+    dg.addColorStop(0, p.dirt);
+    dg.addColorStop(1, p.dirt2);
+    ctx.fillStyle = dg;
+    ctx.fill();
+
+    // 풀(위쪽 띠)
+    ctx.beginPath();
+    for (var px2 = -20; px2 <= G.W + 20; px2 += edgeStep){
+      var y = groundRef(G.scrollX + px2);
+      if (px2 === -20) ctx.moveTo(px2, y); else ctx.lineTo(px2, y);
+    }
+    for (var px3 = G.W + 20; px3 >= -20; px3 -= edgeStep){
+      ctx.lineTo(px3, groundRef(G.scrollX + px3) + 26);
+    }
+    ctx.closePath();
+    var gg = ctx.createLinearGradient(0, G.baseY - 140, 0, G.baseY + 120);
+    gg.addColorStop(0, p.grassTop);
+    gg.addColorStop(1, p.grassBot);
+    ctx.fillStyle = gg;
+    ctx.fill();
+
+    // 풀 테두리
+    ctx.beginPath();
+    for (var px4 = -20; px4 <= G.W + 20; px4 += edgeStep){
+      var y2 = groundRef(G.scrollX + px4);
+      if (px4 === -20) ctx.moveTo(px4, y2); else ctx.lineTo(px4, y2);
+    }
+    ctx.strokeStyle = p.grassEdge;
+    ctx.lineWidth = 4;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+  }
+
+  /* ---------- 물 ---------- */
+  function drawWater(){
+    var p = G.pal;
+    for (var i = 0; i < G.waters.length; i++){
+      var w = G.waters[i];
+      var sx0 = w.x0 - G.scrollX, sx1 = w.x1 - G.scrollX;
+      if (sx1 < -60 || sx0 > G.W + 60) continue;
+
+      var a = clamp(sx0, -60, G.W + 60);
+      var b = clamp(sx1, -60, G.W + 60);
+
+      ctx.beginPath();
+      var first = true;
+      for (var px = a; px <= b; px += 6){
+        var wx = px + G.scrollX;
+        var y = waterSurfaceY(w, wx) + Math.sin(wx * 0.045 + G.t * 2.6) * 2.2;
+        if (first){ ctx.moveTo(px, y); first = false; } else ctx.lineTo(px, y);
+      }
+      ctx.lineTo(b, G.H + 20);
+      ctx.lineTo(a, G.H + 20);
+      ctx.closePath();
+      var wg = ctx.createLinearGradient(0, w.top - 20, 0, w.top + 150);
+      wg.addColorStop(0, p.water[0]);
+      wg.addColorStop(0.45, p.water[1]);
+      wg.addColorStop(1, p.waterDeep);
+      ctx.fillStyle = wg;
+      ctx.fill();
+
+      // 물결 반짝임 (물 안쪽으로 잘라서 그립니다)
+      ctx.save();
+      ctx.beginPath();
+      var f2 = true;
+      for (var px5 = a; px5 <= b; px5 += 6){
+        var wx5 = px5 + G.scrollX;
+        var y5 = waterSurfaceY(w, wx5) + Math.sin(wx5 * 0.045 + G.t * 2.6) * 2.2;
+        if (f2){ ctx.moveTo(px5, y5); f2 = false; } else ctx.lineTo(px5, y5);
+      }
+      ctx.lineTo(b, G.H + 20);
+      ctx.lineTo(a, G.H + 20);
+      ctx.closePath();
+      ctx.clip();
+
+      for (var k = 0; k < 7; k++){
+        var sp = (G.t * 22 + k * 61) % Math.max(1, (b - a));
+        var sx = a + sp;
+        var swx = sx + G.scrollX;
+        var sy = waterSurfaceY(w, swx) + 18 + (k % 4) * 16;
+        var al = 0.28 + Math.sin(G.t * 3 + k) * 0.16;
+        ctx.globalAlpha = Math.max(0.05, al);
+        ctx.fillStyle = '#ffffff';
+        rr(ctx, sx, sy, 16 + (k % 3) * 6, 3, 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // 물 위쪽 물결선
+      ctx.beginPath();
+      var f3 = true;
+      for (var px6 = a; px6 <= b; px6 += 6){
+        var wx6 = px6 + G.scrollX;
+        var y6 = waterSurfaceY(w, wx6) + Math.sin(wx6 * 0.045 + G.t * 2.6) * 2.2;
+        if (f3){ ctx.moveTo(px6, y6); f3 = false; } else ctx.lineTo(px6, y6);
+      }
+      ctx.strokeStyle = 'rgba(255,255,255,.8)';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // 둑의 거품
+      if (!w.bridge){
+        ctx.fillStyle = 'rgba(255,255,255,.8)';
+        [a, b].forEach(function(ex, idx){
+          for (var q = 0; q < 3; q++){
+            ctx.beginPath();
+            ctx.arc(ex + (idx === 0 ? q * 6 : -q * 6), w.top + 4 + q * 2, 4 - q, 0, TAU);
+            ctx.fill();
+          }
+        });
+      } else {
+        drawBridge(w, a, b);
+      }
+    }
+  }
+
+  function drawBridge(w, a, b){
+    var deckY = w.top - 16;
+
+    // 다리 기둥
+    ctx.fillStyle = '#a9743f';
+    for (var px = a + 30; px < b; px += 92){
+      ctx.fillRect(px - 5, deckY + 10, 10, G.H - deckY);
+    }
+
+    // 다리 상판(나무)
+    ctx.fillStyle = '#d0965a';
+    rr(ctx, a - 34, deckY, (b - a) + 68, 16, 5);
+    ctx.fill();
+    ctx.fillStyle = '#b57a40';
+    for (var px2 = a - 28; px2 < b + 30; px2 += 24){
+      ctx.fillRect(px2, deckY, 3, 16);
+    }
+
+    // 난간
+    ctx.strokeStyle = '#8a5a33';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(a - 34, deckY - 28); ctx.lineTo(b + 34, deckY - 28); ctx.stroke();
+    for (var px3 = a - 30; px3 <= b + 30; px3 += 58){
+      ctx.beginPath(); ctx.moveTo(px3, deckY - 28); ctx.lineTo(px3, deckY - 2); ctx.stroke();
+    }
+  }
+
+  /* ---------- 나무, 꽃, 표지판 ---------- */
+  function drawTree(x, y, s, kind){
+    ctx.save();
+    ctx.translate(x, y); ctx.scale(s, s);
+    ctx.fillStyle = '#8a5a33';
+    rr(ctx, -4, -30, 8, 30, 3); ctx.fill();
+    if (kind === 'pine'){
+      ctx.fillStyle = '#2f9e5a';
+      ctx.beginPath(); ctx.moveTo(0, -86); ctx.lineTo(20, -46); ctx.lineTo(-20, -46); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#37b167';
+      ctx.beginPath(); ctx.moveTo(0, -70); ctx.lineTo(26, -28); ctx.lineTo(-26, -28); ctx.closePath(); ctx.fill();
+    } else {
+      ctx.fillStyle = '#48c06e';
+      ctx.beginPath(); ctx.arc(0, -52, 22, 0, TAU); ctx.fill();
+      ctx.beginPath(); ctx.arc(-16, -38, 16, 0, TAU); ctx.fill();
+      ctx.beginPath(); ctx.arc(16, -38, 16, 0, TAU); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.22)';
+      ctx.beginPath(); ctx.arc(-6, -58, 9, 0, TAU); ctx.fill();
+    }
+    ctx.restore();
+  }
+  function drawBush(x, y, s){
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.fillStyle = '#54c96f';
+    ctx.beginPath(); ctx.arc(-10, -12, 12, 0, TAU); ctx.arc(6, -14, 14, 0, TAU); ctx.arc(18, -10, 10, 0, TAU); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.2)';
+    ctx.beginPath(); ctx.arc(2, -20, 6, 0, TAU); ctx.fill();
+    ctx.restore();
+  }
+  function drawFlower(x, y, s, hue){
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.strokeStyle = '#3f9c2c'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -14); ctx.stroke();
+    ctx.fillStyle = hue;
+    for (var i = 0; i < 5; i++){
+      var a = i / 5 * TAU;
+      ctx.beginPath(); ctx.arc(Math.cos(a) * 5, -14 + Math.sin(a) * 5, 4, 0, TAU); ctx.fill();
+    }
+    ctx.fillStyle = '#fff2a8';
+    ctx.beginPath(); ctx.arc(0, -14, 3, 0, TAU); ctx.fill();
+    ctx.restore();
+  }
+  function drawSign(x, y, s){
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.fillStyle = '#8a5a33'; rr(ctx, -3, -34, 6, 34, 2); ctx.fill();
+    ctx.fillStyle = '#fff0c9'; rr(ctx, -26, -60, 52, 28, 7); ctx.fill();
+    ctx.strokeStyle = '#e0b96a'; ctx.lineWidth = 3; rr(ctx, -26, -60, 52, 28, 7); ctx.stroke();
+    ctx.fillStyle = '#e08b00'; starPath(ctx, 0, -46, 8, 3.4, 5); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawDecos(){
+    var start = Math.floor((G.scrollX - 260) / 230) * 230;
+    for (var wx = start; wx < G.scrollX + G.W + 260; wx += 230){
+      if (waterSegAt(wx) || waterSegAt(wx + 40)) continue;
+      var h1 = hash(wx), h2 = hash(wx + 7.3);
+      var gy = groundRef(wx);
+      var sx = Math.round(wx - G.scrollX);
+      if (h1 < 0.36) drawTree(sx, gy + 4, 0.8 + h2 * 0.7, (h2 < (G.theme ? G.theme.pines : 0.2)) ? 'pine' : 'round');
+      else if (h1 < 0.62) drawBush(sx, gy + 2, 0.75 + h2 * 0.5);
+      else if (h1 < 0.86) drawFlower(sx, gy + 2, 0.9 + h2 * 0.5, h2 < 0.33 ? '#ff8fb8' : (h2 < 0.66 ? '#ffe066' : '#c7a8ff'));
+      else drawSign(sx, gy + 2, 0.9);
+    }
+  }
+
+  /* ---------- 코인 ---------- */
+  function coinY(c){
+    var w = waterSegAt(c.x);
+    var base = w ? (w.bridge ? (w.top - 16) : (w.top + 5)) : groundRef(c.x);
+    return base - c.dy;
+  }
+  function drawCoinShape(x, y, scale, ph){
+    var bob = Math.sin(G.t * 3 + ph) * 3;
+    var sq = 0.35 + 0.65 * Math.abs(Math.cos(G.t * 2.1 + ph));
+
+    ctx.save();
+    ctx.translate(x, y + bob);
+
+    // 빛무리
+    var gl = ctx.createRadialGradient(0, 0, 4, 0, 0, 30 * scale);
+    gl.addColorStop(0, 'rgba(255,240,150,.55)');
+    gl.addColorStop(1, 'rgba(255,240,150,0)');
+    ctx.fillStyle = gl;
+    ctx.beginPath(); ctx.arc(0, 0, 30 * scale, 0, TAU); ctx.fill();
+
+    ctx.scale(sq * scale, scale);
+
+    // 동전 몸통
+    var g = ctx.createRadialGradient(-5, -6, 2, 0, 0, 18);
+    g.addColorStop(0, '#fff6c4');
+    g.addColorStop(0.5, '#ffd93d');
+    g.addColorStop(1, '#e8a800');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, 17, 0, TAU); ctx.fill();
+
+    ctx.strokeStyle = '#c98a00';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, 0, 17, 0, TAU); ctx.stroke();
+
+    // 별
+    ctx.fillStyle = '#c98a00';
+    starPath(ctx, 0, 1, 8.5, 3.6, 5);
+    ctx.fill();
+    ctx.fillStyle = '#fff8cd';
+    starPath(ctx, -1, -0.5, 4, 1.7, 5);
+    ctx.fill();
+
+    ctx.restore();
+
+    // 반짝이
+    var tw = Math.sin(G.t * 5 + ph * 2);
+    if (tw > 0.55){
+      ctx.save();
+      ctx.globalAlpha = (tw - 0.55) / 0.45 * 0.9;
+      ctx.strokeStyle = '#fffbe0';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      var sx = x + 13 * scale, sy = y + bob - 14 * scale, r = 6 * scale;
+      ctx.beginPath(); ctx.moveTo(sx - r, sy); ctx.lineTo(sx + r, sy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx, sy - r); ctx.lineTo(sx, sy + r); ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  function drawCoins(){
+    for (var i = 0; i < G.coins.length; i++){
+      var c = G.coins[i];
+      if (!c.live || c.got) continue;
+      var sx = c.x - G.scrollX;
+      if (sx < -50 || sx > G.W + 50) continue;
+      drawCoinShape(sx, coinY(c), 1, c.ph);
+    }
+  }
+
+  /* ---------- 결승 깃발 ---------- */
+  function drawFinish(){
+    var sx = G.stageLen - G.scrollX;
+    if (sx < -160 || sx > G.W + 220) return;
+    var gy = groundRef(G.stageLen);
+
+    // 깃대
+    ctx.fillStyle = '#9a7248';
+    rr(ctx, sx - 4, gy - 190, 8, 190, 3); ctx.fill();
+    ctx.fillStyle = '#e8c87a';
+    ctx.beginPath(); ctx.arc(sx, gy - 194, 8, 0, TAU); ctx.fill();
+
+    // 체크 깃발
+    ctx.save();
+    ctx.translate(sx + 4, gy - 184);
+    var fw = 96, fh = 56;
+    for (var r = 0; r < 4; r++){
+      for (var col = 0; col < 5; col++){
+        var wave = Math.sin(G.t * 5 + col * 0.7) * 4;
+        ctx.fillStyle = ((r + col) % 2) ? '#ffffff' : '#3a4a56';
+        ctx.beginPath();
+        ctx.moveTo(col * (fw / 5), r * (fh / 4) + wave);
+        ctx.lineTo((col + 1) * (fw / 5), r * (fh / 4) + Math.sin(G.t * 5 + (col + 1) * 0.7) * 4);
+        ctx.lineTo((col + 1) * (fw / 5), (r + 1) * (fh / 4) + Math.sin(G.t * 5 + (col + 1) * 0.7) * 4);
+        ctx.lineTo(col * (fw / 5), (r + 1) * (fh / 4) + wave);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+
+    // 결승 표지판
+    ctx.save();
+    ctx.translate(sx, gy - 236);
+    ctx.fillStyle = '#ff5d5d';
+    rr(ctx, -58, -26, 116, 46, 14); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = '900 26px ' + FONT;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('결승!', 0, 0);
+    ctx.restore();
+  }
+
+  /* =====================================================================
+     7. 자동차 그리기
+     ===================================================================== */
+  function drawWheel(c, x, y, r, spin){
+    c.save();
+    c.translate(x, y);
+    c.fillStyle = '#33383f';
+    c.beginPath(); c.arc(0, 0, r, 0, TAU); c.fill();
+    c.fillStyle = '#cdd6de';
+    c.beginPath(); c.arc(0, 0, r * 0.56, 0, TAU); c.fill();
+    c.strokeStyle = '#94a0ac';
+    c.lineWidth = Math.max(1.6, r * 0.15);
+    c.lineCap = 'round';
+    for (var i = 0; i < 4; i++){
+      var a = spin + i * Math.PI / 2;
+      c.beginPath();
+      c.moveTo(Math.cos(a) * r * 0.2, Math.sin(a) * r * 0.2);
+      c.lineTo(Math.cos(a) * r * 0.48, Math.sin(a) * r * 0.48);
+      c.stroke();
+    }
+    c.fillStyle = '#8792a0';
+    c.beginPath(); c.arc(0, 0, r * 0.17, 0, TAU); c.fill();
+    c.restore();
+  }
+
+  function sedanBody(c, color, spin){
+    var r = 14;
+    drawWheel(c, -25, -r, r, spin);
+    drawWheel(c, 25, -r, r, spin);
+
+    c.fillStyle = color;
+    rr(c, -42, -50, 84, 32, 13); c.fill();
+
+    c.fillStyle = shade(color, -0.3);
+    rr(c, -42, -28, 84, 10, 5); c.fill();
+
+    c.fillStyle = color;
+    rr(c, -22, -70, 46, 26, 11); c.fill();
+
+    c.fillStyle = '#dcf3ff';
+    rr(c, -17, -66, 36, 16, 6); c.fill();
+
+    c.fillStyle = shade(color, -0.1);
+    c.fillRect(-1, -66, 3, 16);
+
+    c.fillStyle = '#fffab0';
+    c.beginPath(); c.arc(37, -40, 5.5, 0, TAU); c.fill();
+
+    c.fillStyle = '#ff8a8a';
+    c.beginPath(); c.arc(-38, -40, 4, 0, TAU); c.fill();
+
+    c.fillStyle = 'rgba(255,255,255,.5)';
+    rr(c, -30, -46, 60, 5, 3); c.fill();
+  }
+
+  function carBasic(c, color, spin, t){ sedanBody(c, color, spin); }
+
+  function carPolice(c, color, spin, t){
+    sedanBody(c, color, spin);
+    // 지붕 경광등
+    c.fillStyle = '#2b2f36';
+    rr(c, -13, -80, 28, 7, 3); c.fill();
+    var blink = Math.sin(t * 12) > 0;
+    c.fillStyle = blink ? '#ff4d4d' : '#7e2b2b';
+    rr(c, -12, -79, 12, 5, 2); c.fill();
+    c.fillStyle = blink ? '#2b4a7a' : '#4da6ff';
+    rr(c, 2, -79, 12, 5, 2); c.fill();
+    // 문 별
+    c.fillStyle = '#ffffff';
+    starPath(c, -6, -38, 7, 3, 5); c.fill();
+  }
+
+  function carFire(c, color, spin, t){
+    sedanBody(c, color, spin);
+    // 사다리
+    c.strokeStyle = '#e7edf3';
+    c.lineWidth = 3;
+    c.lineCap = 'round';
+    c.beginPath(); c.moveTo(-30, -76); c.lineTo(30, -82); c.stroke();
+    c.beginPath(); c.moveTo(-30, -68); c.lineTo(30, -74); c.stroke();
+    for (var i = 0; i < 7; i++){
+      var tt = i / 6;
+      var xx = lerp(-30, 30, tt), yy = lerp(-76, -82, tt);
+      c.beginPath(); c.moveTo(xx, yy); c.lineTo(xx + 1.5, yy + 8); c.stroke();
+    }
+    // 호스 릴
+    c.fillStyle = '#f0f4f7';
+    c.beginPath(); c.arc(-33, -36, 8, 0, TAU); c.fill();
+    c.fillStyle = '#c9d3db';
+    c.beginPath(); c.arc(-33, -36, 4, 0, TAU); c.fill();
+  }
+
+  function carMonster(c, color, spin, t){
+    var r = 21;
+    drawWheel(c, -30, -r, r, spin);
+    drawWheel(c, 30, -r, r, spin);
+
+    c.fillStyle = shade(color, -0.38);
+    rr(c, -46, -58, 92, 16, 5); c.fill();
+
+    c.fillStyle = color;
+    rr(c, -44, -80, 88, 34, 10); c.fill();
+
+    c.fillStyle = color;
+    rr(c, -24, -102, 48, 28, 10); c.fill();
+
+    c.fillStyle = '#dcf3ff';
+    rr(c, -19, -98, 38, 17, 6); c.fill();
+
+    c.strokeStyle = shade(color, -0.32);
+    c.lineWidth = 4;
+    c.beginPath(); c.moveTo(-24, -100); c.lineTo(-38, -74); c.stroke();
+    c.beginPath(); c.moveTo(24, -100); c.lineTo(38, -74); c.stroke();
+
+    c.fillStyle = '#fffab0';
+    c.beginPath(); c.arc(41, -68, 6, 0, TAU); c.fill();
+    c.beginPath(); c.arc(-41, -68, 5, 0, TAU); c.fill();
+
+    c.fillStyle = 'rgba(255,255,255,.45)';
+    rr(c, -34, -76, 68, 5, 3); c.fill();
+  }
+
+  function carRocket(c, color, spin, t, fast){
+    var r = 14;
+    drawWheel(c, -24, -r, r, spin);
+    drawWheel(c, 24, -r, r, spin);
+
+    // 꼬리 날개
+    c.fillStyle = shade(color, -0.3);
+    c.beginPath(); c.moveTo(-34, -50); c.lineTo(-52, -64); c.lineTo(-38, -38); c.closePath(); c.fill();
+    c.beginPath(); c.moveTo(-34, -30); c.lineTo(-50, -18); c.lineTo(-36, -22); c.closePath(); c.fill();
+
+    // 몸통
+    c.fillStyle = color;
+    c.beginPath();
+    c.moveTo(-38, -20);
+    c.lineTo(-40, -50);
+    c.quadraticCurveTo(-10, -70, 14, -60);
+    c.lineTo(44, -40);
+    c.lineTo(42, -20);
+    c.closePath();
+    c.fill();
+
+    // 코
+    c.fillStyle = '#ff6b6b';
+    c.beginPath(); c.moveTo(40, -42); c.lineTo(46, -32); c.lineTo(40, -22); c.closePath(); c.fill();
+
+    // 창문
+    c.fillStyle = '#dcf3ff';
+    c.beginPath();
+    c.moveTo(-2, -60); c.quadraticCurveTo(14, -56, 24, -44);
+    c.lineTo(2, -44); c.closePath(); c.fill();
+
+    // 띠
+    c.fillStyle = 'rgba(255,255,255,.55)';
+    rr(c, -34, -34, 66, 5, 3); c.fill();
+
+    // 불꽃
+    if (fast){
+      var fl = 0.7 + Math.sin(t * 26) * 0.3;
+      c.fillStyle = 'rgba(255,183,3,.95)';
+      c.beginPath();
+      c.moveTo(-40, -36); c.lineTo(-40 - 26 * fl, -30); c.lineTo(-40, -24);
+      c.closePath(); c.fill();
+      c.fillStyle = 'rgba(255,240,150,.95)';
+      c.beginPath();
+      c.moveTo(-40, -33); c.lineTo(-40 - 13 * fl, -30); c.lineTo(-40, -27);
+      c.closePath(); c.fill();
+    }
+  }
+
+  function drawCarAt(c, px, py, rot, type, color, o){
+    o = o || {};
+    var sc = o.scale || 1;
+    c.save();
+    c.translate(px, py);
+    c.rotate(rot || 0);
+    c.scale(sc, sc);
+
+    if (o.inWater){
+      c.save();
+      c.translate(0, 6);
+      c.fillStyle = '#ff9f45';
+      c.beginPath(); c.ellipse(0, 0, 46, 11, 0, 0, TAU); c.fill();
+      c.fillStyle = '#fff4e0';
+      for (var i = 0; i < 4; i++){
+        var a = i / 4 * TAU + 0.4;
+        c.beginPath(); c.arc(Math.cos(a) * 34, Math.sin(a) * 5, 5, 0, TAU); c.fill();
+      }
+      c.restore();
+    }
+
+    if (o.shadow !== false){
+      c.save();
+      c.globalAlpha = 0.18;
+      c.fillStyle = '#123a24';
+      c.beginPath(); c.ellipse(0, 3, 48, 8, 0, 0, TAU); c.fill();
+      c.restore();
+    }
+
+    var spin = o.spin || 0;
+    var t = o.t || 0;
+    if (type === 'monster') carMonster(c, color, spin, t);
+    else if (type === 'police') carPolice(c, color, spin, t);
+    else if (type === 'fire') carFire(c, color, spin, t);
+    else if (type === 'rocket') carRocket(c, color, spin, t, o.fast);
+    else carBasic(c, color, spin, t);
+
+    if (o.inWater){
+      c.save();
+      c.globalAlpha = 0.55;
+      c.fillStyle = '#d8f6ff';
+      c.beginPath(); c.ellipse(0, 2, 40, 6, 0, 0, TAU); c.fill();
+      c.restore();
+    }
+
+    c.restore();
+  }
+
+  /* ---------- 주인공 자동차 ---------- */
+  function drawPlayerCar(){
+    var car = G.car;
+    var seg = waterSegAt(car.x);
+    var inW = !!(seg && !seg.bridge);
+    var sx = car.x - G.scrollX;
+    var bob = inW ? Math.sin(G.t * 5.2) * 2.5 : 0;
+    drawCarAt(ctx, sx, car.y + bob, car.rot, save.car, save.color, {
+      t: G.t,
+      spin: car.spin,
+      inWater: inW,
+      fast: car.vx > 40
+    });
+  }
+
+  /* =====================================================================
+     8. 파티클 / 글자 / 폭죽
+     ===================================================================== */
+  function addPart(p){
+    if (G.parts.length > 420) return;
+    G.parts.push(p);
+  }
+  function puff(x, y, color, size, front){
+    addPart({
+      x: x, y: y,
+      vx: (Math.random() - 0.5) * 40 - 30,
+      vy: -20 - Math.random() * 40,
+      life: 0.5 + Math.random() * 0.4, max: 0.9,
+      size: size || 6, color: color || 'rgba(255,255,255,.8)',
+      grav: -40, front: !!front, shape: 'circle'
+    });
+  }
+  function splash(x, y){
+    for (var i = 0; i < 18; i++){
+      addPart({
+        x: x, y: y,
+        vx: (Math.random() - 0.5) * 260,
+        vy: -120 - Math.random() * 220,
+        life: 0.5 + Math.random() * 0.5, max: 1,
+        size: 3 + Math.random() * 5,
+        color: i % 3 === 0 ? '#ffffff' : '#a9ecff',
+        grav: 700, front: true, shape: 'circle'
+      });
+    }
+  }
+  function dust(x, y){
+    addPart({
+      x: x, y: y,
+      vx: -40 - Math.random() * 60,
+      vy: -10 - Math.random() * 30,
+      life: 0.45, max: 0.45,
+      size: 5 + Math.random() * 6,
+      color: 'rgba(214,190,150,.55)',
+      grav: -20, front: false, shape: 'circle'
+    });
+  }
+  function sparkle(x, y){
+    for (var i = 0; i < 8; i++){
+      var a = Math.random() * TAU;
+      var sp = 60 + Math.random() * 140;
+      addPart({
+        x: x, y: y,
+        vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 40,
+        life: 0.45 + Math.random() * 0.35, max: 0.8,
+        size: 3 + Math.random() * 3,
+        color: i % 2 ? '#fff6b8' : '#ffd93d',
+        grav: 300, front: true, shape: 'star'
+      });
+    }
+  }
+
+  function updateParts(dt){
+    for (var i = G.parts.length - 1; i >= 0; i--){
+      var p = G.parts[i];
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vy += (p.grav || 0) * dt;
+      p.life -= dt;
+      if (p.life <= 0) G.parts.splice(i, 1);
+    }
+  }
+  function drawParts(front){
+    for (var i = 0; i < G.parts.length; i++){
+      var p = G.parts[i];
+      if (!!p.front !== front) continue;
+      var sx = p.x - G.scrollX;
+      if (sx < -60 || sx > G.W + 60) continue;
+      var a = clamp(p.life / p.max, 0, 1);
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.fillStyle = p.color;
+      if (p.shape === 'star'){
+        starPath(ctx, sx, p.y, p.size, p.size * 0.4, 5);
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.arc(sx, p.y, p.size * (1.15 - a * 0.3), 0, TAU);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  function addText(x, y, txt, color){
+    G.texts.push({ x: x, y: y, txt: txt, color: color || '#ff9f00', life: 1.0, max: 1.0 });
+  }
+  function updateTexts(dt){
+    for (var i = G.texts.length - 1; i >= 0; i--){
+      var t = G.texts[i];
+      t.y -= 46 * dt;
+      t.life -= dt;
+      if (t.life <= 0) G.texts.splice(i, 1);
+    }
+  }
+  function drawTexts(){
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (var i = 0; i < G.texts.length; i++){
+      var t = G.texts[i];
+      var sx = t.x - G.scrollX;
+      var a = clamp(t.life / t.max, 0, 1);
+      ctx.globalAlpha = a;
+      ctx.font = '900 22px ' + FONT;
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = 'rgba(255,255,255,.95)';
+      ctx.strokeText(t.txt, sx, t.y);
+      ctx.fillStyle = t.color;
+      ctx.fillText(t.txt, sx, t.y);
+    }
+    ctx.restore();
+  }
+
+  function burst(x, y){
+    var colors = ['#ff5d5d', '#ffd93d', '#4da6ff', '#2dbd6e', '#ff78b7', '#9b5de5'];
+    var col = colors[Math.floor(Math.random() * colors.length)];
+    for (var i = 0; i < 26; i++){
+      var a = Math.random() * TAU;
+      var sp = 60 + Math.random() * 220;
+      G.fireworks.push({
+        x: x, y: y,
+        vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+        life: 0.9 + Math.random() * 0.7, max: 1.6,
+        size: 2.5 + Math.random() * 3,
+        color: Math.random() < 0.3 ? '#ffffff' : col,
+        grav: 160
+      });
+    }
+    A.noise(0.25, 0.12, 1800, 0);
+  }
+  function updateFireworks(dt){
+    for (var i = G.fireworks.length - 1; i >= 0; i--){
+      var p = G.fireworks[i];
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vy += p.grav * dt;
+      p.vx *= (1 - dt * 1.2);
+      p.life -= dt;
+      if (p.life <= 0) G.fireworks.splice(i, 1);
+    }
+  }
+  function drawFireworks(){
+    for (var i = 0; i < G.fireworks.length; i++){
+      var p = G.fireworks[i];
+      var a = clamp(p.life / p.max, 0, 1);
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 8;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, TAU); ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  /* =====================================================================
+     9. 게임 진행
+     ===================================================================== */
+  var hudStageText = '';
+  function updateHUD(){
+    coinNumEl.textContent = save.coins;
+    var label = '스테이지 ' + G.stage + (G.theme ? ' · ' + G.theme.name : '');
+    if (label !== hudStageText){ hudStageText = label; stageNameEl.textContent = label; }
+    var prog = clamp(G.car.x / G.stageLen, 0, 1) * 100;
+    barFillEl.style.width = prog.toFixed(1) + '%';
+  }
+
+  function popCoin(){
+    coinNumEl.classList.remove('pop');
+    void coinNumEl.offsetWidth;
+    coinNumEl.classList.add('pop');
+    setTimeout(function(){ coinNumEl.classList.remove('pop'); }, 160);
+  }
+
+  function collectCoin(c){
+    c.got = true;
+    save.coins += 1;
+    save.totalCoins += 1;
+    G.stageCoins += 1;
+    popCoin();
+    updateHUD();
+    saveSoon();
+    A.coin();
+    sparkle(c.x, coinY(c));
+    addText(c.x, coinY(c) - 16, '+1');
+  }
+
+  function doJump(){
+    var car = G.car;
+    if (car.air) return;
+    car.vy = -JUMP_POWER[save.upgrades.tires];
+    car.air = true;
+    A.jump();
+    for (var i = 0; i < 6; i++) dust(car.x - 20, car.y);
+  }
+
+  function startRun(stage){
+    buildStage(stage);
+    var car = G.car;
+    car.x = 0;
+    car.y = groundRef(0);
+    car.vx = 0; car.vy = 0; car.air = false; car.rot = 0; car.spin = 0;
+    G.scrollX = 0;
+    G.stageCoins = 0;
+    G.parts.length = 0;
+    G.texts.length = 0;
+    G.fireworks.length = 0;
+    G.waterIdx = -1;
+    G.jumpBuffer = 0;
+    G.hintT = stage === 1 ? 7 : 0;
+    G.introT = 2.8;
+    G.state = 'playing';
+    G.paused = false;
+    G.prevState = 'playing';
+    hideModal();
+    updateHUD();
+    A.ensure();
+    A.note(523, 0.16, 'triangle', 0.12, 0);
+    A.note(784, 0.22, 'triangle', 0.12, 0.14);
+  }
+
+  function stepDemo(dt){
+    var car = G.car;
+    car.x += 105 * dt;
+    if (car.x > G.stageLen - 600){ car.x = 0; G.scrollX = 0; }
+    car.y = surfaceY(car.x);
+    car.spin += dt * 4;
+    car.rot = Math.atan2(groundRef(car.x + 20) - groundRef(car.x - 20), 40) * 0.7;
+  }
+
+  function stepPlaying(dt){
+    var car = G.car;
+    var lv = save.upgrades;
+
+    var segHere = waterSegAt(car.x);
+    var inW = (segHere && !segHere.bridge) ? segHere : null;
+    var slope = (groundRef(car.x + 16) - groundRef(car.x - 16)) / 32; // +면 내리막
+
+    var target = 0;
+    if (G.keys.run){
+      target = TOP_SPEED[lv.engine];
+      if (slope < 0) target *= (1 - clamp(-slope, 0, 1) * 0.30);       // 오르막은 조금 느리게
+      else target *= (1 + clamp(slope, 0, 1) * 0.12);                   // 내리막은 조금 빠르게
+      if (inW) target *= WATER_SPEED[lv.booster];
+    }
+
+    var accel = G.keys.run ? 900 : 700;
+    if (car.vx < target) car.vx = Math.min(target, car.vx + accel * dt);
+    else car.vx = Math.max(target, car.vx - (G.keys.run ? 620 : 780) * dt);
+
+    car.x += car.vx * dt;
+    car.spin += (car.vx * dt) / 14;
+
+    // 점프
+    if (G.jumpBuffer > 0){
+      G.jumpBuffer -= dt;
+      if (!car.air){ doJump(); G.jumpBuffer = 0; }
+    }
+
+    var sy = surfaceY(car.x);
+
+    if (car.air){
+      car.vy += GRAVITY * dt;
+      car.y += car.vy * dt;
+      if (car.y >= sy && car.vy > 0){
+        car.y = sy;
+        car.vy = 0;
+        car.air = false;
+        for (var d = 0; d < 5; d++) dust(car.x, car.y);
+      }
+      car.rot = lerp(car.rot, clamp(car.vy * 0.00045, -0.32, 0.32), 1 - Math.exp(-dt * 8));
+    } else {
+      car.y = lerp(car.y, sy, 1 - Math.exp(-dt * 18));
+      var targetRot = inW ? 0 : Math.atan2(groundRef(car.x + 18) - groundRef(car.x - 18), 36) * 0.85;
+      car.rot = lerp(car.rot, targetRot, 1 - Math.exp(-dt * 12));
+    }
+
+    // 물에 들어갈 때 / 나올 때 (다리는 물이 아니에요)
+    var wNow = waterSegAt(car.x);
+    if (wNow && wNow.bridge) wNow = null;
+    var wIdx = wNow ? G.waters.indexOf(wNow) : -1;
+    if (wIdx !== G.waterIdx){
+      if (wIdx >= 0){
+        splash(car.x, waterSurfaceY(wNow, car.x) + 4);
+        A.splash();
+        addText(car.x, waterSurfaceY(wNow, car.x) - 60, '풍덩~!', '#2f9fd8');
+      } else if (G.waterIdx >= 0){
+        splash(car.x - 10, car.y);
+        A.noise(0.2, 0.1, 700, 0);
+      }
+      G.waterIdx = wIdx;
+    }
+
+    // 달릴 때 먼지
+    if (G.keys.run && !inW && !car.air && Math.random() < 0.35){
+      dust(car.x - 30, car.y);
+    }
+
+    // 코인 먹기
+    var cx = car.x;
+    var cy = car.y - 34;
+    var rad = 44 + (lv.booster - 1) * 6;
+    for (var i = 0; i < G.coins.length; i++){
+      var c = G.coins[i];
+      if (c.got) continue;
+      var dx = c.x - cx;
+      if (dx < -90 || dx > 280) continue;
+      var cy2 = coinY(c);
+      if (Math.abs(dx) < rad && Math.abs(cy2 - cy) < rad * 0.95){
+        var dist = Math.sqrt(dx * dx + (cy2 - cy) * (cy2 - cy));
+        if (dist < rad) collectCoin(c);
+      }
+    }
+
+    // 결승
+    if (car.x >= G.stageLen){
+      finishStage();
+      return;
+    }
+
+    updateHUD();
+  }
+
+  function finishStage(){
+    var bonus = 18 + G.stage * 4;
+    save.coins += bonus;
+    save.totalCoins += bonus;
+    if (G.stage + 1 > save.bestStage) save.bestStage = G.stage + 1;
+    saveGame();
+    updateHUD();
+    G.state = 'clear';
+    G.fwTimer = 0;
+    A.clear();
+    renderClear(bonus);
+    for (var i = 0; i < 5; i++){
+      burst(G.W * (0.2 + Math.random() * 0.6), G.H * (0.15 + Math.random() * 0.3));
+    }
+  }
+
+  /* =====================================================================
+     10. 화면 그리기
+     ===================================================================== */
+  function render(){
+    var c = ctx;
+    c.setTransform(G.dpr, 0, 0, G.dpr, 0, 0);
+    c.clearRect(0, 0, G.W, G.H);
+
+    var p = G.pal || PALS[0];
+    var mMount = (G.theme && G.theme.mount) || 1;
+
+    drawSky();
+    drawClouds();
+    drawMountains(0.10, G.baseY - 30, 148 * mMount, p.far, mMount > 1.2);
+    drawMountains(0.24, G.baseY + 10, 104 * mMount, p.mid, mMount > 1.2);
+    drawGround();
+    drawWater();
+    drawDecos();
+    drawFinish();
+    drawCoins();
+    drawParts(false);
+    drawPlayerCar();
+    drawParts(true);
+    drawTexts();
+    drawFireworks();
+    drawIntro();
+    drawHint();
+  }
+
+  function drawIntro(){
+    if (!G.introT || G.introT <= 0 || G.state !== 'playing' || !G.theme) return;
+    var total = 2.8;
+    var el = total - G.introT;
+    var a = clamp(el * 4, 0, 1) * clamp(G.introT / 0.7, 0, 1);
+    if (a <= 0) return;
+    var pop = 1 + Math.sin(Math.min(el, 0.6) * 6) * 0.03;
+    var w = Math.min(G.W * 0.84, 360);
+    var h = Math.min(148, G.H * 0.30);
+
+    ctx.save();
+    ctx.globalAlpha = a;
+    ctx.translate(G.W / 2, G.H * 0.32);
+    ctx.scale(pop, pop);
+
+    ctx.fillStyle = 'rgba(255,255,255,.95)';
+    rr(ctx, -w / 2, -h / 2, w, h, 26);
+    ctx.fill();
+    ctx.strokeStyle = '#ffd166';
+    ctx.lineWidth = 5;
+    rr(ctx, -w / 2, -h / 2, w, h, 26);
+    ctx.stroke();
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#e08b00';
+    ctx.font = '900 17px ' + FONT;
+    ctx.fillText('스테이지 ' + G.stage, 0, -h * 0.26);
+
+    ctx.fillStyle = '#2b3f4d';
+    ctx.font = '900 ' + Math.round(Math.min(30, w * 0.085)) + 'px ' + FONT;
+    ctx.fillText(G.theme.icon + ' ' + G.theme.name, 0, h * 0.06);
+
+    ctx.fillStyle = '#8b96a2';
+    ctx.font = '800 13px ' + FONT;
+    ctx.fillText('결승선까지 힘차게 달려요!', 0, h * 0.30);
+    ctx.restore();
+  }
+
+  function drawHint(){
+    if (G.hintT <= 0 || G.state !== 'playing') return;
+    var a = clamp(G.hintT / 1.2, 0, 1);
+    var txt = G.car.x < 500 ? '👉 앞으로! 버튼을 꾹 눌러요' : '⬆️ 점프! 버튼도 눌러 봐요';
+    ctx.save();
+    ctx.globalAlpha = a;
+    ctx.font = '900 16px ' + FONT;
+    var w = ctx.measureText(txt).width + 34;
+    var x = G.W / 2 - w / 2;
+    var y = G.H - clamp(190, G.H * 0.26, 240);
+    ctx.fillStyle = 'rgba(255,255,255,.92)';
+    rr(ctx, x, y, w, 42, 21); ctx.fill();
+    ctx.fillStyle = '#3a4f5f';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(txt, G.W / 2, y + 22);
+    ctx.restore();
+  }
+
+  /* =====================================================================
+     11. 화면(패널) - 시작 / 클리어 / 튜닝샵
+     ===================================================================== */
+  function showSheet(html){
+    sheet.innerHTML = html;
+    modal.classList.add('show');
+  }
+  function hideModal(){
+    modal.classList.remove('show');
+    sheet.innerHTML = '';
+  }
+
+  function themeOf(stage){ return THEMES[(stage - 1) % THEMES.length]; }
+
+  function renderStart(){
+    var maxStage = Math.max(1, save.bestStage);
+    var nowStage = Math.min(Math.max(1, save.bestStage), 99);
+    var th = themeOf(nowStage);
+
+    var chips = '';
+    if (maxStage > 1){
+      chips = '<div class="spWrap"><div class="spTitle">스테이지 골라서 출발</div><div class="spRow">';
+      for (var i = 1; i <= Math.min(maxStage, 12); i++){
+        chips += '<button class="chip" data-act="pick" data-stage="' + i + '">' + i + '</button>';
+      }
+      chips += '</div></div>';
+    }
+
+    showSheet(
+      '<div class="logo"><div class="logoMain"><span class="logoCoin">★</span>코인 자동차</div></div>' +
+      '<div class="sub">코인을 모아서 자동차를 멋지게 꾸며요!</div>' +
+      '<div class="howto">' +
+        '<div class="hi"><span class="ico">👉</span><div><b>앞으로!</b><small>버튼을 꾹 누르면 달려요</small></div></div>' +
+        '<div class="hi"><span class="ico">⬆️</span><div><b>점프!</b><small>산을 넘고 물도 건너요</small></div></div>' +
+        '<div class="hi"><span class="ico">⭐</span><div><b>코인 모으기</b><small>모아서 튜닝샵에서 써요</small></div></div>' +
+      '</div>' +
+      chips +
+      '<button class="bigBtn" data-act="start">출발! 🚗</button>' +
+      '<div style="text-align:center;font-size:12.5px;color:#8b96a2;font-weight:800;margin-top:8px">' +
+        '스테이지 ' + nowStage + ' · ' + th.icon + ' ' + th.name +
+      '</div>' +
+      '<button class="softBtn" data-act="shop">🔧 튜닝샵 구경하기</button>' +
+      '<div style="text-align:center;font-size:11.5px;color:#a8b3bd;font-weight:700;margin-top:10px">' +
+        '보유 코인 ' + save.coins + '개 · 최고 스테이지 ' + save.bestStage +
+      '</div>'
+    );
+  }
+
+  function renderClear(bonus){
+    G.lastBonus = bonus;
+    var nextStage = G.stage + 1;
+    var nth = themeOf(nextStage);
+    var th = G.theme || themeOf(G.stage);
+    showSheet(
+      '<div class="clearBig">🎉</div>' +
+      '<div class="clearTitle">스테이지 ' + G.stage + ' 완주!</div>' +
+      '<div class="clearSub">' + th.icon + ' ' + th.name + ' · 정말 잘했어요!</div>' +
+      '<div class="statRow">' +
+        '<div class="stat"><b>' + G.stageCoins + '</b><small>모은 코인</small></div>' +
+        '<div class="stat"><b>+' + bonus + '</b><small>완주 보너스</small></div>' +
+        '<div class="stat"><b>' + save.coins + '</b><small>모두 합쳐</small></div>' +
+      '</div>' +
+      '<div class="rowBtns">' +
+        '<button class="bigBtn" data-act="next">다음 스테이지 ▶</button>' +
+        '<div style="text-align:center;font-size:12.5px;color:#8b96a2;font-weight:800;margin:-3px 0 4px">' +
+          '스테이지 ' + nextStage + ' · ' + nth.icon + ' ' + nth.name +
+        '</div>' +
+        '<button class="softBtn" data-act="shop">🔧 튜닝샵</button>' +
+        '<button class="softBtn" data-act="retry">↻ 이번 스테이지 다시 하기</button>' +
+      '</div>'
+    );
+  }
+
+  function walletHTML(){
+    return '<div class="wallet"><span class="coinIcon">★</span><b>' + save.coins + '</b></div>';
+  }
+
+  function renderShop(){
+    var tab = G.shopTab || 'car';
+    var body = '';
+
+    if (tab === 'car'){
+      body = '<div class="grid">';
+      CARS.forEach(function(car){
+        var owned = save.ownedCars.indexOf(car.id) !== -1;
+        var on = save.car === car.id;
+        var btn;
+        if (on) btn = '<button class="buy owned" disabled>장착됨 ✓</button>';
+        else if (owned) btn = '<button class="buy owned" data-act="equipCar" data-id="' + car.id + '">장착하기</button>';
+        else if (save.coins >= car.price) btn = '<button class="buy" data-act="buyCar" data-id="' + car.id + '">⭐ ' + car.price + ' 코인</button>';
+        else btn = '<button class="buy" disabled>⭐ ' + car.price + ' 코인</button>';
+        body += '<div class="card' + (on ? ' on' : '') + '">' +
+          '<canvas class="prev" data-type="' + car.id + '" data-color="' + save.color + '"></canvas>' +
+          '<div class="cardName">' + car.name + '</div>' +
+          '<div class="cardDesc">' + car.desc + '</div>' + btn + '</div>';
+      });
+      body += '</div>';
+    } else if (tab === 'color'){
+      body = '<div class="grid">';
+      COLORS.forEach(function(col){
+        var owned = save.ownedColors.indexOf(col.hex) !== -1;
+        var on = save.color === col.hex;
+        var btn;
+        if (on) btn = '<button class="buy owned" disabled>장착됨 ✓</button>';
+        else if (owned) btn = '<button class="buy owned" data-act="equipColor" data-hex="' + col.hex + '">장착하기</button>';
+        else if (save.coins >= col.price) btn = '<button class="buy" data-act="buyColor" data-hex="' + col.hex + '">⭐ ' + col.price + ' 코인</button>';
+        else btn = '<button class="buy" disabled>⭐ ' + col.price + ' 코인</button>';
+        body += '<div class="card' + (on ? ' on' : '') + '">' +
+          '<div class="swatch" style="background:' + col.hex + '"></div>' +
+          '<div class="cardName">' + col.name + '</div>' +
+          '<div class="cardDesc">' + (col.price === 0 ? '처음부터 있어요' : '멋진 색깔') + '</div>' +
+          btn + '</div>';
+      });
+      body += '</div>';
+    } else {
+      body = '';
+      UPS.forEach(function(u){
+        var lv = save.upgrades[u.key];
+        var maxed = lv >= 3;
+        var price = maxed ? 0 : u.prices[lv];
+        var btn;
+        if (maxed) btn = '<button class="buy owned upBuy" disabled>최고 단계 ✓</button>';
+        else if (save.coins >= price) btn = '<button class="buy upBuy" data-act="buyUp" data-key="' + u.key + '">⭐ ' + price + '</button>';
+        else btn = '<button class="buy upBuy" disabled>⭐ ' + price + '</button>';
+
+        var pips = '';
+        for (var i = 1; i <= 3; i++) pips += '<span class="pip' + (i <= lv ? ' on' : '') + '"></span>';
+
+        var effect = '';
+        if (u.key === 'engine') effect = '최고 속도 ' + TOP_SPEED[lv] + ' → ' + (maxed ? '최고!' : TOP_SPEED[lv + 1]);
+        if (u.key === 'tires') effect = '점프 힘 ' + JUMP_POWER[lv] + ' → ' + (maxed ? '최고!' : JUMP_POWER[lv + 1]);
+        if (u.key === 'booster') effect = '물 위 속도 ' + Math.round(WATER_SPEED[lv] * 100) + '% → ' + (maxed ? '최고!' : Math.round(WATER_SPEED[lv + 1] * 100) + '%');
+
+        body += '<div class="upRow">' +
+          '<div class="upIcon">' + u.icon + '</div>' +
+          '<div class="upInfo">' +
+            '<div class="upName">' + u.name + ' <span style="color:#2dbd6e">Lv.' + lv + '</span></div>' +
+            '<div class="upDesc">' + u.desc + ' · ' + effect + '</div>' +
+            '<div class="pips">' + pips + '</div>' +
+          '</div>' + btn + '</div>';
+      });
+    }
+
+    showSheet(
+      '<div class="sheetHead"><h2>🔧 튜닝샵</h2>' + walletHTML() +
+        '<button class="xbtn" data-act="closeShop">✕</button></div>' +
+      '<div class="tabs">' +
+        '<button class="tab' + (tab === 'car' ? ' on' : '') + '" data-act="tab" data-tab="car">🚗 차종</button>' +
+        '<button class="tab' + (tab === 'color' ? ' on' : '') + '" data-act="tab" data-tab="color">🎨 색깔</button>' +
+        '<button class="tab' + (tab === 'tune' ? ' on' : '') + '" data-act="tab" data-tab="tune">⚡ 튜닝</button>' +
+      '</div>' + body +
+      '<button class="softBtn" data-act="closeShop" style="margin-top:14px">다음에 또 올게요</button>'
+    );
+
+    paintPreviews();
+  }
+
+  function paintPreviews(){
+    var list = sheet.querySelectorAll('canvas.prev');
+    for (var i = 0; i < list.length; i++){
+      var cv = list[i];
+      var type = cv.dataset.type;
+      var color = cv.dataset.color;
+      var w = cv.clientWidth || 120;
+      var h = cv.clientHeight || 70;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.round(w * dpr);
+      cv.height = Math.round(h * dpr);
+      var c = cv.getContext('2d');
+      c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      c.clearRect(0, 0, w, h);
+      var sc = Math.min(w / 108, h / 76);
+      drawCarAt(c, w * 0.5, h * 0.88, 0, type, color, { scale: sc, spin: 0.5, t: 1, shadow: true, fast: true });
+    }
+  }
+
+  function openShop(){
+    if (G.state !== 'shop') G.prevState = G.state;
+    G.state = 'shop';
+    G.paused = true;
+    renderShop();
+  }
+  function closeShop(){
+    var prev = G.prevState || 'start';
+    if (prev === 'clear'){ G.state = 'clear'; renderClear(G.lastBonus || 0); }
+    else if (prev === 'playing'){
+      G.state = 'playing'; G.paused = false; hideModal();
+      G.lastT = 0;
+    } else {
+      G.state = 'start'; renderStart();
+    }
+  }
+
+  /* =====================================================================
+     12. 버튼 / 입력
+     ===================================================================== */
+  var pointers = {}; // 손가락(포인터)별로 어떤 버튼을 누르고 있는지
+
+  function bindHold(el, tag, onDown, onUp){
+    el.addEventListener('pointerdown', function(e){
+      e.preventDefault();
+      el.classList.add('active');
+      pointers[e.pointerId] = tag;
+      try { el.setPointerCapture(e.pointerId); } catch (err) {}
+      A.ensure();
+      onDown();
+    });
+    function release(e){
+      if (pointers[e.pointerId] !== tag) return;
+      delete pointers[e.pointerId];
+      el.classList.remove('active');
+      onUp();
+    }
+    el.addEventListener('pointerup', release);
+    el.addEventListener('pointercancel', release);
+    el.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  }
+
+  // 손가락이 버튼 밖에서 떨어져도 그 손가락만 놓이도록
+  function windowRelease(e){
+    var tag = pointers[e.pointerId];
+    if (!tag) return;
+    delete pointers[e.pointerId];
+    if (tag === 'run'){
+      G.keys.run = false;
+      document.getElementById('runBtn').classList.remove('active');
+    } else if (tag === 'jump'){
+      document.getElementById('jumpBtn').classList.remove('active');
+    }
+  }
+  window.addEventListener('pointerup', windowRelease);
+  window.addEventListener('pointercancel', windowRelease);
+
+  bindHold(document.getElementById('runBtn'), 'run',
+    function(){ G.keys.run = true; },
+    function(){ G.keys.run = false; });
+
+  bindHold(document.getElementById('jumpBtn'), 'jump',
+    function(){ G.jumpBuffer = 0.16; },
+    function(){});
+
+  document.getElementById('shopBtn').addEventListener('click', function(){
+    A.ensure(); A.click();
+    openShop();
+  });
+  document.getElementById('muteBtn').addEventListener('click', function(){
+    A.ensure();
+    A.setMuted(!A.muted);
+    save.muted = A.muted;
+    saveGame();
+  });
+
+  // 패널 안의 버튼들 (이벤트 위임)
+  sheet.addEventListener('click', function(e){
+    var el = e.target.closest ? e.target.closest('[data-act]') : null;
+    if (!el) return;
+    var act = el.getAttribute('data-act');
+    A.ensure();
+
+    if (act === 'start'){ A.click(); startRun(Math.max(1, save.bestStage)); return; }
+    if (act === 'pick'){ A.click(); startRun(clamp(parseInt(el.getAttribute('data-stage'), 10) || 1, 1, 99)); return; }
+    if (act === 'next'){ A.click(); startRun(G.stage + 1); return; }
+    if (act === 'retry'){ A.click(); startRun(G.stage); return; }
+    if (act === 'shop'){ A.click(); openShop(); return; }
+    if (act === 'closeShop'){ A.click(); closeShop(); return; }
+
+    if (act === 'tab'){
+      G.shopTab = el.getAttribute('data-tab');
+      A.click();
+      renderShop();
+      return;
+    }
+
+    if (act === 'buyCar' || act === 'equipCar'){
+      var id = el.getAttribute('data-id');
+      var carDef = null;
+      for (var i = 0; i < CARS.length; i++) if (CARS[i].id === id) carDef = CARS[i];
+      if (!carDef) return;
+      var owned = save.ownedCars.indexOf(id) !== -1;
+      if (!owned){
+        if (save.coins < carDef.price){ A.fail(); return; }
+        save.coins -= carDef.price;
+        save.ownedCars.push(id);
+        A.buy();
+      } else {
+        A.click();
+      }
+      save.car = id;
+      saveGame();
+      updateHUD();
+      renderShop();
+      return;
+    }
+
+    if (act === 'buyColor' || act === 'equipColor'){
+      var hex = el.getAttribute('data-hex');
+      var colDef = null;
+      for (var j = 0; j < COLORS.length; j++) if (COLORS[j].hex === hex) colDef = COLORS[j];
+      if (!colDef) return;
+      var has = save.ownedColors.indexOf(hex) !== -1;
+      if (!has){
+        if (save.coins < colDef.price){ A.fail(); return; }
+        save.coins -= colDef.price;
+        save.ownedColors.push(hex);
+        A.buy();
+      } else {
+        A.click();
+      }
+      save.color = hex;
+      saveGame();
+      updateHUD();
+      renderShop();
+      return;
+    }
+
+    if (act === 'buyUp'){
+      var key = el.getAttribute('data-key');
+      var def = null;
+      for (var k = 0; k < UPS.length; k++) if (UPS[k].key === key) def = UPS[k];
+      if (!def) return;
+      var lv = save.upgrades[key];
+      if (lv >= 3){ A.fail(); return; }
+      var price = def.prices[lv];
+      if (save.coins < price){ A.fail(); return; }
+      save.coins -= price;
+      save.upgrades[key] = lv + 1;
+      A.buy();
+      saveGame();
+      updateHUD();
+      renderShop();
+      return;
+    }
+  });
+
+  // 키보드
+  window.addEventListener('keydown', function(e){
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'd' || k === 'D' || k === 'ㅇ'){
+      G.keys.run = true;
+      e.preventDefault();
+    } else if (k === ' ' || k === 'Spacebar' || k === 'ArrowUp' || k === 'w' || k === 'W'){
+      if (!e.repeat) G.jumpBuffer = 0.16;
+      e.preventDefault();
+    } else if (k === 'Escape'){
+      if (G.state === 'shop') closeShop();
+    } else if (k === 'Enter'){
+      if (G.state === 'start') startRun(1);
+    }
+    A.ensure();
+  });
+  window.addEventListener('keyup', function(e){
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'd' || k === 'D' || k === 'ㅇ') G.keys.run = false;
+    if (k === ' ') e.preventDefault();
+  });
+  window.addEventListener('blur', function(){ G.keys.run = false; });
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden){ G.paused = true; }
+    else { G.lastT = 0; if (G.state === 'playing') G.paused = false; }
+  });
+  document.addEventListener('contextmenu', function(e){
+    if (e.target === canvas) e.preventDefault();
+  });
+
+  /* =====================================================================
+     13. 메인 루프
+     ===================================================================== */
+  var lastT = 0;
+  function loop(ts){
+    if (!lastT) lastT = ts;
+    var dt = (ts - lastT) / 1000;
+    lastT = ts;
+    if (dt > 0.05) dt = 0.05;
+    if (dt < 0) dt = 0;
+
+    G.t += dt;
+
+    if (G.state === 'playing' && !G.paused){
+      stepPlaying(dt);
+      if (G.hintT > 0) G.hintT -= dt;
+      if (G.introT > 0) G.introT -= dt;
+    } else if (G.state === 'start'){
+      stepDemo(dt);
+    } else if (G.state === 'clear'){
+      G.fwTimer = (G.fwTimer || 0) - dt;
+      if (G.fwTimer <= 0){
+        G.fwTimer = 0.55;
+        burst(G.W * (0.15 + Math.random() * 0.7), G.H * (0.12 + Math.random() * 0.35));
+      }
+    }
+
+    updateParts(dt);
+    updateTexts(dt);
+    updateFireworks(dt);
+
+    var camTarget = Math.max(0, G.car.x - G.W * 0.30);
+    G.scrollX += (camTarget - G.scrollX) * (1 - Math.exp(-dt * 11));
+
+    // 엔진 소리
+    if (A.engGain && A.ctx){
+      var on = (G.state === 'playing' && !G.paused && !A.muted);
+      var vol = on ? (0.012 + clamp(G.car.vx / 480, 0, 1) * 0.026) : 0;
+      A.engGain.gain.setTargetAtTime(vol, A.ctx.currentTime, 0.12);
+      if (on) A.engOsc.frequency.setTargetAtTime(52 + clamp(G.car.vx / 480, 0, 1) * 62, A.ctx.currentTime, 0.12);
+    }
+
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  /* =====================================================================
+     14. 시작
+     ===================================================================== */
+  function init(){
+    loadGame();
+    resize();
+    A.setMuted(save.muted);
+    buildStage(1);
+    G.car.y = groundRef(0);
+    G.state = 'start';
+    updateHUD();
+    renderStart();
+
+    // 테스트/디버그용 (게임에는 영향 없음)
+    window.__game = { G: G, save: save, saveGame: saveGame, startRun: startRun, buildStage: buildStage };
+
+    requestAnimationFrame(loop);
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
