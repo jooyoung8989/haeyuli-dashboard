@@ -8072,14 +8072,13 @@ function render(justAdded){
   }).join("");
   if (list.length > shown.length) h += '<span class="bk-more">+' + (list.length - shown.length) + "권</span>";
   stack.innerHTML = h;
+  var olds = stack.parentNode.querySelectorAll(".bk-empty");
+  for (var k = 0; k < olds.length; k++) olds[k].parentNode.removeChild(olds[k]);
   if (!list.length) {
     var e = document.createElement("div");
     e.className = "bk-empty";
     e.textContent = "아직 나무에 쌓은 책이 없어요 🌱 책장에서 책을 골라 보세요!";
     stack.parentNode.appendChild(e);
-  } else {
-    var old = stack.parentNode.querySelector(".bk-empty");
-    if (old) old.parentNode.removeChild(old);
   }
   if (justAdded) {
     var bars = stack.querySelectorAll(".bk-b");
