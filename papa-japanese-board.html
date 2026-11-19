@@ -285,6 +285,77 @@ body.nofuri .ww .wl i{display:none;}
 }
 .dashlink:active{transform:scale(.98);}
 
+/* ================= 📅 오늘의 일상 단어 & 회화 표현 ================= */
+.daily{
+  flex:0 0 auto;position:relative;overflow:hidden;
+  border-radius:var(--r);padding:.6vh .8vh .62vh;
+  background:linear-gradient(132deg,#fff8fb 0%,#f7f4ff 58%,#f2f7ff 100%);
+  box-shadow:var(--shadow-sm), inset 0 0 0 .1vh #f2dce7;
+  display:flex;flex-direction:column;gap:.38vh;
+}
+.daily::before{content:"";position:absolute;right:-5vh;top:-7vh;width:17vh;height:17vh;border-radius:50%;
+  background:radial-gradient(circle,rgba(247,166,189,.22),rgba(247,166,189,0) 70%);pointer-events:none;}
+.daily-head{position:relative;z-index:1;display:flex;align-items:center;gap:.45vh;min-width:0;}
+.daily-head b{font-size:1.22vh;font-weight:900;color:#8d3a5e;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.daily-head .dh-mini{display:none;}
+.daily-topic .dt-lab-mini{display:none;}
+.daily-head .dd{flex:0 0 auto;font-size:.98vh;font-weight:900;color:#a2587b;background:rgba(255,255,255,.92);
+  border-radius:999px;padding:.18vh .6vh;white-space:nowrap;box-shadow:inset 0 0 0 .15vh #f3d3e0;}
+.daily-head .dnote{margin-left:auto;flex:0 0 auto;font-size:.9vh;font-weight:800;color:#b09ab0;white-space:nowrap;}
+.daily-topic{position:relative;z-index:1;display:flex;align-items:center;gap:.4vh;min-width:0;
+  padding:.24vh .45vh;border-radius:.85vh;background:linear-gradient(120deg,#fff2f7,#f4f0ff 70%,#eef4ff);
+  box-shadow:inset 0 0 0 .16vh #f0d4e4;}
+.daily-topic .dt-lab{flex:0 0 auto;font-size:.92vh;font-weight:900;color:#a2587b;white-space:nowrap;letter-spacing:-.02em;}
+.daily-topic .dt-name{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:.25vh;
+  font-size:1.12vh;font-weight:900;color:#472a5e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.daily-topic .dt-name #dailyTopicName{overflow:hidden;text-overflow:ellipsis;}
+.daily-topic .dt-btn{flex:0 0 auto;height:2.7vh;padding:0 .62vh;border-radius:999px;
+  font-size:.92vh;font-weight:900;white-space:nowrap;transition:transform .1s;}
+.daily-topic .dt-btn:active{transform:scale(.96);}
+.daily-topic .dt-btn.talk{background:linear-gradient(135deg,#f9b6c9,#ef8fab);color:#5d1730;box-shadow:0 .22vh .6vh rgba(230,130,160,.28);}
+.daily-topic .dt-btn.call{background:linear-gradient(135deg,#8b7fe0,#6a58cf);color:#fff;box-shadow:0 .22vh .6vh rgba(105,88,207,.26);}
+.daily-topic .dt-mini{display:none;}
+.daily-body{position:relative;z-index:1;display:flex;gap:.45vh;min-width:0;}
+.dw-row{flex:1 1 54%;display:grid;grid-template-columns:1fr 1fr;gap:.3vh;min-width:0;}
+.dp-row{flex:1 1 46%;display:flex;flex-direction:column;justify-content:center;gap:.28vh;min-width:0;}
+.dw{
+  display:flex;flex-direction:column;justify-content:center;gap:.02vh;min-width:0;overflow:hidden;text-align:left;
+  padding:.25vh .48vh;border-radius:.8vh;background:#fffdfb;border:.15vh solid #f1dee8;
+  transition:transform .1s,box-shadow .18s,background .18s;
+}
+.dw:active{transform:scale(.97);}
+.dw .dw-jp{display:flex;align-items:baseline;gap:.18vh;min-width:0;white-space:nowrap;padding-top:.16vh;
+  font-family:"Hiragino Sans","Noto Sans JP","Noto Sans CJK JP",sans-serif;
+  font-size:1.28vh;font-weight:900;color:#33254a;line-height:1.3;}
+.dw .dw-jp .dw-t{min-width:0;white-space:nowrap;}
+.dw .dw-jp rt{font-size:.5em;color:var(--sakura-deep);}
+.dw .dw-sp{margin-left:.22vh;flex:0 0 auto;font-size:1.02vh;line-height:1;opacity:.7;}
+.dw .dw-sub{display:flex;align-items:baseline;gap:.18vh;min-width:0;white-space:nowrap;overflow:hidden;
+  font-size:.86vh;font-weight:800;line-height:1.25;color:#a08bad;}
+.dw .dw-pr{color:#a76a88;font-weight:900;flex:0 0 auto;}
+.dw .dw-ko{overflow:hidden;text-overflow:ellipsis;}
+.dw.playing{background:linear-gradient(135deg,#fff1f6,#fdf8ff);border-color:#f3bed1;box-shadow:0 0 0 .35vh rgba(204,77,118,.12);}
+.dp{
+  display:flex;align-items:center;gap:.32vh;min-width:0;
+  padding:.26vh .42vh;border-radius:.8vh;background:rgba(255,255,255,.94);border:.15vh solid #eee1f2;
+  transition:transform .1s,box-shadow .18s,background .18s;
+}
+.dp:active{transform:scale(.99);}
+.dp .dp-sp{flex:0 0 auto;font-size:1.08vh;line-height:1;opacity:.8;}
+.dp .dp-txt{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.02vh;}
+.dp .dp-jp{font-family:"Hiragino Sans","Noto Sans JP","Noto Sans CJK JP",sans-serif;
+  font-size:1.26vh;font-weight:900;color:#3c2350;line-height:1.34;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  padding-top:.22vh;}
+.dp .dp-jp rt{font-size:.5em;color:var(--sakura-deep);}
+.dp .dp-sub{display:flex;align-items:baseline;gap:.18vh;min-width:0;white-space:nowrap;overflow:hidden;
+  font-size:.84vh;font-weight:800;line-height:1.22;color:#a08bad;}
+.dp .dp-pr{color:#a76a88;font-weight:900;flex:0 0 auto;}
+.dp .dp-ko{overflow:hidden;text-overflow:ellipsis;}
+.dp .dp-use{flex:0 0 auto;height:2.35vh;padding:0 .5vh;border-radius:999px;background:#fdf1f5;color:#a53b62;
+  font-size:.86vh;font-weight:900;white-space:nowrap;box-shadow:inset 0 0 0 .15vh #f3cbdb;}
+.dp .dp-use:active{transform:scale(.95);}
+.dp.playing{background:linear-gradient(135deg,#fff1f6,#fdf8ff);border-color:#f3bed1;box-shadow:0 0 0 .35vh rgba(204,77,118,.12);}
+
 /* ================= center stage ================= */
 .stage{min-height:0;display:flex;flex-direction:column;gap:.85vh;}
 
@@ -619,7 +690,7 @@ body.view-call .stage,body.view-call .side.left,body.view-call .helpboard{displa
 
 /* ---------- 왼쪽: 통화 화면 ---------- */
 .call-phone{position:relative;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  gap:.9vh;padding:5.2vh 1.3vh 1.3vh;border-radius:var(--r);overflow:hidden;
+  gap:1vh;padding:5.8vh 1.3vh 1.2vh;border-radius:var(--r);overflow:hidden;
   background:radial-gradient(125% 95% at 50% 0%,#3b4580 0%,#232a55 44%,#141932 100%);
   color:#f4eefc;box-shadow:0 1.2vh 3vh rgba(20,22,50,.34);}
 .call-phone::before{content:"";position:absolute;inset:0;pointer-events:none;
@@ -628,11 +699,19 @@ body.view-call .stage,body.view-call .side.left,body.view-call .helpboard{displa
   font-size:1.05vh;font-weight:900;letter-spacing:.02em;color:rgba(233,226,252,.8);}
 .cp-top .cp-tag{background:rgba(255,255,255,.13);border-radius:999px;padding:.28vh .8vh;}
 .cp-top .cp-sig{margin-left:auto;letter-spacing:.08em;font-size:1.12vh;}
-.cp-body{flex:1 1 auto;width:100%;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.05vh;}
-.cp-avatar{position:relative;z-index:1;width:min(15.5vh,62%);aspect-ratio:1/1;display:grid;place-items:center;
-  border-radius:50%;font-size:min(8vh,4.2rem);line-height:1;
+.cp-body{flex:1 1 auto;width:100%;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.15vh;}
+.cp-rings{position:relative;z-index:1;display:grid;place-items:center;flex:0 0 auto;}
+.cp-ring{position:absolute;border-radius:50%;pointer-events:none;border:.26vh solid rgba(247,166,189,.32);
+  box-shadow:0 0 2.2vh rgba(247,166,189,.18);}
+.cp-ring.a{width:116%;height:116%;}
+.cp-ring.b{width:132%;height:132%;border-color:rgba(247,166,189,.16);box-shadow:none;}
+.call-phone[data-call="ringing"] .cp-ring.a{animation:cpringwave 1.5s ease-out infinite;}
+.call-phone[data-call="live"] .cp-ring.a{animation:cpringwave 3s ease-out infinite;}
+@keyframes cpringwave{0%{transform:scale(.97);opacity:.85}70%{transform:scale(1.04);opacity:.25}100%{opacity:.2}}
+.cp-avatar{position:relative;z-index:1;width:min(24vh,60vw);aspect-ratio:1/1;display:grid;place-items:center;
+  border-radius:50%;font-size:min(11.5vh,6.4rem);line-height:1;
   background:radial-gradient(circle at 35% 28%,#fff0f5,#f7b9cd 55%,#d97aa0);
-  box-shadow:0 0 0 .5vh rgba(247,166,189,.22),0 1.4vh 3vh rgba(10,12,34,.4);}
+  box-shadow:0 0 0 .55vh rgba(247,166,189,.26),0 1.8vh 4vh rgba(10,12,34,.46),0 0 5vh rgba(247,166,189,.22);}
 .cp-avatar::after{content:"";position:absolute;inset:-1.3vh;border-radius:50%;
   border:.28vh solid rgba(247,166,189,.55);opacity:0;}
 .call-phone[data-call="ringing"] .cp-avatar{animation:cpring 1.1s ease-in-out infinite;}
@@ -643,15 +722,15 @@ body.view-call .stage,body.view-call .side.left,body.view-call .helpboard{displa
 .call-phone[data-call="live"] .cp-ava-em{animation:cpbob 2.2s ease-in-out infinite;}
 @keyframes cpbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-.5vh)}}
 .cp-name{position:relative;z-index:1;text-align:center;min-width:0;}
-.cp-name b{display:block;font-size:2vh;font-weight:900;letter-spacing:-.02em;color:#fff;}
+.cp-name b{display:block;font-size:2.4vh;font-weight:900;letter-spacing:-.02em;color:#fff;}
 .cp-ja{display:inline-block;margin-left:.25vh;font-style:normal;font-size:.6em;font-weight:800;color:#e9c8d9;
   letter-spacing:.04em;font-family:"Hiragino Sans","Noto Sans JP",sans-serif;}
-.cp-name span{display:block;margin-top:.3vh;font-size:1.1vh;font-weight:900;color:#e2c3d3;}
+.cp-name span{display:block;margin-top:.35vh;font-size:1.26vh;font-weight:900;color:#e2c3d3;}
 .call-phone[data-call="live"] .cp-name span{color:#9df0c6;}
-.cp-timer{position:relative;z-index:1;font-size:3.9vh;font-weight:900;letter-spacing:.05em;
-  font-variant-numeric:tabular-nums;color:#fdf6ff;text-shadow:0 .3vh 1.2vh rgba(10,10,40,.55);}
-.cp-wave{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:.42vh;height:3vh;}
-.cp-wave i{display:block;width:.5vh;height:.75vh;border-radius:999px;background:rgba(247,196,214,.45);}
+.cp-timer{position:relative;z-index:1;font-size:5.2vh;font-weight:900;letter-spacing:.05em;
+  font-variant-numeric:tabular-nums;color:#fdf6ff;text-shadow:0 .4vh 1.6vh rgba(10,10,40,.6);}
+.cp-wave{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:.5vh;height:3.6vh;}
+.cp-wave i{display:block;width:.62vh;height:.9vh;border-radius:999px;background:rgba(247,196,214,.45);}
 .call-phone[data-call="live"] .cp-wave i{background:#8ef0bd;animation:cpbar 1s ease-in-out infinite;}
 .call-phone[data-call="ringing"] .cp-wave i{background:#ffd479;animation:cpbar .7s ease-in-out infinite;}
 .cp-wave i:nth-child(2){animation-delay:.12s}
@@ -660,9 +739,9 @@ body.view-call .stage,body.view-call .side.left,body.view-call .helpboard{displa
 .cp-wave i:nth-child(5){animation-delay:.48s}
 .cp-wave i:nth-child(6){animation-delay:.6s}
 .cp-wave i:nth-child(7){animation-delay:.72s}
-@keyframes cpbar{0%,100%{height:.85vh}50%{height:2.8vh}}
+@keyframes cpbar{0%,100%{height:.95vh}50%{height:3.4vh}}
 .cp-acts{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:.8vh;width:100%;}
-.cp-btn{height:5.2vh;min-width:min(19vh,92%);padding:0 1.8vh;border-radius:999px;font-size:1.55vh;font-weight:900;
+.cp-btn{height:5.8vh;min-width:min(20vh,92%);padding:0 1.8vh;border-radius:999px;font-size:1.72vh;font-weight:900;
   display:flex;align-items:center;justify-content:center;gap:.45vh;white-space:nowrap;transition:transform .12s;}
 .cp-btn:active{transform:scale(.97);}
 .cp-btn[hidden]{display:none !important;}
@@ -766,20 +845,21 @@ body.view-call .stage,body.view-call .side.left,body.view-call .helpboard{displa
   body.view-call .callview{grid-column:1;grid-row:2;}
 }
 @media (max-width:699px){
-  .pill.call{height:3.8vh;padding:0 .6vh;}
+  .pill.call{height:4.4vh;padding:0 .7vh;background:linear-gradient(135deg,#f7a6bd,#e2739a);color:#4a1226;box-shadow:0 .3vh .9vh rgba(204,77,118,.34);}
+  .pill.call.on{background:linear-gradient(135deg,#f09ab4,#c9557c);}
   .ct-back{height:2.9vh;font-size:.9vh;}
   .callview{grid-column:1;grid-row:1;display:none;gap:.6vh;overflow-y:auto;}
   body.view-call .callview{display:flex;flex-direction:column;}
-  .call-phone{flex:0 0 auto;padding:.6vh .9vh 1vh;border-radius:1.3vh;gap:.6vh;min-height:0;}
+  .call-phone{flex:0 0 auto;padding:.6vh .9vh 1vh;border-radius:1.3vh;gap:.55vh;min-height:0;}
   .cp-top{position:static;width:100%;font-size:.92vh;order:0;}
-  .cp-body{flex:0 0 auto;gap:.55vh;}
-  .cp-avatar{width:8.2vh;font-size:4.4vh;}
-  .cp-name b{font-size:1.85vh;}
-  .cp-name span{font-size:1.05vh;}
-  .cp-timer{font-size:3vh;}
-  .cp-wave{height:2.2vh;}
-  .cp-wave i{width:.42vh;}
-  .cp-btn{height:5vh;font-size:1.35vh;min-width:76%;}
+  .cp-body{flex:0 0 auto;gap:.5vh;}
+  .cp-avatar{width:min(15.5vh,42vw);font-size:min(7.6vh,3.6rem);}
+  .cp-name b{font-size:2.15vh;}
+  .cp-name span{font-size:1.1vh;}
+  .cp-timer{font-size:3.7vh;}
+  .cp-wave{height:2.6vh;gap:.4vh;}
+  .cp-wave i{width:.46vh;}
+  .cp-btn{height:5.2vh;font-size:1.45vh;min-width:76%;}
   .cp-sum{font-size:1.02vh;padding:.7vh .8vh;}
   .cp-note{font-size:.95vh;}
   .call-talk{flex:1 1 auto;min-height:0;}
@@ -947,6 +1027,35 @@ body.view-call .stage,body.view-call .side.left,body.view-call .helpboard{displa
   .sheet{width:92vw;}
   .sheet.wide{width:94vw;}
   .frow > span{flex:0 0 9vh;font-size:1.2vh;}
+}
+/* 📅 오늘의 단어 카드: 폰 커버에서는 3단어 + 1표현만 */
+@media (max-width:699px){
+  .daily{padding:.5vh .7vh .55vh;gap:.32vh;}
+  .daily-head b{font-size:1.2vh;}
+  .daily-head .dh-full{display:none;}
+  .daily-head .dh-mini{display:inline;}
+  .dt-lab-full{display:none;}
+  .daily-topic .dt-lab-mini{display:inline;}
+  .daily-head .dnote{display:none;}
+  .daily-head .dd{font-size:.92vh;}
+  .daily-topic{padding:.22vh .35vh;gap:.3vh;}
+  .daily-topic .dt-lab{font-size:.9vh;}
+  .daily-topic .dt-name{font-size:1.1vh;}
+  .daily-topic .dt-btn{height:2.9vh;font-size:.92vh;padding:0 .5vh;}
+  .daily-topic .dt-full{display:none;}
+  .daily-topic .dt-mini{display:inline;}
+  .daily-body{flex-direction:column;gap:.28vh;}
+  .dw-row{flex:0 0 auto;grid-template-columns:repeat(3,minmax(0,1fr));}
+  .dw-row .dw:nth-child(4){display:none;}
+  .dp-row{flex:0 0 auto;gap:.26vh;}
+  .dp-row .dp:nth-child(2){display:none;}
+  .dw{padding:.26vh .4vh;}
+  .dw .dw-jp{font-size:1.4vh;}
+  .dw .dw-sub{font-size:.94vh;}
+  .dp{padding:.24vh .38vh;}
+  .dp .dp-jp{font-size:1.34vh;}
+  .dp .dp-sub{font-size:.9vh;}
+  .dp .dp-use{height:2.7vh;font-size:.9vh;padding:0 .45vh;}
 }
 @media (max-width:400px){
   .brand b{font-size:1.36vh;}
@@ -1118,6 +1227,27 @@ body.view-call .stage,body.view-call .side.left,body.view-call .helpboard{displa
         </div>
       </div>
 
+      <!-- ================= 📅 오늘의 일상 단어 & 회화 표현 ================= -->
+      <section class="daily" id="dailyCard" data-day="" aria-label="오늘의 일상 단어와 회화 표현">
+        <div class="daily-head">
+          <b><span class="dh-full">📅 오늘의 일상 단어 &amp; 회화 표현</span><span class="dh-mini">📅 오늘의 단어·회화</span></b>
+          <span class="dd" id="dailyDate">—</span>
+          <span class="dnote">매일 아침 새로 바뀌어요</span>
+        </div>
+        <div class="daily-topic" id="dailyTopic">
+          <span class="dt-lab"><span class="dt-lab-full">📅 오늘의 회화 주제</span><span class="dt-lab-mini">📅 오늘 주제</span></span>
+          <b class="dt-name"><span id="dailyTopicEm">🎬</span><span id="dailyTopicName">—</span></b>
+          <button class="dt-btn talk" id="dailyTalkBtn" type="button" title="오늘의 주제로 선생님과 대화하기">
+            <span class="dt-full">💬 오늘 주제로 대화하기</span><span class="dt-mini">💬 대화</span></button>
+          <button class="dt-btn call" id="dailyCallBtn" type="button" title="오늘의 주제로 전화 일본어 시작하기">
+            <span class="dt-full">📞 오늘 주제로 전화</span><span class="dt-mini">📞 전화</span></button>
+        </div>
+        <div class="daily-body">
+          <div class="dw-row" id="dailyWords"></div>
+          <div class="dp-row" id="dailyPhrases"></div>
+        </div>
+      </section>
+
       <div class="logwrap"><div class="log" id="log" aria-live="polite"></div></div>
 
       <div class="inputbar">
@@ -1181,7 +1311,11 @@ body.view-call .stage,body.view-call .side.left,body.view-call .helpboard{displa
           <span class="cp-sig" id="callNet">통화 대기</span>
         </div>
         <div class="cp-body">
-          <div class="cp-avatar" aria-hidden="true"><span class="cp-ava-em">👩‍🏫</span></div>
+          <div class="cp-rings">
+            <i class="cp-ring a" aria-hidden="true"></i>
+            <i class="cp-ring b" aria-hidden="true"></i>
+            <div class="cp-avatar" aria-hidden="true"><span class="cp-ava-em">👩‍🏫</span></div>
+          </div>
           <div class="cp-name"><b id="callWho">유키 선생님 <i class="cp-ja">ゆき先生</i></b><span id="callStatus">전화를 걸어 볼까요?</span></div>
           <div class="cp-timer" id="callTimer">00:00</div>
           <div class="cp-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -1216,12 +1350,12 @@ body.view-call .stage,body.view-call .side.left,body.view-call .helpboard{displa
           <button class="ct-send" id="callSend" type="button">보내기</button>
         </div>
         <div class="ct-foot">
-          <button class="pickle-call" id="pickleCall" type="button">📲 피클과 직접 전화 일본어 하기</button>
-          <span class="pickle-note">피클 앱을 열어 진짜 AI 선생님과<br>전화로 이어서 말해요</span>
+          <button class="pickle-call" id="pickleCall" type="button">📲 피클과 오늘 주제로 전화하기</button>
+          <span class="pickle-note">피클 앱에서 전화하면 오늘 보드에 뜬 주제 그대로<br>대화를 이어가요</span>
         </div>
         <div class="pickle-hint" id="pickleHint" role="status" hidden>
           <span class="phx" aria-hidden="true">📲</span>
-          <div class="pht">전화 일본어는 피클 앱에서 이어져요<br>Safari/브라우저에서 바로 앱이 안 열리면 피클 채팅창에서 <b>'전화 일본어'</b>라고 말하거나 전화 버튼을 눌러 주세요!</div>
+          <div class="pht">전화는 피클 앱에서 이어져요<br>오늘 주제는 <b id="pickleTopic">—</b>예요. Safari/브라우저에서 바로 앱이 안 열리면 피클 채팅창에서 <b>'전화 일본어'</b>라고 말하거나 전화 버튼을 눌러 주세요!</div>
           <button class="phc" id="pickleHintClose" type="button" aria-label="안내 닫기">닫기</button>
         </div>
       </div>
@@ -1371,6 +1505,190 @@ var WORD_PRESETS = [
 ];
 function wordsFromPreset(i){
   return WORD_PRESETS[i % WORD_PRESETS.length].map(function(p){ return { jp:p[0], ko:p[1] }; });
+}
+
+/* =========================================================
+   1.5 📅 오늘의 일상 단어 & 회화 표현 (날짜마다 자동으로 바뀜)
+   ========================================================= */
+var DAILY_WORDS = [
+  { jp:"{朝|あさ}ごはん", pr:"아사고한", ko:"아침밥" },
+  { jp:"{昼|ひる}ごはん", pr:"히루고한", ko:"점심밥" },
+  { jp:"{晩|ばん}ごはん", pr:"반고한", ko:"저녁밥" },
+  { jp:"{歯|は}を{磨|みが}く", pr:"하오 미가쿠", ko:"이를 닦다" },
+  { jp:"{顔|かお}を{洗|あら}う", pr:"카오오 아라우", ko:"세수하다" },
+  { jp:"{服|ふく}を{着|き}る", pr:"후쿠오 키루", ko:"옷을 입다" },
+  { jp:"{靴|くつ}を{履|は}く", pr:"쿠츠오 하쿠", ko:"신발을 신다" },
+  { jp:"{鍵|かぎ}をかける", pr:"카기오 카케루", ko:"문을 잠그다" },
+  { jp:"{電気|でんき}をつける", pr:"덴키오 츠케루", ko:"불을 켜다" },
+  { jp:"{窓|まど}を{開|あ}ける", pr:"마도오 아케루", ko:"창문을 열다" },
+  { jp:"{洗濯|せんたく}", pr:"센타쿠", ko:"빨래" },
+  { jp:"{掃除|そうじ}", pr:"소오지", ko:"청소" },
+  { jp:"{料理|りょうり}", pr:"료오리", ko:"요리" },
+  { jp:"{買|か}い{物|もの}", pr:"카이모노", ko:"장보기" },
+  { jp:"{散歩|さんぽ}", pr:"산포", ko:"산책" },
+  { jp:"{運動|うんどう}", pr:"운도오", ko:"운동" },
+  { jp:"{天気|てんき}", pr:"덴키", ko:"날씨" },
+  { jp:"{雨|あめ}", pr:"아메", ko:"비" },
+  { jp:"{傘|かさ}", pr:"카사", ko:"우산" },
+  { jp:"{電車|でんしゃ}", pr:"덴샤", ko:"전철" },
+  { jp:"{会社|かいしゃ}", pr:"카이샤", ko:"회사" },
+  { jp:"{仕事|しごと}", pr:"시고토", ko:"일·직장" },
+  { jp:"{同僚|どうりょう}", pr:"도오료오", ko:"동료" },
+  { jp:"{会議|かいぎ}", pr:"카이기", ko:"회의" },
+  { jp:"{電話|でんわ}", pr:"덴와", ko:"전화" },
+  { jp:"{約束|やくそく}", pr:"야쿠소쿠", ko:"약속" },
+  { jp:"{時間|じかん}", pr:"지칸", ko:"시간" },
+  { jp:"{最近|さいきん}", pr:"사이킨", ko:"요즘" },
+  { jp:"{忙|いそが}しい", pr:"이소가시이", ko:"바쁘다" },
+  { jp:"{疲|つか}れた", pr:"츠카레타", ko:"피곤하다" },
+  { jp:"{眠|ねむ}い", pr:"네무이", ko:"졸리다" },
+  { jp:"{美味|おい}しい", pr:"오이시이", ko:"맛있다" },
+  { jp:"{安|やす}い", pr:"야스이", ko:"싸다" },
+  { jp:"{高|たか}い", pr:"타카이", ko:"비싸다" },
+  { jp:"{広|ひろ}い", pr:"히로이", ko:"넓다" },
+  { jp:"{近|ちか}い", pr:"치카이", ko:"가깝다" },
+  { jp:"{家族|かぞく}", pr:"카조쿠", ko:"가족" },
+  { jp:"{子|こ}ども", pr:"코도모", ko:"아이" },
+  { jp:"{友|とも}だち", pr:"토모다치", ko:"친구" },
+  { jp:"{病院|びょういん}", pr:"뵤오인", ko:"병원" },
+  { jp:"{薬|くすり}", pr:"쿠스리", ko:"약" },
+  { jp:"{銀行|ぎんこう}", pr:"긴코오", ko:"은행" },
+  { jp:"{郵便局|ゆうびんきょく}", pr:"유우빈쿄쿠", ko:"우체국" },
+  { jp:"{予約|よやく}", pr:"요야쿠", ko:"예약" },
+  { jp:"{食|た}べる", pr:"타베루", ko:"먹다" },
+  { jp:"{飲|の}む", pr:"노무", ko:"마시다" },
+  { jp:"{寝|ね}る", pr:"네루", ko:"자다" },
+  { jp:"{起|お}きる", pr:"오키루", ko:"일어나다" },
+  { jp:"{帰|かえ}る", pr:"카에루", ko:"돌아가다" },
+  { jp:"{待|ま}つ", pr:"마츠", ko:"기다리다" },
+  { jp:"{休|やす}む", pr:"야스무", ko:"쉬다" },
+  { jp:"{台所|だいどころ}", pr:"다이도코로", ko:"부엌" },
+  { jp:"{部屋|へや}", pr:"헤야", ko:"방" },
+  { jp:"{玄関|げんかん}", pr:"겐칸", ko:"현관" },
+  { jp:"{弁当|べんとう}", pr:"벤토오", ko:"도시락" },
+  { jp:"{味噌汁|みそしる}", pr:"미소시루", ko:"된장국" },
+  { jp:"{茶|ちゃ}", pr:"차", ko:"차" },
+  { jp:"{牛乳|ぎゅうにゅう}", pr:"규우뉴우", ko:"우유" },
+  { jp:"{卵|たまご}", pr:"타마고", ko:"달걀" },
+  { jp:"{野菜|やさい}", pr:"야사이", ko:"채소" }
+];
+var DAILY_PHRASES = [
+  { jp:"おはようございます。", pr:"오하요오 고자이마스", ko:"좋은 아침이에요" },
+  { jp:"いってきます。", pr:"잇테키마스", ko:"다녀오겠습니다" },
+  { jp:"いってらっしゃい。", pr:"잇테랏샤이", ko:"다녀오세요" },
+  { jp:"ただいま。", pr:"타다이마", ko:"다녀왔습니다" },
+  { jp:"おかえりなさい。", pr:"오카에리나사이", ko:"다녀오셨어요" },
+  { jp:"いただきます。", pr:"이타다키마스", ko:"잘 먹겠습니다" },
+  { jp:"ごちそうさまでした。", pr:"고치소오사마데시타", ko:"잘 먹었습니다" },
+  { jp:"おやすみなさい。", pr:"오야스미나사이", ko:"안녕히 주무세요" },
+  { jp:"お{疲|つか}れさまです。", pr:"오츠카레사마데스", ko:"수고하셨습니다" },
+  { jp:"お{世話|せわ}になっております。", pr:"오세와니 낫테오리마스", ko:"신세 지고 있습니다" },
+  { jp:"{今日|きょう}は{寒|さむ}いですね。", pr:"쿄오와 사무이데스네", ko:"오늘은 춥네요" },
+  { jp:"{少|すこ}し{待|ま}ってください。", pr:"스코시 맛테 쿠다사이", ko:"조금 기다려 주세요" },
+  { jp:"もう{一度|いちど}{言|い}ってください。", pr:"모오 이치도 잇테 쿠다사이", ko:"다시 한 번 말해 주세요" },
+  { jp:"{写真|しゃしん}を{撮|と}ってもいいですか？", pr:"샤신오 톳테모 이이데스카", ko:"사진 찍어도 될까요?" },
+  { jp:"{駅|えき}はどこですか？", pr:"에키와 도코데스카", ko:"역은 어디예요?" },
+  { jp:"これをください。", pr:"코레오 쿠다사이", ko:"이거 주세요" },
+  { jp:"{全部|ぜんぶ}でいくらですか？", pr:"젠부데 이쿠라데스카", ko:"전부 얼마예요?" },
+  { jp:"お{会計|かいけい}をお{願|ねが}いします。", pr:"오카이케이오 오네가이시마스", ko:"계산 부탁드려요" },
+  { jp:"{大丈夫|だいじょうぶ}です。", pr:"다이조오부데스", ko:"괜찮아요" },
+  { jp:"{気|き}をつけてください。", pr:"키오 츠케테 쿠다사이", ko:"조심하세요" },
+  { jp:"また{明日|あした}。", pr:"마타 아시타", ko:"내일 봐요" },
+  { jp:"{手伝|てつだ}いましょうか？", pr:"테츠다이마쇼오카", ko:"도와드릴까요?" },
+  { jp:"ゆっくり{話|はな}してください。", pr:"윳쿠리 하나시테 쿠다사이", ko:"천천히 말해 주세요" },
+  { jp:"お{名前|なまえ}は{何|なん}ですか？", pr:"오나마에와 난데스카", ko:"이름이 뭐예요?" },
+  { jp:"どこから{来|き}ましたか？", pr:"도코카라 키마시타카", ko:"어디서 오셨어요?" },
+  { jp:"{日本語|にほんご}を{少|すこ}し{勉強|べんきょう}しています。", pr:"니혼고오 스코시 벤쿄오시테이마스", ko:"일본어를 조금 공부하고 있어요" },
+  { jp:"{今日|きょう}はいい{天気|てんき}ですね。", pr:"쿄오와 이이 덴키데스네", ko:"오늘 날씨 좋네요" },
+  { jp:"お{元気|げんき}ですか？", pr:"오겐키데스카", ko:"잘 지내세요?" },
+  { jp:"また{電話|でんわ}します。", pr:"마타 덴와시마스", ko:"다시 전화할게요" },
+  { jp:"{無理|むり}をしないでください。", pr:"무리오 시나이데 쿠다사이", ko:"무리하지 마세요" }
+];
+function daySeed(d){
+  d = d || new Date();
+  return (d.getFullYear() * 372 + (d.getMonth() + 1) * 31 + d.getDate()) | 0;
+}
+function parseDay(s){
+  var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || ""));
+  return m ? new Date(+m[1], +m[2] - 1, +m[3]) : new Date();
+}
+function dailyRng(seed){
+  var a = seed | 0;
+  return function(){
+    a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function dailyTake(list, n, seed){
+  var idx = [], i, j, t, r = dailyRng(seed);
+  for (i = 0; i < list.length; i++) idx.push(i);
+  for (i = list.length - 1; i > 0; i--){
+    j = Math.floor(r() * (i + 1));
+    t = idx[i]; idx[i] = idx[j]; idx[j] = t;
+  }
+  return idx.slice(0, n).map(function(k){ return list[k]; });
+}
+function dailyPick(dayStr){
+  var d = dayStr ? parseDay(dayStr) : new Date();
+  var seed = daySeed(d);
+  return {
+    date: dateKey(d),
+    words: dailyTake(DAILY_WORDS, 4, seed * 3 + 11),
+    phrases: dailyTake(DAILY_PHRASES, 2, seed * 5 + 7)
+  };
+}
+function dailyPlainList(pk){ return { date:pk.date,
+  words:pk.words.map(function(w){ return plain(w.jp); }),
+  phrases:pk.phrases.map(function(p){ return plain(p.jp); }) }; }
+
+/* ---------- 📅 오늘의 회화 주제 (날짜마다 자동 · 피클과 같은 규칙) ----------
+   index = (YYYY-MM-DD를 UTC 자정으로 본 1970-01-01부터의 일수) mod DAILY_TOPICS.length */
+var DAILY_TOPICS = [
+  { id:"anime-fav", em:"🎬", name:"좋아하는 애니·캐릭터 이야기", scen:"anime",
+    q:"{好|す}きなアニメやキャラクターは{何|なん}ですか？", ko:"좋아하는 애니나 캐릭터는 뭐예요?", pr:"스키나 아니메야 캬라쿠타아와 난데스카?" },
+  { id:"ramen", em:"🍜", name:"일본 라멘·맛집 이야기", scen:"travel",
+    q:"日本で{食|た}べてみたいものは{何|なん}ですか？", ko:"일본에서 먹어 보고 싶은 건 뭐예요?", pr:"니혼데 타베테미타이 모노와 난데스카?" },
+  { id:"morning", em:"☀️", name:"아침에 하는 일 이야기", scen:"daily",
+    q:"朝、{起|お}きてから{何|なに}をしますか？", ko:"아침에 일어나서 뭐 해요?", pr:"아사, 오키테카라 나니오 시마스카?" },
+  { id:"anime-line", em:"💬", name:"애니 명대사 이야기", scen:"phrases",
+    q:"{好|す}きなアニメの{名言|めいげん}はありますか？", ko:"좋아하는 애니 명대사가 있어요?", pr:"스키나 아니메노 메이겐와 아리마스카?" },
+  { id:"travel-spot", em:"🗾", name:"일본에서 가 보고 싶은 곳", scen:"travel",
+    q:"日本で{行|い}ってみたいところはどこですか？", ko:"일본에서 가 보고 싶은 곳은 어디예요?", pr:"니혼데 잇테미타이 토코로와 도코데스카?" },
+  { id:"weekend", em:"🏠", name:"주말에 하는 일 이야기", scen:"daily",
+    q:"{週末|しゅうまつ}は{何|なに}をしますか？", ko:"주말에는 뭐 해요?", pr:"슈우마츠와 나니오 시마스카?" },
+  { id:"anime-scene", em:"⚔️", name:"좋아하는 애니 장면 이야기", scen:"anime",
+    q:"アニメのどんなシーンが{好|す}きですか？", ko:"애니의 어떤 장면을 좋아해요?", pr:"아니메노 돈나 시인가 스키데스카?" },
+  { id:"jfood", em:"🍚", name:"좋아하는 일본 음식 이야기", scen:"daily",
+    q:"{好|す}きな日本の{料理|りょうり}は{何|なん}ですか？", ko:"좋아하는 일본 음식은 뭐예요?", pr:"스키나 니혼노 료오리와 난데스카?" },
+  { id:"train", em:"🚃", name:"일본 전철·길 찾기 이야기", scen:"travel",
+    q:"日本で{電車|でんしゃ}に{乗|の}ったことがありますか？", ko:"일본에서 전철 탄 적 있어요?", pr:"니혼데 덴샤니 놋타 코토가 아리마스카?" },
+  { id:"family", em:"👨‍👩‍👦", name:"가족·집 이야기", scen:"daily",
+    q:"{家族|かぞく}とよく{何|なに}をしますか？", ko:"가족과 자주 뭐 해요?", pr:"카조쿠토 요쿠 나니오 시마스카?" },
+  { id:"anime-song", em:"🎵", name:"애니 주제가·음악 이야기", scen:"anime",
+    q:"{好|す}きなアニメの{歌|うた}はありますか？", ko:"좋아하는 애니 노래가 있어요?", pr:"스키나 아니메노 우타와 아리마스카?" },
+  { id:"feeling", em:"😆", name:"오늘 기분·감정 표현", scen:"phrases",
+    q:"{今日|きょう}の{気分|きぶん}はどうですか？", ko:"오늘 기분이 어때요?", pr:"쿄오노 키분와 도오데스카?" },
+  { id:"shopping", em:"🛍️", name:"일본 쇼핑·면세점 이야기", scen:"travel",
+    q:"日本で{買|か}いたいものはありますか？", ko:"일본에서 사고 싶은 게 있어요?", pr:"니혼데 카이타이 모노와 아리마스카?" },
+  { id:"weather-day", em:"🌤️", name:"오늘 날씨·하루 이야기", scen:"daily",
+    q:"{今日|きょう}はどんな{一日|いちにち}でしたか？", ko:"오늘은 어떤 하루였어요?", pr:"쿄오와 돈나 이치니치데시타카?" }
+];
+var DAILY_TOPIC_LEN = DAILY_TOPICS.length;
+function dailyTopicIndex(dayStr){
+  var d = dayStr ? parseDay(dayStr) : new Date();
+  var days = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+  return ((days % DAILY_TOPIC_LEN) + DAILY_TOPIC_LEN) % DAILY_TOPIC_LEN;
+}
+function dailyTopic(dayStr){
+  var i = dailyTopicIndex(dayStr), t = DAILY_TOPICS[i];
+  return { idx:i, total:DAILY_TOPIC_LEN, id:t.id, em:t.em, name:t.name, scen:t.scen,
+           jp:t.q, ko:t.ko, pr:t.pr, date:dateKey(dayStr ? parseDay(dayStr) : new Date()) };
+}
+function dailyTopicLine(dayStr){
+  var t = dailyTopic(dayStr);
+  return t.em + " " + t.name + " (" + plain(t.jp) + ")";
 }
 
 /* =========================================================
@@ -2181,7 +2499,9 @@ var el = {};
  "topics","icTop","icDesc","icChips","btnInterest","wwGrid","dashLink","toast","furiToggle","autoRead",
  "settingsModal","wordsModal","learnModal","learnList","learnTotal","aiProvider","aiKey","aiModel","engineInfo",
  "dashUrl","btnSettings","btnEditWords","wordEditGrid","btnPreset","btnSaveWords","btnSaveSettings","btnResetTalk",
- "btnMicJp","btnMicKo","btnHint","btnSend","btnSpeak","btnSlow","btnKo","rpTabs","mobileTabs","interestCard"
+ "btnMicJp","btnMicKo","btnHint","btnSend","btnSpeak","btnSlow","btnKo","rpTabs","mobileTabs","interestCard",
+ "dailyCard","dailyDate","dailyWords","dailyPhrases",
+ "dailyTopic","dailyTopicEm","dailyTopicName","dailyTalkBtn","dailyCallBtn"
 ].forEach(function(id){ el[id] = $(id); });
 
 /* =========================================================
@@ -2229,6 +2549,69 @@ function renderWords(){
       + ' aria-label="' + esc(plain(wd.jp)) + ' 외웠어요" title="외웠어요">✓</button></div>';
   }).join("");
 }
+/* ---------- 📅 오늘의 일상 단어 & 회화 표현 ---------- */
+var dailyNow = { date:"", words:[], phrases:[] };
+function dailyLabel(ds){
+  var d = parseDay(ds), wd = ["일","월","화","수","목","금","토"][d.getDay()];
+  return (d.getMonth() + 1) + "월 " + d.getDate() + "일 (" + wd + ")";
+}
+function dailyPulse(node){
+  if (!node) return;
+  node.classList.remove("playing"); void node.offsetWidth; node.classList.add("playing");
+  setTimeout(function(){ node.classList.remove("playing"); }, 900);
+}
+function renderDaily(){
+  var pk = dailyPick(TODAY);
+  dailyNow = pk;
+  if (el.dailyCard) el.dailyCard.setAttribute("data-day", pk.date);
+  if (el.dailyDate) el.dailyDate.textContent = dailyLabel(pk.date);
+  if (el.dailyWords) el.dailyWords.innerHTML = pk.words.map(function(w, i){
+    return '<div class="dw" role="button" tabindex="0" data-dw="' + i + '" data-say="' + esc(plain(w.jp)) + '"'
+      + ' aria-label="' + esc(plain(w.jp)) + ' ' + esc(w.ko) + ' 발음 듣기">'
+      + '<span class="dw-jp"><span class="dw-t">' + html(w.jp) + '</span><span class="dw-sp" aria-hidden="true">🔊</span></span>'
+      + '<span class="dw-sub"><span class="dw-pr">' + esc(w.pr) + '</span>'
+      + '<span class="dw-sep" aria-hidden="true">·</span><span class="dw-ko">' + esc(w.ko) + '</span></span>'
+      + '</div>';
+  }).join("");
+  if (el.dailyPhrases) el.dailyPhrases.innerHTML = pk.phrases.map(function(p, i){
+    return '<div class="dp" data-dp="' + i + '" data-say="' + esc(plain(p.jp)) + '">'
+      + '<button class="dp-sp" type="button" aria-label="' + esc(plain(p.jp)) + ' 발음 듣기">🔊</button>'
+      + '<span class="dp-txt"><span class="dp-jp">' + html(p.jp) + '</span>'
+      + '<span class="dp-sub"><span class="dp-pr">' + esc(p.pr) + '</span>'
+      + '<span class="dp-sep" aria-hidden="true">·</span><span class="dp-ko">' + esc(p.ko) + '</span></span></span>'
+      + '<button class="dp-use" type="button" data-use="' + i + '" aria-label="' + esc(plain(p.jp)) + ' 입력창에 넣어 보기">💬 써보기</button>'
+      + '</div>';
+  }).join("");
+  /* 📅 오늘의 회화 주제 */
+  var tp = dailyTopic(pk.date);
+  dailyNow.topic = tp;
+  if (el.dailyCard) el.dailyCard.setAttribute("data-topic", tp.id);
+  if (el.dailyTopicEm) el.dailyTopicEm.textContent = tp.em;
+  if (el.dailyTopicName) el.dailyTopicName.textContent = tp.name;
+  var pt = $("pickleTopic"); if (pt) pt.textContent = tp.em + " " + tp.name;
+}
+
+function startDailyTopicTalk(){
+  var t = dailyNow.topic || dailyTopic(TODAY);
+  startTalk("topic", t.scen, { hook:t, sys:"📅 오늘의 회화 주제 · " + t.em + " " + t.name });
+  if (isPhone()) setPanel("talk");
+  toast("오늘의 주제로 대화를 시작했어요 · " + t.em + " " + t.name);
+}
+function startDailyTopicCall(){
+  var t = dailyNow.topic || dailyTopic(TODAY);
+  state.topic = t.scen; save(); renderTopics();
+  setPanel("call");
+  callStart({ hook:t });
+  setTimeout(function(){ toast("📞 오늘의 주제로 전화를 걸었어요 · " + t.em + " " + t.name); }, 400);
+}
+function dailyUsePhrase(p){
+  if (!p || !el.answerInput) return;
+  el.answerInput.value = plain(p.jp);
+  if (isPhone() && !document.body.classList.contains("view-talk")) setPanel("talk");
+  try { el.answerInput.focus(); } catch(e){}
+  toast("오늘의 표현을 입력창에 넣었어요 · 보내기를 눌러 연습해 보세요!");
+}
+
 function toggleWord(i){
   var wd = state.words[i]; if (!wd) return;
   var k = wkey(wd.jp);
@@ -2460,6 +2843,14 @@ function startTalk(type, id, opts){
   cur = { type:type, id:id, step:0, steps:pack.steps };
   state.mode = type;
   if (type === "topic") state.topic = id;
+  /* 📅 오늘의 회화 주제로 시작하면 첫 질문을 그 주제 질문으로 바꾼다 */
+  if (opts.hook && opts.hook.jp){
+    var hs = cur.steps.slice(), base = hs[0] || {}, hq = [];
+    var hstep = { jp:opts.hook.jp, ko:opts.hook.ko || "", pr:opts.hook.pr || "" };
+    hq.push(hstep); hq.push(hstep); hq.push(hstep);
+    hs[0] = { q:hq, h:base.h, react:base.react };
+    cur.steps = hs;
+  }
   lastCoach = null; hintOpen = false;
   el.coach.hidden = true; el.coachEmpty.hidden = false;
   el.aiBadge.hidden = true;
@@ -2734,6 +3125,7 @@ function askAIChat(t, prev){
     + "question (the ONE Japanese follow-up question), question_ko (its Korean meaning), "
     + "hint (one short Korean tip about 반말/존댓말 or a useful word), words (2-3 items of {jp, ko}). No markdown, no extra text.";
   var user = "Topic: " + (pack ? pack.name + " (" + pack.ja + ")" : "free talk") + "\n"
+    + "Today's theme on his board: " + dailyTopicLine() + " (keep the talk on it when it fits)\n"
     + "Level: " + state.level + "/3\n"
     + "The teacher's last question was: " + (prev ? plain(prev.jp) : "-") + "\n"
     + "Recent conversation:\n" + (dialogTail(8) || "(just started)") + "\n"
@@ -2994,6 +3386,29 @@ function bind(){
     speak(state.words[i] ? state.words[i].jp : card.getAttribute("data-word"), false);
   });
 
+  el.dailyWords.addEventListener("click", function(e){
+    var card = e.target.closest ? e.target.closest(".dw") : null;
+    if (!card) return;
+    dailyPulse(card);
+    speak(card.getAttribute("data-say"), false);
+  });
+  el.dailyWords.addEventListener("keydown", function(e){
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var card = e.target.closest ? e.target.closest(".dw") : null;
+    if (!card) return;
+    e.preventDefault(); dailyPulse(card); speak(card.getAttribute("data-say"), false);
+  });
+  if (el.dailyTalkBtn) el.dailyTalkBtn.addEventListener("click", startDailyTopicTalk);
+  if (el.dailyCallBtn) el.dailyCallBtn.addEventListener("click", startDailyTopicCall);
+  el.dailyPhrases.addEventListener("click", function(e){
+    var use = e.target.closest ? e.target.closest(".dp-use") : null;
+    if (use){ dailyUsePhrase(dailyNow.phrases[parseInt(use.getAttribute("data-use"), 10)]); return; }
+    var sp = e.target.closest ? e.target.closest(".dp-sp") : null;
+    if (!sp) return;
+    var row = sp.closest(".dp");
+    dailyPulse(row); speak(row.getAttribute("data-say"), false);
+  });
+
   el.coachWords.addEventListener("click", function(e){
     var b = e.target.closest ? e.target.closest(".wcard") : null;
     if (b) speak(b.getAttribute("data-wspeak"), false);
@@ -3133,7 +3548,7 @@ var CALL_BANK = {
 };
 
 var CALL = { phase:"idle", step:0, turns:0, jpTurns:0, koTurns:0, sec:0, timer:null, slow:false, hint:true,
-             last:null, lastChild:"", lines:[], aiSeq:0, bound:false };
+             last:null, lastChild:"", lines:[], aiSeq:0, bound:false, hook:null };
 
 function callPad2(n){ return n < 10 ? "0" + n : "" + n; }
 function callFmt(sec){ sec = Math.max(0, Math.round(sec || 0)); return callPad2(Math.floor(sec / 60)) + ":" + callPad2(sec % 60); }
@@ -3151,7 +3566,10 @@ function callRec(){
 }
 function callTopic(){ return SCEN[state.topic] || SCEN.anime; }
 function callBank(){ return CALL_BANK[state.topic] || CALL_BANK.anime; }
-function callCtx(){ var t = callTopic(); return t.emoji + " " + t.name + " · Lv." + state.level; }
+function callCtx(){
+  if (CALL.hook && CALL.hook.name) return CALL.hook.em + " 오늘의 주제 · " + CALL.hook.name + " · Lv." + state.level;
+  var t = callTopic(); return t.emoji + " " + t.name + " · Lv." + state.level;
+}
 /* 지금 난이도에 맞는 질문 한 줄 */
 function callQ(item){
   if (!item) return "";
@@ -3242,8 +3660,12 @@ function callPaintIdle(){
 /* ---------- 통화 시작 / 진행 / 종료 ---------- */
 function callTick(){ CALL.sec++; var t = $("callTimer"); if (t) t.textContent = callFmt(CALL.sec); }
 
-function callStart(){
+function callStart(opts){
   if (CALL.phase === "live" || CALL.phase === "ringing") return;
+  CALL.hook = (opts && opts.hook && opts.hook.jp) ? opts.hook : null;
+  var tpEl = $("callTopic"); if (tpEl) tpEl.textContent = callCtx();
+  var ntEl = $("callNote");
+  if (ntEl && CALL.hook) ntEl.textContent = "오늘의 주제로 전화 중 · " + CALL.hook.em + " " + CALL.hook.name + " · 🎧 이어폰을 끼면 더 잘 들려요";
   /* iOS Safari: 버튼을 누른 그 순간에 읽어주기를 한 번 깨워 둬야 1.3초 뒤 질문도 들린다 */
   try {
     if (window.speechSynthesis && typeof SpeechSynthesisUtterance !== "undefined"){
@@ -3270,6 +3692,12 @@ function callStart(){
 function callAsk(i){
   var pack = callBank();
   var item = pack[i] || null;
+  /* 📅 오늘의 회화 주제로 건 전화: 첫 질문은 오늘의 주제 질문 */
+  if (i === 0 && CALL.hook && CALL.hook.jp){
+    callSay(CALL.hook.jp, CALL.hook.ko || "", CALL.hook.pr || "");
+    callQuick(item ? item.quick : []);
+    return;
+  }
   if (!item){ callSay(CALL_CLOSE.jp, CALL_CLOSE.ko, CALL_CLOSE.pr); callQuick([]); callBeat(); return; }
   callSay(callQ(item), item.ko, item.pr);
   callQuick(item.quick);
@@ -3354,6 +3782,7 @@ function callAI(text, item, next){
     + "Return ONLY minified JSON with keys: say (Japanese), ko (Korean meaning of say), pr (Korean reading of say), "
     + "quick (2-3 short Japanese answers he could say next, each \"Japanese|Korean\"). No extra text.";
   var user = "Topic: " + callTopic().name + " (" + callTopic().ja + ")\n"
+    + "Today's theme on his board: " + (CALL.hook ? CALL.hook.em + " " + CALL.hook.name + " (" + plain(CALL.hook.jp) + ")" : dailyTopicLine()) + " (keep the talk on it when it fits)\n"
     + "Level: " + state.level + "/3\n"
     + "The teacher's last question was: " + plain(callQ(item)) + "\n"
     + "Phone call so far:\n" + callTail(8) + "\n"
@@ -3475,6 +3904,7 @@ function callPickle(){
 
 /* ---------- 화면 진입 / 이탈 ---------- */
 function callEnter(){
+  if (CALL.phase !== "live" && CALL.phase !== "ringing") CALL.hook = null;
   callPaintIdle();
   if (CALL.phase !== "live" && CALL.phase !== "ringing") callSetPhase("idle");
   var hb = $("callHint"); if (hb) hb.setAttribute("aria-pressed", CALL.hint ? "true" : "false");
@@ -3586,6 +4016,7 @@ function init(){
   el.btnKo.classList.toggle("on", state.koView);
   el.btnKo.setAttribute("aria-pressed", state.koView ? "true" : "false");
   renderWords();
+  renderDaily();
   renderInterest();
   renderCounts();
   updateDashLink();
@@ -3600,6 +4031,11 @@ window.JPN = {
   SCEN:SCEN, INTERESTS:INTERESTS, handleUser:handleUser, setLevel:setLevel, startTalk:startTalk,
   setPanel:setPanel, setFuri:setFuri, today:function(){ return TODAY; }, cur:function(){ return cur; },
   call:callApi,
+  daily:{ pick:dailyPick, list:dailyPlainList, words:DAILY_WORDS, phrases:DAILY_PHRASES,
+          render:renderDaily, use:dailyUsePhrase, date:function(){ return dailyNow.date; },
+          shown:function(){ return dailyPlainList(dailyNow); },
+          topics:DAILY_TOPICS, topic:dailyTopic, index:dailyTopicIndex, line:dailyTopicLine,
+          now:function(){ return dailyNow.topic; }, startTalk:startDailyTopicTalk, startCall:startDailyTopicCall },
   lastSay:function(){ return curSay; },
   plain:plain, html:html
 };
