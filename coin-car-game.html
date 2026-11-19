@@ -340,6 +340,85 @@
   .stageCell.locked{ background:#f1f1f1; color:#b8c0c8; box-shadow:0 3px 0 #e2e2e2; cursor:default; }
   .stageCell.locked small{ color:#b8c0c8; }
   .stageCell:active{ transform:translateY(2px); }
+
+  /* ---------- 🗺️ 전체 월드맵 (6개 마을 길) ---------- */
+  .wMap{
+    position:relative; width:100%;
+    --wmh: 372px; --wnw: 106px; --wnode: 27px;
+    height: var(--wmh); margin: 2px 0 6px;
+  }
+  .wMap.compact{ --wmh: 168px; --wnw: 72px; --wnode: 20px; }
+  svg.wRoad{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+  svg.wRoad path{ fill:none; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+  svg.wRoad .wBase{ stroke:#ffffff; stroke-width:14; opacity:.9; }
+  svg.wRoad .wOn{ stroke:#5fd39a; stroke-width:8; }
+  svg.wRoad .wOff{ stroke:#c6d4dd; stroke-width:8; stroke-dasharray:1 10; }
+  .wNode{
+    position:absolute; transform:translate(-50%,-50%);
+    width:var(--wnw); padding:6px 4px 5px; border:none; cursor:pointer;
+    font-family:var(--font); color:#2b3f4d; background:#fff;
+    border-radius:19px; border:3px solid #d9e6ee;
+    box-shadow:0 5px 0 #cdd9e1, 0 8px 14px rgba(20,50,70,.12);
+    display:flex; flex-direction:column; align-items:center; gap:1px;
+    text-align:center; line-height:1.1;
+  }
+  .wNode .wBadge{ position:absolute; top:-12px; right:-9px; font-size:16px; line-height:1;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.18)); }
+  .wNode .wIcon{ font-size:var(--wnode); line-height:1.1; }
+  .wNode .wName{ font-weight:900; font-size:11.5px; letter-spacing:-.5px; white-space:nowrap; }
+  .wNode .wBar{ display:block; width:80%; height:5px; border-radius:99px; background:#eef2f5; overflow:hidden; margin-top:2px; }
+  .wNode .wBar i{ display:block; height:100%; background:#2dbd6e; border-radius:99px; }
+  .wNode .wProg{ font-weight:900; font-size:10px; color:#8b98a3; letter-spacing:-.2px; }
+  .wNode.open{ border-color:#ffe6a8; box-shadow:0 5px 0 #f1e0bb, 0 8px 14px rgba(20,50,70,.12); }
+  .wNode.done{ border-color:#8fe0b4; background:#f4fff9; }
+  .wNode.cur{ border-color:#ffb703; background:#fffaf0;
+    box-shadow:0 5px 0 #efc468, 0 10px 18px rgba(190,120,0,.24); }
+  .wNode.cur .wBadge{ animation:curBob 1.4s ease-in-out infinite; }
+  @keyframes curBob{ 0%,100%{ transform:translateY(0) scale(1) } 50%{ transform:translateY(-4px) scale(1.08) } }
+  .wNode.locked{ background:#f3f5f7; border-color:#e4eaee; color:#a9b4bd; box-shadow:0 5px 0 #e7ecef; }
+  .wNode.locked .wIcon{ filter:grayscale(1); opacity:.5; }
+  .wNode.locked .wProg{ color:#b3bcc4; }
+  .wNode:active{ transform:translate(-50%,calc(-50% + 2px)); }
+  .wMap.compact .wNode{ border-radius:15px; padding:4px 2px 3px; }
+  .wMap.compact .wName{ font-size:9px; }
+  .wMap.compact .wBar{ height:4px; }
+  .wMap.compact .wProg{ font-size:8.5px; }
+  .wMap.compact .wBadge{ font-size:13px; top:-9px; right:-6px; }
+
+  /* ---------- 마을 안 스테이지 레벨 길 ---------- */
+  .sMap{
+    position:relative; width:100%;
+    --smh: 244px; --snw: 64px; --snf: 12.5px;
+    height: var(--smh); margin: 2px 0 6px;
+  }
+  .sMap.compact{ --smh: 158px; --snw: 50px; --snf: 11px; }
+  .sNode{
+    position:absolute; transform:translate(-50%,-50%);
+    width:var(--snw); height:calc(var(--snw) * .92); border:none; cursor:pointer;
+    font-family:var(--font); font-weight:900; font-size:var(--snf); line-height:1.05;
+    background:#eef7ff; color:#2b3f4d; box-shadow:0 4px 0 #d3e6f5;
+    border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+  }
+  .sNode small{ font-size:11px; line-height:1; }
+  .sNode.done{ background:#e9fbf1; color:#1a7a48; box-shadow:0 4px 0 #bfe8cf; }
+  .sNode.locked{ background:#f1f3f5; color:#b8c0c8; box-shadow:0 4px 0 #e2e2e2; }
+  .sNode.cur{ background:#fffaf0; color:#9a5b00; box-shadow:0 4px 0 #f0c66a, 0 0 0 5px rgba(255,183,3,.20); }
+  .sNode .sCar{ position:absolute; top:-13px; font-size:15px; line-height:1; animation:sHop .9s ease-in-out infinite; }
+  @keyframes sHop{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-3px) } }
+  .sNode:active{ transform:translate(-50%,calc(-50% + 2px)); }
+
+  /* ---------- 안내 토스트 ---------- */
+  #toast{
+    position:fixed; left:50%; bottom:calc(26px + env(safe-area-inset-bottom));
+    transform:translate(-50%, 18px); opacity:0; pointer-events:none; z-index:60;
+    max-width:min(86vw, 420px); text-align:center;
+    background:rgba(35,48,60,.94); color:#fff; font-weight:900; font-size:13.5px;
+    padding:11px 16px; border-radius:16px; line-height:1.35; letter-spacing:-.3px;
+    box-shadow:0 8px 20px rgba(10,25,40,.35);
+    transition:opacity .16s ease-out, transform .16s ease-out;
+  }
+  #toast.on{ opacity:1; transform:translate(-50%, 0); }
+
   .pillNote{
     display:flex; align-items:center; gap:7px; background:#fff; border-radius:16px;
     padding:9px 12px; box-shadow:0 3px 0 #f1e6cf; margin-bottom:10px;
@@ -411,6 +490,17 @@
     box-shadow:0 3px 0 #ddd0ba; font-family:var(--font);
   }
   .vTitle{ margin:0; font-size:19px; color:#2b3f4d; letter-spacing:-.5px; }
+  .vHead{ display:flex; align-items:center; gap:7px; margin-bottom:9px; }
+  .vHead .vTitle{ flex:1 1 auto; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .vHead .wallet{ margin-left:0; flex:0 0 auto; }
+  .vHead .backBtn, .vHead .xbtn{ flex:0 0 auto; }
+  @media (max-width: 430px){
+    .vHead{ gap:5px; }
+    .vHead .vTitle{ font-size:15.5px; }
+    .vHead .backBtn{ padding:7px 8px; font-size:11.5px; }
+    .vHead .wallet{ padding:3px 9px 3px 4px; }
+    .vHead .wallet b{ font-size:14px; }
+  }
 
   /* small landscape phones */
   @media (max-height: 430px){
@@ -873,16 +963,50 @@
   function villageBy(id){ return VILLAGES[(id | 0) - 1] || VILLAGES[0]; }
   function stageKey(v, n){ return v + '-' + n; }
   function stageCleared(v, n){ return !!save.cleared[stageKey(v, n)]; }
+
+  /* ---------- 🔒 순차 해금 ----------
+     처음엔 초원 마을 1탄만 열려 있고,
+     한 탄을 성공해야 다음 탄이, 10탄을 성공해야 다음 마을 1탄이 열립니다. */
+  function progressOf(v){ return clamp(save.villageProgress[v] | 0, 0, 10); }
+  // 이 마을에서 이미 지나온 탄 수 (클리어 기록 + 예전 저장의 진행도)
+  function passedCount(v){
+    var leg = progressOf(v), c = 0;
+    for (var n = 1; n <= 10; n++){
+      if (stageCleared(v, n) || leg >= n) c = n; else break;
+    }
+    return c;
+  }
+  function villageOpen(v){
+    v = clamp(v | 0, 1, 6);
+    if (v <= 1) return true;
+    return passedCount(v - 1) >= 10;
+  }
+  function villageDone(v){ return villageOpen(v) ? passedCount(v) : 0; }
   function stageOpen(v, n){
+    if (!villageOpen(v)) return false;
     if (n <= 1) return true;
-    return stageCleared(v, n - 1) || (save.villageProgress[v] | 0) >= n - 1;
+    return passedCount(v) >= n - 1;
+  }
+  // 지금 도전할 탄 (다음에 깨야 할 탄)
+  function nextChallenge(v){
+    var d = villageDone(v);
+    return clamp(d + 1, 1, 10);
   }
   function clearedCount(){
-    var k = Object.keys(save.cleared), n = 0;
-    for (var i = 0; i < k.length; i++) if (save.cleared[k[i]]) n++;
     var p = 0;
-    for (var v = 1; v <= 6; v++) p += clamp(save.villageProgress[v] | 0, 0, 10);
-    return Math.max(n, p);
+    for (var v = 1; v <= 6; v++) p += villageDone(v);
+    return p;
+  }
+  // 저장된 진행도를 순차 해금 규칙에 맞게 보정합니다 (예전 저장 호환)
+  function normalizeUnlocks(){
+    for (var v = 1; v <= 6; v++) save.villageProgress[v] = villageDone(v);
+    var last = clamp(save.lastVillage | 0, 1, 6), best = 1;
+    for (var v2 = 2; v2 <= 6; v2++) if (villageOpen(v2)) best = v2;
+    if (!villageOpen(last)) last = best;
+    save.lastVillage = last;
+    var n = clamp(save.lastStage | 0, 1, 10);
+    if (!stageOpen(last, n)) n = nextChallenge(last);
+    save.lastStage = n;
   }
 
   function loadGame(){
@@ -3551,6 +3675,14 @@
   }
 
   function startRun(vid, no){
+    vid = clamp(vid | 0, 1, 6);
+    no = clamp(no | 0, 1, 10);
+    if (!stageOpen(vid, no)){
+      A.fail();
+      toast('앞 단계를 먼저 성공하면 열려요! 🔒');
+      openVillages();
+      return;
+    }
     buildStage(vid, no);
     hideModal();
     var car = G.car;
@@ -3830,15 +3962,19 @@
       v: G.village, n: G.stageNo, date: new Date().toISOString().slice(0, 10)
     });
     if (save.raceHistory.length > 8) save.raceHistory.length = 8;
+    var nextV = G.stageNo < 10 ? G.village : (G.village < 6 ? G.village + 1 : 6);
+    var nextN = G.stageNo < 10 ? G.stageNo + 1 : (G.village < 6 ? 1 : 10);
     save.bestStage = clearedCount() + 1;
+    save.lastVillage = nextV;
+    save.lastStage = nextN;
     saveGame();
 
     G.state = 'clear';
     G.results = {
       rows: rows, myPlace: myPlace, rankBonus: rankBonus, stageBonus: stageBonus,
       stageCoins: G.stageCoins, total: total, perfect: perfect,
-      nextV: G.stageNo < 10 ? G.village : (G.village < 6 ? G.village + 1 : 1),
-      nextN: G.stageNo < 10 ? G.stageNo + 1 : 1
+      nextV: nextV,
+      nextN: nextN
     };
     G.fwTimer = 0;
     updateHUD();
@@ -4052,14 +4188,14 @@
       modeRowHTML() +
       '<div class="howto">' +
         '<div class="hi"><span class="ico">👉</span><div><b>앞으로!</b><small>버튼을 꾹 누르면 달려요</small></div></div>' +
-        '<div class="hi"><span class="ico">🗺️</span><div><b>6개 마을 · 60스테이지</b><small>마을마다 10탄씩 있어요</small></div></div>' +
+        '<div class="hi"><span class="ico">🗺️</span><div><b>6개 마을 · 60스테이지</b><small>한 탄씩 차례로 열려요</small></div></div>' +
         '<div class="hi"><span class="ico">🔥</span><div><b>부스터 · 🍌 바나나</b><small>아이템으로 앞서 나가요</small></div></div>' +
       '</div>' +
       '<button class="bigBtn" data-act="start">출발! ' + (save.mode === 'math' ? '🧮' : '🚗') + '</button>' +
       '<div style="text-align:center;font-size:12.5px;color:#8b96a2;font-weight:800;margin-top:8px">' +
         '이어서 달릴 곳 · ' + v.icon + ' ' + v.name + ' · ' + n + '탄' +
       '</div>' +
-      '<button class="softBtn" data-act="villages">🗺️ 마을 고르기 <span style="color:#98a4ae">(' + done + '/60)</span></button>' +
+      '<button class="softBtn" data-act="villages">🗺️ 전체 월드맵 <span style="color:#98a4ae">(' + done + '/60)</span></button>' +
       '<button class="softBtn" data-act="records">🏆 내 기록</button>' +
       '<button class="softBtn" data-act="shop">🔧 튜닝샵</button>' +
       '<div style="text-align:center;font-size:11.5px;color:#a8b3bd;font-weight:700;margin-top:10px">' +
@@ -4068,54 +4204,152 @@
     );
   }
 
-  function renderVillages(){
-    G.panel = 'villages';
-    var cards = '';
+  /* ---------- 🔔 안내 토스트 ---------- */
+  var toastTimer = null;
+  function toast(msg){
+    var app = document.getElementById('app');
+    var el = document.getElementById('toast');
+    if (!el){
+      el = document.createElement('div');
+      el.id = 'toast';
+      el.setAttribute('role', 'status');
+      app.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.remove('on');
+    void el.offsetWidth;
+    el.classList.add('on');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove('on'); }, 2100);
+  }
+
+  /* ---------- 길(SVG) 그리기 ---------- */
+  function roadSVG(pts, onArr){
+    var segs = [];
+    for (var i = 0; i < pts.length - 1; i++){
+      var a = pts[i], b = pts[i + 1];
+      var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+      var dx = b.x - a.x, dy = b.y - a.y;
+      var L = Math.sqrt(dx * dx + dy * dy) || 1;
+      var amp = (i % 2 ? -1 : 1) * (Math.abs(dy) > Math.abs(dx) ? 5 : 8);
+      var cx = mx + (-dy / L) * amp, cy = my + (dx / L) * amp;
+      segs.push('M ' + a.x + ' ' + a.y + ' Q ' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + b.x + ' ' + b.y);
+    }
+    var out = '<svg class="wRoad" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">';
+    for (var j = 0; j < segs.length; j++) out += '<path class="wBase" d="' + segs[j] + '"/>';
+    for (var s = 0; s < segs.length; s++){
+      out += '<path class="' + (onArr[s] ? 'wOn' : 'wOff') + ' wSeg" d="' + segs[s] + '"/>';
+    }
+    return out + '</svg>';
+  }
+
+  /* ---------- 🗺️ 전체 월드맵 ---------- */
+  function worldLayout(){
+    if (window.innerHeight < 520 && window.innerWidth >= 520){
+      // 낮은 가로 화면: 한 줄에 6개 마을이 지그재그
+      return { compact: true, pts: [
+        { x: 8, y: 64 }, { x: 24.8, y: 34 }, { x: 41.6, y: 64 },
+        { x: 58.4, y: 34 }, { x: 75.2, y: 64 }, { x: 92, y: 34 }
+      ] };
+    }
+    // 세로/정사각: 두 칸씩 세 줄로 구불구불 (아래 → 위)
+    return { compact: false, pts: [
+      { x: 21, y: 85 }, { x: 79, y: 85 },
+      { x: 79, y: 50 }, { x: 21, y: 50 },
+      { x: 21, y: 15 }, { x: 79, y: 15 }
+    ] };
+  }
+
+  function renderWorldMap(){
+    G.panel = 'map';
+    var lay = worldLayout(), pts = lay.pts;
+    var segOn = [];
+    for (var s = 0; s < 5; s++) segOn.push(villageOpen(s + 2));
+    var nodes = '';
     for (var i = 0; i < VILLAGES.length; i++){
       var v = VILLAGES[i];
-      var prog = save.villageProgress[v.id] | 0;
-      var pct = Math.round(prog / 10 * 100);
-      cards += '<button class="vCard' + (prog >= 10 ? ' done' : '') + '" data-act="pickVillage" data-v="' + v.id + '">' +
-        '<span class="vIcon">' + v.icon + '</span>' +
-        '<span class="vBody">' +
-          '<span class="vName">' + v.name + '</span>' +
-          '<span class="vTag">' + v.tag + '</span>' +
-          '<span class="vBar"><i style="width:' + pct + '%"></i></span>' +
-        '</span>' +
-        '<span class="vNum">' + prog + '/10</span>' +
+      var open = villageOpen(v.id);
+      var done = villageDone(v.id);
+      var cur = open && save.lastVillage === v.id;
+      var cls = 'wNode ' + (done >= 10 ? 'done' : (!open ? 'locked' : (cur ? 'cur' : 'open')));
+      var badge = done >= 10 ? '👑' : (!open ? '🔒' : (cur ? '🚗' : ''));
+      nodes += '<button class="' + cls + '" data-act="pickVillage" data-v="' + v.id + '"' +
+        ' style="left:' + pts[i].x + '%;top:' + pts[i].y + '%" aria-label="' + v.name + ' ' + done + '/10">' +
+        (badge ? '<span class="wBadge">' + badge + '</span>' : '') +
+        '<span class="wIcon">' + v.icon + '</span>' +
+        '<span class="wName">' + v.name + '</span>' +
+        '<span class="wBar"><i style="width:' + (done * 10) + '%"></i></span>' +
+        '<span class="wProg">' + done + '/10</span>' +
       '</button>';
     }
+    var lv = villageBy(save.lastVillage);
+    var roomy = window.innerHeight >= 520;
     showSheet(
-      '<div class="sheetHead"><h2>🗺️ 마을 고르기</h2>' + walletHTML() +
+      '<div class="sheetHead"><h2>🗺️ 전체 월드맵</h2>' + walletHTML() +
         '<button class="xbtn" data-act="closeShop">✕</button></div>' +
-      '<div class="pillNote">🌱 각 마을 1탄은 언제나 열려 있어요! 마음대로 골라 달려 보세요.</div>' +
-      modeRowHTML() +
-      '<div class="vGrid">' + cards + '</div>' +
-      '<button class="softBtn" data-act="closeShop" style="margin-top:12px">닫기</button>'
+      '<div class="wMap' + (lay.compact ? ' compact' : '') + '">' + roadSVG(pts, segOn) + nodes + '</div>' +
+      '<div class="pillNote">🔒 앞 단계를 먼저 성공하면 다음 길이 열려요 · 완주 ' + clearedCount() + '/60</div>' +
+      (roomy ? modeRowHTML() : '') +
+      '<button class="bigBtn" data-act="start">이어서 달리기 · ' + lv.icon + ' ' + save.lastStage + '탄</button>' +
+      '<button class="softBtn" data-act="closeShop">닫기</button>'
     );
+  }
+  function renderVillages(){ renderWorldMap(); }
+
+  /* ---------- 마을 안 1탄 ~ 10탄 레벨 길 ---------- */
+  function stageLayout(){
+    var compact = window.innerHeight < 520;
+    var xs = [9, 29.5, 50, 70.5, 91];
+    var top = compact ? 25 : 26, bot = compact ? 75 : 74;
+    var pts = [];
+    for (var i = 0; i < 5; i++) pts.push({ x: xs[i], y: top });
+    for (var j = 4; j >= 0; j--) pts.push({ x: xs[j], y: bot });
+    return { compact: compact, pts: pts };
   }
 
   function renderStagePick(vid){
     G.panel = 'stages';
     G.pickVillage = vid;
     var v = villageBy(vid);
-    var prog = save.villageProgress[vid] | 0;
-    var cells = '';
-    for (var n = 1; n <= 10; n++){
-      var open = stageOpen(vid, n);
-      var cl = save.cleared[stageKey(vid, n)];
-      var cls = 'stageCell' + (cl ? ' done' : '') + (!open ? ' locked' : '');
-      cells += '<button class="' + cls + '"' + (open ? ' data-act="stage" data-v="' + vid + '" data-n="' + n + '"' : ' disabled') + '>' +
-        n + '탄<small>' + (cl ? medalOf(cl.rank) : (open ? '▶' : '🔒')) + '</small></button>';
+    var openVillage = villageOpen(vid);
+    var done = villageDone(vid);
+    var lay = stageLayout(), pts = lay.pts;
+    var curN = 0;
+    if (openVillage){
+      for (var k = 1; k <= 10; k++){
+        if (stageOpen(vid, k) && !stageCleared(vid, k)){ curN = k; break; }
+      }
     }
+    var cells = '', segOn = [];
+    for (var n = 1; n <= 10; n++){
+      var op = stageOpen(vid, n);
+      var cl = save.cleared[stageKey(vid, n)];
+      var cls = 'sNode' + (cl ? ' done' : '') + (!op ? ' locked' : '') + (curN === n ? ' cur' : '');
+      var sub = cl ? medalOf(cl.rank) : (op ? '▶' : '🔒');
+      var act = op ? 'stage' : 'lockedStage';
+      cells += '<button class="' + cls + '" data-act="' + act + '" data-v="' + vid + '" data-n="' + n + '"' +
+        ' style="left:' + pts[n - 1].x + '%;top:' + pts[n - 1].y + '%" aria-label="' + v.name + ' ' + n + '탄">' +
+        (curN === n ? '<span class="sCar">🚗</span>' : '') +
+        n + '탄<small>' + sub + '</small>' +
+      '</button>';
+    }
+    for (var s = 0; s < 9; s++) segOn.push(stageOpen(vid, s + 2));
+    var head = '<div class="vHead"><button class="backBtn" data-act="villages">← 월드맵</button>' +
+      '<h2 class="vTitle">' + v.icon + ' ' + v.name + '</h2>' + walletHTML() +
+      '<button class="xbtn" data-act="closeShop">✕</button></div>';
+    var note = openVillage
+      ? v.tag + ' · 완주 ' + done + '/10<br>앞 탄을 성공하면 다음 탄이 열려요!' +
+        (done >= 10 ? ' 🎉 이 마을 올클리어!' : '')
+      : '🔒 아직 잠긴 마을이에요.<br>앞 마을의 10탄을 먼저 성공하면 열려요!';
     showSheet(
-      '<div class="vHead"><button class="backBtn" data-act="villages">← 마을</button>' +
-        '<h2 class="vTitle">' + v.icon + ' ' + v.name + '</h2>' + walletHTML() +
-        '<button class="xbtn" data-act="closeShop">✕</button></div>' +
-      '<div class="pillNote">' + v.tag + ' · 완주 ' + prog + '/10<br>1탄은 언제나 열려 있고, 앞 탄을 깨면 다음 탄이 열려요.</div>' +
-      '<div class="stageGrid">' + cells + '</div>' +
-      '<button class="bigBtn" data-act="stage" data-v="' + vid + '" data-n="1" style="margin-top:10px">' + v.icon + ' 1탄부터 달리기</button>' +
-      '<button class="softBtn" data-act="villages">다른 마을 보기</button>'
+      head +
+      '<div class="pillNote">' + note + '</div>' +
+      '<div class="sMap' + (lay.compact ? ' compact' : '') + '">' + roadSVG(pts, segOn) + cells + '</div>' +
+      (openVillage
+        ? '<button class="bigBtn" data-act="stage" data-v="' + vid + '" data-n="' + (curN || 1) + '" style="margin-top:6px">' +
+            (curN ? '▶ ' + v.name + ' ' + curN + '탄 도전!' : '↻ ' + v.name + ' 10탄 다시 달리기') + '</button>'
+        : '') +
+      (window.innerHeight >= 520 ? '<button class="softBtn" data-act="villages">🗺️ 월드맵 보기</button>' : '')
     );
   }
 
@@ -4321,10 +4555,15 @@
     }
     var v = villageBy(G.village);
     var perfect = r.perfect;
+    var unlockedNext = G.stageNo === 10 && G.village < 6 && villageOpen(G.village + 1);
+    var nextVil = villageBy(G.village + 1);
     showSheet(
       '<div class="clearBig">' + (r.myPlace === 1 ? '🏆' : '🎉') + '</div>' +
       '<div class="clearTitle">' + v.icon + ' ' + v.name + ' ' + G.stageNo + '탄 완주!</div>' +
       '<div class="clearSub">' + medalOf(r.myPlace) + ' ' + r.myPlace + '등 · 정말 잘했어요!</div>' +
+      (unlockedNext
+        ? '<div class="pillNote" style="background:#e9fbf1;color:#1a7a48;justify-content:center">🎉 ' + v.name + ' 올클리어! ' + nextVil.icon + ' ' + nextVil.name + '이 열렸어요!</div>'
+        : '') +
       (perfect ? '<div class="pillNote" style="background:#fff6d6;color:#a05a00;justify-content:center">🏆 수학 천재! 연산 올클리어 — 코인 2배!</div>' : '') +
       '<div class="resultList">' + rows + '</div>' +
       '<div class="statRow">' +
@@ -4333,8 +4572,9 @@
         '<div class="stat"><b>+' + r.total + '</b><small>모두 합쳐</small></div>' +
       '</div>' +
       '<div class="rowBtns">' +
-        '<button class="bigBtn" data-act="next" data-v="' + r.nextV + '" data-n="' + r.nextN + '">다음 스테이지 ▶</button>' +
-        '<button class="softBtn" data-act="villages">🗺️ 마을 고르기</button>' +
+        '<button class="bigBtn" data-act="next" data-v="' + r.nextV + '" data-n="' + r.nextN + '">' +
+          (G.stageNo === 10 && G.village < 6 ? '다음 마을 ▶' : '다음 스테이지 ▶') + '</button>' +
+        '<button class="softBtn" data-act="villages">🗺️ 월드맵</button>' +
         '<button class="softBtn" data-act="retry">↻ 이번 스테이지 다시 하기</button>' +
         '<button class="softBtn" data-act="shop">🔧 튜닝샵</button>' +
       '</div>'
@@ -4482,11 +4722,26 @@
       G.mode = save.mode;
       saveGame();
       A.click();
-      if (G.panel === 'villages') renderVillages(); else renderStart();
+      if (G.panel === 'map' || G.panel === 'villages') renderWorldMap(); else renderStart();
       return;
     }
-    if (act === 'villages'){ A.click(); renderVillages(); return; }
-    if (act === 'pickVillage'){ A.click(); renderStagePick(parseInt(el.getAttribute('data-v'), 10) || 1); return; }
+    if (act === 'villages'){ A.click(); renderWorldMap(); return; }
+    if (act === 'pickVillage'){
+      var pv = parseInt(el.getAttribute('data-v'), 10) || 1;
+      if (!villageOpen(pv)){
+        A.fail();
+        toast('앞 마을의 10탄을 먼저 성공하면 열려요! 🔒');
+        return;
+      }
+      A.click();
+      renderStagePick(pv);
+      return;
+    }
+    if (act === 'lockedStage'){
+      A.fail();
+      toast('앞 단계를 먼저 성공하면 열려요! 🔒');
+      return;
+    }
     if (act === 'stage'){
       A.click();
       startRun(parseInt(el.getAttribute('data-v'), 10) || 1, parseInt(el.getAttribute('data-n'), 10) || 1);
@@ -4652,6 +4907,7 @@
      ===================================================================== */
   function init(){
     loadGame();
+    normalizeUnlocks();
     resize();
     A.setMuted(save.muted);
     buildStage(save.lastVillage, save.lastStage);
@@ -4675,6 +4931,8 @@
       villages: VILLAGES, cars: CARS, wheels: WHEELS, avatars: AVATARS, clothes: CLOTHES, bags: BAGS,
       rank: computeRank, openQuiz: openQuiz, answerQuiz: answerQuiz, resumeFromQuiz: resumeFromQuiz,
       stageOpen: stageOpen, stageCleared: stageCleared, clearedCount: clearedCount,
+      villageOpen: villageOpen, villageDone: villageDone, nextChallenge: nextChallenge,
+      renderWorldMap: renderWorldMap, toast: toast, normalizeUnlocks: normalizeUnlocks,
       openShop: openShop, openVillages: openVillages, renderStagePick: renderStagePick,
       renderVillages: renderVillages, useBooster: useBooster, dropBanana: dropBanana,
       teleport: function(x){
