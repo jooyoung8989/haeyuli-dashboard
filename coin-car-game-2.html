@@ -4191,9 +4191,9 @@
     }
     save.shields -= 1;
     saveSoon();
-    updateBoostHUD();
     G.shieldT = SHIELD_SEC;
     G.shieldFlash = 0.35;
+    updateBoostHUD();
     A.fuel();
     addBubble(G.car.x, G.car.y - 112, '🛡️ 쉴드 켜짐!', '#dff0ff');
     rainbowBurst(G.car.x, G.car.y - 40);
@@ -5336,13 +5336,10 @@
 
       var am = a0 + seg / 2;
       var tx = cx + Math.cos(am) * R * 0.62, ty = cy + Math.sin(am) * R * 0.62;
-      c.save();
-      c.translate(tx, ty); c.rotate(am + Math.PI / 2);
       c.fillStyle = '#6b4a2a';
       c.font = '900 ' + Math.round(R * 0.17) + 'px ' + FONT;
       c.textAlign = 'center'; c.textBaseline = 'middle';
-      c.fillText(String(i + 1), 0, 0);
-      c.restore();
+      c.fillText(String(i + 1), tx, ty);
     }
 
     // 가운데 꼭지
@@ -5367,7 +5364,7 @@
     }
     showSheet(
       '<div class="sheetHead"><h2>🎡 마을 완주 보상 룰렛</h2>' +
-        '<button class="xbtn" data-act="roulClose">✕</button></div>' +
+        '<button class="xbtn" data-act="roulClose" style="margin-left:auto">✕</button></div>' +
       '<div class="pillNote" style="justify-content:center">' + v.icon + ' ' + v.name + ' 완주 축하! 룰렛을 돌려 보상을 받아요</div>' +
       '<div class="roulWrap"><div class="roulPointer"></div><canvas id="roulWheel" aria-label="보상 룰렛"></canvas></div>' +
       '<div class="roulLeg">' + leg + '</div>' +
