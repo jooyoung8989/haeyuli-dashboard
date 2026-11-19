@@ -912,7 +912,7 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001s !important;transition-duration:.001s !important}
 }
-/* ---------- 🎟️ 선착순 공유판 · 11명 게이트 (v2) ---------- */
+/* ---------- 🎟️ 선착순 공유판 · 20명 게이트 (v2) ---------- */
 .sharebar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px;padding:5px calc(var(--sar) + 12px) 5px calc(var(--sal) + 12px);background:rgba(15,33,64,.55);color:#f4e3ac;font-size:10px;font-weight:800;letter-spacing:-.01em;text-align:center;line-height:1.5}
 .sharebar b{color:#fff;font-weight:900}
 .sharewait{position:fixed;inset:0;z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:28px;background:var(--paper);color:var(--muted);font-size:12.5px;font-weight:800;text-align:center}
@@ -934,7 +934,7 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
 <body>
 <div class="sharewait" id="shareWait" role="status" aria-live="polite"><span class="swdot" aria-hidden="true"></span><span>접속 인원 확인 중…</span></div>
 <div class="app" id="app" hidden>
-  <div class="sharebar" id="shareBar" hidden>선착순 공유판 (<b id="shareCount">1</b>/11명) · 만든이 박주영 · 무단배포 금지</div>
+  <div class="sharebar" id="shareBar" hidden>선착순 공유판 (<b id="shareCount">1</b>/20명) · 만든이 박주영 · 무단배포 금지</div>
 
 
   <!-- ================= top bar ================= -->
@@ -6879,17 +6879,17 @@ window.PIC = {
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
 </script>
-<!-- v2: 선착순 11명판 (2026-11-20) · 카운터 picoach-pjb-20261119-9f3c/share-slots11v2 -->
+<!-- v2: 선착순 20명판 (2026-11-20) · 카운터 picoach-pjb-20261119-9f3c/share-slots20v2 -->
 <script>
 /* =========================================================
-   🎟️ 선착순 11명 게이트 (v2) · 초과 시 자동 폭파 (공유판 전용)
+   🎟️ 선착순 20명 게이트 (v2) · 초과 시 자동 폭파 (공유판 전용)
    카운터: abacus.jasoncameron.dev (무가입·CORS 허용)
    ========================================================= */
 (function(){
 "use strict";
 var NS = "picoach-pjb-20261119-9f3c";
-var KEY = "share-slots11v2";
-var LIMIT = 11;
+var KEY = "share-slots20v2";
+var LIMIT = 20;
 var API = "https://abacus.jasoncameron.dev/hit/" + NS + "/" + KEY;
 var SLOT_KEY = "picoach.sharePass.v2";
 var CNT_KEY  = "picoach.shareCount.v2";
@@ -6924,7 +6924,7 @@ function blown(){
   if(app){ app.innerHTML = ""; app.hidden = true; }
   screen("blown",
     '<span class="sse" aria-hidden="true">💥</span>' +
-    '<b>💥 선착순 11명 접속 마감 — 이 페이지는 폭파되었습니다</b>' +
+    '<b>💥 선착순 20명 접속 마감 — 이 페이지는 폭파되었습니다</b>' +
     '<small>만든이 박주영 · 무단배포 금지</small>');
 }
 
@@ -6974,7 +6974,7 @@ ready(function(){
   if(slot === "blown"){ blown(); return; }                            /* 이미 마감된 기기 */
   hit().then(function(n){
     set(CNT_KEY, String(n));
-    if(n <= LIMIT){ set(SLOT_KEY, "granted"); open(n); }              /* 11명 이내 */
+    if(n <= LIMIT){ set(SLOT_KEY, "granted"); open(n); }              /* 20명 이내 */
     else { set(SLOT_KEY, "blown"); blown(); }                         /* 11명째 → 폭파 */
   }).catch(function(){ blocked(); });                                 /* 확인 불가 → 본문 비표시 */
 });
