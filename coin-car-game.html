@@ -920,6 +920,11 @@
       if (Array.isArray(o.raceHistory)) save.raceHistory = o.raceHistory.slice(0, 8);
       if (o.lastVillage) save.lastVillage = clamp(o.lastVillage | 0, 1, 6);
       if (o.lastStage) save.lastStage = clamp(o.lastStage | 0, 1, 10);
+      if (!o.lastVillage && typeof o.bestStage === 'number'){
+        // 예전 저장은 초원 마을에서 이어 달리게 해 줍니다
+        save.lastVillage = 1;
+        save.lastStage = clamp(o.bestStage | 0, 1, 10);
+      }
       if (o.villageProgress && typeof o.villageProgress === 'object'){
         for (var v = 1; v <= 6; v++){
           save.villageProgress[v] = clamp(o.villageProgress[v] | 0, 0, 10);
