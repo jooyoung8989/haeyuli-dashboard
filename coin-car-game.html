@@ -406,6 +406,13 @@
   .sNode .sCar{ position:absolute; top:-13px; font-size:15px; line-height:1; animation:sHop .9s ease-in-out infinite; }
   @keyframes sHop{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-3px) } }
   .sNode:active{ transform:translate(-50%,calc(-50% + 2px)); }
+  @media (max-width: 430px){
+    .sMap{ --snw: 54px; --snf: 11.5px; }
+    .sMap .sNode small{ font-size:9.5px; }
+  }
+  @media (max-width: 370px){
+    .sMap{ --snw: 50px; --snf: 11px; }
+  }
 
   /* ---------- 안내 토스트 ---------- */
   #toast{
