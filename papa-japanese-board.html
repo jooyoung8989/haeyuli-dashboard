@@ -3380,7 +3380,6 @@ function callEnd(){
   var turns = CALL.turns, jp = CALL.jpTurns, ko = CALL.koTurns, sec = CALL.sec;
   callSetPhase("ended");
   try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){}
-  addLog("sys", "📞 전화 일본어 통화를 마쳤어요 (" + callFmt(sec) + " · " + turns + "문장)");
   save();
 
   /* 오늘 배운 문장에 내가 한 일본어 문장 저장 (최대 3개, 중복 제외) */
