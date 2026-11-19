@@ -278,6 +278,30 @@
     font-family:var(--font); box-shadow:0 3px 0 #2a6fb4;
   }
   .lockQuiz .err{ width:100%; color:#e05a00; font-size:11.5px; font-weight:900; display:none; }
+  /* ---------- 📝 오늘 숙제 잠금 ---------- */
+  .lockHwList{
+    list-style:none; margin:12px auto 0; padding:0; display:flex; flex-direction:column; gap:6px;
+    max-width:340px; max-height:118px; overflow-y:auto; text-align:left;
+  }
+  .lockHwList li{
+    display:flex; align-items:center; gap:7px; background:#f7f9fb; border-radius:9px; padding:6px 9px;
+    font-size:12.5px; font-weight:800; color:#4b5c69;
+  }
+  .lockHwList li b{ font-size:13px; color:#98a4ae; }
+  .lockHwList li.ok{ background:#f1faf4; color:#2f8a5f; }
+  .lockHwList li.ok b{ color:#2fbe74; }
+  .lockHwList li.none{ display:block; text-align:center; color:#8595a3; font-weight:700; line-height:1.5; }
+  .lockHwBar{
+    margin:10px auto 0; width:min(300px,80%); height:8px; border-radius:99px; background:#eef2f5; overflow:hidden;
+  }
+  .lockHwBar i{ display:block; height:100%; width:0; border-radius:99px; background:#2dbd6e; transition:width .3s; }
+  .lockGo{
+    margin-top:12px; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    min-height:40px; padding:0 16px; border:none; border-radius:12px; cursor:pointer;
+    background:#3f8fd8; color:#fff; font-family:var(--font); font-weight:900; font-size:13.5px;
+    box-shadow:0 3px 0 #2f77b8; letter-spacing:-.3px;
+  }
+  .lockGo:active{ transform:translateY(1px); box-shadow:0 1px 0 #2f77b8; }
 
   /* ---------- modal ---------- */
   #modal{
@@ -1253,6 +1277,7 @@
     gameDifficulty: 'easy',
     raceMode: 'race',
     parentUnlockDate: '',
+    homeworkUnlockDate: '',
     car: 'basic',
     color: '#e63946',
     ownedCars: ['basic'],
@@ -1380,6 +1405,7 @@
       if (o.mode === 'math' || o.mode === 'free' || o.mode === 'race') save.mode = (o.mode === 'free' ? 'free' : 'math');
       if (o.raceMode === 'solo' || o.raceMode === 'race') save.raceMode = o.raceMode;
       if (typeof o.parentUnlockDate === 'string') save.parentUnlockDate = o.parentUnlockDate;
+      if (typeof o.homeworkUnlockDate === 'string') save.homeworkUnlockDate = o.homeworkUnlockDate;
       if (typeof o.bestStage === 'number') save.bestStage = Math.max(1, o.bestStage | 0);
       if (typeof o.muted === 'boolean') save.muted = o.muted;
       if (typeof o.raceBestRank === 'number') save.raceBestRank = clamp(o.raceBestRank | 0, 0, 4);
@@ -6467,12 +6493,24 @@
       if (q){ q.classList.add('on'); var i = document.getElementById('lockAnswer'); if (i) i.focus(); }
     } else if (act === 'ok'){
       lockAnswerCheck();
+    } else if (act === 'askh'){
+      var qh = document.getElementById('lockQuizH');
+      if (qh){ qh.classList.add('on'); var ih = document.getElementById('lockAnswerH'); if (ih) ih.focus(); }
+    } else if (act === 'okh'){
+      hwAnswerCheck();
+    } else if (act === 'board'){
+      var go = document.createElement('a');
+      go.href = boardHref(); go.target = '_blank'; go.rel = 'noopener';
+      document.body.appendChild(go); go.click(); document.body.removeChild(go);
     }
   });
   lockOvEl.addEventListener('keydown', function(e){
     if ((e.key === 'Enter' || e.keyCode === 13) && e.target && e.target.id === 'lockAnswer'){
       e.preventDefault(); e.stopPropagation();
       lockAnswerCheck();
+    } else if ((e.key === 'Enter' || e.keyCode === 13) && e.target && e.target.id === 'lockAnswerH'){
+      e.preventDefault(); e.stopPropagation();
+      hwAnswerCheck();
     }
   });
 
@@ -6622,6 +6660,156 @@
     return { locked: false, warn: false, d: d, mins: mins };
   }
 
+
+  /* =====================================================================
+     19c. 📝 오늘 숙제 완료 연동 잠금 (같은 사이트 localStorage + 가족 코드)
+     · 오늘 요일 숙제가 있으면 → 모두 체크해야 열림
+     · 오늘 숙제가 없으면 → 스터디 보드에서 공부한 날이어야 열림
+     ===================================================================== */
+  var HWK = {
+    hw: 'haeyuli.homework.v1', done: 'haeyuli.hwdone.v1',
+    study: 'haeyuli.studydays.v1', fam: 'haeyuli.family.v1'
+  };
+  var HW_API = 'https://mantledb.sh/v2/';
+  var hwCloud = null, hwCloudAt = 0, hwCloudBusy = false;
+  var hwQ = { a: 0, b: 0 };
+  var HW_PAD = function(n){ return n < 10 ? '0' + n : '' + n; };
+
+  function hwLS(k){
+    try { var v = JSON.parse(localStorage.getItem(k) || 'null'); return (v && typeof v === 'object') ? v : {}; }
+    catch(e){ return {}; }
+  }
+  function hwDayIso(d){
+    return d.getFullYear() + '-' + HW_PAD(d.getMonth() + 1) + '-' + HW_PAD(d.getDate());
+  }
+  function hwMonday(d){
+    var x = new Date(d.getTime());
+    var wd = (x.getDay() + 6) % 7;
+    x.setDate(x.getDate() - wd);
+    x.setHours(0, 0, 0, 0);
+    return x;
+  }
+  function hwItemsOf(hw, d){
+    var wk = hwDayIso(hwMonday(d)), wd = (d.getDay() + 6) % 7;
+    var w = (hw && hw[wk] && typeof hw[wk] === 'object') ? hw[wk] : {};
+    var list = Array.isArray(w[String(wd)]) ? w[String(wd)] : [];
+    var out = [];
+    for (var i = 0; i < list.length; i++) if (list[i] && list[i].id) out.push(list[i]);
+    return out;
+  }
+  function hwMergeItems(a, b){
+    var map = {}, order = [];
+    function add(it){
+      if (!it || !it.id) return;
+      var p = map[it.id];
+      if (!p){ map[it.id] = { id: it.id, text: String(it.text || ''), done: !!it.done, t: Number(it.t) || 0 }; order.push(it.id); return; }
+      var nt = Number(it.t) || 0, pt = Number(p.t) || 0;
+      if (nt > pt){ p.text = String(it.text || ''); p.done = !!it.done; p.t = nt; }
+      else if (nt === pt && it.done) p.done = true;
+    }
+    for (var i = 0; i < (a || []).length; i++) add(a[i]);
+    for (var j = 0; j < (b || []).length; j++) add(b[j]);
+    var out = [];
+    for (var k = 0; k < order.length; k++) out.push(map[order[k]]);
+    return out;
+  }
+  function hwToday(){
+    var d = clockNow(), t = hwDayIso(d);
+    var loc = { hw: hwLS(HWK.hw), done: hwLS(HWK.done), study: hwLS(HWK.study) };
+    var cl = (hwCloud && hwCloudAt && (Date.now() - hwCloudAt < 180000)) ? hwCloud : null;
+    var items = hwMergeItems(hwItemsOf(loc.hw, d), cl ? hwItemsOf(cl.hw, d) : []);
+    var doneN = 0;
+    for (var i = 0; i < items.length; i++) if (items[i].done) doneN++;
+    var study = Number(loc.study[t]) || 0;
+    if (cl && cl.study && Number(cl.study[t]) > study) study = Number(cl.study[t]);
+    var dt = -1, marked = false;
+    if (loc.done[t] && typeof loc.done[t] === 'object'){ dt = Number(loc.done[t].t) || 0; marked = !!loc.done[t].d; }
+    if (cl && cl.done && cl.done[t] && typeof cl.done[t] === 'object' && (Number(cl.done[t].t) || 0) > dt){ marked = !!cl.done[t].d; }
+    var complete;
+    if (items.length) complete = doneN === items.length;
+    else complete = study > 0 || marked;
+    return { date: t, items: items, total: items.length, done: doneN, study: study, complete: complete };
+  }
+  function hwLocked(){
+    if (save.homeworkUnlockDate === dayKeyOf(clockNow())) return false;   /* 부모님이 오늘만 열어 줌 */
+    return !hwToday().complete;
+  }
+  function hwSig(s){
+    var b = '';
+    for (var i = 0; i < s.items.length; i++) b += s.items[i].id + (s.items[i].done ? '1' : '0');
+    return s.date + '|' + s.total + '|' + s.done + '|' + (s.study ? 1 : 0) + '|' + b;
+  }
+  function fetchHwCloud(){
+    var f = hwLS(HWK.fam);
+    if (!f || !f.code || hwCloudBusy) return;
+    if (navigator.onLine === false) return;
+    hwCloudBusy = true;
+    fetch(HW_API + encodeURIComponent('haeyuli-' + String(f.code).toLowerCase()) + '/data?t=' + Date.now(), { cache: 'no-store' })
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(d){ hwCloud = d; hwCloudAt = Date.now(); })
+      .catch(function(){ hwCloudAt = Date.now(); })
+      .then(function(){ hwCloudBusy = false; refreshLock(); });
+  }
+  function boardHref(){
+    var w = window.innerWidth || 0;
+    return w && w < 900 ? './haeyuli-study-mobile.html' : './haeyuli-english-board.html';
+  }
+  function hwLockHTML(s){
+    if (!hwQ.a){ hwQ.a = 21 + ri(58); hwQ.b = 21 + ri(58); }
+    var list = '';
+    if (s.items.length){
+      for (var i = 0; i < s.items.length; i++){
+        var it = s.items[i];
+        list += '<li class="' + (it.done ? 'ok' : '') + '"><b>' + (it.done ? '✅' : '⬜') + '</b><span>' + escH(it.text) + '</span></li>';
+      }
+    } else {
+      list = '<li class="none">오늘 요일에 적힌 숙제가 없어요<br>스터디 보드에서 과목을 하나 공부하면 열려요</li>';
+    }
+    var pct = s.total ? Math.round(s.done / s.total * 100) : (s.study ? 100 : 0);
+    return '<div class="lockCard">' +
+      '<div class="lockBig">📝</div>' +
+      '<div class="lockTitle">숙제 먼저 하고 와요!</div>' +
+      '<div class="lockSub">📝 오늘 숙제를 다 하면 자동차 게임이 열려요!</div>' +
+      '<ul class="lockHwList">' + list + '</ul>' +
+      '<div class="lockHwBar"><i style="width:' + pct + '%"></i></div>' +
+      '<button class="lockGo" type="button" data-lock="board">📚 스터디 보드 열기</button>' +
+      '<div class="lockParent">' +
+        '<button class="lockParentBtn" type="button" data-lock="askh">🔒 부모님 잠금 해제(오늘만)</button>' +
+        '<div class="lockQuiz" id="lockQuizH">' +
+          '<span>' + hwQ.a + ' + ' + hwQ.b + ' = ?</span>' +
+          '<input id="lockAnswerH" type="text" inputmode="numeric" maxlength="3" autocomplete="off" aria-label="부모님 확인 답">' +
+          '<button data-lock="okh">확인</button>' +
+          '<div class="err" id="lockErrH">다시 계산해 보세요.</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+  function escH(s){
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function hwAnswerCheck(){
+    var inp = document.getElementById('lockAnswerH');
+    var v = parseInt(String((inp && inp.value) || '').replace(/[^0-9]/g, ''), 10);
+    if (v === hwQ.a + hwQ.b){
+      save.homeworkUnlockDate = dayKeyOf(clockNow());
+      saveGame();
+      lockShown = '';
+      var ov = document.getElementById('lockOverlay');
+      if (ov){ ov.classList.remove('show'); ov.innerHTML = ''; }
+      refreshLock();
+      G.state = 'start';
+      G.paused = false;
+      renderStart();
+      toast('오늘 하루는 부모님 확인으로 열렸어요 🔓');
+    } else {
+      var err = document.getElementById('lockErrH');
+      if (err) err.style.display = 'block';
+      if (inp){ inp.value = ''; inp.focus(); }
+    }
+  }
+
   function lockHTML(kind, d){
     var before = kind === 'before';
     if (!lockQ.a){ lockQ.a = 21 + ri(58); lockQ.b = 21 + ri(58); }
@@ -6646,15 +6834,23 @@
 
   function refreshLock(){
     var st = timeLock();
+    var hl = st.locked ? null : { st: hwToday(), locked: hwLocked() };
+    var kind = st.locked ? st.kind : (hl && hl.locked ? 'hw' : '');
     var warnEl = document.getElementById('lockWarn');
     var ov = document.getElementById('lockOverlay');
     if (!warnEl || !ov) return false;
 
-    if (st.locked){
-      if (lockShown !== st.kind){
-        lockShown = st.kind;
-        lockQ.a = 0;
-        ov.innerHTML = lockHTML(st.kind, st.d);
+    if (kind){
+      var key = kind === 'hw' ? 'hw|' + hwSig(hl.st) : kind;
+      if (lockShown !== key){
+        lockShown = key;
+        if (kind === 'hw'){
+          hwQ.a = 0; hwQ.b = 0;
+          ov.innerHTML = hwLockHTML(hl.st);
+        } else {
+          lockQ.a = 0;
+          ov.innerHTML = lockHTML(kind, st.d);
+        }
         ov.classList.add('show');
         // 놀이 중이었더라도 부드럽게 멈추고 잠금 화면으로
         G.keys.run = false;
@@ -6663,11 +6859,20 @@
         G.state = 'start';
         G.prevState = 'start';
         G.paused = false;
+        if (kind === 'hw') fetchHwCloud();
       }
-      var tEl = ov.querySelector('.lockTime');
-      if (tEl){
-        var tTxt = '지금 ' + clockText(st.d) + (st.kind === 'before' ? ' · 9:00에 열려요' : ' · 내일 9:00에 열려요');
-        if (tEl.textContent !== tTxt) tEl.textContent = tTxt;
+      if (kind === 'hw'){
+        var bar = ov.querySelector('.lockHwBar i');
+        if (bar){
+          var pct = hl.st.total ? Math.round(hl.st.done / hl.st.total * 100) : (hl.st.study ? 100 : 0);
+          bar.style.width = pct + '%';
+        }
+      } else {
+        var tEl = ov.querySelector('.lockTime');
+        if (tEl){
+          var tTxt = '지금 ' + clockText(st.d) + (st.kind === 'before' ? ' · 9:00에 열려요' : ' · 내일 9:00에 열려요');
+          if (tEl.textContent !== tTxt) tEl.textContent = tTxt;
+        }
       }
       warnEl.classList.remove('on');
       return true;
@@ -6740,6 +6945,8 @@
     renderStart();
     refreshLock();
     setInterval(refreshLock, 1000);
+    fetchHwCloud();
+    setInterval(function(){ if (!document.hidden) fetchHwCloud(); }, 20000);
 
     // 테스트/디버그용 (게임에는 영향 없음)
     window.__game = {
@@ -6757,6 +6964,9 @@
       renderRecords: renderRecords, renderShop: renderShop, renderStart: renderStart, renderClear: renderClear,
       playerLabel: playerLabel, setName: function(v){ save.playerName = cleanName(v); saveGame(); updateHUD(); return playerLabel(); },
       timeLock: timeLock, refreshLock: refreshLock,
+      hwToday: hwToday, hwLocked: hwLocked, hwLockHTML: hwLockHTML, fetchHwCloud: fetchHwCloud,
+      setHwCloud: function(d){ hwCloud = d || null; hwCloudAt = Date.now(); refreshLock(); return hwToday(); },
+      unlockHomework: function(){ save.homeworkUnlockDate = dayKeyOf(clockNow()); saveGame(); lockShown = ''; refreshLock(); return hwLocked(); },
       setClock: function(s){ clockOverride = s ? new Date(s) : null; refreshLock(); return timeLock(); },
       setFuel: function(v){ G.fuel = clamp(v, 0, G.fuelMax); updateHUD(); return G.fuel; },
       autoQuiz: function(kind){

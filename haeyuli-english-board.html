@@ -2765,6 +2765,53 @@ body .hub-card.done{background:#fbfdfc;box-shadow:inset 0 0 0 1px #cfe5d9;}
 body .hub-card.done .hc-badge{background:#eef7f2;color:#2f8f6b;box-shadow:inset 0 0 0 1px #d7e8de;}
 body .hub-note{color:#9aa7b3;font-weight:600;}
 
+/* ===== 🚗 오늘 숙제 · 코인 자동차 2 열림 배너 ===== */
+.wk-today{flex:0 0 auto;display:flex;align-items:center;gap:1vh;flex-wrap:wrap;
+  padding:.55rem .8rem;border-radius:.9rem;background:#f7f9fb;box-shadow:inset 0 0 0 1px #e6ebf0;}
+.wk-today.ok{background:#f2f9f4;box-shadow:inset 0 0 0 1.4px #bfe3cd;}
+.wk-today .wk-t-em{font-size:1.15rem;line-height:1;}
+.wk-today .wk-t-t{display:flex;flex-direction:column;min-width:0;}
+.wk-today .wk-t-t b{font-size:.92rem;font-weight:900;color:#1f2a33;letter-spacing:-.02em;}
+.wk-today .wk-t-t span{font-size:.76rem;font-weight:800;color:#8595a3;}
+.wk-today.ok .wk-t-t span{color:#2f8a5f;}
+.wk-game{margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;
+  padding:.55rem .95rem;border-radius:.85rem;background:#2dbd6e;color:#fff;
+  font-size:.92rem;font-weight:900;letter-spacing:-.02em;text-decoration:none;
+  box-shadow:0 3px 0 #1f9c58;white-space:nowrap;}
+.wk-game:active{transform:translateY(1px);box-shadow:0 1px 0 #1f9c58;}
+@media (max-width:520px){ .wk-today{padding:.5rem .6rem;} .wk-game{margin-left:0;width:100%;justify-content:center;} }
+
+/* ===== 👨‍👩‍👧 가족 숙제·용돈 동기화 ===== */
+.fam-box{display:flex;flex-direction:column;gap:.8rem;
+  background:linear-gradient(160deg,#f8fbf8,#eff6f1);border-radius:.9rem;padding:.85rem .8rem .75rem;
+  box-shadow:inset 0 0 0 1px #dceadf;}
+.fam-h{display:flex;align-items:center;gap:.45rem;}
+.fam-h b{font-size:.98rem;font-weight:900;color:#1e4b3a;}
+.fam-h span{margin-left:auto;font-size:.62rem;font-weight:900;color:#82a791;letter-spacing:.06em;}
+.fam-code{display:flex;align-items:center;gap:.5rem;background:#fff;border-radius:.7rem;padding:.5rem .7rem;
+  box-shadow:inset 0 0 0 1px #dceadf;}
+.fam-code em{font-style:normal;font-size:.72rem;font-weight:900;color:#82a791;flex:0 0 auto;}
+.fam-code b{font-size:1.22rem;font-weight:900;letter-spacing:.2em;color:#166b47;font-variant-numeric:tabular-nums;}
+.fam-code .btn{margin-left:auto;}
+.fam-acts{display:flex;gap:.45rem;flex-wrap:wrap;align-items:center;}
+.fam-acts .btn{min-height:2.5rem;padding:0 .85rem;font-size:.78rem;}
+.fam-acts input[type="text"]{flex:1 1 8rem;min-width:0;height:2.5rem;border:0;border-radius:.6rem;
+  box-shadow:inset 0 0 0 1px #d7e6dd;padding:0 .7rem;font:inherit;font-size:.82rem;font-weight:900;
+  letter-spacing:.12em;text-transform:uppercase;color:#1f3b2e;}
+.fam-state{margin:0;font-size:.72rem;font-weight:800;color:#6f8b7c;line-height:1.5;}
+.fam-state.err{color:#cf5138;}
+.fam-note{margin:0;font-size:.7rem;font-weight:800;color:#7e97aa;line-height:1.5;}
+.fam-note b{color:#3e7fa2;}
+body.mob .fam-box{gap:.6rem;padding:.75rem .7rem .7rem;border-radius:.9rem;}
+body.mob .fam-h b{font-size:1rem;}
+body.mob .fam-h span{font-size:.62rem;}
+body.mob .fam-code{padding:.55rem .6rem;}
+body.mob .fam-code b{font-size:1.3rem;}
+body.mob .fam-acts .btn{min-height:2.4rem;font-size:.74rem;border-radius:.7rem;}
+body.mob .fam-acts input[type="text"]{height:2.4rem;font-size:.76rem;border-radius:.7rem;}
+body.mob .fam-state{font-size:.7rem;}
+body.mob .fam-note{font-size:.66rem;}
+
 /* 홈 주간표 */
 body .home-main,body .home-pet{background:#fff;box-shadow:inset 0 0 0 1px #e6ebf0;}
 body .weekboard{background:#fff;box-shadow:inset 0 0 0 1px #e6ebf0;}
@@ -3861,6 +3908,28 @@ body .wk-sub i{font-size:.95rem;}
           <li>과목을 끝낼 때마다 알림이 도착해요.</li>
         </ol>
         <p class="hintline">토픽 코드는 <b>이 기기에만</b> 저장돼요. 코드를 아는 사람만 알림을 받을 수 있어요.</p>
+      </div>
+      <div class="fam-box" id="famBox">
+        <div class="fam-h"><b>👨‍👩‍👧 가족 숙제·용돈 동기화</b><span>무료 클라우드</span></div>
+        <div id="famOff">
+          <p class="fam-note">엄마 폰과 해율이 아이패드가 <b>같은 가족 코드</b>를 쓰면 숙제·시간표·용돈이 함께 바뀌어요.</p>
+          <div class="fam-acts">
+            <button class="btn ok" id="famCreate" type="button">✨ 가족 코드 만들기</button>
+          </div>
+          <div class="fam-acts">
+            <input id="famCodeIn" type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="가족 코드 입력">
+            <button class="btn ghost" id="famJoin" type="button">🔗 연결하기</button>
+          </div>
+        </div>
+        <div id="famOn" hidden>
+          <div class="fam-code"><em>가족 코드</em><b id="famCodeVal">—</b><button class="btn ghost" id="famCopy" type="button">📋 복사</button></div>
+          <div class="fam-acts">
+            <button class="btn ok" id="famSyncNow" type="button">🔄 지금 동기화</button>
+            <button class="btn ghost" id="famLeave" type="button">연결 해제</button>
+          </div>
+        </div>
+        <p class="fam-state" id="famState">아직 연결하지 않았어요 · 이 기기 안에만 저장돼요</p>
+        <p class="fam-note">엄마 폰에서도 같은 스터디 보드를 열어 코드를 넣으면 숙제를 적고 용돈을 줄 수 있어요. 코드를 아는 사람만 함께 쓸 수 있어요.</p>
       </div>
     </div>
     <div class="sheet-foot">
@@ -9805,6 +9874,7 @@ function pad2(n){ return n < 10 ? "0" + n : "" + n; }
 function iso(d){ return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
 
 var PLAN_KEY = "haeyuli.week.v1", HW_KEY = "haeyuli.homework.v1", SD_KEY = "haeyuli.studydays.v1";
+var DONE_KEY = "haeyuli.hwdone.v1";
 var DAYN = ["월", "화", "수", "목", "금", "토", "일"];
 var SUBJ = {
   en:      { em:"🔤", nm:"영어" },
@@ -9851,6 +9921,37 @@ function hwWeek(){
 }
 function saveHwWeek(w){ w.all[w.key] = w.days; writeObj(HW_KEY, w.all); }
 
+/* --- 오늘 숙제 완료 상태 (날짜별) --- */
+function doneMap(){ var v = readObj(DONE_KEY); return (v && typeof v === "object") ? v : {}; }
+function studiedToday(t){
+  var sd = studyDays();
+  if ((Number(sd[t]) || 0) > 0) return true;
+  try {
+    var info = SB.attendInfo ? SB.attendInfo() : null;
+    if (info && info.days && info.days[t]) return true;
+  } catch(e){}
+  return false;
+}
+function todayStatus(){
+  var d = new Date(), t = iso(d), wd = (d.getDay() + 6) % 7;
+  var items = hwWeek().days[String(wd)] || [];
+  var doneN = 0;
+  for (var i = 0; i < items.length; i++) if (items[i].done) doneN++;
+  var studied = studiedToday(t), dm = doneMap()[t];
+  var complete;
+  if (items.length) complete = doneN === items.length;      /* 적힌 숙제를 모두 체크 */
+  else complete = studied || !!(dm && dm.d);                /* 숙제가 없으면 공부한 날 */
+  return { date:t, day:wd, total:items.length, done:doneN, studied:studied, complete:complete };
+}
+function markTodayDone(){
+  var st = todayStatus(), m = doneMap(), cur = m[st.date];
+  if (!cur || (!!cur.d) !== st.complete){
+    m[st.date] = { d:st.complete, t:Date.now() };
+    writeObj(DONE_KEY, m);
+  }
+  return st;
+}
+
 /* 공부한 날 — 출석 + 공부 기록 */
 function studyDays(){
   var v = readObj(SD_KEY); return (v && typeof v === "object") ? v : {};
@@ -9888,6 +9989,16 @@ function render(){
       }).join("")
     + '</div>';
 
+  var st = null;
+  try { st = markTodayDone(); } catch(e){ st = null; }
+  if (st) {
+    h += '<div class="wk-today' + (st.complete ? " ok" : "") + '">'
+      + '<span class="wk-t-em" aria-hidden="true">' + (st.complete ? "✅" : "📝") + '</span>'
+      + '<div class="wk-t-t"><b>' + (st.complete ? "오늘 숙제 완료!" : (st.total ? "오늘 숙제 " + st.done + " / " + st.total : "오늘은 적힌 숙제가 없어요")) + '</b>'
+      + '<span>' + (st.complete ? "코인 자동차 2가 열렸어요 🚗" : (st.total ? "남은 숙제를 다 체크하면 자동차 게임이 열려요" : "과목을 하나라도 공부하면 자동차 게임이 열려요")) + '</span></div>'
+      + (st.complete ? '<a class="wk-game" href="coin-car-game-2.html" data-game="1">🚗 코인 자동차 2 하러 가기!</a>' : "")
+      + '</div>';
+  }
   h += '<div class="wk-grid">';
   for (var i = 0; i < 7; i++) {
     var ds2 = iso(addDays(w0, i)), isT = ds2 === todayIso;
@@ -9924,7 +10035,7 @@ function addHw(day, text){
   if (!t) return false;
   var w = hwWeek();
   w.days[String(day)] = w.days[String(day)] || [];
-  w.days[String(day)].push({ id:"h" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36), text:t, done:false });
+  w.days[String(day)].push({ id:"h" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36), text:t, done:false, t:Date.now() });
   saveHwWeek(w);
   render();
   return true;
@@ -9933,7 +10044,7 @@ function toggleHw(id){
   var w = hwWeek(), found = false;
   for (var d = 0; d < 7; d++) {
     var list = w.days[String(d)] || [];
-    for (var i = 0; i < list.length; i++) if (list[i].id === id) { list[i].done = !list[i].done; found = true; }
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) { list[i].done = !list[i].done; list[i].t = Date.now(); found = true; }
   }
   if (found) { saveHwWeek(w); render(); }
   return found;
@@ -9942,7 +10053,10 @@ function delHw(id){
   var w = hwWeek();
   for (var d = 0; d < 7; d++) {
     var list = w.days[String(d)] || [];
-    for (var i = 0; i < list.length; i++) if (list[i].id === id) { list.splice(i, 1); saveHwWeek(w); render(); return true; }
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) {
+      w.all.del = w.all.del || {}; w.all.del[list[i].id] = Date.now();
+      list.splice(i, 1); saveHwWeek(w); render(); return true;
+    }
   }
   return false;
 }
@@ -9951,6 +10065,7 @@ function toggleSub(day, key){
   p.days[k] = p.days[k] || [];
   var at = p.days[k].indexOf(key);
   if (at >= 0) p.days[k].splice(at, 1); else p.days[k].push(key);
+  p.daysAt = p.daysAt || {}; p.daysAt[k] = Date.now();
   savePlan(p); render();
   return p.days[k];
 }
@@ -10008,6 +10123,9 @@ SB.week = {
   addHw: addHw, toggleHw: toggleHw, delHw: delHw, toggleSub: toggleSub,
   hw: function(){ return hwWeek().days; },
   attended: function(ds){ return attDay(ds); },
+  todayStatus: function(){ return todayStatus(); },
+  markTodayDone: function(){ return markTodayDone(); },
+  doneMap: function(){ return doneMap(); },
   labels: DAYN, subjects: SUBJ
 };
 
@@ -10907,6 +11025,424 @@ SB.book = {
   undo: undoRemove,
   render: render,
   weekStart: weekStart
+};
+})();
+
+/* =====================================================================
+   👨‍👩‍👧 가족 숙제·용돈 동기화 — 무료 클라우드(MantleDB), 로그인 없음
+   · 가족 코드를 만들면 클라우드에 이 기기의 숙제·시간표·용돈을 올린다
+   · 다른 기기(엄마 폰 ↔ 해율이 아이패드)에서 코드만 넣으면 같은 데이터
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+function $(id){ return document.getElementById(id); }
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function num(n){ return (typeof n === "number" && isFinite(n)) ? n : 0; }
+function arr(x){ return Array.isArray(x) ? x : []; }
+
+var API = "https://mantledb.sh/v2/";
+var FAM_KEY = "haeyuli.family.v1";
+var K = {
+  plan: "haeyuli.week.v1", hw: "haeyuli.homework.v1", money: "haeyuli.money.v1",
+  done: "haeyuli.hwdone.v1", study: "haeyuli.studydays.v1"
+};
+
+function read(k, fb){
+  try { var v = JSON.parse(localStorage.getItem(k) || "null"); return (v && typeof v === "object") ? v : fb; }
+  catch(e){ return fb; }
+}
+function write(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+function fam(){ var f = read(FAM_KEY, {}); return (f && typeof f === "object") ? f : {}; }
+function saveFam(f){ write(FAM_KEY, f); }
+function nsOf(code){ return "haeyuli-" + String(code || "").toLowerCase(); }
+function toast(t){ if (SB.toast) SB.toast(t); }
+
+function snap(){
+  var pl = read(K.plan, { days:{} });
+  try { if (SB.week && SB.week.plan) pl = SB.week.plan(); } catch(e){}
+  return {
+    plan: pl,
+    hw: read(K.hw, {}),
+    money: read(K.money, { piggy:0, bank:[], log:[] }),
+    done: read(K.done, {}),
+    study: read(K.study, {})
+  };
+}
+function body(d){
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study });
+}
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study]); }
+
+/* ---------------- 클라우드 ---------------- */
+function apiGet(code){
+  return fetch(API + encodeURIComponent(nsOf(code)) + "/data?t=" + Date.now(), { cache:"no-store", mode:"cors" })
+    .then(function(r){
+      if (r.status === 404) return null;
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    });
+}
+function apiPut(code, doc){
+  return fetch(API + encodeURIComponent(nsOf(code)) + "/data", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(doc)
+  }).then(function(r){
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  });
+}
+
+/* ---------------- 병합 ---------------- */
+function mergePlan(lp, cp){
+  lp = lp || {}; cp = cp || {};
+  var ld = lp.days || {}, cd = cp.days || {}, la = lp.daysAt || {}, ca = cp.daysAt || {};
+  var out = { days:{}, daysAt:{} };
+  for (var i = 0; i < 7; i++){
+    var k = String(i), lt = num(la[k]), ct = num(ca[k]), src;
+    if (ct > lt) src = cd[k];
+    else if (lt > ct) src = ld[k];
+    else src = Array.isArray(ld[k]) ? ld[k] : cd[k];
+    out.days[k] = arr(src).slice();
+    out.daysAt[k] = Math.max(lt, ct);
+  }
+  out.at = Math.max(num(lp.at), num(cp.at), 1);
+  return out;
+}
+
+function mergeTodo(lh, ch){
+  lh = lh || {}; ch = ch || {};
+  var keys = {}, del = {};
+  Object.keys(lh).forEach(function(k){ if (k !== "del") keys[k] = 1; });
+  Object.keys(ch).forEach(function(k){ if (k !== "del") keys[k] = 1; });
+  Object.keys(lh.del || {}).forEach(function(id){ del[id] = Math.max(num(del[id]), num(lh.del[id])); });
+  Object.keys(ch.del || {}).forEach(function(id){ del[id] = Math.max(num(del[id]), num(ch.del[id])); });
+
+  var out = { del: del };
+  Object.keys(keys).sort().forEach(function(wk){
+    var lw = (lh[wk] && typeof lh[wk] === "object") ? lh[wk] : {};
+    var cw = (ch[wk] && typeof ch[wk] === "object") ? ch[wk] : {};
+    var outW = {};
+    for (var d = 0; d < 7; d++){
+      var lk = arr(lw[String(d)]), ck = arr(cw[String(d)]);
+      if (!lk.length && !ck.length) continue;
+      var map = {}, order = [];
+      var add = function(it){
+        if (!it || !it.id) return;
+        var prev = map[it.id];
+        if (!prev){
+          map[it.id] = { id:it.id, text:String(it.text || ""), done:!!it.done, t:num(it.t) };
+          order.push(it.id);
+          return;
+        }
+        var nt = num(it.t), pt = num(prev.t);
+        if (nt > pt){ prev.text = String(it.text || ""); prev.done = !!it.done; prev.t = nt; }
+        else if (nt === pt && it.done) prev.done = true;
+      };
+      lk.forEach(add); ck.forEach(add);
+      var list = [];
+      order.forEach(function(id){
+        var it = map[id];
+        if (num(del[id]) >= it.t && num(del[id]) > 0) return;   /* 지운 숙제 */
+        list.push(it);
+      });
+      outW[String(d)] = list;
+    }
+    out[wk] = outW;
+  });
+  return out;
+}
+
+function mergeMoney(lm, cm, base){
+  lm = lm || {}; cm = cm || {};
+  var delta = num(lm.piggy) - num(base);
+  var piggy = Math.max(0, Math.round(num(cm.piggy) + delta));
+  var bank = {}, border = [];
+  function put(e){
+    if (!e || !e.id) return;
+    var prev = bank[e.id];
+    if (!prev){
+      bank[e.id] = { id:e.id, amt:num(e.amt), at:e.at || "", mat:e.mat || "", out:e.out || "" };
+      border.push(e.id);
+      return;
+    }
+    if (!prev.out && e.out) prev.out = e.out;
+  }
+  arr(lm.bank).forEach(put); arr(cm.bank).forEach(put);
+  var log = {}, lorder = [];
+  function putLog(x){
+    if (!x) return;
+    var k = [x.t, x.at, x.why].join("|");
+    if (!log[k]){ log[k] = x; lorder.push(k); }
+  }
+  arr(lm.log).forEach(putLog); arr(cm.log).forEach(putLog);
+  var logs = lorder.map(function(k){ return log[k]; })
+    .sort(function(a, b){ return String(b.at || "").localeCompare(String(a.at || "")); })
+    .slice(0, 20);
+  return { piggy:piggy, bank:border.map(function(id){ return bank[id]; }), log:logs };
+}
+
+function mergeDone(ld, cd){
+  ld = ld || {}; cd = cd || {};
+  var out = {}, keys = {};
+  Object.keys(ld).forEach(function(k){ keys[k] = 1; });
+  Object.keys(cd).forEach(function(k){ keys[k] = 1; });
+  Object.keys(keys).forEach(function(k){
+    var a = (ld[k] && typeof ld[k] === "object") ? ld[k] : null;
+    var b = (cd[k] && typeof cd[k] === "object") ? cd[k] : null;
+    if (!a && !b) return;
+    if (!a) { out[k] = b; return; }
+    if (!b) { out[k] = a; return; }
+    out[k] = num(b.t) > num(a.t) ? b : a;
+  });
+  return out;
+}
+
+function mergeStudy(ls, cs){
+  ls = ls || {}; cs = cs || {};
+  var out = {}, keys = {};
+  Object.keys(ls).forEach(function(k){ keys[k] = 1; });
+  Object.keys(cs).forEach(function(k){ keys[k] = 1; });
+  Object.keys(keys).forEach(function(k){ out[k] = Math.max(num(ls[k]), num(cs[k])); });
+  return out;
+}
+
+function buildDoc(local, cloud, base, code){
+  var c = cloud || {};
+  return {
+    v: 1,
+    code: code,
+    plan: mergePlan(local.plan, c.plan),
+    hw: mergeTodo(local.hw, c.hw),
+    money: mergeMoney(local.money, c.money, base),
+    done: mergeDone(local.done, c.done),
+    study: mergeStudy(local.study, c.study),
+    at: Date.now()
+  };
+}
+
+/* ---------------- 적용 ---------------- */
+function applyDoc(doc){
+  var s = snap(), changed = false;
+  if (JSON.stringify(doc.plan) !== JSON.stringify(s.plan)) { write(K.plan, doc.plan); changed = true; }
+  if (JSON.stringify(doc.hw) !== JSON.stringify(s.hw)) { write(K.hw, doc.hw); changed = true; }
+  if (JSON.stringify(doc.money) !== JSON.stringify(s.money)) { write(K.money, doc.money); changed = true; }
+  if (JSON.stringify(doc.done) !== JSON.stringify(s.done)) { write(K.done, doc.done); changed = true; }
+  if (JSON.stringify(doc.study) !== JSON.stringify(s.study)) { write(K.study, doc.study); changed = true; }
+  if (changed) rerender();
+  return changed;
+}
+
+function rerender(){
+  try { if (SB.week && SB.week.render) SB.week.render(); } catch(e){}
+  try { if (SB.money && SB.money.render) SB.money.render(); } catch(e){}
+}
+
+/* ---------------- 동기화 ---------------- */
+var busy = false;
+
+function pullPush(manual){
+  var f = fam();
+  if (!f.code){
+    if (manual) setState("가족 코드를 먼저 만들어 주세요", true);
+    return Promise.resolve(false);
+  }
+  if (busy) return Promise.resolve(false);
+  busy = true;
+  setState(manual ? "동기화하는 중…" : "");
+
+  return apiGet(f.code).then(function(cloud){
+    var local = snap();
+    if (!cloud){
+      var doc = {
+        v:1, code:f.code, plan:local.plan, hw:local.hw, money:local.money,
+        done:local.done, study:local.study, at:Date.now()
+      };
+      return apiPut(f.code, doc).then(function(){ return true; });
+    }
+    var merged = buildDoc(local, cloud, num(f.base), f.code);
+    applyDoc(merged);
+    if (body(merged) !== body(cloud)){
+      return apiPut(f.code, merged).then(function(){ return true; });
+    }
+    return true;
+  }).then(function(ok){
+    var s = snap(), g = fam();
+    g.base = num(s.money.piggy);
+    g.lastSync = Date.now();
+    g.sig = sigOf(s);
+    g.lastError = "";
+    g.at = g.at || Date.now();
+    saveFam(g);
+    setState();
+    if (manual) toast("🔄 가족 숙제·용돈을 맞췄어요");
+    return ok;
+  }).catch(function(e){
+    var g = fam();
+    g.lastError = String((e && e.message) || e || "오류");
+    saveFam(g);
+    setState("", true);
+    if (manual) toast("동기화하지 못했어요 · 인터넷을 확인해 주세요");
+    return false;
+  }).then(function(r){ busy = false; return r; });
+}
+
+/* ---------------- 설정 화면 ---------------- */
+function fmtTime(ts){
+  if (!ts) return "아직";
+  var d = new Date(ts), h = d.getHours(), m = d.getMinutes();
+  return (h < 12 ? "오전 " : "오후 ") + ((h % 12) || 12) + ":" + pad2(m);
+}
+function setState(msg, err){
+  var el = $("famState"); if (!el) return;
+  var f = fam();
+  if (msg){ el.textContent = msg; el.classList.toggle("err", !!err); return; }
+  if (!f.code){ el.textContent = "아직 연결하지 않았어요 · 이 기기 안에만 저장돼요"; el.classList.remove("err"); return; }
+  if (f.lastError){ el.textContent = "⚠️ 연결은 됐는데 마지막 동기화가 실패했어요 (" + fmtTime(f.lastSync) + ")"; el.classList.add("err"); return; }
+  el.textContent = "✅ 연결됨 · 마지막 동기화 " + fmtTime(f.lastSync);
+  el.classList.remove("err");
+}
+function paint(){
+  var f = fam(), on = !!f.code;
+  if ($("famOff")) $("famOff").hidden = on;
+  if ($("famOn")) $("famOn").hidden = !on;
+  if ($("famCodeVal")) $("famCodeVal").textContent = on ? f.code : "—";
+  setState();
+}
+function newCode(){
+  var A = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ", s = "";
+  for (var i = 0; i < 6; i++) s += A.charAt(Math.floor(Math.random() * A.length));
+  return s;
+}
+function createCode(){
+  if (fam().code) return;
+  var code = newCode(), s = snap();
+  saveFam({ code:code, base:num(s.money.piggy), lastSync:0, sig:"", lastError:"", at:Date.now() });
+  paint();
+  setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
+  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, at:Date.now() })
+    .then(function(){
+      var g = fam();
+      g.base = num(s.money.piggy); g.lastSync = Date.now(); g.sig = sigOf(s); g.lastError = "";
+      saveFam(g); setState();
+      toast("✅ 가족 코드 " + code + " 로 연결했어요");
+    })
+    .catch(function(e){
+      var g = fam(); g.lastError = String((e && e.message) || e); saveFam(g);
+      setState("클라우드에 올리지 못했어요 · 인터넷을 확인한 뒤 🔄 지금 동기화를 눌러 주세요", true);
+    });
+}
+function joinCode(){
+  var inp = $("famCodeIn");
+  var code = String((inp && inp.value) || "").toUpperCase().replace(/[^0-9A-Z]/g, "").slice(0, 8);
+  if (code.length < 4){ toast("가족 코드를 정확히 넣어 주세요"); return; }
+  setState("코드를 확인하는 중…");
+  apiGet(code).then(function(cloud){
+    if (!cloud){ setState("그 코드를 찾지 못했어요 · 코드를 다시 확인해 주세요", true); return; }
+    if (cloud.plan) write(K.plan, cloud.plan);
+    if (cloud.hw) write(K.hw, cloud.hw);
+    if (cloud.money) write(K.money, cloud.money);
+    if (cloud.done) write(K.done, cloud.done);
+    if (cloud.study) write(K.study, cloud.study);
+    var s = snap();
+    saveFam({ code:code, base:num(s.money.piggy), lastSync:Date.now(), sig:sigOf(s), lastError:"", at:Date.now() });
+    if (inp) inp.value = "";
+    paint(); rerender();
+    toast("🔗 가족 코드 " + code + " 로 연결했어요");
+    pullPush(false);
+  }).catch(function(){
+    setState("인터넷 연결을 확인해 주세요", true);
+  });
+}
+function leaveCode(){
+  var f = fam();
+  if (!f.code) return;
+  var ok = true;
+  try { ok = window.confirm("이 기기에서 가족 동기화를 끊을까요?\n이 기기에 있는 숙제·용돈은 그대로 남아요."); } catch(e){}
+  if (!ok) return;
+  saveFam({});
+  paint();
+  toast("이 기기만 쓰는 상태로 돌아왔어요");
+}
+
+function copyCode(){
+  var code = fam().code || "";
+  if (!code) return;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(code).then(function(){ toast("가족 코드 " + code + " 를 복사했어요"); });
+      return;
+    }
+  } catch(e){}
+  var ta = document.createElement("textarea");
+  ta.value = code; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); toast("가족 코드 " + code + " 를 복사했어요"); } catch(e){}
+  document.body.removeChild(ta);
+}
+
+/* ---------------- 연결 ---------------- */
+function bindUI(){
+  function on(id, fn){
+    var el = $(id);
+    if (el && !el.__fam){ el.__fam = 1; el.addEventListener("click", fn); }
+  }
+  var sb = $("btnSettings");
+  if (sb && !sb.__fam){
+    sb.__fam = 1;
+    sb.addEventListener("click", function(){ setTimeout(paint, 40); });
+  }
+  on("famCreate", createCode);
+  on("famJoin", joinCode);
+  on("famSyncNow", function(){ pullPush(true); });
+  on("famLeave", leaveCode);
+  on("famCopy", copyCode);
+  var inp = $("famCodeIn");
+  if (inp && !inp.__fam){
+    inp.__fam = 1;
+    inp.addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); joinCode(); } });
+  }
+}
+
+function start(){
+  bindUI();
+  paint();
+  var f = fam();
+  if (f.code) setTimeout(function(){ pullPush(false); }, 900);
+
+  setInterval(function(){
+    var g = fam();
+    if (!g.code || busy || document.hidden) return;
+    pullPush(false);                       /* 다른 기기의 숙제·용돈 받기 */
+  }, 15000);
+
+  setInterval(function(){
+    var g = fam();
+    if (!g.code || busy || document.hidden) return;
+    if (sigOf(snap()) !== g.sig) pullPush(false);   /* 이 기기에서 바뀐 것 올리기 */
+  }, 4000);
+
+  document.addEventListener("visibilitychange", function(){
+    if (!document.hidden && fam().code) pullPush(false);
+  });
+  window.addEventListener("online", function(){ if (fam().code) pullPush(false); });
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+else start();
+
+SB.family = {
+  api: API,
+  code: function(){ return fam().code || ""; },
+  state: function(){ return fam(); },
+  sync: function(){ return pullPush(true); },
+  create: createCode,
+  join: joinCode,
+  leave: leaveCode,
+  paint: paint,
+  today: function(){ return (SB.week && SB.week.todayStatus) ? SB.week.todayStatus() : null; },
+  local: snap
 };
 })();
 
