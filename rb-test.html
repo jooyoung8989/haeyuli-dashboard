@@ -3769,6 +3769,12 @@ body.mob .rb-q{font-size:3vw;}
 body.mob .rb-opt{font-size:2.6vw;}
 body.mob .rb-canvas-box canvas{height:34vw;}
 
+/* 리딩앤 바로가기 */
+.rb-ext{display:inline-flex;align-items:center;gap:.4vh;text-decoration:none;
+  background:linear-gradient(135deg,#fff2e8,#ffe6f0);color:#b5482f !important;
+  box-shadow:inset 0 0 0 .2vh #f6c6ae;border-radius:999px;font-weight:900;}
+.rb-ext:active{transform:scale(.97);}
+
 /* ==/RB-BLOCK-CSS== */
 </style>
 </head>
@@ -15237,8 +15243,43 @@ function setRead(key, on){
   if (!BYKEY[key]) return;
   if (on) read[key] = Date.now(); else delete read[key];
   wr(K.read, read);
-  paintAll();
+  refreshCard(key);
+  refreshCounters();
+  var t = rd(K.today, null);
+  if (t && t.k === key){ var h = $("rbHome"); if (h) h.innerHTML = homeCard(); var aw = $("rbAskWrap"); if (aw) aw.innerHTML = askCard(); }
   RB.sync();
+}
+/* 카드 한 장만 다시 그린다 (230장 전체를 다시 만들지 않게) */
+function refreshCard(key){
+  var el = document.querySelector('[data-book="' + key.replace(/"/g, '\\"') + '"]');
+  if (!el) return;
+  var b = BYKEY[key], on = isRead(key);
+  el.classList.toggle("read", on);
+  var chk = el.querySelector("[data-rbtoggle]");
+  if (chk){ chk.classList.toggle("on", on); chk.textContent = on ? "✓ 읽었어요" : "읽었어요"; }
+}
+function refreshCounters(){
+  var n = $("rbTabN"); if (n) n.textContent = readCount("") + "/" + BOOKS.length;
+  var chips = $("rbChips");
+  if (chips && chips.children.length){
+    chips.children[0].innerHTML = '전체 <b>' + readCount("") + "/" + BOOKS.length + '</b>';
+    for (var i = 0; i < SERIES.length; i++){
+      var el = chips.children[i + 1];
+      if (!el) continue;
+      el.innerHTML = SERIES[i].e + " " + esc(SERIES[i].n.replace("솔루토이 ", "")) +
+        ' <b>' + readCount(SERIES[i].k) + "/" + SERIES[i].books.length + '</b>';
+    }
+  }
+  var pr = document.querySelector("#rbShelfWrap .rb-prog");
+  if (pr){
+    var c = CHIP ? readCount(CHIP) : readCount(""), tot = CHIP ? seriesOf(CHIP).books.length : BOOKS.length;
+    var bar = pr.querySelector(".rb-bar i"), sp = pr.querySelector("span");
+    if (bar) bar.style.width = Math.round(c / tot * 100) + "%";
+    if (sp) sp.textContent = c + " / " + tot + "권";
+  }
+  var h = $("rbHome");
+  if (h && h.innerHTML.indexOf("읽었어요") >= 0){ /* 홈 카드는 오늘 책이 읽히면 다시 */ }
+  if (!$("rbHome")) return;
 }
 
 /* ---------- 3. 오늘의 책 ---------- */
@@ -15725,6 +15766,31 @@ RB.sync = function(){
   } catch(e){ SYNCING = false; }
 };
 
+/* ---------- 8-b. 리딩앤 바로가기 (온라인 공부 → 영어) ---------- */
+var EXT_LINKS = [
+  ["rbRnLink", "🔗 리딩앤", "https://www.readingn.com", "리딩앤 사이트 열기 (새 창)"],
+  ["rbPmLink", "🔗 파닉스 몬스터", "https://m.alist.co.kr/PM2nd/index_real.asp", "파닉스 몬스터 사이트 열기 (새 창)"]
+];
+function addReadingN(){
+  try {
+    EXT_LINKS.forEach(function(x){
+      var old = document.getElementById(x[0]); if (old && old.parentNode) old.parentNode.removeChild(old);
+    });
+    if (!SB || SB.current !== "study" || SB.subject !== "en") return;
+    var box = document.getElementById("subs2");
+    var host = (box && !box.hidden) ? box : document.getElementById("subs");
+    if (!host || host.hidden) return;
+    EXT_LINKS.forEach(function(x){
+      var a = document.createElement("a");
+      a.id = x[0]; a.className = "subtab rb-ext";
+      a.href = x[2]; a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.textContent = x[1];
+      a.setAttribute("aria-label", x[3]);
+      host.appendChild(a);
+    });
+  } catch(e){}
+}
+
 /* ---------- 9. 시작 ---------- */
 function boot(){
   try {
@@ -15735,9 +15801,12 @@ function boot(){
     var oldBook = SB.onShow.book;
     SB.onShow.book = function(){ if (oldBook) { try { oldBook.apply(this, arguments); } catch(e){} }
       paintShelves(); if (MODE !== "act") applyMode(); };
+    var oldChips = SB.renderChips;
+    SB.renderChips = function(){ if (oldChips) { try { oldChips.apply(this, arguments); } catch(e){} } addReadingN(); };
     var oldHome = SB.onShow.home;
     SB.onShow.home = function(){ try { buildHome(); var h = $("rbHome"); if (h) h.innerHTML = homeCard(); } catch(e){} if (oldHome) try { oldHome.apply(this, arguments); } catch(e){} };
     paintAll();
+    addReadingN();
     RB.sync();
   } catch(e){
     try { (window.__rbErrs = window.__rbErrs || []).push(String(e)); } catch(e2){}
