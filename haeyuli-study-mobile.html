@@ -5148,6 +5148,15 @@ body.mob .dy-viewmeta{font-size:.8rem;}
     <div class="subs subs2" id="subs2" aria-label="과목 학습 메뉴" hidden></div>
   </nav>
 
+  <!-- 🔗 파닉스 몬스터 바로가기 바 (영어 탭에서만 보임) -->
+  <div class="ext-bar" id="enExtBar" hidden>
+    <a class="ext-btn" href="https://m.alist.co.kr/PM2nd/index_real.asp" target="_blank" rel="noopener noreferrer"
+       aria-label="파닉스 몬스터 사이트 새 창으로 열기">
+      <span class="ext-em" aria-hidden="true">🔗</span> 파닉스 몬스터
+      <span class="ext-go">새 창으로 열기 ↗</span>
+    </a>
+  </div>
+
   <div class="views">
     <!-- ================= 💻 온라인 공부 (과목 고르기) ================= -->
     <section class="view studyhub" id="viewStudyHub" data-view="study-hub" hidden>
@@ -5188,15 +5197,20 @@ body.mob .dy-viewmeta{font-size:.8rem;}
     </section>
   </main>
 
-    <!-- ================= 🎬 영어 영상 (흘려듣기 21개 채널) ================= -->
+    <!-- ================= 🎬 영어 영상 (흘려듣기 21개 채널 + 한 편씩) ================= -->
     <section class="view engvid" id="viewEnVideo" data-view="en-video" hidden>
       <div class="ev-wrap">
         <div class="ev-hd">
           <b>🎬 영어 영상</b>
-          <span class="ev-sub">흘려듣기 좋은 공식 채널 21개 · 3단계</span>
+          <span class="ev-sub">흘려듣기 좋은 공식 채널 · 3단계 + 한 편씩</span>
           <div class="ev-steps" id="evSteps" role="group" aria-label="단계 고르기"></div>
         </div>
         <div class="ev-chans" id="evChans" aria-label="채널 바로가기"></div>
+        <div class="ep-bar" id="epBar" hidden>
+          <div class="ep-chips" id="epChips" role="group" aria-label="만화 채널 고르기"></div>
+          <span class="ep-count" id="epCount"></span>
+          <a class="ev-chan ep-open" id="epOpen" href="https://www.youtube.com" target="_blank" rel="noopener">채널 ↗</a>
+        </div>
         <div class="ev-grid" id="evGrid"></div>
       </div>
     </section>
@@ -19698,7 +19712,6 @@ RB.sync = function(){
 
 /* ---------- 8-b. 리딩앤 바로가기 (온라인 공부 → 영어) ---------- */
 var EXT_LINKS = [
-  ["rbRnLink", "🔗 리딩앤", "https://www.readingn.com", "리딩앤 사이트 열기 (새 창)"],
   ["rbPmLink", "🔗 파닉스 몬스터", "https://m.alist.co.kr/PM2nd/index_real.asp", "파닉스 몬스터 사이트 열기 (새 창)"]
 ];
 function addReadingN(){
@@ -20432,6 +20445,7 @@ else boot();
 /* ==/RB-BLOCK-JS== */
 </script>
 
+
 <!-- ===== 공용 영상 모달 (🔬 과학 영상관 · 🎬 영어 영상) ===== -->
 <style id="vidHubCss">
 /* =====================================================================
@@ -20493,8 +20507,33 @@ else boot();
   box-shadow:inset 0 0 0 1.2px #dde8ef;white-space:nowrap;}
 .ev-chan:hover{background:#eaf6ff;color:#0e5a86;}
 .ev-grid{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(clamp(150px,17vw,205px),1fr));gap:.8vh;align-content:start;padding-right:.2vh;}
+  grid-template-columns:repeat(auto-fill,minmax(clamp(150px,17vw,205px),1fr));gap:.8vh;align-content:start;
+  grid-auto-rows:max-content;padding-right:.2vh;}
 .ev-grid .vid-card{width:auto;}
+
+/* 📺 한 편씩 골라보기 — 채널 고르기 · 봤어요 ✓ */
+.ep-bar{flex:0 0 auto;display:flex;align-items:center;gap:.5rem;min-width:0;}
+.ep-bar[hidden]{display:none;}
+.ep-chips{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:.35rem;flex-wrap:nowrap;
+  overflow-x:auto;scrollbar-width:none;padding:.1rem 0;}
+.ep-chips::-webkit-scrollbar{display:none;}
+.ep-chip{flex:0 0 auto;}
+.ep-chip.on{background:#e9f6ff;color:#0e5a86;box-shadow:inset 0 0 0 1.6px #9dcde9;}
+.ep-count{flex:0 0 auto;font-size:clamp(10.5px,1.3vh,14px);font-weight:800;color:#2f8b6b;
+  background:#f2f8f4;padding:.15rem .6rem;border-radius:999px;box-shadow:inset 0 0 0 1px #d7e8de;white-space:nowrap;}
+.ep-open{flex:0 0 auto;}
+.vid-ep{position:relative;cursor:pointer;}
+.vid-ep.watched{box-shadow:inset 0 0 0 1.6px #b8e0c9;background:#fbfefc;}
+.vid-ep.watched .vid-t{color:#2f6b52;}
+.vid-ep .vid-epl{display:inline-block;align-self:flex-start;font-size:clamp(9px,1.1vh,11.5px);font-weight:900;color:#6c7f8e;
+  background:#f1f6fa;padding:.05rem .38rem;border-radius:6px;margin-bottom:.12rem;}
+.vid-ck{position:absolute;right:.32rem;top:.32rem;width:1.75rem;height:1.75rem;border-radius:50%;
+  display:grid;place-items:center;background:rgba(255,255,255,.86);color:#a8b7c3;font-size:.95rem;font-weight:900;
+  box-shadow:0 1px 4px rgba(0,0,0,.18);}
+.vid-ck.on{background:#2f9e6b;color:#fff;box-shadow:0 2px 6px rgba(30,120,80,.35);}
+.vid-ck:active{transform:scale(.9);}
+body.mob .ep-count{font-size:.62rem;}
+body.mob .vid-ck{width:1.55rem;height:1.55rem;font-size:.82rem;}
 .ev-empty{padding:2vh;text-align:center;font-weight:700;color:#8b98a4;font-size:clamp(13px,1.6vh,18px);}
 
 .vh-modal{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;
@@ -20518,7 +20557,29 @@ else boot();
   background:rgba(255,255,255,.14);color:#dff1fb;font-weight:800;font-size:clamp(12px,1.45vh,15px);}
 .vh-src{font-size:clamp(11px,1.35vh,15px);font-weight:700;color:#9fb3c4;}
 
+/* 🔗 파닉스 몬스터 바로가기 바 (영어 탭) */
+#subs2 .rb-ext{display:none !important;}
+.ext-bar{flex:0 0 auto;display:flex;align-items:center;gap:.5rem;padding:.2vh 1.6vh .3vh;}
+.ext-bar[hidden]{display:none;}
+.ext-btn{display:inline-flex;align-items:center;gap:.45rem;min-height:2.7rem;padding:0 1.15rem;border-radius:999px;
+  background:linear-gradient(135deg,#eef7ff,#dcefff);color:#0d5a86;font-weight:900;font-size:clamp(13px,1.6vh,17px);
+  letter-spacing:-.02em;box-shadow:inset 0 0 0 1.6px #a6d2ee,0 2px 7px rgba(40,110,150,.14);white-space:nowrap;}
+.ext-btn:active{transform:scale(.97);}
+.ext-btn .ext-em{font-size:1.15em;line-height:1;}
+.ext-go{font-size:.76em;font-weight:800;color:#4f7f9c;background:rgba(255,255,255,.78);
+  padding:.12rem .5rem;border-radius:999px;}
+body.mob .ext-bar{padding:.15rem .6rem .3rem;}
+body.mob .ext-btn{min-height:2.45rem;font-size:.84rem;padding:0 .85rem;gap:.35rem;}
+body.mob .ext-go{font-size:.66rem;padding:.1rem .4rem;}
+
 /* 휴대폰 */
+@media (max-width: 940px){
+  .sci-hd b{flex:1 1 auto;}
+  .sci-sub{display:none;}
+  .sci-chips{order:3;flex:1 1 100%;}
+  .sci-open{order:2;}
+  .ev-steps{flex:1 1 100%;}
+}
 body.mob .sci-hub{padding:.6rem .6rem .55rem;border-radius:14px;gap:.4rem;}
 body.mob .sci-hd b{font-size:1rem;}
 body.mob .sci-sub{display:none;}
@@ -20570,8 +20631,7 @@ function esc(s){
   });
 }
 
-/* ---------------- 🔬 과학 채널 4개 · 영상 16편 ---------------- */
-var SCI = [
+/* ---------------- 🔬 과학 채널 4개 · 영상 16편 ---------------- */var SCI = [
   { k:"goguma", em:"🍠", nm:"고구마머리 과학", ch:"@고구마머리",
     url:"https://www.youtube.com/channel/UC29S0y5vK0XTCke45dGWT6w",
     vids:[
@@ -20679,6 +20739,9 @@ var EN = [
   ] }
 ];
 
+var EPI = [{"k":"harry","em":"🐰","nm":"해리더버니","en":"Harry the Bunny","ch":"@HarryTheBunny","url":"https://www.youtube.com/channel/UCxFiKveLtQkOSI8Lv-rfl2A","vids":[{"id":"gRmwu8Hsins","t":"Circle","n":"오늘의 단어: circle — 동그라미","d":"3:31","ep":"첫 단어"},{"id":"mSM8pMM84Vw","t":"Colors","n":"오늘의 단어: colors — 색깔","d":"3:31","ep":"첫 단어"},{"id":"5cFa_eMWDj8","t":"Cat","n":"오늘의 단어: cat — 고양이","d":"3:31","ep":"첫 단어"},{"id":"0PAUojRMNik","t":"Green","n":"오늘의 단어: green — 초록","d":"4:31","ep":"첫 단어"},{"id":"IGaJRfE299Q","t":"Cereal","n":"오늘의 단어: cereal — 시리얼","d":"3:31","ep":"첫 단어"},{"id":"XIioZNbuTc4","t":"Games","n":"오늘의 단어: games — 놀이","d":"3:31","ep":"첫 단어"},{"id":"NOzRroAHmMg","t":"Pillow","n":"오늘의 단어: pillow — 베개","d":"3:31","ep":"첫 단어"},{"id":"kACqjzNpHXk","t":"Eyes","n":"오늘의 단어: eyes — 눈","d":"3:30","ep":"첫 단어"},{"id":"xShpSJ60ydw","t":"Carrot","n":"오늘의 단어: carrot — 당근","d":"3:31","ep":"첫 단어"},{"id":"0j27lzxZ7uU","t":"Dog","n":"오늘의 단어: dog — 강아지","d":"3:31","ep":"첫 단어"},{"id":"IZHtuEUa8Pk","t":"One","n":"오늘의 단어: one — 하나","d":"3:31","ep":"첫 단어"},{"id":"FNUe28TJats","t":"Red","n":"오늘의 단어: red — 빨강","d":"3:31","ep":"첫 단어"},{"id":"b_zbxNA1hGk","t":"Blue","n":"오늘의 단어: blue — 파랑","d":"4:31","ep":"첫 단어"},{"id":"6qZP_6Nf7FM","t":"Yellow","n":"오늘의 단어: yellow — 노랑","d":"3:31","ep":"첫 단어"},{"id":"ZSiEYXGaSug","t":"Book","n":"오늘의 단어: book — 책","d":"3:31","ep":"첫 단어"},{"id":"0tR46ZK-nYg","t":"Juice","n":"오늘의 단어: juice — 주스","d":"3:31","ep":"첫 단어"},{"id":"lrrD_NpoTuY","t":"Milk","n":"오늘의 단어: milk — 우유","d":"3:31","ep":"첫 단어"},{"id":"jVQlZLk2y0k","t":"Breakfast","n":"오늘의 단어: breakfast — 아침밥","d":"3:31","ep":"첫 단어"},{"id":"JNWCKdfx2w8","t":"CD","n":"오늘의 단어: CD — 시디","d":"4:31","ep":"첫 단어"},{"id":"IGuy-7YJ0kk","t":"Next to","n":"오늘의 단어: next to — 옆에","d":"3:31","ep":"첫 단어"},{"id":"7z3zBBhl58w","t":"On","n":"오늘의 단어: on — 위에","d":"3:31","ep":"첫 단어"},{"id":"sW7LANy7NHM","t":"Dreams","n":"오늘의 단어: dreams — 꿈","d":"3:31","ep":"첫 단어"},{"id":"6nGyJnw9tCg","t":"Whistle","n":"오늘의 단어: whistle — 호루라기","d":"3:31","ep":"첫 단어"},{"id":"Rm-hnBZYm9U","t":"Duck","n":"오늘의 단어: duck — 오리","d":"3:31","ep":"첫 단어"},{"id":"syQlYN8hRN0","t":"Bunny","n":"오늘의 단어: bunny — 토끼","d":"3:31","ep":"첫 단어"},{"id":"xx06n9xeS70","t":"Shirt","n":"오늘의 단어: shirt — 셔츠","d":"4:31","ep":"첫 단어"},{"id":"meCoCvfduxA","t":"Scarf","n":"오늘의 단어: scarf — 목도리","d":"3:31","ep":"첫 단어"},{"id":"uaSmsNTxAOE","t":"Blanket","n":"오늘의 단어: blanket — 담요","d":"3:30","ep":"첫 단어"},{"id":"hr_P8lQGyGs","t":"Teddy Bear","n":"오늘의 단어: teddy bear — 곰인형","d":"3:31","ep":"첫 단어"},{"id":"l-6bp2H1NHg","t":"Cup","n":"오늘의 단어: cup — 컵","d":"3:31","ep":"첫 단어"}]},{"k":"maisy","em":"🌳","nm":"메이지","en":"Maisy","ch":"@MaisyMouse","url":"https://www.youtube.com/channel/UC6PkaI25MZai1547O9bTeqQ","vids":[{"id":"P_uKWfGCaMI","t":"Beach","n":"바닷가 · 롤러스케이트 · 우산 · 깃털","d":"20:16","ep":"20분 묶음"},{"id":"TvfOE2ytjxk","t":"Sandcastle","n":"모래성 · 박쥐 · 진저브레드 · 공","d":"20:16","ep":"20분 묶음"},{"id":"wNDGKgP1ZCI","t":"Swing","n":"그네 · 생일 · 강아지 · 비","d":"20:16","ep":"20분 묶음"},{"id":"PyGu4T_cx2I","t":"Parade","n":"퍼레이드 · 해적 놀이 · 에어바운스 · 탈룰라","d":"20:16","ep":"20분 묶음"},{"id":"r5bm4ro6Ov0","t":"Circus","n":"서커스 · 신나는 춤 · 달걀 찾기 · 에디 무릎이 아파","d":"20:16","ep":"20분 묶음"},{"id":"2zfATybf42c","t":"Treasure","n":"보물찾기 · 구름 · 벼룩 · 양","d":"20:16","ep":"20분 묶음"},{"id":"vIc5cEMECFw","t":"Rowing","n":"노 젓기 · 손수레 · 손전등 · 밴드 놀이","d":"20:16","ep":"20분 묶음"},{"id":"JTaPZfzsijc","t":"Train","n":"동물 세기 · 언덕 위 친구들 · 분장 파티 · 잠자리 이야기","d":"20:16","ep":"20분 묶음"},{"id":"8RU-CST7dv4","t":"Bounce","n":"통통 튀기 · 장보기 · 벌레 · 건전지","d":"20:16","ep":"20분 묶음"},{"id":"5dVzq4mzbFo","t":"Tennis","n":"테니스 · 달팽이 · 통통 튀기 · 배 타기","d":"20:16","ep":"20분 묶음"},{"id":"bD_zz-Eri5s","t":"Hop","n":"깡충 놀이 · 배 타기 · 달팽이 · 테니스","d":"20:16","ep":"20분 묶음"},{"id":"AS-FCGXblUU","t":"Toot Toot","n":"빵빵 · 펭귄 · 재채기 · 업어 주기","d":"20:16","ep":"20분 묶음"},{"id":"zb1oN15pLqY","t":"Go!","n":"바퀴 · 산 오르기 · 캥거루 · 비눗방울","d":"20:16","ep":"20분 묶음"},{"id":"5QLIN6O1j-E","t":"Sky","n":"‘하늘’ 이야기로 시작해요","d":"20:16","ep":"20분 묶음"},{"id":"iJL5fGF4PYU","t":"Swimming","n":"수영 · 숨바꼭질 · 이글루 · 모래 놀이","d":"20:16","ep":"20분 묶음"},{"id":"TGxMdjooM5I","t":"Stick","n":"막대기 · 수확 · 엉망진창 · 창고","d":"20:16","ep":"20분 묶음"},{"id":"YztyofbUMV8","t":"Plane","n":"비행기 · 놀이 축제 · 퍼레이드 · 보물찾기","d":"20:16","ep":"20분 묶음"},{"id":"5_MJs5qyFq4","t":"Clouds","n":"구름 · 막대기 · 벼룩","d":"20:16","ep":"20분 묶음"},{"id":"7yEErqpyqyE","t":"Ball","n":"축구 · 버스 · 쿠키 굽기 · 쿠키 나누기 · 고양이 선물","d":"20:16","ep":"20분 묶음"},{"id":"SuL7ksZ3YZI","t":"Shopping","n":"장보기 · 벌레 · 모자 · 망원경","d":"20:16","ep":"20분 묶음"},{"id":"LoVhUf6RYK4","t":"Pool","n":"물놀이 · 동물 세기 · 캠핑 · 자전거","d":"20:16","ep":"20분 묶음"},{"id":"MhmoUJR26Qs","t":"Playground","n":"놀이터 · 눈 오는 날 · 점박이 · 빨래","d":"20:16","ep":"20분 묶음"},{"id":"ecCshan66Yc","t":"Picnic","n":"소풍 · 기차 · 캠핑 · 물놀이","d":"20:16","ep":"20분 묶음"},{"id":"TSlUTIf291k","t":"Mountain","n":"산 · 비눗방울 · 캥거루 · 친구 집에서 자기","d":"20:16","ep":"20분 묶음"},{"id":"KLCYJWOlmX4","t":"Footprints","n":"‘발자국’ 이야기로 시작해요","d":"20:16","ep":"20분 묶음"},{"id":"KUH2yW93i_I","t":"Ferry","n":"배 타기 · 달팽이 · 통통 튀기 · 건전지","d":"20:16","ep":"20분 묶음"},{"id":"BuYfMrUQ7gQ","t":"Camping","n":"캠핑 · 기차 · 파티 · 자전거","d":"20:16","ep":"20분 묶음"},{"id":"Uxyl2lag5Wo","t":"Boat","n":"보트 · 점박이 · 숨바꼭질 · 놀이터","d":"20:16","ep":"20분 묶음"},{"id":"ziv8hilXToU","t":"Bike","n":"자전거 · 토끼 · 잘 자요 · 파티","d":"20:16","ep":"20분 묶음"},{"id":"hIZM_p85sLM","t":"Library","n":"도서관 · 삐약 소리 · 인형극 · 호스 물놀이","d":"20:16","ep":"20분 묶음"}]},{"k":"pororo","em":"🐧","nm":"뽀로로 영어","en":"Pororo","ch":"@pororoenglish","url":"https://www.youtube.com/channel/UCAmia3u27mHY-Y6c-lwakAQ","vids":[{"id":"8kIe7reaK3o","t":"We're Friends","n":"우린 친구야","d":"5:01","ep":"S1E1"},{"id":"o5eW3iAyiMs","t":"It's All Right","n":"괜찮아","d":"5:02","ep":"S1E2"},{"id":"v6yKr3Onf1Y","t":"Ice Fishing","n":"얼음낚시","d":"5:01","ep":"S1E3"},{"id":"RPPs7dFA48I","t":"Smile, Smile, Smile!","n":"웃어요, 웃어!","d":"5:01","ep":"S1E4"},{"id":"jGUDXTyCnio","t":"What Happened to My Face?!","n":"내 얼굴이 왜 이래!","d":"5:02","ep":"S1E5"},{"id":"hFy4MG1504c","t":"Achoo, I Got a Cold","n":"에취, 감기 걸렸어","d":"5:03","ep":"S1E6"},{"id":"1pXPG3qCYug","t":"Dream of Flying","n":"하늘을 나는 꿈","d":"5:03","ep":"S1E7"},{"id":"NMOMfthG6Jk","t":"Who Touched My Snowman?","n":"누가 내 눈사람 건드렸어?","d":"5:01","ep":"S1E8"},{"id":"SQ3-mmGoML8","t":"Treasure Hunting","n":"보물찾기","d":"5:02","ep":"S1E9"},{"id":"NEh2r7qEYhM","t":"Crong the Troublemaker","n":"말썽꾸러기 크롱","d":"5:02","ep":"S1E10"},{"id":"eVLTJJMIYGQ","t":"Let's Play Together","n":"같이 놀자","d":"5:01","ep":"S1E11"},{"id":"W8ug7PP9pyY","t":"Can't I Have the Moon?","n":"달을 가질 수 없을까?","d":"5:01","ep":"S1E12"},{"id":"fZOZUvtvYnE","t":"Eddy's Secret","n":"에디의 비밀","d":"5:01","ep":"S1E13"},{"id":"WYiNpaJIxcM","t":"A Magic Flute","n":"마법 피리","d":"5:01","ep":"S1E14"},{"id":"WfuGZMPadGk","t":"Snow Canvas","n":"눈 도화지","d":"5:01","ep":"S1E15"},{"id":"F1oL04hracA","t":"Wanna Have a Round?","n":"한 판 할래?","d":"5:02","ep":"S1E16"},{"id":"_Gv4cp0YUN4","t":"Crong's Christmas","n":"크롱의 크리스마스","d":"5:01","ep":"S1E17"},{"id":"Q3Jq6SWKRYg","t":"Loopy, You Can Do It!","n":"루피, 할 수 있어!","d":"5:02","ep":"S1E18"},{"id":"TytB08QPTnQ","t":"Eddy and the Telescope","n":"에디와 망원경","d":"5:01","ep":"S1E19"},{"id":"yMmxyM_VzV4","t":"A Jigsaw Puzzle","n":"직소 퍼즐","d":"5:01","ep":"S1E20"},{"id":"lhYjBCoXoUs","t":"Kite-flying","n":"연날리기","d":"5:02","ep":"S1E21"},{"id":"XaAD6e8RPek","t":"Save Loopy!","n":"루피를 구해 줘!","d":"5:00","ep":"S1E22"},{"id":"o9e9SSU3ZCE","t":"Train Adventure","n":"기차 모험","d":"5:02","ep":"S1E23"},{"id":"e6k1ieLt2iQ","t":"Be Careful!","n":"조심해!","d":"5:01","ep":"S1E24"},{"id":"4yuqGz1rIx0","t":"Pororo and the Dandelion","n":"뽀로로와 민들레","d":"5:01","ep":"S1E25"},{"id":"hPD18eR-NbE","t":"Hiccup Cure","n":"딸꾹질 멈추기","d":"5:01","ep":"S1E26"},{"id":"7GD-lKbk2yI","t":"Pororo Meets a Whale","n":"고래를 만난 뽀로로","d":"5:02","ep":"S1E27"},{"id":"kP8o6RAGlq0","t":"Magnetic Play","n":"자석 놀이","d":"5:01","ep":"S1E28"},{"id":"Ox_qZc3zW5w","t":"Stomach Ache!","n":"배 아파!","d":"5:02","ep":"S1E29"},{"id":"j5ljGdwfe20","t":"Dancing Together","n":"다 같이 춤을","d":"5:03","ep":"S1E30"}]},{"k":"peppa","em":"🐷","nm":"페파피그","en":"Peppa Pig","ch":"@PeppaPigOfficial","url":"https://www.youtube.com/channel/UCAOtE1V7Ots4DjM8JLlrYgg","vids":[{"id":"UgA0wI1hjOk","t":"Muddy Puddles","n":"비가 그치자 페파와 조지가 진흙 웅덩이에서 신나게 뛰어요","d":"5:10","ep":"S1E1"},{"id":"afNXMuKKw-U","t":"Best Friend","n":"수지가 놀러 왔는데 페파는 조지를 안 끼워 줘요","d":"5:16","ep":"S1E3"},{"id":"pDsI5bGA2EE","t":"Musical Instruments","n":"청소하다 찾은 악기 상자로 온 가족이 연주해요","d":"4:11","ep":"S1E16"},{"id":"VTlcmpgknpk","t":"Flying a Kite","n":"연을 날리다 나무에 걸려 버려요","d":"5:10","ep":"S1E14"},{"id":"_jcr_U7kSO4","t":"Camping","n":"돼지 가족이 캠핑을 떠나요","d":"5:10","ep":"S1E35"},{"id":"eTDBBjMjM7A","t":"Very Hot Day","n":"너무 더운 날, 웅덩이가 다 말라서 시원해질 방법을 찾아요","d":"5:10","ep":"S1E40"},{"id":"m2gcV3JIEcM","t":"Mister Skinnylegs","n":"조지가 친구 삼은 거미를 페파는 무서워해요","d":"4:30","ep":"S1E47"},{"id":"k4Wf7IdQfhs","t":"Bubbles","n":"비눗방울 물이 떨어지자 아빠가 새로 만드는 법을 알려줘요","d":"5:16","ep":"S2E1"},{"id":"q-iOdPPUoNk","t":"Bedtime","n":"페파와 조지가 잠자는 시간을 최대한 미뤄 봐요","d":"4:48","ep":"S2E14"},{"id":"VHItyc1jycM","t":"Stars","n":"자기 전 따뜻한 우유, 그리고 별 보기","d":"4:30","ep":"S2E49"},{"id":"ObGUbF29mKw","t":"The Toy Cupboard","n":"장난감이 넘쳐서 새 장난감장을 주문하고 직접 조립해요","d":"4:30","ep":"S2E44"},{"id":"ckJpbJ-3_DA","t":"The Powercut","n":"갑자기 집이 깜깜! 전기 없이 저녁을 보내요","d":"4:30","ep":"S2E47"},{"id":"KIynYGdF6VQ","t":"Washing","n":"아빠 축구 셔츠가 진흙 범벅, 빨래하다 빨간 옷이 섞여요","d":"5:00","ep":"S3E10"},{"id":"f4Hmc_u4BNs","t":"The Noisy Night","n":"사촌 클로이네 집에서 하룻밤 자요","d":"5:26","ep":"S4E23"},{"id":"YyTvkyc0Le8","t":"The Olden Days","n":"엄마가 페파와 수지의 아기 때 사진을 보여줘요","d":"5:11","ep":"S4E51"},{"id":"0wBCztRRBF4","t":"The Perfect Day","n":"가족이 쇼핑센터에 가요","d":"4:38","ep":"S6E28"},{"id":"GYFiJoCc9rc","t":"Jelly","n":"평범한 날인 줄 알았는데, 가족이 엄마를 위해 젤리를 만들었어요","d":"5:13","ep":"S7E18"},{"id":"zbyBsP5msjc","t":"Potty Training","n":"놀다가 자꾸 화장실! 조지가 변기 쓰는 법을 배워요","d":"5:13","ep":"S7E19"},{"id":"J7i7xAgM2JY","t":"Mummy Pig's Birthday","n":"엄마 생일을 특별하게 만들려고 가족이 뭉쳐요","d":"5:01","ep":"S1E21"},{"id":"cA1MrDGoxw8","t":"Daddy Pig's Birthday","n":"아빠 생일인데 출근! 그 사이 깜짝 선물을 준비해요","d":"4:30","ep":"S2E50"},{"id":"bmHAigGgJWA","t":"The Rainbow","n":"페파가 무지개를 봐요","d":"5:16","ep":"S3E2"},{"id":"1rVuHNKb5fU","t":"Daddy Pig the Football Star - Dirty Clothes","n":"축구하고 더러워진 옷을 빨래해요","d":"5:16"},{"id":"VLkY6Vj6OLQ","t":"Rain Rain Go Away - Can't Go Out To Play","n":"비가 와서 밖에 못 나가는 날","d":"5:11"},{"id":"etC-JGFEwBc","t":"Bedtime Routine - Resting is Important","n":"잠자리에 드는 저녁 루틴","d":"5:15"},{"id":"PPRXuIzzfLk","t":"What's Inside Peppa's Giant Parcel?","n":"커다란 소포 안에 뭐가 들었을까","d":"4:29"},{"id":"4B6Z5q4GwHQ","t":"Peppa Pig Looks At Old Baby Pictures","n":"아기 때 사진을 꺼내 봐요","d":"4:30"},{"id":"aGCAsKsE5Fg","t":"Peppa Helps Out","n":"페파가 집안일을 도와요","d":"5:58"},{"id":"boPP9g3BypY","t":"Chloé's Puppet Show","n":"사촌 클로이가 인형을 만들어 인형극을 해요","d":"5:14","ep":"S1E41"},{"id":"kiPLMgh0L8A","t":"Emily Elephant","n":"놀이방에 새 친구 에밀리가 왔어요","d":"4:45","ep":"S2E2"},{"id":"ZxhhOlVVFcM","t":"George's Friend","n":"조지와 리처드 래빗이 처음 만났는데 사이좋게 지내기가 어려워요","d":"4:45","ep":"S2E6"}]},{"k":"bluey","em":"🐶","nm":"블루이","en":"Bluey","ch":"@BlueyOfficialChannel","url":"https://www.youtube.com/channel/UCVzLLZkDuFGAE2BGdBuBNBg","vids":[{"id":"P1nydF443xM","t":"The Magic Xylophone","n":"아빠를 얼리는 마법 실로폰, 빙고에게도 차례를 줘요","d":"7:05","ep":"S1E1"},{"id":"xWyjy7SyirA","t":"Keepy Uppy","n":"마지막 남은 풍선, 바닥에 안 떨어뜨리기 놀이","d":"7:00","ep":"S1E3"},{"id":"iXx0znW2muQ","t":"Shadowlands","n":"소풍 가서 그림자만 밟고 공원을 건너요","d":"7:05","ep":"S1E5"},{"id":"3ibV7x_3jBc","t":"The Weekend","n":"아빠와 보내는 주말, 마법 동상 놀이를 하다 나뭇잎벌레를 발견한 빙고","d":"6:39","s":27,"ep":"S1E6"},{"id":"dwizxjFLKL8","t":"Fruitbat","n":"자기 싫은 블루이, 밤에도 깨어 있는 과일박쥐가 되고 싶어요","d":"6:26","s":1170,"ep":"S1E8"},{"id":"W3GpdLhgHVA","t":"Hotel","n":"아빠가 손님인 호텔 놀이, 언니 맘대로만 해서 속상한 빙고","d":"6:45","ep":"S1E10"},{"id":"cc9oLWrzQTc","t":"Butterflies","n":"나비 놀이하다 주도에게 밀려난 빙고, 다 같이 노는 법","d":"7:05","ep":"S1E15"},{"id":"vAdXLDVkjVA","t":"Yoga Ball","n":"아빠 의자 요가 볼로 놀기, 너무 세게 노는 아빠에게 빙고가 말해요","d":"6:45","ep":"S1E16"},{"id":"YpI0jgqNJGc","t":"The Pool","n":"준비물 없이 수영장에 간 아빠와 아이들","d":"6:45","ep":"S1E22"},{"id":"MmuDI7lbJpk","t":"The Beach","n":"바닷가에서 혼자 엄마 발자국을 따라 걷는 블루이","d":"6:45","ep":"S1E26"},{"id":"D6JLZWVQd7A","t":"Grannies","n":"할머니 놀이, 할머니도 플로스 춤을 출 수 있을까?","d":"7:05","ep":"S1E28"},{"id":"V3r4UWtoN_o","t":"The Sleepover","n":"낮잠을 끊어서 너무 피곤한 머핀이 자고 가는 날","d":"6:45","ep":"S1E39"},{"id":"Q-K4TCO7Lp8","t":"Asparagus","n":"식탁 예절 배우는 저녁, 마법 아스파라거스로 모두 동물이 돼요","d":"6:45","ep":"S1E49"},{"id":"5YU76jjCTD4","t":"Verandah Santa","n":"크리스마스이브, 착한 아이에게만 산타가 온대요","d":"7:05","ep":"S1E52"},{"id":"3-JaRuTxlaU","t":"Bingo","n":"언니가 놀러 간 날, 혼자 노는 법을 찾는 빙고","d":"6:45","ep":"S2E9"},{"id":"e8ULi9CC6os","t":"Dad Baby","n":"아기띠를 맨 아빠가 아기 빙고를 낳는 놀이","d":"6:45","ep":"S2E13"},{"id":"8ZhBU5EObcE","t":"The Show","n":"어머니의 날 아침상을 쏟은 빙고, 엄마를 위한 공연","d":"7:05","ep":"S2E19"},{"id":"TxoqJ0Pmux0","t":"Sleepytime","n":"밤새 내 침대에서 자 보기! 꿈속 우주여행","d":"7:50","ep":"S2E26"},{"id":"ewekkT49lsM","t":"Seesaw","n":"아빠가 꿈쩍 않는 시소, 친구들이 힘을 모아요","d":"6:45","ep":"S2E28"},{"id":"FCeGAAo6WbM","t":"Movies","n":"처음 간 영화관, 무서운 장면이 걱정인 블루이","d":"6:45","ep":"S2E29"},{"id":"gEtqeF5bCNg","t":"The Quiet Game","n":"말 안 하기 놀이로 머핀 생일 선물 고르기","d":"7:05","ep":"S2E37"},{"id":"-M9lvQADvAI","t":"Double Babysitter","n":"베이비시터가 두 명! 래드 삼촌과 프리스키","d":"7:05","ep":"S2E39"},{"id":"reGHW4k1FHU","t":"Muffin Cone","n":"손가락 빠는 버릇 때문에 깔때기를 쓴 머핀","d":"7:05","ep":"S2E43"},{"id":"HHad5_bI5o0","t":"Ice Cream","n":"아이스크림을 똑같이 나누려다 그만 다 녹아 버렸어요","d":"6:20","s":2747,"ep":"S2E47"},{"id":"xmkCmJtK6X8","t":"Baby Race","n":"누가 먼저 걸을까? 엄마의 ‘아기 경주’ 이야기","d":"6:45","ep":"S2E50"},{"id":"JcinTAfwdVw","t":"Christmas Swim","n":"크리스마스 선물 인형 바틀비를 가족에게 소개해요","d":"6:45","ep":"S2E51"},{"id":"MDWUeW34Xtc","t":"Easter","n":"부활절 아침, 단서를 따라 달걀 찾기","d":"7:05","ep":"S2E52"},{"id":"BVFVa4qup8A","t":"Omelette","n":"아빠 생일, 엄마와 빙고의 오믈렛 만들기","d":"7:05","ep":"S3E5"},{"id":"1NLyCCrNncs","t":"Mini Bluey","n":"언니를 따라 하는 ‘미니 블루이’ 빙고","d":"6:45","ep":"S3E7"},{"id":"gvaeBYeN70g","t":"Unicorse","n":"잠자리 동화를 방해하는 말썽쟁이 인형 유니코스","d":"6:45","ep":"S3E8"}]},{"k":"caillou","em":"👦","nm":"까이유","en":"Caillou","ch":"@caillou","url":"https://www.youtube.com/channel/UC4yQCVlLhTmOqX5kUkAGr0g","vids":[{"id":"ItRset_OVfc","t":"Caillou Makes Cookies","n":"까이유가 쿠키를 만들어요","d":"5:03","ep":"S1E1"},{"id":"D315S-voWGc","t":"Caillou's Not Afraid Anymore","n":"이제 무섭지 않아요","d":"5:03","ep":"S1E2"},{"id":"PO1vOxv82_M","t":"Caillou Hates Vegetables","n":"채소가 싫어요","d":"5:03","ep":"S1E3"},{"id":"NZI2EyQk5hY","t":"Caillou's All Alone","n":"혼자 남은 까이유","d":"5:03","ep":"S1E4"},{"id":"4R9xSi62rW4","t":"Caillou Tidies His Toys","n":"장난감 정리하기","d":"5:03","ep":"S1E5"},{"id":"sdajGO0e3Go","t":"Caillou Learns to Drive","n":"운전을 배워요","d":"5:03","ep":"S1E6"},{"id":"YOx5l8dc8tQ","t":"Caillou at Daycare","n":"어린이집에 간 까이유","d":"5:06","ep":"S1E7"},{"id":"DVRAAw7Ot_s","t":"Caillou Joins the Circus","n":"서커스에 들어가요","d":"5:03","ep":"S1E8"},{"id":"CsCr4R3OJWI","t":"Caillou is Afraid in the Dark","n":"어두운 게 무서워요","d":"5:03","ep":"S1E9"},{"id":"4lCn5VrsUpc","t":"Caillou's Friends","n":"까이유의 친구들","d":"5:03","ep":"S1E10"},{"id":"cngKXTjKP8I","t":"Caillou Visits the Doctor","n":"병원에 가요","d":"5:03","ep":"S1E11"},{"id":"jo-FtXX5CsA","t":"Big Brother Caillou","n":"형이 된 까이유","d":"5:03","ep":"S1E12"},{"id":"4fx35vK9u4E","t":"Caillou Goes Shopping","n":"장 보러 가요","d":"5:03","ep":"S1E13"},{"id":"NS-GlR6xE0o","t":"Caillou in the Bathtub","n":"욕조에서 목욕해요","d":"5:03","ep":"S1E14"},{"id":"5f83MPjwg6E","t":"Caillou Gets Dressed","n":"혼자 옷 입기","d":"5:03","ep":"S1E15"},{"id":"xujmienzisA","t":"Caillou's Teddy Shirt","n":"곰돌이 셔츠","d":"5:03","ep":"S1E16"},{"id":"Hac3bf-UEl8","t":"Caillou Goes Round the Block","n":"동네 한 바퀴","d":"5:03","ep":"S1E17"},{"id":"34qTgkX5ZRw","t":"Caillou's Hiding Place","n":"까이유의 숨는 곳","d":"5:03","ep":"S1E18"},{"id":"ZHFgS163_AE","t":"Caillou's Birthday Present","n":"생일 선물","d":"5:03","ep":"S1E19"},{"id":"Z2RJv9oFeY4","t":"Caillou and Gilbert","n":"까이유와 고양이 길버트","d":"5:03","ep":"S1E20"},{"id":"pwaJVC7kVME","t":"Caillou's Summer Goodnight","n":"여름밤 잘 자요","d":"5:03","ep":"S1E21"},{"id":"rp1Ieb5SNFA","t":"Caillou is Scared of Dogs","n":"강아지가 무서워요","d":"5:07","ep":"S1E22"},{"id":"_K134-C9j1k","t":"Caillou Goes to the Zoo","n":"동물원에 가요","d":"5:03","ep":"S1E23"},{"id":"5qJtRkYkjyM","t":"Caillou's Rainy Day","n":"비 오는 날","d":"5:03","ep":"S1E24"},{"id":"53DbbAeDy_8","t":"Caillou at the Beach","n":"바닷가에서","d":"5:03","ep":"S1E25"},{"id":"6fgtli8JkA4","t":"Caillou's New Shoes","n":"새 신발","d":"5:03","ep":"S1E26"},{"id":"5wOD-cQU9-U","t":"Caillou's Snowman","n":"눈사람 만들기","d":"5:02","ep":"S1E27"},{"id":"ft6R57FEAug","t":"Caillou is a Clown","n":"광대가 된 까이유","d":"5:03","ep":"S1E28"},{"id":"1luufTKNhvM","t":"Caillou's Special Friend","n":"특별한 친구","d":"5:03","ep":"S1E29"},{"id":"veaztqm-IJk","t":"Caillou Rakes the Leaves","n":"낙엽 쓸기","d":"5:03","ep":"S1E30"}]},{"k":"octonauts","em":"🐙","nm":"옥토넛","en":"Octonauts","ch":"@Octonauts","url":"https://www.youtube.com/channel/UCXLLQkbYE-G9jYrra7R4Qsw","vids":[{"id":"Lad1KMClsV8","t":"The Undersea Storm","n":"바닷속 폭풍","d":"10:16","ep":"S1E1"},{"id":"ZffZzHupUjk","t":"The Giant Squid","n":"대왕오징어","d":"10:16","ep":"S1E2"},{"id":"ou7IQ9t2vHQ","t":"The Great Algae Escape","n":"해조류 대탈출","d":"10:15","ep":"S1E3"},{"id":"G49YN-WQhiQ","t":"The Walrus Chief","n":"바다코끼리 대장","d":"10:16","ep":"S1E4"},{"id":"1_2F327oAHk","t":"The Flying Fish","n":"날치","d":"10:16","ep":"S1E5"},{"id":"utUZQIWME-o","t":"The Narwhal","n":"일각고래","d":"10:15","ep":"S1E6"},{"id":"QEHFt7jUECM","t":"The Monster Map","n":"괴물 지도","d":"10:16","ep":"S1E7"},{"id":"jlK3ku-WlBw","t":"The Crab & Urchin","n":"게와 성게","d":"10:15","ep":"S1E8"},{"id":"JdfmHs3Y2-E","t":"The Albino Humpback Whale","n":"하얀 혹등고래","d":"10:15","ep":"S1E9"},{"id":"qmI17xrtp0E","t":"The Remipedes","n":"동굴 속 레미페드","d":"10:16","ep":"S1E10"},{"id":"pRYxGMqKwx0","t":"The Orcas","n":"범고래","d":"11:04","ep":"S1E11"},{"id":"AAJ3q26mhRA","t":"The Blobfish Brothers","n":"블롭피시 형제","d":"10:16","ep":"S1E12"},{"id":"ALis_ItW-2k","t":"The Decorator Crab","n":"장식게","d":"11:04","ep":"S1E13"},{"id":"GRhNusqztiM","t":"The Whale Shark","n":"고래상어","d":"10:16","ep":"S1E14"},{"id":"3HorI-RCOsQ","t":"The Cookiecutter Sharks","n":"쿠키커터상어","d":"10:16","ep":"S1E15"},{"id":"ueoRsifithY","t":"The Jellyfish Bloom","n":"해파리 떼","d":"10:16","ep":"S1E16"},{"id":"qombRngfDrM","t":"The Speedy Sailfish","n":"빠른 돛새치","d":"10:16","ep":"S1E17"},{"id":"DH2vqSwhV-I","t":"The Vampire Squid","n":"흡혈오징어","d":"10:15","ep":"S1E18"},{"id":"XYprkBf9574","t":"The Humuhumus","n":"후무후무 물고기","d":"10:16","ep":"S1E19"},{"id":"-Z-wECdBX94","t":"The Giant Spider Crab","n":"키다리게","d":"10:16","ep":"S1E20"},{"id":"eXuY-aFR_Uo","t":"The Giant Kelp Forest","n":"거대한 켈프 숲","d":"10:15","ep":"S1E21"},{"id":"1nzgjcKtPZE","t":"The Hermit Crab","n":"소라게","d":"10:16","ep":"S1E22"},{"id":"hDG1QW3pV9M","t":"The Hungry Pilot Fish","n":"배고픈 동갈방어","d":"10:15","ep":"S1E23"},{"id":"HWd80BbXG-A","t":"The Beluga Whales","n":"벨루가","d":"10:16","ep":"S1E24"},{"id":"FWX3DT-OqpE","t":"The Snot Sea Cucumber","n":"콧물 해삼","d":"10:16","ep":"S1E25"},{"id":"NoriVCavPZA","t":"The Giant Whirlpool","n":"거대한 소용돌이","d":"10:16","ep":"S1E26"},{"id":"5Bb4IcTIl74","t":"The Slime Eels","n":"끈적끈적 먹장어","d":"10:16","ep":"S1E27"},{"id":"28z79MWP0CY","t":"The Arctic Orcas","n":"북극 범고래","d":"10:16","ep":"S1E28"},{"id":"7gqNUf4YPyk","t":"The Lost Sea Star","n":"길 잃은 불가사리","d":"10:15","ep":"S1E29"},{"id":"rN2wVE02cj4","t":"The Giant Jelly","n":"거대한 해파리","d":"10:15","ep":"S1E30"}]},{"k":"alpha","em":"🔠","nm":"알파블럭스","en":"Alphablocks","ch":"@officialalphablocks","url":"https://www.youtube.com/channel/UC_qs3c0ehDvZkbiEbOj6Drg","vids":[{"id":"xg4_gWt8N_Q","t":"The Alphabet From A to Z","n":"파닉스 A부터 Z까지","d":"2:35"},{"id":"q0TDCt-l85w","t":"The Alphabet Song","n":"알파벳 송","d":"5:00"},{"id":"0rm9UIGyjJU","t":"Boo - An Alphablocks Halloween Special","n":"할로윈 특집","d":"9:45"},{"id":"u3yeE7tnPSs","t":"The ABC's Phonics Song","n":"ABC 파닉스 송","d":"24:03"}]},{"k":"number","em":"🔢","nm":"넘버블록스","en":"Numberblocks","ch":"@Numberblocks","url":"https://www.youtube.com/channel/UCPlwvN0w4qFSP1FllALB92w","vids":[{"id":"gtnXvPLP4t4","t":"Peekaboo! (Sing-along)","n":"숫자 노래","d":"4:30"},{"id":"aqMh7Bd5DCw","t":"Numberblobs","n":"함께 세어 봐요","d":"4:44"},{"id":"JMbRCt8MAgQ","t":"What Makes A Shape, A Shape?","n":"도형 노래","d":"3:07"},{"id":"dPOUvBwPt2k","t":"Let's Learn the Times Tables!","n":"구구단 배우기","d":"1:02:51"}]}];
+
+
 /* ---------------- 영상 색인 (id → 영상 + 채널 정보) ---------------- */
 var IDX = {};
 (function(){
@@ -20688,6 +20751,9 @@ var IDX = {};
   EN.forEach(function(g){ g.chans.forEach(function(c){ c.vids.forEach(function(v){
     IDX[v.id] = { v:v, ch:c, dir:"eng-vid" };
   }); }); });
+  EPI.forEach(function(c){ c.vids.forEach(function(v){
+    IDX[v.id] = IDX[v.id] || { v:v, ch:c };
+  }); });
 })();
 
 function cardHTML(v, dir){
@@ -20725,17 +20791,27 @@ function renderSci(){
 }
 
 /* ---------------- 🎬 영어 영상 (영어 탭) ---------------- */
+var STEPS = EN.map(function(g){ return { em:g.em, nm:g.nm }; })
+  .concat([{ em:"📺", nm:"한 편씩 골라보기" }]);
 var evG = 0;
 function renderEng(){
-  var steps = $("evSteps"), chans = $("evChans"), grid = $("evGrid");
+  var steps = $("evSteps"), chans = $("evChans"), grid = $("evGrid"), bar = $("epBar");
   if (!steps || !grid) return;
-  if (evG >= EN.length) evG = 0;
-  var g = EN[evG];
-  steps.innerHTML = EN.map(function(x, i){
+  if (evG >= STEPS.length) evG = 0;
+  steps.innerHTML = STEPS.map(function(x, i){
     var on = i === evG;
     return '<button class="sci-chip' + (on ? " on" : "") + '" type="button" data-ev="' + i + '"'
       + ' aria-pressed="' + (on ? "true" : "false") + '">' + x.em + " " + esc(x.nm) + "</button>";
   }).join("");
+  if (evG === 3){
+    if (chans) chans.hidden = true;
+    if (bar) bar.hidden = false;
+    renderEpi();
+    return;
+  }
+  if (chans) chans.hidden = false;
+  if (bar) bar.hidden = true;
+  var g = EN[evG];
   if (chans) chans.innerHTML = g.chans.map(function(c){
     return '<a class="ev-chan" href="' + c.url + '" target="_blank" rel="noopener"'
       + ' aria-label="' + esc(c.nm) + ' 유튜브 채널 열기">' + c.em + " " + esc(c.nm) + " ↗</a>";
@@ -20743,6 +20819,53 @@ function renderEng(){
   grid.innerHTML = g.chans.map(function(c){
     return c.vids.map(function(v){ return cardHTML(v, "eng-vid"); }).join("");
   }).join("");
+  try { grid.scrollTop = 0; } catch(e){}
+}
+
+/* ---------------- 📺 한 편씩 골라 보기 (봤어요 ✓) ---------------- */
+var WK = "haeyuli.vidwatched.v1";
+var epK = EPI[0].k;
+function watchedAll(){
+  try { var v = JSON.parse(localStorage.getItem(WK) || "{}"); return (v && typeof v === "object" && !Array.isArray(v)) ? v : {}; }
+  catch(e){ return {}; }
+}
+function setWatched(id, on){
+  var w = watchedAll();
+  if (on) w[id] = Date.now(); else delete w[id];
+  try { localStorage.setItem(WK, JSON.stringify(w)); } catch(e){}
+}
+function epiCur(){
+  for (var i = 0; i < EPI.length; i++) if (EPI[i].k === epK) return EPI[i];
+  return EPI[0];
+}
+function epiCard(v, on){
+  return '<div class="vid-card vid-ep' + (on ? " watched" : "") + '" data-vid="' + v.id + '"'
+    + ' role="button" tabindex="0" aria-label="' + esc(v.t) + ' 영상 보기">'
+    + '<span class="vid-th"><img src="https://i.ytimg.com/vi/' + v.id + '/mqdefault.jpg" alt=""'
+    + ' width="320" height="180" loading="lazy" decoding="async">'
+    + '<span class="vid-pl" aria-hidden="true">▶</span>'
+    + '<span class="vid-len">' + esc(v.d) + '</span>'
+    + '<button class="vid-ck' + (on ? " on" : "") + '" type="button" data-ck="' + v.id + '"'
+    + ' aria-pressed="' + (on ? "true" : "false") + '" aria-label="' + esc(v.t) + ' 봤어요 표시">✓</button>'
+    + '</span>'
+    + '<span class="vid-bd">'
+    + (v.ep ? '<span class="vid-epl">' + esc(v.ep) + '</span>' : "")
+    + '<span class="vid-t">' + esc(v.t) + '</span>'
+    + '<span class="vid-n">' + esc(v.n) + '</span></span></div>';
+}
+function renderEpi(){
+  var chips = $("epChips"), grid = $("evGrid"), cnt = $("epCount"), op = $("epOpen");
+  if (!grid) return;
+  var cur = epiCur(), w = watchedAll();
+  if (chips) chips.innerHTML = EPI.map(function(c){
+    var on = c.k === epK;
+    return '<button class="ev-chan ep-chip' + (on ? " on" : "") + '" type="button" data-ep="' + c.k + '"'
+      + ' aria-pressed="' + (on ? "true" : "false") + '">' + c.em + " " + esc(c.nm) + "</button>";
+  }).join("");
+  var n = cur.vids.filter(function(v){ return !!w[v.id]; }).length;
+  if (cnt) cnt.textContent = cur.vids.length + "편 중 " + n + "편 봤어요 ✓";
+  if (op){ op.href = cur.url; op.textContent = cur.ch + " 채널 ↗"; }
+  grid.innerHTML = cur.vids.map(function(v){ return epiCard(v, !!w[v.id]); }).join("");
   try { grid.scrollTop = 0; } catch(e){}
 }
 
@@ -20754,13 +20877,14 @@ function openVid(id){
   if (!m || !f) return;
   if (t) t.textContent = it.v.t + (it.v.n ? " · " + it.v.n : "");
   if (c) c.textContent = it.ch.em + " " + it.ch.nm;
-  f.innerHTML = '<iframe src="https://www.youtube.com/embed/' + it.v.id + '?autoplay=1&rel=0&playsinline=1"'
+  f.innerHTML = '<iframe src="https://www.youtube.com/embed/' + it.v.id
+    + '?autoplay=1&rel=0&playsinline=1' + (it.v.s ? "&start=" + it.v.s : "") + '"'
     + ' title="' + esc(it.v.t) + '" loading="lazy"'
     + ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"'
     + ' referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
-  if (o) o.href = "https://www.youtube.com/watch?v=" + it.v.id;
+  if (o) o.href = "https://www.youtube.com/watch?v=" + it.v.id + (it.v.s ? "&t=" + it.v.s : "");
   if (cn) cn.href = it.ch.url;
-  if (s) s.textContent = it.ch.ch + " · " + it.v.len;
+  if (s) s.textContent = it.ch.ch + (it.v.len || it.v.d ? " · " + (it.v.len || it.v.d) : "");
   m.hidden = false;
 }
 function closeVid(){
@@ -20798,12 +20922,38 @@ function bind(){
       renderEng();
     });
   }
+  var epc = $("epChips");
+  if (epc && !epc.__vb){
+    epc.__vb = 1;
+    epc.addEventListener("click", function(e){
+      var b = e.target.closest ? e.target.closest("[data-ep]") : null;
+      if (!b) return;
+      epK = b.getAttribute("data-ep");
+      renderEpi();
+    });
+  }
   var grid = $("evGrid");
   if (grid && !grid.__vb){
     grid.__vb = 1;
     grid.addEventListener("click", function(e){
+      var ck = e.target.closest ? e.target.closest("[data-ck]") : null;
+      if (ck){
+        var id = ck.getAttribute("data-ck");
+        var on = !ck.classList.contains("on");
+        setWatched(id, on);
+        renderEpi();
+        return;
+      }
       var c = e.target.closest ? e.target.closest("[data-vid]") : null;
       if (c) openVid(c.getAttribute("data-vid"));
+    });
+    grid.addEventListener("keydown", function(e){
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var c = e.target.closest ? e.target.closest("[data-vid]") : null;
+      if (c && !(e.target.closest && e.target.closest("[data-ck]"))){
+        e.preventDefault();
+        openVid(c.getAttribute("data-vid"));
+      }
     });
   }
   var x = $("vhClose");
@@ -20825,21 +20975,45 @@ function hook(){
   var pEn = SB.onShow.en, pSt = SB.onShow.study;
   SB.onShow.en = function(sub){
     if (pEn) { try { pEn(sub); } catch(e){} }
+    try { syncExtBar(); } catch(e){}
     if (sub === "video") { try { renderEng(); } catch(e){} }
   };
   SB.onShow.study = function(sec){
     if (pSt) { try { pSt(sec); } catch(e){} }
+    try { syncExtBar(); } catch(e){}
     if (!sec || sec === "hub") { try { renderSci(); } catch(e){} }
   };
+  var pChips = SB.renderChips;
+  if (pChips){
+    SB.renderChips = function(){
+      var r; try { r = pChips.apply(this, arguments); } catch(e){}
+      try { syncExtBar(); } catch(e){}
+      return r;
+    };
+  }
+  var pGo = SB.go;
+  if (pGo){
+    SB.go = function(){
+      try { return pGo.apply(this, arguments); }
+      finally { try { syncExtBar(); } catch(e){} }
+    };
+  }
+}
+
+/* 🔗 파닉스 몬스터 바로가기 바 — 영어 탭에서만 보인다 */
+function syncExtBar(){
+  var bar = $("enExtBar"); if (!bar) return;
+  bar.hidden = !(SB.current === "study" && SB.subject === "en");
 }
 
 function init(){
-  try { bind(); renderSci(); renderEng(); hook(); } catch(e){ try { console.warn(e); } catch(e2){} }
+  try { bind(); renderSci(); renderEng(); hook(); syncExtBar(); } catch(e){ try { console.warn(e); } catch(e2){} }
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
 else init();
 
-SB.videoHub = { sci: SCI, en: EN, open: openVid, close: closeVid, renderSci: renderSci, renderEng: renderEng };
+SB.videoHub = { sci: SCI, en: EN, epi: EPI, open: openVid, close: closeVid,
+  renderSci: renderSci, renderEng: renderEng, renderEpi: renderEpi };
 })();
 
 </script>
