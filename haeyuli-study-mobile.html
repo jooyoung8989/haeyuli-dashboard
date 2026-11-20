@@ -3468,6 +3468,18 @@ body.mob .pbk-fin-p{font-size:.82rem;}
   box-shadow:inset 0 0 0 1px #e9eef2;overflow:hidden;}
 .er-art svg{width:100%;height:100%;display:block;}
 .er.on .er-art{background:#fff;box-shadow:inset 0 0 0 1px #ecdfc4;}
+.er-art img{width:100%;height:100%;object-fit:cover;display:block;}
+/* 시대 카드 실사 사진 */
+.hd-photo{margin:0;width:100%;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;
+  background:#eef1f4;box-shadow:0 2px 10px rgba(22,42,58,.10),inset 0 0 0 1px #e6ebf0;}
+.hd-photo img{display:block;width:100%;height:auto;aspect-ratio:16/10;max-height:38vh;
+  object-fit:cover;object-position:center;background:#e8ecef;}
+.hd-photo figcaption{display:flex;flex-direction:column;gap:.1rem;padding:.6rem .9rem .65rem;
+  background:#fbf8f0;border-top:1px solid #f2e8d6;}
+.hd-photo figcaption b{font-size:clamp(14px,1.8vh,21px);font-weight:800;color:#5c4a1d;letter-spacing:-.02em;line-height:1.2;}
+.hd-photo figcaption span{font-size:clamp(11px,1.35vh,15px);font-weight:600;color:#9c8a63;}
+.hd-photo figcaption em{font-style:normal;font-size:clamp(9px,1.05vh,12px);font-weight:600;color:#bcb096;letter-spacing:.01em;}
+@media (max-width:820px){ .hd-photo img{max-height:none;} }
 .hk-art{position:absolute;right:.35rem;top:.3rem;width:1.95rem;height:1.95rem;display:block;opacity:.95;}
 .hk-art svg{width:100%;height:100%;display:block;}
 .hd-cap{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:0;}
@@ -4259,6 +4271,11 @@ body.mob #viewHome .wk-hwtx{font-size:1rem;}
 #viewHome .rb-home{grid-row:2;align-self:start;}
 #viewHome .weekboard{grid-row:3 !important;}
 body.mob #viewHome .rb-home,body.mob #viewHome .weekboard{grid-row:auto !important;}
+/* 독후활동: 넓은 화면에서 그림판이 지나치게 커지지 않게 */
+.rb-act{width:100%;max-width:1180px;margin:0 auto;}
+.rb-canvas-box{max-width:760px;}
+.rb-canvas-box canvas{height:clamp(140px,24vh,230px);}
+body.mob .rb-canvas-box canvas{height:clamp(150px,34vw,260px);}
 
 /* ==/RB-BLOCK-CSS== */
 </style>
@@ -11902,6 +11919,29 @@ var ERAS = [
   { id:"joseon", em:"🏛️", nm:"조선", y:"1392년 ~ 1910년", ev:["한글 창제","경복궁"], easy:"이성계가 세운 나라로, 27명의 왕이 다스렸어요.", link:"joseon" },
   { id:"now", em:"🇰🇷", nm:"대한민국", y:"1948년 ~ 오늘", ev:["광복(1945)","대한민국 정부 수립(1948)"], easy:"지금 우리가 사는 나라예요." }
 ];
+var ERAPHOTO = {
+  paleo:  { f:"hist-img/paleo.webp",  cap:"주먹도끼 (뗀석기)", sub:"임진·한탄강 유역 · 연세대학교박물관", credit:"Ismoon / Wikimedia Commons · CC BY-SA 4.0" },
+  neo:    { f:"hist-img/neo.webp",    cap:"빗살무늬 토기", sub:"서울 암사동 · 국립중앙박물관", credit:"국립중앙박물관 / Wikimedia Commons · 공공누리 1유형" },
+  bronze: { f:"hist-img/bronze.webp", cap:"고인돌", sub:"강화도 · 청동기 시대 무덤", credit:"Taewangkorea / Wikimedia Commons · CC BY-SA 4.0" },
+  iron:   { f:"hist-img/iron.webp",   cap:"세형 동검", sub:"화순 대곡리 출토 · 초기 철기", credit:"국가유산청 / Wikimedia Commons · 공공누리 1유형" },
+  three:  { f:"hist-img/three.webp",  cap:"경주 첨성대", sub:"신라 사람들이 하늘을 보던 곳", credit:"Basile Morin / Wikimedia Commons · CC BY-SA 4.0" },
+  nb:     { f:"hist-img/nb.webp",     cap:"불국사 석가탑", sub:"경주 · 통일신라", credit:"Christophe95 / Wikimedia Commons · CC BY-SA 4.0" },
+  goryeo: { f:"hist-img/goryeo.webp", cap:"청자 상감운학문 매병", sub:"고려청자 · 구름과 학 무늬", credit:"국가유산포털 / Wikimedia Commons · 공공누리 1유형" },
+  joseon: { f:"hist-img/joseon.webp", cap:"경복궁 근정전", sub:"서울 · 조선 임금의 자리", credit:"Dkdksjsh / Wikimedia Commons · CC BY-SA 4.0" },
+  now:    { f:"hist-img/now.webp",    cap:"광화문", sub:"서울 · 지금의 대한민국", credit:"*Youngjin / Wikimedia Commons · CC BY-SA 4.0" }
+};
+function eraPhoto(id, big){
+  var p = ERAPHOTO[id];
+  if (!p) return eraArt(id);
+  if (!big) {
+    return '<img src="' + p.f + '" alt="' + esc(p.cap) + '" width="1080" height="675" loading="lazy" decoding="async">';
+  }
+  return '<figure class="hd-photo">'
+    + '<img src="' + p.f + '" alt="' + esc(p.cap) + ' 실물 사진" width="1080" height="675" loading="lazy" decoding="async">'
+    + '<figcaption><b>' + esc(p.cap) + '</b>'
+    + (p.sub ? '<span>' + esc(p.sub) + '</span>' : '')
+    + '<em>사진 ' + esc(p.credit) + '</em></figcaption></figure>';
+}
 var E = { cur:"goryeo" };
 
 var DY = {
@@ -12214,7 +12254,7 @@ function renderEraList(){
   var box = $("eraList"); if (!box) return;
   box.innerHTML = ERAS.map(function(e){
     return '<button class="er' + (e.id === E.cur ? " on" : "") + '" type="button" data-era="' + e.id + '" aria-pressed="' + (e.id === E.cur ? "true" : "false") + '">'
-      + '<span class="er-art" aria-hidden="true">' + eraArt(e.id) + '</span>'
+      + '<span class="er-art" aria-hidden="true">' + eraPhoto(e.id) + '</span>'
       + '<span class="er-t"><b>' + esc(e.nm) + '</b><i>' + esc(e.y) + '</i></span>'
       + '</button>';
   }).join("");
@@ -12225,7 +12265,7 @@ function renderEraList(){
   var box = $("eraDetail"); if (!box) return;
   box.innerHTML = '<div class="hd-top"><span class="hd-no">' + e.em + '</span>'
     + '<div class="hd-name"><b>' + esc(e.nm) + '</b><span>' + esc(e.y) + '</span></div></div>'
-    + '<div class="hd-art">' + eraArt(e.id) + '</div>'
+    + '<div class="hd-art">' + eraPhoto(e.id, true) + '</div>'
     + '<p class="hd-cap"><b>' + esc(e.ev[0]) + '</b><span>' + esc(e.ev[1] || "") + '</span></p>'
     + '<p class="hd-easy">' + esc(e.easy) + '</p>'
     + '<div class="hd-cap hd-btns">'
