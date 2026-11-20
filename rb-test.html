@@ -15891,14 +15891,31 @@ function openSettingsSafe(){
 }
 function wireSettings(){
   var b = $("btnSettings");
-  if (!b || b.__rbSet) return;
-  b.__rbSet = 1;
-  b.addEventListener("click", function(){
-    var m = $("settingsModal");
-    if (!m) return;
-    /* 예전 요소가 없어 다른 스크립트가 멈췄다면 여기서 직접 연다 */
-    setTimeout(function(){ if (m.hidden) openSettingsSafe(); }, 30);
-  });
+  if (b && !b.__rbSet){
+    b.__rbSet = 1;
+    b.addEventListener("click", function(){
+      var m = $("settingsModal");
+      if (!m) return;
+      /* 예전 요소가 없어 다른 스크립트가 멈췄다면 여기서 직접 연다 */
+      setTimeout(function(){ if (m.hidden) openSettingsSafe(); }, 30);
+    });
+  }
+  var modal = $("settingsModal");
+  if (modal && !modal.__rbClose){
+    modal.__rbClose = 1;
+    modal.addEventListener("click", function(e){
+      if (e.target === modal){ modal.hidden = true; return; }
+      var c = e.target.closest ? e.target.closest("[data-close]") : null;
+      if (c && c.getAttribute("data-close") === "settingsModal") modal.hidden = true;
+    });
+  }
+  if (!document.__rbEsc){
+    document.__rbEsc = 1;
+    document.addEventListener("keydown", function(e){
+      if (e.key !== "Escape") return;
+      var m = $("settingsModal"); if (m && !m.hidden) m.hidden = true;
+    });
+  }
 }
 
 /* ---------- 9. 시작 ---------- */
