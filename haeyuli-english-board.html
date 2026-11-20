@@ -896,6 +896,16 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
   box-shadow:inset 0 0 0 .14vh #e6f1f9;text-align:left;}
 .cx-line .no{flex:0 0 auto;font-size:1vh;font-weight:900;color:#a9c1d3;}
 .cx-line .tx{font-size:1.3vh;font-weight:900;color:#2c5670;line-height:1.45;letter-spacing:-.02em;word-break:keep-all;}
+/* 🎙️ 따라 읽기 — 목소리에 맞춰 읽은 글자가 초록색으로 바뀌어요 */
+.cx-line .tx .cx-ch{border-radius:.3vh;transition:color .12s ease,background .12s ease;}
+.cx-line .tx .cx-ch.on{color:#16a34a;}
+.cx-line .tx .cx-ch.cur{color:#15803d;background:#dcfce7;}
+.cx-tools .t.rec-on{background:#e8fbf1;color:#0f7a52;box-shadow:inset 0 0 0 .22vh #9fe0bd;}
+.cx-tools .t[disabled]{opacity:.42;}
+.cx-vrow{display:flex;align-items:center;gap:.5vh;margin-top:.1vh;}
+.cx-vnote{flex:1 1 auto;min-width:0;font-size:1.02vh;font-weight:800;color:#7b93a8;line-height:1.4;letter-spacing:-.01em;}
+.cx-vbar{flex:0 0 8vh;height:.7vh;border-radius:1vh;background:#e8f2fa;overflow:hidden;}
+.cx-vbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#86efac,#16a34a);transition:width .2s ease;}
 .cx-line.hl{background:#fffbe9;box-shadow:inset 0 0 0 .2vh #f2d07a;}
 .cx-vocab{display:flex;flex-wrap:wrap;gap:.3vh;}
 .cx-v{font-size:1vh;font-weight:900;color:#5f6f9c;background:#f4f1ff;border-radius:999px;padding:.28vh .6vh;box-shadow:inset 0 0 0 .14vh #e2dbff;}
@@ -3724,6 +3734,9 @@ body.mob .rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;
   box-shadow:inset 0 0 0 .14vh #f2e0bb;}
 .rb-book.read{background:#f7fdf9;}
 .rb-book.read img{opacity:.92;}
+.rb-more{grid-column:1/-1;width:100%;border-radius:1.2vh;padding:1.1vh 0;font-size:1.35vh;font-weight:900;
+  background:#f2f8fd;color:#3f7f9e;box-shadow:inset 0 0 0 .16vh #d7e8f5;}
+.rb-note{font-size:1.2vh;font-weight:800;color:#8b8f98;margin:.2vh 0 .4vh;}
 .rb-book.read::after{content:"✓";position:absolute;top:.55vh;right:.6vh;width:2.1vh;height:2.1vh;border-radius:50%;
   background:#39b978;color:#fff;font-size:1.25vh;font-weight:900;display:flex;align-items:center;justify-content:center;
   box-shadow:0 .25vh .6vh rgba(40,150,100,.35);}
@@ -8719,21 +8732,351 @@ function endQuiz(){
   if (got) { SB.confetti(); SB.toast("🧩 낱말 퀴즈 완료 · ⭐ +" + got); }
 }
 
+/* =====================================================================
+   🎙️ 고전 따라 읽기 — 아이가 읽는 목소리를 알아듣고, 읽은 글자를 초록색으로
+   · SpeechRecognition(ko-KR·interim) 으로 듣고, 되면 MediaRecorder 로 내 목소리도 녹음
+   · iOS Safari 처럼 둘을 같이 못 쓰는 기기에서도 초록색 따라가기는 그대로 살아 있어요
+   ===================================================================== */
+var CXV = {
+  c:null, spans:[], norm:"", total:0, pos:0,
+  on:false, manual:false, finished:false, bound:false, tries:0,
+  sr:null, sess:null,
+  mr:null, stream:null, chunks:[], url:null, audio:null, recErr:false
+};
+
+function cxSRClass(){ return window.SpeechRecognition || window.webkitSpeechRecognition || null; }
+function cxNote(t){ var n = $("cxVNote"); if (n) n.textContent = t; }
+
+/* --- 7세 발음은 조금 달라도 같은 글자로 봐 주기 (시/신 · 니/리 · 애/에) --- */
+var CX_CHO = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
+var CX_JUNG = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ";
+var CX_CSIM = { "ㄴ":"ㄹ", "ㄹ":"ㄴ", "ㅁ":"ㅂ", "ㅂ":"ㅁ", "ㅇ":"ㅎ", "ㅎ":"ㅇ" };
+var CX_JSIM = { "ㅐ":"ㅔ", "ㅔ":"ㅐ", "ㅒ":"ㅖ", "ㅖ":"ㅒ", "ㅚ":"ㅙ", "ㅙ":"ㅚ", "ㅟ":"ㅢ", "ㅢ":"ㅟ" };
+function cxJamo(ch){
+  var c = String(ch == null ? "" : ch).charCodeAt(0);
+  if (!(c >= 0xac00 && c <= 0xd7a3)) return null;
+  var i = c - 0xac00;
+  return [CX_CHO.charAt(Math.floor(i / 588)), CX_JUNG.charAt(Math.floor((i % 588) / 28))];
+}
+function cxSame(a, b){
+  if (a === b) return true;
+  var pa = cxJamo(a), pb = cxJamo(b);
+  if (!pa || !pb) return false;
+  var cho = (pa[0] === pb[0] || CX_CSIM[pa[0]] === pb[0]);
+  var jung = (pa[1] === pb[1] || CX_JSIM[pa[1]] === pb[1]);
+  return cho && jung;              /* 받침이 달라도(시/신) 같은 글자로 봐요 */
+}
+function cxNormText(s){ return String(s == null ? "" : s).toLowerCase().replace(/[^0-9a-z\uac00-\ud7a3]/g, ""); }
+function cxFind(ch, t, p, loose, win){
+  for (var k = 0; k <= win && p + k < t.length; k++){
+    var tc = t.charAt(p + k);
+    if (loose ? cxSame(ch, tc) : ch === tc) return p + k;
+  }
+  return -1;
+}
+/* 한 단어를 통째로 건너뛴 경우 — 3글자가 연달아 또박또박 맞으면 그 자리로 넘어가요 */
+function cxFar(heard, i, t, p){
+  for (var k = 4; k <= 26 && p + k + 2 < t.length; k++){
+    var ok = 0;
+    for (var m = 0; m < 3; m++){
+      if (i + m < heard.length && heard.charAt(i + m) === t.charAt(p + k + m)) ok++;
+      else break;
+    }
+    if (ok >= 3) return p + k;
+  }
+  return -1;
+}
+/* 들린 말을 '지금 커서(start)'부터 글자 하나씩 맞춰 나가요 — 뒤로는 가지 않아요 */
+function cxAlign(heard, start){
+  var t = CXV.norm, p = start, i = 0, miss = 0;
+  while (i < heard.length && p < t.length){
+    var k = -1;
+    if (miss >= 3) k = cxFar(heard, i, t, p);
+    if (k < 0) k = cxFind(heard.charAt(i), t, p, false, 2);
+    if (k < 0) k = cxFind(heard.charAt(i), t, p, true, 5);
+    if (k >= 0){ p = k + 1; i++; miss = 0; }
+    else { i++; miss++; if (miss > 10) break; }
+  }
+  return p;
+}
+
+/* 글자 span 을 모아 두고, 읽은 만큼 초록색을 칠해요 */
+function cxMark(){
+  var body = $("koClassic"); if (!body) return;
+  var nodes = body.querySelectorAll(".cx-ch");
+  CXV.spans = [];
+  for (var i = 0; i < nodes.length; i++){
+    var ni = parseInt(nodes[i].getAttribute("data-ni"), 10);
+    nodes[i].__ni = isFinite(ni) ? ni : -1;
+    nodes[i].__on = false; nodes[i].__cur = false;
+    CXV.spans.push(nodes[i]);
+  }
+}
+function cxPaint(){
+  var p = CXV.pos, i, s;
+  for (i = 0; i < CXV.spans.length; i++){
+    s = CXV.spans[i];
+    var on = (s.__ni >= 0 && s.__ni < p);
+    if (s.__on !== on){ s.__on = on; s.classList.toggle("on", on); }
+    var cur = (s.__ni === p);
+    if (s.__cur !== cur){ s.__cur = cur; s.classList.toggle("cur", cur); }
+  }
+  var bar = $("cxVBar");
+  if (bar && CXV.total) bar.style.width = Math.round(p / CXV.total * 100) + "%";
+  var rec = $("cxRec");
+  if (rec){
+    rec.classList.toggle("rec-on", !!CXV.on);
+    rec.textContent = CXV.on ? "⏹️ 그만 듣기" : "🎙️ 따라 읽기 (녹음)";
+  }
+  var play = $("cxPlay");
+  if (play) play.disabled = !CXV.url;
+}
+
+/* --- 녹음(내 목소리) --- */
+function cxStopTracks(){
+  try { if (CXV.stream && CXV.stream.getTracks) CXV.stream.getTracks().forEach(function(t){ try { t.stop(); } catch(e){} }); } catch(e){}
+  CXV.stream = null;
+}
+function cxStopRec(){
+  var mr = CXV.mr; CXV.mr = null;
+  if (mr){ try { if (mr.state !== "inactive") mr.stop(); } catch(e){ cxStopTracks(); } }
+  else cxStopTracks();
+}
+function cxRecDone(){
+  var got = CXV.chunks.slice(); CXV.chunks = [];
+  cxStopTracks();
+  if (got.length){
+    try {
+      var blob = new Blob(got, { type: (got[0] && got[0].type) || "audio/webm" });
+      if (CXV.url){ try { URL.revokeObjectURL(CXV.url); } catch(e){} }
+      CXV.url = URL.createObjectURL(blob);
+      CXV.recErr = false;
+      if (!CXV.finished) cxNote("🎙️ 내 목소리 저장! ▶️ 내 목소리 듣기로 들어 봐요");
+    } catch(e){ CXV.recErr = true; }
+  }
+  cxPaint();
+}
+function cxStartRec(){
+  if (!CXV.on) return;
+  try {
+    if (!(window.MediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){ CXV.recErr = true; cxPaint(); return; }
+  } catch(e){ CXV.recErr = true; cxPaint(); return; }
+  var p = null;
+  try { p = navigator.mediaDevices.getUserMedia({ audio:true }); } catch(e){ p = null; }
+  if (!p || typeof p.then !== "function"){ CXV.recErr = true; cxPaint(); return; }
+  p.then(function(stream){
+    if (!CXV.on){ try { stream.getTracks().forEach(function(t){ t.stop(); }); } catch(e){} return; }
+    CXV.stream = stream; CXV.chunks = [];
+    var mr = null;
+    try { mr = new MediaRecorder(stream); } catch(e){ mr = null; }
+    if (!mr){ cxStopTracks(); CXV.recErr = true; cxPaint(); return; }
+    CXV.mr = mr;
+    mr.ondataavailable = function(ev){ if (ev && ev.data && ev.data.size) CXV.chunks.push(ev.data); };
+    mr.onstop = cxRecDone;
+    try { mr.start(); } catch(e){ CXV.mr = null; cxStopTracks(); CXV.recErr = true; }
+    cxPaint();
+  }, function(){ CXV.recErr = true; cxPaint(); });
+}
+
+/* --- 듣기(음성 인식) --- */
+function cxStopSR(){
+  var r = CXV.sr; CXV.sr = null; CXV.sess = null;
+  if (r){
+    try { r.onresult = null; r.onerror = null; r.onend = null; } catch(e){}
+    try { r.abort(); } catch(e){}
+  }
+}
+function cxSROnce(){
+  var SRc = cxSRClass();
+  if (!SRc || !CXV.on) return;
+  var r = null;
+  try { r = new SRc(); } catch(e){ r = null; }
+  if (!r) return;
+  CXV.sr = r;
+  CXV.sess = { at: CXV.pos, heard: "" };
+  try { r.lang = "ko-KR"; } catch(e){}
+  try { r.interimResults = true; } catch(e){}
+  try { r.continuous = true; } catch(e){}
+  try { r.maxAlternatives = 1; } catch(e){}
+  r.onresult = function(ev){
+    if (CXV.sr !== r || !CXV.sess) return;
+    var all = "", n = 0, i;
+    try { n = (ev && ev.results) ? ev.results.length : 0; } catch(e){ n = 0; }
+    for (i = 0; i < n; i++){
+      try { all += (ev.results[i] && ev.results[i][0] && ev.results[i][0].transcript) || ""; } catch(e){}
+    }
+    var h = cxNormText(all);
+    if (!h || h === CXV.sess.heard) return;
+    CXV.sess.heard = h;
+    CXV.tries = 0;
+    var np = cxAlign(h, CXV.sess.at);
+    if (np > CXV.pos){ CXV.pos = np; cxPaint(); cxCheck(); }
+  };
+  r.onerror = function(ev){
+    if (CXV.sr !== r) return;
+    var code = (ev && ev.error) || "";
+    if (code === "audio-capture") cxStopRec();          /* 마이크를 녹음이 잡고 있으면 녹음을 끄고 계속 들어요 */
+    else if (code === "not-allowed" || code === "service-not-allowed"){
+      cxHalt(false);
+      cxNote("마이크를 허용하면 목소리에 맞춰 초록색으로 바뀌어요");
+      SB.toast("마이크를 허용해 주세요! 설정에서 마이크를 켜면 목소리를 따라가요 🎙️");
+    }
+  };
+  r.onend = function(){
+    if (CXV.sr !== r) return;
+    CXV.sr = null; CXV.sess = null;
+    if (!CXV.on || CXV.finished) return;
+    if (++CXV.tries > 60){ cxHalt(false); cxNote("잠깐 쉬었다가 🎙️ 를 다시 눌러 볼까요?"); return; }
+    setTimeout(function(){ if (CXV.on && !CXV.sr && !CXV.finished) cxSROnce(); }, 220);
+  };
+  try { r.start(); } catch(e){ CXV.sr = null; }
+}
+
+function cxHalt(quiet){
+  var was = CXV.on;
+  CXV.on = false;
+  cxStopSR();
+  cxStopRec();
+  cxPaint();
+  if (quiet && was) cxNote("멈췄어요. 🎙️ 를 누르면 이어서 읽어요");
+}
+function cxStart(){
+  if (!CXV.c || CXV.on) return;
+  if (CXV.total > 0 && CXV.pos >= CXV.total){ CXV.pos = 0; CXV.finished = false; cxPaint(); }
+  CXV.on = true; CXV.tries = 0;
+  var SRc = cxSRClass();
+  if (!SRc){
+    CXV.manual = true;
+    cxPaint();
+    cxNote("이 브라우저는 목소리 인식이 안 돼요. 글자를 톡톡 누르면 초록색으로 넘어가요 (녹음은 그대로 돼요)");
+    SB.toast("크롬·Safari에서 사용하면 목소리에 맞춰 초록색으로 바뀌어요!");
+    cxStartRec();
+    return;
+  }
+  CXV.manual = false;
+  cxPaint();
+  cxNote("🎙️ 듣고 있어요! 천천히 읽으면 초록색으로 따라가요");
+  cxSROnce();
+  setTimeout(cxStartRec, 350);          /* 음성인식이 먼저 마이크를 잡고, 녹음은 되면 같이 해요 */
+}
+function cxToggle(){
+  if (CXV.on){
+    cxHalt(true);
+    cxNote("멈췄어요. ▶️ 로 내 목소리를 듣거나 🎙️ 로 다시 읽어요");
+  } else cxStart();
+}
+function cxPlay(){
+  if (!CXV.url){ SB.toast("먼저 🎙️ 따라 읽기로 내 목소리를 녹음해 봐요"); return; }
+  try {
+    if (CXV.audio){ try { CXV.audio.pause(); } catch(e){} }
+    CXV.audio = new Audio(CXV.url);
+    var pr = CXV.audio.play();
+    if (pr && typeof pr.catch === "function") pr.catch(function(){ SB.toast("소리를 재생하지 못했어요. 🔊 볼륨을 확인해 봐요"); });
+    cxNote("🎧 내 목소리를 들려주고 있어요");
+  } catch(e){ SB.toast("소리를 재생하지 못했어요. 🔊 볼륨을 확인해 봐요"); }
+}
+function cxReset(){
+  var was = CXV.on;
+  cxHalt(false);
+  CXV.pos = 0; CXV.finished = false;
+  cxPaint();
+  cxNote("처음부터 다시! 🎙️ 를 누르고 읽어 보세요");
+  if (was) setTimeout(function(){ if (!CXV.on) cxStart(); }, 300);
+}
+function cxJump(ni){
+  if (!isFinite(ni)) return;
+  ni = Math.max(0, Math.min(ni, CXV.total));
+  if (ni <= CXV.pos) return;
+  CXV.pos = ni;
+  cxPaint();
+  cxCheck();
+}
+function cxCheck(){
+  if (!CXV.c || CXV.finished || CXV.total <= 0 || CXV.pos < CXV.total) return;
+  CXV.finished = true;
+  var c = CXV.c;
+  cxHalt(false);
+  var got = 0;
+  try { got = SB.earn("ko|classic:" + c.id, 1); SB.markAttendance("ko"); } catch(e){ got = 0; }
+  var body = $("koClassic");
+  if (body){
+    var m = body.querySelector(".cx-title .medal");
+    if (m) m.textContent = "🏅 읽음";
+  }
+  var dn = $("cxDone");
+  if (dn){ dn.classList.add("done"); dn.textContent = "✅ 읽기 완료"; }
+  cxNote("🏅 끝까지 다 읽었어요! ▶️ 내 목소리 듣기로 들어 보세요");
+  if (got) SB.starFX(got, "🏅 " + c.title + " 끝까지 읽었어요!");
+  else { SB.confetti(); SB.toast("👏 " + c.title + " 끝까지 잘 읽었어요! 별은 이미 받았어요 😊"); }
+}
+/* 다른 화면으로 넘어가면 마이크를 닫아요 */
+(function cxWatch(){
+  if (!window.MutationObserver) return;
+  var mo = new MutationObserver(function(){
+    var ko = $("viewKo");
+    if (ko && ko.hidden){ if (CXV.on || CXV.mr) cxHalt(true); return; }
+    var blocks = document.querySelectorAll('[data-secblock="classic"]');
+    for (var i = 0; i < blocks.length; i++){
+      if (blocks[i].hidden){ if (CXV.on || CXV.mr) cxHalt(true); return; }
+    }
+  });
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){
+      var ko = $("viewKo"); if (ko) mo.observe(ko, { attributes:true, attributeFilter:["hidden"] });
+      var bs = document.querySelectorAll('[data-secblock="classic"]');
+      for (var i = 0; i < bs.length; i++) mo.observe(bs[i], { attributes:true, attributeFilter:["hidden"] });
+    });
+  } else {
+    var ko2 = $("viewKo"); if (ko2) mo.observe(ko2, { attributes:true, attributeFilter:["hidden"] });
+    var bs2 = document.querySelectorAll('[data-secblock="classic"]');
+    for (var j = 0; j < bs2.length; j++) mo.observe(bs2[j], { attributes:true, attributeFilter:["hidden"] });
+  }
+})();
+window.addEventListener("pagehide", function(){ if (CXV.on) cxHalt(true); });
+
+/* 고전 4줄을 글자 하나하나 span 으로 그려요 */
+function cxBuild(c){
+  var norm = "";
+  var html = c.lines.map(function(l, k){
+    var tx = "";
+    for (var i = 0; i < l.length; i++){
+      var ch = l.charAt(i);
+      if (/\s/.test(ch)){ tx += " "; continue; }
+      var ni;
+      if (/[0-9a-zA-Z\uac00-\ud7a3]/.test(ch)){ ni = norm.length; norm += ch.toLowerCase(); }
+      else { ni = Math.max(0, norm.length - 1); }      /* 마침표·따옴표는 앞 글자와 함께 초록 */
+      tx += '<span class="cx-ch" data-ni="' + ni + '">' + esc(ch) + "</span>";
+    }
+    return '<button class="cx-line" type="button" data-line="' + k + '"><span class="no">' + (k + 1) + '</span><span class="tx">' + tx + "</span></button>";
+  }).join("");
+  CXV.norm = norm; CXV.total = norm.length; CXV.pos = 0;
+  return html;
+}
+
 function renderClassic(){
   var st = store(), i = ((st.cx || 0) % CLASSIC.length + CLASSIC.length) % CLASSIC.length;
   var c = CLASSIC[i];
-  var no = $("koClassicNo"); if (no) no.textContent = (i + 1) + " / " + CLASSIC.length;
   var body = $("koClassic"); if (!body) return;
+  if (CXV.c && CXV.c !== c){                      /* 다른 고전으로 넘어가면 듣기·녹음을 멈춰요 */
+    cxHalt(false);
+    if (CXV.url){ try { URL.revokeObjectURL(CXV.url); } catch(e){} CXV.url = null; }
+  }
+  CXV.c = c; CXV.finished = false;
+  var no = $("koClassicNo"); if (no) no.textContent = (i + 1) + " / " + CLASSIC.length;
   var done = !!SB.readDash().led["ko|classic:" + c.id];
+  var linesHTML = cxBuild(c);
   body.innerHTML = '<div class="cx-title"><span class="em">' + c.em + "</span><b>" + esc(c.title) + "</b>"
     + '<span class="medal">' + (done ? "🏅 읽음" : "") + "</span></div>"
-    + '<div class="cx-lines">' + c.lines.map(function(l, k){
-        return '<button class="cx-line" type="button" data-line="' + k + '"><span class="no">' + (k + 1) + '</span><span class="tx">' + esc(l) + "</span></button>";
-      }).join("") + "</div>"
+    + '<div class="cx-lines">' + linesHTML + "</div>"
     + '<div class="cx-vocab">' + c.vocab.map(function(v){
         return '<span class="cx-v"><b>' + esc(v[0]) + "</b> " + esc(v[1]) + "</span>";
       }).join("") + "</div>"
     + '<p class="cx-ask">🤔 ' + esc(c.ask) + "</p>"
+    + '<div class="cx-tools"><button class="t" type="button" id="cxRec">🎙️ 따라 읽기 (녹음)</button>'
+    + '<button class="t" type="button" id="cxPlay" disabled>▶️ 내 목소리 듣기</button>'
+    + '<button class="t" type="button" id="cxAgain">↺ 다시</button></div>'
+    + '<div class="cx-vrow"><span class="cx-vnote" id="cxVNote" role="status">🎙️ 를 누르고 고전을 또박또박 읽어 보세요</span>'
+    + '<span class="cx-vbar" aria-hidden="true"><i id="cxVBar"></i></span></div>'
     + '<div class="cx-tools"><button class="t" type="button" id="cxSpeak">🔊 전체 듣기</button>'
     + '<button class="t' + (done ? " done" : "") + '" type="button" id="cxDone">' + (done ? "✅ 읽기 완료" : "✅ 다 읽었어요 (⭐+1)") + "</button>"
     + '<button class="t pk" type="button" id="cxPrev">◀</button><button class="t pk" type="button" id="cxNext">▶</button></div>';
@@ -8746,17 +9089,38 @@ function renderClassic(){
     else SB.toast("이미 읽은 고전이에요! 또 읽어도 좋아요 😊");
     renderClassic();
   });
-  var bodyEl = $("koClassic");
-  bodyEl.addEventListener("click", function(e){
-    var l = e.target.closest("[data-line]"); if (!l) return;
-    SB.speak(c.lines[parseInt(l.getAttribute("data-line"), 10)], false, "ko-KR");
-    l.classList.add("hl");
-    setTimeout(function(){ l.classList.remove("hl"); }, 1800);
-  });
+  var rec = $("cxRec"); if (rec) rec.addEventListener("click", cxToggle);
+  var play = $("cxPlay"); if (play) play.addEventListener("click", cxPlay);
+  var ag = $("cxAgain"); if (ag) ag.addEventListener("click", cxReset);
+  cxMark();
+  cxPaint();
+  if (!CXV.bound){
+    CXV.bound = true;
+    body.addEventListener("click", function(e){
+      var line = (e.target && e.target.closest) ? e.target.closest("[data-line]") : null;
+      if (!line) return;
+      if (CXV.on){
+        if (!CXV.manual) return;                      /* 듣는 중에는 소리를 겹치지 않아요 */
+        var t = (e.target.closest) ? e.target.closest(".cx-ch") : null;
+        if (t){
+          var ni = parseInt(t.getAttribute("data-ni"), 10);
+          if (isFinite(ni)) cxJump(ni + 1);
+        }
+        return;
+      }
+      var k = parseInt(line.getAttribute("data-line"), 10);
+      if (!CXV.c || !CXV.c.lines[k]) return;
+      SB.speak(CXV.c.lines[k], false, "ko-KR");
+      line.classList.add("hl");
+      setTimeout(function(){ line.classList.remove("hl"); }, 1800);
+    });
+  }
   var pv = $("cxPrev"), nx = $("cxNext");
-  if (pv) pv.addEventListener("click", function(){ var s = store(); s.cx = i - 1; save(s); renderClassic(); });
-  if (nx) nx.addEventListener("click", function(){ var s = store(); s.cx = i + 1; save(s); renderClassic(); });
+  if (pv) pv.addEventListener("click", function(){ cxHalt(false); var s = store(); s.cx = i - 1; save(s); renderClassic(); });
+  if (nx) nx.addEventListener("click", function(){ cxHalt(false); var s = store(); s.cx = i + 1; save(s); renderClassic(); });
 }
+
+SB.cxRead = { state:function(){ return { pos:CXV.pos, total:CXV.total, on:CXV.on, manual:CXV.manual, finished:CXV.finished, hasAudio:!!CXV.url, sr:!!CXV.sr }; }, srd:cxSRClass, start:cxStart, halt:cxHalt, reset:cxReset };
 
 SB.ko = { days:DAYS, classic:CLASSIC, dayIdx:dayIdx, q:QZ, quote:function(){ return DAYS[dayIdx()]; } };
 SB.onShow.ko = function(sub){
@@ -15271,9 +15635,16 @@ else bind();
 </script>
 <script id="rbScript" data-rb="1">
 /* ==RB-BLOCK-JS== */
-window.__RB_DATA=[["sci","솔루토이 과학","🔬","본책 34권 + 별책 1권",[[1,"파릇파릇 봄의 산과 들","book-img/sci_01.webp"],[2,"울창한 여름의 산과 들","book-img/sci_02.webp"],[3,"울긋불긋 가을의 산과 들","book-img/sci_03.webp"],[4,"하얀 겨울의 산과 들","book-img/sci_04.webp"],[5,"생명의 늪 신비한 동굴","book-img/sci_05.webp"],[6,"구불구불 강","book-img/sci_06.webp"],[7,"숨 쉬는 갯벌","book-img/sci_07.webp"],[8,"깊고 깊은 바닷속","book-img/sci_08.webp"],[9,"우리 주변의 동물","book-img/sci_09.webp"],[10,"우리 주변의 식물","book-img/sci_10.webp"],[11,"작은 생물과 생태계","book-img/sci_11.webp"],[12,"우리는 환경 지킴이","book-img/sci_12.webp"],[13,"신기한 우리 몸","book-img/sci_13.webp"],[14,"알쏭달쏭 몸속 탐험","book-img/sci_14.webp"],[15,"다섯 가지 감각","book-img/sci_15.webp"],[16,"쑥쑥 자라는 우리 몸","book-img/sci_16.webp"],[17,"사막에서 북극까지","book-img/sci_17.webp"],[18,"빙글빙글 우리 지구","book-img/sci_18.webp"],[19,"변화무쌍한 날씨","book-img/sci_19.webp"],[20,"폭발하는 화산 흔들리는 지진","book-img/sci_20.webp"],[21,"오래전 지구","book-img/sci_21.webp"],[22,"별을 찾아서","book-img/sci_22.webp"],[23,"머나먼 우주","book-img/sci_23.webp"],[24,"정확하게 재어 보기","book-img/sci_24.webp"],[25,"여러 가지 에너지와 힘","book-img/sci_25.webp"],[26,"밀고 당기는 자석","book-img/sci_26.webp"],[27,"찌릿찌릿 전기","book-img/sci_27.webp"],[28,"밝은 빛 까만 그림자","book-img/sci_28.webp"],[29,"소리의 비밀","book-img/sci_29.webp"],[30,"다양한 물체와 물질","book-img/sci_30.webp"],[31,"섞여 있는 혼합물","book-img/sci_31.webp"],[32,"녹고 녹이는 물질","book-img/sci_32.webp"],[33,"물의 놀라운 변신","book-img/sci_33.webp"],[34,"활활 타오르는 불","book-img/sci_34.webp"],[35,"나만의 생생 실험실","book-img/sci_35.webp"]]],["math","솔루토이 수학","🔢","본책 30권 + 별책 2권",[[1,"물고기꼬리의 물고기 세기","book-img/math_01.webp"],[2,"한솔이와 두솔이의 용돈 모으기","book-img/math_02.webp"],[3,"꼬마 용 마꼬","book-img/math_03.webp"],[4,"멋진 공연을 해 볼까?","book-img/math_04.webp"],[5,"증조할머니와 홍시","book-img/math_05.webp"],[6,"도도의 행복 나누기 여행","book-img/math_06.webp"],[7,"내 고구마야","book-img/math_07.webp"],[8,"네쌍둥이의 생일 케이크","book-img/math_08.webp"],[9,"돌배와 이방","book-img/math_09.webp"],[10,"산타 할아버지를 기다리며","book-img/math_10.webp"],[11,"현아와 구름","book-img/math_11.webp"],[12,"세모 샘을 찾아간 삼 형제","book-img/math_12.webp"],[13,"네모난 엽서","book-img/math_13.webp"],[14,"뾰족 발 외계인 뭉뚝 발 외계인","book-img/math_14.webp"],[15,"달려, 도란아!","book-img/math_15.webp"],[16,"집수리 대장 비버","book-img/math_16.webp"],[17,"코끼리 치마는 너무 짧아","book-img/math_17.webp"],[18,"사막 여행을 떠난 꼬물이","book-img/math_18.webp"],[19,"마법 약을 삼킨 리탄","book-img/math_19.webp"],[20,"소원을 들어주는 약국","book-img/math_20.webp"],[21,"소미의 돌잔치","book-img/math_21.webp"],[22,"형제의 농사짓기","book-img/math_22.webp"],[23,"어떤 계절이 가장 좋아?","book-img/math_23.webp"],[24,"뒤죽박죽 궁전","book-img/math_24.webp"],[25,"오색 돌이 사라졌어요","book-img/math_25.webp"],[26,"동주의 빠른 길 찾기 대작전","book-img/math_26.webp"],[27,"토비네 채소밭에 생긴 일","book-img/math_27.webp"],[28,"잘못 놓인 벽돌","book-img/math_28.webp"],[29,"아주아주 큰 이불","book-img/math_29.webp"],[30,"명탐정 마르코","book-img/math_30.webp"]]],["kor","솔루토이 국어","📖","본책 30권 + 별책 2권",[[1,"박죽이가 잡혀갔어요!","book-img/kor_01.webp"],[2,"아버지를 구한 소리","book-img/kor_02.webp"],[3,"다람쥐 공주님의 신랑감 찾기","book-img/kor_03.webp"],[4,"호동 왕자의 입맛을 찾아라!","book-img/kor_04.webp"],[5,"그 말이 그 말이었어?","book-img/kor_05.webp"],[6,"해리의 엉망진창 도시 여행","book-img/kor_06.webp"],[7,"마법사가 되고 싶어!","book-img/kor_07.webp"],[8,"일기장 오 형제","book-img/kor_08.webp"],[9,"박 도령이 보낸 편지","book-img/kor_09.webp"],[10,"꾀꼬리의 금메달","book-img/kor_10.webp"],[11,"대장 고양이의 선택","book-img/kor_11.webp"],[12,"우리들의 보금자리","book-img/kor_12.webp"],[13,"쌍둥이 형제와 피노키오","book-img/kor_13.webp"],[14,"햇솜이네 마을 잔치에 오세요","book-img/kor_14.webp"],[15,"설우야, 설명을 부탁해","book-img/kor_15.webp"],[16,"한밤중에 생긴 일","book-img/kor_16.webp"],[17,"펭귄들아, 위험해!","book-img/kor_17.webp"],[18,"나는야 발표왕","book-img/kor_18.webp"],[19,"원숭이는 우기기 대장이에요","book-img/kor_19.webp"],[20,"도깨비방망이를 돌려주세요","book-img/kor_20.webp"],[21,"멍구야, 고맙데이","book-img/kor_21.webp"],[22,"나비 모둠 친구들아, 누리집에서 만나!","book-img/kor_22.webp"],[23,"수목원에서 만난 친구","book-img/kor_23.webp"],[24,"제중원에 간 궁녀 달이","book-img/kor_24.webp"],[25,"아기 돼지 삼 형제, 그 후","book-img/kor_25.webp"],[26,"잃어버린 만년필을 찾아서","book-img/kor_26.webp"],[27,"시간 여행자를 뽑습니다","book-img/kor_27.webp"],[28,"놀이공원의 꼬마 유령","book-img/kor_28.webp"],[29,"비단을 잘 팔려면","book-img/kor_29.webp"],[30,"모아 왕의 왕궁 짓기","book-img/kor_30.webp"]]],["hist","솔루토이 한국사","🏛️","본책 31권 + 별책 2권",[[1,"선사 시대, 초기 국가 시대에는 어떻게 살았을까?","book-img/hist_01.webp"],[2,"삼국 시대에는 어떻게 살았을까?","book-img/hist_02.webp"],[3,"남북국 시대에는 어떻게 살았을까?","book-img/hist_03.webp"],[4,"고려 시대에는 어떻게 살았을까?","book-img/hist_04.webp"],[5,"조선 전기에는 어떻게 살았을까?","book-img/hist_05.webp"],[6,"조선 후기에는 어떻게 살았을까?","book-img/hist_06.webp"],[7,"근대에는 어떻게 살았을까?","book-img/hist_07.webp"],[8,"현대에는 어떻게 살고 있을까?","book-img/hist_08.webp"],[9,"옛날에도 아파트에 살았을까?","book-img/hist_09.webp"],[10,"옛날에도 청바지를 입었을까?","book-img/hist_10.webp"],[11,"옛날에도 과자를 먹었을까?","book-img/hist_11.webp"],[12,"옛날에도 귀를 뚫었을까?","book-img/hist_12.webp"],[13,"옛날에도 책을 읽었을까?","book-img/hist_13.webp"],[14,"옛날에도 동요를 불렀을까?","book-img/hist_14.webp"],[15,"옛날에도 그림을 그렸을까?","book-img/hist_15.webp"],[16,"옛날에도 찰흙 놀이를 했을까?","book-img/hist_16.webp"],[17,"옛날에도 마트에 갔을까?","book-img/hist_17.webp"],[18,"옛날에도 돈을 썼을까?","book-img/hist_18.webp"],[19,"옛날에도 회사에 다녔을까?","book-img/hist_19.webp"],[20,"옛날에도 다른 나라에 갔을까?","book-img/hist_20.webp"],[21,"옛날에도 세뱃돈을 받았을까?","book-img/hist_21.webp"],[22,"옛날에도 학교에 다녔을까?","book-img/hist_22.webp"],[23,"옛날에도 게임을 했을까?","book-img/hist_23.webp"],[24,"옛날에도 결혼식을 했을까?","book-img/hist_24.webp"],[25,"옛날에도 약속을 잘 지켰을까?","book-img/hist_25.webp"],[26,"옛날에도 부자로 살았을까?","book-img/hist_26.webp"],[27,"옛날에도 귀신을 믿었을까?","book-img/hist_27.webp"],[28,"옛날에도 자동차를 탔을까?","book-img/hist_28.webp"],[29,"옛날에도 전화를 했을까?","book-img/hist_29.webp"],[30,"옛날에도 세탁기를 썼을까?","book-img/hist_30.webp"],[31,"옛날에도 총을 쐈을까?","book-img/hist_31.webp"],[32,"개념 쏙쏙쏙 역사 교과서","book-img/hist_32.webp"],[33,"역사 인물 누구일까?","book-img/hist_33.webp"]]],["geo","솔루토이 지리","🌏","본책 35권 + 별책 2권",[[1,"빙글빙글 계절 요리조리 날씨","book-img/geo_01.webp"],[2,"우리가 사는 마을","book-img/geo_02.webp"],[3,"토토를 찾아라!","book-img/geo_03.webp"],[4,"달이 별이의 우리나라 여행","book-img/geo_04.webp"],[5,"구석구석 우리 땅 여행","book-img/geo_05.webp"],[6,"둥글둥글 지구 한 바퀴","book-img/geo_06.webp"],[7,"별별 세계 기후 여행","book-img/geo_07.webp"],[8,"와우! 생활 모습이 달라요","book-img/geo_08.webp"],[9,"숨바꼭질 대작전","book-img/geo_09.webp"],[10,"왜 나만 따라 하니?","book-img/geo_10.webp"],[11,"우동 맛 지키는 복 고양이","book-img/geo_11.webp"],[12,"겁쟁이가 아니야","book-img/geo_12.webp"],[13,"음매! 하고 우는 개","book-img/geo_13.webp"],[14,"뚜엉의 생일","book-img/geo_14.webp"],[15,"무타킨과 영혼의 인형","book-img/geo_15.webp"],[16,"도시의 오마르와 사막의 사카카","book-img/geo_16.webp"],[17,"천재 영화감독 무스타파","book-img/geo_17.webp"],[18,"나타샤의 모스크바 여행","book-img/geo_18.webp"],[19,"돌아온 헤라클레스","book-img/geo_19.webp"],[20,"비토의 선물","book-img/geo_20.webp"],[21,"카르멘의 편지","book-img/geo_21.webp"],[22,"앤드루, 어디 가니?","book-img/geo_22.webp"],[23,"돌돌 마녀의 향수","book-img/geo_23.webp"],[24,"할머니는 잔소리 대왕","book-img/geo_24.webp"],[25,"야나 할머니의 벽화 이야기","book-img/geo_25.webp"],[26,"노르웨이 삼총사","book-img/geo_26.webp"],[27,"내가 진짜 여신인 이유","book-img/geo_27.webp"],[28,"내 생일은 독립 기념일","book-img/geo_28.webp"],[29,"아마존에서 온 친구","book-img/geo_29.webp"],[30,"콜케를 찾아서","book-img/geo_30.webp"],[31,"미안해, 사하르","book-img/geo_31.webp"],[32,"이다음에 어른이 되면","book-img/geo_32.webp"],[33,"아기 고릴라 토마","book-img/geo_33.webp"],[34,"만델라의 편지","book-img/geo_34.webp"],[35,"캥거루 버스를 탄 제임스","book-img/geo_35.webp"],[36,"자신만만 지리 대탐험","book-img/geo_36.webp"],[37,"뚝딱뚝딱 세계 문화 만들기","book-img/geo_37.webp"]]],["world","솔루토이 세계사","🗺️","본책 34권 + 별책 1권",[[1,"고대 이야기","book-img/world_01.webp"],[2,"중세 이야기 1","book-img/world_02.webp"],[3,"중세 이야기 2","book-img/world_03.webp"],[4,"근대 이야기 1","book-img/world_04.webp"],[5,"근대 이야기 2","book-img/world_05.webp"],[6,"현대 이야기","book-img/world_06.webp"],[7,"치이테 왕자의 4대 문명 모험","book-img/world_07.webp"],[8,"다리우스 1세와 페르시아고양이","book-img/world_08.webp"],[9,"그리스인의 진정한 우승","book-img/world_09.webp"],[10,"알렉산드로스 대왕의 동방 모험","book-img/world_10.webp"],[11,"로마를 아낀 내 친구, 카이사르","book-img/world_11.webp"],[12,"아소카왕에게 배우는 평등","book-img/world_12.webp"],[13,"만리장성의 365번째 돌","book-img/world_13.webp"],[14,"신의 왕국 비잔티움 제국","book-img/world_14.webp"],[15,"중세 유럽에 살고 싶어!","book-img/world_15.webp"],[16,"아라비아에 내린 신의 계시","book-img/world_16.webp"],[17,"200년의 전쟁, 십자군 이야기","book-img/world_17.webp"],[18,"세상을 바꾼 중국의 네 가지 발명","book-img/world_18.webp"],[19,"나는 칭기즈 칸의 후예","book-img/world_19.webp"],[20,"무사가 되고 싶은 겐지","book-img/world_20.webp"],[21,"피렌체를 찾아온 마법사들","book-img/world_21.webp"],[22,"콜럼버스와 꼬마 선원","book-img/world_22.webp"],[23,"타지마할과 황제의 꿈","book-img/world_23.webp"],[24,"베르사유 궁전의 재봉사","book-img/world_24.webp"],[25,"홍차와 미국의 독립","book-img/world_25.webp"],[26,"마리 앙투아네트의 눈물","book-img/world_26.webp"],[27,"증기 기관차를 탄 로봇 삼 형제","book-img/world_27.webp"],[28,"청나라의 마지막 궁녀 이야기","book-img/world_28.webp"],[29,"세계를 뒤흔든 총알 하나","book-img/world_29.webp"],[30,"붉은 광장의 일기장","book-img/world_30.webp"],[31,"누가 히틀러를 말려 주세요!","book-img/world_31.webp"],[32,"아프리카 국경선의 비밀","book-img/world_32.webp"],[33,"베를린 장벽을 넘은 우정","book-img/world_33.webp"],[34,"살기 좋은 세계를 만들어요!","book-img/world_34.webp"]]],["hero","솔루토이 위인","🌟","본책 30권 + 별책 1권",[[1,"세상을 탐구한 화가 레오나르도 다빈치","book-img/hero_01.webp"],[2,"어린 왕자를 쓴 작가 생텍쥐페리","book-img/hero_02.webp"],[3,"곤충의 생활을 연구한 곤충학자 파브르","book-img/hero_03.webp"],[4,"세상을 바꾼 발명가 에디슨","book-img/hero_04.webp"],[5,"꺼지지 않는 열정을 그린 화가 고흐","book-img/hero_05.webp"],[6,"자신만의 그림을 그리는 화가 피카소","book-img/hero_06.webp"],[7,"마음을 담아 작곡하는 음악가 모차르트","book-img/hero_07.webp"],[8,"건축물에 자연을 담은 건축가 가우디","book-img/hero_08.webp"],[9,"생물의 변화를 연구한 생물학자 다윈","book-img/hero_09.webp"],[10,"대한 독립 만세를 외친 승려 한용운","book-img/hero_10.webp"],[11,"듣지 못하는 열정의 작곡가 베토벤","book-img/hero_11.webp"],[12,"소박한 이웃을 그린 화가 박수근","book-img/hero_12.webp"],[13,"나라를 사랑한 시인 윤동주","book-img/hero_13.webp"],[14,"자연을 섬세하게 그린 화가 신사임당","book-img/hero_14.webp"],[15,"비행의 꿈을 이룬 발명가 라이트 형제","book-img/hero_15.webp"],[16,"소처럼 우직하게 그림을 그린 화가 이중섭","book-img/hero_16.webp"],[17,"진심으로 백성을 사랑한 왕 세종 대왕","book-img/hero_17.webp"],[18,"백성을 위해 지도를 만든 지리학자 김정호","book-img/hero_18.webp"],[19,"수많은 생명을 구한 미생물학자 파스퇴르","book-img/hero_19.webp"],[20,"사과로 우주의 힘을 밝혀낸 과학자 뉴턴","book-img/hero_20.webp"],[21,"우주의 진실을 밝힌 천문학자 갈릴레이","book-img/hero_21.webp"],[22,"독립 만세 운동을 이끈 소녀 유관순","book-img/hero_22.webp"],[23,"조선의 바다를 지킨 장군 이순신","book-img/hero_23.webp"],[24,"노예를 해방시킨 대통령 링컨","book-img/hero_24.webp"],[25,"인도의 독립을 이끈 평화 지도자 간디","book-img/hero_25.webp"],[26,"평화를 사랑한 화학자 노벨","book-img/hero_26.webp"],[27,"아프리카 작은 마을의 위대한 의사 슈바이처","book-img/hero_27.webp"],[28,"가난한 사람들의 어머니 테레사","book-img/hero_28.webp"],[29,"사람들의 희망이 된 사회 운동가 헬렌 켈러","book-img/hero_29.webp"],[30,"나눔을 실천한 강철왕 카네기","book-img/hero_30.webp"],[31,"꿈 쑥쑥 직업 체험관","book-img/hero_31.webp"]]]];
+window.__RB_DATA=[["sci","솔루토이 과학","🔬","본책 34권 + 별책 1권",[[1,"파릇파릇 봄의 산과 들","book-img/sci_01.webp"],[2,"울창한 여름의 산과 들","book-img/sci_02.webp"],[3,"울긋불긋 가을의 산과 들","book-img/sci_03.webp"],[4,"하얀 겨울의 산과 들","book-img/sci_04.webp"],[5,"생명의 늪 신비한 동굴","book-img/sci_05.webp"],[6,"구불구불 강","book-img/sci_06.webp"],[7,"숨 쉬는 갯벌","book-img/sci_07.webp"],[8,"깊고 깊은 바닷속","book-img/sci_08.webp"],[9,"우리 주변의 동물","book-img/sci_09.webp"],[10,"우리 주변의 식물","book-img/sci_10.webp"],[11,"작은 생물과 생태계","book-img/sci_11.webp"],[12,"우리는 환경 지킴이","book-img/sci_12.webp"],[13,"신기한 우리 몸","book-img/sci_13.webp"],[14,"알쏭달쏭 몸속 탐험","book-img/sci_14.webp"],[15,"다섯 가지 감각","book-img/sci_15.webp"],[16,"쑥쑥 자라는 우리 몸","book-img/sci_16.webp"],[17,"사막에서 북극까지","book-img/sci_17.webp"],[18,"빙글빙글 우리 지구","book-img/sci_18.webp"],[19,"변화무쌍한 날씨","book-img/sci_19.webp"],[20,"폭발하는 화산 흔들리는 지진","book-img/sci_20.webp"],[21,"오래전 지구","book-img/sci_21.webp"],[22,"별을 찾아서","book-img/sci_22.webp"],[23,"머나먼 우주","book-img/sci_23.webp"],[24,"정확하게 재어 보기","book-img/sci_24.webp"],[25,"여러 가지 에너지와 힘","book-img/sci_25.webp"],[26,"밀고 당기는 자석","book-img/sci_26.webp"],[27,"찌릿찌릿 전기","book-img/sci_27.webp"],[28,"밝은 빛 까만 그림자","book-img/sci_28.webp"],[29,"소리의 비밀","book-img/sci_29.webp"],[30,"다양한 물체와 물질","book-img/sci_30.webp"],[31,"섞여 있는 혼합물","book-img/sci_31.webp"],[32,"녹고 녹이는 물질","book-img/sci_32.webp"],[33,"물의 놀라운 변신","book-img/sci_33.webp"],[34,"활활 타오르는 불","book-img/sci_34.webp"],[35,"나만의 생생 실험실","book-img/sci_35.webp"]]],["math","솔루토이 수학","🔢","본책 30권 + 별책 2권",[[1,"물고기꼬리의 물고기 세기","book-img/math_01.webp"],[2,"한솔이와 두솔이의 용돈 모으기","book-img/math_02.webp"],[3,"꼬마 용 마꼬","book-img/math_03.webp"],[4,"멋진 공연을 해 볼까?","book-img/math_04.webp"],[5,"증조할머니와 홍시","book-img/math_05.webp"],[6,"도도의 행복 나누기 여행","book-img/math_06.webp"],[7,"내 고구마야","book-img/math_07.webp"],[8,"네쌍둥이의 생일 케이크","book-img/math_08.webp"],[9,"돌배와 이방","book-img/math_09.webp"],[10,"산타 할아버지를 기다리며","book-img/math_10.webp"],[11,"현아와 구름","book-img/math_11.webp"],[12,"세모 샘을 찾아간 삼 형제","book-img/math_12.webp"],[13,"네모난 엽서","book-img/math_13.webp"],[14,"뾰족 발 외계인 뭉뚝 발 외계인","book-img/math_14.webp"],[15,"달려, 도란아!","book-img/math_15.webp"],[16,"집수리 대장 비버","book-img/math_16.webp"],[17,"코끼리 치마는 너무 짧아","book-img/math_17.webp"],[18,"사막 여행을 떠난 꼬물이","book-img/math_18.webp"],[19,"마법 약을 삼킨 리탄","book-img/math_19.webp"],[20,"소원을 들어주는 약국","book-img/math_20.webp"],[21,"소미의 돌잔치","book-img/math_21.webp"],[22,"형제의 농사짓기","book-img/math_22.webp"],[23,"어떤 계절이 가장 좋아?","book-img/math_23.webp"],[24,"뒤죽박죽 궁전","book-img/math_24.webp"],[25,"오색 돌이 사라졌어요","book-img/math_25.webp"],[26,"동주의 빠른 길 찾기 대작전","book-img/math_26.webp"],[27,"토비네 채소밭에 생긴 일","book-img/math_27.webp"],[28,"잘못 놓인 벽돌","book-img/math_28.webp"],[29,"아주아주 큰 이불","book-img/math_29.webp"],[30,"명탐정 마르코","book-img/math_30.webp"]]],["kor","솔루토이 국어","📖","본책 30권 + 별책 2권",[[1,"박죽이가 잡혀갔어요!","book-img/kor_01.webp"],[2,"아버지를 구한 소리","book-img/kor_02.webp"],[3,"다람쥐 공주님의 신랑감 찾기","book-img/kor_03.webp"],[4,"호동 왕자의 입맛을 찾아라!","book-img/kor_04.webp"],[5,"그 말이 그 말이었어?","book-img/kor_05.webp"],[6,"해리의 엉망진창 도시 여행","book-img/kor_06.webp"],[7,"마법사가 되고 싶어!","book-img/kor_07.webp"],[8,"일기장 오 형제","book-img/kor_08.webp"],[9,"박 도령이 보낸 편지","book-img/kor_09.webp"],[10,"꾀꼬리의 금메달","book-img/kor_10.webp"],[11,"대장 고양이의 선택","book-img/kor_11.webp"],[12,"우리들의 보금자리","book-img/kor_12.webp"],[13,"쌍둥이 형제와 피노키오","book-img/kor_13.webp"],[14,"햇솜이네 마을 잔치에 오세요","book-img/kor_14.webp"],[15,"설우야, 설명을 부탁해","book-img/kor_15.webp"],[16,"한밤중에 생긴 일","book-img/kor_16.webp"],[17,"펭귄들아, 위험해!","book-img/kor_17.webp"],[18,"나는야 발표왕","book-img/kor_18.webp"],[19,"원숭이는 우기기 대장이에요","book-img/kor_19.webp"],[20,"도깨비방망이를 돌려주세요","book-img/kor_20.webp"],[21,"멍구야, 고맙데이","book-img/kor_21.webp"],[22,"나비 모둠 친구들아, 누리집에서 만나!","book-img/kor_22.webp"],[23,"수목원에서 만난 친구","book-img/kor_23.webp"],[24,"제중원에 간 궁녀 달이","book-img/kor_24.webp"],[25,"아기 돼지 삼 형제, 그 후","book-img/kor_25.webp"],[26,"잃어버린 만년필을 찾아서","book-img/kor_26.webp"],[27,"시간 여행자를 뽑습니다","book-img/kor_27.webp"],[28,"놀이공원의 꼬마 유령","book-img/kor_28.webp"],[29,"비단을 잘 팔려면","book-img/kor_29.webp"],[30,"모아 왕의 왕궁 짓기","book-img/kor_30.webp"]]],["hist","솔루토이 한국사","🏛️","본책 31권 + 별책 2권",[[1,"선사 시대, 초기 국가 시대에는 어떻게 살았을까?","book-img/hist_01.webp"],[2,"삼국 시대에는 어떻게 살았을까?","book-img/hist_02.webp"],[3,"남북국 시대에는 어떻게 살았을까?","book-img/hist_03.webp"],[4,"고려 시대에는 어떻게 살았을까?","book-img/hist_04.webp"],[5,"조선 전기에는 어떻게 살았을까?","book-img/hist_05.webp"],[6,"조선 후기에는 어떻게 살았을까?","book-img/hist_06.webp"],[7,"근대에는 어떻게 살았을까?","book-img/hist_07.webp"],[8,"현대에는 어떻게 살고 있을까?","book-img/hist_08.webp"],[9,"옛날에도 아파트에 살았을까?","book-img/hist_09.webp"],[10,"옛날에도 청바지를 입었을까?","book-img/hist_10.webp"],[11,"옛날에도 과자를 먹었을까?","book-img/hist_11.webp"],[12,"옛날에도 귀를 뚫었을까?","book-img/hist_12.webp"],[13,"옛날에도 책을 읽었을까?","book-img/hist_13.webp"],[14,"옛날에도 동요를 불렀을까?","book-img/hist_14.webp"],[15,"옛날에도 그림을 그렸을까?","book-img/hist_15.webp"],[16,"옛날에도 찰흙 놀이를 했을까?","book-img/hist_16.webp"],[17,"옛날에도 마트에 갔을까?","book-img/hist_17.webp"],[18,"옛날에도 돈을 썼을까?","book-img/hist_18.webp"],[19,"옛날에도 회사에 다녔을까?","book-img/hist_19.webp"],[20,"옛날에도 다른 나라에 갔을까?","book-img/hist_20.webp"],[21,"옛날에도 세뱃돈을 받았을까?","book-img/hist_21.webp"],[22,"옛날에도 학교에 다녔을까?","book-img/hist_22.webp"],[23,"옛날에도 게임을 했을까?","book-img/hist_23.webp"],[24,"옛날에도 결혼식을 했을까?","book-img/hist_24.webp"],[25,"옛날에도 약속을 잘 지켰을까?","book-img/hist_25.webp"],[26,"옛날에도 부자로 살았을까?","book-img/hist_26.webp"],[27,"옛날에도 귀신을 믿었을까?","book-img/hist_27.webp"],[28,"옛날에도 자동차를 탔을까?","book-img/hist_28.webp"],[29,"옛날에도 전화를 했을까?","book-img/hist_29.webp"],[30,"옛날에도 세탁기를 썼을까?","book-img/hist_30.webp"],[31,"옛날에도 총을 쐈을까?","book-img/hist_31.webp"],[32,"개념 쏙쏙쏙 역사 교과서","book-img/hist_32.webp"],[33,"역사 인물 누구일까?","book-img/hist_33.webp"]]],["geo","솔루토이 지리","🌏","본책 35권 + 별책 2권",[[1,"빙글빙글 계절 요리조리 날씨","book-img/geo_01.webp"],[2,"우리가 사는 마을","book-img/geo_02.webp"],[3,"토토를 찾아라!","book-img/geo_03.webp"],[4,"달이 별이의 우리나라 여행","book-img/geo_04.webp"],[5,"구석구석 우리 땅 여행","book-img/geo_05.webp"],[6,"둥글둥글 지구 한 바퀴","book-img/geo_06.webp"],[7,"별별 세계 기후 여행","book-img/geo_07.webp"],[8,"와우! 생활 모습이 달라요","book-img/geo_08.webp"],[9,"숨바꼭질 대작전","book-img/geo_09.webp"],[10,"왜 나만 따라 하니?","book-img/geo_10.webp"],[11,"우동 맛 지키는 복 고양이","book-img/geo_11.webp"],[12,"겁쟁이가 아니야","book-img/geo_12.webp"],[13,"음매! 하고 우는 개","book-img/geo_13.webp"],[14,"뚜엉의 생일","book-img/geo_14.webp"],[15,"무타킨과 영혼의 인형","book-img/geo_15.webp"],[16,"도시의 오마르와 사막의 사카카","book-img/geo_16.webp"],[17,"천재 영화감독 무스타파","book-img/geo_17.webp"],[18,"나타샤의 모스크바 여행","book-img/geo_18.webp"],[19,"돌아온 헤라클레스","book-img/geo_19.webp"],[20,"비토의 선물","book-img/geo_20.webp"],[21,"카르멘의 편지","book-img/geo_21.webp"],[22,"앤드루, 어디 가니?","book-img/geo_22.webp"],[23,"돌돌 마녀의 향수","book-img/geo_23.webp"],[24,"할머니는 잔소리 대왕","book-img/geo_24.webp"],[25,"야나 할머니의 벽화 이야기","book-img/geo_25.webp"],[26,"노르웨이 삼총사","book-img/geo_26.webp"],[27,"내가 진짜 여신인 이유","book-img/geo_27.webp"],[28,"내 생일은 독립 기념일","book-img/geo_28.webp"],[29,"아마존에서 온 친구","book-img/geo_29.webp"],[30,"콜케를 찾아서","book-img/geo_30.webp"],[31,"미안해, 사하르","book-img/geo_31.webp"],[32,"이다음에 어른이 되면","book-img/geo_32.webp"],[33,"아기 고릴라 토마","book-img/geo_33.webp"],[34,"만델라의 편지","book-img/geo_34.webp"],[35,"캥거루 버스를 탄 제임스","book-img/geo_35.webp"],[36,"자신만만 지리 대탐험","book-img/geo_36.webp"],[37,"뚝딱뚝딱 세계 문화 만들기","book-img/geo_37.webp"]]],["world","솔루토이 세계사","🗺️","본책 34권 + 별책 1권",[[1,"고대 이야기","book-img/world_01.webp"],[2,"중세 이야기 1","book-img/world_02.webp"],[3,"중세 이야기 2","book-img/world_03.webp"],[4,"근대 이야기 1","book-img/world_04.webp"],[5,"근대 이야기 2","book-img/world_05.webp"],[6,"현대 이야기","book-img/world_06.webp"],[7,"치이테 왕자의 4대 문명 모험","book-img/world_07.webp"],[8,"다리우스 1세와 페르시아고양이","book-img/world_08.webp"],[9,"그리스인의 진정한 우승","book-img/world_09.webp"],[10,"알렉산드로스 대왕의 동방 모험","book-img/world_10.webp"],[11,"로마를 아낀 내 친구, 카이사르","book-img/world_11.webp"],[12,"아소카왕에게 배우는 평등","book-img/world_12.webp"],[13,"만리장성의 365번째 돌","book-img/world_13.webp"],[14,"신의 왕국 비잔티움 제국","book-img/world_14.webp"],[15,"중세 유럽에 살고 싶어!","book-img/world_15.webp"],[16,"아라비아에 내린 신의 계시","book-img/world_16.webp"],[17,"200년의 전쟁, 십자군 이야기","book-img/world_17.webp"],[18,"세상을 바꾼 중국의 네 가지 발명","book-img/world_18.webp"],[19,"나는 칭기즈 칸의 후예","book-img/world_19.webp"],[20,"무사가 되고 싶은 겐지","book-img/world_20.webp"],[21,"피렌체를 찾아온 마법사들","book-img/world_21.webp"],[22,"콜럼버스와 꼬마 선원","book-img/world_22.webp"],[23,"타지마할과 황제의 꿈","book-img/world_23.webp"],[24,"베르사유 궁전의 재봉사","book-img/world_24.webp"],[25,"홍차와 미국의 독립","book-img/world_25.webp"],[26,"마리 앙투아네트의 눈물","book-img/world_26.webp"],[27,"증기 기관차를 탄 로봇 삼 형제","book-img/world_27.webp"],[28,"청나라의 마지막 궁녀 이야기","book-img/world_28.webp"],[29,"세계를 뒤흔든 총알 하나","book-img/world_29.webp"],[30,"붉은 광장의 일기장","book-img/world_30.webp"],[31,"누가 히틀러를 말려 주세요!","book-img/world_31.webp"],[32,"아프리카 국경선의 비밀","book-img/world_32.webp"],[33,"베를린 장벽을 넘은 우정","book-img/world_33.webp"],[34,"살기 좋은 세계를 만들어요!","book-img/world_34.webp"]]],["hero","솔루토이 위인","🌟","본책 30권 + 별책 1권",[[1,"세상을 탐구한 화가 레오나르도 다빈치","book-img/hero_01.webp"],[2,"어린 왕자를 쓴 작가 생텍쥐페리","book-img/hero_02.webp"],[3,"곤충의 생활을 연구한 곤충학자 파브르","book-img/hero_03.webp"],[4,"세상을 바꾼 발명가 에디슨","book-img/hero_04.webp"],[5,"꺼지지 않는 열정을 그린 화가 고흐","book-img/hero_05.webp"],[6,"자신만의 그림을 그리는 화가 피카소","book-img/hero_06.webp"],[7,"마음을 담아 작곡하는 음악가 모차르트","book-img/hero_07.webp"],[8,"건축물에 자연을 담은 건축가 가우디","book-img/hero_08.webp"],[9,"생물의 변화를 연구한 생물학자 다윈","book-img/hero_09.webp"],[10,"대한 독립 만세를 외친 승려 한용운","book-img/hero_10.webp"],[11,"듣지 못하는 열정의 작곡가 베토벤","book-img/hero_11.webp"],[12,"소박한 이웃을 그린 화가 박수근","book-img/hero_12.webp"],[13,"나라를 사랑한 시인 윤동주","book-img/hero_13.webp"],[14,"자연을 섬세하게 그린 화가 신사임당","book-img/hero_14.webp"],[15,"비행의 꿈을 이룬 발명가 라이트 형제","book-img/hero_15.webp"],[16,"소처럼 우직하게 그림을 그린 화가 이중섭","book-img/hero_16.webp"],[17,"진심으로 백성을 사랑한 왕 세종 대왕","book-img/hero_17.webp"],[18,"백성을 위해 지도를 만든 지리학자 김정호","book-img/hero_18.webp"],[19,"수많은 생명을 구한 미생물학자 파스퇴르","book-img/hero_19.webp"],[20,"사과로 우주의 힘을 밝혀낸 과학자 뉴턴","book-img/hero_20.webp"],[21,"우주의 진실을 밝힌 천문학자 갈릴레이","book-img/hero_21.webp"],[22,"독립 만세 운동을 이끈 소녀 유관순","book-img/hero_22.webp"],[23,"조선의 바다를 지킨 장군 이순신","book-img/hero_23.webp"],[24,"노예를 해방시킨 대통령 링컨","book-img/hero_24.webp"],[25,"인도의 독립을 이끈 평화 지도자 간디","book-img/hero_25.webp"],[26,"평화를 사랑한 화학자 노벨","book-img/hero_26.webp"],[27,"아프리카 작은 마을의 위대한 의사 슈바이처","book-img/hero_27.webp"],[28,"가난한 사람들의 어머니 테레사","book-img/hero_28.webp"],[29,"사람들의 희망이 된 사회 운동가 헬렌 켈러","book-img/hero_29.webp"],[30,"나눔을 실천한 강철왕 카네기","book-img/hero_30.webp"],[31,"꿈 쑥쑥 직업 체험관","book-img/hero_31.webp"]]],["jn","조물조물 자연놀이","🌿","본책 30권 + 별책 2권",[[1,"랑랑이의 비밀 친구","book-img/jn_01.webp"],[2,"포포는 용감해!","book-img/jn_02.webp"],[3,"날고 싶은 뚜뚜","book-img/jn_03.webp"],[4,"우리는 꼭 닮은 친구야!","book-img/jn_04.webp"],[5,"깜박깜박 보보는 못 말려!","book-img/jn_05.webp"],[6,"나도 엄마라고!","book-img/jn_06.webp"],[7,"붉은 깃털을 갖고 싶어!","book-img/jn_07.webp"],[8,"올림픽에 간 상어","book-img/jn_08.webp"],[9,"나야 나, 무당벌레 반짝이!","book-img/jn_09.webp"],[10,"내가 누구인지 알고 싶어!","book-img/jn_10.webp"],[11,"힘을 내, 너울아!","book-img/jn_11.webp"],[12,"달이의 나뭇잎 편지","book-img/jn_12.webp"],[13,"나는 왜 이럴까?","book-img/jn_13.webp"],[14,"해바라기 아빠","book-img/jn_14.webp"],[15,"뾰족해도 좋아!","book-img/jn_15.webp"],[16,"세상에서 가장 멋진 토담이","book-img/jn_16.webp"],[17,"초원을 지키는 기린 아저씨","book-img/jn_17.webp"],[18,"어서 올라가, 포비야!","book-img/jn_18.webp"],[19,"꿈꾸는 용감이","book-img/jn_19.webp"],[20,"수상한 냄새가 나!","book-img/jn_20.webp"],[21,"새내기 부부의 새 둥지","book-img/jn_21.webp"],[22,"개굴개굴 약 오르지?","book-img/jn_22.webp"],[23,"꾸꾸의 꼬리를 찾아 줄게!","book-img/jn_23.webp"],[24,"여기가 내 집이야!","book-img/jn_24.webp"],[25,"숲속 노래잔치","book-img/jn_25.webp"],[26,"꽃을 사랑한 꼬미","book-img/jn_26.webp"],[27,"시끌벅적 푸름이네 농장","book-img/jn_27.webp"],[28,"내 씨앗을 날려 줘!","book-img/jn_28.webp"],[29,"그래그래 참나무, 싫어 싫어 소나무","book-img/jn_29.webp"],[30,"우리 아기 못 보았니?","book-img/jn_30.webp"]],"자연놀이"],["jt","조물조물 탐구놀이","🔬","본책 30권 + 별책 1권",[[1,"예슬이가 달라졌어","book-img/jt_01.webp"],[2,"설탕 생쥐를 잡아라","book-img/jt_02.webp"],[3,"세상에서 가장 예쁜 손","book-img/jt_03.webp"],[4,"이사는 힘들어","book-img/jt_04.webp"],[5,"초록 마을 탐정 삼총사","book-img/jt_05.webp"],[6,"똥은 먹기 싫어!","book-img/jt_06.webp"],[7,"모리가 위험해","book-img/jt_07.webp"],[8,"숲으로 간 곰곰이","book-img/jt_08.webp"],[9,"행복한 호박꽃","book-img/jt_09.webp"],[10,"코끼리가 사라졌어요!","book-img/jt_10.webp"],[11,"빛돌을 찾아 떠난 꾸비","book-img/jt_11.webp"],[12,"햇빛 동네 집배원 달빛 동네 집배원","book-img/jt_12.webp"],[13,"달을 사랑한 모모","book-img/jt_13.webp"],[14,"누구야, 누구?","book-img/jt_14.webp"],[15,"토토가 다녀올게요!","book-img/jt_15.webp"],[16,"내일 또 놀자!","book-img/jt_16.webp"],[17,"황금 왕관은 무거워!","book-img/jt_17.webp"],[18,"소년 탐정 유수프","book-img/jt_18.webp"],[19,"구름숲 놀이터로 놀러 오세요","book-img/jt_19.webp"],[20,"할아버지 가방이 궁금해!","book-img/jt_20.webp"],[21,"청소기 괴물이 나타났다!","book-img/jt_21.webp"],[22,"누누와 도도의 여름휴가","book-img/jt_22.webp"],[23,"키글은 우리 마을 영웅","book-img/jt_23.webp"],[24,"산타 할아버지가 받은 선물","book-img/jt_24.webp"],[25,"로봇 친구 코코","book-img/jt_25.webp"],[26,"페럿 마을의 해결사, 키키와 루이","book-img/jt_26.webp"],[27,"오늘은 무슨 일을 할까","book-img/jt_27.webp"],[28,"둥실둥실 솔방울호","book-img/jt_28.webp"],[29,"고마워, 윙","book-img/jt_29.webp"],[30,"아주 특별한 오렌지","book-img/jt_30.webp"]],"탐구놀이"],["jh","조물조물 역사놀이","🏯","본책 30권 + 별책 2권",[[1,"그냥 털실이 아니야!","book-img/jh_01.webp"],[2,"내가 조그만 아기였을 때","book-img/jh_02.webp"],[3,"나는 오빠예요!","book-img/jh_03.webp"],[4,"바다거북이 준 선물","book-img/jh_04.webp"],[5,"다온이네 가족 여행","book-img/jh_05.webp"],[6,"저 옷이 입고 싶어!","book-img/jh_06.webp"],[7,"항아리에 담긴 빨간 맛","book-img/jh_07.webp"],[8,"집 지킴이 신들의 이사","book-img/jh_08.webp"],[9,"다 같이 놀자!","book-img/jh_09.webp"],[10,"파란 마을 무지개 유치원","book-img/jh_10.webp"],[11,"느티나무 마을 이야기","book-img/jh_11.webp"],[12,"솜이와 연우의 소꿉놀이","book-img/jh_12.webp"],[13,"잠비는 메밀묵을 좋아해!","book-img/jh_13.webp"],[14,"새싹 아파트에 어떻게 가요?","book-img/jh_14.webp"],[15,"다락방의 낡은 편지","book-img/jh_15.webp"],[16,"혼례 시작이오!","book-img/jh_16.webp"],[17,"까치야, 내년 설날에 또 만나!","book-img/jh_17.webp"],[18,"부럼을 찾아라!","book-img/jh_18.webp"],[19,"추석에는 내가 최고야","book-img/jh_19.webp"],[20,"만세 부르는 날","book-img/jh_20.webp"],[21,"우리나라의 두 번째 생일","book-img/jh_21.webp"],[22,"한글날에 만난 무영이","book-img/jh_22.webp"],[23,"양 시간이 언제예요?","book-img/jh_23.webp"],[24,"숭례문은 내가 지킬게!","book-img/jh_24.webp"],[25,"골동품 가게에서 생긴 일","book-img/jh_25.webp"],[26,"찍고 또 찍고!","book-img/jh_26.webp"],[27,"산속의 부처님 나라","book-img/jh_27.webp"],[28,"호지와 별똥별","book-img/jh_28.webp"],[29,"누가 커다란 돌을 옮겼을까?","book-img/jh_29.webp"],[30,"마니산의 청동 거울","book-img/jh_30.webp"]],"역사놀이"],["jc","조물조물 창의놀이","💡","본책 30권 + 별책 1권",[[1,"우리 아빠는 멋진 미용사","book-img/jc_01.webp"],[2,"신기한 물건 가게","book-img/jc_02.webp"],[3,"두더지 삼 형제의 소원","book-img/jc_03.webp"],[4,"슈퍼 영웅보다 꽃이 좋아","book-img/jc_04.webp"],[5,"황금을 지킨 세 친구","book-img/jc_05.webp"],[6,"요정들의 지붕 고치기 대작전","book-img/jc_06.webp"],[7,"커다란 호박","book-img/jc_07.webp"],[8,"모아의 소원","book-img/jc_08.webp"],[9,"고무 공룡 사용법","book-img/jc_09.webp"],[10,"토끼 구하기 대작전","book-img/jc_10.webp"],[11,"최고의 김밥이 될 거야!","book-img/jc_11.webp"],[12,"동글동글 이 단추는 누구 거지?","book-img/jc_12.webp"],[13,"우리끼리 놀까?","book-img/jc_13.webp"],[14,"바나나 껍질로 무엇을 만들까?","book-img/jc_14.webp"],[15,"반짝반짝 빛나는 초록별","book-img/jc_15.webp"],[16,"진짜 보물은 무엇일까?","book-img/jc_16.webp"],[17,"방귀 뿡 쿵짝짝 음악대","book-img/jc_17.webp"],[18,"저 여기 있어요!","book-img/jc_18.webp"],[19,"주주의 생일잔치","book-img/jc_19.webp"],[20,"우당탕 발명 유치원","book-img/jc_20.webp"],[21,"우리가 만드는 연극","book-img/jc_21.webp"],[22,"푸른 마을 초록 시장의 부꾸","book-img/jc_22.webp"],[23,"배고픈 늑대 두 마리","book-img/jc_23.webp"],[24,"병정개미 티미, 공주님을 지켜라!","book-img/jc_24.webp"],[25,"테라노 로봇과 그림","book-img/jc_25.webp"],[26,"곰을 어떻게 피하지?","book-img/jc_26.webp"],[27,"시끌벅적 고양이 고민 해결소","book-img/jc_27.webp"],[28,"다람쥐 형제의 첫 번째 하늘 여행","book-img/jc_28.webp"],[29,"편리한 수레바퀴 만들기","book-img/jc_29.webp"],[30,"쥐돌이가 만든 뾰족이 신발","book-img/jc_30.webp"]],"창의놀이"],["js","조물조물 사회놀이","🏘️","본책 30권 + 별책 2권",[[1,"무럭이의 공 찾기","book-img/js_01.webp"],[2,"내 마음을 받아 주세요!","book-img/js_02.webp"],[3,"산들 마을이 최고야!","book-img/js_03.webp"],[4,"일하기 싫단 말이야!","book-img/js_04.webp"],[5,"구리구리 톡톡 복숭아 저금통","book-img/js_05.webp"],[6,"꼬꼬댁 닭 잡아라!","book-img/js_06.webp"],[7,"장난감이 갖고 싶어!","book-img/js_07.webp"],[8,"어디 어디 숨었니?","book-img/js_08.webp"],[9,"나도 무도회에 가고 싶어!","book-img/js_09.webp"],[10,"난쟁이 마을의 특별한 날","book-img/js_10.webp"],[11,"오늘은 내 생일이야!","book-img/js_11.webp"],[12,"불국사의 새 식구","book-img/js_12.webp"],[13,"구구 아저씨와 세 비둘기","book-img/js_13.webp"],[14,"우리들의 비밀 놀이터","book-img/js_14.webp"],[15,"달빛 서당 훈장님","book-img/js_15.webp"],[16,"세 귀신의 마을 구경","book-img/js_16.webp"],[17,"우리 밤이야!","book-img/js_17.webp"],[18,"얘들아, 일어나!","book-img/js_18.webp"],[19,"숲속 팥죽 잔치","book-img/js_19.webp"],[20,"헌 이 줄게, 새 이 다오!","book-img/js_20.webp"],[21,"향이의 나들이","book-img/js_21.webp"],[22,"우두둑 괴물과 김치 동자","book-img/js_22.webp"],[23,"자, 하늘을 날아 볼까?","book-img/js_23.webp"],[24,"황 영감의 문방사우","book-img/js_24.webp"],[25,"할머니의 비밀","book-img/js_25.webp"],[26,"소원을 들어주는 나무","book-img/js_26.webp"],[27,"안녕, 반가워!","book-img/js_27.webp"],[28,"인형 마을 대소동","book-img/js_28.webp"],[29,"일어나세요, 잠보 여왕님!","book-img/js_29.webp"],[30,"울렁이의 집 찾기","book-img/js_30.webp"]],"사회놀이"],["aes","꼬잉꼬잉 이솝극장과 철학동화","🦊","본책 30권",[[1,"시골로 간 뚱보 아저씨","book-img/aes_01.webp"],[2,"걱정으로 채워진 욕심 항아리","book-img/aes_02.webp"],[3,"누가 고슴도치나무에 올라갈래?","book-img/aes_03.webp"],[4,"한 걸음 한 걸음","book-img/aes_04.webp"],[5,"심술은 나를 외롭게 해","book-img/aes_05.webp"],[6,"부풀리다 터진 말","book-img/aes_06.webp"],[7,"귀찮아 귀찮아","book-img/aes_07.webp"],[8,"겉모습이 다는 아냐","book-img/aes_08.webp"],[9,"고집쟁이 올리","book-img/aes_09.webp"],[10,"돌 항아리","book-img/aes_10.webp"],[11,"토리의 거짓말","book-img/aes_11.webp"],[12,"세상에서 가장 강한 건?","book-img/aes_12.webp"],[13,"지금의 내가 좋아","book-img/aes_13.webp"],[14,"딱 보면 아는 사나이","book-img/aes_14.webp"],[15,"네모는 말로만 다 해","book-img/aes_15.webp"],[16,"돌에 새긴 우정","book-img/aes_16.webp"],[17,"반달눈썹이 된 뻐꾸기","book-img/aes_17.webp"],[18,"마음으로 세어요","book-img/aes_18.webp"],[19,"내가 먼저, 네가 먼저?","book-img/aes_19.webp"],[20,"그냥나무들의 햇빛 다툼","book-img/aes_20.webp"],[21,"방패연과 가오리연","book-img/aes_21.webp"],[22,"혼자서도 이겼을까?","book-img/aes_22.webp"],[23,"되돌아온 착한 마음","book-img/aes_23.webp"],[24,"머지와 사과나무","book-img/aes_24.webp"],[25,"들꽃 마을 집배원","book-img/aes_25.webp"],[26,"채소 행성 외계인의 모험","book-img/aes_26.webp"],[27,"꽃다발 받은 발","book-img/aes_27.webp"],[28,"초록대왕 빨강대장","book-img/aes_28.webp"],[29,"너를 위한 마음","book-img/aes_29.webp"],[30,"이름 모를 새","book-img/aes_30.webp"]],"꼬잉꼬잉"],["csk","역사 챌린지 어린이 조선왕조실록","📜","본책 30권",[[1,"백발백중 이성계 고려를 쏘다","book-img/csk_01.webp"],[2,"새로운 나라, 조선을 세운 태조","book-img/csk_02.webp"],[3,"왕의 자리를 양보한 정종","book-img/csk_03.webp"],[4,"태종, 왕의 힘을 키우다","book-img/csk_04.webp"],[5,"인재를 키워 나라를 다스린 세종","book-img/csk_05.webp"],[6,"세종, 백성을 위해 공부하다","book-img/csk_06.webp"],[7,"불운의 어린 왕, 단종","book-img/csk_07.webp"],[8,"조카를 몰아낸 세조","book-img/csk_08.webp"],[9,"예종, 못다 펼친 꿈","book-img/csk_09.webp"],[10,"성종, 유교로 나라를 완성하다","book-img/csk_10.webp"],[11,"폭군의 등장, 연산군","book-img/csk_11.webp"],[12,"중종, 개혁을 꿈꾸다","book-img/csk_12.webp"],[13,"어머니의 그늘에 가려진 명종","book-img/csk_13.webp"],[14,"신하들의 다툼 속 선조","book-img/csk_14.webp"],[15,"도망친 선조, 맞서 싸운 조선","book-img/csk_15.webp"],[16,"전쟁 후 왕이 된 광해군","book-img/csk_16.webp"],[17,"인조, 청나라에 무릎 꿇다","book-img/csk_17.webp"],[18,"복수를 꿈꾼 효종, 그의 계획은?","book-img/csk_18.webp"],[19,"연이은 시련, 괴로운 현종","book-img/csk_19.webp"],[20,"신하들을 떨게 한 숙종","book-img/csk_20.webp"],[21,"장 희빈의 아들 경종","book-img/csk_21.webp"],[22,"가장 오래 나라를 다스린 영조","book-img/csk_22.webp"],[23,"영조, 사도 세자의 비극","book-img/csk_23.webp"],[24,"개혁 정치를 펼친 정조","book-img/csk_24.webp"],[25,"정조, 수원 화성에 담은 꿈","book-img/csk_25.webp"],[26,"어린 왕 순조, 세도 정치의 시작","book-img/csk_26.webp"],[27,"농사꾼에서 왕이 된 철종","book-img/csk_27.webp"],[28,"조선을 지키려 노력한 고종","book-img/csk_28.webp"],[29,"고종, 대한 제국을 선포하다","book-img/csk_29.webp"],[30,"조선의 마지막 왕 순종","book-img/csk_30.webp"]],"조선왕조실록"],["hoy","호야·토야의 옛날이야기","🐯","본책 70권",[[1,"우렁이 색시","book-img/hoy_01.webp"],[2,"방귀 며느리","book-img/hoy_02.webp"],[3,"의좋은 형제","book-img/hoy_03.webp"],[4,"도깨비감투","book-img/hoy_04.webp"],[5,"해와 달이 된 오누이","book-img/hoy_05.webp"],[6,"금도끼 은도끼","book-img/hoy_06.webp"],[7,"소금을 만드는 맷돌","book-img/hoy_07.webp"],[8,"주머니 속 이야기 귀신","book-img/hoy_08.webp"],[9,"젊어지는 샘물","book-img/hoy_09.webp"],[10,"새끼 밴 황소","book-img/hoy_10.webp"],[11,"사람이 된 들쥐","book-img/hoy_11.webp"],[12,"개를 흉내 낸 돼지","book-img/hoy_12.webp"],[13,"호랑이와 곶감","book-img/hoy_13.webp"],[14,"바리데기","book-img/hoy_14.webp"],[15,"멸치 대왕의 꿈","book-img/hoy_15.webp"],[16,"콩쥐 팥쥐","book-img/hoy_16.webp"],[17,"반쪽이","book-img/hoy_17.webp"],[18,"까막나라 불개","book-img/hoy_18.webp"],[19,"재주 많은 여섯쌍둥이","book-img/hoy_19.webp"],[20,"촛국 먹고 아그그","book-img/hoy_20.webp"],[21,"은혜 갚은 황새","book-img/hoy_21.webp"],[22,"혹부리 할아버지","book-img/hoy_22.webp"],[23,"견우와 직녀","book-img/hoy_23.webp"],[24,"꽁지 닷 발 주둥이 닷 발","book-img/hoy_24.webp"],[25,"효자와 눈썹 없는 호랑이","book-img/hoy_25.webp"],[26,"황금보다 더 좋은 친구","book-img/hoy_26.webp"],[27,"바보와 올랑촐랑 푸드덕","book-img/hoy_27.webp"],[28,"중국 임금이 된 머슴","book-img/hoy_28.webp"],[29,"보이나? 보이네","book-img/hoy_29.webp"],[30,"호박씨를 먹이면","book-img/hoy_30.webp"],[31,"냄새값 소리값","book-img/hoy_31.webp"],[32,"솜 장수 넷 고양이 다리 넷","book-img/hoy_32.webp"],[33,"힘센 며느리의 소 길들이기","book-img/hoy_33.webp"],[34,"팥죽 할멈과 호랑이","book-img/hoy_34.webp"],[35,"삼 년 고개","book-img/hoy_35.webp"],[36,"아껴라 아껴 영감님과 뭐든지 아껴 영감님","book-img/hoy_36.webp"],[37,"백일홍","book-img/hoy_37.webp"],[38,"가는 새끼줄 굵은 새끼줄","book-img/hoy_38.webp"],[39,"방귀 뿡과 오이씨","book-img/hoy_39.webp"],[40,"꿀강아지","book-img/hoy_40.webp"],[41,"불쌍한 사람을 도운 싱글벙글 정씨","book-img/hoy_41.webp"],[42,"소나기의 유래","book-img/hoy_42.webp"],[43,"며느릿감 고르기","book-img/hoy_43.webp"],[44,"좁쌀 한 톨로 장가든 총각","book-img/hoy_44.webp"],[45,"설문대 할망","book-img/hoy_45.webp"],[46,"둥글납작 길쭉 네모","book-img/hoy_46.webp"],[47,"아홉 살짜리 원님","book-img/hoy_47.webp"],[48,"꽃가마를 탄 고양이","book-img/hoy_48.webp"],[49,"망주석 재판","book-img/hoy_49.webp"],[50,"소금 장수와 기름 장수","book-img/hoy_50.webp"],[51,"볍씨 한 톨","book-img/hoy_51.webp"],[52,"방귀 시합","book-img/hoy_52.webp"],[53,"떡 자루와 돈 자루","book-img/hoy_53.webp"],[54,"뛰는 놈 위에 나는 놈","book-img/hoy_54.webp"],[55,"백두산 장생초","book-img/hoy_55.webp"],[56,"닭값과 모이값","book-img/hoy_56.webp"],[57,"떡시루 잡기","book-img/hoy_57.webp"],[58,"솥 안에 넣어 둔 돈","book-img/hoy_58.webp"],[59,"빨강 부채 파랑 부채","book-img/hoy_59.webp"],[60,"대장장이와 목수의 이사","book-img/hoy_60.webp"],[61,"선녀와 나무꾼","book-img/hoy_61.webp"],[62,"흥부와 놀부","book-img/hoy_62.webp"],[63,"저승에 있는 곳간","book-img/hoy_63.webp"],[64,"세 신랑의 재주","book-img/hoy_64.webp"],[65,"황금이 나오는 집","book-img/hoy_65.webp"],[66,"장화 홍련","book-img/hoy_66.webp"],[67,"소가 된 게으름뱅이","book-img/hoy_67.webp"],[68,"먹여 주고 재워 주고","book-img/hoy_68.webp"],[69,"짧아진 바지","book-img/hoy_69.webp"],[70,"송아지와 바꾼 무","book-img/hoy_70.webp"]],"옛날이야기"],["how","호야·토야의 세계 옛이야기","🌍","본책 50권",[[1,"금비녀와 씽찬","book-img/how_01.webp"],[2,"복숭아 부부","book-img/how_02.webp"],[3,"수호와 흰말/바위가 된 젊은이","book-img/how_03.webp"],[4,"진짜 신랑을 기다린 공주","book-img/how_04.webp"],[5,"신통한 힘을 가진 루엉","book-img/how_05.webp"],[6,"떰과 깜/두꺼비가 울면","book-img/how_06.webp"],[7,"꾀보 칸칠의 강물 마시기/호랑이를 속인 꾀보 칸칠/나무껍질의 마지막 소원","book-img/how_07.webp"],[8,"속고, 속이고/도둑과 아이의 이야기 겨루기","book-img/how_08.webp"],[9,"노란 옷을 입은 피나","book-img/how_09.webp"],[10,"보리 국수 속의 반지","book-img/how_10.webp"],[11,"손짓 수수께끼/우리 집이 천국","book-img/how_11.webp"],[12,"보물 항아리를 찾은 나무꾼","book-img/how_12.webp"],[13,"훠테메와 인내석","book-img/how_13.webp"],[14,"나스레틴 호카와 외투","book-img/how_14.webp"],[15,"보여요? 안 보여요?/붉은 수염을 이긴 전사","book-img/how_15.webp"],[16,"옥수수 도둑/회오리바람","book-img/how_16.webp"],[17,"여신들의 선물","book-img/how_17.webp"],[18,"달나라 하얀 달꽃","book-img/how_18.webp"],[19,"은혜 갚은 물고기","book-img/how_19.webp"],[20,"바보 마이착","book-img/how_20.webp"],[21,"코끼리 거북과 바다 요정","book-img/how_21.webp"],[22,"베이암과 두 아내","book-img/how_22.webp"],[23,"섬 소년 마우이","book-img/how_23.webp"],[24,"값진 세 마디","book-img/how_24.webp"],[25,"가난한 부부의 세 가지 소원/엉뚱한 농부 의사","book-img/how_25.webp"],[26,"다정한 오누이","book-img/how_26.webp"],[27,"무엇이 가장 아름다울까?","book-img/how_27.webp"],[28,"성모상과 늙은 음악가/솜씨 좋은 도둑","book-img/how_28.webp"],[29,"장사 한스의 모험","book-img/how_29.webp"],[30,"막내딸이 받은 황금 줄","book-img/how_30.webp"],[31,"거짓말 나라/산 귀신이 된 고집불통 남편","book-img/how_31.webp"],[32,"캄프리아노는 정말 똑똑해","book-img/how_32.webp"],[33,"달걀값은 얼마일까?","book-img/how_33.webp"],[34,"흰곰한테 시집갈게요","book-img/how_34.webp"],[35,"욕심을 부린 엄마 트롤","book-img/how_35.webp"],[36,"왕이 된 재봉사","book-img/how_36.webp"],[37,"두 운명","book-img/how_37.webp"],[38,"아름다운 노래를 부른 개구리 딸","book-img/how_38.webp"],[39,"성공은 무엇으로 살 수 있나요?","book-img/how_39.webp"],[40,"무슨 빵을 드시나요?","book-img/how_40.webp"],[41,"아이와 물의 요정","book-img/how_41.webp"],[42,"잘 떠벌리는 마누라","book-img/how_42.webp"],[43,"왕자와 붉은 장미","book-img/how_43.webp"],[44,"풀라니족 남자의 질투","book-img/how_44.webp"],[45,"욕심쟁이 재판관","book-img/how_45.webp"],[46,"하늘에서 뚝 떨어진 영웅","book-img/how_46.webp"],[47,"미치광이 친구의 지혜","book-img/how_47.webp"],[48,"아샤의 거짓말","book-img/how_48.webp"],[49,"욕심 많은 원숭이 비비","book-img/how_49.webp"],[50,"맵케니와 임팔라","book-img/how_50.webp"]],"세계 옛이야기"]];
+/* 완독C: 교원 창의융합 완독 C단계(8-13세) 공식 코스는 별도 전집 목록이 아니라
+   아래 8개 전집을 52주 교과 연계로 읽는 프로그램이라, 책장에 이미 있는 전집의 책을 모아 보여 준다. */
+window.__RB_COURSE={"wandokc":{"n":"완독C 코스","e":"🎯","short":"완독C 코스","refs":["world"],
+  "note":"교원 창의융합 완독 C단계 공식 코스 8개 전집 가운데 지금 우리 책장에 있는 책만 모았어요."}};
+
 /* ===== 📚 빨간펜 솔루토이 '우리 집 책장' · 하루 한 권 · 독후활동 =====
    자료: 교원 빨간펜 공식 상품 페이지(kyowonedu.com)의 전집 '전체 도서 보기' 권 목록·표지
+   추가(2026-11-20): 조물조물 5종·꼬잉꼬잉 이솝극장과 철학동화·역사 챌린지 어린이 조선왕조실록·
+   호야·토야의 옛날이야기·호야·토야의 세계 옛이야기 + 완독C 코스
    표지 이미지: repo book-img/ (168px webp) */
 (function(){
 "use strict";
@@ -15291,13 +15662,26 @@ var RB = window.RB = window.RB || {};
 var SRC = window.__RB_DATA || [];
 var SERIES = [], BOOKS = [], BYKEY = {};
 SRC.forEach(function(s){
-  var ser = { k:s[0], n:s[1], e:s[2], c:s[3], books:[] };
+  var ser = { k:s[0], n:s[1], e:s[2], c:s[3], short:s[5] || null, books:[] };
   s[4].forEach(function(b){
     var o = { key:s[0] + ":" + b[0], ser:s[0], serName:s[1], em:s[2], n:b[0], t:b[1], img:b[2] };
     ser.books.push(o); BOOKS.push(o); BYKEY[o.key] = o;
   });
   SERIES.push(ser);
 });
+/* 완독C 코스: 이미 책장에 있는 전집의 책을 모아 보여 준다 (읽음 표시·독후활동 공유) */
+(function(){
+  var CO = window.__RB_COURSE || {};
+  Object.keys(CO).forEach(function(ck){
+    var cs = CO[ck], bs = [];
+    (cs.refs || []).forEach(function(rk){
+      SERIES.forEach(function(x){ if (x.k === rk) bs = bs.concat(x.books); });
+    });
+    if (!bs.length) return;
+    SERIES.push({ k:ck, n:cs.n, e:cs.e, c:(bs.length + "권"), short:cs.short || null,
+                  note:cs.note || "", course:true, books:bs });
+  });
+})();
 
 /* ---------- 2. 저장 ---------- */
 var K = {
@@ -15317,6 +15701,7 @@ function readCount(serKey){
   return s ? s.books.filter(function(b){ return read[b.key]; }).length : 0;
 }
 function seriesOf(k){ return SERIES.filter(function(s){ return s.k === k; })[0]; }
+function seriesLabel(s){ return s.short || String(s.n).replace("솔루토이 ", ""); }
 
 function setRead(key, on){
   if (!BYKEY[key]) return;
@@ -15345,7 +15730,7 @@ function refreshCounters(){
     for (var i = 0; i < SERIES.length; i++){
       var el = chips.children[i + 1];
       if (!el) continue;
-      el.innerHTML = SERIES[i].e + " " + esc(SERIES[i].n.replace("솔루토이 ", "")) +
+      el.innerHTML = SERIES[i].e + " " + esc(seriesLabel(SERIES[i])) +
         ' <b>' + readCount(SERIES[i].k) + "/" + SERIES[i].books.length + '</b>';
     }
   }
@@ -15430,6 +15815,60 @@ var QS = {
     ["‘모나리자’를 그린 화가는?", ["레오나르도 다빈치", "고흐", "피카소"], 0],
     ["독립 만세를 외친 소녀는?", ["유관순", "신사임당", "헬렌 켈러"], 0],
     ["나는 칭기즈 칸의 후예 — 칭기즈 칸은 어느 나라 사람일까요?", ["몽골", "중국", "일본"], 0]
+  ],
+  jn: [
+    ["다람쥐가 겨울잠을 자는 까닭은?", ["추워서 먹이가 없어서", "놀고 싶어서", "물속에서 살아서"], 0],
+    ["북극곰은 어디에 살까요?", ["북극", "사막", "정글"], 0],
+    ["애벌레가 나비가 되는 것을 무엇이라고 할까요?", ["한살이", "겨울잠", "이사"], 0],
+    ["식물이 자라려면 무엇이 필요할까요?", ["물과 햇빛", "텔레비전", "모래"], 0]
+  ],
+  jt: [
+    ["물을 얼리면 어떻게 될까요?", ["얼음이 돼요", "불이 돼요", "사라져요"], 0],
+    ["자석이 끌어당기는 것은?", ["쇠붙이", "나무", "종이"], 0],
+    ["낮과 밤은 왜 생길까요?", ["지구가 돌기 때문에", "해가 없어지니까", "달이 오니까"], 0],
+    ["빛이 없으면 생기는 것은?", ["그림자", "소리", "냄새"], 0]
+  ],
+  jh: [
+    ["한글을 만든 임금님은?", ["세종대왕", "정조", "태조"], 0],
+    ["우리나라의 첫 나라를 세운 사람은?", ["단군왕검", "주몽", "왕건"], 0],
+    ["조선을 세운 사람은?", ["이성계", "이순신", "강감찬"], 0],
+    ["옛날에도 돈을 썼을까요?", ["네, 엽전을 썼어요", "아니요, 없었어요", "저금통을 썼어요"], 0]
+  ],
+  jc: [
+    ["막힌 것을 다르게 생각해 보는 힘을 무엇이라고 할까요?", ["창의력", "달리기", "기억"], 0],
+    ["편리하게 만든 물건을 무엇이라고 할까요?", ["발명품", "과자", "그림"], 0],
+    ["두 사람이 함께 하면 더 좋은 것을 고르세요.", ["함께 하는 것", "혼자 하는 것", "가만히 있는 것"], 0],
+    ["똑같은 바나나 껍질로 무엇을 만들 수 있을까요?", ["여러 가지를 만들 수 있어요", "아무것도 못 만들어요", "바나나만 만들어요"], 0]
+  ],
+  js: [
+    ["동네에서 이사를 하면 무엇이 달라질까요?", ["사는 곳과 이웃", "날씨", "계절"], 0],
+    ["물건을 사려면 어디에 가야 할까요?", ["시장이나 마트", "우체국", "놀이터"], 0],
+    ["돈을 모은다고 할 때 쓰는 것은?", ["저금통", "모래함", "물컵"], 0],
+    ["우리나라의 국경일이 아닌 것은?", ["생일", "광복절", "개천절"], 0]
+  ],
+  aes: [
+    ["이솝이야기에서 주인공이 배우는 것은?", ["지혜와 바른 마음", "요리 방법", "노래 부르기"], 0],
+    ["거짓말을 하면 어떻게 될까요?", ["믿음을 잃어요", "기가 나요", "돈이 생겨요"], 0],
+    ["욕심을 부리면 어떻게 될까요?", ["가진 것도 잃을 수 있어요", "더 좋아져요", "아무 일도 없어요"], 0],
+    ["친구와 다투었을 때 가장 좋은 방법은?", ["이야기해서 풀어요", "안 보는 척해요", "더 화를 내요"], 0]
+  ],
+  csk: [
+    ["조선을 세운 왕은?", ["태조 이성계", "세종대왕", "정조"], 0],
+    ["백성을 위해 공부한 왕은?", ["세종", "연산군", "순종"], 0],
+    ["수원 화성을 만든 왕은?", ["정조", "태종", "예종"], 0],
+    ["조선의 마지막 왕은?", ["순종", "고종", "철종"], 0]
+  ],
+  hoy: [
+    ["여우에게 꾀를 부린 동물은?", ["호랑이", "토끼", "곰"], 0],
+    ["우렁이 색시의 이야기에서 주인공이 오래 아꼈던 것은?", ["우렁이 껍데기", "금도끼", "맷돌"], 0],
+    ["금도끼 은도끼 이야기에서 산신령이 칭찬한 것은?", ["정직한 마음", "큰 목소리", "빠른 걸음"], 0],
+    ["해와 달이 된 오누이를 쫓아간 것은?", ["호랑이", "사자", "늑대"], 0]
+  ],
+  how: [
+    ["세계 옛이야기는 어느 나라 이야기일까요?", ["여러 나라", "우리나라만", "한 나라만"], 0],
+    ["옛이야기는 누가 들려주었을까요?", ["옛날 어른들", "로봇", "자동차"], 0],
+    ["다른 나라 이야기를 들으면 무엇을 알 수 있을까요?", ["그 나라 문화와 생각", "숫자만", "날씨만"], 0],
+    ["지혜로운 사람이 쓰는 힘은?", ["슬기와 말", "주먹", "돈"], 0]
   ]
 };
 function quizFor(book){
@@ -15442,6 +15881,8 @@ function quizFor(book){
 var MODE = "tree";           /* tree | shelf | act */
 var ACTIVE = null;           /* 독후활동 중인 책 key */
 var CHIP = "";               /* 시리즈 필터 */
+var SHOWN = 120;             /* 한 번에 그리는 책 수(전체 보기 성능) */
+var SHOWN_FOR = null;
 
 function cover(b){ return b.img ? '<img src="' + esc(b.img) + '" alt="' + esc(b.t) + ' 표지" loading="lazy">' : ""; }
 
@@ -15475,11 +15916,12 @@ function shelfHTML(){
       readCount("") + "/" + BOOKS.length + '</b></button>';
   SERIES.forEach(function(s){
     chips += '<button class="rb-chip' + (CHIP === s.k ? " on" : "") + '" type="button" data-rbchip="' + s.k + '">' +
-      s.e + " " + esc(s.n.replace("솔루토이 ", "")) + ' <b>' + readCount(s.k) + "/" + s.books.length + '</b></button>';
+      s.e + " " + esc(seriesLabel(s)) + ' <b>' + readCount(s.k) + "/" + s.books.length + '</b></button>';
   });
 
   var list = CHIP ? (seriesOf(CHIP) ? seriesOf(CHIP).books : []) : BOOKS;
-  var grid = list.map(function(b){
+  var shown = Math.min(SHOWN, list.length);
+  var grid = list.slice(0, shown).map(function(b){
     var on = isRead(b.key);
     return '<div class="rb-book' + (on ? " read" : "") + '" data-book="' + esc(b.key) + '">' +
       cover(b) + '<span class="rb-bn">' + b.n + '</span>' +
@@ -15494,7 +15936,8 @@ function shelfHTML(){
   if (CHIP && seriesOf(CHIP)) {
     var s = seriesOf(CHIP), c = readCount(CHIP);
     prog = '<div class="rb-prog"><b>' + esc(s.n) + '</b><div class="rb-bar"><i style="width:' +
-      Math.round(c / s.books.length * 100) + '%"></i></div><span>' + c + " / " + s.books.length + '권</span></div>';
+      Math.round(c / s.books.length * 100) + '%"></i></div><span>' + c + " / " + s.books.length + '권</span></div>' +
+      (s.note ? '<div class="rb-note">' + esc(s.note) + '</div>' : '');
   } else {
     var c2 = readCount("");
     prog = '<div class="rb-prog"><b>우리 집 책장</b><div class="rb-bar"><i style="width:' +
@@ -15503,7 +15946,9 @@ function shelfHTML(){
 
   return '<div class="rb-askwrap" id="rbAskWrap">' + askCard() + '</div>' +
          '<div class="rb-chips" id="rbChips">' + chips + '</div>' + prog +
-         '<div class="rb-shelf" id="rbShelf">' + (grid || '<div class="rb-empty">책을 찾지 못했어요</div>') + '</div>';
+         '<div class="rb-shelf" id="rbShelf">' + (grid || '<div class="rb-empty">책을 찾지 못했어요</div>') +
+         (list.length > shown ? '<button class="rb-more" type="button" data-rbmore="1">더 보기 · ' + (list.length - shown) + '권</button>' : '') +
+         '</div>';
 }
 
 function actHTML(b){
@@ -15563,6 +16008,7 @@ var BUILT = null;
 function paintShelves(force){
   var w = $("rbShelfWrap"); if (!w) return;
   if (!force && BUILT === CHIP && w.children.length){ tabCount(); return; }
+  if (SHOWN_FOR !== CHIP){ SHOWN_FOR = CHIP; SHOWN = 120; }
   w.innerHTML = shelfHTML();
   BUILT = CHIP;
   tabCount();
@@ -15764,7 +16210,9 @@ document.addEventListener("click", function(e){
     return;
   }
   var chip = el.closest("[data-rbchip]");
-  if (chip){ CHIP = chip.getAttribute("data-rbchip"); paintShelves(true); return; }
+  if (chip){ CHIP = chip.getAttribute("data-rbchip"); SHOWN = 120; paintShelves(true); return; }
+  var mo = el.closest("[data-rbmore]");
+  if (mo){ SHOWN += 120; paintShelves(true); return; }
 
   var tg = el.closest("[data-rbtoggle]");
   if (tg){
