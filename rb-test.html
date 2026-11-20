@@ -3562,6 +3562,7 @@ body.mob .pbk-fin-p{font-size:.82rem;}
 .wk-adot.on{background:linear-gradient(150deg,#6fe0ac,#33bd82);box-shadow:inset 0 0 0 1px #2fae78;}
 .wk-hwchk{display:none;}
 .wk-hwitem{gap:.2rem;align-items:center;flex-wrap:nowrap;}
+.wk-hwtx{word-break:keep-all;overflow-wrap:anywhere;font-size:.9rem;line-height:1.25;}
 .wk-hwdel{width:.95rem;flex:0 0 auto;}
 .wk-hwlist{min-height:1.6rem;}
 .wk-hwtx{flex:1 1 auto;}
@@ -15812,6 +15813,48 @@ function addReadingN(){
   } catch(e){}
 }
 
+/* ---------- 8-c. 숙제를 다 하면 출석 도장까지 자동으로 ---------- */
+var ATTK = "haeyuli.attend.v1";
+function localToday(){ var d = new Date(); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+function attStore(){
+  try { var v = JSON.parse(localStorage.getItem(ATTK) || "{}"); if (!v || typeof v !== "object") v = {}; if (!v.days || typeof v.days !== "object") v.days = {}; return v; }
+  catch(e){ return { days:{} }; }
+}
+function syncAttendance(){
+  try {
+    var board = document.getElementById("weekBoard"); if (!board) return;
+    var complete = !!board.querySelector(".wk-today.ok");
+    var t = localToday(), att = attStore(), rec = att.days[t];
+    var stamped = !!(rec && rec.star);
+    if (complete && !stamped){
+      if (SB.markAttendance) SB.markAttendance("check");
+      if (SB.week && SB.week.render) SB.week.render();
+      if (SB.toast) SB.toast("🐾 숙제를 다 했으니 출석 도장도 찍었어요!");
+    } else if (!complete && stamped){
+      var ks = Object.keys(rec.src || {});
+      /* 우리가 자동으로 찍은 도장만 되돌린다 (직접 찍은 도장은 그대로) */
+      if (ks.length === 1 && ks[0] === "check"){
+        delete att.days[t];
+        try { localStorage.setItem(ATTK, JSON.stringify(att)); } catch(e){}
+        if (SB.renderAttend) SB.renderAttend();
+        if (SB.onAttend) SB.onAttend();
+        if (SB.week && SB.week.render) SB.week.render();
+      }
+    }
+  } catch(e){ try { (window.__rbErrs = window.__rbErrs || []).push("att:" + e); } catch(e2){} }
+}
+function watchWeekBoard(){
+  var board = document.getElementById("weekBoard");
+  if (!board || board.__rbWatch) return;
+  board.__rbWatch = 1;
+  var tm = null;
+  try {
+    new MutationObserver(function(){ clearTimeout(tm); tm = setTimeout(syncAttendance, 90); })
+      .observe(board, { childList:true, subtree:true });
+  } catch(e){}
+  syncAttendance();
+}
+
 /* ---------- 9. 시작 ---------- */
 function boot(){
   try {
@@ -15825,9 +15868,11 @@ function boot(){
     var oldChips = SB.renderChips;
     SB.renderChips = function(){ if (oldChips) { try { oldChips.apply(this, arguments); } catch(e){} } addReadingN(); };
     var oldHome = SB.onShow.home;
-    SB.onShow.home = function(){ try { buildHome(); var h = $("rbHome"); if (h) h.innerHTML = homeCard(); } catch(e){} if (oldHome) try { oldHome.apply(this, arguments); } catch(e){} };
+    SB.onShow.home = function(){ try { buildHome(); var h = $("rbHome"); if (h) h.innerHTML = homeCard(); } catch(e){} if (oldHome) try { oldHome.apply(this, arguments); } catch(e){}
+      try { watchWeekBoard(); syncAttendance(); } catch(e){} };
     paintAll();
     addReadingN();
+    watchWeekBoard();
     RB.sync();
   } catch(e){
     try { (window.__rbErrs = window.__rbErrs || []).push(String(e)); } catch(e2){}
