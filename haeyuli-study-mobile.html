@@ -5769,6 +5769,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
         </div>
         <div class="pg-acts">
           <button class="pg-btn mom" id="pgMom" type="button">🔒 엄마 용돈 주기</button>
+          <button class="pg-btn coupon" id="pgCoupon" type="button">🔒 엄마 쿠폰 주기</button>
           <button class="pg-btn bank" id="pgBank" type="button">🏦 은행으로 가기</button>
           <button class="pg-btn spend" id="pgSpend" type="button">➖ 용돈 썼어요</button>
         </div>
@@ -15465,13 +15466,14 @@ function mergeCoupons(lc, cc){
     if (x.id && byId[x.id]) prev = byId[x.id];
     else if (x.rid && byRid[x.rid]) prev = byRid[x.rid];
     if (!prev){
-      var cp = { id:x.id || ("cp" + String(x.rid)), name:x.name || "", at:x.at || "", days:num(x.days) || 30,
-                 rid:x.rid || "", used:x.used || "", usedAt:x.usedAt || "" };
+      var cp = { id:x.id || ("cp" + String(x.rid)), name:x.name || "", at:x.at || "", days:num(x.days) || (x.src === "mom" ? 0 : 30),
+                 rid:x.rid || "", src:x.src || "", used:x.used || "", usedAt:x.usedAt || "" };
       out.push(cp);
       if (cp.id) byId[cp.id] = cp;
       if (cp.rid) byRid[cp.rid] = cp;
       return;
     }
+    if (!prev.src && x.src) prev.src = x.src;
     if (!prev.used && x.used){ prev.used = x.used; prev.usedAt = x.usedAt || x.used; }
     if (!prev.usedAt && x.usedAt) prev.usedAt = x.usedAt;
   }
@@ -15999,13 +16001,13 @@ function renderCard(){
   var n = $("cpCount");
   if (n) n.textContent = items.length ? ("사용 가능 " + avail + "장 · 모두 " + items.length + "장") : "아직 없어요";
   if (!items.length){
-    list.innerHTML = '<li class="cp-empty">아직 쿠폰이 없어요.<br>숙제를 <b>30일 연속</b>으로 다 하면 🎟️ 쿠폰이 와요!</li>';
+    list.innerHTML = '<li class="cp-empty">아직 쿠폰이 없어요.<br>숙제를 <b>30일 연속</b>으로 다 하면 🎟️ 쿠폰이 와요!<br>엄마가 <b>🔒 엄마 쿠폰 주기</b>로 직접 주기도 해요.</li>';
     return;
   }
   list.innerHTML = items.map(function(x){
     return '<li class="cp-item' + (x.used ? " used" : "") + '">'
       +   '<div class="cp-i1"><b>' + esc(x.name) + '</b>'
-      +     '<span>' + (x.days || MOM_DAYS) + '일 연속 숙제 · ' + esc(x.at) + ' 발급</span></div>'
+      +     '<span>' + (x.src === "mom" ? "엄마가 준 쿠폰" : ((x.days || MOM_DAYS) + "일 연속 숙제")) + ' · ' + esc(x.at) + ' 발급</span></div>'
       +   '<span class="cp-badge ' + (x.used ? "off" : "on") + '">' + (x.used ? "사용 완료" : "사용 가능") + '</span>'
       +   (x.used
             ? '<span class="cp-when">' + esc(x.usedAt || x.used) + '</span>'
@@ -16075,6 +16077,151 @@ function submitMom(){
   var box = document.querySelector("#cpMomModal .mom-sum");
   if (box){ box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake"); }
   return false;
+}
+
+/* ───────────────────────── 🔒 엄마 쿠폰 주기 (엄마가 직접 적어서 발급) ───────────────────────── */
+var GQA = { a:0, b:0 };
+var MOM_CHIPS = ["주말 키즈카페 가기", "원하는 장난감 1개", "아이패드 30분", "아이스크림 1개 먹기", "엄마랑 영화 보기", "치킨 먹기"];
+function gq(){
+  GQA.a = 11 + Math.floor(Math.random() * 78);
+  GQA.b = 11 + Math.floor(Math.random() * (99 - GQA.a));
+  if (GQA.b < 11) GQA.b = 11;
+  if ($("gvA")) $("gvA").textContent = GQA.a;
+  if ($("gvB")) $("gvB").textContent = GQA.b;
+  if ($("gvAns")) $("gvAns").value = "";
+  if ($("gvMsg")) $("gvMsg").textContent = "";
+}
+function gvNow(){
+  var n = $("gvNow");
+  if (n) n.textContent = couponList().length + "장";
+}
+function mountGive(){
+  if ($("cpGiveModal")) return;
+  var wrap = document.createElement("div");
+  wrap.className = "modal";
+  wrap.id = "cpGiveModal";
+  wrap.hidden = true;
+  wrap.innerHTML =
+      '<div class="sheet momsheet" role="dialog" aria-modal="true" aria-labelledby="cpGiveTitle">'
+    +   '<div class="sheet-head"><h3 id="cpGiveTitle">🔒 엄마 쿠폰 주기</h3>'
+    +     '<button class="close" type="button" data-gvclose="1" aria-label="닫기">✕</button></div>'
+    +   '<div class="sheet-body">'
+    +     '<div class="mom-lock" id="gvLock">'
+    +       '<p class="mom-q">여기는 <b>엄마만</b> 열 수 있어요.<br><b>두 자리 덧셈</b>을 풀면 쿠폰을 만들 수 있어요.</p>'
+    +       '<div class="mom-sum"><b id="gvA">46</b><span>+</span><b id="gvB">28</b><span>=</span>'
+    +         '<input id="gvAns" type="text" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="?" aria-label="덧셈 정답"></div>'
+    +       '<p class="mom-msg" id="gvMsg"></p>'
+    +       '<div class="mom-btns">'
+    +         '<button class="mom-open" id="gvOpen" type="button">열기 🔓</button>'
+    +         '<button class="mom-newq" id="gvNewQ" type="button">🔄 다른 문제</button>'
+    +       '</div>'
+    +     '</div>'
+    +     '<div class="mom-panel cp-give" id="gvPanel" hidden>'
+    +       '<p class="mom-hello">엄마예요 👩‍💼 해율이한테 줄 쿠폰을 적어 주세요.</p>'
+    +       '<div class="cp-chips" id="gvChips">' + MOM_CHIPS.map(function(t){
+              return '<button type="button" class="cp-chip" data-gvchip="' + esc(t) + '">' + esc(t) + '</button>';
+            }).join("") + '</div>'
+    +       '<label class="frow"><span>쿠폰 내용</span>'
+    +         '<input id="gvText" type="text" autocomplete="off" maxlength="40" placeholder="예: 주말 키즈카페 가기"></label>'
+    +       '<p class="mom-msg" id="gvSendMsg"></p>'
+    +       '<div class="cp-gnow">지금 쿠폰 <b id="gvNow">0장</b></div>'
+    +       '<div class="mom-btns">'
+    +         '<button class="mom-open cp-go-btn" id="gvGo" type="button">🎟️ 쿠폰 발급하기</button>'
+    +         '<button class="mom-newq" id="gvLockBtn" type="button">🔒 다시 잠그기</button>'
+    +       '</div>'
+    +     '</div>'
+    +   '</div>'
+    + '</div>';
+  document.body.appendChild(wrap);
+
+  wrap.addEventListener("click", function(e){
+    if (e.target === wrap || e.target.closest("[data-gvclose]")) { closeGive(); return; }
+    if (e.target.closest("#gvOpen")) { unlockGive(); return; }
+    if (e.target.closest("#gvNewQ")) { gq(); return; }
+    if (e.target.closest("#gvLockBtn")) { closeGive(); return; }
+    if (e.target.closest("#gvGo")) { sendMomCoupon(); return; }
+    var ch = e.target.closest("[data-gvchip]");
+    if (ch && $("gvText")){
+      $("gvText").value = ch.getAttribute("data-gvchip") || "";
+      if ($("gvSendMsg")) $("gvSendMsg").textContent = "";
+      try { $("gvText").focus(); } catch(err){}
+    }
+  });
+  var ga = $("gvAns");
+  if (ga) ga.addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); unlockGive(); } });
+  var gt = $("gvText");
+  if (gt) gt.addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); sendMomCoupon(); } });
+}
+function openGive(){
+  mountGive();
+  gq();
+  if ($("gvLock")) $("gvLock").hidden = false;
+  if ($("gvPanel")) $("gvPanel").hidden = true;
+  if ($("gvText")) $("gvText").value = "";
+  if ($("gvSendMsg")) $("gvSendMsg").textContent = "";
+  gvNow();
+  var m = $("cpGiveModal");
+  if (m) m.hidden = false;
+  setTimeout(function(){ var i = $("gvAns"); if (i) try { i.focus(); } catch(e){} }, 120);
+}
+function closeGive(){ var m = $("cpGiveModal"); if (m) m.hidden = true; }
+function unlockGive(){
+  var v = parseInt(String(($("gvAns") || {}).value || "").replace(/[^0-9]/g, ""), 10);
+  if (v === GQA.a + GQA.b){
+    if ($("gvLock")) $("gvLock").hidden = true;
+    if ($("gvPanel")) $("gvPanel").hidden = false;
+    if ($("gvSendMsg")) $("gvSendMsg").textContent = "";
+    gvNow();
+    toast("🔓 엄마 쿠폰 칸이 열렸어요!");
+    setTimeout(function(){ var i = $("gvText"); if (i) try { i.focus(); } catch(e){} }, 140);
+    return true;
+  }
+  if ($("gvMsg")) $("gvMsg").textContent = "정답이 아니에요. 다시 계산해 보세요 🤔";
+  var box = document.querySelector("#cpGiveModal .mom-sum");
+  if (box){ box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake"); }
+  return false;
+}
+function issueMomCoupon(text){
+  var name = String(text == null ? "" : text).replace(/\s+/g, " ").trim();
+  if (!name) return null;
+  if (name.length > 40) name = name.slice(0, 40);
+  var c = readC();
+  var it = {
+    id: "cpm" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36),
+    name: name, at: today(), days: 0, rid: "", src: "mom", used: "", usedAt: ""
+  };
+  c.items.unshift(it);
+  if (!saveC(c)) return null;
+  renderCard();
+  try { renderGuideNow(); } catch(e){}
+  syncFam();
+  return it;
+}
+function sendMomCoupon(){
+  var inp = $("gvText");
+  var name = String((inp && inp.value) || "").trim();
+  if (!name){
+    if ($("gvSendMsg")) $("gvSendMsg").textContent = "쿠폰 내용을 적어 주세요 ✏️";
+    if (inp) try { inp.focus(); } catch(e){}
+    return false;
+  }
+  var it = issueMomCoupon(name);
+  if (!it){
+    if ($("gvSendMsg")) $("gvSendMsg").textContent = "쿠폰을 만들지 못했어요. 잠시 뒤 다시 해 주세요";
+    return false;
+  }
+  if (inp) inp.value = "";
+  if ($("gvSendMsg")) $("gvSendMsg").textContent = "";
+  gvNow();
+  closeGive();
+  try { if (SB.confetti) SB.confetti(); } catch(e){}
+  toast("🎟️ '" + it.name + "' 쿠폰을 해율이 쿠폰함에 넣었어요!");
+  setTimeout(function(){
+    try { SB.go("piggy", "main"); } catch(e){}
+    var cd = $("cpCard");
+    if (cd) try { cd.scrollIntoView({ block:"nearest" }); } catch(e){}
+  }, 260);
+  return true;
 }
 
 /* ───────────────────────── 🏆 30일 축하 팝업 ───────────────────────── */
@@ -16176,6 +16323,7 @@ function mountRewardGuide(){
     +   '<li><b>📝 숙제 5일 연속</b><span>그날 숙제를 <em>전부</em> 체크한 날이 5일 이어지면 <em>+5,000원</em> (10·15·20일도 5일마다)</span></li>'
     +   '<li><b>🏆 숙제 30일 연속</b><span>한 달 내리 다 하면 <em>🎟️ 원하는 거 사기 쿠폰</em> 1장 · 60·90일도 한 장씩</span></li>'
     +   '<li><b>📖 연속 독서 보너스</b><span>북트리 책 + 빨간펜 ‘읽었어요 ✓’ 합산 — 3일 <em>+200원</em> · 7일 <em>+400원</em> · 14일 <em>+600원</em> · 30일 <em>+1,000원</em></span></li>'
+    +   '<li><b>🎟️ 엄마 쿠폰</b><span>엄마가 <em>💰 용돈 → 🔒 엄마 쿠폰 주기</em>에서 내용을 직접 적어 주면 쿠폰함에 들어가요</span></li>'
     +   '<li><b>⭐ 별 보너스</b><span>용돈·보상금이 들어올 때마다 <em>별 +2개</em> · 학습·독서 활동으로도 별이 쌓여요 (구치파치 음식 사기)</span></li>'
     + '</ul>'
     + '<p class="rewd-now" id="rewdNow"></p>';
@@ -16214,6 +16362,18 @@ function mountStyle(){
     "  box-shadow:inset 0 0 0 .12rem #edcf87;white-space:nowrap;}",
     ".cp-use:active{transform:scale(.98);}",
     ".cp-when{grid-column:1 / -1;font-size:.76rem;font-weight:800;color:#8aa2b6;}",
+    ".pg-btn.coupon{background:linear-gradient(135deg,#ffe0ec,#ffb1cd);color:#8a1f52;box-shadow:0 .4vh 1.2vh rgba(230,120,160,.28);}",
+    "body .pg-btn.coupon{background:#fbf2f6;color:#8a3a5c;box-shadow:inset 0 0 0 1px #ecdfe6;}",
+    ".cp-chips{display:flex;flex-wrap:wrap;gap:.4rem;}",
+    ".cp-chip{height:2.3rem;padding:0 .72rem;border-radius:999px;background:#fff6fa;color:#a83566;font-size:.86rem;font-weight:900;",
+    "  box-shadow:inset 0 0 0 .1rem #f6cadc;white-space:nowrap;}",
+    ".cp-chip:active{transform:scale(.97);}",
+    ".cp-gnow{margin:0;font-size:.95rem;font-weight:900;color:#8a7355;}",
+    ".cp-gnow b{color:#c1225e;font-size:1.15rem;}",
+    ".mom-open.cp-go-btn{background:linear-gradient(135deg,#ffd3e4,#ff9dc0);color:#6d1136;box-shadow:0 .4vh 1.2vh rgba(220,110,150,.26);}",
+    ".cp-give .frow input{font-size:1.02rem;}",
+    /* 폰 보드의 아래 고정 메뉴에 쿠폰함 마지막 버튼이 가리지 않게 */
+    "body.mob #viewPiggy{padding-bottom:5rem;}",
     ".cp-pop{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;}",
     ".cp-veil{position:absolute;inset:0;background:radial-gradient(circle at 50% 35%,rgba(255,214,120,.34),rgba(20,40,60,.6));backdrop-filter:blur(2px);}",
     ".cp-cardbox{position:relative;width:min(92vw,34rem);padding:2.4vh 2.2vh 2vh;border-radius:1.6rem;text-align:center;",
@@ -16254,6 +16414,7 @@ function bind(){
   mountCard();
   mountRewardGuide();
   mountMom();
+  mountGive();
   var pop = $("cpPop");
   if (pop && !pop.__b){
     pop.__b = 1;
@@ -16266,6 +16427,8 @@ function bind(){
       }
     });
   }
+  var pgcp = $("pgCoupon");
+  if (pgcp && !pgcp.__b){ pgcp.__b = 1; pgcp.addEventListener("click", openGive); }
   var card = $("cpCard");
   if (card && !card.__b){
     card.__b = 1;
@@ -16348,6 +16511,9 @@ SB.coupons = {
   issue: issueCoupon,
   use: useCoupon,
   popup: function(days){ showPop(days || MOM_DAYS); },
+  give: openGive,
+  closeGive: closeGive,
+  momIssue: issueMomCoupon,
   close: closePop,
   render: renderCard,
   readBonus: payReadBonus,
