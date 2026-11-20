@@ -21109,6 +21109,24 @@ function centerActive(){
   });
   sync();
 }
+/* 탭/과목/하위 탭이 바뀌어 줄이 다시 그려져도 고른 칩이 잘리지 않게 */
+function watchNav(){
+  var S = window.SB;
+  if (!S) return;
+  function again(){ setTimeout(centerActive, 60); setTimeout(centerActive, 420); }
+  if (S.go && !S.go.__hx){
+    var g = S.go;
+    S.go = function(){ var r; try { r = g.apply(this, arguments); } finally { again(); } return r; };
+    S.go.__hx = 1;
+  }
+  if (S.renderChips && !S.renderChips.__hx){
+    var p = S.renderChips;
+    S.renderChips = function(){ var r; try { r = p.apply(this, arguments); } finally { again(); } return r; };
+    S.renderChips.__hx = 1;
+  }
+}
+watchNav();
+setTimeout(watchNav, 400);
 document.addEventListener("click", function(e){
   var t = e.target.closest ? e.target.closest(".tab,.subtab,.sw-w,.ev-chan,.ep-chip,.sci-chip") : null;
   later();
