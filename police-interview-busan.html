@@ -919,6 +919,87 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001s !important;transition-duration:.001s !important}
 }
+
+/* ---------- 🎙️ 상단 녹음 버튼 ---------- */
+.recbtn{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:5px;
+  min-width:38px;height:38px;padding:0 8px;border-radius:12px;
+  background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,.07));
+  color:#fff;font-size:17px;line-height:1;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 2px 8px rgba(0,0,0,.18);
+}
+.recbtn .recic{display:block;line-height:1}
+.recbtn .recdot{display:none;width:9px;height:9px;border-radius:50%;background:#ff5252;box-shadow:0 0 0 3px rgba(255,82,82,.3)}
+.recbtn .recstop{display:none;width:11px;height:11px;border-radius:2px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.14)}
+.recbtn .rectime{display:none;font-size:12px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.recbtn.on{background:linear-gradient(160deg,#9c2626,#5d1111);box-shadow:inset 0 0 0 1px rgba(255,140,140,.55),0 2px 10px rgba(120,20,20,.45)}
+.recbtn.on .recdot{display:block;animation:recpulse 1.15s ease-in-out infinite}
+.recbtn.on .recic{display:none}
+.recbtn.on .recstop{display:block}
+.appbar.rec-on .maker{display:none}
+.recbtn.on .rectime{display:block}
+.recbtn:active{transform:scale(.96)}
+@keyframes recpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.42;transform:scale(.8)}}
+
+/* ---------- 🎙️ 녹음 제목 입력·삭제 확인 ---------- */
+.recdlg{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;
+  padding:calc(var(--sat) + 18px) 16px calc(var(--sab) + 18px);background:rgba(8,17,34,.56)}
+.recdlg[hidden]{display:none}
+.recdlgbox{width:100%;max-width:420px;max-height:100%;overflow:auto;background:var(--card);border:1px solid var(--line);
+  border-radius:18px;padding:18px 16px 14px;box-shadow:0 22px 50px rgba(8,17,34,.34);animation:fadeUp .16s ease}
+.recdlgh{font-size:15px;font-weight:900;letter-spacing:-.02em;color:var(--navy)}
+.recdlgsub{margin:6px 0 0;font-size:12px;font-weight:700;color:var(--ink-2);line-height:1.55}
+.recdlgmeta{margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--paper);border:1px solid var(--line-2);
+  font-size:11.5px;font-weight:800;color:var(--muted);line-height:1.45;word-break:keep-all}
+.recdlgmeta:empty{display:none}
+.rectitlein{width:100%;min-height:46px;margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);
+  background:#fff;color:var(--ink);font:inherit;font-size:16px;font-weight:700;letter-spacing:-.01em}
+.rectitlein:focus{outline:none;border-color:#9fb6dd;box-shadow:0 0 0 3px rgba(36,64,111,.12)}
+.rectitlein[hidden]{display:none}
+.recdlgact{display:flex;gap:8px;margin-top:12px}
+.recdlgact .btn{flex:1 1 0;min-height:46px}
+
+/* ---------- 🎙️ 내 녹음 기록 (내 답변 탭) ---------- */
+.recsec{margin-top:16px}
+.reccard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:12px 12px 13px}
+.rechead{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.recheadt{display:flex;align-items:center;gap:7px;min-width:0}
+.recheadt b{font-size:13.5px;font-weight:900;letter-spacing:-.02em;color:var(--navy)}
+.reccount{flex:0 0 auto;font-size:10.5px;font-weight:900;color:var(--muted);background:var(--navy-soft);padding:2px 7px;border-radius:99px}
+.recdesc{margin:7px 0 0;font-size:11.5px;font-weight:600;color:var(--muted);line-height:1.6}
+.reclist{margin-top:10px;display:flex;flex-direction:column;gap:11px}
+.recday{display:flex;flex-direction:column;gap:7px}
+.recdayh{display:flex;align-items:center;gap:6px;padding:0 1px}
+.recdayh b{font-size:11.5px;font-weight:900;letter-spacing:-.01em;color:var(--ink-2)}
+.rectoday{font-size:9px;font-weight:900;color:#fff;background:var(--navy);padding:1px 6px;border-radius:99px}
+.recdayn{margin-left:auto;font-size:10px;font-weight:800;color:var(--muted)}
+.recitem{display:flex;align-items:center;gap:7px;padding:7px 8px;border:1px solid var(--line-2);border-radius:12px;background:#fbfcfe}
+.recitem.on{border-color:#bccff0;background:#f3f8ff}
+.recplay{flex:0 0 42px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:15px;
+  background:linear-gradient(160deg,var(--navy-2),var(--navy));color:#fff;box-shadow:0 2px 8px rgba(15,33,64,.2)}
+.recplay:active{transform:scale(.95)}
+.recmain{flex:1 1 auto;min-width:0}
+.rectitle{font-size:12.5px;font-weight:900;letter-spacing:-.01em;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recmeta{font-size:10.5px;font-weight:700;color:var(--muted);margin-top:1px}
+.recbar{height:4px;border-radius:99px;background:#e6ecf6;margin-top:6px;overflow:hidden}
+.recfill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--navy),#4171bd);transition:width .15s linear}
+.recicon{flex:0 0 34px;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:13px;
+  background:#fff;border:1px solid var(--line);color:var(--ink-2)}
+.recicon.del{color:var(--bad);border-color:#f1d3d0}
+.recicon:active{transform:scale(.95)}
+.recempty{padding:15px 11px;text-align:center;font-size:11.5px;font-weight:700;color:var(--muted);line-height:1.65;
+  background:var(--paper);border:1px dashed var(--line);border-radius:12px}
+@media (max-width:430px){
+  .appbar{gap:8px}
+  .recbtn{min-width:36px;height:36px;padding:0 6px;font-size:16px;border-radius:11px}
+  .recbtn.on{padding:0 8px 0 7px}
+  .recbtn .rectime{font-size:11.5px}
+  .maker{padding:2px 6px}
+  .callbtn{width:36px;height:36px;min-width:36px;border-radius:11px;font-size:16px}
+  .dday{min-width:52px;padding:3px 8px}
+  .recdlgbox{padding:16px 14px 12px}
+}
+
 </style>
 </head>
 <body>
@@ -933,6 +1014,7 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
         <small>순경 공채 · 3분 발표 · 인성·압박 · 속도 체크</small>
       </span>
     </div>
+    <button class="recbtn" id="recBtn" type="button" aria-label="내 목소리 녹음" title="내 목소리 녹음" aria-pressed="false"><span class="recdot" aria-hidden="true"></span><span class="recic" id="recIcon" aria-hidden="true">🎙️</span><span class="recstop" aria-hidden="true"></span><span class="rectime" id="recTime" hidden>00:00</span></button>
     <span class="maker" title="만든이 박주영">만든이 박주영</span>
     <button class="callbtn" id="callInterview" type="button" aria-label="전화 면접 시작" title="전화 면접 시작">📞</button>
     <button class="dday empty" id="ddayChip" type="button" aria-label="면접일 설정">
@@ -1405,6 +1487,21 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
   <div data-r="reportHost"></div>
 </div>
 
+<!-- ================= 🎙️ 녹음 저장 · 제목 수정 · 삭제 확인 ================= -->
+<div class="recdlg" id="recDlg" hidden role="dialog" aria-modal="true" aria-labelledby="recDlgTitle" aria-label="녹음 저장">
+  <div class="recdlgbox">
+    <div class="recdlgh" id="recDlgTitle">🎙️ 녹음 저장</div>
+    <p class="recdlgsub" id="recDlgSub">제목을 정해 주세요.</p>
+    <div class="recdlgmeta" id="recDlgMeta"></div>
+    <label class="sr-only" for="recTitleInput">녹음 제목</label>
+    <input class="rectitlein" id="recTitleInput" type="text" maxlength="60" autocomplete="off" spellcheck="false" enterkeyhint="done" placeholder="예: 오전 8:35 면접 연습">
+    <div class="recdlgact">
+      <button class="btn ghost" type="button" id="recDlgAlt">취소</button>
+      <button class="btn primary" type="button" id="recDlgOk">저장</button>
+    </div>
+  </div>
+</div>
+<audio id="recAudio" preload="metadata"></audio>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 /* =========================================================
@@ -7623,7 +7720,7 @@ function personalSeg(name){
   if ($("personalQWrap")) $("personalQWrap").hidden = name !== "q";
   if ($("minePane")) $("minePane").hidden = name !== "mine";
   if ($("prevPane")) $("prevPane").hidden = name !== "prev";
-  if (name === "mine") mineSummary();
+  if (name === "mine"){ mineSummary(); recRender(); }
   if (name === "prev") renderPrev();
   window.scrollTo({ top:0, behavior:"auto" });
 }
@@ -7739,6 +7836,7 @@ function renderMine(){
     '<button class="btn ghost" type="button" id="mineSpeedAll">⏱️ 1분 자기소개로 속도 체크</button>' +
     '<button class="btn danger" type="button" id="mineClearAll">모두 지우기</button>' +
   '</div>';
+  h += recSectionHTML();
   host.innerHTML = h;
   MINE_FIELDS.forEach(function(f){
     var ta = $("mine-"+f.key);
@@ -7796,6 +7894,7 @@ function renderMine(){
     mineSave(true); toast("내 답안을 모두 지웠어요.");
   });
   mineSummary();
+  recRender();
 }
 Array.prototype.forEach.call(document.querySelectorAll("#personalSeg button"), function(b){
   b.addEventListener("click", function(){ personalSeg(b.getAttribute("data-pseg")); });
@@ -7824,9 +7923,556 @@ function init(){
   spSetTarget(50);
   renderSpeedHist();
   renderMine();
+  recInit();
   renderDraft();
   spPaint();
   setView("speech");
+}
+
+/* =========================================================
+   10. 🎙️ 상단 녹음 — 어느 탭에서든 내 목소리 녹음
+   · 맨 위 헤더 🎙️ → 바로 녹음, 녹음 중 빨간 점·타이머(00:12) → ⏹ → 제목 입력 후 저장
+   · 저장한 녹음은 인성·경험 → ✍️ 내 소개·지원동기 → 🎙️ 내 녹음 기록 에 날짜별로
+   · 오디오는 이 기기(IndexedDB)에만 보관. 서버 전송 없음.
+   ========================================================= */
+var REC_DB = "police.rec.v1";
+var REC_STORE = "clips";
+var REC_VER = 1;
+var recDB = null, recDBBroken = false;
+var recState = {
+  recording:false, starting:false, startAt:0, elapsed:0, tid:null,
+  mr:null, chunks:[], stream:null, mime:"", finishing:false,
+  pending:null, items:[], loaded:false, loadErr:false,
+  mode:"save", editId:null, playId:null, url:null
+};
+
+function recSupported(){
+  return !!(window.MediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+}
+function recPickMime(){
+  if (!window.MediaRecorder) return "";
+  var list = ["audio/mp4;codecs=mp4a.40.2", "audio/mp4", "audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus"];
+  for (var i=0;i<list.length;i++){
+    try {
+      if (!MediaRecorder.isTypeSupported || MediaRecorder.isTypeSupported(list[i])) return list[i];
+    } catch(e){}
+  }
+  return "";
+}
+function dateKeyOf(ms){
+  var d = new Date(ms || Date.now());
+  return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate());
+}
+var REC_DOW = ["일","월","화","수","목","금","토"];
+function recDayLabel(key){
+  var p = String(key || "").split("-");
+  if (p.length !== 3) return String(key || "");
+  var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  if (!d || isNaN(d.getTime())) return String(key);
+  return key + " (" + REC_DOW[d.getDay()] + ")";
+}
+function recClock(sec){
+  sec = Math.max(0, Math.floor(sec || 0));
+  var h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = sec%60;
+  return h ? (h + ":" + pad2(m) + ":" + pad2(s)) : (pad2(m) + ":" + pad2(s));
+}
+function recSizeText(b){
+  b = Number(b) || 0;
+  if (!b) return "";
+  if (b >= 1048576) return (Math.round(b/104857.6)/10) + "MB";
+  return Math.max(1, Math.round(b/1024)) + "KB";
+}
+function recTimeText(ms){
+  var d = new Date(ms || Date.now());
+  return pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+}
+function recDefaultTitle(ms){
+  var d = new Date(ms || Date.now());
+  var h = d.getHours(), ap = h < 12 ? "오전" : "오후", h12 = h % 12;
+  if (!h12) h12 = 12;
+  return ap + " " + h12 + ":" + pad2(d.getMinutes()) + " 면접 연습";
+}
+function recFind(id){
+  for (var i=0;i<recState.items.length;i++) if (recState.items[i].id === id) return recState.items[i];
+  return null;
+}
+function recSort(){
+  recState.items.sort(function(a,b){ return (b.createdAt||0) - (a.createdAt||0); });
+}
+function recNorm(it){
+  if (!it) return it;
+  if (!it.dateKey) it.dateKey = dateKeyOf(it.createdAt || Date.now());
+  if (it.size == null) it.size = (it.blob && it.blob.size) || 0;
+  if (!it.mimeType) it.mimeType = (it.blob && it.blob.type) || "";
+  if (it.durationSec == null) it.durationSec = 0;
+  if (!it.title) it.title = recDefaultTitle(it.createdAt);
+  return it;
+}
+
+/* --- IndexedDB (새로고침·앱 종료 후에도 녹음 유지) --- */
+function recIdb(){
+  return new Promise(function(res, rej){
+    if (recDB) return res(recDB);
+    if (recDBBroken || !window.indexedDB) return rej(new Error("idb-unavailable"));
+    var rq;
+    try { rq = window.indexedDB.open(REC_DB, REC_VER); } catch(e){ recDBBroken = true; return rej(e); }
+    rq.onupgradeneeded = function(){
+      var db = rq.result;
+      if (!db.objectStoreNames.contains(REC_STORE)){
+        var st = db.createObjectStore(REC_STORE, { keyPath:"id" });
+        try { st.createIndex("createdAt", "createdAt", { unique:false }); } catch(e){}
+        try { st.createIndex("dateKey", "dateKey", { unique:false }); } catch(e){}
+      }
+    };
+    rq.onsuccess = function(){ recDB = rq.result; res(recDB); };
+    rq.onerror = function(){ recDBBroken = true; rej(rq.error || new Error("idb-open")); };
+    rq.onblocked = function(){ rej(new Error("idb-blocked")); };
+  });
+}
+function recStore(mode, fn){
+  return recIdb().then(function(db){
+    return new Promise(function(res, rej){
+      var tx, rq;
+      try {
+        tx = db.transaction(REC_STORE, mode);
+        rq = fn(tx.objectStore(REC_STORE));
+      } catch(e){ return rej(e); }
+      tx.oncomplete = function(){ res(rq); };
+      tx.onerror = function(){ rej(tx.error || new Error("idb-tx")); };
+      tx.onabort = function(){ rej(tx.error || new Error("idb-abort")); };
+    });
+  });
+}
+function recLoad(){
+  return recStore("readonly", function(st){ return st.getAll(); }).then(function(rq){
+    var rows = (rq && rq.result) ? rq.result : [];
+    recState.items = rows.map(recNorm);
+    recSort();
+    recState.loaded = true; recState.loadErr = false;
+    recRender();
+    return recState.items;
+  }).catch(function(){
+    recState.loaded = true; recState.loadErr = true;
+    recRender();
+    return recState.items;
+  });
+}
+function recPut(rec){
+  return recStore("readwrite", function(st){ return st.put(rec); }).then(function(){
+    var i = -1;
+    for (var k=0;k<recState.items.length;k++) if (recState.items[k].id === rec.id) i = k;
+    if (i >= 0) recState.items[i] = rec; else recState.items.push(rec);
+    recSort(); recRender();
+    return rec;
+  });
+}
+function recDelete(id){
+  return recStore("readwrite", function(st){ return st.delete(id); }).then(function(){
+    recState.items = recState.items.filter(function(x){ return x.id !== id; });
+    if (recState.playId === id) recStopPlayback();
+    recRender();
+  });
+}
+
+/* --- 녹음 시작·정지 --- */
+function recTick(){
+  if (!recState.recording) return;
+  recState.elapsed = (Date.now() - recState.startAt) / 1000;
+  var tm = $("recTime");
+  if (tm) tm.textContent = recClock(recState.elapsed);
+}
+function paintRecState(){
+  var on = !!recState.recording;
+  var btn = $("recBtn");
+  if (btn){
+    btn.classList.toggle("on", on);
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    var lab = on ? "녹음 정지" : "내 목소리 녹음";
+    btn.setAttribute("aria-label", lab);
+    btn.title = lab;
+  }
+  var ic = $("recIcon"), tm = $("recTime");
+  if (ic) ic.textContent = on ? "⏹" : "🎙️";
+  if (tm){
+    tm.hidden = !on;
+    tm.textContent = recClock(recState.elapsed);
+  }
+  var bar = document.querySelector(".appbar");
+  if (bar) bar.classList.toggle("rec-on", on);
+  var nb = $("recNewBtn");
+  if (nb) nb.textContent = on ? "녹음 정지" : "🎙️ 새 녹음";
+}
+function recHeaderTap(){
+  if (recState.recording) recStop();
+  else recStart();
+}
+function recStart(){
+  if (recState.recording || recState.starting) return Promise.resolve(false);
+  if (!recSupported()){
+    toast("이 브라우저에서는 녹음을 지원하지 않아요. 아이폰 사파리·크롬 최신 버전에서 열어 주세요.");
+    return Promise.resolve(false);
+  }
+  recState.starting = true;
+  recState.elapsed = 0;
+  return navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true } })
+    .then(function(stream){
+      var mime = recPickMime();
+      var mr = null;
+      try { mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }
+      catch(e){
+        try { mr = new MediaRecorder(stream); }
+        catch(e2){
+          try { stream.getTracks().forEach(function(t){ t.stop(); }); } catch(x){}
+          recState.starting = false;
+          toast("녹음을 시작하지 못했어요. 잠시 후 다시 시도해 주세요.");
+          return false;
+        }
+      }
+      recState.stream = stream;
+      recState.mr = mr;
+      recState.mime = mr.mimeType || mime || "audio/webm";
+      recState.chunks = [];
+      recState.finishing = false;
+      mr.ondataavailable = function(e){ if (e.data && e.data.size) recState.chunks.push(e.data); };
+      mr.onstop = function(){ recFinish(); };
+      mr.onerror = function(){ toast("녹음 중 오류가 났어요. 다시 시도해 주세요."); };
+      try { mr.start(1000); }
+      catch(e){
+        try { stream.getTracks().forEach(function(t){ t.stop(); }); } catch(x){}
+        recState.stream = null; recState.mr = null; recState.starting = false;
+        toast("녹음을 시작하지 못했어요. 잠시 후 다시 시도해 주세요.");
+        return false;
+      }
+      recState.starting = false;
+      recState.recording = true;
+      recState.startAt = Date.now();
+      recState.elapsed = 0;
+      clearInterval(recState.tid);
+      recState.tid = setInterval(recTick, 250);
+      paintRecState();
+      toast("녹음을 시작했어요. 빨간 정지 버튼을 누르면 제목을 붙여 저장할 수 있어요.");
+      return true;
+    })
+    .catch(function(err){
+      recState.starting = false;
+      var name = (err && err.name) || "";
+      if (name === "NotAllowedError" || name === "SecurityError")
+        toast("마이크 권한이 꺼져 있어요. 주소창의 🔒 에서 마이크를 허용해 주세요.");
+      else if (name === "NotFoundError" || name === "DevicesNotFoundError")
+        toast("마이크를 찾지 못했어요.");
+      else if (name === "NotReadableError")
+        toast("다른 앱이 마이크를 쓰고 있어요. 통화·녹음 앱을 닫고 다시 시도해 주세요.");
+      else toast("녹음을 시작하지 못했어요." + (name ? " (" + name + ")" : ""));
+      paintRecState();
+      return false;
+    });
+}
+function recStop(){
+  if (!recState.recording) return false;
+  recState.elapsed = Math.max(0.2, (Date.now() - recState.startAt) / 1000);
+  recState.recording = false;
+  clearInterval(recState.tid);
+  recState.tid = null;
+  paintRecState();
+  var mr = recState.mr;
+  try {
+    if (mr && mr.state && mr.state !== "inactive") mr.stop();
+    else recFinish();
+  } catch(e){ recFinish(); }
+  return true;
+}
+function recFinish(){
+  if (recState.finishing) return;
+  recState.finishing = true;
+  var dur = recState.elapsed || Math.max(0.2, (Date.now() - recState.startAt) / 1000);
+  var chunks = recState.chunks || [];
+  var type = recState.mime || "audio/webm";
+  if (recState.stream){
+    try { recState.stream.getTracks().forEach(function(t){ try{ t.stop(); }catch(e){} }); } catch(e){}
+    recState.stream = null;
+  }
+  recState.mr = null;
+  recState.chunks = [];
+  recState.recording = false;
+  clearInterval(recState.tid);
+  recState.tid = null;
+  paintRecState();
+  var blob = null;
+  try { blob = chunks.length ? new Blob(chunks, { type: type }) : null; } catch(e){ blob = null; }
+  if (!blob || !blob.size){
+    recState.finishing = false;
+    toast("녹음된 소리가 없어요. 마이크 권한을 확인하고 다시 시도해 주세요.");
+    return;
+  }
+  var now = Date.now();
+  recState.pending = {
+    blob: blob, mimeType: blob.type || type, size: blob.size,
+    durationSec: Math.round(dur*10)/10, createdAt: now, dateKey: dateKeyOf(now)
+  };
+  recState.finishing = false;
+  openRecDialog("save", null);
+}
+
+/* --- 제목 입력·삭제 확인 창 --- */
+function recDlgEls(){
+  return { dlg:$("recDlg"), title:$("recDlgTitle"), sub:$("recDlgSub"), meta:$("recDlgMeta"),
+           inp:$("recTitleInput"), ok:$("recDlgOk"), alt:$("recDlgAlt") };
+}
+function openRecDialog(mode, id){
+  var e = recDlgEls();
+  if (!e.dlg) return;
+  recState.mode = mode;
+  recState.editId = id || null;
+  var item = id ? recFind(id) : null;
+  var showInput = (mode === "save" || mode === "edit");
+  if (mode === "save"){
+    var p = recState.pending || {};
+    e.title.textContent = "🎙️ 녹음 저장";
+    e.sub.textContent = "제목을 정하고 저장하세요. 나중에 ✏️ 로 바꿀 수 있어요.";
+    e.meta.textContent = recClock(p.durationSec || 0) + " · " + recDayLabel(p.dateKey || dateKeyOf()) + " · " + recSizeText(p.size || 0);
+    e.ok.textContent = "저장";
+    e.ok.className = "btn primary";
+    e.alt.textContent = "버리기";
+    e.alt.className = "btn ghost";
+    e.inp.value = recDefaultTitle(p.createdAt || Date.now());
+    e.dlg.setAttribute("aria-label", "녹음 저장");
+  } else if (mode === "edit"){
+    if (!item) return;
+    e.title.textContent = "✏️ 녹음 제목 수정";
+    e.sub.textContent = "제목을 고치고 저장하면 목록에 바로 반영돼요.";
+    e.meta.textContent = recClock(item.durationSec) + " · " + recDayLabel(item.dateKey) + " · " + recTimeText(item.createdAt);
+    e.ok.textContent = "저장";
+    e.ok.className = "btn primary";
+    e.alt.textContent = "취소";
+    e.alt.className = "btn ghost";
+    e.inp.value = item.title || "";
+    e.dlg.setAttribute("aria-label", "녹음 제목 수정");
+  } else if (mode === "discard"){
+    e.title.textContent = "🗑️ 녹음을 버릴까요?";
+    e.sub.textContent = "저장하지 않으면 이 녹음은 사라져요. 되돌릴 수 없습니다.";
+    e.meta.textContent = recClock((recState.pending || {}).durationSec || 0);
+    e.ok.textContent = "버리기";
+    e.ok.className = "btn danger";
+    e.alt.textContent = "돌아가기";
+    e.alt.className = "btn ghost";
+    e.dlg.setAttribute("aria-label", "녹음 버리기 확인");
+  } else if (mode === "delete"){
+    if (!item) return;
+    e.title.textContent = "🗑️ 녹음을 지울까요?";
+    e.sub.textContent = "이 녹음과 제목이 이 기기에서 완전히 지워져요.";
+    e.meta.textContent = "‘" + item.title + "’ · " + recClock(item.durationSec);
+    e.ok.textContent = "지우기";
+    e.ok.className = "btn danger";
+    e.alt.textContent = "취소";
+    e.alt.className = "btn ghost";
+    e.dlg.setAttribute("aria-label", "녹음 삭제 확인");
+  }
+  e.inp.hidden = !showInput;
+  e.dlg.hidden = false;
+  if (showInput){
+    setTimeout(function(){ try { e.inp.focus(); e.inp.select(); } catch(err){} }, 60);
+  }
+}
+function closeRecDialog(){
+  var e = recDlgEls();
+  if (!e.dlg) return;
+  e.dlg.hidden = true;
+  recState.editId = null;
+}
+function recDlgAltTap(){
+  if (recState.mode === "save"){ openRecDialog("discard", null); return; }
+  if (recState.mode === "discard"){ openRecDialog("save", null); return; }
+  closeRecDialog();
+}
+function recSavePending(title){
+  var p = recState.pending;
+  if (!p) return closeRecDialog();
+  var rec = {
+    id: "r" + p.createdAt.toString(36) + Math.random().toString(36).slice(2, 7),
+    title: title, dateKey: p.dateKey, createdAt: p.createdAt,
+    durationSec: p.durationSec, blob: p.blob, mimeType: p.mimeType,
+    size: p.size || (p.blob ? p.blob.size : 0)
+  };
+  return recPut(rec).then(function(){
+    recState.pending = null;
+    closeRecDialog();
+    toast("녹음을 저장했어요. 인성·경험 → ✍️ 내 소개·지원동기 → 🎙️ 내 녹음 기록");
+    return rec;
+  }).catch(function(){
+    toast("저장하지 못했어요. 브라우저 저장 공간(비공개 모드)을 확인해 주세요.");
+    return null;
+  });
+}
+function recDlgConfirm(){
+  var mode = recState.mode;
+  if (mode === "save"){
+    var inp = $("recTitleInput");
+    var title = ((inp && inp.value) || "").trim() || recDefaultTitle((recState.pending || {}).createdAt);
+    return recSavePending(title);
+  }
+  if (mode === "edit"){
+    var it = recFind(recState.editId);
+    if (!it) return closeRecDialog();
+    var v = (($("recTitleInput") || {}).value || "").trim();
+    if (!v){ toast("제목을 한 글자 이상 입력해 주세요."); return; }
+    it.title = v;
+    return recPut(it).then(function(){ closeRecDialog(); toast("제목을 바꿨어요."); })
+      .catch(function(){ toast("제목을 저장하지 못했어요."); });
+  }
+  if (mode === "discard"){
+    recState.pending = null;
+    closeRecDialog();
+    toast("녹음을 저장하지 않고 버렸어요.");
+    return;
+  }
+  if (mode === "delete"){
+    var id = recState.editId;
+    return recDelete(id).then(function(){ closeRecDialog(); toast("녹음을 지웠어요."); })
+      .catch(function(){ toast("삭제하지 못했어요."); });
+  }
+}
+
+/* --- 내 답변 탭 · 날짜별 목록 --- */
+function recSectionHTML(){
+  return '<div class="recsec" id="recSection">' +
+    '<div class="reccard">' +
+      '<div class="rechead"><div class="recheadt"><b>🎙️ 내 녹음 기록</b><span class="reccount" id="recCount">0개</span></div>' +
+      '<button class="btn gold sm" type="button" id="recNewBtn">🎙️ 새 녹음</button></div>' +
+      '<p class="recdesc">맨 위 <b>🎙️</b> 를 누르면 어느 탭에서든 바로 녹음이 시작돼요. 녹음은 <b>이 기기(IndexedDB)</b>에만 저장되고 날짜별로 모입니다. ▶️ 재생 · ✏️ 제목 수정 · 🗑️ 삭제할 수 있어요.</p>' +
+      '<div class="reclist" id="recList"></div>' +
+    '</div>' +
+  '</div>';
+}
+function recItemHTML(it){
+  var playing = recState.playId === it.id;
+  return '<div class="recitem' + (playing ? ' on' : '') + '" data-rec-item="' + esc(it.id) + '">' +
+    '<button class="recplay" type="button" data-rec-play="' + esc(it.id) + '" aria-label="' + (playing ? "일시정지" : "재생") + '">' + (playing ? "⏸️" : "▶️") + '</button>' +
+    '<div class="recmain">' +
+      '<div class="rectitle">' + esc(it.title) + '</div>' +
+      '<div class="recmeta">' + recClock(it.durationSec) + ' · ' + recTimeText(it.createdAt) + ' · ' + recSizeText(it.size) + '</div>' +
+      '<div class="recbar"><div class="recfill" id="recFill-' + esc(it.id) + '"></div></div>' +
+    '</div>' +
+    '<button class="recicon" type="button" data-rec-edit="' + esc(it.id) + '" aria-label="제목 수정">✏️</button>' +
+    '<button class="recicon del" type="button" data-rec-del="' + esc(it.id) + '" aria-label="삭제">🗑️</button>' +
+  '</div>';
+}
+function recListHTML(){
+  if (!recState.loaded) return '<div class="recempty">녹음 목록을 불러오는 중…</div>';
+  if (recState.loadErr) return '<div class="recempty">이 브라우저에서는 녹음 보관함(IndexedDB)을 열 수 없어요. 사파리·크롬 일반 창에서 다시 열어 주세요.</div>';
+  var items = recState.items;
+  if (!items.length){
+    return '<div class="recempty">아직 저장한 녹음이 없어요.<br>맨 위 <b>🎙️</b> 를 누르면 바로 녹음이 시작됩니다.</div>';
+  }
+  var out = "", cur = "", today = dateKeyOf(Date.now()), counts = {};
+  items.forEach(function(it){ counts[it.dateKey] = (counts[it.dateKey] || 0) + 1; });
+  items.forEach(function(it){
+    if (it.dateKey !== cur){
+      if (cur) out += "</div>";
+      cur = it.dateKey;
+      out += '<div class="recday"><div class="recdayh"><b>' + esc(recDayLabel(cur)) + '</b>' +
+        (cur === today ? '<span class="rectoday">오늘</span>' : '') +
+        '<span class="recdayn">' + counts[cur] + '개</span></div>';
+    }
+    out += recItemHTML(it);
+  });
+  if (cur) out += "</div>";
+  return out;
+}
+function recRender(){
+  var list = $("recList");
+  if (list) list.innerHTML = recListHTML();
+  var cnt = $("recCount");
+  if (cnt) cnt.textContent = recState.items.length + "개";
+  paintRecState();
+  recBind();
+}
+function recBind(){
+  var host = $("recSection");
+  if (!host || host.getAttribute("data-bound")) return;
+  host.setAttribute("data-bound", "1");
+  host.addEventListener("click", function(e){
+    var t = e.target.closest ? e.target.closest("button") : null;
+    if (!t) return;
+    if (t.id === "recNewBtn"){ recHeaderTap(); return; }
+    var v = t.getAttribute("data-rec-play");
+    if (v){ recPlay(v); return; }
+    v = t.getAttribute("data-rec-edit");
+    if (v){ openRecDialog("edit", v); return; }
+    v = t.getAttribute("data-rec-del");
+    if (v){ openRecDialog("delete", v); return; }
+  });
+}
+
+/* --- 재생(하나의 오디오 요소 재사용) --- */
+function paintPlayUI(){
+  var au = $("recAudio"), id = recState.playId;
+  if (!au || !id) return;
+  var btn = null;
+  try { btn = document.querySelector('[data-rec-play="' + id + '"]'); } catch(e){}
+  if (btn) btn.textContent = au.paused ? "▶️" : "⏸️";
+  var fill = $("recFill-" + id);
+  if (fill){
+    var d = au.duration, t = au.currentTime;
+    var pct = (isFinite(d) && d > 0) ? Math.max(0, Math.min(100, t / d * 100)) : 0;
+    fill.style.width = pct.toFixed(1) + "%";
+  }
+}
+function recStopPlayback(){
+  var au = $("recAudio");
+  if (au){
+    try { au.pause(); } catch(e){}
+    try { au.removeAttribute("src"); au.load(); } catch(e){}
+  }
+  if (recState.url){
+    try { URL.revokeObjectURL(recState.url); } catch(e){}
+  }
+  recState.url = null;
+  recState.playId = null;
+}
+function recPlay(id){
+  var it = recFind(id);
+  var au = $("recAudio");
+  if (!it || !au) return;
+  if (recState.playId === id){
+    if (au.paused){
+      var p = au.play();
+      if (p && p.catch) p.catch(function(){ toast("재생하지 못했어요."); });
+    } else au.pause();
+    return;
+  }
+  recStopPlayback();
+  if (!it.blob){ toast("이 녹음 파일을 찾지 못했어요."); return; }
+  try { recState.url = URL.createObjectURL(it.blob); } catch(e){ toast("재생하지 못했어요."); return; }
+  recState.playId = id;
+  au.src = recState.url;
+  au.currentTime = 0;
+  var pr = au.play();
+  if (pr && pr.catch) pr.catch(function(){ toast("재생하지 못했어요. 소리 크기를 확인해 주세요."); });
+  recRender();
+}
+
+/* --- 시작 --- */
+function recInit(){
+  var btn = $("recBtn");
+  if (btn) btn.addEventListener("click", recHeaderTap);
+  var au = $("recAudio");
+  if (au){
+    au.addEventListener("timeupdate", paintPlayUI);
+    au.addEventListener("play", paintPlayUI);
+    au.addEventListener("pause", paintPlayUI);
+    au.addEventListener("loadedmetadata", paintPlayUI);
+    au.addEventListener("ended", function(){ recStopPlayback(); recRender(); });
+  }
+  var ok = $("recDlgOk"), alt = $("recDlgAlt"), inp = $("recTitleInput"), dlg = $("recDlg");
+  if (ok) ok.addEventListener("click", recDlgConfirm);
+  if (alt) alt.addEventListener("click", recDlgAltTap);
+  if (inp) inp.addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); recDlgConfirm(); } });
+  if (dlg) dlg.addEventListener("click", function(e){ if (e.target === dlg && recState.mode !== "save") closeRecDialog(); });
+  document.addEventListener("keydown", function(e){
+    if ((e.key === "Escape" || e.key === "Esc") && dlg && !dlg.hidden) closeRecDialog();
+  });
+  paintRecState();
+  recLoad();
 }
 
 window.PIC = {
@@ -7855,7 +8501,13 @@ window.PIC = {
   personalSeg: personalSeg, mineSave: mineSave,
   prevQuestions: PREV_QUESTIONS, renderPrev: renderPrev, paintPrev: paintPrev,
   prevFav: { isFav: isPrevFav, toggle: togglePrevFav, idOf: prevFavId, count: prevFavCount },
-  draftPaint: draftPaint, draftEval: draftEval, drafts: drafts
+  draftPaint: draftPaint, draftEval: draftEval, drafts: drafts,
+  rec: { state: recState, start: recStart, stop: recStop, headerTap: recHeaderTap,
+         list: function(){ return recState.items; }, all: recLoad, put: recPut, del: recDelete,
+         savePending: recSavePending, render: recRender, play: recPlay, stopPlay: recStopPlayback,
+         defaultTitle: recDefaultTitle, dateKey: dateKeyOf, dayLabel: recDayLabel,
+         mime: recPickMime, supported: recSupported, clock: recClock,
+         dialog: openRecDialog, dialogOk: recDlgConfirm, dialogAlt: recDlgAltTap }
 };
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
