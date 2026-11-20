@@ -15485,9 +15485,15 @@ function buildBookView(){
   applyMode();
 }
 
-function paintShelves(){
+var BUILT = null;
+function paintShelves(force){
   var w = $("rbShelfWrap"); if (!w) return;
+  if (!force && BUILT === CHIP && w.children.length){ tabCount(); return; }
   w.innerHTML = shelfHTML();
+  BUILT = CHIP;
+  tabCount();
+}
+function tabCount(){
   var n = $("rbTabN");
   if (n) n.textContent = readCount("") + "/" + BOOKS.length;
 }
@@ -15684,7 +15690,7 @@ document.addEventListener("click", function(e){
     return;
   }
   var chip = el.closest("[data-rbchip]");
-  if (chip){ CHIP = chip.getAttribute("data-rbchip"); paintShelves(); return; }
+  if (chip){ CHIP = chip.getAttribute("data-rbchip"); paintShelves(true); return; }
 
   var tg = el.closest("[data-rbtoggle]");
   if (tg){
