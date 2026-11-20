@@ -905,6 +905,8 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
 .cx-tools.cx-microw .t{min-height:5vh;font-size:clamp(12px,1.65vh,19px);letter-spacing:-.01em;}
 .cx-tools .t.cx-mic{background:#e9fdf1;color:#0f7a52;box-shadow:inset 0 0 0 .2vh #86efac;}
 .cx-tools .t.cx-mic.rec-on{background:#dcfce7;color:#166534;box-shadow:inset 0 0 0 .28vh #22c55e;}
+.cx-tools .t.cx-red{background:#fff3f2;color:#b3362c;box-shadow:inset 0 0 0 .2vh #f7b9b1;}
+.cx-tools .t.cx-red.rec-on{background:#ffe4e1;color:#991b1b;box-shadow:inset 0 0 0 .28vh #ef4444;}
 .cx-vrow{display:flex;align-items:center;gap:.5vh;margin-top:.1vh;}
 .cx-vnote{flex:1 1 auto;min-width:0;font-size:1.02vh;font-weight:800;color:#7b93a8;line-height:1.4;letter-spacing:-.01em;}
 .cx-vbar{flex:0 0 8vh;height:.7vh;border-radius:1vh;background:#e8f2fa;overflow:hidden;}
@@ -9029,13 +9031,21 @@ function endQuiz(){
    ===================================================================== */
 var CXV = {
   c:null, spans:[], norm:"", total:0, pos:0,
-  on:false, manual:false, finished:false, bound:false, tries:0,
+  on:false, manual:false, finished:false, bound:false,
+  tries:0, last:0,
   sr:null, sess:null,
-  mr:null, stream:null, chunks:[], url:null, audio:null, recErr:false
+  rec:false, mr:null, stream:null, chunks:[], url:null, audio:null, recErr:false
 };
 
 function cxSRClass(){ return window.SpeechRecognition || window.webkitSpeechRecognition || null; }
 function cxNote(t){ var n = $("cxVNote"); if (n) n.textContent = t; }
+/* 방금 들린 말을 짧게 보여 줘요 — 마이크가 살아 있는지 바로 알 수 있어요 */
+function cxHeard(raw){
+  var s = String(raw == null ? "" : raw).replace(/\s+/g, " ").trim();
+  if (!s) return;
+  if (s.length > 18) s = "…" + s.slice(-18);
+  cxNote('🎙️ 들었어요: "' + s + '"');
+}
 
 /* --- 7세 발음은 조금 달라도 같은 글자로 봐 주기 (시/신 · 니/리 · 애/에) --- */
 var CX_CHO = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
@@ -9116,24 +9126,34 @@ function cxPaint(){
   var rec = $("cxRec");
   if (rec){
     rec.classList.toggle("rec-on", !!CXV.on);
-    rec.textContent = CXV.on ? "⏹️ 그만 듣기" : "🎙️ 따라 읽기 (녹음)";
+    rec.textContent = CXV.on
+      ? "⏹️ 그만 듣기"
+      : (CXV.manual ? "👆 글자 눌러서 따라가기" : "🎙️ 따라 읽기 (초록 따라가기)");
+  }
+  var mic = $("cxMicRec");
+  if (mic){
+    mic.classList.toggle("rec-on", !!CXV.rec);
+    mic.textContent = CXV.rec ? "⏹️ 녹음 끝내기" : "🔴 목소리 녹음";
   }
   var play = $("cxPlay");
   if (play) play.disabled = !CXV.url;
 }
 
-/* --- 녹음(내 목소리) --- */
+/* --- 녹음(내 목소리) — 이 버튼을 누를 때는 듣기(SpeechRecognition)를 먼저 끄고 녹음만 해요 --- */
 function cxStopTracks(){
   try { if (CXV.stream && CXV.stream.getTracks) CXV.stream.getTracks().forEach(function(t){ try { t.stop(); } catch(e){} }); } catch(e){}
   CXV.stream = null;
 }
 function cxStopRec(){
+  CXV.rec = false;
   var mr = CXV.mr; CXV.mr = null;
-  if (mr){ try { if (mr.state !== "inactive") mr.stop(); } catch(e){ cxStopTracks(); } }
+  if (mr){ try { if (mr.state !== "inactive") mr.stop(); else cxStopTracks(); } catch(e){ cxStopTracks(); } }
   else cxStopTracks();
+  if (CXV.chunks && CXV.chunks.length === 0) cxStopTracks();
 }
 function cxRecDone(){
   var got = CXV.chunks.slice(); CXV.chunks = [];
+  CXV.rec = false;
   cxStopTracks();
   if (got.length){
     try {
@@ -9141,34 +9161,54 @@ function cxRecDone(){
       if (CXV.url){ try { URL.revokeObjectURL(CXV.url); } catch(e){} }
       CXV.url = URL.createObjectURL(blob);
       CXV.recErr = false;
-      if (!CXV.finished) cxNote("🎙️ 내 목소리 저장! ▶️ 내 목소리 듣기로 들어 봐요");
+      if (!CXV.finished && !CXV.on) cxNote("🎙️ 내 목소리 저장! ▶️ 내 목소리 듣기로 들어 봐요");
     } catch(e){ CXV.recErr = true; }
+  } else if (!CXV.finished && !CXV.on){
+    cxNote("소리가 담기지 않았어요. 마이크를 켜고 다시 녹음해 봐요");
   }
   cxPaint();
 }
+function cxRecFail(){
+  CXV.rec = false; CXV.recErr = true;
+  cxStopTracks();
+  cxPaint();
+  cxNote("마이크를 허용하면 녹음도 돼요 · 🎙️ 따라 읽기는 그대로 쓸 수 있어요");
+}
 function cxStartRec(){
-  if (!CXV.on) return;
-  try {
-    if (!(window.MediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){ CXV.recErr = true; cxPaint(); return; }
-  } catch(e){ CXV.recErr = true; cxPaint(); return; }
+  if (CXV.rec || CXV.mr) return;
+  var can = false;
+  try { can = !!(window.MediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia); } catch(e){ can = false; }
+  if (!can){
+    CXV.recErr = true; cxPaint();
+    cxNote("이 브라우저는 녹음이 안 돼요 · 🎙️ 따라 읽기로 초록색은 그대로 따라가요");
+    SB.toast("이 브라우저에서는 녹음이 안 돼요. 초록 따라가기는 그대로 돼요!");
+    return;
+  }
+  CXV.rec = true; CXV.recErr = false; cxPaint();
+  cxNote("🔴 녹음 중이에요. 다 읽으면 ⏹️ 녹음 끝내기를 눌러요");
+  /* 듣기를 막 끈 직후에는 마이크가 풀릴 때까지 아주 잠깐 기다려요 */
+  setTimeout(function(){ if (CXV.rec) cxRecOpen(); }, 220);
+}
+function cxRecOpen(){
+  if (!CXV.rec) return;
   var p = null;
   try { p = navigator.mediaDevices.getUserMedia({ audio:true }); } catch(e){ p = null; }
-  if (!p || typeof p.then !== "function"){ CXV.recErr = true; cxPaint(); return; }
+  if (!p || typeof p.then !== "function"){ cxRecFail(); return; }
   p.then(function(stream){
-    if (!CXV.on){ try { stream.getTracks().forEach(function(t){ t.stop(); }); } catch(e){} return; }
+    if (!CXV.rec){ try { stream.getTracks().forEach(function(t){ t.stop(); }); } catch(e){} return; }
     CXV.stream = stream; CXV.chunks = [];
     var mr = null;
     try { mr = new MediaRecorder(stream); } catch(e){ mr = null; }
-    if (!mr){ cxStopTracks(); CXV.recErr = true; cxPaint(); return; }
+    if (!mr){ cxStopTracks(); cxRecFail(); return; }
     CXV.mr = mr;
     mr.ondataavailable = function(ev){ if (ev && ev.data && ev.data.size) CXV.chunks.push(ev.data); };
     mr.onstop = cxRecDone;
-    try { mr.start(); } catch(e){ CXV.mr = null; cxStopTracks(); CXV.recErr = true; }
+    try { mr.start(); } catch(e){ CXV.mr = null; cxRecFail(); return; }
     cxPaint();
-  }, function(){ CXV.recErr = true; cxPaint(); });
+  }, function(){ cxRecFail(); });
 }
 
-/* --- 듣기(음성 인식) --- */
+/* --- 듣기(음성 인식) — 이 버튼은 SpeechRecognition 만 단독으로 써요 --- */
 function cxStopSR(){
   var r = CXV.sr; CXV.sr = null; CXV.sess = null;
   if (r){
@@ -9183,7 +9223,7 @@ function cxSROnce(){
   try { r = new SRc(); } catch(e){ r = null; }
   if (!r) return;
   CXV.sr = r;
-  CXV.sess = { at: CXV.pos, heard: "" };
+  CXV.sess = { at: CXV.pos, heard: "", norm: "" };
   try { r.lang = "ko-KR"; } catch(e){}
   try { r.interimResults = true; } catch(e){}
   try { r.continuous = true; } catch(e){}
@@ -9191,35 +9231,61 @@ function cxSROnce(){
   r.onresult = function(ev){
     if (CXV.sr !== r || !CXV.sess) return;
     var all = "", n = 0, i;
+    CXV.tries = 0; CXV.last = Date.now();          /* 소리가 들어오면 재시작 횟수를 되돌려요 */
     try { n = (ev && ev.results) ? ev.results.length : 0; } catch(e){ n = 0; }
     for (i = 0; i < n; i++){
       try { all += (ev.results[i] && ev.results[i][0] && ev.results[i][0].transcript) || ""; } catch(e){}
     }
     var h = cxNormText(all);
-    if (!h || h === CXV.sess.heard) return;
-    CXV.sess.heard = h;
-    CXV.tries = 0;
+    var raw = String(all).replace(/\s+/g, " ").trim();
+    if (!h) return;
+    if (raw && raw !== CXV.sess.heard){ CXV.sess.heard = raw; if (!CXV.finished) cxHeard(raw); }
+    if (h === CXV.sess.norm) return;
+    CXV.sess.norm = h;
     var np = cxAlign(h, CXV.sess.at);
     if (np > CXV.pos){ CXV.pos = np; cxPaint(); cxCheck(); }
   };
   r.onerror = function(ev){
     if (CXV.sr !== r) return;
     var code = (ev && ev.error) || "";
-    if (code === "audio-capture") cxStopRec();          /* 마이크를 녹음이 잡고 있으면 녹음을 끄고 계속 들어요 */
-    else if (code === "not-allowed" || code === "service-not-allowed"){
+    if (code === "not-allowed" || code === "service-not-allowed"){
       cxHalt(false);
       cxNote("마이크를 허용하면 목소리에 맞춰 초록색으로 바뀌어요");
       SB.toast("마이크를 허용해 주세요! 설정에서 마이크를 켜면 목소리를 따라가요 🎙️");
+      return;
     }
+    if (code === "audio-capture"){
+      cxNote("마이크를 다른 앱이 쓰고 있어요. 그 앱을 끄고 다시 읽어 봐요");
+      return;
+    }
+    if (code === "network"){
+      cxNote("인터넷이 잠깐 느렸어요. 다시 듣고 있어요 🎙️");
+      return;
+    }
+    /* no-speech(조용함)·aborted 는 그냥 다시 들으면 돼요 — onend 에서 이어 들어요 */
   };
   r.onend = function(){
     if (CXV.sr !== r) return;
     CXV.sr = null; CXV.sess = null;
     if (!CXV.on || CXV.finished) return;
-    if (++CXV.tries > 60){ cxHalt(false); cxNote("잠깐 쉬었다가 🎙️ 를 다시 눌러 볼까요?"); return; }
-    setTimeout(function(){ if (CXV.on && !CXV.sr && !CXV.finished) cxSROnce(); }, 220);
+    var wait = 220;
+    /* 한참 조용하면 조금씩 쉬었다가 다시 들어요 (갤럭시 크롬은 조용하면 자주 끊겨요) */
+    if (Date.now() - (CXV.last || 0) > 12000){
+      CXV.tries++;
+      wait = Math.min(1200, 220 + CXV.tries * 120);
+      if (CXV.tries > 40){
+        cxHalt(false);
+        cxNote("🎙️ 조금 쉬고 있어요. 다시 누르면 이어서 들어요");
+        return;
+      }
+    }
+    setTimeout(function(){ if (CXV.on && !CXV.sr && !CXV.finished) cxSROnce(); }, wait);
   };
-  try { r.start(); } catch(e){ CXV.sr = null; }
+  try { r.start(); }
+  catch(e){
+    CXV.sr = null; CXV.sess = null;
+    if (CXV.on) setTimeout(function(){ if (CXV.on && !CXV.sr && !CXV.finished) cxSROnce(); }, 400);
+  }
 }
 
 function cxHalt(quiet){
@@ -9233,30 +9299,42 @@ function cxHalt(quiet){
 function cxStart(){
   if (!CXV.c || CXV.on) return;
   if (CXV.total > 0 && CXV.pos >= CXV.total){ CXV.pos = 0; CXV.finished = false; cxPaint(); }
-  CXV.on = true; CXV.tries = 0;
+  CXV.on = true; CXV.tries = 0; CXV.last = Date.now();
   var SRc = cxSRClass();
   if (!SRc){
     CXV.manual = true;
     cxPaint();
-    cxNote("이 브라우저는 목소리 인식이 안 돼요. 글자를 톡톡 누르면 초록색으로 넘어가요 (녹음은 그대로 돼요)");
+    cxNote("이 브라우저는 목소리 인식이 안 돼요. 글자를 톡톡 누르면 초록색으로 넘어가요");
     SB.toast("크롬·Safari에서 사용하면 목소리에 맞춰 초록색으로 바뀌어요!");
-    cxStartRec();
     return;
   }
   CXV.manual = false;
   cxPaint();
   cxNote("🎙️ 듣고 있어요! 천천히 읽으면 초록색으로 따라가요");
-  cxSROnce();
-  setTimeout(cxStartRec, 350);          /* 음성인식이 먼저 마이크를 잡고, 녹음은 되면 같이 해요 */
+  cxSROnce();                       /* 음성인식만 단독으로 — 녹음은 같이 켜지 않아요 */
 }
 function cxToggle(){
   if (CXV.on){
     cxHalt(true);
     cxNote("멈췄어요. ▶️ 로 내 목소리를 듣거나 🎙️ 로 다시 읽어요");
-  } else cxStart();
+    return;
+  }
+  if (CXV.rec) cxStopRec();            /* 녹음 중이면 녹음을 끄고 듣기만 켜요 (한 번에 하나만) */
+  cxStart();
+}
+/* 🔴 목소리 녹음 — 듣기를 끄고 녹음만 해요 (마이크를 두 앱이 다투지 않게) */
+function cxRecToggle(){
+  if (CXV.rec){
+    cxStopRec();
+    if (!CXV.finished) cxNote("🔴 녹음을 마쳤어요. ▶️ 내 목소리 듣기로 들어 봐요");
+    cxPaint();
+    return;
+  }
+  if (CXV.on) cxHalt(false);        /* 듣기 → 녹음, 한 번에 하나만 */
+  cxStartRec();
 }
 function cxPlay(){
-  if (!CXV.url){ SB.toast("먼저 🎙️ 따라 읽기로 내 목소리를 녹음해 봐요"); return; }
+  if (!CXV.url){ SB.toast("먼저 🔴 목소리 녹음으로 내 목소리를 담아 봐요"); return; }
   try {
     if (CXV.audio){ try { CXV.audio.pause(); } catch(e){} }
     CXV.audio = new Audio(CXV.url);
@@ -9299,6 +9377,7 @@ function cxCheck(){
   if (got) SB.starFX(got, "🏅 " + c.title + " 끝까지 읽었어요!");
   else { SB.confetti(); SB.toast("👏 " + c.title + " 끝까지 잘 읽었어요! 별은 이미 받았어요 😊"); }
 }
+
 /* 다른 화면으로 넘어가면 마이크를 닫아요 */
 (function cxWatch(){
   if (!window.MutationObserver) return;
@@ -9362,10 +9441,11 @@ function renderClassic(){
         return '<span class="cx-v"><b>' + esc(v[0]) + "</b> " + esc(v[1]) + "</span>";
       }).join("") + "</div>"
     + '<p class="cx-ask">🤔 ' + esc(c.ask) + "</p>"
-    + '<div class="cx-tools cx-microw"><button class="t cx-mic" type="button" id="cxRec">🎙️ 따라 읽기 (녹음)</button>'
+    + '<div class="cx-tools cx-microw"><button class="t cx-mic" type="button" id="cxRec">🎙️ 따라 읽기 (초록 따라가기)</button>'
+    + '<button class="t cx-red" type="button" id="cxMicRec">🔴 목소리 녹음</button>'
     + '<button class="t" type="button" id="cxPlay" disabled>▶️ 내 목소리 듣기</button>'
     + '<button class="t" type="button" id="cxAgain">↺ 다시</button></div>'
-    + '<div class="cx-vrow"><span class="cx-vnote" id="cxVNote" role="status">🎙️ 를 누르고 고전을 또박또박 읽어 보세요</span>'
+    + '<div class="cx-vrow"><span class="cx-vnote" id="cxVNote" role="status">🎙️ 는 듣기만, 🔴 은 녹음만 — 하나씩 따로 써요</span>'
     + '<span class="cx-vbar" aria-hidden="true"><i id="cxVBar"></i></span></div>'
     + '<div class="cx-tools"><button class="t" type="button" id="cxSpeak">🔊 전체 듣기</button>'
     + '<button class="t' + (done ? " done" : "") + '" type="button" id="cxDone">' + (done ? "✅ 읽기 완료" : "✅ 다 읽었어요 (⭐+1)") + "</button>"
@@ -9380,6 +9460,7 @@ function renderClassic(){
     renderClassic();
   });
   var rec = $("cxRec"); if (rec) rec.addEventListener("click", cxToggle);
+  var mic = $("cxMicRec"); if (mic) mic.addEventListener("click", cxRecToggle);
   var play = $("cxPlay"); if (play) play.addEventListener("click", cxPlay);
   var ag = $("cxAgain"); if (ag) ag.addEventListener("click", cxReset);
   cxMark();
@@ -9410,7 +9491,7 @@ function renderClassic(){
   if (nx) nx.addEventListener("click", function(){ cxHalt(false); var s = store(); s.cx = i + 1; save(s); renderClassic(); });
 }
 
-SB.cxRead = { state:function(){ return { pos:CXV.pos, total:CXV.total, on:CXV.on, manual:CXV.manual, finished:CXV.finished, hasAudio:!!CXV.url, sr:!!CXV.sr }; }, srd:cxSRClass, start:cxStart, halt:cxHalt, reset:cxReset };
+SB.cxRead = { state:function(){ return { pos:CXV.pos, total:CXV.total, on:CXV.on, manual:CXV.manual, finished:CXV.finished, hasAudio:!!CXV.url, sr:!!CXV.sr, rec:!!CXV.rec }; }, srd:cxSRClass, start:cxStart, halt:cxHalt, reset:cxReset, rec:cxRecToggle };
 
 SB.ko = { days:DAYS, classic:CLASSIC, dayIdx:dayIdx, q:QZ, quote:function(){ return DAYS[dayIdx()]; } };
 SB.onShow.ko = function(sub){
