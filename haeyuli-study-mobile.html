@@ -1305,6 +1305,114 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 .think-why{margin:0;font-size:.98vh;font-weight:800;color:#6d8a9c;line-height:1.4;background:#f7fcff;border-radius:.7vh;padding:.35vh .5vh;}
 .shape-art{display:flex;justify-content:center;align-items:center;height:7.6vh;}
 .shape-art svg{height:100%;width:auto;}
+/* 🔢 수세기 · ➕ 기탄 드릴 · 🧠 그림 사고력 */
+.cs-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.7vh;padding:.3vh 1.2vh .5vh;overflow-y:auto;}
+.cs-head{flex:0 0 auto;display:flex;align-items:center;gap:.6vh;flex-wrap:wrap;}
+.cs-lv{font-size:1.05vh;font-weight:900;color:#0d6f9e;background:#eef8ff;border-radius:999px;padding:.4vh .9vh;box-shadow:inset 0 0 0 .14vh #cfe8f6;white-space:nowrap;}
+.cs-lv b{color:#c1553a;}
+.cs-n{font-size:1vh;font-weight:900;color:#9db4c6;white-space:nowrap;}
+.cs-art{flex:0 0 auto;display:flex;align-items:flex-end;justify-content:center;gap:.45vh;min-height:8vh;padding:.4vh 0;flex-wrap:wrap;}
+.cs-art svg{height:8vh;width:auto;}
+.cs-art svg.cs-unit{height:2.1vh;margin-bottom:.2vh;}
+.cs-line{display:flex;align-items:center;gap:.7vh;justify-content:center;flex-wrap:wrap;}
+.cs-box{min-width:6vh;height:6vh;display:grid;place-items:center;border-radius:1.1vh;background:#f4fbff;box-shadow:inset 0 0 0 .22vh #cfe8f6;font-size:2.6vh;font-weight:900;color:#134d6b;}
+.cs-box.q{background:#fff8e6;box-shadow:inset 0 0 0 .26vh #f0cf8a;color:#c9a227;}
+.cs-dots{font-size:2.2vh;font-weight:900;color:#9db4c6;}
+.cs-q{margin:0;font-size:1.5vh;font-weight:900;color:#31586f;text-align:center;line-height:1.5;}
+.cs-q b{color:#0d7fa8;}
+.cs-opts{display:grid;grid-template-columns:1fr 1fr;gap:.5vh;max-width:60rem;width:100%;margin:0 auto;}
+.cs-opt{height:5.4vh;border-radius:1.1vh;background:#fff;font-size:1.9vh;font-weight:900;color:#21526d;box-shadow:inset 0 0 0 .2vh #dbeaf6;}
+.cs-opt.ok{background:#e6fbef;color:#0b6b47;box-shadow:inset 0 0 0 .28vh #63d19f;}
+.cs-opt.no{background:#fff0ee;color:#a33a2c;box-shadow:inset 0 0 0 .28vh #ffab9b;}
+.gd-wrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.55vh;padding:.2vh 1.2vh .5vh;}
+.gd-head{flex:0 0 auto;display:flex;align-items:center;gap:.7vh;flex-wrap:wrap;}
+.gd-lv{font-size:1.05vh;font-weight:900;color:#8a5a08;background:#fff7e2;border-radius:999px;padding:.4vh .9vh;box-shadow:inset 0 0 0 .14vh #f0ddb0;white-space:nowrap;}
+.gd-lv b{color:#c1553a;}
+.gd-count{font-size:1vh;font-weight:900;color:#9db4c6;white-space:nowrap;}
+.gd-tip{font-size:.95vh;font-weight:800;color:#a0b6c7;margin-left:auto;white-space:nowrap;}
+.gd-grid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,minmax(0,1fr));grid-auto-flow:column;gap:.5vh 1.4vh;}
+.gd-item{display:flex;align-items:center;gap:.7vh;min-height:0;padding:.25vh .5vh;border-radius:.9vh;background:#fbfdff;box-shadow:inset 0 0 0 .14vh #e8f2fa;}
+.gd-no{font-size:.9vh;font-weight:900;color:#b3c4d0;min-width:1.4vh;}
+.gd-eq{font-size:2.1vh;font-weight:900;color:#134d6b;white-space:nowrap;}
+.gd-eq em{font-style:normal;color:#e2761b;}
+.gd-stack{display:inline-flex;flex-direction:column;align-items:flex-end;line-height:1.12;font-size:1.95vh;font-weight:900;color:#134d6b;font-variant-numeric:tabular-nums;}
+.gd-stack i{display:block;width:100%;height:0;border-top:.2vh solid #8aa9bd;margin-top:.15vh;}
+.gd-cv{flex:1 1 auto;min-width:0;align-self:stretch;margin:.15vh 0;background:#fff;border-radius:.7vh;box-shadow:inset 0 0 0 .18vh #cfe3f2;touch-action:none;display:block;}
+.gd-ans{flex:0 0 auto;min-width:3.6vh;text-align:center;font-size:2.1vh;font-weight:900;color:#0b6b47;font-variant-numeric:tabular-nums;}
+.gd-ans.off{color:#dbe9f3;}
+.gd-clr{flex:0 0 auto;width:3.8vh;min-width:3.8vh;height:3.8vh;padding:0;border-radius:50%;background:#fff;color:#6d8a9c;font-size:1.45vh;font-weight:900;box-shadow:inset 0 0 0 .14vh #dbeaf6;white-space:nowrap;}
+.gd-foot{flex:0 0 auto;display:flex;gap:.7vh;flex-wrap:wrap;justify-content:center;padding-top:.2vh;}
+.gd-btn{height:4.6vh;padding:0 1.6vh;border-radius:1.1vh;font-size:1.15vh;font-weight:900;white-space:nowrap;}
+.gd-btn.check{background:linear-gradient(135deg,#ffe49a,#ffc247);color:#6a3d00;box-shadow:0 .3vh .8vh rgba(240,170,40,.26);}
+.gd-btn.done{background:linear-gradient(135deg,#a6ebc6,#4ecb96);color:#0b4a32;box-shadow:0 .3vh .8vh rgba(60,170,120,.24);}
+.gd-btn.new{background:#fff;color:#21526d;box-shadow:inset 0 0 0 .18vh #dbeaf6;}
+.gd-btn:disabled{opacity:.85;}
+.think-body.story{justify-content:flex-start;}
+.think-art{flex:0 0 auto;display:flex;justify-content:center;align-items:center;height:24vh;padding:.2vh 0;}
+.think-art svg{height:100%;width:auto;max-width:100%;}
+.panel-h .mini{margin-left:.3vh;}
+.mathview[data-sec="think"] .think-art{height:min(36vh,400px);}
+.mathview[data-sec="shape"] .shape-art{height:min(32vh,340px);}
+.cs-main{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:2vh;}
+.mathview[data-sec="calc"] .gd-eq{font-size:clamp(24px,3.8vh,46px);}
+.mathview[data-sec="calc"] .gd-stack{font-size:clamp(22px,3.5vh,42px);}
+.mathview[data-sec="calc"] .gd-ans{font-size:clamp(22px,3.4vh,40px);}
+.mathview[data-sec="calc"] .gd-btn{min-height:5.2vh;font-size:clamp(15px,1.9vh,24px);padding:0 2.2vh;}
+.mathview[data-sec="concept"] .cs-q{font-size:clamp(19px,2.6vh,34px);}
+.mathview[data-sec="concept"] .cs-art svg{height:14vh;}
+.mathview[data-sec="concept"] .cs-art svg.cs-unit{height:3.7vh;}
+.mathview[data-sec="concept"] .cs-box{min-width:8vh;height:8vh;font-size:3.4vh;}
+.mathview[data-sec="concept"] .cs-opt{min-height:6.4vh;font-size:clamp(17px,2.2vh,28px);}
+/* 📐 설정 › 학습 설정 */
+.set-tabs{flex:0 0 auto;display:flex;gap:.4vh;padding:.2vh 1.8vh .6vh;border-bottom:.14vh solid #eaf2f8;}
+.set-tab{height:4.2vh;padding:0 1.2vh;border-radius:999px;background:#f4f9fd;color:#5f8098;font-size:1.15vh;font-weight:900;white-space:nowrap;box-shadow:inset 0 0 0 .16vh #e0ecf5;}
+.set-tab.on{background:#fff;color:#0d6f9e;box-shadow:inset 0 0 0 .2vh #9fd3ee;}
+.set-pane{display:flex;flex-direction:column;gap:1.1vh;}
+.set-pane[hidden]{display:none;}
+.ls-box{padding:1.1vh 1.2vh;border-radius:1rem;background:linear-gradient(160deg,#fffdf6,#f7fbff);box-shadow:inset 0 0 0 .16vh #e3eef7;display:flex;flex-direction:column;gap:.6vh;}
+.ls-h{display:flex;align-items:baseline;gap:.6vh;flex-wrap:wrap;}
+.ls-h b{font-size:1.1rem;font-weight:900;color:#1e5478;}
+.ls-h span{margin-left:auto;font-size:.82rem;font-weight:900;color:#8aa2b6;}
+.ls-now{margin:0;font-size:.95rem;font-weight:800;color:#5f7f96;line-height:1.45;}
+.ls-now b{color:#c1553a;}
+.ls-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.35rem;}
+.ls-grid.two{grid-template-columns:repeat(2,minmax(0,1fr));}
+.ls-chip{display:flex;flex-direction:column;align-items:center;gap:.05rem;padding:.45rem .3rem;border-radius:.7rem;background:#fff;box-shadow:inset 0 0 0 .1rem #e2ecf4;}
+.ls-chip b{font-size:.95rem;font-weight:900;color:#21526d;}
+.ls-chip em{font-size:.72rem;font-weight:800;color:#8aa2b6;font-style:normal;}
+.ls-chip.on{background:#eef9ff;box-shadow:inset 0 0 0 .14rem #59b0dc;}
+.ls-chip.on b{color:#0d6f9e;}
+.ls-acts{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
+.ls-acts .btn em{font-style:normal;font-size:.78rem;font-weight:800;opacity:.8;}
+@media (max-width:820px), (max-width:960px) and (orientation:portrait){
+  .gd-item{padding:.35rem .5rem;gap:.5rem;}
+  body.mob .gd-grid{grid-template-columns:1fr;}
+  .gd-eq{font-size:1.15rem;}
+  .gd-stack{font-size:1.1rem;}
+  .gd-ans{font-size:1.1rem;min-width:2.4rem;}
+  .gd-clr{width:2.2rem;min-width:2.2rem;height:2.2rem;font-size:.9rem;}
+  .gd-btn{min-height:2.9rem;font-size:.86rem;}
+  .cs-body{padding:.4rem;gap:.6rem;}
+  .cs-q{font-size:1rem;}
+  .cs-opt{min-height:2.9rem;font-size:1rem;}
+  .cs-art svg{height:5.5rem;}
+  .cs-art svg.cs-unit{height:1.9rem;}
+  .cs-box{min-width:3.6rem;height:3.6rem;font-size:1.5rem;}
+  .think-art{height:11rem;}
+  .set-tabs{padding:.3rem .9rem .5rem;}
+  .set-tab{height:2.3rem;font-size:.8rem;padding:0 .7rem;}
+  .ls-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+body.mob .gd-grid{grid-template-rows:none;grid-auto-rows:auto;grid-auto-flow:row;}
+body.mob .gd-item{min-height:3.4rem;}
+body.mob .gd-cv{align-self:stretch;height:3.2rem;}
+body.mob .gd-foot{padding-bottom:.4rem;}
+@media (max-width:620px){
+  body.mob .gd-grid{grid-template-columns:1fr;}
+  .gd-grid{grid-template-columns:1fr;grid-template-rows:none;grid-auto-flow:row;gap:.5rem;}
+  .gd-item{min-height:3.9rem;}
+  .gd-cv{flex:1 1 auto;height:3.4rem;margin:0;}
+}
 
 /* ===== 사회 ===== */
 .socview{display:grid;grid-template-columns:34% 30% minmax(0,1fr);gap:.8vh;}
@@ -2903,7 +3011,7 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 .mathview[data-sec] .think-opts{gap:1.2vh;max-width:60rem;margin:0 auto;width:100%;}
 .mathview[data-sec] .think-opt{font-size:clamp(18px,2.4vh,32px);min-height:7vh;height:auto;padding:.6vh 1.6vh;}
 .mathview[data-sec] .think-why{font-size:clamp(15px,2vh,26px);}
-.mathview[data-sec="shape"] .shape-art{height:min(30vh,300px);}
+.mathview[data-sec="shape"] .shape-art{height:min(32vh,340px);}
 
 /* 사회 */
 .socview[data-sec="cards"] .soc-chips{padding:.6vh 1.4vh;gap:.8vh;}
@@ -5940,27 +6048,12 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
     <!-- ================= 🔢 수학 ================= -->
     <section class="view mathview" id="viewMath" data-view="math" hidden>
       <div class="panel math-concept" data-secblock="concept">
-        <div class="panel-h"><b>🎨 수 개념 놀이</b><span class="ph-no2">터치하며 익혀요</span></div>
-        <div class="mc-tabs">
-          <button class="mini on" type="button" data-mc="count">세어 보기</button>
-          <button class="mini" type="button" data-mc="ten">10 만들기</button>
-          <button class="mini" type="button" data-mc="split">가르기·모으기</button>
-        </div>
-        <div class="mc-body">
-          <div class="tenframe" id="tenFrame"></div>
-          <div class="mc-split" id="mcSplit" hidden></div>
-          <div class="mc-count"><b id="mcCount">0</b><span>개</span></div>
-          <div class="mc-task" id="mcTask"></div>
-          <div class="mc-answer" id="mcAnswer"></div>
-        </div>
+        <div class="panel-h"><b>🔢 수세기</b><span class="ph-no2" id="mcLevel">레벨 1 · 50~100</span></div>
+        <div class="cs-body" id="countBody"></div>
       </div>
       <div class="panel math-calc" data-secblock="calc">
-        <div class="panel-h"><b>➕ 수 연산</b><span class="ph-no2" id="calcProg">0 / 8</span></div>
-        <div class="calc-modes">
-          <button class="mini on" type="button" data-cm="easy">🍬 아주 쉬운 게임</button>
-          <button class="mini" type="button" data-cm="grade">➕ 초1 연산</button>
-        </div>
-        <div class="calc-body" id="calcBody"></div>
+        <div class="panel-h"><b>➕ 기탄 연산 드릴</b><span class="ph-no2" id="calcProg">0 / 10</span></div>
+        <div class="gd-wrap" id="gitanDrill"></div>
       </div>
       <div class="math-think">
         <div class="panel think-panel" id="thinkPanel" data-secblock="think"></div>
@@ -6506,7 +6599,13 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
       <h3 id="setTitle">⚙️ 설정</h3>
       <button class="close" type="button" data-close="settingsModal" aria-label="닫기">✕</button>
     </div>
+    <div class="set-tabs" role="tablist" aria-label="설정 종류">
+      <button class="set-tab on" type="button" role="tab" aria-selected="true" data-settab="general">⚙️ 일반 설정</button>
+      <button class="set-tab" type="button" role="tab" aria-selected="false" data-settab="learn">📐 학습 설정</button>
+      <button class="set-tab" type="button" role="tab" aria-selected="false" data-settab="reward">🎁 보상 설명</button>
+    </div>
     <div class="sheet-body">
+      <div class="set-pane" data-setpane="general">
       <label class="frow"><span>AI 선생님</span>
         <select id="aiProvider">
           <option value="none">내장 선생님만 쓰기 (추천)</option>
@@ -6573,6 +6672,9 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
         <p class="fam-state" id="famState">아직 연결하지 않았어요 · 이 기기 안에만 저장돼요</p>
         <p class="fam-note">엄마 폰에서도 같은 스터디 보드를 열어 코드를 넣으면 숙제를 적고 용돈을 줄 수 있어요. 코드를 아는 사람만 함께 쓸 수 있어요.</p>
       </div>
+      </div>
+      <div class="set-pane" data-setpane="learn" hidden></div>
+      <div class="set-pane" data-setpane="reward" hidden></div>
     </div>
     <div class="sheet-foot">
       <button class="btn ghost" id="btnResetTalk" type="button">↺ 대화 처음부터</button>
@@ -9089,7 +9191,7 @@ var SUBJECTS = [
 var SECS = {
   en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"], ["video", "🎬 영어 영상"]],
   ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"]],
-  math:    [["concept", "🔢 수개념"], ["calc", "➕ 연산"], ["think", "🧠 사고력"], ["shape", "🔺 도형"], ["clock", "⏰ 시계 읽기"], ["gugu", "✖️ 구구단 원리"], ["video", "🎬 수학 영상"]],
+  math:    [["concept", "🔢 수세기"], ["calc", "➕ 기탄 연산"], ["think", "🧠 그림 사고력"], ["shape", "🔺 도형 이름"], ["clock", "⏰ 시계 읽기"], ["gugu", "✖️ 구구단 원리"], ["video", "🎬 수학 영상"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말·뜻 쓰기"]],
   history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["video", "🎬 역사 영상"],
             ["world", "🌍 세계사 연표"], ["compare", "⚖️ 한국 vs 세계"]]
@@ -11172,550 +11274,902 @@ function save(s){ writeJSON(KEY, s); }
 function daySeed(){ var d = new Date(); return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); }
 function rng(seed){ var s = (seed >>> 0) || 1; return function(){ s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
 
-/* ---------------------------- 수 개념 놀이 ---------------------------- */
-var MC = { mode:"count", n:0, ten:6, split:{ a:0, b:0, target:7 }, splitDone:false };
+/* ---------------------------- 📐 학습 설정 값 (기탄 진도 · 수세기 레벨) ---------------------------- */
+var MSET_KEY = "haeyuli.mathset.v1";
+var CALC_LEVELS = [
+  { k:"D1", tag:"D-1", sub:"+5, +6",      help:"두 자리 수에 5·6을 더해요" },
+  { k:"D2", tag:"D-2", sub:"+7, +8",      help:"두 자리 수에 7·8을 더해요" },
+  { k:"D3", tag:"D-3", sub:"+9, +10",     help:"두 자리 수에 9·10을 더해요" },
+  { k:"D4", tag:"D-4", sub:"+5~10 종합",  help:"5부터 10까지 섞어서 더해요" },
+  { k:"D5", tag:"D-5", sub:"큰 수 덧셈",   help:"큰 두 자리 수끼리 더해요" },
+  { k:"E1", tag:"E-1", sub:"-1~-3",       help:"1·2·3을 빼요" },
+  { k:"E2", tag:"E-2", sub:"-4~-10",      help:"4부터 10까지 빼요" },
+  { k:"E3", tag:"E-3", sub:"16까지 빼기",  help:"16까지의 수에서 빼요" },
+  { k:"E4", tag:"E-4", sub:"25까지 빼기",  help:"25까지의 수에서 빼요" },
+  { k:"E5", tag:"E-5", sub:"덧뺄셈 종합",  help:"덧셈과 뺄셈을 섞어요" },
+  { k:"F1", tag:"F-1", sub:"합 99 세로셈", help:"두 자리 + 두 자리 세로셈" },
+  { k:"F2", tag:"F-2", sub:"두 자리 덧셈", help:"받아올림이 있는 두 자리 덧셈" }
+];
+var COUNT_LEVELS = [
+  { k:1, tag:"레벨 1", sub:"50~100",  help:"50부터 100까지 세어요" },
+  { k:2, tag:"레벨 2", sub:"100~200", help:"100부터 200까지 세어요" }
+];
+var MSET = { calc:"D1", count:1, at:0 };
+function calcById(k){
+  for (var i = 0; i < CALC_LEVELS.length; i++) if (CALC_LEVELS[i].k === k) return CALC_LEVELS[i];
+  return CALC_LEVELS[0];
+}
+function calcIdx(k){
+  for (var i = 0; i < CALC_LEVELS.length; i++) if (CALC_LEVELS[i].k === k) return i;
+  return 0;
+}
+function countById(k){ return String(k) === "2" ? COUNT_LEVELS[1] : COUNT_LEVELS[0]; }
+function msetLoad(){
+  var v = readJSON(MSET_KEY, null);
+  if (!v || typeof v !== "object") return;
+  if (calcById(v.calc).k === v.calc) MSET.calc = v.calc;
+  MSET.count = String(v.count) === "2" ? 2 : 1;
+  MSET.at = +v.at || 0;
+}
+function msetWrite(){
+  MSET.at = Date.now();
+  writeJSON(MSET_KEY, { calc:MSET.calc, count:MSET.count, at:MSET.at });
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
+}
 
-/* ---------------- 🍎 가르기 · 모으기 (그림 조각 드래그) ---------------- */
-var MS = { mode:"split", n:7, fruit:0, pool:[], a:[], b:[], merged:[], done:false, init:false, msg:"" };
-function msArt(){
-  if (MS.fruit === 1) {
-    return '<svg viewBox="0 0 40 40" aria-hidden="true">'
-      + '<path d="M20 12 q-12 -4 -13 9 q-2 13 13 17 q15 -4 13 -17 q-1 -13 -13 -9 Z" fill="#e2483f"/>'
-      + '<path d="M20 12 l-7 -5 l5 -1 l2 3 l2 -3 l5 1 Z" fill="#4fae63"/>'
-      + '<g fill="#ffe08a"><circle cx="15" cy="22" r="1.3"/><circle cx="25" cy="21" r="1.3"/><circle cx="20" cy="29" r="1.3"/></g></svg>';
+/* ---------------------------- ✍️ 기탄 드릴 연산 (10문제 · 손글씨 답칸) ---------------------------- */
+function ri(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); }
+function gitanQ(lv){
+  var a = 10, b = 5, op = "+", vert = false;
+  if (lv === "D1"){ b = ri(5, 6); a = ri(10, 99 - b); }
+  else if (lv === "D2"){ b = ri(7, 8); a = ri(11, 99 - b); }
+  else if (lv === "D3"){ b = ri(9, 10); a = ri(12, 99 - b); }
+  else if (lv === "D4"){ b = ri(5, 10); a = ri(10, 99 - b); }
+  else if (lv === "D5"){ a = ri(45, 88); b = ri(10, 99 - a); }
+  else if (lv === "E1"){ a = ri(11, 99); b = ri(1, 3); op = "-"; }
+  else if (lv === "E2"){ a = ri(12, 99); b = ri(4, 10); op = "-"; }
+  else if (lv === "E3"){ a = ri(11, 16); b = ri(1, Math.min(9, a - 1)); op = "-"; }
+  else if (lv === "E4"){ a = ri(17, 25); b = ri(4, 9); op = "-"; }
+  else if (lv === "E5"){
+    if (Math.random() < 0.5){ b = ri(5, 10); a = ri(10, 99 - b); }
+    else { a = ri(12, 99); b = ri(4, 10); op = "-"; }
   }
-  return '<svg viewBox="0 0 40 40" aria-hidden="true">'
-    + '<path d="M20 13 q-14 -5 -16 8 q-2 14 16 16 q18 -2 16 -16 q-2 -13 -16 -8 Z" fill="#e4574c"/>'
-    + '<path d="M20 13 v-6" stroke="#7a4b22" stroke-width="2.4" stroke-linecap="round"/>'
-    + '<path d="M20 7 q7 -7 11 -2 q-5 6 -11 2 Z" fill="#5fbf74"/>'
-    + '<ellipse cx="12" cy="22" rx="3" ry="5" fill="#fff" opacity=".3" transform="rotate(-20 12 22)"/></svg>';
+  else if (lv === "F1"){ a = ri(21, 78); b = ri(12, 99 - a); vert = true; }
+  else { a = ri(25, 79); b = ri(21, 79); vert = true; }
+  return { a:a, b:b, op:op, ans:(op === "+" ? a + b : a - b), v:vert };
 }
-function msNew(mode){
-  if (mode) MS.mode = mode;
-  MS.fruit = Math.floor(Math.random() * 2);
-  MS.n = 5 + Math.floor(Math.random() * 6);          /* 5~10개 */
-  MS.done = false;
-  MS.msg = "";
-  MS.init = true;
-  var ids = [], i;
-  for (i = 0; i < MS.n; i++) ids.push(i);
-  MS.pool = []; MS.a = []; MS.b = []; MS.merged = [];
-  MS.sa = 0; MS.sb = 0;
-  if (MS.mode === "merge") {
-    var cut = 1 + Math.floor(Math.random() * (MS.n - 1));
-    MS.a = ids.slice(0, cut);
-    MS.b = ids.slice(cut);
-    MS.sa = MS.a.length;
-    MS.sb = MS.b.length;
-  } else {
-    MS.pool = ids;
+var GD = { items:[], ink:[], revealed:false, done:false, key:"" };
+function gdNew(){
+  var lv = MSET.calc, items = [], seen = {}, guard = 0, q, k;
+  while (items.length < 10 && guard++ < 500){
+    q = gitanQ(lv); k = q.a + q.op + q.b;
+    if (seen[k]) continue;
+    seen[k] = 1; items.push(q);
   }
-  msRender();
+  GD.items = items; GD.ink = []; GD.revealed = false; GD.done = false;
+  for (var i = 0; i < items.length; i++) GD.ink[i] = false;
+  gdRender();
 }
-function msPieceHTML(id){
-  return '<button class="ms-piece" type="button" data-piece="' + id + '" aria-label="그림 조각">' + msArt() + '</button>';
+function gdCount(){
+  var n = 0, i;
+  for (i = 0; i < GD.ink.length; i++) if (GD.ink[i]) n++;
+  var el = $("gdCount"); if (el) el.textContent = n + " / " + GD.items.length + " 썼어요";
+  var pr = $("calcProg"); if (pr) pr.textContent = n + " / " + GD.items.length;
 }
-function msBoxHTML(list, cls, drop, label){
-  return '<div class="ms-basket ' + cls + '" data-drop="' + drop + '">'
-    + '<span class="ms-btitle">' + label + ' <b>' + list.length + '</b></span>'
-    + '<div class="ms-pieces">'
-    + (list.length ? list.map(msPieceHTML).join("") : '<span class="ms-empty">여기로 끌어다 놓아요</span>')
-    + '</div></div>';
-}
-function msRender(){
-  var box = $("mcSplit"); if (!box) return;
-  if (!MS.init) { msNew("split"); return; }
-  var a = MS.a.length, b = MS.b.length, pool = MS.pool.length, mg = MS.merged.length;
-  var eq, task;
-  if (MS.mode === "split") {
-    eq = MS.n + " → " + a + " 과 " + b;
-    task = '<b>' + MS.n + '개</b>를 왼쪽·오른쪽 바구니로 끌어 나눠 보세요';
-  } else {
-    eq = MS.sa + " + " + MS.sb + " = " + (mg === MS.sa + MS.sb ? MS.sa + MS.sb : "?");
-    task = '두 바구니의 그림을 <b>모으기 바구니</b>로 끌어 모아 보세요';
-  }
-  var h = '<div class="ms-top">'
-    + '<div class="ms-modes" role="group" aria-label="가르기 모으기">'
-    +   '<button type="button" data-sm="split" class="' + (MS.mode === "split" ? "on" : "") + '">가르기</button>'
-    +   '<button type="button" data-sm="merge" class="' + (MS.mode === "merge" ? "on" : "") + '">모으기</button>'
-    + '</div>'
-    + '<div class="ms-eq" id="msEq">' + eq + '</div>'
-    + '<button class="mini" type="button" data-msnew="1">🔄 새 문제</button>'
-    + '</div>'
-    + '<div class="ms-taskline">' + task + '</div>';
-  if (MS.mode === "split") {
-    h += '<div class="ms-basket ms-pool" data-drop="pool"><span class="ms-btitle">남은 조각 <b>' + pool + '</b></span>'
-      + '<div class="ms-pieces">' + (pool ? MS.pool.map(msPieceHTML).join("") : '<span class="ms-empty">다 옮겼어요 👍</span>') + '</div></div>'
-      + '<div class="ms-two">' + msBoxHTML(MS.a, "red", "a", "왼쪽 바구니") + msBoxHTML(MS.b, "blue", "b", "오른쪽 바구니") + '</div>';
-  } else {
-    h += '<div class="ms-two">' + msBoxHTML(MS.a, "red", "a", "왼쪽 바구니") + msBoxHTML(MS.b, "blue", "b", "오른쪽 바구니") + '</div>'
-      + '<div class="ms-basket ms-merge" data-drop="merged"><span class="ms-btitle">모으기 바구니 <b>' + mg + '</b></span>'
-      + '<div class="ms-pieces">' + (mg ? MS.merged.map(msPieceHTML).join("") : '<span class="ms-empty">여기로 끌어다 모아요</span>') + '</div></div>';
-  }
-  h += '<div class="ms-msg">' + (MS.msg || "") + '</div>';
+function gdRender(){
+  var box = $("gitanDrill"); if (!box) return;
+  var lv = calcById(MSET.calc);
+  var h = '<div class="gd-head">'
+    + '<span class="gd-lv">📐 기탄수학 <b>' + lv.tag + '</b> · ' + esc(lv.sub) + '</span>'
+    + '<span class="gd-count" id="gdCount">0 / ' + GD.items.length + ' 썼어요</span>'
+    + '<span class="gd-tip">✍️ 답 칸에 손가락·펜으로 써 보세요</span>'
+    + '</div><div class="gd-grid">';
+  GD.items.forEach(function(q, i){
+    h += '<div class="gd-item">'
+      + '<span class="gd-no">' + (i + 1) + '</span>'
+      + (q.v
+          ? '<span class="gd-stack"><b>' + q.a + '</b><b>' + q.op + ' ' + q.b + '</b><i></i></span>'
+          : '<span class="gd-eq">' + q.a + ' <em>' + q.op + '</em> ' + q.b + ' =</span>')
+      + '<canvas class="gd-cv" width="280" height="120" data-gd="' + i + '" aria-label="' + (i + 1) + '번 답 쓰는 칸"></canvas>'
+      + '<span class="gd-ans' + (GD.revealed ? '' : ' off') + '" data-gans="' + i + '">' + (GD.revealed ? q.ans : '?') + '</span>'
+      + '<button class="gd-clr" type="button" data-gclr="' + i + '" aria-label="' + (i + 1) + '번 지우기">⌫</button>'
+      + '</div>';
+  });
+  h += '</div><div class="gd-foot">' + gdFootHTML() + '</div>';
   box.innerHTML = h;
-  box.hidden = MC.mode !== "split";
-  msBind(box);
+  gdBind();
+  gdCount();
+}
+function gdFootHTML(){
+  if (GD.done) return '<button class="gd-btn done" type="button" disabled>🎉 오늘 연산 완료!</button>'
+    + '<button class="gd-btn new" type="button" id="gdNew">🔄 새 10문제</button>';
+  if (GD.revealed) return '<button class="gd-btn done" type="button" id="gdDone">🎉 다 맞았어요 (완료)</button>'
+    + '<button class="gd-btn new" type="button" id="gdNew">🔄 새 10문제</button>';
+  return '<button class="gd-btn check" type="button" id="gdCheck">✅ 다 풀었어요 (정답 보기)</button>'
+    + '<button class="gd-btn new" type="button" id="gdNew">🔄 새 10문제</button>';
+}
+function gdFoot(){
+  var box = $("gitanDrill"); if (!box) return null;
+  var f = box.querySelector(".gd-foot"); if (!f) return null;
+  f.innerHTML = gdFootHTML();
+  var c = $("gdCheck"); if (c) c.addEventListener("click", gdReveal);
+  var d = $("gdDone"); if (d) d.addEventListener("click", gdFinish);
+  var n = $("gdNew"); if (n) n.addEventListener("click", function(){ gdNew(); });
+  return f;
+}
+function gdBind(){
+  var box = $("gitanDrill"); if (!box) return;
+  var cvs = box.querySelectorAll("canvas[data-gd]");
+  for (var i = 0; i < cvs.length; i++) (function(cv){
+    var idx = parseInt(cv.getAttribute("data-gd"), 10), drawing = false, last = null;
+    function pos(e){
+      var r = cv.getBoundingClientRect();
+      return { x:(e.clientX - r.left) * cv.width / Math.max(1, r.width),
+               y:(e.clientY - r.top) * cv.height / Math.max(1, r.height) };
+    }
+    cv.addEventListener("pointerdown", function(e){
+      e.preventDefault();
+      drawing = true; last = pos(e);
+      try { cv.setPointerCapture(e.pointerId); } catch(err){}
+      var c = cv.getContext("2d");
+      c.strokeStyle = "#16496b"; c.lineWidth = 7; c.lineCap = "round"; c.lineJoin = "round";
+      c.beginPath(); c.moveTo(last.x, last.y); c.lineTo(last.x + .6, last.y + .6); c.stroke();
+      if (!GD.ink[idx]){ GD.ink[idx] = true; gdCount(); }
+    });
+    cv.addEventListener("pointermove", function(e){
+      if (!drawing) return;
+      var p = pos(e), c = cv.getContext("2d");
+      c.strokeStyle = "#16496b"; c.lineWidth = 7; c.lineCap = "round"; c.lineJoin = "round";
+      c.beginPath(); c.moveTo(last.x, last.y); c.lineTo(p.x, p.y); c.stroke();
+      last = p;
+    });
+    cv.addEventListener("pointerup", function(){ drawing = false; last = null; });
+    cv.addEventListener("pointercancel", function(){ drawing = false; last = null; });
+  })(cvs[i]);
+  var clrs = box.querySelectorAll("[data-gclr]");
+  for (var j = 0; j < clrs.length; j++) (function(b){
+    b.addEventListener("click", function(){
+      var k = parseInt(b.getAttribute("data-gclr"), 10);
+      var cv = box.querySelector('canvas[data-gd="' + k + '"]');
+      if (cv){ var c = cv.getContext("2d"); c.clearRect(0, 0, cv.width, cv.height); }
+      GD.ink[k] = false; gdCount();
+    });
+  })(clrs[j]);
+  var chk = $("gdCheck"); if (chk) chk.addEventListener("click", gdReveal);
+  var dn = $("gdDone"); if (dn) dn.addEventListener("click", gdFinish);
+  var nw = $("gdNew"); if (nw) nw.addEventListener("click", function(){ gdNew(); });
+}
+function gdReveal(){
+  if (GD.done) return;
+  GD.revealed = true;
+  var box = $("gitanDrill"); if (!box) return;
+  GD.items.forEach(function(q, i){
+    var el = box.querySelector('[data-gans="' + i + '"]');
+    if (el){ el.textContent = q.ans; el.classList.remove("off"); }
+  });
+  gdFoot();
+  var n = 0; for (var i = 0; i < GD.ink.length; i++) if (GD.ink[i]) n++;
+  SB.toast("정답을 옆에 보여 줬어요 · " + n + "/" + GD.items.length + "문제에 답을 썼어요");
+}
+function gdFinish(){
+  if (GD.done) return;
+  GD.done = true;
+  var got = 0;
+  try { got = SB.earn(SB.today() + "|math|gitan", 2); } catch(e){ got = 0; }
+  try { SB.markAttendance("math"); } catch(e){}
+  gdFoot();
+  var left = 0;
+  try { left = SB.subjProgress ? (SB.subjProgress()["math"] || {}).left || 0 : 0; } catch(e){ left = 0; }
+  try { SB.confetti(); } catch(e){}
+  try { SB.speak("연산 십 문제 끝났어요. 정말 잘했어요!", false, "ko-KR"); } catch(e){}
+  SB.toast("➕ 연산 10문제 완료!" + (got ? " ⭐ +" + got : "") + (left ? " · 수학 " + left + "개 더 하면 200원" : " · 수학 오늘 완료!"));
+}
 
-  /* 성공 판정 — 감점 없이 칭찬하고 다음 문제로 */
-  var ok = false;
-  if (MS.mode === "split") ok = (pool === 0 && a > 0 && b > 0);
-  else ok = (mg === MS.sa + MS.sb && MS.sa > 0 && MS.sb > 0);
-  if (ok && !MS.done) {
-    MS.done = true;
-    var key = SB.today() + "|math|split|" + MS.mode;
-    var got = 0;
-    try { got = SB.earn(key, 1); } catch(e){}
-    try { SB.markAttendance("math"); } catch(e){}
-    MS.msg = MS.mode === "split"
-      ? "🎉 " + MS.n + " → " + a + " 과 " + b + " 로 나눴어요!"
-      : "🎉 " + MS.sa + " + " + MS.sb + " = " + (MS.sa + MS.sb) + " 로 모았어요!";
-    box.querySelector(".ms-msg").textContent = MS.msg;
-    try { if (got) SB.starFX(got, MS.msg); else { if (SB.confetti) SB.confetti(); } } catch(e){}
-    try { SB.speak(MS.mode === "split" ? (MS.n + "는 " + a + " 더하기 " + b) : (MS.sa + " 더하기 " + MS.sb + "는 " + (MS.sa + MS.sb)), false, "ko-KR"); } catch(e){}
-    setTimeout(function(){ if (MS.done) msNew(MS.mode); }, 2100);
-  }
+/* ---------------------------- 🔢 수세기 (레벨 1 · 50~100 / 레벨 2 · 100~200) ---------------------------- */
+function rodSVG(){
+  var s = '<svg viewBox="0 0 20 70" aria-hidden="true">';
+  for (var i = 0; i < 10; i++) s += '<rect x="2" y="' + (2 + i * 6.6) + '" width="16" height="6.6" fill="' + (i % 2 ? "#bfe6fa" : "#9fd8f5") + '" stroke="#2f8fc4" stroke-width=".8"/>';
+  return s + '</svg>';
 }
-function msMove(id, target){
-  var lists = { pool:MS.pool, a:MS.a, b:MS.b, merged:MS.merged };
-  for (var k in lists) {
-    var i = lists[k].indexOf(id);
-    if (i >= 0) { if (k === target) { msRender(); return; } lists[k].splice(i, 1); break; }
-  }
-  if (lists[target]) lists[target].push(id);
-  MS.msg = "";
-  msRender();
+function unitSVG(){
+  return '<svg class="cs-unit" viewBox="0 0 14 14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" rx="2" fill="#ffd166" stroke="#d9a521" stroke-width="1.2"/></svg>';
 }
-function msTap(id){
-  var inPool = MS.pool.indexOf(id) >= 0, inA = MS.a.indexOf(id) >= 0, inB = MS.b.indexOf(id) >= 0;
-  if (MS.mode === "split") {
-    if (inPool) msMove(id, MS.a.length <= MS.b.length ? "a" : "b");
-    else msMove(id, "pool");
+function flatSVG(){
+  var s = '<svg viewBox="0 0 72 72" aria-hidden="true"><rect x="1" y="1" width="70" height="70" fill="#bcd8ff" stroke="#4a7fc0" stroke-width="1.4"/>';
+  for (var i = 1; i < 10; i++){
+    s += '<line x1="' + (1 + i * 7) + '" y1="1" x2="' + (1 + i * 7) + '" y2="71" stroke="#4a7fc0" stroke-width=".6"/>';
+    s += '<line x1="1" y1="' + (1 + i * 7) + '" x2="71" y2="' + (1 + i * 7) + '" stroke="#4a7fc0" stroke-width=".6"/>';
+  }
+  return s + '</svg>';
+}
+function blocksArt(t, u, flat){
+  var h = "", i;
+  for (i = 0; i < (flat || 0); i++) h += flatSVG();
+  for (i = 0; i < t; i++) h += rodSVG();
+  for (i = 0; i < u; i++) h += unitSVG();
+  return h;
+}
+function numBoxes(list){
+  var h = '<div class="cs-line">';
+  for (var i = 0; i < list.length; i++){
+    var v = list[i];
+    h += (i ? '<span class="cs-dots">→</span>' : '');
+    h += (v === null ? '<span class="cs-box q">?</span>' : '<span class="cs-box">' + v + '</span>');
+  }
+  return h + '</div>';
+}
+function optsAround(ans, step, list){
+  var out = [ans], cands = list || [ans - 1, ans + 1, ans + step, ans - step, ans + 10, ans - 10];
+  for (var i = 0; i < cands.length && out.length < 4; i++){
+    var v = cands[i];
+    if (v === ans || v < 0 || out.indexOf(v) >= 0) continue;
+    out.push(v);
+  }
+  while (out.length < 4) out.push(ans + out.length * 3 + 1);
+  var r = [], tmp = out.slice();
+  while (tmp.length) r.push(tmp.splice(Math.floor(Math.random() * tmp.length), 1)[0]);
+  return r.map(String);
+}
+var CT = { q:null, lv:1, n:0, done:false };
+function countOne(lv){
+  var n, m, s, t, u, ans, ask, art, kind;
+  if (lv === 2) kind = ["flat", "next", "skip", "between", "hundred", "cmp"][ri(0, 5)];
+  else kind = ["next", "between", "skip", "tens", "before"][ri(0, 4)];
+  if (kind === "next"){
+    n = lv === 2 ? ri(100, 198) : ri(50, 98);
+    ans = n + 1;
+    ask = '<b>' + n + '</b> 다음에 오는 수는?';
+    art = numBoxes([n, null]);
+  } else if (kind === "between"){
+    m = lv === 2 ? ri(100, 196) : ri(50, 96);
+    ans = m + 1;
+    ask = '<b>' + m + '</b>와 <b>' + (m + 2) + '</b> 사이에 있는 수는?';
+    art = numBoxes([m, null, m + 2]);
+  } else if (kind === "skip"){
+    s = lv === 2 ? 10 * ri(10, 16) : 10 * ri(5, 6);
+    ans = s + 30;
+    ask = '<b>' + s + '</b>부터 <b>10씩</b> 뛰어 세면 <b>?</b>에는 어떤 수가 올까요?';
+    art = numBoxes([s, s + 10, s + 20, null]);
+  } else if (kind === "tens"){
+    t = ri(5, 9); u = ri(1, 9); ans = t * 10 + u;
+    ask = '십 모형 <b>' + t + '</b>개와 낱개 <b>' + u + '</b>개는 얼마일까요?';
+    art = blocksArt(t, u, 0);
+  } else if (kind === "before"){
+    n = lv === 2 ? ri(101, 199) : ri(51, 99);
+    ans = n - 1;
+    ask = '<b>' + n + '</b> 바로 앞에 오는 수는?';
+    art = numBoxes([null, n]);
+  } else if (kind === "flat"){
+    t = ri(1, 8); u = ri(1, 9); ans = 100 + t * 10 + u;
+    ask = '백 모형 <b>1</b>개, 십 모형 <b>' + t + '</b>개, 낱개 <b>' + u + '</b>개는 얼마일까요?';
+    art = blocksArt(t, u, 1);
+  } else if (kind === "hundred"){
+    n = ri(110, 199);
+    ans = n;
+    ask = '백 모형 <b>1</b>개와 십 모형 <b>' + Math.floor((n - 100) / 10) + '</b>개는 얼마일까요?';
+    art = blocksArt(Math.floor((n - 100) / 10), 0, 1);
   } else {
-    if (inA || inB) msMove(id, "merged");
-    else if (inA === false && MS.merged.indexOf(id) >= 0) msMove(id, MS.a.length <= MS.b.length ? "a" : "b");
+    var a1 = ri(100, 189), b1 = ri(100, 189);
+    if (a1 === b1) b1 = a1 + 7;
+    ans = Math.max(a1, b1);
+    ask = '<b>' + a1 + '</b>과 <b>' + b1 + '</b> 중 더 큰 수는?';
+    art = numBoxes([a1, b1]);
   }
+  return { kind:kind, ask:ask, art:art, ans:ans, opts:optsAround(ans, lv === 2 ? 10 : 10) };
 }
-function msBind(box){
-  if (box.__b) return;
-  box.__b = 1;
-  var drag = null;
+function countNew(){
+  CT.lv = MSET.count;
+  CT.q = countOne(CT.lv);
+  CT.done = false;
+  countRender();
+}
+function countRender(){
+  var box = $("countBody"); if (!box) return;
+  if (!CT.q) return countNew();
+  var lv = countById(MSET.count);
+  var el = $("mcLevel"); if (el) el.textContent = lv.tag + " · " + lv.sub;
+  var q = CT.q;
+  box.innerHTML = '<div class="cs-head">'
+      + '<span class="cs-n" id="csN">오늘 ' + CT.n + '문제</span>'
+      + '<button class="mini" type="button" id="csNew" style="margin-left:auto">🔄 새 문제</button>'
+    + '</div>'
+    + '<div class="cs-main">'
+      + '<div class="cs-art">' + q.art + '</div>'
+      + '<p class="cs-q">' + q.ask + '</p>'
+      + '<div class="cs-opts">' + q.opts.map(function(v){
+          return '<button class="cs-opt" type="button" data-cs="' + esc(v) + '">' + esc(v) + '</button>';
+        }).join("") + '</div>'
+    + '</div>';
+  var nb = $("csNew"); if (nb) nb.addEventListener("click", function(){ countNew(); });
+  var ops = box.querySelectorAll("[data-cs]");
+  for (var i = 0; i < ops.length; i++) (function(b){
+    b.addEventListener("click", function(){
+      var v = parseInt(b.getAttribute("data-cs"), 10);
+      if (v === q.ans){
+        b.classList.add("ok");
+        CT.n++;
+        var got = 0;
+        try { got = SB.earn(SB.today() + "|math|count", 1); } catch(e){ got = 0; }
+        try { SB.markAttendance("math"); } catch(e){}
+        if (got) SB.starFX(got, "🔢 수세기 정답!"); else SB.toast("정답! 이제 다음 문제 🌟");
+        setTimeout(function(){ countNew(); }, 900);
+      } else {
+        b.classList.add("no");
+        SB.toast("한 번 더 세어 볼까요? 십 모형부터 다시 세어 봐요 🔢");
+      }
+    });
+  })(ops[i]);
+}
+
+/* ---------------------------- 🖼️ 그림 사고력 (초1 사고력 문제집형 문장제) ---------------------------- */
+function thKid(x, y, shirt, hair){
+  return '<g transform="translate(' + x + ',' + y + ')">'
+    + '<rect x="-9" y="9" width="18" height="26" rx="7" fill="' + shirt + '"/>'
+    + '<rect x="-12" y="13" width="4" height="16" rx="2" fill="' + shirt + '"/>'
+    + '<rect x="8" y="13" width="4" height="16" rx="2" fill="' + shirt + '"/>'
+    + '<rect x="-6.5" y="34" width="5" height="13" rx="2.5" fill="#3c4b5c"/>'
+    + '<rect x="1.5" y="34" width="5" height="13" rx="2.5" fill="#3c4b5c"/>'
+    + '<circle cx="0" cy="0" r="9.5" fill="#ffdcc0"/>'
+    + '<path d="M-9.6 -2.4 q1.6 -11 9.6 -11 q8 0 9.6 11 q-3.6 -5 -9.6 -5 q-6 0 -9.6 5Z" fill="' + (hair || "#3b2b23") + '"/>'
+    + '<circle cx="-3.2" cy=".6" r="1.1" fill="#3c4b5c"/><circle cx="3.2" cy=".6" r="1.1" fill="#3c4b5c"/>'
+    + '<path d="M-2.8 4.4 q2.8 2.4 5.6 0" stroke="#c9776a" stroke-width="1.3" fill="none" stroke-linecap="round"/>'
+    + '</g>';
+}
+function svgWrap(inner, label){
+  return '<svg viewBox="0 0 360 180" role="img" aria-label="' + label + '" preserveAspectRatio="xMidYMid meet">' + inner + '</svg>';
+}
+var SC_BUS = svgWrap(
+    '<rect width="360" height="180" fill="#eaf7ff"/>'
+  + '<rect y="126" width="360" height="54" fill="#e3f1dc"/>'
+  + '<rect y="122" width="360" height="6" fill="#c9e2c2"/>'
+  + '<rect x="0" y="0" width="360" height="46" fill="#dcf0fc"/>'
+  + '<rect x="8" y="30" width="5" height="98" fill="#9fb6c4"/>'
+  + '<circle cx="10.5" cy="26" r="14" fill="#ffd166" stroke="#d9a521" stroke-width="2.4"/>'
+  + '<rect x="4" y="20" width="13" height="10" rx="2.4" fill="#8a5a08"/>'
+  + '<rect x="6" y="22" width="9" height="4" rx="1" fill="#fff6de"/>'
+  + '<circle cx="7" cy="31" r="1.7" fill="#8a5a08"/><circle cx="14" cy="31" r="1.7" fill="#8a5a08"/>'
+  + thKid(50, 78, "#e4574c")
+  + thKid(94, 78, "#2f8fc4")
+  + thKid(138, 78, "#f2b93b")
+  + thKid(182, 78, "#5fbf74")
+  + thKid(226, 78, "#8a6ad8")
+  + thKid(270, 78, "#ef8b3c")
+  + '<g transform="translate(300,58)"><rect width="60" height="66" rx="8" fill="#ffcf5c" stroke="#e0a927" stroke-width="2"/>'
+  + '<rect x="6" y="8" width="48" height="24" rx="4" fill="#cfeaf7"/>'
+  + '<circle cx="14" cy="70" r="7" fill="#46586a"/><circle cx="46" cy="70" r="7" fill="#46586a"/></g>',
+  "버스 정류장에 아이들이 한 줄로 서 있어요");
+
+function thBeast(x, y, body, kind){
+  var s = '<g transform="translate(' + x + ',' + y + ')">';
+  s += '<ellipse cx="0" cy="0" rx="19" ry="12" fill="' + body + '"/>';
+  s += '<rect x="-13" y="9" width="4.6" height="11" rx="2" fill="' + body + '"/>';
+  s += '<rect x="-3" y="9" width="4.6" height="11" rx="2" fill="' + body + '"/>';
+  s += '<rect x="7" y="9" width="4.6" height="11" rx="2" fill="' + body + '"/>';
+  if (kind === "lion") s += '<circle cx="19" cy="-11" r="13" fill="#d99a3e"/>';
+  s += '<circle cx="19" cy="-10" r="9" fill="' + body + '"/>';
+  if (kind === "rabbit"){
+    s += '<ellipse cx="15" cy="-27" rx="3.2" ry="9" fill="' + body + '"/>';
+    s += '<ellipse cx="23" cy="-27" rx="3.2" ry="9" fill="' + body + '"/>';
+  }
+  if (kind === "cat"){
+    s += '<path d="M13 -18 l3 -8 l4 7 Z" fill="' + body + '"/>';
+    s += '<path d="M22 -18 l4 -8 l3 8 Z" fill="' + body + '"/>';
+  }
+  if (kind === "dog"){
+    s += '<ellipse cx="13" cy="-16" rx="3" ry="6" fill="#8a5f3c"/>';
+  }
+  if (kind === "turtle"){
+    s += '<path d="M-14 -2 a15 12 0 0 1 28 0 Z" fill="#5e9a4e"/>';
+    s += '<circle cx="19" cy="-10" r="7" fill="#8fca7a"/>';
+  }
+  s += '<circle cx="22" cy="-12" r="1.4" fill="#2f3b47"/>';
+  return s + '</g>';
+}
+var SC_RACE = svgWrap(
+    '<rect width="360" height="180" fill="#eef9ff"/>'
+  + '<rect y="128" width="360" height="52" fill="#f0e6d2"/>'
+  + '<rect x="0" y="122" width="360" height="8" fill="#d9c9a8"/>'
+  + '<rect x="330" y="18" width="6" height="110" fill="#9fb6c4"/>'
+  + '<path d="M336 20 l22 10 l-22 10 Z" fill="#e4574c"/>'
+  + '<circle cx="40" cy="46" r="13" fill="#fff" stroke="#2f8fc4" stroke-width="2.4"/>'
+  + '<text x="40" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#2f8fc4" font-family="system-ui,sans-serif">1</text>'
+  + '<circle cx="105" cy="46" r="13" fill="#fff" stroke="#2f8fc4" stroke-width="2.4"/>'
+  + '<text x="105" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#2f8fc4" font-family="system-ui,sans-serif">2</text>'
+  + '<circle cx="170" cy="46" r="13" fill="#fff" stroke="#2f8fc4" stroke-width="2.4"/>'
+  + '<text x="170" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#2f8fc4" font-family="system-ui,sans-serif">3</text>'
+  + '<circle cx="235" cy="46" r="13" fill="#fff" stroke="#2f8fc4" stroke-width="2.4"/>'
+  + '<text x="235" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#2f8fc4" font-family="system-ui,sans-serif">4</text>'
+  + '<circle cx="300" cy="46" r="13" fill="#fff" stroke="#2f8fc4" stroke-width="2.4"/>'
+  + '<text x="300" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#2f8fc4" font-family="system-ui,sans-serif">5</text>'
+  + thBeast(40, 100, "#f2f0ee", "rabbit")
+  + thBeast(105, 100, "#7cb96a", "turtle")
+  + thBeast(170, 104, "#e2a13c", "lion")
+  + thBeast(235, 100, "#b9b3ad", "cat")
+  + thBeast(300, 100, "#c98f5e", "dog"),
+  "달리기 경주에서 동물들이 1등부터 5등까지 들어왔어요");
+
+var SC_APT = svgWrap(
+    '<rect width="360" height="180" fill="#eaf7ff"/>'
+  + '<rect y="150" width="360" height="30" fill="#e3f1dc"/>'
+  + '<rect x="120" y="10" width="130" height="140" rx="6" fill="#ffe9c9" stroke="#e0b86e" stroke-width="2.4"/>'
+  + '<rect x="150" y="20" width="70" height="10" rx="3" fill="#f4c986"/>'
+  + '<rect x="132" y="24" width="106" height="22" rx="3" fill="#fffaf0" stroke="#e8d3ac"/>'
+  + '<rect x="132" y="50" width="106" height="22" rx="3" fill="#fffaf0" stroke="#e8d3ac"/>'
+  + '<rect x="132" y="76" width="106" height="22" rx="3" fill="#eaf7ff" stroke="#8fc0da" stroke-width="2"/>'
+  + '<rect x="132" y="102" width="106" height="22" rx="3" fill="#fffaf0" stroke="#e8d3ac"/>'
+  + '<rect x="132" y="128" width="106" height="22" rx="3" fill="#fffaf0" stroke="#e8d3ac"/>'
+  + '<text x="112" y="40" text-anchor="end" font-size="12" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">5층</text>'
+  + '<text x="112" y="66" text-anchor="end" font-size="12" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">4층</text>'
+  + '<text x="112" y="92" text-anchor="end" font-size="12" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">3층</text>'
+  + '<text x="112" y="118" text-anchor="end" font-size="12" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">2층</text>'
+  + '<text x="112" y="144" text-anchor="end" font-size="12" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">1층</text>'
+  + '<circle cx="170" cy="87" r="7" fill="#ffdcc0"/>'
+  + '<path d="M163 84 q1.2 -8 7 -8 q5.8 0 7 8 q-3 -3.6 -7 -3.6 q-4 0 -7 3.6Z" fill="#3b2b23"/>'
+  + '<circle cx="167.6" cy="87.6" r="1" fill="#3c4b5c"/><circle cx="172.4" cy="87.6" r="1" fill="#3c4b5c"/>'
+  + '<text x="254" y="92" font-size="12" font-weight="900" fill="#b8860b" font-family="system-ui,sans-serif">해율이</text>',
+  "아파트 3층 창문에 해율이가 있어요");
+
+var SC_SCALE = svgWrap(
+    '<rect width="360" height="180" fill="#f7fbff"/>'
+  + '<rect x="174" y="40" width="12" height="104" fill="#b7c7d3"/>'
+  + '<path d="M140 148 L220 148 L190 100 L170 100 Z" fill="#cbd8e2"/>'
+  + '<rect x="60" y="46" width="240" height="8" rx="4" fill="#8aa9bd"/>'
+  + '<circle cx="180" cy="46" r="7" fill="#6f8fa5"/>'
+  + '<path d="M62 50 L20 96 M62 50 L104 96" stroke="#8aa9bd" stroke-width="3"/>'
+  + '<path d="M298 50 L256 96 M298 50 L340 96" stroke="#8aa9bd" stroke-width="3"/>'
+  + '<rect x="16" y="96" width="92" height="8" rx="4" fill="#cbd8e2"/>'
+  + '<rect x="252" y="96" width="92" height="8" rx="4" fill="#cbd8e2"/>'
+  + '<circle cx="46" cy="84" r="14" fill="#e2483f"/><circle cx="78" cy="84" r="14" fill="#e2483f"/>'
+  + '<path d="M46 70 v-6 M78 70 v-6" stroke="#7a4b22" stroke-width="2.4" stroke-linecap="round"/>'
+  + '<circle cx="268" cy="86" r="10" fill="#f5a623"/><circle cx="292" cy="86" r="10" fill="#f5a623"/>'
+  + '<circle cx="316" cy="86" r="10" fill="#f5a623"/>',
+  "양팔저울 왼쪽에 사과 2개, 오른쪽에 귤 3개가 놓여 있고 수평이에요");
+
+var SC_FRUIT = svgWrap(
+    '<rect width="360" height="180" fill="#fbfff6"/>'
+  + '<path d="M70 96 h220 l-24 66 h-172 Z" fill="#e2c08d" stroke="#c39f6b" stroke-width="2.4"/>'
+  + '<path d="M78 108 h204 M84 122 h192" stroke="#c39f6b" stroke-width="1.6"/>'
+  + '<circle cx="118" cy="80" r="15" fill="#e2483f"/><circle cx="150" cy="74" r="15" fill="#e2483f"/><circle cx="182" cy="80" r="15" fill="#e2483f"/>'
+  + '<ellipse cx="222" cy="78" rx="13" ry="16" fill="#c9d95a"/><ellipse cx="258" cy="80" rx="13" ry="16" fill="#c9d95a"/>'
+  + '<circle cx="98" cy="52" r="12" fill="#f08a3c"/><circle cx="130" cy="42" r="12" fill="#f08a3c"/>'
+  + '<circle cx="166" cy="46" r="12" fill="#f08a3c"/><circle cx="206" cy="40" r="12" fill="#f08a3c"/>',
+  "바구니에 사과 3개, 배 2개, 감 4개가 담겨 있어요");
+
+var SC_MATCH = svgWrap(
+    '<rect width="360" height="180" fill="#fffdf6"/>'
+  + '<g stroke="#c99a5b" stroke-width="6" stroke-linecap="round">'
+  + '<path d="M70 120 L110 50"/><path d="M110 50 L150 120"/><path d="M70 120 L150 120"/>'
+  + '<path d="M210 120 L250 50"/><path d="M250 50 L290 120"/><path d="M210 120 L290 120"/>'
+  + '</g>'
+  + '<g fill="#e4574c"><circle cx="70" cy="120" r="5"/><circle cx="110" cy="50" r="5"/><circle cx="150" cy="120" r="5"/>'
+  + '<circle cx="210" cy="120" r="5"/><circle cx="250" cy="50" r="5"/><circle cx="290" cy="120" r="5"/></g>',
+  "성냥개비로 삼각형을 두 개 만들었어요");
+
+var SC_BLOCK = svgWrap(
+    '<rect width="360" height="180" fill="#f8fcff"/>'
+  + '<g stroke="#c96a48" stroke-width="2.2">'
+  + '<rect x="96" y="112" width="46" height="46" fill="#ffc0a8"/>'
+  + '<rect x="144" y="112" width="46" height="46" fill="#ffdf9e"/>'
+  + '<rect x="192" y="112" width="46" height="46" fill="#a8e0c0"/>'
+  + '</g>'
+  + '<g stroke="#4a7fc0" stroke-width="2.2"><rect x="120" y="66" width="46" height="46" fill="#bcd8ff"/>'
+  + '<rect x="168" y="66" width="46" height="46" fill="#e0c8ff"/></g>',
+  "쌓기나무가 아래에 3개, 위에 2개 있어요");
+
+var SC_PASS = svgWrap(
+    '<rect width="360" height="180" fill="#eef9ff"/>'
+  + '<rect y="150" width="360" height="30" fill="#e3f1dc"/>'
+  + '<rect x="40" y="34" width="230" height="106" rx="12" fill="#ffcf5c" stroke="#e0a927" stroke-width="2.4"/>'
+  + '<rect x="50" y="44" width="210" height="40" rx="5" fill="#cfeaf7"/>'
+  + '<g fill="#4d6d85">'
+  + '<circle cx="68" cy="64" r="8"/><circle cx="96" cy="64" r="8"/><circle cx="124" cy="64" r="8"/><circle cx="152" cy="64" r="8"/>'
+  + '<circle cx="180" cy="64" r="8"/><circle cx="208" cy="64" r="8"/><circle cx="236" cy="64" r="8"/>'
+  + '<circle cx="252" cy="64" r="8"/>'
+  + '</g>'
+  + '<circle cx="70" cy="146" r="10" fill="#46586a"/><circle cx="240" cy="146" r="10" fill="#46586a"/>'
+  + '<text x="286" y="60" font-size="13" font-weight="900" fill="#c1553a" font-family="system-ui,sans-serif">3명</text>'
+  + '<path d="M296 66 v22 m0 0 l-7 -8 m7 8 l7 -8" stroke="#c1553a" stroke-width="3" fill="none" stroke-linecap="round"/>'
+  + thKid(300, 108, "#8a6ad8") + thKid(334, 108, "#2f8fc4") + thKid(316, 124, "#5fbf74"),
+  "버스에 8명이 타고 있었는데 3명이 내렸어요");
+
+var SC_PATTERN = svgWrap(
+    '<rect width="360" height="180" fill="#fffdf8"/>'
+  + '<circle cx="44" cy="90" r="20" fill="#e4574c"/>'
+  + '<circle cx="92" cy="90" r="20" fill="#2f8fc4"/>'
+  + '<circle cx="140" cy="90" r="20" fill="#f2b93b"/>'
+  + '<circle cx="188" cy="90" r="20" fill="#e4574c"/>'
+  + '<circle cx="236" cy="90" r="20" fill="#2f8fc4"/>'
+  + '<circle cx="284" cy="90" r="20" fill="#f2b93b"/>'
+  + '<circle cx="334" cy="90" r="20" fill="#fff" stroke="#9fb6c4" stroke-width="3" stroke-dasharray="6 5"/>'
+  + '<text x="334" y="99" text-anchor="middle" font-size="22" font-weight="900" fill="#9fb6c4" font-family="system-ui,sans-serif">?</text>',
+  "빨강, 파랑, 노랑 구슬이 차례로 꿰어진 목걸이");
+
+var SC_STAIR = svgWrap(
+    '<rect width="360" height="180" fill="#f7fbff"/>'
+  + '<g fill="#d6e8f5" stroke="#8fbdd8" stroke-width="2">'
+  + '<rect x="40" y="120" width="70" height="30"/><rect x="110" y="90" width="70" height="60"/>'
+  + '<rect x="180" y="60" width="70" height="90"/><rect x="250" y="30" width="70" height="120"/>'
+  + '</g>'
+  + thKid(62, 74, "#5fbf74")
+  + '<text x="330" y="26" text-anchor="end" font-size="13" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">한 번에 3칸씩</text>',
+  "해율이가 계단을 한 번에 3칸씩 올라가요");
+
+var SC_CANDY = svgWrap(
+    '<rect width="360" height="180" fill="#fff9fc"/>'
+  + '<g fill="#f08a3c" stroke="#c96f27" stroke-width="1.6">'
+  + '<rect x="26" y="30" width="20" height="14" rx="7"/><rect x="66" y="30" width="20" height="14" rx="7"/>'
+  + '<rect x="106" y="30" width="20" height="14" rx="7"/><rect x="146" y="30" width="20" height="14" rx="7"/>'
+  + '<rect x="186" y="30" width="20" height="14" rx="7"/><rect x="226" y="30" width="20" height="14" rx="7"/>'
+  + '<rect x="266" y="30" width="20" height="14" rx="7"/><rect x="306" y="30" width="20" height="14" rx="7"/>'
+  + '<rect x="120" y="62" width="20" height="14" rx="7"/><rect x="210" y="62" width="20" height="14" rx="7"/>'
+  + '</g>'
+  + '<ellipse cx="110" cy="136" rx="62" ry="18" fill="#eaf3fa" stroke="#9fb6c4" stroke-width="2.4"/>'
+  + '<ellipse cx="250" cy="136" rx="62" ry="18" fill="#eaf3fa" stroke="#9fb6c4" stroke-width="2.4"/>'
+  + '<text x="110" y="168" text-anchor="middle" font-size="13" font-weight="900" fill="#8aa2b6" font-family="system-ui,sans-serif">접시 1</text>'
+  + '<text x="250" y="168" text-anchor="middle" font-size="13" font-weight="900" fill="#8aa2b6" font-family="system-ui,sans-serif">접시 2</text>',
+  "사탕 10개와 접시 2개가 있어요");
+
+var SC_LINE = svgWrap(
+    '<rect width="360" height="180" fill="#eef9ff"/>'
+  + '<rect y="132" width="360" height="48" fill="#e3f1dc"/>'
+  + '<path d="M112 42 H70 m0 0 l12 -8 m-12 8 l12 8" stroke="#c1553a" stroke-width="3" fill="none" stroke-linecap="round"/>'
+  + '<text x="34" y="48" font-size="13" font-weight="900" fill="#c1553a" font-family="system-ui,sans-serif">앞</text>'
+  + thKid(96, 84, "#5fbf74") + thKid(156, 84, "#2f8fc4") + thKid(216, 84, "#f2b93b") + thKid(276, 84, "#f08a3c")
+  + '<path d="M216 50 l0 -10 m-6 6 l6 -6 l6 6" stroke="#b8860b" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+  + '<text x="216" y="34" text-anchor="middle" font-size="12" font-weight="900" fill="#b8860b" font-family="system-ui,sans-serif">해율이</text>',
+  "아이 네 명이 한 줄로 서 있고 세 번째가 해율이예요");
+
+var SC_LEGS = svgWrap(
+    '<rect width="360" height="180" fill="#fbfff6"/>'
+  + '<rect y="132" width="360" height="48" fill="#e3f1dc"/>'
+  + '<g stroke="#d9a521" stroke-width="2.4" fill="#ffe08a">'
+  + '<ellipse cx="80" cy="92" rx="26" ry="20"/><circle cx="104" cy="68" r="13"/>'
+  + '<path d="M104 62 l0 -10 l10 4 Z" fill="#e4574c"/>'
+  + '<ellipse cx="184" cy="92" rx="26" ry="20"/><circle cx="208" cy="68" r="13"/>'
+  + '<path d="M208 62 l0 -10 l10 4 Z" fill="#e4574c"/>'
+  + '</g>'
+  + '<g stroke="#c9821f" stroke-width="3.4" stroke-linecap="round">'
+  + '<path d="M72 110 v20 M88 110 v20"/>'
+  + '<path d="M176 110 v20 M192 110 v20"/>'
+  + '</g>'
+  + '<g stroke="#8a5f3c" stroke-width="2.4" fill="#c98f5e">'
+  + '<ellipse cx="292" cy="100" rx="30" ry="20"/><circle cx="324" cy="78" r="15"/>'
+  + '<path d="M314 66 l-6 -10 M332 66 l6 -10" stroke="#8a5f3c" stroke-width="3"/>'
+  + '</g>'
+  + '<g stroke="#8a5f3c" stroke-width="3" stroke-linecap="round">'
+  + '<path d="M272 118 v16 M284 118 v16 M302 118 v16 M314 118 v16"/>'
+  + '</g>',
+  "닭 두 마리와 강아지 한 마리가 있어요");
+
+var SC_TALL = svgWrap(
+    '<rect width="360" height="180" fill="#f7fbff"/>'
+  + '<rect y="150" width="360" height="30" fill="#e3f1dc"/>'
+  + '<g transform="translate(90,148) scale(0.9)"><g transform="translate(0,-47)">' + thKid(0, 0, "#2f8fc4") + '</g></g>'
+  + '<g transform="translate(180,148) scale(1.12)"><g transform="translate(0,-47)">' + thKid(0, 0, "#5fbf74") + '</g></g>'
+  + '<g transform="translate(270,148) scale(0.76)"><g transform="translate(0,-47)">' + thKid(0, 0, "#f08a3c") + '</g></g>'
+  + '<text x="90" y="140" text-anchor="middle" font-size="15" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">가</text>'
+  + '<text x="180" y="140" text-anchor="middle" font-size="15" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">나</text>'
+  + '<text x="270" y="140" text-anchor="middle" font-size="15" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">다</text>',
+  "키가 다른 친구 세 명이 나란히 서 있어요");
+
+function thGiraffe(x, y, s){
+  return '<g transform="translate(' + x + ',' + y + ') scale(' + s + ')">'
+    + '<rect x="-11" y="8" width="4.6" height="22" fill="#e0b43a"/>'
+    + '<rect x="-4" y="8" width="4.6" height="22" fill="#e0b43a"/>'
+    + '<rect x="3" y="8" width="4.6" height="22" fill="#e0b43a"/>'
+    + '<ellipse cx="-3" cy="0" rx="19" ry="12" fill="#f0c94a"/>'
+    + '<rect x="8" y="-44" width="10" height="48" rx="5" fill="#f0c94a"/>'
+    + '<ellipse cx="15" cy="-46" rx="12" ry="9" fill="#f5d874"/>'
+    + '<circle cx="20" cy="-48" r="1.7" fill="#3b2b23"/>'
+    + '<path d="M10 -54 v-7 M19 -54 v-7" stroke="#c8961f" stroke-width="2.4" stroke-linecap="round"/>'
+    + '<g fill="#bf8f20"><circle cx="-9" cy="-2" r="2.6"/><circle cx="1" cy="3" r="2.2"/><circle cx="-14" cy="4" r="2"/><circle cx="12" cy="-28" r="2"/></g>'
+    + '</g>';
+}
+var SC_ZOO = svgWrap(
+    '<rect width="360" height="180" fill="#fbfff6"/>'
+  + '<rect y="134" width="360" height="46" fill="#e6f2dc"/>'
+  + '<g transform="translate(56,104)">'
+  +   '<ellipse cx="0" cy="0" rx="24" ry="15" fill="#eaa93f"/>'
+  +   '<rect x="-15" y="10" width="5" height="16" rx="2.5" fill="#d99a2e"/>'
+  +   '<rect x="-4" y="10" width="5" height="16" rx="2.5" fill="#d99a2e"/>'
+  +   '<rect x="8" y="10" width="5" height="16" rx="2.5" fill="#d99a2e"/>'
+  +   '<circle cx="24" cy="-12" r="15" fill="#c07f22"/>'
+  +   '<circle cx="24" cy="-12" r="10" fill="#f3c977"/>'
+  +   '<circle cx="27" cy="-14" r="1.8" fill="#3b2b23"/>'
+  +   '<circle cx="34" cy="-22" r="3" fill="#c07f22"/>'
+  + '</g>'
+  + thGiraffe(150, 104, 1)
+  + thGiraffe(250, 110, 0.82)
+  + '<g transform="translate(320,106)">'
+  +   '<ellipse cx="0" cy="0" rx="22" ry="15" fill="#b3c0cc"/>'
+  +   '<circle cx="-13" cy="-4" r="13" fill="#c3cfda"/>'
+  +   '<circle cx="-23" cy="-7" r="10" fill="#a9b6c2"/>'
+  +   '<path d="M-30 -3 q-7 14 3 21" stroke="#a9b6c2" stroke-width="7" fill="none" stroke-linecap="round"/>'
+  +   '<circle cx="-26" cy="-10" r="1.6" fill="#3b3b3b"/>'
+  +   '<rect x="-14" y="12" width="6" height="16" rx="3" fill="#a9b6c2"/>'
+  +   '<rect x="-2" y="12" width="6" height="16" rx="3" fill="#a9b6c2"/>'
+  +   '<rect x="10" y="12" width="6" height="16" rx="3" fill="#a9b6c2"/>'
+  + '</g>',
+  "동물원에 사자와 기린, 코끼리가 있어요");
+
+var SC_TRI = svgWrap(
+    '<rect width="360" height="180" fill="#eef9ff"/>'
+  + '<rect y="148" width="360" height="32" fill="#e3f1dc"/>'
+  + '<path d="M22 148 L74 56 L126 148 Z" fill="#ffb3a8" stroke="#e2604a" stroke-width="2.4"/>'
+  + '<rect x="156" y="100" width="72" height="48" fill="#cfe4f7" stroke="#4a7fc0" stroke-width="2.4"/>'
+  + '<path d="M150 100 L192 58 L234 100 Z" fill="#e4574c" stroke="#b53c2f" stroke-width="2.4"/>'
+  + '<rect x="270" y="118" width="14" height="30" fill="#a9764a"/>'
+  + '<path d="M252 118 L277 58 L302 118 Z" fill="#9fd8a0" stroke="#3f9a70" stroke-width="2.4"/>'
+  + '<circle cx="330" cy="40" r="16" fill="#ffd166" stroke="#d9a521" stroke-width="2.4"/>',
+  "세모(삼각형) 모양이 여러 개 그려진 그림");
+
+var THINK = [
+  { svg:SC_BUS, q:"버스 정류장에 아이들이 한 줄로 서 있어요. 왼쪽에서 다섯 번째 아이는 무슨 색 옷을 입었을까요?",
+    o:["보라색","파란색","초록색","주황색"], a:"보라색", why:"왼쪽부터 빨강·파랑·노랑·초록·보라·주황 순서예요." },
+  { svg:SC_RACE, q:"달리기 경주에서 2등을 한 동물은 어느 동물일까요?",
+    o:["토끼","거북이","사자","개"], a:"거북이", why:"2번 자리에 들어온 동물이 거북이예요." },
+  { svg:SC_APT, q:"해율이는 3층에 살아요. 엄마는 해율이보다 2층 위에 살아요. 엄마는 몇 층에 살까요?",
+    o:["4층","5층","6층","2층"], a:"5층", why:"3층에서 한 층 위가 4층, 두 층 위가 5층이에요." },
+  { svg:SC_SCALE, q:"양팔저울이 수평이에요. 사과 1개와 귤 1개 중에서 더 무거운 것은 무엇일까요?",
+    o:["사과","귤","똑같아요","알 수 없어요"], a:"사과", why:"사과 2개와 귤 3개가 같으니 사과 하나가 더 무거워요." },
+  { svg:SC_FRUIT, q:"바구니에서 가장 많은 과일은 무엇일까요?",
+    o:["사과","배","감","모두 같아요"], a:"감", why:"감이 4개로 사과 3개, 배 2개보다 많아요." },
+  { svg:SC_MATCH, q:"성냥개비로 삼각형 두 개를 만들었어요. 성냥개비는 모두 몇 개일까요?",
+    o:["4개","5개","6개","7개"], a:"6개", why:"삼각형 하나에 3개씩, 두 개면 3+3=6개예요." },
+  { svg:SC_BLOCK, q:"쌓기나무는 모두 몇 개일까요?",
+    o:["4개","5개","6개","7개"], a:"5개", why:"아래 3개와 위 2개를 더하면 5개예요." },
+  { svg:SC_PASS, q:"버스에 8명이 타고 있었어요. 정류장에서 3명이 내렸어요. 버스에 남은 사람은 몇 명일까요?",
+    o:["3명","5명","8명","11명"], a:"5명", why:"8명에서 3명이 내리면 8-3=5명이에요." },
+  { svg:SC_PATTERN, q:"빨강·파랑·노랑 구슬이 차례로 꿰어져 있어요. 물음표에 올 구슬은 무슨 색일까요?",
+    o:["빨강","파랑","노랑","초록"], a:"파랑", why:"빨강·파랑·노랑이 세 번 되풀이되고 있어요." },
+  { svg:SC_STAIR, q:"해율이가 계단을 한 번에 3칸씩 올라요. 4번 오르면 모두 몇 칸을 올라갈까요?",
+    o:["7칸","9칸","12칸","15칸"], a:"12칸", why:"3칸씩 4번이면 3+3+3+3=12칸이에요." },
+  { svg:SC_CANDY, q:"사탕 10개를 접시 두 개에 똑같이 나누면 한 접시에 몇 개씩 놓일까요?",
+    o:["4개","5개","6개","10개"], a:"5개", why:"10개를 둘로 똑같이 나누면 5개씩이에요." },
+  { svg:SC_LINE, q:"해율이는 앞에서 3번째, 뒤에서 2번째에 서 있어요. 줄은 모두 몇 명일까요?",
+    o:["4명","5명","6명","7명"], a:"4명", why:"해율이 앞에 2명, 뒤에 1명이 있어 모두 4명이에요." },
+  { svg:SC_LEGS, q:"닭 두 마리와 강아지 한 마리의 다리는 모두 몇 개일까요?",
+    o:["4개","6개","8개","10개"], a:"8개", why:"닭 2마리의 다리는 2+2=4개, 강아지는 4개라서 모두 8개예요." },
+  { svg:SC_TALL, q:"세 친구 중에서 키가 가장 큰 친구는 누구일까요?",
+    o:["가","나","다","모두 같아요"], a:"나", why:"나가 머리부터 발끝까지 가장 길게 그려져 있어요." },
+  { svg:SC_ZOO, q:"동물원에 있는 기린은 모두 몇 마리일까요?",
+    o:["1마리","2마리","3마리","4마리"], a:"2마리", why:"목이 긴 기린이 2마리 있어요." },
+  { svg:SC_TRI, q:"그림에서 세모(삼각형) 모양은 모두 몇 개일까요?",
+    o:["2개","3개","4개","5개"], a:"3개", why:"왼쪽 큰 세모, 집 지붕, 나무 위 세모까지 3개예요." }
+];
+
+/* ---------------------------- 🔺 도형 이름 맞추기 (초1·2 교과과정) ---------------------------- */
+var SHAPE = [
+  { svg:'<svg viewBox="0 0 200 200"><rect x="42" y="42" width="116" height="116" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","사각형","원","오각형"], a:"사각형", why:"변이 4개인 도형은 사각형이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><rect x="24" y="62" width="152" height="76" fill="#ffe08a" stroke="#c9a03c" stroke-width="3"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","원","사각형","육각형"], a:"사각형", why:"길쭉해도 변이 4개면 사각형이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,28 26,166 174,166" fill="#ffb3a8" stroke="#e2604a" stroke-width="3"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","사각형","오각형","원"], a:"삼각형", why:"변이 3개인 도형은 삼각형이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="72" fill="#ffd166" stroke="#dda427" stroke-width="3"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["동그라미 모양","삼각형","사각형","오각형"], a:"동그라미 모양", why:"빙글 둥근 도형은 동그라미(원) 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,26 174,80 146,166 54,166 26,80" fill="#bcd8ff" stroke="#4a7fc0" stroke-width="3"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["사각형","오각형","육각형","삼각형"], a:"오각형", why:"변이 5개인 도형은 오각형이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,24 166,62 166,138 100,176 34,138 34,62" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["오각형","육각형","사각형","원"], a:"육각형", why:"변이 6개인 도형은 육각형이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><g stroke="#c96a48" stroke-width="2.6"><rect x="46" y="76" width="88" height="82" fill="#ffc0a8"/><path d="M46 76 L76 44 L164 44 L134 76 Z" fill="#ffdf9e"/><path d="M134 76 L164 44 L164 126 L134 158 Z" fill="#f2b48c"/></g></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["상자 모양","둥근 기둥 모양","공 모양","세모 모양"], a:"상자 모양", why:"네모난 면이 여섯 개인 상자 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><ellipse cx="100" cy="46" rx="52" ry="20" fill="#cfeaf7" stroke="#2f8fc4" stroke-width="2.6"/><path d="M48 46 v106 a52 20 0 0 0 104 0 V46" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2.6"/><ellipse cx="100" cy="46" rx="52" ry="20" fill="#e8f6ff" stroke="#2f8fc4" stroke-width="2.6"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["상자 모양","둥근 기둥 모양","공 모양","동그라미 모양"], a:"둥근 기둥 모양", why:"위아래가 둥글고 옆이 반듯한 기둥 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><defs><radialGradient id="sphA" cx="34%" cy="30%" r="78%"><stop offset="0" stop-color="#ffffff"/><stop offset="42%" stop-color="#e7b9cd"/><stop offset="100%" stop-color="#b8517f"/></radialGradient></defs><ellipse cx="104" cy="176" rx="52" ry="9" fill="#000" opacity=".08"/><circle cx="100" cy="100" r="70" fill="url(#sphA)"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["공 모양","상자 모양","둥근 기둥 모양","네모 모양"], a:"공 모양", why:"어느 쪽에서 봐도 둥근 공 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,26 174,80 146,166 54,166 26,80" fill="#ffe08a" stroke="#c9a03c" stroke-width="3"/><text x="100" y="118" text-anchor="middle" font-size="22" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">?</text></svg>',
+    q:"이 도형의 변은 모두 몇 개일까요?", o:["3개","4개","5개","6개"], a:"5개", why:"한 변씩 세어 보면 5개예요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,24 166,62 166,138 100,176 34,138 34,62" fill="#bcd8ff" stroke="#4a7fc0" stroke-width="3"/><g fill="#2f6f95"><circle cx="100" cy="24" r="5"/><circle cx="166" cy="62" r="5"/><circle cx="166" cy="138" r="5"/><circle cx="100" cy="176" r="5"/><circle cx="34" cy="138" r="5"/><circle cx="34" cy="62" r="5"/></g></svg>',
+    q:"이 도형의 꼭짓점은 모두 몇 개일까요?", o:["4개","5개","6개","7개"], a:"6개", why:"뾰족한 점을 세어 보면 6개예요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,30 22,168 178,168" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/></svg>',
+    q:"이 도형의 변은 모두 몇 개일까요?", o:["3개","4개","5개","6개"], a:"3개", why:"세 변으로 둘러싸여 있어요." },
+  { svg:'<svg viewBox="0 0 200 200"><rect x="70" y="70" width="112" height="112" fill="#cfe4f7" stroke="#4a7fc0" stroke-width="3" transform="rotate(45 100 100)"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["세모 모양","네모 모양","동그라미 모양","오각형"], a:"네모 모양", why:"돌려 놓아도 변이 4개면 네모(사각형) 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><g stroke="#e2604a" stroke-width="3"><line x1="100" y1="40" x2="40" y2="160"/><line x1="40" y1="160" x2="160" y2="160"/><line x1="160" y1="160" x2="100" y2="40"/></g><g fill="#ffd166"><circle cx="100" cy="40" r="7"/><circle cx="40" cy="160" r="7"/><circle cx="160" cy="160" r="7"/></g></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","사각형","원","육각형"], a:"삼각형", why:"세 변과 세 꼭짓점이 있는 도형이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><g stroke="#8a5a2b" stroke-width="2.6"><path d="M38 62 L92 34 L164 62 L110 90 Z" fill="#ffe9c9"/><path d="M38 62 L110 90 L110 168 L38 140 Z" fill="#f4d3a8"/><path d="M110 90 L164 62 L164 140 L110 168 Z" fill="#e8c194"/></g></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["상자 모양","둥근 기둥 모양","삼각형","원"], a:"상자 모양", why:"여섯 면이 모두 네모인 상자 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><defs><radialGradient id="sphB" cx="34%" cy="30%" r="78%"><stop offset="0" stop-color="#ffffff"/><stop offset="44%" stop-color="#b9ddf7"/><stop offset="100%" stop-color="#3f86bd"/></radialGradient></defs><ellipse cx="104" cy="172" rx="50" ry="9" fill="#000" opacity=".08"/><circle cx="100" cy="100" r="66" fill="url(#sphB)"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["공 모양","둥근 기둥 모양","상자 모양","세모 모양"], a:"공 모양", why:"둥글게 생긴 입체 도형은 공 모양이에요." }
+];
+var TS = { ti:0, si:0 };
+function thinkBind(panel, attr, item, key, label){
+  var btns = panel.querySelectorAll("[" + attr + "]");
+  for (var i = 0; i < btns.length; i++) (function(b){
+    b.addEventListener("click", function(){
+      var v = b.getAttribute(attr);
+      if (v === item.a){
+        b.classList.add("ok");
+        var got = 0;
+        try { got = SB.earn(key, 1); } catch(e){ got = 0; }
+        try { SB.markAttendance("math"); } catch(e){}
+        var why = panel.querySelector(".think-why"); if (why) why.hidden = false;
+        if (got) SB.starFX(got, label + " 정답!"); else SB.toast("정답! 💡 " + item.why);
+      } else {
+        b.classList.add("no");
+        SB.toast("한 번 더 살펴봐요 · 그림을 천천히 보면 보여요 🔍");
+      }
+    });
+  })(btns[i]);
+}
+function paintThink(){
+  var tp = $("thinkPanel"); if (!tp) return;
+  var t = THINK[TS.ti % THINK.length];
+  tp.setAttribute("data-ti", String(TS.ti % THINK.length));
+  var key = SB.today() + "|math|think", done = !!SB.readDash().led[key];
+  tp.innerHTML = '<div class="panel-h"><b>🧠 오늘의 사고력</b>'
+      + '<span class="ph-no2">' + (done ? "⭐ 완료" : "⭐ +1") + '</span>'
+      + '<button class="mini" type="button" data-tnew="1">🔄 다른 문제</button></div>'
+    + '<div class="think-body story">'
+      + '<div class="think-art">' + t.svg + '</div>'
+      + '<p class="think-q">' + esc(t.q) + '</p>'
+      + '<div class="think-opts">' + t.o.map(function(o){
+          return '<button class="think-opt" type="button" data-think="' + esc(o) + '">' + esc(o) + '</button>';
+        }).join("") + '</div>'
+      + '<p class="think-why" hidden>💡 ' + esc(t.why) + '</p>'
+    + '</div>';
+  thinkBind(tp, "data-think", t, key, "🧠 사고력");
+  var nb = tp.querySelector("[data-tnew]");
+  if (nb) nb.addEventListener("click", function(){ TS.ti = (TS.ti + 1) % THINK.length; paintThink(); });
+}
+function paintShape(){
+  var sp = $("shapePanel"); if (!sp) return;
+  var s = SHAPE[TS.si % SHAPE.length];
+  sp.setAttribute("data-si", String(TS.si % SHAPE.length));
+  var key = SB.today() + "|math|shape", done = !!SB.readDash().led[key];
+  sp.innerHTML = '<div class="panel-h"><b>🔺 도형 이름 맞추기</b>'
+      + '<span class="ph-no2">' + (done ? "⭐ 완료" : "⭐ +1") + '</span>'
+      + '<button class="mini" type="button" data-snew="1">🔄 다른 문제</button></div>'
+    + '<div class="think-body story">'
+      + '<div class="shape-art">' + s.svg + '</div>'
+      + '<p class="think-q">' + esc(s.q) + '</p>'
+      + '<div class="think-opts">' + s.o.map(function(o){
+          return '<button class="think-opt" type="button" data-shape="' + esc(o) + '">' + esc(o) + '</button>';
+        }).join("") + '</div>'
+      + '<p class="think-why" hidden>💡 ' + esc(s.why) + '</p>'
+    + '</div>';
+  thinkBind(sp, "data-shape", s, key, "🔺 도형");
+  var nb = sp.querySelector("[data-snew]");
+  if (nb) nb.addEventListener("click", function(){ TS.si = (TS.si + 1) % SHAPE.length; paintShape(); });
+}
+function renderThink(){
+  var d = new Date();
+  TS.ti = (d.getDate() + d.getMonth() + 3) % THINK.length;
+  TS.si = (d.getDate() + d.getMonth() + 8) % SHAPE.length;
+  paintThink(); paintShape();
+}
+
+/* ---------------------------- 📐 설정 › 학습 설정 탭 ---------------------------- */
+function learnPane(){ return document.querySelector('#settingsModal [data-setpane="learn"]'); }
+function renderLearnPane(){
+  var box = learnPane();
+  if (!box){ return; }
+  var lv = calcById(MSET.calc), ci = calcIdx(MSET.calc), nx = CALC_LEVELS[ci + 1] || null;
+  var cv = countById(MSET.count), nv = MSET.count === 1 ? COUNT_LEVELS[1] : null;
+  var h = '<div class="ls-box">'
+    + '<div class="ls-h"><b>📐 기탄수학 연산 진도</b><span>엄마가 바꾸기 전까지 이 단계만 계속 나와요</span></div>'
+    + '<p class="ls-now">지금 단계 · <b>' + lv.tag + ' (' + esc(lv.sub) + ')</b> — ' + esc(lv.help) + '</p>'
+    + '<div class="ls-grid">' + CALC_LEVELS.map(function(L){
+        return '<button class="ls-chip' + (L.k === MSET.calc ? " on" : "") + '" type="button" data-lscalc="' + L.k + '">'
+          + '<b>' + L.tag + '</b><em>' + esc(L.sub) + '</em></button>';
+      }).join("") + '</div>'
+    + '<div class="ls-acts">' + (nx
+        ? '<button class="btn ok" type="button" data-lsnext="calc">다음 레벨로 올리기 ▶ <em>' + nx.tag + ' ' + esc(nx.sub) + '</em></button>'
+        : '<button class="btn ghost" type="button" disabled>F-2 가 마지막 단계예요</button>')
+    + '</div></div>'
+    + '<div class="ls-box">'
+    + '<div class="ls-h"><b>🔢 수세기 레벨</b><span>한 번에 한 레벨만 나와요</span></div>'
+    + '<p class="ls-now">지금 레벨 · <b>' + cv.tag + ' (' + cv.sub + ')</b> — ' + esc(cv.help) + '</p>'
+    + '<div class="ls-grid two">' + COUNT_LEVELS.map(function(L){
+        return '<button class="ls-chip' + (L.k === MSET.count ? " on" : "") + '" type="button" data-lscount="' + L.k + '">'
+          + '<b>' + L.tag + '</b><em>' + L.sub + '</em></button>';
+      }).join("") + '</div>'
+    + '<div class="ls-acts">' + (nv
+        ? '<button class="btn ok" type="button" data-lsnext="count">다음 레벨로 올리기 ▶ <em>' + nv.tag + ' ' + nv.sub + '</em></button>'
+        : '<button class="btn ghost" type="button" disabled>레벨 2 가 마지막이에요</button>')
+    + '</div></div>'
+    + '<p class="hintline">바꾸면 다음 문제부터 바로 새 단계로 나와요. 가족 코드를 쓰면 엄마 폰·해율이 아이패드에 함께 저장돼요.</p>';
+  box.innerHTML = h;
+}
+function applyLearnChange(){
+  msetWrite();
+  renderLearnPane();
+  var lvEl = $("mcLevel"); if (lvEl){ var c = countById(MSET.count); lvEl.textContent = c.tag + " · " + c.sub; }
+  countNew();
+  gdNew();
+}
+function bindLearnPane(){
+  var box = learnPane(); if (!box || box.__lb) return;
+  box.__lb = 1;
   box.addEventListener("click", function(e){
-    var el = e.target;
-    if (!el || !el.closest) return;
-    var sm = el.closest("[data-sm]");
-    if (sm) { MS.mode = sm.getAttribute("data-sm"); MS.msg = ""; msNew(MS.mode); return; }
-    if (el.closest("[data-msnew]")) { msNew(MS.mode); return; }
-  });
-  box.addEventListener("pointerdown", function(e){
-    var p = e.target && e.target.closest ? e.target.closest(".ms-piece") : null;
-    if (!p) return;
-    e.preventDefault();
-    var r = p.getBoundingClientRect();
-    drag = { id:parseInt(p.getAttribute("data-piece"), 10), sx:e.clientX, sy:e.clientY,
-             moved:false, ghost:null, w:r.width, h:r.height };
-    try { p.setPointerCapture(e.pointerId); } catch(err){}
-  });
-  box.addEventListener("pointermove", function(e){
-    if (!drag) return;
-    var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
-    if (!drag.moved && (Math.abs(dx) + Math.abs(dy)) > 7) {
-      drag.moved = true;
-      var g = document.createElement("div");
-      g.className = "ms-ghost";
-      g.innerHTML = msArt();
-      g.style.width = drag.w + "px";
-      g.style.height = drag.h + "px";
-      document.body.appendChild(g);
-      drag.ghost = g;
-      document.body.classList.add("ms-dragging");
-    }
-    if (drag.ghost) {
-      drag.ghost.style.left = (e.clientX - drag.w / 2) + "px";
-      drag.ghost.style.top = (e.clientY - drag.h / 2) + "px";
-      var under = document.elementFromPoint(e.clientX, e.clientY);
-      var drop = under && under.closest ? under.closest("[data-drop]") : null;
-      var all = box.querySelectorAll("[data-drop]");
-      for (var i = 0; i < all.length; i++) all[i].classList.toggle("ms-over", all[i] === drop);
-    }
-  });
-  function finish(e, cancelled){
-    if (!drag) return;
-    var d = drag; drag = null;
-    document.body.classList.remove("ms-dragging");
-    if (d.ghost && d.ghost.parentNode) d.ghost.parentNode.removeChild(d.ghost);
-    var all = box.querySelectorAll("[data-drop]");
-    for (var i = 0; i < all.length; i++) all[i].classList.remove("ms-over");
-    if (cancelled) return;
-    var target = null;
-    if (d.moved) {
-      var el = document.elementFromPoint(e.clientX, e.clientY);
-      var drop = el && el.closest ? el.closest("[data-drop]") : null;
-      if (drop) target = drop.getAttribute("data-drop");
-    }
-    if (!target) { msTap(d.id); return; }
-    msMove(d.id, target);
-  }
-  box.addEventListener("pointerup", function(e){ finish(e, false); });
-  box.addEventListener("pointercancel", function(e){ finish(e, true); });
-  window.addEventListener("pointerup", function(e){ if (drag) finish(e, false); });
-}
-SB.msState = function(){ return { mode:MS.mode, n:MS.n, pool:MS.pool.slice(), a:MS.a.slice(), b:MS.b.slice(), merged:MS.merged.slice(), msg:MS.msg }; };
-SB.msNew = msNew;
-
-function renderFrame(){
-  var f = $("tenFrame"); if (!f) return;
-  var filled = MC.mode === "split" ? (MC.split.a + MC.split.b) : MC.n;
-  if (MC.mode === "ten") filled = MC.ten;
-  var cells = "";
-  for (var i = 0; i < 10; i++) cells += '<button class="tcell' + (i < filled ? " on" : "") + '" type="button" data-cell="' + i + '" aria-label="' + (i+1) + '번째 칸"></button>';
-  f.innerHTML = cells;
-  var c = $("mcCount"); if (c) c.textContent = filled;
-}
-function renderConcept(){
-  var s = store();
-  var tabs = document.querySelectorAll("[data-mc]");
-  for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle("on", tabs[i].getAttribute("data-mc") === MC.mode);
-  var tn = $("tenFrame");
-  if (tn) tn.hidden = MC.mode === "split";
-  var mb0 = document.querySelector(".mc-body");
-  if (mb0 && MC.mode !== "split") mb0.classList.remove("ms-mode");
-  var cc = $("mcCount");
-  if (cc && cc.parentNode) cc.parentNode.hidden = MC.mode === "split";
-  var sp = $("mcSplit"); if (sp) sp.hidden = MC.mode !== "split";
-  var hint = $("mcHint"), task = $("mcTask"), ans = $("mcAnswer");
-  renderFrame();
-  if (MC.mode === "count") {
-    if (hint) hint.textContent = "칸을 눌러 구슬을 넣고, 개수를 세어 보세요";
-    if (task) task.innerHTML = '지금 <b>' + MC.n + '</b>개! <button class="mini" type="button" id="mcSay">🔊 숫자 읽기</button>';
-    if (ans) ans.innerHTML = '<button class="mini" type="button" data-quick="1">1개</button><button class="mini" type="button" data-quick="5">5개</button><button class="mini" type="button" data-quick="10">10개</button><button class="mini" type="button" data-clear="1">비우기</button>';
-  } else if (MC.mode === "ten") {
-    var need = 10 - MC.ten;
-    if (hint) hint.textContent = "10칸을 가득 채우면 10이 돼요";
-    if (task) task.innerHTML = '구슬이 <b>' + MC.ten + '</b>개 있어요. 10을 만들려면 <b>몇 개</b> 더 넣어야 할까요?';
-    if (ans) {
-      var opts = [need, need + 1, Math.max(0, need - 1), need + 2].filter(function(v, i, arr){ return v >= 0 && v <= 10 && arr.indexOf(v) === i; }).slice(0, 4);
-      opts = SB.shuffle(opts);
-      ans.innerHTML = opts.map(function(v){ return '<button class="mc-opt" type="button" data-ten="' + v + '">' + v + "개</button>"; }).join("");
-    }
-  } else {
-    if (hint) hint.textContent = "그림을 손가락으로 끌어다 바구니에 담아 보세요";
-    if (task) task.innerHTML = "";
-    if (ans) ans.innerHTML = "";
-    var mb = document.querySelector(".mc-body");
-    if (mb) mb.classList.add("ms-mode");
-    msRender();
-  }
-}
-function bindConcept(){
-  var tabs = document.querySelectorAll("[data-mc]");
-  for (var i = 0; i < tabs.length; i++) tabs[i].addEventListener("click", function(e){
-    MC.mode = e.target.getAttribute("data-mc"); renderConcept();
-  });
-  var f = $("tenFrame");
-  if (f) f.addEventListener("click", function(e){
-    var c = e.target.closest("[data-cell]"); if (!c) return;
-    var idx = parseInt(c.getAttribute("data-cell"), 10);
-    if (MC.mode === "split") return;
-    if (MC.mode === "count") {
-      MC.n = idx + 1 === MC.n ? idx : Math.max(MC.n, idx + 1);
-      SB.speak(String(MC.n), false, "ko-KR");
-      var got = 0;
-      if (MC.n === 10) got = SB.earn(SB.today() + "|math|count10", 1);
-      if (got) SB.starFX(got, "10칸을 가득 채웠어요!");
-      renderConcept();
-    }
-  });
-  var ans = $("mcAnswer");
-  if (ans) ans.addEventListener("click", function(e){
-    var q = e.target.closest("[data-quick]");
-    if (q) { MC.n = parseInt(q.getAttribute("data-quick"), 10); SB.speak(String(MC.n), false, "ko-KR"); renderConcept(); return; }
-    var t = e.target.closest("[data-ten]");
-    if (t) {
-      var v = parseInt(t.getAttribute("data-ten"), 10), need = 10 - MC.ten;
-      if (v === need) {
-        var got = SB.earn(SB.today() + "|math|concept", 1);
-        SB.markAttendance("math");
-        MC.ten = 1 + Math.floor(Math.random() * 9);
-        if (got) SB.starFX(got, "10 만들기 성공! " + MC.ten + "개에는 " + (10 - MC.ten) + "개를 더해요");
-        else SB.toast("정답! 10을 만들었어요 🌟");
-        renderConcept();
-      } else { SB.toast("한 번 더 세어 볼까? 10칸에서 " + MC.ten + "개를 빼면 돼요"); }
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var c = t.closest("[data-lscalc]");
+    if (c){
+      var k = c.getAttribute("data-lscalc");
+      if (k === MSET.calc) return;
+      MSET.calc = k; applyLearnChange();
+      SB.toast("📐 기탄 " + calcById(k).tag + " 단계로 바꿨어요");
       return;
     }
-    var add = e.target.closest("[data-add]");
-    if (add) {
-      var side = add.getAttribute("data-add");
-      if (MC.split.a + MC.split.b < MC.split.target) MC.split[side]++;
-      else SB.toast("구슬을 다 썼어요! 비우기로 다시 해 봐요");
-      renderConcept(); return;
+    var n = t.closest("[data-lscount]");
+    if (n){
+      var v = String(n.getAttribute("data-lscount")) === "2" ? 2 : 1;
+      if (v === MSET.count) return;
+      MSET.count = v; applyLearnChange();
+      SB.toast("🔢 수세기 " + countById(v).tag + "로 바꿨어요");
+      return;
     }
-    if (e.target.closest("[data-clear]")) { MC.n = 0; MC.split.a = 0; MC.split.b = 0; MC.splitDone = false; renderConcept(); return; }
-    if (e.target.closest("[data-newsplit]")) { MC.split = { a:0, b:0, target:5 + Math.floor(Math.random() * 5) }; MC.splitDone = false; renderConcept(); return; }
-  });
-  document.addEventListener("click", function(e){
-    if (e.target.closest("#mcSay")) SB.speak(MC.n + "개", false, "ko-KR");
-  });
-}
-
-/* ---------------------------- 초1 연산 ---------------------------- */
-function calcQuestions(){
-  var r = rng(daySeed()), qs = [];
-  for (var i = 0; i < 8; i++) {
-    var a, b, ans, op;
-    if (i % 4 === 0) { a = 1 + Math.floor(r() * 8); b = 1 + Math.floor(r() * (10 - a)); op = "+"; ans = a + b; }
-    else if (i % 4 === 1) { a = 4 + Math.floor(r() * 7); b = 1 + Math.floor(r() * (a - 1)); op = "-"; ans = a - b; }
-    else if (i % 4 === 2) { a = 1 + Math.floor(r() * 9); op = "+"; b = 10 - a; ans = 10; }
-    else { a = 6 + Math.floor(r() * 4); b = 2 + Math.floor(r() * 4); op = "+"; ans = a + b; }
-    var opts = [ans], guard = 0;
-    while (opts.length < 4 && guard++ < 40) {
-      var d = ans + (Math.floor(r() * 7) - 3);
-      if (d !== ans && d >= 0 && d <= 20 && opts.indexOf(d) < 0) opts.push(d);
+    var nx = t.closest("[data-lsnext]");
+    if (nx){
+      var part = nx.getAttribute("data-lsnext");
+      if (part === "calc"){
+        var i = calcIdx(MSET.calc);
+        if (i >= CALC_LEVELS.length - 1) return;
+        MSET.calc = CALC_LEVELS[i + 1].k;
+        applyLearnChange();
+        SB.toast("📐 기탄 " + calcById(MSET.calc).tag + " 단계로 올렸어요!");
+      } else {
+        MSET.count = 2; applyLearnChange();
+        SB.toast("🔢 수세기 레벨 2 (100~200)로 올렸어요!");
+      }
     }
-    qs.push({ a:a, b:b, op:op, ans:ans, opts:SB.shuffle(opts) });
-  }
-  return qs;
-}
-var CALC = { qs:[], i:0, score:0, live:false, hint:false, mode:"easy" };
-var EASY = { qs:[], i:0, score:0, live:false, hint:false };
-
-function renderGrade(){
-  var body = $("calcBody"); if (!body) return;
-  var prog = $("calcProg");
-  if (!CALC.live) {
-    var doneKey = SB.today() + "|math|calc", prev = parseInt(SB.readDash().led[doneKey], 10) || 0;
-    if (prog) prog.textContent = "0 / 8";
-    body.innerHTML = '<div class="calc-start"><div class="big">➕</div><b>초1 연산 8문제</b>'
-      + '<p>한 자리 덧셈·뺄셈, 10의 보수, 받아올림 입문까지!<br>8문제를 다 맞히면 <b>⭐ +3</b>, 6~7문제면 +2, 4~5문제면 +1</p>'
-      + '<p>오늘 받은 별: ' + (prev ? "⭐ " + prev : "아직 없어요") + "</p>"
-      + '<button class="tst-go" type="button" id="calcStart">연산 시작 ▶</button></div>';
-    var b = $("calcStart"); if (b) b.addEventListener("click", function(){
-      CALC.qs = calcQuestions(); CALC.i = 0; CALC.score = 0; CALC.live = true; renderCalc();
-    });
-    return;
-  }
-  var q = CALC.qs[CALC.i];
-  if (!q) { endCalc(); return; }
-  if (prog) prog.textContent = (CALC.i + 1) + " / " + CALC.qs.length;
-  var hintHTML = "";
-  if (CALC.hint) {
-    var dots = function(n, cls){ var s = ""; for (var k = 0; k < n; k++) s += '<i class="dot ' + cls + '"></i>'; return s; };
-    hintHTML = '<div class="calc-hint">' + (q.op === "+"
-      ? '<span class="grp">' + dots(q.a, "y") + '</span><span class="plus">+</span><span class="grp">' + dots(q.b, "b") + "</span>"
-      : '<span class="grp">' + dots(q.a, "y") + '</span><span class="plus">−</span><span class="grp">' + dots(q.b, "b") + "</span>")
-      + '<span class="hintcap">그림으로 세어 보면 쉬워요</span></div>';
-  }
-  body.innerHTML = '<div class="calc-q"><div class="eq">' + q.a + ' <em>' + q.op + '</em> ' + q.b + ' = <b>?</b></div>'
-    + '<button class="mini" type="button" id="calcHint">🖼️ 그림 힌트 ' + (CALC.hint ? "끄기" : "보기") + "</button></div>"
-    + hintHTML
-    + '<div class="calc-opts">' + q.opts.map(function(o){
-        return '<button class="calc-opt" type="button" data-num="' + o + '">' + o + "</button>";
-      }).join("") + "</div>";
-  var h = $("calcHint"); if (h) h.addEventListener("click", function(){ CALC.hint = !CALC.hint; renderCalc(); });
-  body.querySelectorAll(".calc-opt").forEach(function(b2){
-    b2.addEventListener("click", function(){ answerCalc(b2, parseInt(b2.getAttribute("data-num"), 10)); });
   });
 }
-function answerCalc(btn, v){
-  var q = CALC.qs[CALC.i]; if (!q) return;
-  var all = $("calcBody").querySelectorAll(".calc-opt");
-  for (var i = 0; i < all.length; i++) all[i].disabled = true;
-  if (v === q.ans) { btn.classList.add("ok"); CALC.score++; }
-  else { btn.classList.add("no"); for (var j = 0; j < all.length; j++) if (parseInt(all[j].getAttribute("data-num"), 10) === q.ans) all[j].classList.add("ok"); }
-  setTimeout(function(){ CALC.i++; renderCalc(); }, 760);
-}
-function endCalc(){
-  CALC.live = false;
-  var sc = CALC.score, n = CALC.qs.length || 8;
-  var want = sc >= 8 ? 3 : (sc >= 6 ? 2 : (sc >= 4 ? 1 : 0));
-  var got = want ? SB.earn(SB.today() + "|math|calc", want) : 0;
-  SB.markAttendance("math");
-  var body = $("calcBody");
-  if (body) body.innerHTML = '<div class="calc-start"><div class="big">' + (sc >= 6 ? "🎉" : "💪") + "</div>"
-    + "<b>8문제 중 " + sc + "문제 정답!</b>"
-    + "<p>" + (got ? "별 " + got + "개를 받았어요." : (want ? "오늘은 이미 이만큼 받았어요." : "4문제 이상 맞히면 별을 받을 수 있어요.")) + "</p>"
-    + '<button class="tst-again" type="button" id="calcAgain">🔁 다시 풀기</button></div>';
-  var b = $("calcAgain"); if (b) b.addEventListener("click", function(){ CALC.qs = calcQuestions(); CALC.i = 0; CALC.score = 0; CALC.live = true; renderCalc(); });
-  if (got) { SB.confetti(); SB.toast("➕ 연산 " + sc + "/8 · ⭐ +" + got); }
-}
-
-/* ---------------------------- 사고력 · 도형 ---------------------------- */
-var THINK = [
-  { q:"2, 4, 6, 8, □ 에 들어갈 수는?", o:["9","10","12","7"], a:"10", why:"2씩 커지는 규칙이에요." },
-  { q:"1, 3, 5, 7, □ 에 들어갈 수는?", o:["8","9","10","11"], a:"9", why:"홀수가 2씩 커져요." },
-  { q:"10, 20, 30, □, 50 에 들어갈 수는?", o:["35","40","45","60"], a:"40", why:"10씩 커지는 규칙이에요." },
-  { q:"100, 90, 80, □, 60 에 들어갈 수는?", o:["70","75","85","50"], a:"70", why:"10씩 작아져요." },
-  { q:"사과가 3개, 배가 5개 있어요. 더 많은 과일은?", o:["사과","배","같아요","모르겠어요"], a:"배", why:"5는 3보다 커요." },
-  { q:"가장 무거운 것은?", o:["개미","고양이","코끼리","참새"], a:"코끼리", why:"코끼리는 아주 크고 무거워요." },
-  { q:"가장 작은 것은?", o:["개미","강아지","자동차","집"], a:"개미", why:"개미는 아주 작아요." },
-  { q:"5, 4, 3, □, 1 에 들어갈 수는?", o:["0","2","6","4"], a:"2", why:"1씩 작아지는 규칙이에요." },
-  { q:"빨강, 파랑, 빨강, 파랑, □ 에 들어갈 색은?", o:["빨강","파랑","노랑","초록"], a:"빨강", why:"두 색이 번갈아 나와요." },
-  { q:"1, 2, 4, 8, □ 에 들어갈 수는?", o:["10","12","16","14"], a:"16", why:"앞의 수를 두 배로 만들어요." },
-  { q:"형은 7살, 동기는 4살이에요. 형이 동기보다 몇 살 많을까요?", o:["2살","3살","4살","11살"], a:"3살", why:"7 - 4 = 3 이에요." },
-  { q:"연필이 5자루 있었는데 2자루를 친구에게 줬어요. 남은 연필은?", o:["2자루","3자루","5자루","7자루"], a:"3자루", why:"5 - 2 = 3 이에요." }
-];
-var SHAPE = [
-  { q:"세모(삼각형)는 몇 개일까요?", svg:'<svg viewBox="0 0 100 100"><polygon points="20,70 50,20 80,70" fill="#ffb3a8" stroke="#e2604a" stroke-width="2"/></svg>', o:["1개","2개","3개","4개"], a:"1개", why:"뾰족한 세 각이 있는 도형이에요." },
-  { q:"네모(사각형)는 몇 개일까요?", svg:'<svg viewBox="0 0 100 100"><rect x="22" y="24" width="54" height="54" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/></svg>', o:["1개","2개","3개","5개"], a:"1개", why:"네 각이 반듯한 도형이에요." },
-  { q:"동그라미는 몇 개일까요?", svg:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="28" fill="#ffd166" stroke="#dda427" stroke-width="2"/></svg>', o:["1개","2개","3개","0개"], a:"1개", why:"빙글 둥근 모양이에요." },
-  { q:"쌓기나무는 모두 몇 개일까요?", svg:'<svg viewBox="0 0 100 100"><rect x="18" y="52" width="28" height="28" fill="#ffc0a8" stroke="#c96a48"/><rect x="46" y="52" width="28" height="28" fill="#ffdf9e" stroke="#c9a03c"/><rect x="32" y="26" width="28" height="26" fill="#a8e0c0" stroke="#3f9a70"/></svg>', o:["2개","3개","4개","5개"], a:"3개", why:"아래에 2개, 위에 1개가 있어요." },
-  { q:"다음에 올 모양은? ○ △ □ ○ △ □ ○ △ □ ○ ?", o:["○","△","□","☆"], a:"△", why:"○△□가 되풀이돼요." },
-  { q:"반쪽 동그라미 2개를 붙이면 무엇이 될까요?", svg:'<svg viewBox="0 0 100 100"><path d="M16 50a34 34 0 0 1 68 0z" fill="#b9e0ff" stroke="#3f86bd" stroke-width="2" transform="rotate(180 50 50)"/><path d="M16 50a34 34 0 0 1 68 0z" fill="#ffd6e7" stroke="#bd5b86" stroke-width="2"/></svg>', o:["세모","네모","동그라미","별"], a:"동그라미", why:"반쪽을 붙이면 동그라미가 돼요." },
-  { q:"둥근 모양은 무엇일까요?", o:["공","책","상자","주사위"], a:"공", why:"공은 어디서 봐도 둥글어요." },
-  { q:"네모 4개로 만든 큰 모양은?", svg:'<svg viewBox="0 0 100 100"><rect x="20" y="20" width="30" height="30" fill="#ffe08a" stroke="#c9a03c"/><rect x="50" y="20" width="30" height="30" fill="#ffd166" stroke="#c9a03c"/><rect x="20" y="50" width="30" height="30" fill="#ffdf9e" stroke="#c9a03c"/><rect x="50" y="50" width="30" height="30" fill="#ffc247" stroke="#c9a03c"/></svg>', o:["네모","세모","동그라미","별"], a:"네모", why:"네모 4개가 모여 더 큰 네모가 돼요." },
-  { q:"세모 2개를 붙이면 무엇이 될까요?", svg:'<svg viewBox="0 0 100 100"><polygon points="50,18 22,62 78,62" fill="#ffb3a8" stroke="#e2604a" stroke-width="2"/><polygon points="50,82 22,62 78,62" fill="#ffd0c8" stroke="#e2604a" stroke-width="2"/></svg>', o:["세모","네모","동그라미","별"], a:"네모", why:"세모 2개를 붙이면 네모가 돼요." },
-  { q:"나비의 오른쪽 날개와 같은 모양은?", o:["왼쪽 날개","더듬이","몸통","다리"], a:"왼쪽 날개", why:"나비는 좌우가 똑같은 대칭이에요." },
-  { q:"쌓기나무가 2층으로 있어요. 모두 몇 개일까요?", svg:'<svg viewBox="0 0 100 100"><rect x="16" y="52" width="24" height="24" fill="#ffc0a8" stroke="#c96a48"/><rect x="40" y="52" width="24" height="24" fill="#ffdf9e" stroke="#c9a03c"/><rect x="64" y="52" width="24" height="24" fill="#a8e0c0" stroke="#3f9a70"/><rect x="28" y="28" width="24" height="24" fill="#bcd8ff" stroke="#4a7fc0"/><rect x="52" y="28" width="24" height="24" fill="#e0c8ff" stroke="#7a4fc0"/></svg>', o:["3개","4개","5개","6개"], a:"5개", why:"아래 3개 + 위 2개 = 5개예요." }
-];
-var TS = { ti:0, si:0, tdone:false, sdone:false };
-
-function renderThink(){
-  var ti = ((new Date().getDate() + new Date().getMonth()) % THINK.length);
-  var si = ((new Date().getDate() + new Date().getMonth() + 3) % SHAPE.length);
-  TS.ti = ti; TS.si = si;
-  var t = THINK[ti], s = SHAPE[si];
-  var tp = $("thinkPanel");
-  if (tp) {
-    var key = SB.today() + "|math|think", done = !!SB.readDash().led[key];
-    tp.innerHTML = '<div class="panel-h"><b>🧩 오늘의 사고력</b><span class="ph-no2">' + (done ? "⭐ 완료" : "⭐ +1") + "</span></div>"
-      + '<div class="think-body"><p class="think-q">' + esc(t.q) + "</p>"
-      + '<div class="think-opts">' + t.o.map(function(o){
-          return '<button class="think-opt" type="button" data-think="' + esc(o) + '">' + esc(o) + "</button>";
-        }).join("") + "</div>"
-      + '<p class="think-why" id="thinkWhy" hidden>💡 ' + esc(t.why) + "</p></div>";
-    tp.querySelectorAll("[data-think]").forEach(function(b){
-      b.addEventListener("click", function(){
-        var v = b.getAttribute("data-think");
-        if (v === t.a) {
-          b.classList.add("ok");
-          var got = SB.earn(key, 1);
-          SB.markAttendance("math");
-          var why = $("thinkWhy"); if (why) why.hidden = false;
-          if (got) SB.starFX(got, "🧩 사고력 정답!"); else SB.toast("정답! 💡 " + t.why);
-        } else { b.classList.add("no"); SB.toast("한 번 더 생각해 봐요. 그림을 세어 보면 도움이 돼요!"); }
-      });
+function bindSettingsTabs(){
+  var m = $("settingsModal"); if (!m) return;
+  if (!m.__st){
+    m.__st = 1;
+    m.addEventListener("click", function(e){
+      var t = e.target;
+      var b = t && t.closest ? t.closest("[data-settab]") : null;
+      if (!b) return;
+      var k = b.getAttribute("data-settab"), tabs = m.querySelectorAll("[data-settab]"), i;
+      for (i = 0; i < tabs.length; i++){
+        var on = tabs[i] === b;
+        tabs[i].classList.toggle("on", on);
+        tabs[i].setAttribute("aria-selected", on ? "true" : "false");
+      }
+      var panes = m.querySelectorAll("[data-setpane]");
+      for (i = 0; i < panes.length; i++) panes[i].hidden = panes[i].getAttribute("data-setpane") !== k;
+      if (k === "learn") renderLearnPane();
     });
   }
-  var sp = $("shapePanel");
-  if (sp) {
-    var key2 = SB.today() + "|math|shape", done2 = !!SB.readDash().led[key2];
-    sp.innerHTML = '<div class="panel-h"><b>🔺 오늘의 도형</b><span class="ph-no2">' + (done2 ? "⭐ 완료" : "⭐ +1") + "</span></div>"
-      + '<div class="think-body shape-body"><div class="shape-art">' + s.svg + "</div>"
-      + '<p class="think-q">' + esc(s.q) + "</p>"
-      + '<div class="think-opts two">' + s.o.map(function(o){
-          return '<button class="think-opt" type="button" data-shape="' + esc(o) + '">' + esc(o) + "</button>";
-        }).join("") + "</div>"
-      + '<p class="think-why" id="shapeWhy" hidden>💡 ' + esc(s.why) + "</p></div>";
-    sp.querySelectorAll("[data-shape]").forEach(function(b){
-      b.addEventListener("click", function(){
-        var v = b.getAttribute("data-shape");
-        if (v === s.a) {
-          b.classList.add("ok");
-          var got = SB.earn(key2, 1);
-          SB.markAttendance("math");
-          var why = $("shapeWhy"); if (why) why.hidden = false;
-          if (got) SB.starFX(got, "🔺 도형 정답!"); else SB.toast("정답! 💡 " + s.why);
-        } else { b.classList.add("no"); SB.toast("모양을 천천히 살펴보아요 🔍"); }
-      });
-    });
+  var btn = $("btnSettings");
+  if (btn && !btn.__stb){
+    btn.__stb = 1;
+    btn.addEventListener("click", function(){ setTimeout(function(){ renderLearnPane(); }, 40); });
   }
+  bindLearnPane();
 }
 
-
-/* ---------------------------- 아주 쉬운 한 자릿수 게임 ---------------------------- */
-function easyQuestions(){
-  var qs = [];
-  for (var i = 0; i < 5; i++) {
-    var a, b, op, ans;
-    if (Math.random() < 0.5) { a = 1 + Math.floor(Math.random() * 7); b = 1 + Math.floor(Math.random() * (10 - a)); op = "+"; ans = a + b; }
-    else { a = 2 + Math.floor(Math.random() * 8); b = 1 + Math.floor(Math.random() * a); op = "-"; ans = a - b; }
-    var opts = [ans], guard = 0;
-    while (opts.length < 4 && guard++ < 30) {
-      var d = ans + (Math.floor(Math.random() * 5) - 2);
-      if (d !== ans && d >= 0 && d <= 10 && opts.indexOf(d) < 0) opts.push(d);
-    }
-    qs.push({ a:a, b:b, op:op, ans:ans, opts:SB.shuffle(opts) });
-  }
-  return qs;
-}
-function renderEasy(){
-  var body = $("calcBody"); if (!body) return;
-  var prog = $("calcProg");
-  if (!EASY.live) {
-    var key = SB.today() + "|math|easy", prev = parseInt(SB.readDash().led[key], 10) || 0;
-    if (prog) prog.textContent = "0 / 5";
-    body.innerHTML = '<div class="calc-start"><div class="big">🍬</div><b>아주 쉬운 한 자릿수 게임</b>'
-      + '<p>1+2, 4+3, 6-2처럼 <b>10보다 작은 수</b>로 놀아요.<br>5문제를 다 맞히면 <b>⭐ +2</b>, 3문제 이상이면 +1</p>'
-      + '<p>오늘 받은 별: ' + (prev ? "⭐ " + prev : "아직 없어요") + "</p>"
-      + '<button class="tst-go" type="button" id="easyStart">놀이 시작 ▶</button></div>';
-    var b = $("easyStart"); if (b) b.addEventListener("click", function(){ EASY.qs = easyQuestions(); EASY.i = 0; EASY.score = 0; EASY.live = true; renderEasy(); });
-    return;
-  }
-  var q = EASY.qs[EASY.i];
-  if (!q) return endEasy();
-  if (prog) prog.textContent = (EASY.i + 1) + " / " + EASY.qs.length;
-  var hint = "";
-  if (EASY.hint) {
-    var dots = function(n, cls){ var t = ""; for (var k = 0; k < n; k++) t += '<i class="dot ' + cls + '"></i>'; return t; };
-    hint = '<div class="calc-hint"><span class="grp">' + dots(q.a, "y") + '</span><span class="plus">' + (q.op === "+" ? "+" : "−") + '</span><span class="grp">' + dots(q.b, "b") + '</span><span class="hintcap">그림을 세어 봐요</span></div>';
-  }
-  body.innerHTML = '<div class="calc-q"><div class="eq">' + q.a + " <em>" + q.op + "</em> " + q.b + " = <b>?</b></div>"
-    + '<button class="mini" type="button" id="easyHint">🖼️ 그림 도우미 ' + (EASY.hint ? "끄기" : "보기") + "</button></div>"
-    + hint
-    + '<div class="calc-opts easy">' + q.opts.map(function(o){ return '<button class="calc-opt" type="button" data-en2="' + o + '">' + o + "</button>"; }).join("") + "</div>";
-  var h = $("easyHint"); if (h) h.addEventListener("click", function(){ EASY.hint = !EASY.hint; renderEasy(); });
-  body.querySelectorAll("[data-en2]").forEach(function(b2){
-    b2.addEventListener("click", function(){ answerEasy(b2, parseInt(b2.getAttribute("data-en2"), 10)); });
-  });
-}
-function answerEasy(btn, v){
-  var q = EASY.qs[EASY.i]; if (!q) return;
-  var all = $("calcBody").querySelectorAll(".calc-opt");
-  for (var i = 0; i < all.length; i++) all[i].disabled = true;
-  if (v === q.ans) { btn.classList.add("ok"); EASY.score++; }
-  else { btn.classList.add("no"); for (var j = 0; j < all.length; j++) if (parseInt(all[j].getAttribute("data-en2"), 10) === q.ans) all[j].classList.add("ok"); }
-  setTimeout(function(){ EASY.i++; renderEasy(); }, 620);
-}
-function endEasy(){
-  EASY.live = false;
-  var sc = EASY.score, n = EASY.qs.length || 5;
-  var want = sc >= 5 ? 2 : (sc >= 3 ? 1 : 0);
-  var got = want ? SB.earn(SB.today() + "|math|easy", want) : 0;
-  SB.markAttendance("math");
-  var body = $("calcBody");
-  if (body) body.innerHTML = '<div class="calc-start"><div class="big">' + (sc >= 4 ? "🌟" : "🌱") + "</div>"
-    + "<b>5문제 중 " + sc + "문제 정답!</b>"
-    + "<p>" + (got ? "별 " + got + "개를 받았어요!" : (want ? "오늘은 이미 이만큼 받았어요." : "3문제 이상 맞히면 별을 받을 수 있어요.")) + "</p>"
-    + '<button class="tst-again" type="button" id="easyAgain">🔁 한 판 더</button></div>';
-  var b = $("easyAgain"); if (b) b.addEventListener("click", function(){ EASY.qs = easyQuestions(); EASY.i = 0; EASY.score = 0; EASY.live = true; renderEasy(); });
-  if (got) { SB.confetti(); SB.toast("🍬 쉬운 연산 " + sc + "/5 · ⭐ +" + got); }
-}
-function renderCalc(){
-  if (CALC.mode === "easy") return renderEasy();
-  return renderGrade();
-}
-
-SB.math = { think:THINK, shape:SHAPE, calcQuestions:calcQuestions, concept:MC, calc:CALC, easy:EASY, easyQuestions:easyQuestions };
-SB.onShow.math = function(){
-  renderConcept(); renderCalc(); renderThink();
+/* ---------------------------- 연결 ---------------------------- */
+SB.math = { think:THINK, shape:SHAPE, drill:GD, count:CT, set:MSET, levels:CALC_LEVELS };
+SB.mathSetChanged = function(){
+  msetLoad();
+  renderLearnPane();
+  countNew();
+  gdNew();
 };
-function bindCalcModes(){
-  var box = document.querySelector(".calc-modes");
-  if (!box) return;
-  box.addEventListener("click", function(e){
-    var b = e.target.closest("[data-cm]"); if (!b) return;
-    CALC.mode = b.getAttribute("data-cm");
-    var chips = box.querySelectorAll("[data-cm]");
-    for (var i = 0; i < chips.length; i++) chips[i].classList.toggle("on", chips[i] === b);
-    renderCalc();
-  });
-}
+SB.onShow.math = function(){
+  if (!CT.q) countNew(); else countRender();
+  if (!GD.items.length) gdNew(); else gdCount();
+  paintThink();
+  paintShape();
+};
 function initMath(){
-  renderConcept(); renderCalc(); renderThink(); bindConcept(); bindCalcModes();
+  msetLoad();
+  countNew();
+  gdNew();
+  renderThink();
+  bindSettingsTabs();
+  renderLearnPane();
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initMath);
 else initMath();
 })();
+
 
 /* =====================================================================
    📞 전화 영어 — 통화 화면(타이머·아바타) · 자동 영어 질문(TTS) · 말하기
@@ -16009,7 +16463,8 @@ var K = {
   done: "haeyuli.hwdone.v1", study: "haeyuli.studydays.v1",
   coupons: "haeyuli.coupons.v1",
   rbRead: "haeyuli.redpen.read.v1", rbToday: "haeyuli.redpen.today.v1",
-  rbUn: "haeyuli.redpen.unread.v1", rbLog: "study.readlog.v1"
+  rbUn: "haeyuli.redpen.unread.v1", rbLog: "study.readlog.v1",
+  mathset: "haeyuli.mathset.v1"
 };
 
 function read(k, fb){
@@ -16033,6 +16488,7 @@ function snap(){
     done: read(K.done, {}),
     study: read(K.study, {}),
     coupons: read(K.coupons, { items:[], issued:{} }),
+    mathset: read(K.mathset, {}),
     rb: {
       read: read(K.rbRead, {}),
       today: (rbT && rbT.d && rbT.k) ? rbT : null,
@@ -16042,9 +16498,20 @@ function snap(){
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset]); }
+
+/* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
+function mergeMathset(l, c){
+  l = (l && typeof l === "object") ? l : {};
+  c = (c && typeof c === "object") ? c : {};
+  var la = num(l.at), ca = num(c.at), pick;
+  if (ca > la) pick = c; else if (la > ca) pick = l; else pick = c.calc ? c : l;
+  var out = { calc: String(pick.calc || l.calc || c.calc || "D1"), count: (String(pick.count) === "2" ? 2 : 1), at: Math.max(la, ca, 1) };
+  if (!out.calc) out.calc = "D1";
+  return out;
+}
 
 /* ---------------- 클라우드 ---------------- */
 function apiGet(code){
@@ -16304,19 +16771,24 @@ function buildDoc(local, cloud, base, code){
     study: mergeStudy(local.study, c.study),
     coupons: mergeCoupons(local.coupons, c.coupons),
     rb: mergeRb(local.rb, c.rb),
+    mathset: mergeMathset(local.mathset, c.mathset),
     at: Date.now()
   };
 }
 
 /* ---------------- 적용 ---------------- */
 function applyDoc(doc){
-  var s = snap(), changed = false, rbChanged = false;
+  var s = snap(), changed = false, rbChanged = false, mathChanged = false;
   if (JSON.stringify(doc.plan) !== JSON.stringify(s.plan)) { write(K.plan, doc.plan); changed = true; }
   if (JSON.stringify(doc.hw) !== JSON.stringify(s.hw)) { write(K.hw, doc.hw); changed = true; }
   if (JSON.stringify(doc.money) !== JSON.stringify(s.money)) { write(K.money, doc.money); changed = true; }
   if (JSON.stringify(doc.done) !== JSON.stringify(s.done)) { write(K.done, doc.done); changed = true; }
   if (JSON.stringify(doc.study) !== JSON.stringify(s.study)) { write(K.study, doc.study); changed = true; }
   if (doc.coupons && JSON.stringify(doc.coupons) !== JSON.stringify(s.coupons)) { write(K.coupons, doc.coupons); changed = true; }
+  /* 📐 수학 진도 설정 — 다른 기기에서 엄마가 바꾼 단계를 이 기기에도 반영 */
+  if (doc.mathset && typeof doc.mathset === "object" && JSON.stringify(doc.mathset) !== JSON.stringify(s.mathset || {})){
+    write(K.mathset, doc.mathset); changed = true; mathChanged = true;
+  }
   /* 📖 빨간펜 책 — 오늘 읽을 책·읽은 책·독서 기록 */
   if (doc.rb && typeof doc.rb === "object"){
     var cur = s.rb || {};
@@ -16328,6 +16800,7 @@ function applyDoc(doc){
     if (rbChanged) changed = true;
   }
   if (changed) rerender(rbChanged);
+  if (mathChanged) { try { if (SB.mathSetChanged) SB.mathSetChanged(); } catch(e){} }
   return changed;
 }
 
@@ -16358,7 +16831,7 @@ function pullPush(manual){
     if (!cloud){
       var doc = {
         v:1, code:f.code, plan:local.plan, hw:local.hw, money:local.money,
-        done:local.done, study:local.study, coupons:local.coupons, rb:local.rb, at:Date.now()
+        done:local.done, study:local.study, coupons:local.coupons, rb:local.rb, mathset:local.mathset, at:Date.now()
       };
       return apiPut(f.code, doc).then(function(){ return true; });
     }
@@ -16422,7 +16895,7 @@ function createCode(){
   saveFam({ code:code, base:num(s.money.piggy), lastSync:0, sig:"", lastError:"", at:Date.now() });
   paint();
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
-  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, at:Date.now() })
+  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, at:Date.now() })
     .then(function(){
       var g = fam();
       g.base = num(s.money.piggy); g.lastSync = Date.now(); g.sig = sigOf(s); g.lastError = "";
@@ -16447,6 +16920,7 @@ function joinCode(){
     if (cloud.done) write(K.done, cloud.done);
     if (cloud.study) write(K.study, cloud.study);
     if (cloud.coupons) write(K.coupons, cloud.coupons);
+    if (cloud.mathset && typeof cloud.mathset === "object"){ write(K.mathset, cloud.mathset); try { if (SB.mathSetChanged) SB.mathSetChanged(); } catch(e){} }
     var gotRb = false;
     if (cloud.rb && typeof cloud.rb === "object"){
       if (cloud.rb.read) { write(K.rbRead, cloud.rb.read); gotRb = true; }
@@ -17208,7 +17682,8 @@ function mountRewardGuide(){
     +   '<li><b>⭐ 별 보너스</b><span>용돈·보상금이 들어올 때마다 <em>별 +2개</em> · 학습·독서 활동으로도 별이 쌓여요 (구치파치 음식 사기)</span></li>'
     + '</ul>'
     + '<p class="rewd-now" id="rewdNow"></p>';
-  body.insertBefore(box, body.firstChild);
+  var pane = document.querySelector('#settingsModal [data-setpane="reward"]');
+  if (pane) pane.appendChild(box); else body.insertBefore(box, body.firstChild);
   renderGuideNow();
 }
 function renderGuideNow(){
