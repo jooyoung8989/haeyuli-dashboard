@@ -14890,7 +14890,8 @@ var API = "https://mantledb.sh/v2/";
 var FAM_KEY = "haeyuli.family.v1";
 var K = {
   plan: "haeyuli.week.v1", hw: "haeyuli.homework.v1", money: "haeyuli.money.v1",
-  done: "haeyuli.hwdone.v1", study: "haeyuli.studydays.v1"
+  done: "haeyuli.hwdone.v1", study: "haeyuli.studydays.v1",
+  coupons: "haeyuli.coupons.v1"
 };
 
 function read(k, fb){
@@ -14911,13 +14912,14 @@ function snap(){
     hw: read(K.hw, {}),
     money: read(K.money, { piggy:0, bank:[], log:[] }),
     done: read(K.done, {}),
-    study: read(K.study, {})
+    study: read(K.study, {}),
+    coupons: read(K.coupons, { items:[], issued:{} })
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons]); }
 
 /* ---------------- 클라우드 ---------------- */
 function apiGet(code){
@@ -15076,6 +15078,37 @@ function mergeStudy(ls, cs){
   return out;
 }
 
+/* 🎟️ 쿠폰 — id 로 합치고 같은 회차(rid)는 한 장만, '사용 완료'가 이긴다 */
+function mergeCoupons(lc, cc){
+  lc = lc || {}; cc = cc || {};
+  var out = [], byId = {}, byRid = {};
+  function put(x){
+    if (!x || (!x.id && !x.rid)) return;
+    var prev = null;
+    if (x.id && byId[x.id]) prev = byId[x.id];
+    else if (x.rid && byRid[x.rid]) prev = byRid[x.rid];
+    if (!prev){
+      var cp = { id:x.id || ("cp" + String(x.rid)), name:x.name || "", at:x.at || "", days:num(x.days) || 30,
+                 rid:x.rid || "", used:x.used || "", usedAt:x.usedAt || "" };
+      out.push(cp);
+      if (cp.id) byId[cp.id] = cp;
+      if (cp.rid) byRid[cp.rid] = cp;
+      return;
+    }
+    if (!prev.used && x.used){ prev.used = x.used; prev.usedAt = x.usedAt || x.used; }
+    if (!prev.usedAt && x.usedAt) prev.usedAt = x.usedAt;
+  }
+  arr(lc.items).forEach(put); arr(cc.items).forEach(put);
+  out.sort(function(a, b){ return String(b.at || "").localeCompare(String(a.at || "")) || String(b.id).localeCompare(String(a.id)); });
+  var issued = {}, k;
+  var li = (lc.issued && typeof lc.issued === "object") ? lc.issued : {};
+  var ci = (cc.issued && typeof cc.issued === "object") ? cc.issued : {};
+  for (k in li) issued[k] = 1;
+  for (k in ci) issued[k] = 1;
+  out.forEach(function(x){ if (x.rid) issued[x.rid] = 1; });
+  return { items: out.slice(0, 200), issued: issued };
+}
+
 function buildDoc(local, cloud, base, code){
   var c = cloud || {};
   return {
@@ -15086,6 +15119,7 @@ function buildDoc(local, cloud, base, code){
     money: mergeMoney(local.money, c.money, base),
     done: mergeDone(local.done, c.done),
     study: mergeStudy(local.study, c.study),
+    coupons: mergeCoupons(local.coupons, c.coupons),
     at: Date.now()
   };
 }
@@ -15098,6 +15132,7 @@ function applyDoc(doc){
   if (JSON.stringify(doc.money) !== JSON.stringify(s.money)) { write(K.money, doc.money); changed = true; }
   if (JSON.stringify(doc.done) !== JSON.stringify(s.done)) { write(K.done, doc.done); changed = true; }
   if (JSON.stringify(doc.study) !== JSON.stringify(s.study)) { write(K.study, doc.study); changed = true; }
+  if (doc.coupons && JSON.stringify(doc.coupons) !== JSON.stringify(s.coupons)) { write(K.coupons, doc.coupons); changed = true; }
   if (changed) rerender();
   return changed;
 }
@@ -15105,6 +15140,8 @@ function applyDoc(doc){
 function rerender(){
   try { if (SB.week && SB.week.render) SB.week.render(); } catch(e){}
   try { if (SB.money && SB.money.render) SB.money.render(); } catch(e){}
+  try { if (SB.coupons && SB.coupons.render) SB.coupons.render(); } catch(e){}
+  try { if (SB.coupons && SB.coupons.guide) SB.coupons.guide(); } catch(e){}
 }
 
 /* ---------------- 동기화 ---------------- */
@@ -15125,7 +15162,7 @@ function pullPush(manual){
     if (!cloud){
       var doc = {
         v:1, code:f.code, plan:local.plan, hw:local.hw, money:local.money,
-        done:local.done, study:local.study, at:Date.now()
+        done:local.done, study:local.study, coupons:local.coupons, at:Date.now()
       };
       return apiPut(f.code, doc).then(function(){ return true; });
     }
@@ -15464,6 +15501,503 @@ try {
     if (!document.hidden) { try { SB.subj200.sync(); } catch(e){} }
   });
 } catch(e){}
+})();
+</script>
+<script>
+/* =====================================================================
+   🏆 보상 — 30일 연속 숙제 쿠폰 · 🎟️ 쿠폰 보관함 · 🎁 보상 설명 · 📖 연속 독서 보너스 · ⭐ 별 보너스
+   · 숙제 연속 일수(haeyuli.hwstreak.v1)가 30·60·90… 일째가 되면 🎟️ 원하는 거 사기 쿠폰 1장
+   · 쿠폰: haeyuli.coupons.v1 (가족 동기화 · 같은 회차 중복 발급 없음)
+   · 쿠폰 사용 처리는 엄마 두 자리 덧셈 확인을 거친다
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+if (window.__REWARD) return;
+window.__REWARD = 1;
+
+var CKEY = "haeyuli.coupons.v1";
+var COUPON_NAME = "🎟️ 원하는 거 사기 쿠폰";
+var MOM_DAYS = 30;
+var READ_STEPS = [[3, 200], [7, 400], [14, 600], [30, 1000]];
+
+function $(id){ return document.getElementById(id); }
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function today(){
+  try { if (SB.today) return SB.today(); } catch(e){}
+  var d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+function shift(ds, n){
+  var p = String(ds).split("-");
+  var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  d.setDate(d.getDate() + n);
+  return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+function clockNow(){
+  var d = new Date(), h = d.getHours(), m = d.getMinutes();
+  return (h < 12 ? "오전 " : "오후 ") + ((h % 12) || 12) + ":" + (m < 10 ? "0" + m : m);
+}
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c];
+  });
+}
+function toast(msg){ try { if (SB.toast) SB.toast(msg); } catch(e){} }
+function syncFam(){
+  try {
+    if (SB.family && SB.family.sync)
+      setTimeout(function(){ try { SB.family.sync(); } catch(e){} }, 150);
+  } catch(e){}
+}
+function won(n){ return (Number(n) || 0).toLocaleString("ko-KR") + "원"; }
+
+/* ───────────────────────── 🎟️ 쿠폰 저장소 ───────────────────────── */
+function readC(){
+  var v = null;
+  try { v = JSON.parse(localStorage.getItem(CKEY) || "null"); } catch(e){ v = null; }
+  if (!v || typeof v !== "object" || Array.isArray(v)) v = {};
+  if (!Array.isArray(v.items)) v.items = [];
+  if (!v.issued || typeof v.issued !== "object" || Array.isArray(v.issued)) v.issued = {};
+  return v;
+}
+function saveC(v){ try { localStorage.setItem(CKEY, JSON.stringify(v)); return true; } catch(e){ return false; } }
+
+function couponList(){ return readC().items.slice(); }
+function availableCount(){
+  var n = 0, it = couponList();
+  for (var i = 0; i < it.length; i++) if (!it[i].used) n++;
+  return n;
+}
+function issueCoupon(days){
+  days = Number(days) || MOM_DAYS;
+  var date = today(), rid = "coupon" + days + "-" + date + "-" + days;
+  var c = readC();
+  if (c.issued[rid]) return null;
+  for (var i = 0; i < c.items.length; i++) if (c.items[i].rid === rid){
+    c.issued[rid] = 1; saveC(c); return null;
+  }
+  var it = {
+    id: "cp" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36),
+    name: COUPON_NAME, at: date, days: days, rid: rid, used: "", usedAt: ""
+  };
+  c.items.unshift(it);
+  c.issued[rid] = 1;
+  saveC(c);
+  renderCard();
+  syncFam();
+  return it;
+}
+function useCoupon(id){
+  var c = readC(), it = null;
+  for (var i = 0; i < c.items.length; i++) if (c.items[i].id === id) it = c.items[i];
+  if (!it || it.used) return false;
+  it.used = today();
+  it.usedAt = today() + " " + clockNow();
+  saveC(c);
+  renderCard();
+  toast("🎟️ 쿠폰을 '사용 완료'로 바꿨어요!");
+  syncFam();
+  return true;
+}
+
+/* ───────────────────────── 🎟️ 쿠폰 보관함 카드 ───────────────────────── */
+function mountCard(){
+  var side = document.querySelector("#viewPiggy .pg-side");
+  if (!side || $("cpCard")) return;
+  var card = document.createElement("div");
+  card.className = "pg-card cp-card";
+  card.id = "cpCard";
+  card.innerHTML = '<div class="pg-ch"><b>🎟️ 내 쿠폰 보관함</b><span id="cpCount">아직 없어요</span></div>'
+    + '<ul class="cp-list" id="cpList"></ul>';
+  var logCard = side.querySelector(".pg-logcard");
+  if (logCard && logCard.parentNode === side) side.insertBefore(card, logCard);
+  else side.appendChild(card);
+  renderCard();
+}
+function renderCard(){
+  var list = $("cpList"); if (!list) return;
+  var items = couponList(), avail = 0, i;
+  for (i = 0; i < items.length; i++) if (!items[i].used) avail++;
+  var n = $("cpCount");
+  if (n) n.textContent = items.length ? ("사용 가능 " + avail + "장 · 모두 " + items.length + "장") : "아직 없어요";
+  if (!items.length){
+    list.innerHTML = '<li class="cp-empty">아직 쿠폰이 없어요.<br>숙제를 <b>30일 연속</b>으로 다 하면 🎟️ 쿠폰이 와요!</li>';
+    return;
+  }
+  list.innerHTML = items.map(function(x){
+    return '<li class="cp-item' + (x.used ? " used" : "") + '">'
+      +   '<div class="cp-i1"><b>' + esc(x.name) + '</b>'
+      +     '<span>' + (x.days || MOM_DAYS) + '일 연속 숙제 · ' + esc(x.at) + ' 발급</span></div>'
+      +   '<span class="cp-badge ' + (x.used ? "off" : "on") + '">' + (x.used ? "사용 완료" : "사용 가능") + '</span>'
+      +   (x.used
+            ? '<span class="cp-when">' + esc(x.usedAt || x.used) + '</span>'
+            : '<button class="cp-use" type="button" data-cpuse="' + esc(x.id) + '">사용 완료로 바꾸기</button>')
+      + '</li>';
+  }).join("");
+}
+
+/* ───────────────────────── 🔒 엄마 확인 (두 자리 덧셈) ───────────────────────── */
+var QA = { a:0, b:0 }, pendingId = "";
+function newQA(){
+  QA.a = 11 + Math.floor(Math.random() * 78);
+  QA.b = 11 + Math.floor(Math.random() * (99 - QA.a));
+  if (QA.b < 11) QA.b = 11;
+  if ($("cpA")) $("cpA").textContent = QA.a;
+  if ($("cpB")) $("cpB").textContent = QA.b;
+  if ($("cpAns")) $("cpAns").value = "";
+  if ($("cpMsg")) $("cpMsg").textContent = "";
+}
+function mountMom(){
+  if ($("cpMomModal")) return;
+  var wrap = document.createElement("div");
+  wrap.className = "modal";
+  wrap.id = "cpMomModal";
+  wrap.hidden = true;
+  wrap.innerHTML =
+      '<div class="sheet momsheet" role="dialog" aria-modal="true" aria-labelledby="cpMomTitle">'
+    +   '<div class="sheet-head"><h3 id="cpMomTitle">🔒 쿠폰 사용 확인</h3>'
+    +     '<button class="close" type="button" data-cpclose="1" aria-label="닫기">✕</button></div>'
+    +   '<div class="sheet-body">'
+    +     '<div class="mom-lock" id="cpLock">'
+    +       '<p class="mom-q">쿠폰을 <b>사용 완료</b>로 바꾸려면<br><b>엄마 두 자리 덧셈</b>을 풀어 주세요.</p>'
+    +       '<div class="mom-sum"><b id="cpA">46</b><span>+</span><b id="cpB">28</b><span>=</span>'
+    +         '<input id="cpAns" type="text" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="?" aria-label="덧셈 정답"></div>'
+    +       '<p class="mom-msg" id="cpMsg"></p>'
+    +       '<div class="mom-btns">'
+    +         '<button class="mom-open" id="cpOpen" type="button">사용 완료로 바꾸기 🔓</button>'
+    +         '<button class="mom-newq" id="cpNewQ" type="button">🔄 다른 문제</button>'
+    +       '</div>'
+    +     '</div>'
+    +   '</div>'
+    + '</div>';
+  document.body.appendChild(wrap);
+}
+function openMom(id){
+  pendingId = id || "";
+  mountMom();
+  newQA();
+  var m = $("cpMomModal");
+  if (m) m.hidden = false;
+  setTimeout(function(){ var i = $("cpAns"); if (i) try { i.focus(); } catch(e){} }, 120);
+}
+function closeMom(){
+  var m = $("cpMomModal");
+  if (m) m.hidden = true;
+  pendingId = "";
+}
+function submitMom(){
+  var v = parseInt(String(($("cpAns") || {}).value || "").replace(/[^0-9]/g, ""), 10);
+  if (v === QA.a + QA.b){
+    var id = pendingId;
+    closeMom();
+    if (id) useCoupon(id);
+    return true;
+  }
+  if ($("cpMsg")) $("cpMsg").textContent = "정답이 아니에요. 다시 계산해 보세요 🤔";
+  var box = document.querySelector("#cpMomModal .mom-sum");
+  if (box){ box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake"); }
+  return false;
+}
+
+/* ───────────────────────── 🏆 30일 축하 팝업 ───────────────────────── */
+function popHTML(days){
+  return '<div class="cp-veil"></div>'
+    + '<div class="cp-cardbox" role="dialog" aria-modal="true" aria-labelledby="cpTitle">'
+    +   '<div class="cp-em" aria-hidden="true">🏆</div>'
+    +   '<div class="cp-kicker">' + days + '일 연속 숙제 달성!</div>'
+    +   '<h2 class="cp-title" id="cpTitle">🏆 ' + days + '일 연속 숙제 대성공!</h2>'
+    +   '<div class="cp-ticket"><span aria-hidden="true">🎟️</span><b>원하는 거 사기 쿠폰</b><i>1장</i></div>'
+    +   '<p class="cp-sub">' + days + '일 동안 매일 숙제를 다 끝냈어요!<br>쿠폰은 <b>💰 용돈 → 🎟️ 내 쿠폰 보관함</b>에 들어 있어요.</p>'
+    +   '<div class="cp-btns">'
+    +     '<button class="cp-go" type="button">🎟️ 쿠폰함 보기</button>'
+    +     '<button class="cp-ok" type="button">확인</button>'
+    +   '</div>'
+    + '</div>';
+}
+function showPop(days){
+  var t0 = Date.now();
+  (function waitJackpot(){
+    var jp = $("jpWrap");
+    if (jp && !jp.hidden && Date.now() - t0 < 20000) { setTimeout(waitJackpot, 400); return; }
+    var old = $("cpPop");
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    var wrap = document.createElement("div");
+    wrap.id = "cpPop";
+    wrap.className = "cp-pop";
+    wrap.innerHTML = popHTML(days || MOM_DAYS);
+    document.body.appendChild(wrap);
+    try { if (SB.confetti) SB.confetti(); } catch(e){}
+  })();
+}
+function closePop(){
+  var w = $("cpPop");
+  if (w && w.parentNode) w.parentNode.removeChild(w);
+}
+
+/* ───────────────────────── 📖 연속 독서 보너스 ───────────────────────── */
+function readStreak(){
+  try { if (SB.readlog && SB.readlog.streak) return Number(SB.readlog.streak()) || 0; } catch(e){}
+  return 0;
+}
+function seenInLog(rid){
+  try {
+    var d = (SB.money && SB.money.data) ? SB.money.data() : null;
+    var log = (d && Array.isArray(d.log)) ? d.log : [];
+    for (var i = 0; i < log.length; i++) if (log[i] && log[i].rid === rid) return true;
+  } catch(e){}
+  return false;
+}
+function payReadBonus(){
+  var st = readStreak();
+  if (!st) return 0;
+  var paid = 0;
+  for (var i = 0; i < READ_STEPS.length; i++){
+    var n = READ_STEPS[i][0], amt = READ_STEPS[i][1];
+    if (st < n) continue;
+    var hit = shift(today(), -(st - n));              /* 이어 읽기 n일째가 된 날 */
+    var rid = "readbonus-" + n + "-" + hit;
+    if (seenInLog(rid)) continue;                     /* 같은 회차는 한 번만 */
+    var bal = 0;
+    try { bal = (SB.money && SB.money.credit) ? SB.money.credit(amt, "📖 " + n + "일 연속 독서 보너스", rid) : 0; }
+    catch(e){ bal = 0; }
+    if (bal) paid += amt;
+  }
+  return paid;
+}
+
+/* ───────────────────────── ⭐ 보상금 별 +2 ───────────────────────── */
+function hookStarBonus(){
+  if (!SB.money || !SB.money.credit || SB.money.__star2) return;
+  var orig = SB.money.credit;
+  SB.money.credit = function(amt, why, rid){
+    var bal = orig.apply(this, arguments);
+    try {
+      if (Number(amt) > 0 && SB.earn){
+        var key = "rewardstar|" + (rid || (today() + "|" + why + "|" + Date.now()));
+        SB.earn(key, 2);
+      }
+    } catch(e){}
+    return bal;
+  };
+  SB.money.__star2 = 1;
+}
+
+/* ───────────────────────── 🎁 설정 · 보상 설명 ───────────────────────── */
+function mountRewardGuide(){
+  var body = document.querySelector("#settingsModal .sheet-body");
+  if (!body || $("rewdBox")) return;
+  var box = document.createElement("div");
+  box.id = "rewdBox";
+  box.className = "rewd";
+  box.innerHTML =
+      '<div class="rewd-h"><b>🎁 보상 설명</b><span>엄마가 언제든 확인</span></div>'
+    + '<ul class="rewd-list">'
+    +   '<li><b>📚 온라인 공부 한 과목</b><span>수학 · 영어 · 한자 · 국어 · 역사 — 과목마다 <em>하루 1번</em> 끝내면 <em>+200원</em></span></li>'
+    +   '<li><b>📝 숙제 5일 연속</b><span>그날 숙제를 <em>전부</em> 체크한 날이 5일 이어지면 <em>+5,000원</em> (10·15·20일도 5일마다)</span></li>'
+    +   '<li><b>🏆 숙제 30일 연속</b><span>한 달 내리 다 하면 <em>🎟️ 원하는 거 사기 쿠폰</em> 1장 · 60·90일도 한 장씩</span></li>'
+    +   '<li><b>📖 연속 독서 보너스</b><span>북트리 책 + 빨간펜 ‘읽었어요 ✓’ 합산 — 3일 <em>+200원</em> · 7일 <em>+400원</em> · 14일 <em>+600원</em> · 30일 <em>+1,000원</em></span></li>'
+    +   '<li><b>⭐ 별 보너스</b><span>용돈·보상금이 들어올 때마다 <em>별 +2개</em> · 학습·독서 활동으로도 별이 쌓여요 (구치파치 음식 사기)</span></li>'
+    + '</ul>'
+    + '<p class="rewd-now" id="rewdNow"></p>';
+  body.insertBefore(box, body.firstChild);
+  renderGuideNow();
+}
+function renderGuideNow(){
+  var el = $("rewdNow"); if (!el) return;
+  var hw = 0;
+  try { hw = (SB.streak && SB.streak.info) ? (SB.streak.info().days || 0) : 0; } catch(e){ hw = 0; }
+  var rd = readStreak();
+  var cp = couponList().length, av = availableCount();
+  el.innerHTML = '지금 — 📝 숙제 <b>' + hw + '일</b> 연속 · 📖 독서 <b>' + rd + '일</b> 연속 · 🎟️ 쿠폰 <b>' + cp + '장</b>'
+    + (av ? ' (사용 가능 ' + av + '장)' : '') + ' · ⭐ 별 <b>' + ((SB.starsNow && SB.starsNow()) || 0) + '개</b>';
+}
+
+/* ───────────────────────── 스타일 ───────────────────────── */
+function mountStyle(){
+  if ($("rewdStyle")) return;
+  var st = document.createElement("style");
+  st.id = "rewdStyle";
+  st.textContent = [
+    ".cp-card .cp-list{list-style:none;margin:.5vh 0 0;padding:0;display:flex;flex-direction:column;gap:.4vh;max-height:16vh;overflow-y:auto;}",
+    ".cp-card .cp-empty{margin:0;font-size:.9rem;font-weight:800;color:#8aa2b6;line-height:1.45;}",
+    ".cp-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.2vh .6vh;align-items:center;",
+    "  padding:.5vh .7vh;border-radius:.7rem;background:#fffaf0;box-shadow:inset 0 0 0 .1rem #f3e2bd;}",
+    ".cp-item.used{background:#f6f8fa;box-shadow:inset 0 0 0 .1rem #e3e9ef;}",
+    ".cp-i1{display:flex;flex-direction:column;min-width:0;}",
+    ".cp-i1 b{font-size:.98rem;font-weight:900;color:#8a5a08;line-height:1.25;}",
+    ".cp-item.used .cp-i1 b{color:#7f8f9c;}",
+    ".cp-i1 span{font-size:.78rem;font-weight:800;color:#a98b52;}",
+    ".cp-badge{font-size:.76rem;font-weight:900;padding:.16rem .5rem;border-radius:999px;white-space:nowrap;}",
+    ".cp-badge.on{background:#fff0c6;color:#8a5a08;box-shadow:inset 0 0 0 .1rem #edcf87;}",
+    ".cp-badge.off{background:#eef1f4;color:#7f8f9c;box-shadow:inset 0 0 0 .1rem #dbe3ea;}",
+    ".cp-use{grid-column:1 / -1;height:2.2rem;border-radius:.6rem;background:#fff;color:#a15a12;font-size:.84rem;font-weight:900;",
+    "  box-shadow:inset 0 0 0 .12rem #edcf87;white-space:nowrap;}",
+    ".cp-use:active{transform:scale(.98);}",
+    ".cp-when{grid-column:1 / -1;font-size:.76rem;font-weight:800;color:#8aa2b6;}",
+    ".cp-pop{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;}",
+    ".cp-veil{position:absolute;inset:0;background:radial-gradient(circle at 50% 35%,rgba(255,214,120,.34),rgba(20,40,60,.6));backdrop-filter:blur(2px);}",
+    ".cp-cardbox{position:relative;width:min(92vw,34rem);padding:2.4vh 2.2vh 2vh;border-radius:1.6rem;text-align:center;",
+    "  background:linear-gradient(160deg,#fffdf5,#fff6de 60%,#ffeec2);box-shadow:0 1.6vh 4vh rgba(40,60,90,.34),inset 0 0 0 .22vh #f0d79a;}",
+    ".cp-em{font-size:clamp(40px,7vh,74px);line-height:1;}",
+    ".cp-kicker{margin-top:.6vh;font-size:.95rem;font-weight:900;color:#b8860b;letter-spacing:.02em;}",
+    ".cp-title{margin:.4vh 0 0;font-size:clamp(19px,2.9vh,30px);font-weight:900;color:#8a5a08;letter-spacing:-.02em;line-height:1.24;}",
+    ".cp-ticket{margin:1.4vh auto 0;display:inline-flex;align-items:center;gap:.7rem;padding:.9vh 1.6vh;border-radius:.9rem;",
+    "  background:#fff;box-shadow:inset 0 0 0 .2vh #eec96f,0 .4vh 1vh rgba(200,150,40,.18);}",
+    ".cp-ticket span{font-size:1.7rem;line-height:1;}",
+    ".cp-ticket b{font-size:clamp(15px,2vh,20px);font-weight:900;color:#a15a12;}",
+    ".cp-ticket i{font-style:normal;font-size:.92rem;font-weight:900;color:#c08a1e;background:#fff6de;padding:.1rem .55rem;border-radius:999px;}",
+    ".cp-sub{margin:1.2vh 0 0;font-size:.98rem;font-weight:800;color:#8a7355;line-height:1.5;}",
+    ".cp-btns{margin-top:1.6vh;display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;}",
+    ".cp-go,.cp-ok{height:clamp(44px,6vh,54px);padding:0 1.3rem;border-radius:999px;font-size:1rem;font-weight:900;white-space:nowrap;}",
+    ".cp-go{background:#fff;color:#a15a12;box-shadow:inset 0 0 0 .16rem #eec96f;}",
+    ".cp-ok{background:linear-gradient(135deg,#ffca46,#f2a02a);color:#5c3a00;box-shadow:0 .4vh 1vh rgba(200,140,20,.28);}",
+    ".rewd{padding:1.2vh 1.3vh;border-radius:1rem;background:linear-gradient(160deg,#fffdf6,#fff7e4);box-shadow:inset 0 0 0 .16rem #f0ddb0;}",
+    ".rewd-h{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;}",
+    ".rewd-h b{font-size:1.05rem;font-weight:900;color:#8a5a08;}",
+    ".rewd-h span{margin-left:auto;font-size:.82rem;font-weight:900;color:#b39558;}",
+    ".rewd-list{list-style:none;margin:.8vh 0 0;padding:0;display:flex;flex-direction:column;gap:.55vh;}",
+    ".rewd-list li{display:flex;flex-direction:column;gap:.1vh;padding:.55vh .7vh;border-radius:.7rem;background:rgba(255,255,255,.86);",
+    "  box-shadow:inset 0 0 0 .08rem #f2e3bd;}",
+    ".rewd-list b{font-size:.94rem;font-weight:900;color:#7a5a13;}",
+    ".rewd-list span{font-size:.86rem;font-weight:800;color:#7f8f9c;line-height:1.42;}",
+    ".rewd-list em{font-style:normal;font-weight:900;color:#c1553a;}",
+    ".rewd-now{margin:.8vh 0 0;font-size:.84rem;font-weight:800;color:#8a7355;line-height:1.45;}",
+    ".rewd-now b{color:#0f7a55;}",
+    "@media (max-width:560px){.cp-card .cp-list{max-height:none;} .rewd-list span{font-size:.82rem;}}"
+  ].join("\n");
+  document.head.appendChild(st);
+}
+
+/* ───────────────────────── 연결 ───────────────────────── */
+function bind(){
+  mountStyle();
+  mountCard();
+  mountRewardGuide();
+  mountMom();
+  var pop = $("cpPop");
+  if (pop && !pop.__b){
+    pop.__b = 1;
+    pop.addEventListener("click", function(e){
+      if (e.target.closest(".cp-ok") || e.target.classList.contains("cp-veil")) { closePop(); return; }
+      if (e.target.closest(".cp-go")){
+        closePop();
+        try { SB.go("piggy", "main"); } catch(err){}
+        setTimeout(function(){ var c = $("cpCard"); if (c) try { c.scrollIntoView({ block:"nearest" }); } catch(e){} }, 320);
+      }
+    });
+  }
+  var card = $("cpCard");
+  if (card && !card.__b){
+    card.__b = 1;
+    card.addEventListener("click", function(e){
+      var b = e.target.closest("[data-cpuse]");
+      if (b) openMom(b.getAttribute("data-cpuse"));
+    });
+  }
+  var modal = $("cpMomModal");
+  if (modal && !modal.__b){
+    modal.__b = 1;
+    modal.addEventListener("click", function(e){
+      if (e.target === modal || e.target.closest("[data-cpclose]")) { closeMom(); return; }
+      if (e.target.closest("#cpOpen")) { submitMom(); return; }
+      if (e.target.closest("#cpNewQ")) { newQA(); return; }
+    });
+    var ans = $("cpAns");
+    if (ans) ans.addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); submitMom(); } });
+  }
+}
+
+/* 팝업 버튼은 위임으로 한 번만 건다(팝업을 다시 그려도 살아 있게) */
+document.addEventListener("click", function(e){
+  if (!e.target || !e.target.closest) return;
+  var w = e.target.closest("#cpPop");
+  if (!w) return;
+  if (e.target.closest(".cp-ok") || (e.target.classList && e.target.classList.contains("cp-veil"))) { closePop(); return; }
+  if (e.target.closest(".cp-go")){
+    closePop();
+    try { SB.go("piggy", "main"); } catch(err){}
+    setTimeout(function(){ var c = $("cpCard"); if (c) try { c.scrollIntoView({ block:"nearest" }); } catch(e){} }, 320);
+  }
+}, true);
+
+/* 숙제 연속 일수 → 30일마다 쿠폰 */
+function hookStreak(){
+  if (!SB.streak || !SB.streak.note || SB.streak.__cp) return;
+  var orig = SB.streak.note;
+  SB.streak.note = function(st){
+    var info = orig.apply(this, arguments);
+    try {
+      var d = info && info.days ? Number(info.days) : 0;
+      if (d >= MOM_DAYS && d % MOM_DAYS === 0){
+        var it = issueCoupon(d);
+        if (it) showPop(d);
+      }
+    } catch(e){}
+    return info;
+  };
+  SB.streak.__cp = 1;
+}
+
+/* 연속 독서 보너스는 독서 기록이 바뀔 때마다 */
+function hookReadlog(){
+  if (!SB.readlog || SB.readlog.__rw) return;
+  var orig = SB.readlog.render;
+  SB.readlog.render = function(){
+    var r = (typeof orig === "function") ? orig.apply(this, arguments) : null;
+    try { payReadBonus(); } catch(e){}
+    try { renderGuideNow(); } catch(e){}
+    return r;
+  };
+  SB.readlog.__rw = 1;
+}
+
+/* 용돈 탭을 열 때마다 쿠폰·보상 현황 새로 */
+if (typeof SB.onShow === "object" && SB.onShow){
+  var prevPiggy = SB.onShow.piggy;
+  SB.onShow.piggy = function(){
+    if (prevPiggy){ try { prevPiggy.apply(this, arguments); } catch(e){} }
+    try { mountCard(); renderCard(); renderGuideNow(); } catch(e){}
+  };
+}
+
+SB.coupons = {
+  name: COUPON_NAME,
+  list: couponList,
+  count: function(){ return couponList().length; },
+  available: availableCount,
+  issue: issueCoupon,
+  use: useCoupon,
+  popup: function(days){ showPop(days || MOM_DAYS); },
+  close: closePop,
+  render: renderCard,
+  readBonus: payReadBonus,
+  guide: renderGuideNow,
+  clear: function(){ try { localStorage.removeItem(CKEY); } catch(e){} renderCard(); }
+};
+
+function boot(){
+  try { mountStyle(); } catch(e){}
+  try { hookStarBonus(); } catch(e){}
+  try { hookStreak(); } catch(e){}
+  try { hookReadlog(); } catch(e){}
+  try { bind(); } catch(e){}
+  /* 오늘 이미 30일째인데 팝업을 놓쳤다면 한 번만 채워 준다 */
+  setTimeout(function(){
+    try {
+      var d = (SB.streak && SB.streak.info) ? Number(SB.streak.info().days) || 0 : 0;
+      if (d >= MOM_DAYS && d % MOM_DAYS === 0){
+        var it = issueCoupon(d);
+        if (it) showPop(d);
+      }
+    } catch(e){}
+    try { payReadBonus(); } catch(e){}
+    try { renderGuideNow(); } catch(e){}
+  }, 900);
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+else boot();
+setTimeout(function(){ try { bind(); } catch(e){} }, 700);
 })();
 </script>
 <script>
