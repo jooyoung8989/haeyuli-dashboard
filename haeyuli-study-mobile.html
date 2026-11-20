@@ -16397,6 +16397,13 @@ function wireSettings(){
   }
 }
 
+/* 어느 경로로 화면이 바뀌어도 영어 하위 메뉴 링크를 다시 붙인다 */
+document.addEventListener("click", function(){
+  clearTimeout(window.__rbExtT);
+  window.__rbExtT = setTimeout(addReadingN, 60);
+}, true);
+window.addEventListener("hashchange", function(){ setTimeout(addReadingN, 80); });
+
 /* ---------- 9. 시작 ---------- */
 function boot(){
   try {
