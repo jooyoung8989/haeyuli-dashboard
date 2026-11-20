@@ -20506,6 +20506,10 @@ else boot();
   border-radius:999px;font-size:clamp(10.5px,1.32vh,14px);font-weight:800;color:#3f6479;background:#f5fafd;
   box-shadow:inset 0 0 0 1.2px #dde8ef;white-space:nowrap;}
 .ev-chan:hover{background:#eaf6ff;color:#0e5a86;}
+.ev-chan.on{background:#e9f6ff;color:#0e5a86;box-shadow:inset 0 0 0 1.6px #9dcde9;}
+.ev-chan:active{transform:scale(.97);}
+.ev-all{background:#edf4f8;color:#4a6d84;}
+.ev-all.on{background:#e2eef8;color:#0e5a86;box-shadow:inset 0 0 0 1.6px #9dcde9;}
 .ev-grid{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;
   grid-template-columns:repeat(auto-fill,minmax(clamp(150px,17vw,205px),1fr));gap:.8vh;align-content:start;
   grid-auto-rows:max-content;padding-right:.2vh;}
@@ -20610,6 +20614,36 @@ body.mob .vh-modal{padding:.6rem;}
 body.mob .vh-box{width:100%;max-height:88vh;}
 body.mob .vh-open{font-size:.66rem;}
 body.mob .vh-x{height:2.4rem;padding:0 .85rem;font-size:.8rem;}
+
+/* =====================================================================
+   📱 좁은 화면(태블릿 세로·휴대폰): 상단 탭·과목 줄·하위 탭·긴 칩 줄을
+   손가락으로 옆으로 슬라이드해서 끝까지 볼 수 있게
+   ===================================================================== */
+.tabs-main,.subs,.ev-steps,.ev-chans,.ep-chips,.sw-list,.hj-chips,.sci-row,.hints{
+  -webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain;
+  scrollbar-width:none;}
+.tabs-main::-webkit-scrollbar,.subs::-webkit-scrollbar,.ev-steps::-webkit-scrollbar,
+.ev-chans::-webkit-scrollbar,.ep-chips::-webkit-scrollbar,.sw-list::-webkit-scrollbar,
+.hj-chips::-webkit-scrollbar,.sci-row::-webkit-scrollbar{display:none;height:0;}
+.tabs-main>*,.subs>*,.ev-steps>*,.ev-chans>*,.ep-chips>*,.sw-list>*,.hj-chips>*{flex:0 0 auto;}
+/* 잘린 쪽에 더 있다는 표시 — 그쪽 가장자리만 살짝 흐리게 */
+.hx-l{-webkit-mask-image:linear-gradient(to right,rgba(0,0,0,0),#000 14px);
+  mask-image:linear-gradient(to right,rgba(0,0,0,0),#000 14px);}
+.hx-r{-webkit-mask-image:linear-gradient(to left,rgba(0,0,0,0),#000 16px);
+  mask-image:linear-gradient(to left,rgba(0,0,0,0),#000 16px);}
+.hx-l.hx-r{-webkit-mask-image:linear-gradient(to right,rgba(0,0,0,0),#000 14px,#000 calc(100% - 16px),rgba(0,0,0,0));
+  mask-image:linear-gradient(to right,rgba(0,0,0,0),#000 14px,#000 calc(100% - 16px),rgba(0,0,0,0));}
+
+@media (max-width:1000px){
+  /* 탭 줄 · 과목 줄 · 하위 탭 줄을 각각 한 줄씩 차지하게 하고, 그 줄 안에서 옆으로 슬라이드 */
+  .tabbar{display:flex;flex-direction:row;flex-wrap:wrap;align-items:stretch;gap:.4rem;
+    height:auto;min-width:0;padding:0;}
+  .tabs-main{flex:1 1 100%;width:100%;max-width:100%;min-width:0;height:auto;
+    flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;padding:.25rem;}
+  .subs,#subs,#subs2{flex:1 1 100%;width:100%;max-width:100%;min-width:0;
+    margin-left:0;height:auto;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;padding:.25rem;}
+  .tab,.subtab{flex:0 0 auto;}
+}
 
 </style>
 <div class="vh-modal" id="vhModal" hidden>
@@ -20782,7 +20816,7 @@ function renderSci(){
 /* ---------------- 🎬 영어 영상 (영어 탭) ---------------- */
 var STEPS = EN.map(function(g){ return { em:g.em, nm:g.nm }; })
   .concat([{ em:"📺", nm:"한 편씩 골라보기" }]);
-var evG = 0;
+var evG = 0, evCh = -1;   /* evCh: 고른 채널 번호(-1 = 전체 채널) */
 function renderEng(){
   var steps = $("evSteps"), chans = $("evChans"), grid = $("evGrid"), bar = $("epBar");
   if (!steps || !grid) return;
@@ -20801,10 +20835,18 @@ function renderEng(){
   if (chans) chans.hidden = false;
   if (bar) bar.hidden = true;
   var g = EN[evG];
-  if (chans) chans.innerHTML = g.chans.map(function(c){
-    return '<span class="ev-chan">' + c.em + " " + esc(c.nm) + "</span>";
-  }).join("");
-  grid.innerHTML = g.chans.map(function(c){
+  if (evCh >= g.chans.length) evCh = -1;
+  /* 채널 칩 = 필터 버튼 (전체 채널 + 채널별). 누른 채널 영상만 아래에 보인다. */
+  if (chans) chans.innerHTML =
+      '<button class="ev-chan ev-all' + (evCh < 0 ? " on" : "") + '" type="button" data-evch="-1"'
+      + ' aria-pressed="' + (evCh < 0 ? "true" : "false") + '">📚 전체 채널</button>'
+    + g.chans.map(function(c, i){
+        var on = i === evCh;
+        return '<button class="ev-chan' + (on ? " on" : "") + '" type="button" data-evch="' + i + '"'
+          + ' aria-pressed="' + (on ? "true" : "false") + '">' + c.em + " " + esc(c.nm) + "</button>";
+      }).join("");
+  var show = evCh < 0 ? g.chans : [g.chans[evCh]];
+  grid.innerHTML = show.map(function(c){
     return c.vids.map(function(v){ return cardHTML(v, "eng-vid"); }).join("");
   }).join("");
   try { grid.scrollTop = 0; } catch(e){}
@@ -20910,7 +20952,21 @@ function bind(){
     steps.addEventListener("click", function(e){
       var b = e.target.closest ? e.target.closest("[data-ev]") : null;
       if (!b) return;
-      evG = parseInt(b.getAttribute("data-ev"), 10) || 0;
+      var gi = parseInt(b.getAttribute("data-ev"), 10) || 0;
+      if (gi !== evG) evCh = -1;   /* 단계를 바꾸면 채널 선택 해제 */
+      evG = gi;
+      renderEng();
+    });
+  }
+  var evc = $("evChans");
+  if (evc && !evc.__vb){
+    evc.__vb = 1;
+    evc.addEventListener("click", function(e){
+      var b = e.target.closest ? e.target.closest("[data-evch]") : null;
+      if (!b) return;
+      var i = parseInt(b.getAttribute("data-evch"), 10);
+      if (isNaN(i)) i = -1;
+      evCh = (i === evCh) ? -1 : i;   /* 고른 칩을 한 번 더 누르면 전체 채널로 */
       renderEng();
     });
   }
@@ -21006,6 +21062,68 @@ else init();
 
 SB.videoHub = { sci: SCI, en: EN, epi: EPI, open: openVid, close: closeVid,
   renderSci: renderSci, renderEng: renderEng, renderEpi: renderEpi };
+})();
+
+/* =====================================================================
+   📱 가로 칩 줄 도우미 — 손가락 슬라이드 · 선택 칩 가운데로 · 잘린 쪽 흐림 힌트
+   ===================================================================== */
+(function(){
+"use strict";
+var HROW = ".tabs-main,.subs,.ev-steps,.ev-chans,.ep-chips,.sw-list,.hj-chips,.sci-row,.hints";
+function rowOf(el){
+  var r = el && el.parentElement;
+  while (r && r !== document.body){
+    if (r.matches && r.matches(HROW) && r.scrollWidth > r.clientWidth + 1) return r;
+    r = r.parentElement;
+  }
+  return null;
+}
+function hint(r){
+  if (!r || !r.classList) return;
+  var max = r.scrollWidth - r.clientWidth;
+  r.classList.toggle("hx-l", max > 1 && r.scrollLeft > 2);
+  r.classList.toggle("hx-r", max > 1 && r.scrollLeft < max - 2);
+}
+function sync(){
+  var rs = document.querySelectorAll(HROW);
+  for (var i = 0; i < rs.length; i++) hint(rs[i]);
+}
+function later(){
+  setTimeout(sync, 0); setTimeout(sync, 150); setTimeout(sync, 500);
+}
+function center(r){
+  if (!r) return;
+  var on = r.querySelector(".on") || r.querySelector('[aria-pressed="true"]');
+  if (!on) return;
+  var rr = r.getBoundingClientRect(), er = on.getBoundingClientRect();
+  if (er.left < rr.left + 3 || er.right > rr.right - 3){
+    try { on.scrollIntoView({ behavior:"smooth", inline:"center", block:"nearest" }); }
+    catch(e){ try { on.scrollIntoView(); } catch(e2){} }
+  }
+}
+/* 화면이 열릴 때 지금 고른 탭이 잘려 있으면 가운데로 */
+function centerActive(){
+  ["#tabsMain", "#subs", "#subs2", "#evSteps", "#evChans", "#epChips"].forEach(function(s){
+    var r = document.querySelector(s);
+    if (r && !r.hidden && r.scrollWidth > r.clientWidth + 1) center(r);
+  });
+  sync();
+}
+document.addEventListener("click", function(e){
+  var t = e.target.closest ? e.target.closest(".tab,.subtab,.sw-w,.ev-chan,.ep-chip,.sci-chip") : null;
+  later();
+  if (!t) return;
+  var r = rowOf(t) || (t.parentElement && t.parentElement.matches && t.parentElement.matches(HROW) ? t.parentElement : null);
+  if (r) setTimeout(function(){ center(r); hint(r); }, 90);
+}, true);
+document.addEventListener("scroll", function(e){
+  var r = e.target;
+  if (r && r.nodeType === 1 && r.matches && r.matches(HROW)) hint(r);
+}, true);
+window.addEventListener("resize", later);
+window.addEventListener("orientationchange", later);
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ later(); setTimeout(centerActive, 350); });
+else { later(); setTimeout(centerActive, 350); }
 })();
 
 </script>
