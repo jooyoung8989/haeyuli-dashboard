@@ -3282,7 +3282,7 @@ body .wk-sub i{font-size:.95rem;}
 .hq-next{width:100%;height:5vh;min-height:44px;border-radius:13px;background:linear-gradient(140deg,#46c78d,#1f9e6a);color:#fff;
   font-size:clamp(15px,2vh,23px);font-weight:900;box-shadow:0 .4vh 1vh rgba(30,140,95,.26);}
 .hq-next:active{transform:scale(.99);}
-.hq-done{display:flex;flex-direction:column;gap:.7vh;padding:1.6vh 1.2vh;border-radius:15px;background:#f6fbf8;
+.hq-done{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:.7vh;padding:1.6vh 1.2vh;border-radius:15px;background:#f6fbf8;
   box-shadow:inset 0 0 0 1.5px #c5e8d6;text-align:center;}
 .hq-done .big{font-size:clamp(19px,2.6vh,30px);font-weight:900;color:#14683f;letter-spacing:-.02em;}
 .hq-done p{margin:0;font-size:clamp(13px,1.7vh,20px);font-weight:700;color:#3f5c4d;line-height:1.55;}
@@ -5704,7 +5704,7 @@ body.mob .dy-viewmeta{font-size:.8rem;}
       <div class="hist-block" data-secblock="quiz">
         <div class="hist-head">
           <div class="hist-title"><b>🎯 역사 퀴즈</b><span>실사 사진 16장 중 8문제 · 이름을 맞혀 보세요</span></div>
-          <div class="hq-meter"><b id="hqProg">1 / 8</b><span id="hqScore">⭐ 0</span></div>
+          <div class="hq-meter"><b id="hqProg">1 / 8</b><span id="hqScore">✅ 정답 0</span></div>
         </div>
         <div class="hq-wrap">
           <div class="hq-stage" id="hqStage">
@@ -14007,7 +14007,7 @@ function curQ(){ return H.set[H.i] || null; }
 function meter(){
   var p = $("hqProg"), s = $("hqScore");
   if (p) p.textContent = (H.done ? SETN : Math.min(H.i + 1, SETN)) + " / " + SETN;
-  if (s) s.textContent = "⭐ " + H.ok;
+  if (s) s.textContent = "✅ 정답 " + H.ok;
 }
 function optText(it, oi){ return oi === 0 ? it.a : it.d[oi - 1]; }
 
