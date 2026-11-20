@@ -5019,6 +5019,7 @@ body.mob .dy-viewmeta{font-size:.8rem;}
         <div class="pg-top">
           <span class="pg-h">🐷 내 저금통</span>
           <b class="pg-amount" id="pgAmount">0원</b>
+          <span class="pg-fillpct" id="pgFillTxt" aria-label="저금통 채운 정도">0%</span>
         </div>
         <div class="pg-art" id="pgArt">
           <svg class="pg-pig" viewBox="0 0 320 240" role="img" aria-label="돼지 저금통">
@@ -5039,6 +5040,21 @@ body.mob .dy-viewmeta{font-size:.8rem;}
               <ellipse cx="122" cy="206" rx="17" ry="11" fill="#d8b2bd"/>
               <ellipse cx="182" cy="206" rx="17" ry="11" fill="#d8b2bd"/>
             </g>
+            <defs>
+              <clipPath id="pgBelly"><ellipse cx="140" cy="150" rx="76" ry="54"/></clipPath>
+              <linearGradient id="pgFillG" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffd76a"/><stop offset=".38" stop-color="#ffc0cf"/>
+                <stop offset="1" stop-color="#ff9ab6"/>
+              </linearGradient>
+            </defs>
+            <g clip-path="url(#pgBelly)">
+              <rect id="pgFillRect" x="64" y="94" width="152" height="112" fill="url(#pgFillG)" style="transform:translateY(112px);transition:transform .9s cubic-bezier(.2,.8,.2,1)"/>
+              <g id="pgFillCoins" style="transform:translateY(106px);transition:transform .9s cubic-bezier(.2,.8,.2,1)">
+                <circle cx="108" cy="204" r="9" fill="#ffd166" stroke="#e0a92c" stroke-width="2"/>
+                <circle cx="140" cy="200" r="9" fill="#ffdf8a" stroke="#e0a92c" stroke-width="2"/>
+                <circle cx="172" cy="204" r="9" fill="#ffd166" stroke="#e0a92c" stroke-width="2"/>
+              </g>
+            </g>
             <g class="pg-coinstack" id="pgCoins"></g>
           </svg>
           <div class="pg-fly" id="pgFly" aria-hidden="true"></div>
@@ -5046,6 +5062,7 @@ body.mob .dy-viewmeta{font-size:.8rem;}
         <div class="pg-acts">
           <button class="pg-btn mom" id="pgMom" type="button">🔒 엄마 용돈 주기</button>
           <button class="pg-btn bank" id="pgBank" type="button">🏦 은행으로 가기</button>
+          <button class="pg-btn spend" id="pgSpend" type="button">➖ 용돈 썼어요</button>
         </div>
       </div>
       <aside class="pg-side">
@@ -5059,8 +5076,9 @@ body.mob .dy-viewmeta{font-size:.8rem;}
           <button class="pg-go" id="pgGoBank" type="button">통장 보기 →</button>
         </div>
         <div class="pg-card pg-logcard">
-          <div class="pg-ch"><b>📋 최근 내역</b></div>
-          <ul class="pg-log" id="pgLog"></ul>
+          <div class="pg-ch"><b>📒 용돈 기입장</b><span id="pgMonthSum">이번 달 0원</span></div>
+          <div class="pg-months" id="pgMonths" role="tablist" aria-label="월 고르기"></div>
+          <ul class="pg-log pg-ledger" id="pgLedger"></ul>
         </div>
       </aside>
     </section>
@@ -12244,7 +12262,7 @@ function addPiggy(amt, why, rid){
   var d = data();
   d.piggy = Math.max(0, (Number(d.piggy) || 0) + amt);
   d.log.unshift({ t:(amt > 0 ? "+" : "") + won(amt), amt:amt, at:today() + " " + new Date().toTimeString().slice(0, 5), why:why || "", rid:rid || "" });
-  d.log = d.log.slice(0, 20);
+  d.log = d.log.slice(0, 600);
   save(d);
   return d;
 }
@@ -12326,7 +12344,7 @@ function deposit(){
   d.piggy -= amt;
   d.bank.push({ id:"d" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36), amt:amt, at:at, mat:addDays(at, 30), out:"" });
   d.log.unshift({ t:"-🏦 " + won(amt), amt:-amt, at:at + " " + new Date().toTimeString().slice(0, 5), why:"은행 저금" });
-  d.log = d.log.slice(0, 20);
+  d.log = d.log.slice(0, 600);
   save(d);
   pick = 0;
   renderBank(); renderPiggy();
@@ -14569,7 +14587,7 @@ function mergeMoney(lm, cm, base){
       var ka = [a.at, a.t, a.why].join("|"), kb = [b.at, b.t, b.why].join("|");
       return ka < kb ? 1 : (ka > kb ? -1 : 0);
     })
-    .slice(0, 20);
+    .slice(0, 600);
   var banks = border.map(function(id){ return bank[id]; });
   banks.sort(function(a, b){ return String(a.at || "").localeCompare(String(b.at || "")) || String(a.id).localeCompare(String(b.id)); });
   return { piggy:piggy, bank:banks, log:logs };
@@ -15488,6 +15506,299 @@ function boot(){
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
 else boot();
 setTimeout(function(){ try { bind(); } catch(e){} }, 700);
+})();
+</script>
+<script>
+/* =====================================================================
+   💰 용돈 화면 — 저금통이 차오르는 연출 · ➖ 용돈 썼어요 · 📒 월별 용돈 기입장
+   · 잔액이 늘면 돼지 배 안의 분홍/황금 채움과 동전이 함께 올라온다
+   · 쓰기는 엄마 두 자리 덧셈 확인을 거쳐 실제 잔액에서 차감 + 지출 내역(-금액원 · 사용처)
+   · 내역은 1월~12월 탭으로 보고, 그 달 받은 합계·쓴 합계를 함께 보여 준다
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+if (window.__PIGGYUI) return;
+window.__PIGGYUI = 1;
+
+var GOAL = 20000;                 /* 저금통이 가득 차는 기준 */
+var MONTH = "";                   /* 고른 달 YYYY-MM (비어 있으면 이번 달) */
+var QA = { a:0, b:0 };
+
+function $(id){ return document.getElementById(id); }
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function today(){
+  try { if (SB.today) return SB.today(); } catch(e){}
+  var d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+function thisMonth(){ return today().slice(0, 7); }
+function monthOf(at){ return String(at || "").slice(0, 7); }
+function money(){
+  try { return (SB.money && SB.money.data) ? SB.money.data() : { piggy:0, log:[] }; }
+  catch(e){ return { piggy:0, log:[] }; }
+}
+function won(n){ return (Number(n) || 0).toLocaleString("ko-KR") + "원"; }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c];
+  });
+}
+function toast(m){ try { if (SB.toast) SB.toast(m); } catch(e){} }
+function syncFam(){
+  try { if (SB.family && SB.family.sync) setTimeout(function(){ try { SB.family.sync(); } catch(e){} }, 150); } catch(e){}
+}
+
+/* ── 저금통 채움 ── */
+function level(){ return Math.max(0, Math.min(1, (Number(money().piggy) || 0) / GOAL)); }
+function paintFill(){
+  var L = level(), rect = $("pgFillRect"), coins = $("pgFillCoins"), txt = $("pgFillTxt");
+  if (rect) rect.style.transform = "translateY(" + ((1 - L) * 112).toFixed(1) + "px)";
+  if (coins) coins.style.transform = "translateY(" + ((1 - L) * 106).toFixed(1) + "px)";
+  if (txt){
+    txt.textContent = Math.round(L * 100) + "%";
+    txt.classList.toggle("full", L >= 0.75);
+  }
+}
+
+/* ── 📒 월별 기입장 ── */
+function monthKey(){ return MONTH || thisMonth(); }
+function renderMonths(){
+  var box = $("pgMonths"); if (!box) return;
+  var log = money().log || [], y = monthKey().slice(0, 4), sel = monthKey(), h = "";
+  for (var m = 1; m <= 12; m++){
+    var key = y + "-" + pad2(m), has = false;
+    for (var i = 0; i < log.length; i++) if (monthOf(log[i].at) === key) { has = true; break; }
+    h += '<button type="button" class="pg-m' + (key === sel ? " on" : "") + (has ? " has" : "") + '"'
+      + ' data-pgm="' + key + '" role="tab" aria-selected="' + (key === sel) + '">' + m + '월</button>';
+  }
+  if (box.innerHTML !== h) box.innerHTML = h;
+}
+function renderLedger(){
+  var list = $("pgLedger"); if (!list) return;
+  var d = money(), log = d.log || [], sel = monthKey();
+  var rows = [], inc = 0, exp = 0, i;
+  for (i = 0; i < log.length; i++){
+    if (monthOf(log[i].at) !== sel) continue;
+    rows.push(log[i]);
+    if (Number(log[i].amt) > 0) inc += Number(log[i].amt);
+    else exp += Math.abs(Number(log[i].amt) || 0);
+  }
+  var sum = $("pgMonthSum");
+  if (sum){
+    sum.innerHTML = rows.length
+      ? ('받음 <b class="in">+' + won(inc) + '</b> · 씀 <b class="out">-' + won(exp) + '</b>')
+      : '이 달 내역 없음';
+  }
+  if (!rows.length){
+    list.innerHTML = '<li class="empty">' + sel.slice(5).replace(/^0/, "") + '월에는 아직 내역이 없어요</li>';
+    return;
+  }
+  list.innerHTML = rows.map(function(x){
+    var plus = Number(x.amt) > 0;
+    var when = String(x.at || "").slice(5);
+    return '<li class="' + (plus ? "in" : "out") + '">'
+      +   '<b>' + esc(x.t) + '</b>'
+      +   '<span>' + (x.why ? esc(x.why) + " · " : "") + esc(when) + '</span>'
+      + '</li>';
+  }).join("");
+}
+function renderAll(){ paintFill(); renderMonths(); renderLedger(); }
+
+/* ── ➖ 용돈 썼어요 ── */
+function newQA(){
+  QA.a = 11 + Math.floor(Math.random() * 78);
+  QA.b = 11 + Math.floor(Math.random() * (99 - QA.a));
+  if (QA.b < 11) QA.b = 11;
+  if ($("spA")) $("spA").textContent = QA.a;
+  if ($("spB")) $("spB").textContent = QA.b;
+  if ($("spAns")) $("spAns").value = "";
+  if ($("spMsg")) $("spMsg").textContent = "";
+}
+function mountSpend(){
+  if ($("pgSpendModal")) return;
+  var w = document.createElement("div");
+  w.className = "modal";
+  w.id = "pgSpendModal";
+  w.hidden = true;
+  w.innerHTML =
+      '<div class="sheet momsheet" role="dialog" aria-modal="true" aria-labelledby="spTitle">'
+    +   '<div class="sheet-head"><h3 id="spTitle">➖ 용돈 썼어요</h3>'
+    +     '<button class="close" type="button" data-spclose="1" aria-label="닫기">✕</button></div>'
+    +   '<div class="sheet-body">'
+    +     '<p class="sp-now">지금 저금통 <b id="spPiggy">0원</b></p>'
+    +     '<label class="frow"><span>쓴 금액</span>'
+    +       '<input id="spAmt" type="text" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="예: 1000"></label>'
+    +     '<label class="frow"><span>어디에 썼나요</span>'
+    +       '<input id="spWhy" type="text" autocomplete="off" maxlength="30" placeholder="예: 문구점 연필"></label>'
+    +     '<div class="mom-lock sp-lock">'
+    +       '<p class="mom-q">엄마가 확인해 주세요. <b>두 자리 덧셈</b>을 풀면 차감돼요.</p>'
+    +       '<div class="mom-sum"><b id="spA">46</b><span>+</span><b id="spB">28</b><span>=</span>'
+    +         '<input id="spAns" type="text" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="?" aria-label="덧셈 정답"></div>'
+    +       '<p class="mom-msg" id="spMsg"></p>'
+    +     '</div>'
+    +     '<div class="mom-btns">'
+    +       '<button class="mom-open" id="spGo" type="button">➖ 쓰기 (차감)</button>'
+    +       '<button class="mom-newq" id="spNewQ" type="button">🔄 다른 문제</button>'
+    +     '</div>'
+    +   '</div>'
+    + '</div>';
+  document.body.appendChild(w);
+}
+function openSpend(){
+  mountSpend();
+  newQA();
+  if ($("spPiggy")) $("spPiggy").textContent = won(money().piggy);
+  if ($("spAmt")) $("spAmt").value = "";
+  if ($("spWhy")) $("spWhy").value = "";
+  var m = $("pgSpendModal");
+  if (m) m.hidden = false;
+  setTimeout(function(){ var i = $("spAmt"); if (i) try { i.focus(); } catch(e){} }, 120);
+}
+function closeSpend(){ var m = $("pgSpendModal"); if (m) m.hidden = true; }
+function submitSpend(){
+  var ans = parseInt(String(($("spAns") || {}).value || "").replace(/[^0-9]/g, ""), 10);
+  var amt = parseInt(String(($("spAmt") || {}).value || "").replace(/[^0-9]/g, ""), 10);
+  var why = String(($("spWhy") || {}).value || "").trim();
+  if (ans !== QA.a + QA.b){
+    if ($("spMsg")) $("spMsg").textContent = "정답이 아니에요. 다시 계산해 보세요 🤔";
+    var box = document.querySelector("#pgSpendModal .mom-sum");
+    if (box){ box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake"); }
+    return false;
+  }
+  if (!amt || amt <= 0){ if ($("spMsg")) $("spMsg").textContent = "쓴 금액을 적어 주세요 ✏️"; return false; }
+  var bal = Number(money().piggy) || 0;
+  if (amt > bal){ if ($("spMsg")) $("spMsg").textContent = "저금통에 " + won(bal) + "밖에 없어요"; return false; }
+  if (!why){ if ($("spMsg")) $("spMsg").textContent = "어디에 썼는지 적어 주세요 ✏️"; return false; }
+  var okSpend = false;
+  try {
+    if (SB.money && SB.money.credit){
+      SB.money.credit(-amt, why, "spend-" + Date.now().toString(36));
+      okSpend = true;
+    }
+  } catch(e){ okSpend = false; }
+  if (!okSpend){ if ($("spMsg")) $("spMsg").textContent = "차감하지 못했어요. 잠시 뒤 다시 해 주세요"; return false; }
+  closeSpend();
+  renderAll();
+  toast("➖ " + won(amt) + " · " + why + " — 저금통에서 뺐어요");
+  syncFam();
+  return true;
+}
+
+/* ── 스타일 ── */
+function mountStyle(){
+  if ($("pgUiStyle")) return;
+  var st = document.createElement("style");
+  st.id = "pgUiStyle";
+  st.textContent = [
+    /* 저금통은 조금 더 컴팩트하게 */
+    ".pg-pig{width:min(100%,42vh);height:auto;max-height:min(36vh,330px);aspect-ratio:320/240;}",
+    ".pg-art{padding:.4vh 0;}",
+    ".pg-fillpct{font-size:.95rem;font-weight:900;color:#c2889c;background:#fff0f5;border-radius:999px;",
+    "  padding:.16rem .6rem;box-shadow:inset 0 0 0 .1rem #f7d7e3;white-space:nowrap;}",
+    ".pg-fillpct.full{color:#a06a00;background:#fff6de;box-shadow:inset 0 0 0 .1rem #eed08a;}",
+    /* 버튼 3개 */
+    ".pg-btn.spend{background:linear-gradient(135deg,#ffd9d3,#ffb3a8);color:#8a2f22;box-shadow:0 .4vh 1.2vh rgba(220,120,100,.28);}",
+    ".pg-acts{gap:.6vh;} .pg-btn{min-height:3.2rem;font-size:1.05rem;white-space:nowrap;}",
+    "@media (min-width:720px){ .pg-months{flex-wrap:wrap;overflow:visible;} }",
+    "@media (max-width:560px){ .pg-btn{flex:1 1 44%;font-size:.98rem;padding:0 .5rem;} .pg-btn.spend{flex:1 1 100%;} }",
+    /* 월 탭 */
+    ".pg-months{display:flex;gap:.28rem;overflow-x:auto;margin:.5vh 0 .2vh;padding-bottom:.2rem;scrollbar-width:thin;}",
+    ".pg-m{flex:0 0 auto;height:2rem;padding:0 .62rem;border-radius:999px;background:#f6f9fb;color:#7f97a9;",
+    "  font-size:.82rem;font-weight:900;box-shadow:inset 0 0 0 .1rem #e3ebf2;white-space:nowrap;}",
+    ".pg-m.has{background:#eef7ff;color:#1c7099;box-shadow:inset 0 0 0 .1rem #cfe8f7;}",
+    ".pg-m.on{background:#fff;color:#0d6f9e;box-shadow:inset 0 0 0 .16rem #7cc6ee,0 .2vh .6vh rgba(60,140,190,.16);}",
+    ".pg-ch b{white-space:nowrap;}",
+    ".pg-ch span b{font-size:.85rem;}",
+    ".pg-ch span .in{color:#15805a;} .pg-ch span .out{color:#c0554a;}",
+    /* 기입장 목록 */
+    ".pg-ledger{max-height:22vh;}",
+    ".pg-ledger li{flex-direction:column;align-items:flex-start;gap:.05rem;padding:.34rem .5rem;}",
+    ".pg-ledger li b{font-size:.95rem;}",
+    ".pg-ledger li span{font-size:.76rem;line-height:1.35;}",
+    ".pg-ledger li.in{background:#f3fcf7;} .pg-ledger li.in b{color:#15805a;}",
+    ".pg-ledger li.out{background:#fff7f5;} .pg-ledger li.out b{color:#c0554a;}",
+    ".sp-now{margin:0 0 .6vh;font-size:.98rem;font-weight:900;color:#1e5478;}",
+    ".sp-now b{color:#0d6f9e;}",
+    ".sp-lock{background:none;box-shadow:none;padding:0;margin-top:1vh;}",
+    "@media (max-height:700px){ .pg-ledger{max-height:16vh;} }"
+  ].join("\n");
+  document.head.appendChild(st);
+}
+
+/* ── 연결 ── */
+function bind(){
+  mountStyle();
+  mountSpend();
+  var sp = $("pgSpend");
+  if (sp && !sp.__b){ sp.__b = 1; sp.addEventListener("click", openSpend); }
+  var months = $("pgMonths");
+  if (months && !months.__b){
+    months.__b = 1;
+    months.addEventListener("click", function(e){
+      var b = e.target.closest("[data-pgm]");
+      if (!b) return;
+      MONTH = b.getAttribute("data-pgm");
+      renderMonths(); renderLedger();
+    });
+  }
+  var modal = $("pgSpendModal");
+  if (modal && !modal.__b){
+    modal.__b = 1;
+    modal.addEventListener("click", function(e){
+      if (e.target === modal || e.target.closest("[data-spclose]")) { closeSpend(); return; }
+      if (e.target.closest("#spGo")) { submitSpend(); return; }
+      if (e.target.closest("#spNewQ")) { newQA(); return; }
+    });
+    var ans = $("spAns");
+    if (ans) ans.addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); submitSpend(); } });
+  }
+  renderAll();
+}
+
+if (typeof SB.onShow === "object" && SB.onShow){
+  var prev = SB.onShow.piggy;
+  SB.onShow.piggy = function(){
+    if (prev){ try { prev.apply(this, arguments); } catch(e){} }
+    try { bind(); renderAll(); } catch(e){}
+  };
+}
+/* 용돈이 바뀔 때마다 채움·기입장도 새로 */
+if (SB.money && SB.money.credit && !SB.money.__pgu){
+  var origCredit = SB.money.credit;
+  SB.money.credit = function(){
+    var r = origCredit.apply(this, arguments);
+    try { renderAll(); } catch(e){}
+    return r;
+  };
+  SB.money.__pgu = 1;
+}
+
+SB.piggyUI = {
+  goal: GOAL,
+  level: level,
+  month: function(m){ if (m){ MONTH = m; renderMonths(); renderLedger(); } return monthKey(); },
+  months: function(){
+    var out = [], log = money().log || [], y = monthKey().slice(0, 4);
+    for (var m = 1; m <= 12; m++){
+      var key = y + "-" + pad2(m), inc = 0, exp = 0, n = 0;
+      for (var i = 0; i < log.length; i++) if (monthOf(log[i].at) === key){
+        n++;
+        if (Number(log[i].amt) > 0) inc += Number(log[i].amt); else exp += Math.abs(Number(log[i].amt) || 0);
+      }
+      out.push({ month:key, n:n, in:inc, out:exp });
+    }
+    return out;
+  },
+  render: renderAll,
+  openSpend: openSpend,
+  submitSpend: submitSpend,
+  closeSpend: closeSpend
+};
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+else bind();
+setTimeout(function(){ try { bind(); renderAll(); } catch(e){} }, 800);
 })();
 </script>
 <script>
@@ -16844,7 +17155,8 @@ function ggFit(){
   grid.style.setProperty("--bd", Math.max(1.6, Math.min(4, cell * 0.055)).toFixed(1) + "px");
 }
 function ggChain(n, count){
-  if (count > 5) return "";  /* 6묶음부터는 덧셈을 늘어놓지 않아요 */
+  if (count > 5) return "";                    /* 6묶음부터는 덧셈을 늘어놓지 않아요 */
+  if (count <= 1) return "";                   /* 1묶음이면 '= n = n' 을 겹쳐 쓰지 않아요 */
   var a = []; for (var i = 0; i < count; i++) a.push(n);
   return a.join(" + ") + " = ";
 }
