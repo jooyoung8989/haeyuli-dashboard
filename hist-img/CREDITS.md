@@ -18,3 +18,25 @@
 
 세로로 긴 유물 사진(주먹도끼·고려청자)은 잘라내지 않고 좌우를 배경색으로 늘여 16:10으로 맞췄습니다.
 모든 사진은 사람이 직접 눈으로 확인해 유물·유적이 맞는지, 깨지지 않았는지 검사했습니다.
+
+## 🎯 역사 퀴즈용 사진 (2026-11-20 추가)
+
+`🎯 역사 퀴즈` 탭에서 쓰는 유물·유적 사진입니다. 위 연도표 사진과 같은 방식(1080×675 WebP)으로 저장했습니다.
+
+| 유물 | 파일 | 원본 (Wikimedia Commons) | 저작자 | 라이선스 |
+|---|---|---|---|---|
+| 신라 금관 | `crown.webp` | [Gold Crown of Silla Kingdom 01b.jpg](https://commons.wikimedia.org/wiki/File:Gold_Crown_of_Silla_Kingdom_01b.jpg) | Gary Todd | CC0 |
+| 석굴암 부처님 | `seok.webp` | [Front view of Buddha at Seokguram.jpg](https://commons.wikimedia.org/wiki/File:Front_view_of_Buddha_at_Seokguram.jpg) | 문화재청 Cultural Heritage Administration | 공공누리 제1유형(출처표시) |
+| 팔만대장경 목판 | `tripitaka.webp` | [Korea-Haeinsa Tripitaka Koreana woodblock 2770-06a.jpg](https://commons.wikimedia.org/wiki/File:Korea-Haeinsa_Tripitaka_Koreana_woodblock_2770-06a.jpg) | Steve46814 | CC BY-SA 3.0 |
+| 훈민정음 해례본 | `hunmin.webp` | [Hunminjeongeum Haerye 03.jpg](https://commons.wikimedia.org/wiki/File:Hunminjeongeum_Haerye_03.jpg) | 조선 정부 (퍼블릭 도메인) | Public domain |
+| 거북선(통영 복원) | `turtle.webp` | [Korea-Tongyeong Port-Turtle ship replica-03.jpg](https://commons.wikimedia.org/wiki/File:Korea-Tongyeong_Port-Turtle_ship_replica-03.jpg) | Junho Jung | CC BY-SA 3.0 |
+| 측우기 | `raingauge.webp` | [Jang Yeong-sil Science Garden-Rain Gauges 13-11789 Busan 03.JPG](https://commons.wikimedia.org/wiki/File:Jang_Yeong-sil_Science_Garden-Rain_Gauges_13-11789_Busan,_South_Korea_03.JPG) | Steve46814 | CC BY-SA 3.0 |
+| 백제 금동대향로 | `incense.webp` | [백제 금동대향로.jpg](https://commons.wikimedia.org/wiki/File:%EB%B0%B1%EC%A0%9C_%EA%B8%88%EB%8F%99%EB%8C%80%ED%96%A5%EB%A1%9C.jpg) | 국립중앙박물관 National Museum of Korea | 공공누리 제1유형(출처표시) |
+
+## 🎬 역사 영상 썸네일 (`hist-vid/`)
+
+`🎬 역사 영상` 탭의 카드 썸네일은 각 유튜브 영상의 공개 썸네일(`i.ytimg.com`)을 320×180 JPG로 내려받아 저장했습니다.
+영상은 재생 시 유튜브 공식 임베드(`youtube.com/embed/…`)로 띄우고, 임베드가 막히는 환경을 위해 `유튜브 앱으로 열기` 링크를 함께 둡니다.
+
+- 지니스쿨 역사 GeniSchool History — https://www.youtube.com/channel/UCvkLnjWQIntS0pnreTEfP_g (https://www.youtube.com/@Geni_History)
+- EBS 키즈 「역사가 술술」 — https://www.youtube.com/@EBSKids

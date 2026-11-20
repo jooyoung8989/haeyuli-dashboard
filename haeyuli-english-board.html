@@ -3239,6 +3239,104 @@ body .wk-sub i{font-size:.95rem;}
 .hd-go{align-self:flex-start;height:3rem;padding:0 1.3rem;border-radius:999px;background:#fbf8f0;color:#77561a;
   font-size:clamp(13px,1.6vh,19px);font-weight:800;box-shadow:inset 0 0 0 1.5px #ecdfc4;}
 .hd-say:active,.hd-go:active{transform:scale(.98);}
+
+/* =====================================================================
+   🎯 역사 사진 퀴즈 · 🎬 역사 영상
+   ===================================================================== */
+.hq-meter{margin-left:auto;display:flex;align-items:center;gap:.8vh;font-weight:900;color:#4b6a80;}
+.hq-meter b{font-size:clamp(14px,1.7vh,20px);}
+.hq-meter span{font-size:clamp(12px,1.5vh,17px);color:#a07a2c;font-weight:900;}
+.hq-wrap{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:1vh;}
+.hq-stage{position:relative;min-height:0;display:flex;align-items:center;justify-content:center;border-radius:16px;
+  background:#101b24;overflow:hidden;box-shadow:inset 0 0 0 1px #e6ebf0;}
+.hq-stage img{width:100%;height:100%;object-fit:contain;display:block;}
+.hq-cap{position:absolute;left:0;right:0;bottom:0;padding:1.4vh 1.2vh .9vh;display:flex;align-items:baseline;gap:.6vh;flex-wrap:wrap;
+  background:linear-gradient(to top,rgba(9,16,23,.88),rgba(9,16,23,0));}
+.hq-cap[hidden]{display:none;}
+.hq-cap b{font-size:clamp(15px,2vh,24px);font-weight:900;color:#fff;letter-spacing:-.02em;}
+.hq-cap span{font-size:clamp(11px,1.4vh,16px);font-weight:700;color:#cfe0ee;}
+.hq-side{min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:.8vh;}
+.hq-top{display:flex;align-items:center;gap:.6vh;}
+.hq-step{font-size:clamp(12px,1.5vh,17px);font-weight:900;color:#7d8b98;letter-spacing:.04em;}
+.hq-say{margin-left:auto;height:2.6rem;padding:0 1rem;border-radius:999px;background:#f2f7fb;color:#35657f;
+  font-size:clamp(12px,1.45vh,16px);font-weight:800;box-shadow:inset 0 0 0 1px #dbe6ef;}
+.hq-q{margin:0;font-size:clamp(17px,2.2vh,26px);font-weight:800;color:#1f2a33;line-height:1.35;letter-spacing:-.02em;}
+.hq-opts{display:grid;grid-template-columns:1fr 1fr;gap:.7vh;}
+.hq-opt{min-height:4.6vh;padding:.85vh .9vh;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 1.5px #dde6ee;
+  font-size:clamp(14px,1.8vh,21px);font-weight:800;color:#2c3a46;display:flex;align-items:center;justify-content:center;
+  text-align:center;line-height:1.25;transition:transform .12s ease;}
+.hq-opt:active{transform:scale(.98);}
+.hq-opt.ok{background:#e9f9f0;color:#136b41;box-shadow:inset 0 0 0 2.5px #35bb79;}
+.hq-opt.ng{background:#fdeeee;color:#a8403a;box-shadow:inset 0 0 0 2.5px #e88b84;animation:hqShake .28s;}
+.hq-opt.dead{opacity:.42;}
+@keyframes hqShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-.25rem)}75%{transform:translateX(.25rem)}}
+.hq-fb{padding:1vh 1.1vh;border-radius:13px;background:#f1fbf6;box-shadow:inset 0 0 0 1.5px #b6e6ce;
+  font-size:clamp(13px,1.65vh,20px);font-weight:700;color:#14643f;line-height:1.5;}
+.hq-fb[hidden]{display:none;}
+.hq-fb b{display:block;font-size:clamp(15px,2vh,23px);font-weight:900;margin-bottom:.25vh;}
+.hq-fb em{display:block;margin-top:.4vh;font-style:normal;font-size:clamp(11px,1.35vh,15px);font-weight:700;color:#6f8a7c;}
+.hq-fb.warn{background:#fff8ee;box-shadow:inset 0 0 0 1.5px #f0dcb6;color:#8a5a12;}
+.hq-fb.warn em{color:#a98a52;}
+.hq-next{width:100%;height:5vh;min-height:44px;border-radius:13px;background:linear-gradient(140deg,#46c78d,#1f9e6a);color:#fff;
+  font-size:clamp(15px,2vh,23px);font-weight:900;box-shadow:0 .4vh 1vh rgba(30,140,95,.26);}
+.hq-next:active{transform:scale(.99);}
+.hq-done{display:flex;flex-direction:column;gap:.7vh;padding:1.6vh 1.2vh;border-radius:15px;background:#f6fbf8;
+  box-shadow:inset 0 0 0 1.5px #c5e8d6;text-align:center;}
+.hq-done .big{font-size:clamp(19px,2.6vh,30px);font-weight:900;color:#14683f;letter-spacing:-.02em;}
+.hq-done p{margin:0;font-size:clamp(13px,1.7vh,20px);font-weight:700;color:#3f5c4d;line-height:1.55;}
+.hq-done p b{color:#12683f;}
+.hq-again,.hq-more{height:4.4vh;min-height:40px;border-radius:12px;font-weight:900;font-size:clamp(13px,1.7vh,19px);}
+.hq-again{background:#fff;color:#1d7b52;box-shadow:inset 0 0 0 1.5px #bfe3d1;}
+.hq-more{background:#f2f0fa;color:#5a4a9c;box-shadow:inset 0 0 0 1.5px #dbd6ef;}
+/* 🎬 영상 */
+.hv-filter{display:flex;gap:.5vh;flex-wrap:wrap;margin-left:auto;}
+.hv-chip{height:3.4vh;min-height:34px;padding:0 1.1vh;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1.5px #e2e8ee;
+  font-size:clamp(12px,1.5vh,17px);font-weight:800;color:#5d6f7e;white-space:nowrap;}
+.hv-chip.on{background:#f0f6ff;color:#1b5f9e;box-shadow:inset 0 0 0 2px #a9cdf0;}
+.hv-list{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,15.5rem),1fr));gap:1vh;align-content:start;padding:.3vh;}
+.hv-card{display:flex;flex-direction:column;text-align:left;border-radius:14px;overflow:hidden;background:#fff;
+  box-shadow:inset 0 0 0 1px #e6ebf0;padding:0;}
+.hv-card:active{transform:scale(.99);}
+.hv-thumb{position:relative;display:block;aspect-ratio:16/9;background:#e8eef4;overflow:hidden;}
+.hv-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.hv-play{position:absolute;inset:0;display:grid;place-items:center;font-size:1.7rem;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.55);}
+.hv-len{position:absolute;right:.45rem;bottom:.45rem;padding:.05rem .45rem;border-radius:6px;background:rgba(6,12,18,.82);
+  color:#fff;font-size:.72rem;font-weight:800;}
+.hv-body{display:flex;flex-direction:column;gap:.3vh;padding:.8vh .9vh 1vh;}
+.hv-t{font-size:clamp(14px,1.7vh,19px);font-weight:800;color:#22303c;line-height:1.32;letter-spacing:-.02em;}
+.hv-m{display:flex;align-items:center;gap:.45vh;flex-wrap:wrap;}
+.hv-b{font-style:normal;padding:.1rem .5rem;border-radius:999px;font-size:clamp(10px,1.25vh,14px);font-weight:900;}
+.hv-b.geni{background:#fff2e3;color:#a9611b;}
+.hv-b.ebs{background:#eaf2ff;color:#1f5fa8;}
+.hv-note{font-size:clamp(11px,1.4vh,16px);font-weight:600;color:#6b7a88;line-height:1.35;}
+.hv-empty{padding:2vh;text-align:center;font-weight:700;color:#8b98a4;font-size:clamp(13px,1.6vh,18px);}
+.hv-modal{position:fixed;inset:0;z-index:95;display:flex;align-items:center;justify-content:center;
+  background:rgba(8,15,22,.74);padding:2vh;}
+.hv-modal[hidden]{display:none;}
+.hv-box{width:min(96vw,58rem);max-height:92vh;background:#101b24;border-radius:16px;overflow:hidden;
+  display:flex;flex-direction:column;box-shadow:0 2vh 6vh rgba(0,0,0,.5);}
+.hv-top{display:flex;align-items:center;gap:1vh;padding:.9vh 1.2vh;}
+.hv-top b{font-size:clamp(14px,1.7vh,19px);font-weight:800;color:#fff;line-height:1.3;}
+.hv-x{margin-left:auto;flex:0 0 auto;width:2.4rem;height:2.4rem;border-radius:50%;background:rgba(255,255,255,.16);
+  color:#fff;font-size:1rem;font-weight:900;}
+.hv-frame{aspect-ratio:16/9;background:#000;}
+.hv-frame iframe{width:100%;height:100%;border:0;display:block;}
+.hv-foot{display:flex;align-items:center;gap:1vh;padding:.9vh 1.2vh;flex-wrap:wrap;}
+.hv-open{height:2.9rem;padding:0 1.3rem;border-radius:999px;background:#e5372b;color:#fff;font-weight:900;
+  font-size:clamp(13px,1.55vh,17px);display:inline-flex;align-items:center;gap:.4rem;}
+.hv-src2{font-size:clamp(11px,1.35vh,15px);font-weight:700;color:#9fb3c4;}
+@media (max-width:960px) and (orientation:portrait),(max-width:820px){
+  .hq-wrap{display:flex;flex-direction:column;gap:.8vh;}
+  .hq-stage{flex:0 0 auto;height:min(34vh,20rem);min-height:0;}
+  .hq-side{flex:1 1 auto;min-height:0;overflow-y:auto;}
+}
+@media (max-width:520px){
+  .hq-opts{grid-template-columns:1fr;}
+  .hq-opt{min-height:3.4rem;}
+  .hq-stage{min-height:min(36vh,17rem);}
+  .hv-list{grid-template-columns:minmax(0,1fr);}
+}
 @media (max-width:820px), (max-width:960px) and (orientation:portrait){
   .histview{height:auto;}
   .hist-block{height:auto;}
@@ -4579,6 +4677,17 @@ body.mob .dy-viewmeta{font-size:.8rem;}
         </div>
         <div class="hub2-grid" id="hubGrid"></div>
         <p class="hub2-note">공부 다 하면 200원!!!! 열심히 모아 봐요!</p>
+        <!-- ===== 🔬 재미있는 과학 영상관 (5과목 카드 아래) ===== -->
+        <div class="sci-hub" id="sciHub">
+          <div class="sci-hd">
+            <b>🔬 재미있는 과학 영상관</b>
+            <span class="sci-sub">고구마머리 · 사물궁이 · Nat Geo Kids · SciShow Kids</span>
+            <div class="sci-chips" id="sciChips" role="group" aria-label="과학 채널 고르기"></div>
+            <a class="sci-open" id="sciOpen" href="https://www.youtube.com" target="_blank" rel="noopener">채널 ↗</a>
+          </div>
+          <div class="sci-row" id="sciRow"></div>
+        </div>
+
       </div>
     </section>
 
@@ -4597,6 +4706,19 @@ body.mob .dy-viewmeta{font-size:.8rem;}
       </div>
     </section>
   </main>
+
+    <!-- ================= 🎬 영어 영상 (흘려듣기 21개 채널) ================= -->
+    <section class="view engvid" id="viewEnVideo" data-view="en-video" hidden>
+      <div class="ev-wrap">
+        <div class="ev-hd">
+          <b>🎬 영어 영상</b>
+          <span class="ev-sub">흘려듣기 좋은 공식 채널 21개 · 3단계</span>
+          <div class="ev-steps" id="evSteps" role="group" aria-label="단계 고르기"></div>
+        </div>
+        <div class="ev-chans" id="evChans" aria-label="채널 바로가기"></div>
+        <div class="ev-grid" id="evGrid"></div>
+      </div>
+    </section>
 
     <!-- ================= 🏠 홈 (이번 달 출석 현황판 + 이번 주 숙제) ================= -->
     <section class="view homeview" id="viewHome" data-view="home" hidden>
@@ -5096,6 +5218,37 @@ body.mob .dy-viewmeta{font-size:.8rem;}
         <div class="hist-body">
           <div class="hist-kings" id="histList" aria-label="왕 고르기"></div>
           <aside class="hist-detail" id="histDetail"></aside>
+        </div>
+      </div>
+      <div class="hist-block" data-secblock="quiz">
+        <div class="hist-head">
+          <div class="hist-title"><b>🎯 역사 퀴즈</b><span>사진을 보고 이름을 맞혀 보세요</span></div>
+          <div class="hq-meter"><b id="hqProg">1 / 8</b><span id="hqScore">⭐ 0</span></div>
+        </div>
+        <div class="hq-wrap">
+          <div class="hq-stage" id="hqStage">
+            <img id="hqImg" alt="역사 유물 사진" width="1080" height="675" decoding="async">
+            <div class="hq-cap" id="hqCap" hidden></div>
+          </div>
+          <div class="hq-side" id="hqSide"></div>
+        </div>
+      </div>
+      <div class="hist-block" data-secblock="video">
+        <div class="hist-head">
+          <div class="hist-title"><b>🎬 역사 영상</b><span>지니스쿨 역사 · EBS 역사가 술술</span></div>
+          <div class="hv-filter" id="hvFilter" role="group" aria-label="시대 고르기"></div>
+        </div>
+        <div class="hv-list" id="hvList"></div>
+      </div>
+      <div class="hv-modal" id="hvModal" hidden>
+        <div class="hv-box" role="dialog" aria-modal="true" aria-label="역사 영상 재생">
+          <div class="hv-top"><b id="hvTitle">역사 영상</b>
+            <button class="hv-x" id="hvClose" type="button" aria-label="영상 닫기">✕</button></div>
+          <div class="hv-frame" id="hvFrame"></div>
+          <div class="hv-foot">
+            <a class="hv-open" id="hvOpen" href="https://www.youtube.com" target="_blank" rel="noopener">▶ 유튜브 앱으로 열기</a>
+            <span class="hv-src2" id="hvSrc2"></span>
+          </div>
         </div>
       </div>
     </section>
@@ -7841,23 +7994,24 @@ var SUBJECTS = [
   { k:"en",      em:"🔤", nm:"영어", desc:"그림 동화책 · 사이트워드 · 퀴즈", sec:"sight" },
   { k:"hanja",   em:"漢", nm:"한자", desc:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", sec:"trace" },
   { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄", sec:"quote" },
-  { k:"history", em:"🏛️", nm:"역사", desc:"시대 연도표 · 고려·조선 왕 계보", sec:"timeline" }
+  { k:"history", em:"🏛️", nm:"역사", desc:"연도표 · 왕 계보 · 사진 퀴즈 · 영상", sec:"timeline" }
 ];
 var SECS = {
-  en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"]],
+  en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"], ["video", "🎬 영어 영상"]],
   ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"]],
   math:    [["concept", "🔢 수개념"], ["calc", "➕ 연산"], ["think", "🧠 사고력"], ["shape", "🔺 도형"], ["clock", "⏰ 시계 읽기"], ["gugu", "✖️ 구구단 원리"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말 빈칸"]],
-  history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"]]
+  history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["video", "🎬 역사 영상"]]
 };
 var VIEWID = {
   "home:main":"viewHome", "study:hub":"viewStudyHub",
-  "study:en:book":"viewEnBook", "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:test":"viewEnTest", "study:en:call":"viewEnCall",
+  "study:en:video":"viewEnVideo", "study:en:book":"viewEnBook", "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:test":"viewEnTest", "study:en:call":"viewEnCall",
   "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord",
   "study:math:concept":"viewMath", "study:math:calc":"viewMath", "study:math:think":"viewMath",
   "study:math:shape":"viewMath", "study:math:clock":"viewMath", "study:math:gugu":"viewMath",
   "study:hanja:trace":"viewHanja", "study:hanja:word":"viewHanja",
   "study:history:timeline":"viewHistory", "study:history:goryeo":"viewHistory", "study:history:joseon":"viewHistory",
+  "study:history:quiz":"viewHistory", "study:history:video":"viewHistory",
   "book:main":"viewBook", "piggy:main":"viewPiggy", "bank:main":"viewBank",
   "attend:main":"viewAttend", "room:main":"viewRoom", "diary:main":"viewDiary"
 };
@@ -11605,7 +11759,7 @@ var HUB = [
   { k:"ko", nm:"국어", badge:["가","나"], color:"#2f8b6b", bg:"#eef7f2",
     d:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄", hero:koHero },
   { k:"history", nm:"역사", badge:["史",""], color:"#6a5aa8", bg:"#f2f0fa",
-    d:"시대 연도표 · 고려·조선 왕 계보", hero:histHero }
+    d:"연도표 · 왕 계보 · 사진 퀴즈 · 영상", hero:histHero }
 ];
 
 function hubRec(){
@@ -13194,6 +13348,7 @@ function renderEraList(){
     + '<p class="hd-easy">' + esc(e.easy) + '</p>'
     + '<div class="hd-cap hd-btns">'
     + (e.link ? '<button class="hd-go" type="button" data-goto="' + e.link + '">👑 ' + (e.link === "goryeo" ? "고려" : "조선") + ' 왕조 계보 →</button>' : "")
+    + '<button class="hd-go hd-vid" type="button" data-era-vid="' + e.id + '">🎬 이 시대 영상</button>'
     + '<button class="hd-say" type="button" id="eraSay">🔊 읽어주기</button></div>';
   var sp = $("eraSay");
   if (sp) sp.addEventListener("click", function(){
@@ -13275,6 +13430,355 @@ SB.history = {
 };
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); render(); });
 else { bind(); render(); }
+})();
+
+/* =====================================================================
+   🎯 역사 사진 퀴즈 · 🎬 역사 영상 (지니스쿨 · EBS 역사가 술술)
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+if (SB.histQuiz) return;
+function $(id){ return document.getElementById(id); }
+function e(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+    return ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[c];
+  });
+}
+function shuffle(a){
+  for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+
+/* ---------- 사진 문제 16개 (모두 hist-img/ 실사 사진) ---------- */
+var PRAISE = ["정답이에요! 🎉", "와, 맞았어요! 👏", "딩동댕! 🎊", "정말 잘했어요! ⭐"];
+var Q = [
+ { f:"hist-img/paleo.webp", cap:"주먹도끼", tag:"구석기 시대",
+   q:"이 돌로 만든 도구의 이름은 무엇일까요?",
+   a:"주먹도끼", d:["빗살무늬토기", "거북선", "고려청자"],
+   ex:"구석기 사람들이 사냥할 때 쓴 주먹도끼예요. 돌을 깨서 날카롭게 만들었어요!" },
+ { f:"hist-img/neo.webp", cap:"빗살무늬토기", tag:"신석기 시대",
+   q:"이 그릇의 이름은 무엇일까요?",
+   a:"빗살무늬토기", d:["고려청자", "측우기", "금관"],
+   ex:"신석기 시대에 음식을 담던 빗살무늬토기예요. 빗살처럼 줄무늬가 있어요!" },
+ { f:"hist-img/bronze.webp", cap:"고인돌", tag:"청동기 시대",
+   q:"이 큰 돌무덤의 이름은 무엇일까요?",
+   a:"고인돌", d:["첨성대", "석가탑", "근정전"],
+   ex:"청동기 시대 힘센 사람이 묻힌 고인돌이에요. 큰 돌을 탁자처럼 올려놓았어요." },
+ { f:"hist-img/iron.webp", cap:"세형 동검", tag:"철기 시대",
+   q:"이 검은 어느 시대에 만들었을까요?",
+   a:"철기 시대", d:["신석기 시대", "고려 시대", "조선 시대"],
+   ex:"화순 대곡리에서 나온 청동 검 '세형 동검'이에요. 철기 시대 초기에 쓰였어요." },
+ { f:"hist-img/three.webp", cap:"첨성대", tag:"삼국 시대",
+   q:"경주에 있는 이 돌탑의 이름은 무엇일까요?",
+   a:"첨성대", d:["석가탑", "고인돌", "거북선"],
+   ex:"신라 사람들이 별을 보며 날씨를 살피던 첨성대예요. 지금도 경주에 있어요!" },
+ { f:"hist-img/nb.webp", cap:"석가탑", tag:"남북국 시대",
+   q:"불국사에 있는 이 돌탑은 무엇일까요?",
+   a:"석가탑", d:["첨성대", "금관", "측우기"],
+   ex:"불국사에 있는 석가탑이에요. 1,200년이 넘은 돌탑이에요!" },
+ { f:"hist-img/goryeo.webp", cap:"고려청자", tag:"고려 시대",
+   q:"이 파란 그릇은 무엇일까요?",
+   a:"고려청자", d:["빗살무늬토기", "훈민정음", "거북선"],
+   ex:"고려 사람들이 만든 청자예요. 하늘색처럼 맑고 예뻐요." },
+ { f:"hist-img/joseon.webp", cap:"근정전", tag:"조선 시대",
+   q:"조선 임금이 나라 일을 보던 이 집은 무엇일까요?",
+   a:"근정전", d:["첨성대", "고인돌", "석가탑"],
+   ex:"경복궁 근정전이에요. 임금이 여기에서 신하들과 나라 일을 했어요." },
+ { f:"hist-img/now.webp", cap:"광화문", tag:"대한민국",
+   q:"경복궁 앞에 있는 이 큰 문은 무엇일까요?",
+   a:"광화문", d:["근정전", "숭례문", "첨성대"],
+   ex:"지금도 우리 곁에 있는 광화문이에요. 경복궁의 큰 정문이에요." },
+ { f:"hist-img/crown.webp", cap:"신라 금관", tag:"삼국 시대",
+   q:"이 반짝이는 머리 장식은 무엇일까요?",
+   a:"금관", d:["거북선", "측우기", "빗살무늬토기"],
+   ex:"신라 임금님이 쓰던 금관이에요. 금으로 만들고 나뭇가지 모양을 새겼어요." },
+ { f:"hist-img/seok.webp", cap:"석굴암 부처님", tag:"남북국 시대",
+   q:"석굴암에 있는 이 부처님은 무엇으로 만들었을까요?",
+   a:"돌", d:["나무", "금", "흙"],
+   ex:"경주 석굴암의 부처님은 커다란 돌을 깎아 만들었어요. 1,000년 넘게 그 자리에 있어요." },
+ { f:"hist-img/tripitaka.webp", cap:"팔만대장경", tag:"고려 시대",
+   q:"글자를 가득 새긴 이 나무판은 무엇일까요?",
+   a:"팔만대장경 목판", d:["훈민정음", "측우기", "거북선"],
+   ex:"고려 사람들이 부처님 말씀을 새긴 팔만대장경이에요. 판이 8만 장이 넘어요!" },
+ { f:"hist-img/hunmin.webp", cap:"훈민정음", tag:"조선 시대",
+   q:"이 옛 책의 이름은 무엇일까요?",
+   a:"훈민정음", d:["팔만대장경", "거북선", "고려청자"],
+   ex:"세종대왕이 만든 한글을 설명한 책, 훈민정음이에요. ㄱㄴㄷ 글자가 보여요!" },
+ { f:"hist-img/turtle.webp", cap:"거북선", tag:"조선 시대",
+   q:"거북처럼 생긴 이 배의 이름은 무엇일까요?",
+   a:"거북선", d:["뗏목", "잠수함", "돛단배"],
+   ex:"이순신 장군이 왜적을 물리친 거북선이에요. 지붕에 뾰족한 못이 있었어요." },
+ { f:"hist-img/raingauge.webp", cap:"측우기", tag:"조선 시대",
+   q:"비가 얼마나 왔는지 재던 이 그릇은 무엇일까요?",
+   a:"측우기", d:["빗살무늬토기", "고려청자", "금관"],
+   ex:"조선 세종 때 만든 측우기예요. 빗물이 얼마나 고였는지 재서 농사에 썼어요." },
+ { f:"hist-img/incense.webp", cap:"백제 금동대향로", tag:"삼국 시대",
+   q:"백제 사람들이 만든 이 향로의 이름은 무엇일까요?",
+   a:"금동대향로", d:["측우기", "거북선", "석가탑"],
+   ex:"봉황과 연꽃 모양을 새긴 백제 금동대향로예요. 향을 피우는 그릇이에요." }
+];
+
+var SETN = 8;
+var H = { set:[], i:0, ok:0, ng:0, order:[], locked:false, done:false, started:false };
+
+function curQ(){ return H.set[H.i] || null; }
+function meter(){
+  var p = $("hqProg"), s = $("hqScore");
+  if (p) p.textContent = (H.done ? SETN : Math.min(H.i + 1, SETN)) + " / " + SETN;
+  if (s) s.textContent = "⭐ " + H.ok;
+}
+function optText(it, oi){ return oi === 0 ? it.a : it.d[oi - 1]; }
+
+function startSet(){
+  H.set = shuffle(Q.slice()).slice(0, SETN);
+  H.i = 0; H.ok = 0; H.ng = 0; H.locked = false; H.done = false;
+  renderQ();
+}
+function renderQ(){
+  var side = $("hqSide"); if (!side) return;
+  var it = curQ(); if (!it) return;
+  var img = $("hqImg");
+  if (img){ img.src = it.f; img.alt = it.cap + " 실물 사진"; }
+  var cap = $("hqCap"); if (cap){ cap.hidden = true; cap.innerHTML = ""; }
+  H.locked = false;
+  H.order = shuffle([0, 1, 2, 3]);
+  var h = "";
+  h += '<div class="hq-top"><span class="hq-step">문제 ' + (H.i + 1) + ' / ' + SETN + '</span>'
+     + '<button class="hq-say" type="button" id="hqSay">🔊 문제 읽어주기</button></div>';
+  h += '<p class="hq-q">' + e(it.q) + '</p>';
+  h += '<div class="hq-opts" id="hqOpts" role="group" aria-label="보기">';
+  for (var k = 0; k < 4; k++){
+    h += '<button class="hq-opt" type="button" data-k="' + k + '">' + e(optText(it, H.order[k])) + '</button>';
+  }
+  h += '</div><div class="hq-fb" id="hqFb" hidden></div><div class="hq-foot" id="hqFoot"></div>';
+  side.innerHTML = h;
+  side.scrollTop = 0;
+  meter();
+}
+function sayQuestion(){
+  var it = curQ(); if (!it) return;
+  try { SB.speak(it.q + " " + H.order.map(function(o){ return optText(it, o); }).join(", "), false, "ko-KR"); } catch(err){}
+}
+function pick(btn){
+  if (H.locked) return;
+  var it = curQ(); if (!it) return;
+  var k = parseInt(btn.getAttribute("data-k"), 10);
+  var fb = $("hqFb"), opts = $("hqOpts");
+  if (H.order[k] !== 0){
+    H.ng++;
+    btn.classList.add("ng"); btn.disabled = true;
+    if (fb){
+      fb.hidden = false; fb.className = "hq-fb warn";
+      fb.innerHTML = "<b>음, 다시 생각해 볼까요? 🤔</b><span>다른 보기를 한 번 더 눌러 봐요. 틀려도 괜찮아요!</span>";
+    }
+    return;
+  }
+  H.locked = true; H.ok++;
+  btn.classList.add("ok");
+  if (opts){
+    var bs = opts.querySelectorAll(".hq-opt");
+    for (var i = 0; i < bs.length; i++){ bs[i].classList.remove("ng"); bs[i].classList.add("dead"); bs[i].disabled = true; }
+  }
+  btn.classList.remove("dead");
+  if (fb){
+    fb.hidden = false; fb.className = "hq-fb";
+    fb.innerHTML = "<b>" + PRAISE[Math.floor(Math.random() * PRAISE.length)] + "</b>"
+      + "<span>" + e(it.ex) + "</span><em>" + e(it.cap) + " · " + e(it.tag) + "</em>";
+  }
+  var cap = $("hqCap");
+  if (cap){ cap.hidden = false; cap.innerHTML = "<b>" + e(it.cap) + "</b><span>" + e(it.tag) + "</span>"; }
+  var last = (H.i + 1) >= SETN;
+  var foot = $("hqFoot");
+  if (foot) foot.innerHTML = '<button class="hq-next" type="button" id="hqNext">' + (last ? "결과 보기 →" : "다음 문제 →") + '</button>';
+  meter();
+}
+function nextQ(){
+  if (!H.locked) return;
+  if (H.i + 1 >= SETN){ finish(); return; }
+  H.i++;
+  renderQ();
+}
+function finish(){
+  H.done = true; H.locked = true;
+  var stars = H.ok >= 6 ? 2 : 1;
+  var got = 0;
+  try { got = SB.earn(SB.today() + "|history|photoquiz", stars); } catch(err){ got = 0; }
+  try { SB.markAttendance("history"); } catch(err){}
+  var side = $("hqSide");
+  if (side){
+    side.innerHTML = '<div class="hq-done">'
+      + '<b class="big">🎉 ' + SETN + '문제 완주!</b>'
+      + '<p>맞힌 문제 <b>' + H.ok + '개</b> · 틀린 횟수 ' + H.ng + '번<br>'
+      + (got > 0 ? ('별 <b>⭐ +' + got + '</b>도 받았어요!') : '오늘 별은 이미 받아서, 별은 다음에 또 받을 수 있어요!')
+      + '</p><p>📅 오늘 역사 출석 도장도 찍혔어요 ✅</p>'
+      + '<button class="hq-again" type="button" id="hqAgain">🔄 새 문제로 다시 풀기</button>'
+      + '<button class="hq-more" type="button" id="hqMore">🎬 역사 영상 보기</button>'
+      + '</div>';
+    side.scrollTop = 0;
+  }
+  var cap = $("hqCap"); if (cap){ cap.hidden = true; cap.innerHTML = ""; }
+  meter();
+  if (got > 0 && SB.starFX){ try { SB.starFX(got, "역사 퀴즈 완주!"); } catch(err){} }
+}
+
+/* ---------- 영상 16편 (지니스쿨 역사 · EBS 키즈 '역사가 술술') ---------- */
+var VIDS = [
+ { id:"ii7PobQgBeQ", era:"pre",    src:"geni", len:"4:41",  title:"구석기와 신석기, 뭐가 다를까?", note:"뗀석기·간석기를 비교해요" },
+ { id:"dajNcGW2w7s", era:"pre",    src:"geni", len:"8:43",  title:"단군 할아버지와 고조선 이야기", note:"곰과 호랑이 이야기로 배워요" },
+ { id:"6wfXZIbujeo", era:"three",  src:"geni", len:"15:49", title:"알에서 태어난 왕들 · 삼국 건국신화", note:"고구려·백제·신라의 시작" },
+ { id:"_V9eaarwu_A", era:"three",  src:"geni", len:"9:03",  title:"발해 대조영 이야기", note:"고구려를 이어받은 나라" },
+ { id:"5fcXe8_DfxE", era:"three",  src:"ebs",  len:"17:25", title:"삼국시대 · 통일신라와 후삼국", note:"삼국 시대를 한 번에 정리" },
+ { id:"O-Pic6Z5GyY", era:"three",  src:"ebs",  len:"17:23", title:"광개토대왕의 요동 정벌", note:"고구려를 크게 넓힌 왕" },
+ { id:"Mj6biziV468", era:"goryeo", src:"geni", len:"4:13",  title:"왕건, 고려를 세우다", note:"후삼국을 하나로 모았어요" },
+ { id:"zqCNGrlCVWA", era:"goryeo", src:"geni", len:"5:52",  title:"몽골의 침입, 긴 전쟁의 시작", note:"고려를 괴롭힌 몽골과의 싸움" },
+ { id:"yd9ZXYmFT28", era:"goryeo", src:"ebs",  len:"17:23", title:"후삼국 통일 왕건 · 광종", note:"고려를 세운 왕건과 나라를 다진 광종" },
+ { id:"OAEG3WuF_m4", era:"goryeo", src:"ebs",  len:"17:00", title:"강감찬과 귀주대첩", note:"거란을 물리친 강감찬 장군" },
+ { id:"CiMM9kOTeZI", era:"joseon", src:"geni", len:"13:26", title:"고려의 멸망과 조선의 건국", note:"이성계와 정도전의 새 나라" },
+ { id:"jYGSDUV5a1M", era:"joseon", src:"geni", len:"15:19", title:"이순신 장군과 임진왜란", note:"한산·명량·노량의 큰 승리" },
+ { id:"rgj76OtkHD0", era:"joseon", src:"ebs",  len:"16:48", title:"술술 풀리는 조선시대 이야기", note:"조선 500년을 한 번에" },
+ { id:"xt5GtNjj774", era:"modern", src:"geni", len:"3:49",  title:"일제에게 나라를 빼앗기다", note:"잊지 말아야 할 슬픈 역사" },
+ { id:"SYcfVkdJsXw", era:"modern", src:"geni", len:"9:05",  title:"대한 독립 만세 · 광복", note:"독립을 위해 싸운 사람들" },
+ { id:"kpXOUAH8oT0", era:"modern", src:"ebs",  len:"17:37", title:"전봉준 · 주시경 이야기", note:"농민의 편에 선 전봉준, 한글을 지킨 주시경" }
+];
+var VERAS = [["all","전체"], ["pre","선사·고조선"], ["three","삼국·남북국"], ["goryeo","고려"], ["joseon","조선"], ["modern","근현대"]];
+var VS = { era:"all" };
+var SRCNAME = { geni:"지니스쿨 역사", ebs:"EBS 역사가 술술" };
+var SRCBADGE = { geni:"지니스쿨", ebs:"EBS" };
+
+function renderFilter(){
+  var box = $("hvFilter"); if (!box) return;
+  box.innerHTML = VERAS.map(function(x){
+    var on = x[0] === VS.era;
+    return '<button class="hv-chip' + (on ? " on" : "") + '" type="button" data-vera="' + x[0] + '" aria-pressed="' + (on ? "true" : "false") + '">' + x[1] + '</button>';
+  }).join("");
+}
+function renderVids(){
+  renderFilter();
+  var box = $("hvList"); if (!box) return;
+  var list = VIDS.filter(function(v){ return VS.era === "all" || v.era === VS.era; });
+  if (!list.length){ box.innerHTML = '<p class="hv-empty">이 시대 영상이 아직 없어요.</p>'; return; }
+  box.innerHTML = list.map(function(v){
+    return '<button class="hv-card" type="button" data-vid="' + v.id + '">'
+      + '<span class="hv-thumb"><img src="hist-vid/' + v.id + '.jpg" alt="" width="320" height="180" loading="lazy" decoding="async">'
+      + '<span class="hv-play" aria-hidden="true">▶</span><span class="hv-len">' + v.len + '</span></span>'
+      + '<span class="hv-body"><span class="hv-t">' + e(v.title) + '</span>'
+      + '<span class="hv-m"><em class="hv-b ' + v.src + '">' + SRCBADGE[v.src] + '</em></span>'
+      + '<span class="hv-note">' + e(v.note) + '</span></span>'
+      + '</button>';
+  }).join("");
+}
+function setEra(era){
+  for (var i = 0; i < VERAS.length; i++) if (VERAS[i][0] === era) VS.era = era;
+  renderVids();
+}
+function openVid(id){
+  var v = null;
+  for (var i = 0; i < VIDS.length; i++) if (VIDS[i].id === id) v = VIDS[i];
+  if (!v) return;
+  var m = $("hvModal"), f = $("hvFrame"), t = $("hvTitle"), o = $("hvOpen"), s = $("hvSrc2");
+  if (!m || !f) return;
+  if (t) t.textContent = v.title;
+  f.innerHTML = '<iframe src="https://www.youtube.com/embed/' + v.id + '?autoplay=1&rel=0&playsinline=1"'
+    + ' title="' + e(v.title) + '" loading="lazy"'
+    + ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"'
+    + ' referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+  if (o) o.href = "https://www.youtube.com/watch?v=" + v.id;
+  if (s) s.textContent = SRCNAME[v.src] + " · " + v.len;
+  m.hidden = false;
+}
+function closeVid(){
+  var m = $("hvModal"), f = $("hvFrame");
+  if (f) f.innerHTML = "";
+  if (m) m.hidden = true;
+}
+
+/* ---------- 탭 연결 ---------- */
+function bindQuiz(){
+  var side = $("hqSide");
+  if (side && !side.__hqb){
+    side.__hqb = 1;
+    side.addEventListener("click", function(ev){
+      var t = ev.target;
+      var opt = t.closest ? t.closest(".hq-opt") : null;
+      if (opt){ pick(opt); return; }
+      if (t.closest && t.closest("#hqSay")){ sayQuestion(); return; }
+      if (t.closest && t.closest("#hqNext")){ nextQ(); return; }
+      if (t.closest && t.closest("#hqAgain")){ startSet(); return; }
+      if (t.closest && t.closest("#hqMore")){ SB.go("study", "history", "video"); return; }
+    });
+  }
+}
+function bindVid(){
+  var list = $("hvList");
+  if (list && !list.__hvb){
+    list.__hvb = 1;
+    list.addEventListener("click", function(ev){
+      var c = ev.target.closest ? ev.target.closest("[data-vid]") : null;
+      if (c) openVid(c.getAttribute("data-vid"));
+    });
+  }
+  var filt = $("hvFilter");
+  if (filt && !filt.__hvb){
+    filt.__hvb = 1;
+    filt.addEventListener("click", function(ev){
+      var c = ev.target.closest ? ev.target.closest("[data-vera]") : null;
+      if (c) setEra(c.getAttribute("data-vera"));
+    });
+  }
+  var x = $("hvClose");
+  if (x && !x.__hvb){ x.__hvb = 1; x.addEventListener("click", closeVid); }
+  var m = $("hvModal");
+  if (m && !m.__hvb){
+    m.__hvb = 1;
+    m.addEventListener("click", function(ev){ if (ev.target === m) closeVid(); });
+  }
+  if (!window.__hvEsc){
+    window.__hvEsc = 1;
+    document.addEventListener("keydown", function(ev){
+      if (ev.key === "Escape" || ev.keyCode === 27) closeVid();
+    });
+  }
+}
+/* 시대 카드의 🎬 버튼 → 영상 탭으로 이동 + 그 시대만 보기 */
+var ERA2V = { paleo:"pre", neo:"pre", bronze:"pre", iron:"pre", three:"three", nb:"three", goryeo:"goryeo", joseon:"joseon", now:"modern" };
+if (!window.__hvEraGo){
+  window.__hvEraGo = 1;
+  document.addEventListener("click", function(ev){
+    var b = ev.target.closest ? ev.target.closest("[data-era-vid]") : null;
+    if (!b) return;
+    var era = b.getAttribute("data-era-vid");
+    SB.go("study", "history", "video");
+    setEra(ERA2V[era] || "all");
+  });
+}
+/* 하위 탭을 옮기면 영상 모달은 닫기 */
+if (!window.__hvTabClose){
+  window.__hvTabClose = 1;
+  document.addEventListener("click", function(ev){
+    var b = ev.target.closest ? ev.target.closest(".subtab") : null;
+    if (b) closeVid();
+  });
+}
+
+var prevShow = SB.onShow.history;
+SB.onShow.history = function(sec){
+  if (prevShow){ try { prevShow(sec); } catch(err){} }
+  if (sec === "quiz"){
+    bindQuiz();
+    if (!H.started){ H.started = true; startSet(); }
+    else meter();
+  }
+  if (sec === "video"){ bindVid(); renderVids(); }
+  if (sec !== "video") closeVid();
+};
+
+SB.histQuiz = {
+  items: Q, start: function(){ startSet(); return SETN; },
+  videos: VIDS, open: openVid, close: closeVid, era: setEra
+};
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bindQuiz(); bindVid(); });
+else { bindQuiz(); bindVid(); }
 })();
 
 /* =====================================================================
@@ -18567,6 +19071,418 @@ else boot();
 })();
 
 /* ==/RB-BLOCK-JS== */
+</script>
+
+<!-- ===== 공용 영상 모달 (🔬 과학 영상관 · 🎬 영어 영상) ===== -->
+<style id="vidHubCss">
+/* =====================================================================
+   🔬 재미있는 과학 영상관 · 🎬 영어 영상 — 공용 영상 모달
+   ===================================================================== */
+.sci-hub{flex:0 0 auto;min-height:0;display:flex;flex-direction:column;gap:.5vh;
+  padding:.85vh 1.1vh .7vh;border-radius:16px;
+  background:linear-gradient(170deg,#f5fbff 0%,#feffff 100%);box-shadow:inset 0 0 0 1.2px #d9e9f3;}
+.sci-hd{flex:0 0 auto;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;min-width:0;}
+.sci-hd b{flex:0 0 auto;font-size:clamp(15px,1.95vh,21px);font-weight:900;color:#17506e;letter-spacing:-.02em;white-space:nowrap;}
+.sci-sub{flex:0 1 auto;min-width:0;font-size:clamp(10px,1.25vh,14px);font-weight:600;color:#93a3b1;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;}
+.sci-chips{flex:1 1 13rem;min-width:0;display:flex;align-items:center;gap:.35rem;flex-wrap:nowrap;
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:.1rem 0;}
+.sci-chips::-webkit-scrollbar{display:none;}
+.sci-chip{display:inline-flex;align-items:center;gap:.28rem;height:1.95rem;padding:0 .7rem;border-radius:999px;
+  font-size:clamp(11px,1.38vh,15px);font-weight:800;color:#45606f;background:#fff;
+  box-shadow:inset 0 0 0 1.3px #dde8ef;white-space:nowrap;}
+.sci-chip:active{transform:scale(.97);}
+.sci-chip.on{background:#e9f6ff;color:#0e5a86;box-shadow:inset 0 0 0 1.7px #9dcde9;}
+.sci-open{flex:0 0 auto;display:inline-flex;align-items:center;gap:.25rem;height:1.95rem;padding:0 .75rem;border-radius:999px;
+  font-size:clamp(11px,1.35vh,15px);font-weight:900;color:#fff;background:#2b6f96;white-space:nowrap;
+  box-shadow:0 2px 6px rgba(43,111,150,.28);}
+.sci-row{flex:1 1 auto;min-height:0;display:flex;gap:.75vh;overflow-x:auto;overflow-y:hidden;
+  padding:0 0 .3vh;scrollbar-width:thin;}
+.sci-row::-webkit-scrollbar{height:6px;}
+.sci-row::-webkit-scrollbar-thumb{background:#cfe2ee;border-radius:999px;}
+
+.vid-card{flex:0 0 auto;display:flex;flex-direction:column;width:clamp(150px,16.5vw,206px);
+  text-align:left;border-radius:12px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 1px #e2ecf3;}
+.sci-row .vid-card{flex:1 1 0;width:auto;min-width:9.6rem;max-width:15rem;}
+.vid-card:active{transform:scale(.985);}
+.vid-th{position:relative;aspect-ratio:16/9;background:#e8eef4;overflow:hidden;display:block;}
+.vid-th img{width:100%;height:100%;object-fit:cover;display:block;}
+.vid-pl{position:absolute;inset:0;display:grid;place-items:center;font-size:1.35rem;color:#fff;
+  text-shadow:0 2px 8px rgba(0,0,0,.5);}
+.vid-len{position:absolute;right:.3rem;bottom:.28rem;padding:.02rem .34rem;border-radius:5px;
+  background:rgba(6,12,18,.8);font-size:clamp(9px,1.1vh,12px);font-weight:800;color:#fff;}
+.vid-bd{padding:.45vh .55vh .55vh;display:flex;flex-direction:column;gap:.18vh;min-height:0;}
+.vid-t{font-size:clamp(11px,1.32vh,14px);font-weight:800;color:#22303c;line-height:1.3;letter-spacing:-.01em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.vid-n{font-size:clamp(9.5px,1.12vh,12px);font-weight:600;color:#8b98a4;line-height:1.28;
+  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
+
+.view.engvid{padding:0;display:flex;flex-direction:column;height:100%;min-height:0;background:none;box-shadow:none;}
+.ev-wrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.6vh;padding:.8vh .9vh;
+  border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px #e6ebf0;}
+.ev-hd{flex:0 0 auto;display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;min-width:0;}
+.ev-hd b{font-size:clamp(15px,1.95vh,21px);font-weight:900;color:#1b3f5c;letter-spacing:-.02em;white-space:nowrap;}
+.ev-hd .ev-sub{font-size:clamp(10px,1.25vh,14px);font-weight:600;color:#93a3b1;white-space:nowrap;}
+.ev-steps{flex:1 1 13rem;min-width:0;display:flex;gap:.35rem;flex-wrap:nowrap;overflow-x:auto;
+  scrollbar-width:none;padding:.1rem 0;}
+.ev-steps::-webkit-scrollbar{display:none;}
+.ev-chans{flex:0 0 auto;display:flex;gap:.35rem;overflow-x:auto;padding:0 0 .25vh;scrollbar-width:thin;}
+.ev-chans::-webkit-scrollbar{height:6px;}
+.ev-chans::-webkit-scrollbar-thumb{background:#dbe6ee;border-radius:999px;}
+.ev-chan{flex:0 0 auto;display:inline-flex;align-items:center;gap:.25rem;height:1.95rem;padding:0 .7rem;
+  border-radius:999px;font-size:clamp(10.5px,1.32vh,14px);font-weight:800;color:#3f6479;background:#f5fafd;
+  box-shadow:inset 0 0 0 1.2px #dde8ef;white-space:nowrap;}
+.ev-chan:hover{background:#eaf6ff;color:#0e5a86;}
+.ev-grid{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(clamp(150px,17vw,205px),1fr));gap:.8vh;align-content:start;padding-right:.2vh;}
+.ev-grid .vid-card{width:auto;}
+.ev-empty{padding:2vh;text-align:center;font-weight:700;color:#8b98a4;font-size:clamp(13px,1.6vh,18px);}
+
+.vh-modal{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;
+  padding:2vh;background:rgba(8,14,20,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.vh-modal[hidden]{display:none;}
+.vh-box{width:min(96vw,58rem);max-height:92vh;background:#101b24;border-radius:16px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(0,0,0,.45);display:flex;flex-direction:column;}
+.vh-top{display:flex;align-items:center;gap:.6vh;padding:.9vh 1.2vh;min-width:0;}
+.vh-top b{font-size:clamp(14px,1.7vh,19px);font-weight:800;color:#fff;line-height:1.3;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.vh-ch{flex:0 0 auto;font-size:clamp(10px,1.25vh,14px);font-weight:800;color:#8fd0f2;
+  background:rgba(90,190,240,.16);padding:.1rem .5rem;border-radius:999px;white-space:nowrap;}
+.vh-x{margin-left:auto;flex:0 0 auto;width:2.4rem;height:2.4rem;border-radius:50%;
+  background:rgba(255,255,255,.16);color:#fff;font-weight:900;font-size:1rem;}
+.vh-frame{aspect-ratio:16/9;background:#000;}
+.vh-frame iframe{width:100%;height:100%;border:0;display:block;}
+.vh-foot{display:flex;align-items:center;gap:.7vh;padding:.9vh 1.2vh;flex-wrap:wrap;}
+.vh-open{height:2.9rem;display:inline-flex;align-items:center;gap:.3rem;padding:0 1.3rem;border-radius:999px;
+  background:#e5372b;color:#fff;font-weight:900;font-size:clamp(12px,1.5vh,16px);}
+.vh-chan{height:2.9rem;display:inline-flex;align-items:center;gap:.3rem;padding:0 1.1rem;border-radius:999px;
+  background:rgba(255,255,255,.14);color:#dff1fb;font-weight:800;font-size:clamp(12px,1.45vh,15px);}
+.vh-src{font-size:clamp(11px,1.35vh,15px);font-weight:700;color:#9fb3c4;}
+
+/* 휴대폰 */
+body.mob .sci-hub{padding:.6rem .6rem .55rem;border-radius:14px;gap:.4rem;}
+body.mob .sci-hd b{font-size:1rem;}
+body.mob .sci-sub{display:none;}
+body.mob .sci-chips{margin-left:0;flex:1 1 auto;gap:.3rem;}
+body.mob .sci-chip,body.mob .sci-open{height:1.8rem;font-size:.68rem;padding:0 .55rem;}
+body.mob .sci-row{gap:.5rem;}
+body.mob .vid-card,body.mob .sci-row .vid-card{flex:0 0 auto;width:9.4rem;min-width:0;max-width:none;border-radius:10px;}
+body.mob .vid-t{font-size:.7rem;}
+body.mob .vid-n{font-size:.6rem;}
+body.mob .view.engvid{height:auto;min-height:0;}
+body.mob .ev-wrap{height:auto;padding:.6rem .55rem;gap:.5rem;}
+body.mob .ev-hd b{font-size:1.05rem;}
+body.mob .ev-hd .ev-sub{display:none;}
+body.mob .ev-steps{margin-left:0;flex:1 1 auto;gap:.3rem;}
+body.mob .ev-chan{height:1.8rem;font-size:.66rem;padding:0 .55rem;}
+body.mob .ev-grid{grid-template-columns:1fr 1fr;overflow:visible;gap:.5rem;padding-bottom:.4rem;}
+body.mob .vh-modal{padding:.6rem;}
+body.mob .vh-box{width:100%;max-height:88vh;}
+body.mob .vh-open,body.mob .vh-chan{height:2.5rem;font-size:.78rem;}
+
+</style>
+<div class="vh-modal" id="vhModal" hidden>
+  <div class="vh-box" role="dialog" aria-modal="true" aria-label="영상 재생">
+    <div class="vh-top">
+      <b id="vhTitle">영상</b>
+      <span class="vh-ch" id="vhCh"></span>
+      <button class="vh-x" id="vhClose" type="button" aria-label="영상 닫기">✕</button>
+    </div>
+    <div class="vh-frame" id="vhFrame"></div>
+    <div class="vh-foot">
+      <a class="vh-open" id="vhOpen" href="https://www.youtube.com" target="_blank" rel="noopener">▶ 유튜브 앱/새 창으로 열기</a>
+      <a class="vh-chan" id="vhChan" href="https://www.youtube.com" target="_blank" rel="noopener">📺 채널 열기</a>
+      <span class="vh-src" id="vhSrc"></span>
+    </div>
+  </div>
+</div>
+<script id="vidHubJs">
+/* =====================================================================
+   🔬 재미있는 과학 영상관 (온라인 공부 첫 화면) · 🎬 영어 영상 (영어 탭)
+   — 실제 유튜브 영상 ID만 사용. 누르면 임베드 모달 + 유튜브 앱 링크.
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c];
+  });
+}
+
+/* ---------------- 🔬 과학 채널 4개 · 영상 16편 ---------------- */
+var SCI = [
+  { k:"goguma", em:"🍠", nm:"고구마머리 과학", ch:"@고구마머리",
+    url:"https://www.youtube.com/channel/UC29S0y5vK0XTCke45dGWT6w",
+    vids:[
+      { id:"QcRr-oR9nOw", len:"3:13", t:"만약 내 몸속 원자의 빈 공간을 전부 없앤다면?", n:"내 몸이 99.99% 텅 비어 있다고?" },
+      { id:"7mVvBulNAvo", len:"9:30", t:"만약 내 키가 매일 두 배씩 커진다면?", n:"하루하루 커지는 나, 어디까지?" },
+      { id:"dvfOrnJdWCI", len:"4:56", t:"만약 달에서 수영한다면 어떨까?", n:"달에서는 물이 동글동글 떠다녀요" },
+      { id:"FWBESn5YKGw", len:"8:07", t:"만약 물 대신 콜라만 마시면 어떻게 될까?", n:"제로콜라는 괜찮을까?" }
+    ] },
+  { k:"sci", em:"💡", nm:"사물궁이 잡학지식", ch:"@사물궁이",
+    url:"https://www.youtube.com/channel/UC7F6UDq3gykPZHWRhrj_BDw",
+    vids:[
+      { id:"OJV20cIhGfk", len:"3:57", t:"오레오를 반으로 나누면 왜 크림이 한쪽에 붙을까?", n:"과자로 배우는 과학" },
+      { id:"Z8eXd6gQmvA", len:"4:40", t:"올빼미는 어떻게 소리 없이 날까?", n:"부엉이의 깃털 비밀" },
+      { id:"w_oVhqxh-00", len:"4:53", t:"우주의 빈 공간에는 무엇이 있을까?", n:"텅 빈 것 같지만 가득해요" },
+      { id:"0buchIZwiTQ", len:"6:46", t:"초식동물은 풀만 먹는데 왜 몸집이 클까?", n:"풀만 먹고 어떻게 클까?" }
+    ] },
+  { k:"natgeo", em:"🦁", nm:"National Geographic Kids", ch:"@natgeokids",
+    url:"https://www.youtube.com/channel/UCXVCgDuD_QCkI7gTKU7-tpg",
+    vids:[
+      { id:"AH7KGVjXOkE", len:"6:32", t:"The Floor REALLY IS Lava! (화산 이야기)", n:"용암은 정말 몇 도일까?" },
+      { id:"ziUQS2I_Lco", len:"6:08", t:"Baby Penguins: 아기 펭귄", n:"솜털에서 바다 다이버로" },
+      { id:"PZ5ZJYuD1vw", len:"6:02", t:"How does a Beaver build a Dam?", n:"비버는 댐을 어떻게 지을까?" },
+      { id:"DLRdkTUJ-kY", len:"6:04", t:"Sea Otters: 바다수달", n:"다시마 숲의 작은 수호자" }
+    ] },
+  { k:"scishow", em:"🧪", nm:"SciShow Kids", ch:"@SciShowKids",
+    url:"https://www.youtube.com/channel/UCRFIPG2u1DxKLNuE3y2SjHA",
+    vids:[
+      { id:"8qdYCpSW2eY", len:"5:48", t:"The Biggest Volcano Ever is in Space!", n:"우주에서 가장 큰 화산" },
+      { id:"r2xP7heE0wk", len:"8:11", t:"How Eyes Let Us See The World", n:"우리 눈은 어떻게 볼까?" },
+      { id:"f-FsMRCutlI", len:"5:34", t:"Water Made the Grand Canyon!", n:"물이 만든 그랜드캐니언" },
+      { id:"5Ssty1ejoek", len:"5:28", t:"Where Can We Find Water?", n:"물은 어디에 있을까?" }
+    ] }
+];
+
+/* ---------------- 🎬 영어 영상 21개 채널 · 3단계 ---------------- */
+var EN = [
+  { k:"start", em:"🌱", nm:"입문·동요·파닉스", chans:[
+    { em:"🎵", nm:"Super Simple Songs", ch:"@SuperSimpleSongs", url:"https://www.youtube.com/channel/UCLsooMJoIpl_7ux2jvdPB-Q",
+      vids:[ { id:"yCjJyiqpAuU", len:"2:34", t:"Twinkle Twinkle Little Star", n:"반짝반짝 작은별" },
+             { id:"PIWYVP6hBEM", len:"2:08", t:"Scrubbity Rubbity Doo", n:"손 씻기 노래" } ] },
+    { em:"🐻", nm:"Badanamu", ch:"@Badanamu", url:"https://www.youtube.com/channel/UCQD_yZCS2BGO_BXtYrXFg1Q",
+      vids:[ { id:"U0aaaKPg9PA", len:"2:32", t:"Sing the Alphabet", n:"알파벳 노래" },
+             { id:"8lD2CWsxHw4", len:"1:45", t:"Badanamu ABC Song", n:"ABC 송" } ] },
+    { em:"🔠", nm:"Alphablocks", ch:"@officialalphablocks", url:"https://www.youtube.com/channel/UC_qs3c0ehDvZkbiEbOj6Drg",
+      vids:[ { id:"xg4_gWt8N_Q", len:"2:35", t:"The Alphabet From A to Z", n:"파닉스 A부터 Z까지" },
+             { id:"q0TDCt-l85w", len:"5:00", t:"The Alphabet Song", n:"알파벳 송" } ] },
+    { em:"🔢", nm:"Numberblocks", ch:"@Numberblocks", url:"https://www.youtube.com/channel/UCPlwvN0w4qFSP1FllALB92w",
+      vids:[ { id:"gtnXvPLP4t4", len:"4:30", t:"Peekaboo! (Sing-along)", n:"숫자 노래" },
+             { id:"aqMh7Bd5DCw", len:"4:44", t:"Numberblobs", n:"함께 세어 봐요" } ] },
+    { em:"🗣️", nm:"Yakka Dee!", ch:"@YakkaDee", url:"https://www.youtube.com/channel/UCMgbJL73cGG3TxmYafJw5hA",
+      vids:[ { id:"lbOvVsgxSL8", len:"1:53", t:"Can You Say Apple?", n:"사과, 말해 볼까?" },
+             { id:"mHu8csxCdQ8", len:"7:16", t:"Fruit", n:"과일 낱말 놀이" } ] },
+    { em:"🪿", nm:"Mother Goose Club", ch:"@MotherGooseClub", url:"https://www.youtube.com/channel/UCJkWoS4RsldA1coEIot5yDA",
+      vids:[ { id:"kLvbJ6e_SdI", len:"2:55", t:"The Wheels on the Bus", n:"버스 바퀴 노래" },
+             { id:"Qv4EDf9Mwhg", len:"2:33", t:"Wheels on the Bus (Animated)", n:"애니메이션 버전" } ] },
+    { em:"🔤", nm:"Preschool Prep Company", ch:"@PreschoolPrepCompany", url:"https://www.youtube.com/channel/UC47Uh7XWApFNpCqQ80e61ug",
+      vids:[ { id:"EjOd6uPj_6c", len:"2:13", t:"Phonics Song", n:"파닉스 송" },
+             { id:"-Y_TGNgUkOU", len:"42:20", t:"Meet the Letters (FREE)", n:"알파벳 익히기" } ] }
+  ] },
+  { k:"easy", em:"🐣", nm:"쉬운 생활·그림책 애니", chans:[
+    { em:"🐷", nm:"Peppa Pig", ch:"@PeppaPigOfficial", url:"https://www.youtube.com/channel/UCAOtE1V7Ots4DjM8JLlrYgg",
+      vids:[ { id:"t7dTdE8Aqtw", len:"2:51", t:"Jumping in Muddy Puddles", n:"진흙 웅덩이 노래" },
+             { id:"_8j4Vxb4DRI", len:"44:54", t:"Controlling the Weather", n:"45분 모음" } ] },
+    { em:"🐭", nm:"Maisy Mouse", ch:"@MaisyMouse", url:"https://www.youtube.com/channel/UC6PkaI25MZai1547O9bTeqQ",
+      vids:[ { id:"skx0DLR0PF0", len:"20:14", t:"Maisy Mouse: Day At The Fair", n:"놀이공원에 갔어요" },
+             { id:"2qzEaxyLV_c", len:"20:19", t:"Maisy Mouse: Birthday", n:"생일 파티" } ] },
+    { em:"🐶", nm:"Hey Duggee", ch:"@HeyDuggeeOfficial", url:"https://www.youtube.com/channel/UCj_mFUb-47d9QNiJ5556LjQ",
+      vids:[ { id:"Mfd8EcI5Dsw", len:"7:00", t:"The Key Badge", n:"열쇠 배지" },
+             { id:"Ov8mXJADZ04", len:"1:09:47", t:"Animal Adventures with Duggee", n:"동물 친구들 모험" } ] },
+    { em:"👦", nm:"Caillou", ch:"@caillou", url:"https://www.youtube.com/channel/UC4yQCVlLhTmOqX5kUkAGr0g",
+      vids:[ { id:"obVsCmFm_MY", len:"22:38", t:"Caillou's favourite plate", n:"내가 좋아하는 접시" },
+             { id:"we8amlzi-jg", len:"21:48", t:"Caillou and the Loud Lunch", n:"시끄러운 점심시간" } ] },
+    { em:"🐰", nm:"Max & Ruby", ch:"@OfficialMaxRuby", url:"https://www.youtube.com/channel/UCjF2lVpoUweXPGf0oRJcP0A",
+      vids:[ { id:"rnwytwUit4U", len:"23:37", t:"Ruby's Tower / Max's Tree Fort", n:"Ep.72" },
+             { id:"q8xony0ihf4", len:"22:48", t:"Max's Sandwich / Ruby's Art Stand", n:"Ep.57" } ] },
+    { em:"🐇", nm:"Simon Super Rabbit", ch:"@SimonSuperRabbit", url:"https://www.youtube.com/channel/UCMAGJ9Hhe_IjsiuYHrns8ag",
+      vids:[ { id:"NPReDQwEcCY", len:"4:59", t:"Let's play tag!", n:"술래잡기 하자!" },
+             { id:"zjI2na5VxF8", len:"4:59", t:"Easy Peasy Rackets", n:"라켓 놀이" } ] },
+    { em:"🐻", nm:"The Berenstain Bears", ch:"@OfficialBerenstainBears", url:"https://www.youtube.com/channel/UCGtFbbGApG0s_8mMuJd-zKg",
+      vids:[ { id:"vQIwxWRzhnI", len:"24:05", t:"The Bad Habit / The Prize Pumpkin", n:"Ep.16" },
+             { id:"vUBKrSwCprY", len:"24:05", t:"Papa's Pizza / The Female Fullback", n:"Ep.38" } ] },
+    { em:"🐕", nm:"Clifford the Big Red Dog", ch:"@CliffordtheBigRedDogClassic", url:"https://www.youtube.com/channel/UCqu9w7Mw14mAUQMzcyV3D4A",
+      vids:[ { id:"CT09fcX-lGE", len:"11:06", t:"The Perfect Pancake", n:"완벽한 팬케이크" },
+             { id:"5_OMTt6n6iI", len:"11:06", t:"Clifford's Cookie Craving", n:"쿠키가 먹고 싶어요" } ] }
+  ] },
+  { k:"fun", em:"🚀", nm:"모험·탈것·재미", chans:[
+    { em:"🚚", nm:"Gecko's Garage", ch:"@GeckosGarage", url:"https://www.youtube.com/channel/UChULBXQf9VDYAi3vRLu_U-w",
+      vids:[ { id:"oSJpK6Lpo8M", len:"33:26", t:"Monster Truck Makeover FAIL!", n:"몬스터트럭 꾸미기" },
+             { id:"4JS_plRfP14", len:"11:11", t:"The Haunted Halloween Car Wash", n:"으스스한 세차장" } ] },
+    { em:"🌍", nm:"Go Jetters", ch:"@GoJettersOfficial", url:"https://www.youtube.com/channel/UCmpFvRQSMIhBKtcFYb-qv_w",
+      vids:[ { id:"_A_e2fs2UQw", len:"11:59", t:"Let's Explore The UK", n:"영국을 탐험해요" },
+             { id:"dJqVWqp1L1M", len:"8:04", t:"Trip to South America", n:"남아메리카 여행" } ] },
+    { em:"🐤", nm:"Peep and the Big Wide World", ch:"@PeepWGBH", url:"https://www.youtube.com/channel/UCPq6g4Q4-SFMIJ048IXmupA",
+      vids:[ { id:"0PhY4ZW03jQ", len:"10:44", t:"Quack and the Amazing Sandy Magic", n:"모래 마술" },
+             { id:"s8Vb4i-Lmaw", len:"10:44", t:"Soap Opera", n:"비누 놀이" } ] },
+    { em:"🦄", nm:"Morphle TV", ch:"@Morphle", url:"https://www.youtube.com/channel/UC5Ti4_DVp7LW34PjEwB13Xg",
+      vids:[ { id:"03HFSliBWy4", len:"31:03", t:"Morphle is CRYING!", n:"울보 모플" },
+             { id:"XbM90po2ubo", len:"1:02:29", t:"Building a Shed", n:"오두막 짓기" } ] },
+    { em:"🐾", nm:"Nick Jr.", ch:"@nickjr", url:"https://www.youtube.com/channel/UCUe6ZpY6TJ0no8jI4l2iLxw",
+      vids:[ { id:"7HftjTgq9Jk", len:"10:13", t:"PAW Patrol Big Rig Adventures", n:"PAW 패트롤 구조대" },
+             { id:"Ei4ndrKB8jw", len:"3:30", t:"Marshall and PAW Patrol Toys", n:"마샬과 장난감 구조대" } ] },
+    { em:"🐉", nm:"Dibo the Gift Dragon", ch:"@DibotheGiftDragon_Official", url:"https://www.youtube.com/channel/UC71Yce9k0wl--h8_BOJ-cmA",
+      vids:[ { id:"toBcYDLSfVg", len:"11:01", t:"Ep20 Ice Cream Mountain", n:"아이스크림 산" },
+             { id:"qI2JZWlOV2g", len:"11:01", t:"Ep31 Shhhh.. It's a Secret", n:"쉿, 비밀이야" } ] }
+  ] }
+];
+
+/* ---------------- 영상 색인 (id → 영상 + 채널 정보) ---------------- */
+var IDX = {};
+(function(){
+  SCI.forEach(function(c){ c.vids.forEach(function(v){
+    IDX[v.id] = { v:v, ch:c, dir:"sci-vid" };
+  }); });
+  EN.forEach(function(g){ g.chans.forEach(function(c){ c.vids.forEach(function(v){
+    IDX[v.id] = { v:v, ch:c, dir:"eng-vid" };
+  }); }); });
+})();
+
+function cardHTML(v, dir){
+  return '<button class="vid-card" type="button" data-vid="' + v.id + '"'
+    + ' aria-label="' + esc(v.t) + ' 영상 보기">'
+    + '<span class="vid-th"><img src="' + dir + '/' + v.id + '.jpg" alt="" width="320" height="180"'
+    + ' loading="lazy" decoding="async">'
+    + '<span class="vid-pl" aria-hidden="true">▶</span>'
+    + '<span class="vid-len">' + esc(v.len) + '</span></span>'
+    + '<span class="vid-bd"><span class="vid-t">' + esc(v.t) + '</span>'
+    + '<span class="vid-n">' + esc(v.n) + '</span></span></button>';
+}
+
+/* ---------------- 🔬 과학 영상관 (온라인 공부 첫 화면) ---------------- */
+var sciK = SCI[0].k;
+function sciCur(){
+  for (var i = 0; i < SCI.length; i++) if (SCI[i].k === sciK) return SCI[i];
+  return SCI[0];
+}
+function renderSci(){
+  var chips = $("sciChips"), row = $("sciRow"), link = $("sciOpen");
+  if (!chips || !row) return;
+  var cur = sciCur();
+  chips.innerHTML = SCI.map(function(c){
+    var on = c.k === sciK;
+    return '<button class="sci-chip' + (on ? " on" : "") + '" type="button" data-sci="' + c.k + '"'
+      + ' aria-pressed="' + (on ? "true" : "false") + '">' + c.em + " " + esc(c.nm) + "</button>";
+  }).join("");
+  if (link){
+    link.href = cur.url;
+    link.textContent = cur.ch + " 채널 ↗";
+    link.setAttribute("aria-label", cur.nm + " 유튜브 채널 열기");
+  }
+  row.innerHTML = cur.vids.map(function(v){ return cardHTML(v, "sci-vid"); }).join("");
+}
+
+/* ---------------- 🎬 영어 영상 (영어 탭) ---------------- */
+var evG = 0;
+function renderEng(){
+  var steps = $("evSteps"), chans = $("evChans"), grid = $("evGrid");
+  if (!steps || !grid) return;
+  if (evG >= EN.length) evG = 0;
+  var g = EN[evG];
+  steps.innerHTML = EN.map(function(x, i){
+    var on = i === evG;
+    return '<button class="sci-chip' + (on ? " on" : "") + '" type="button" data-ev="' + i + '"'
+      + ' aria-pressed="' + (on ? "true" : "false") + '">' + x.em + " " + esc(x.nm) + "</button>";
+  }).join("");
+  if (chans) chans.innerHTML = g.chans.map(function(c){
+    return '<a class="ev-chan" href="' + c.url + '" target="_blank" rel="noopener"'
+      + ' aria-label="' + esc(c.nm) + ' 유튜브 채널 열기">' + c.em + " " + esc(c.nm) + " ↗</a>";
+  }).join("");
+  grid.innerHTML = g.chans.map(function(c){
+    return c.vids.map(function(v){ return cardHTML(v, "eng-vid"); }).join("");
+  }).join("");
+  try { grid.scrollTop = 0; } catch(e){}
+}
+
+/* ---------------- 영상 모달 ---------------- */
+function openVid(id){
+  var it = IDX[id]; if (!it) return;
+  var m = $("vhModal"), f = $("vhFrame"), t = $("vhTitle"), c = $("vhCh"),
+      o = $("vhOpen"), cn = $("vhChan"), s = $("vhSrc");
+  if (!m || !f) return;
+  if (t) t.textContent = it.v.t + (it.v.n ? " · " + it.v.n : "");
+  if (c) c.textContent = it.ch.em + " " + it.ch.nm;
+  f.innerHTML = '<iframe src="https://www.youtube.com/embed/' + it.v.id + '?autoplay=1&rel=0&playsinline=1"'
+    + ' title="' + esc(it.v.t) + '" loading="lazy"'
+    + ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"'
+    + ' referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+  if (o) o.href = "https://www.youtube.com/watch?v=" + it.v.id;
+  if (cn) cn.href = it.ch.url;
+  if (s) s.textContent = it.ch.ch + " · " + it.v.len;
+  m.hidden = false;
+}
+function closeVid(){
+  var m = $("vhModal"), f = $("vhFrame");
+  if (f) f.innerHTML = "";
+  if (m) m.hidden = true;
+}
+
+/* ---------------- 이벤트 · 화면 연결 ---------------- */
+function bind(){
+  var chips = $("sciChips");
+  if (chips && !chips.__vb){
+    chips.__vb = 1;
+    chips.addEventListener("click", function(e){
+      var b = e.target.closest ? e.target.closest("[data-sci]") : null;
+      if (!b) return;
+      sciK = b.getAttribute("data-sci");
+      renderSci();
+    });
+  }  var row = $("sciRow");
+  if (row && !row.__vb){
+    row.__vb = 1;
+    row.addEventListener("click", function(e){
+      var c = e.target.closest ? e.target.closest("[data-vid]") : null;
+      if (c) openVid(c.getAttribute("data-vid"));
+    });
+  }
+  var steps = $("evSteps");
+  if (steps && !steps.__vb){
+    steps.__vb = 1;
+    steps.addEventListener("click", function(e){
+      var b = e.target.closest ? e.target.closest("[data-ev]") : null;
+      if (!b) return;
+      evG = parseInt(b.getAttribute("data-ev"), 10) || 0;
+      renderEng();
+    });
+  }
+  var grid = $("evGrid");
+  if (grid && !grid.__vb){
+    grid.__vb = 1;
+    grid.addEventListener("click", function(e){
+      var c = e.target.closest ? e.target.closest("[data-vid]") : null;
+      if (c) openVid(c.getAttribute("data-vid"));
+    });
+  }
+  var x = $("vhClose");
+  if (x && !x.__vb){ x.__vb = 1; x.addEventListener("click", closeVid); }
+  var m = $("vhModal");
+  if (m && !m.__vb){
+    m.__vb = 1;
+    m.addEventListener("click", function(e){ if (e.target === m) closeVid(); });
+  }
+  if (!window.__vhEsc){
+    window.__vhEsc = 1;
+    document.addEventListener("keydown", function(e){
+      if (e.key === "Escape" || e.keyCode === 27) closeVid();
+    });
+  }
+}
+
+function hook(){
+  var pEn = SB.onShow.en, pSt = SB.onShow.study;
+  SB.onShow.en = function(sub){
+    if (pEn) { try { pEn(sub); } catch(e){} }
+    if (sub === "video") { try { renderEng(); } catch(e){} }
+  };
+  SB.onShow.study = function(sec){
+    if (pSt) { try { pSt(sec); } catch(e){} }
+    if (!sec || sec === "hub") { try { renderSci(); } catch(e){} }
+  };
+}
+
+function init(){
+  try { bind(); renderSci(); renderEng(); hook(); } catch(e){ try { console.warn(e); } catch(e2){} }
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+else init();
+
+SB.videoHub = { sci: SCI, en: EN, open: openVid, close: closeVid, renderSci: renderSci, renderEng: renderEng };
+})();
+
 </script>
 </body>
 </html>
