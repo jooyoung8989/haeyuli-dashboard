@@ -12416,7 +12416,9 @@ function toggleSubDone(day, key){
   try { if (SB.family && SB.family.sync) SB.family.sync(); } catch(e){}
   return !cur;
 }
-function savePlan(p){ writeObj(PLAN_KEY, p); }
+function savePlan(p){ writeObj(PLAN_KEY, p); touchFam(); }
+/* 가족 코드가 연결돼 있으면 지금 올리라고 알린다 */
+function touchFam(){ try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){} }
 
 function weekStart(){
   var d = new Date();
@@ -12560,6 +12562,7 @@ function addHw(day, text){
   w.days[String(day)].push({ id:"h" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36), text:t, done:false, t:Date.now(), c:Date.now() });
   saveHwWeek(w);
   render();
+  touchFam();
   return true;
 }
 function toggleHw(id){
@@ -12568,7 +12571,7 @@ function toggleHw(id){
     var list = w.days[String(d)] || [];
     for (var i = 0; i < list.length; i++) if (list[i].id === id) { list[i].done = !list[i].done; list[i].t = Date.now(); found = true; }
   }
-  if (found) { saveHwWeek(w); render(); }
+  if (found) { saveHwWeek(w); render(); touchFam(); }
   return found;
 }
 function delHw(id){
@@ -12577,7 +12580,7 @@ function delHw(id){
     var list = w.days[String(d)] || [];
     for (var i = 0; i < list.length; i++) if (list[i].id === id) {
       w.all.del = w.all.del || {}; w.all.del[list[i].id] = Date.now();
-      list.splice(i, 1); saveHwWeek(w); render(); return true;
+      list.splice(i, 1); saveHwWeek(w); render(); touchFam(); return true;
     }
   }
   return false;
@@ -12588,7 +12591,7 @@ function toggleSub(day, key){
   var at = p.days[k].indexOf(key);
   if (at >= 0) p.days[k].splice(at, 1); else p.days[k].push(key);
   p.daysAt = p.daysAt || {}; p.daysAt[k] = Date.now();
-  savePlan(p); render();
+  savePlan(p); render(); touchFam();
   return p.days[k];
 }
 
@@ -15026,7 +15029,9 @@ var FAM_KEY = "haeyuli.family.v1";
 var K = {
   plan: "haeyuli.week.v1", hw: "haeyuli.homework.v1", money: "haeyuli.money.v1",
   done: "haeyuli.hwdone.v1", study: "haeyuli.studydays.v1",
-  coupons: "haeyuli.coupons.v1"
+  coupons: "haeyuli.coupons.v1",
+  rbRead: "haeyuli.redpen.read.v1", rbToday: "haeyuli.redpen.today.v1",
+  rbUn: "haeyuli.redpen.unread.v1", rbLog: "study.readlog.v1"
 };
 
 function read(k, fb){
@@ -15042,19 +15047,26 @@ function toast(t){ if (SB.toast) SB.toast(t); }
 function snap(){
   var pl = read(K.plan, { days:{} });
   try { if (SB.week && SB.week.plan) pl = SB.week.plan(); } catch(e){}
+  var rbT = read(K.rbToday, null), rbL = read(K.rbLog, null);
   return {
     plan: pl,
     hw: read(K.hw, {}),
     money: read(K.money, { piggy:0, bank:[], log:[] }),
     done: read(K.done, {}),
     study: read(K.study, {}),
-    coupons: read(K.coupons, { items:[], issued:{} })
+    coupons: read(K.coupons, { items:[], issued:{} }),
+    rb: {
+      read: read(K.rbRead, {}),
+      today: (rbT && rbT.d && rbT.k) ? rbT : null,
+      un: read(K.rbUn, {}),
+      log: { days: (rbL && rbL.days && typeof rbL.days === "object") ? rbL.days : {} }
+    }
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb]); }
 
 /* ---------------- 클라우드 ---------------- */
 function apiGet(code){
@@ -15245,6 +15257,63 @@ function mergeCoupons(lc, cc){
   return { items: out.slice(0, 200), issued: issued };
 }
 
+/* 📖 빨간펜 '오늘 읽을 책'·'읽은 책' — 기기마다 다른 책을 고르지 않게 한 문서로 맞춘다
+   · read : 책키 → 읽은 시각. 같은 책은 더 최근 시각이 이긴다
+   · un   : '읽었어요 ✓'를 푼 기록(책키 → 시각). 이 시각이 read 보다 크거나 같으면 읽지 않은 책
+   · today: { d:날짜, k:책키, n, at:고른 시각 } — at 이 더 최근인 쪽을 쓴다
+   · log  : 날짜별로 읽은 책(study.readlog.v1 의 days) — 합집합, 푼 책은 빼고 */
+function mergeRb(lr, cr){
+  lr = lr || {}; cr = cr || {};
+  var lread = lr.read || {}, cread = cr.read || {};
+  var lun = lr.un || {}, cun = cr.un || {};
+  var out = { read:{}, un:{}, today:null, log:{ days:{} } }, keys = {}, k;
+
+  Object.keys(lread).forEach(function(x){ keys[x] = 1; });
+  Object.keys(cread).forEach(function(x){ keys[x] = 1; });
+  Object.keys(lun).forEach(function(x){ out.un[x] = Math.max(num(out.un[x]), num(lun[x])); });
+  Object.keys(cun).forEach(function(x){ out.un[x] = Math.max(num(out.un[x]), num(cun[x])); });
+  Object.keys(keys).sort().forEach(function(x){
+    var t = Math.max(num(lread[x]), num(cread[x]));
+    if (!t) return;
+    if (num(out.un[x]) >= t) return;                 /* 나중에 ✓를 풀었으면 읽지 않은 책 */
+    out.read[x] = t;
+  });
+  Object.keys(out.un).forEach(function(x){           /* 이미 다시 읽은 책의 옛 표시는 버린다 */
+    if (!out.un[x] || num(out.read[x]) > num(out.un[x])) delete out.un[x];
+  });
+
+  /* 오늘의 책 — 고른 시각(at)이 더 최근인 쪽 */
+  var lt = lr.today || null, ct = cr.today || null, pick = null;
+  if (lt && lt.d && lt.k) pick = lt;
+  if (ct && ct.d && ct.k && (!pick || num(ct.at) > num(pick.at))) pick = ct;
+  if (pick){
+    var n = 0, at = num(pick.at);
+    [lt, ct].forEach(function(x){
+      if (x && x.d === pick.d && x.k === pick.k){ n = Math.max(n, num(x.n)); at = Math.max(at, num(x.at)); }
+    });
+    out.today = { d:String(pick.d), k:String(pick.k), n:n, at:at || 1 };
+  }
+
+  /* 독서 기록(날짜 장부) — 합집합. ✓를 푼 책은 그 날 기록에서도 뺀다 */
+  var ldays = (lr.log && lr.log.days) || {}, cdays = (cr.log && cr.log.days) || {}, days = {};
+  [ldays, cdays].forEach(function(src){
+    Object.keys(src || {}).forEach(function(dd){
+      var b = src[dd];
+      if (!b || typeof b !== "object") return;
+      Object.keys(b).forEach(function(bk){
+        var t = num(b[bk]);
+        if (!t || num(out.un[bk]) >= t) return;
+        if (!days[dd]) days[dd] = {};
+        days[dd][bk] = Math.max(num(days[dd][bk]), t);
+      });
+    });
+  });
+  var dk = Object.keys(days).sort();
+  for (var i = 0; i < dk.length - 200; i++) delete days[dk[i]];
+  out.log = { days: days };
+  return out;
+}
+
 function buildDoc(local, cloud, base, code){
   var c = cloud || {};
   return {
@@ -15256,28 +15325,41 @@ function buildDoc(local, cloud, base, code){
     done: mergeDone(local.done, c.done),
     study: mergeStudy(local.study, c.study),
     coupons: mergeCoupons(local.coupons, c.coupons),
+    rb: mergeRb(local.rb, c.rb),
     at: Date.now()
   };
 }
 
 /* ---------------- 적용 ---------------- */
 function applyDoc(doc){
-  var s = snap(), changed = false;
+  var s = snap(), changed = false, rbChanged = false;
   if (JSON.stringify(doc.plan) !== JSON.stringify(s.plan)) { write(K.plan, doc.plan); changed = true; }
   if (JSON.stringify(doc.hw) !== JSON.stringify(s.hw)) { write(K.hw, doc.hw); changed = true; }
   if (JSON.stringify(doc.money) !== JSON.stringify(s.money)) { write(K.money, doc.money); changed = true; }
   if (JSON.stringify(doc.done) !== JSON.stringify(s.done)) { write(K.done, doc.done); changed = true; }
   if (JSON.stringify(doc.study) !== JSON.stringify(s.study)) { write(K.study, doc.study); changed = true; }
   if (doc.coupons && JSON.stringify(doc.coupons) !== JSON.stringify(s.coupons)) { write(K.coupons, doc.coupons); changed = true; }
-  if (changed) rerender();
+  /* 📖 빨간펜 책 — 오늘 읽을 책·읽은 책·독서 기록 */
+  if (doc.rb && typeof doc.rb === "object"){
+    var cur = s.rb || {};
+    if (JSON.stringify(doc.rb.read || {}) !== JSON.stringify(cur.read || {})) { write(K.rbRead, doc.rb.read || {}); rbChanged = true; }
+    if (JSON.stringify(doc.rb.un || {}) !== JSON.stringify(cur.un || {})) { write(K.rbUn, doc.rb.un || {}); rbChanged = true; }
+    if (doc.rb.today && JSON.stringify(doc.rb.today) !== JSON.stringify(cur.today)) { write(K.rbToday, doc.rb.today); rbChanged = true; }
+    var dl = (doc.rb.log && doc.rb.log.days) || null;
+    if (dl && JSON.stringify(dl) !== JSON.stringify((cur.log && cur.log.days) || {})) { write(K.rbLog, { v:1, days:dl }); rbChanged = true; }
+    if (rbChanged) changed = true;
+  }
+  if (changed) rerender(rbChanged);
   return changed;
 }
 
-function rerender(){
+function rerender(rbChanged){
   try { if (SB.week && SB.week.render) SB.week.render(); } catch(e){}
   try { if (SB.money && SB.money.render) SB.money.render(); } catch(e){}
   try { if (SB.coupons && SB.coupons.render) SB.coupons.render(); } catch(e){}
   try { if (SB.coupons && SB.coupons.guide) SB.coupons.guide(); } catch(e){}
+  /* 빨간펜 책이 바뀌었으면 홈 '오늘 읽을 책'·책장 권수를 바로 다시 그린다 */
+  if (rbChanged) { try { if (window.RB && RB.reload) RB.reload(); } catch(e){} }
 }
 
 /* ---------------- 동기화 ---------------- */
@@ -15298,7 +15380,7 @@ function pullPush(manual){
     if (!cloud){
       var doc = {
         v:1, code:f.code, plan:local.plan, hw:local.hw, money:local.money,
-        done:local.done, study:local.study, coupons:local.coupons, at:Date.now()
+        done:local.done, study:local.study, coupons:local.coupons, rb:local.rb, at:Date.now()
       };
       return apiPut(f.code, doc).then(function(){ return true; });
     }
@@ -15362,7 +15444,7 @@ function createCode(){
   saveFam({ code:code, base:num(s.money.piggy), lastSync:0, sig:"", lastError:"", at:Date.now() });
   paint();
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
-  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, at:Date.now() })
+  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, at:Date.now() })
     .then(function(){
       var g = fam();
       g.base = num(s.money.piggy); g.lastSync = Date.now(); g.sig = sigOf(s); g.lastError = "";
@@ -15386,10 +15468,18 @@ function joinCode(){
     if (cloud.money) write(K.money, cloud.money);
     if (cloud.done) write(K.done, cloud.done);
     if (cloud.study) write(K.study, cloud.study);
+    if (cloud.coupons) write(K.coupons, cloud.coupons);
+    var gotRb = false;
+    if (cloud.rb && typeof cloud.rb === "object"){
+      if (cloud.rb.read) { write(K.rbRead, cloud.rb.read); gotRb = true; }
+      if (cloud.rb.un) { write(K.rbUn, cloud.rb.un); gotRb = true; }
+      if (cloud.rb.today) { write(K.rbToday, cloud.rb.today); gotRb = true; }
+      if (cloud.rb.log && cloud.rb.log.days) { write(K.rbLog, { v:1, days:cloud.rb.log.days }); gotRb = true; }
+    }
     var s = snap();
     saveFam({ code:code, base:num(s.money.piggy), lastSync:Date.now(), sig:sigOf(s), lastError:"", at:Date.now() });
     if (inp) inp.value = "";
-    paint(); rerender();
+    paint(); rerender(gotRb);
     toast("🔗 가족 코드 " + code + " 로 연결했어요");
     pullPush(false);
   }).catch(function(){
@@ -15446,6 +15536,20 @@ function bindUI(){
   }
 }
 
+/* 손댄 즉시 올린다 — 숙제 추가·체크·삭제, 오늘의 책 고르기가 바로 다른 기기로 간다 */
+var touchTimer = 0;
+function touch(){
+  if (!fam().code) return;
+  clearTimeout(touchTimer);
+  touchTimer = setTimeout(function(){ try { pullPush(false); } catch(e){} }, 400);
+}
+var wakeTimer = 0;
+function wake(){
+  if (!fam().code || busy) return;
+  clearTimeout(wakeTimer);
+  wakeTimer = setTimeout(function(){ try { pullPush(false); } catch(e){} }, 120);
+}
+
 function start(){
   bindUI();
   paint();
@@ -15455,19 +15559,21 @@ function start(){
   setInterval(function(){
     var g = fam();
     if (!g.code || busy || document.hidden) return;
-    pullPush(false);                       /* 다른 기기의 숙제·용돈 받기 */
-  }, 15000);
+    pullPush(false);                       /* 다른 기기의 숙제·용돈·책 받기 (6초) */
+  }, 6000);
 
   setInterval(function(){
     var g = fam();
-    if (!g.code || busy || document.hidden) return;
-    if (sigOf(snap()) !== g.sig) pullPush(false);   /* 이 기기에서 바뀐 것 올리기 */
-  }, 4000);
+    if (!g.code || busy) return;
+    if (sigOf(snap()) !== g.sig) pullPush(false);   /* 이 기기에서 바뀐 것 올리기 (숨겨져 있어도) */
+  }, 2500);
 
   document.addEventListener("visibilitychange", function(){
-    if (!document.hidden && fam().code) pullPush(false);
+    if (!document.hidden) wake();
   });
-  window.addEventListener("online", function(){ if (fam().code) pullPush(false); });
+  window.addEventListener("focus", function(){ wake(); });
+  window.addEventListener("pageshow", function(){ wake(); });
+  window.addEventListener("online", function(){ wake(); });
 }
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
@@ -15478,6 +15584,7 @@ SB.family = {
   code: function(){ return fam().code || ""; },
   state: function(){ return fam(); },
   sync: function(){ return pullPush(true); },
+  touch: touch,
   create: createCode,
   join: joinCode,
   leave: leaveCode,
@@ -19460,12 +19567,22 @@ SRC.forEach(function(s){
 var K = {
   read:  "haeyuli.redpen.read.v1",
   today: "haeyuli.redpen.today.v1",
+  un:    "haeyuli.redpen.unread.v1",
   art:   "haeyuli.redpen.art.v1",
   quiz:  "haeyuli.redpen.quiz.v1"
 };
 var read = rd(K.read, {}) || {};
+var unread = rd(K.un, {}) || {};
 var art  = rd(K.art, {}) || {};
 var quiz = rd(K.quiz, {}) || {};
+/* 다른 기기에서 풀어 둔 책(✓ 취소)은 다시 읽지 않은 책으로 */
+(function(){
+  for (var k in unread){
+    if (!unread[k]) continue;
+    if (!read[k] || Number(unread[k]) >= Number(read[k])) delete read[k];
+  }
+})();
+function touchFam(){ try { if (window.SB && SB.family && SB.family.touch) SB.family.touch(); } catch(e){} }
 
 function isRead(k){ return !!read[k]; }
 function readCount(serKey){
@@ -19479,8 +19596,16 @@ function seriesLabel(s){ return s.short || String(s.n).replace("솔루토이 ", 
 function setRead(key, on){
   if (!BYKEY[key]) return;
   var prevTs = read[key];
-  if (on) read[key] = Date.now(); else delete read[key];
+  if (on){
+    read[key] = Date.now();
+    if (unread[key]) { delete unread[key]; wr(K.un, unread); }
+  } else {
+    delete read[key];
+    unread[key] = Date.now();             /* ✓를 풀었다는 표시 — 다른 기기가 되살리지 않게 */
+    wr(K.un, unread);
+  }
   wr(K.read, read);
+  touchFam();
   try { if (SB.readlog) SB.readlog.markRedpen(key, on, on ? read[key] : prevTs); } catch(e){}
   refreshCard(key);
   refreshCounters();
@@ -19538,12 +19663,14 @@ function todayBook(rotate){
   if (rotate){
     var prev = (t && t.d === d) ? t.k : null;
     var pick = pickFor(d, prev);
-    wr(K.today, { d:d, k:pick.key, n:(prev ? 1 : 0) });
+    wr(K.today, { d:d, k:pick.key, n:(prev ? 1 : 0), at:Date.now() });
+    touchFam();
     return pick;
   }
   if (t && t.d === d && BYKEY[t.k] && !isRead(t.k)) return BYKEY[t.k];
   var p = pickFor(d);
-  wr(K.today, { d:d, k:p.key, n:(t && t.d === d ? (t.n || 0) : 0) });
+  wr(K.today, { d:d, k:p.key, n:(t && t.d === d ? (t.n || 0) : 0), at:Date.now() });
+  touchFam();
   return p;
 }
 
@@ -19882,6 +20009,22 @@ function applyMode(){
     tabs[j].setAttribute("aria-pressed", on ? "true" : "false");
   }
 }
+
+/* 가족 코드로 받은 책 상태를 다시 읽어 홈 카드·책장 권수·✓ 표시를 한 번에 갱신 */
+RB.reload = function(){
+  try {
+    read = rd(K.read, {}) || {};
+    unread = rd(K.un, {}) || {};
+    for (var k in unread){
+      if (!unread[k]) continue;
+      if (!read[k] || Number(unread[k]) >= Number(read[k])) delete read[k];
+    }
+    art  = rd(K.art, {}) || {};
+    quiz = rd(K.quiz, {}) || {};
+    paintAll();
+    refreshCounters();
+  } catch(e){}
+};
 
 function paintAll(){
   try { if (SB.readlog) SB.readlog.render(); } catch(e){}
@@ -20271,6 +20414,7 @@ if (document.readyState === "loading") document.addEventListener("DOMContentLoad
 else setTimeout(boot, 0);
 window.RB = { series:SERIES, books:BOOKS, read:function(){ return read; }, isRead:isRead,
   setRead:setRead, open:openActivity, today:function(){ return todayBook(false); },
+  reload:function(){ return RB.reload(); },
   stats:function(){ return { total:BOOKS.length, read:readCount("") }; } };
 })();
 
