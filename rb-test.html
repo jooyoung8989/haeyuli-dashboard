@@ -3687,7 +3687,7 @@ body.mob .rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;
 
 .rb-prog{display:flex;align-items:center;gap:1vh;flex:0 0 auto;}
 .rb-prog b{font-size:1.5vh;color:#2a3646;font-weight:900;}
-.rb-bar{flex:1 1 auto;height:.9vh;border-radius:999px;background:#e8eef4;overflow:hidden;}
+.rb-bar{flex:1 1 auto;min-width:6vh;height:1.1vh;border-radius:999px;background:#dfe8f1;overflow:hidden;box-shadow:inset 0 0 0 .12vh #cfdce8;}
 .rb-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#5ec2ee,#39b978);}
 .rb-prog span{font-size:1.35vh;font-weight:900;color:#3f7f9e;}
 
@@ -15520,7 +15520,9 @@ function buildHome(){
 function applyMode(){
   var treeOn = (MODE === "tree");
   var view = $("viewBook"); if (!view) return;
-  var panels = view.querySelectorAll(":scope > .bk-panel");
+  var tree = $("rbTreeBody");
+  if (tree) tree.classList.toggle("rb-hide", !treeOn);
+  var panels = view.querySelectorAll(".bk-panel");
   for (var i = 0; i < panels.length; i++) panels[i].classList.toggle("rb-hide", !treeOn);
   var sw = $("rbShelfWrap"), aw = $("rbActWrap");
   if (sw) sw.classList.toggle("rb-hide", MODE !== "shelf");
