@@ -727,33 +727,52 @@ img{display:block;}
 .prep-link:active{transform:scale(.97);}
 .prep-plus{flex:0 0 auto;width:3.2vh;height:3.2vh;border-radius:50%;background:#FFF3C4;color:#8A6200;font-size:1.5vh;
   font-weight:900;display:grid;place-items:center;box-shadow:inset 0 0 0 .16vh #F2D075;}
-.prep-list{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:.45vh;padding-right:.1vh;}
-.prep-row{flex:0 0 auto;display:flex;align-items:center;gap:.7vh;min-height:5.2vh;padding:.4vh .85vh;border-radius:1.2vh;
+/* 준비물은 한 줄씩 쌓지 않고 병렬(2~3열) 카드 그리드로 — 여러 개를 한눈에 */
+.prep-scroll{flex:1;min-height:0;position:relative;display:flex;}
+.prep-scroll::after{content:"";position:absolute;left:.2vh;right:.2vh;bottom:0;height:2.2vh;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,0),#fff 72%);opacity:0;transition:opacity .18s;}
+.dprep.more .prep-scroll::after{opacity:1;}
+.prep-list{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  grid-auto-rows:minmax(5.4vh,auto);align-content:start;gap:.55vh .55vh;padding-right:.2vh;}
+.prep-row{position:relative;min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"chk body";
+  column-gap:.55vh;align-items:center;padding:.5vh .7vh;border-radius:1.2vh;
   background:#FFFDF5;box-shadow:inset 0 0 0 .18vh #F0E6D0;transition:background .18s;}
 .prep-row.done{background:#F5FDF8;box-shadow:inset 0 0 0 .18vh #c9ecda;}
-.prep-row .pchk{flex:0 0 auto;width:3.9vh;height:3.9vh;border-radius:1.1vh;border:.22vh solid #d9c9a3;background:#fff;
-  display:grid;place-items:center;font-size:2.2vh;font-weight:900;color:transparent;line-height:1;}
+.prep-row .pchk{grid-area:chk;align-self:center;width:3.4vh;height:3.4vh;border-radius:1vh;border:.22vh solid #d9c9a3;background:#fff;
+  display:grid;place-items:center;font-size:2vh;font-weight:900;color:transparent;line-height:1;}
 .prep-row.done .pchk{background:#3fbb78;border-color:#3fbb78;color:#fff;}
-.prep-row .ptype{flex:0 0 auto;font-size:2.05vh;line-height:1;}
-.prep-row .ptxt{flex:1;min-width:0;font-size:2.15vh;font-weight:900;color:#3d4a43;line-height:1.32;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.prep-row .pbody{grid-area:body;min-width:0;display:flex;flex-direction:column;gap:.12vh;padding-right:2.4vh;}
+.prep-row .ptxt{font-size:2.15vh;font-weight:900;color:#3d4a43;line-height:1.24;word-break:break-word;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .prep-row.done .ptxt{color:#9fb2a9;text-decoration:line-through;}
-.prep-row .pdate{flex:0 0 auto;font-size:1.25vh;font-weight:900;color:#8A6200;white-space:nowrap;background:#FFF3D4;
-  border-radius:999px;padding:.22vh .75vh;}
+.prep-row .pmeta{display:flex;align-items:center;gap:.35vh;min-width:0;}
+.prep-row .ptype{flex:0 0 auto;font-size:1.45vh;line-height:1;}
+.prep-row .pdate{flex:0 0 auto;font-size:1.1vh;font-weight:900;color:#8A6200;white-space:nowrap;background:#FFF3D4;
+  border-radius:999px;padding:.2vh .7vh;}
 .prep-row .pdate.soon{background:#FFE0D3;color:#b8482a;}
-.prep-row .pdel{flex:0 0 auto;width:2.8vh;height:2.8vh;border-radius:50%;background:rgba(255,255,255,.9);color:#c9c3ac;
-  font-size:1.15vh;font-weight:900;display:grid;place-items:center;line-height:1;}
+.prep-row .pdel{position:absolute;top:.4vh;right:.45vh;width:2.4vh;height:2.4vh;border-radius:50%;background:#F5EFE0;color:#bdb195;
+  font-size:1vh;font-weight:900;display:grid;place-items:center;line-height:1;}
 .prep-empty{flex:1;display:grid;place-items:center;font-size:1.6vh;font-weight:700;color:#b9ae94;text-align:center;line-height:1.45;}
-.prep-form{flex:0 0 auto;display:flex;gap:.4vh;}
+.prep-list.empty{display:flex;flex-direction:column;justify-content:center;}
+/* 입력줄(추가·메모)은 한 줄에 나란히 두어 준비물 카드가 들어갈 자리를 넓힌다 */
+.prep-tools{flex:0 0 auto;display:flex;align-items:stretch;gap:.5vh;min-width:0;}
+.prep-form{flex:1 1 58%;display:flex;gap:.4vh;min-width:0;}
 .prep-form input{flex:1;min-width:0;min-height:3.5vh;border-radius:.9vh;border:.2vh solid #EFE3C6;background:#FFFDF7;
   padding:0 .7vh;font-size:1.25vh;font-weight:700;color:#33413a;outline:none;}
 .prep-form input:focus{border-color:#8fd7ae;background:#fff;}
 .prep-form button{flex:0 0 auto;min-height:3.5vh;padding:0 1vh;border-radius:.9vh;background:#F7C948;color:#5F4100;
   font-size:1.25vh;font-weight:900;box-shadow:0 .2vh .5vh rgba(224,168,0,.25);}
-.prep-memo{flex:0 0 auto;display:flex;align-items:center;gap:.5vh;background:#FFFBEC;border-radius:.9vh;
+.prep-memo{flex:1 1 42%;display:flex;align-items:center;gap:.4vh;background:#FFFBEC;border-radius:.9vh;min-width:0;
   padding:.15vh .6vh;box-shadow:inset 0 0 0 .16vh #F3E6C4;}
 .prep-memo span{flex:0 0 auto;font-size:1.12vh;font-weight:900;color:#8A6200;white-space:nowrap;}
 .prep-memo input{flex:1;min-width:0;min-height:3vh;border:0;background:transparent;font-size:1.25vh;font-weight:800;
   color:#4A4238;outline:none;}
+
+@media (min-width:901px){
+  /* 넓은 화면에서는 세 열로 고정 — 카드 한 장이 커져 글씨가 더 잘 보인다 */
+  .prep-list{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(6.2vh,auto);}
+}
 
 /* ---- 하단 요약 ---- */
 .dash-bottom{flex:0 0 auto;height:23vh;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,2.25fr);gap:1.1vh;}
@@ -1104,8 +1123,19 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
 @media (max-width:640px){
   /* 폰에서는 알림 설정 버튼을 한 줄씩 크게 */
   .ntfy-btns .btn{flex:1 1 100%;min-height:5vh;font-size:1.6vh;}
-  .prep-row .ptxt{font-size:1.9vh;}
-  .prep-row{min-height:4.8vh;}
+  /* 폰에서도 준비물은 두 칸 나란히 — 제목은 두 줄까지, 체크·날짜·삭제는 아래줄에 */
+  .prep-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:.45vh;grid-auto-rows:minmax(5.6vh,auto);}
+  .prep-row{grid-template-columns:auto minmax(0,1fr) auto;
+    grid-template-areas:"txt txt del" "chk met del";
+    row-gap:.15vh;column-gap:.3vh;padding:.45vh .5vh;}
+  .prep-row .pbody{display:contents;}
+  .prep-row .ptxt{grid-area:txt;font-size:1.6vh;line-height:1.24;}
+  .prep-row .pmeta{grid-area:met;gap:.25vh;}
+  .prep-row .pchk{grid-area:chk;width:2.5vh;height:2.5vh;border-radius:.8vh;font-size:1.4vh;}
+  .prep-row .ptype{font-size:1.05vh;}
+  .prep-row .pdate{font-size:.92vh;padding:.12vh .45vh;}
+  .prep-row .pdel{grid-area:del;position:static;align-self:end;width:2.1vh;height:2.1vh;font-size:.86vh;}
+  .prep-memo span b{display:none;}
 }
 
 @media (max-height:760px){
@@ -1298,14 +1328,16 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
           <a class="prep-link" id="engLink" href="./haeyuli-english-board.html" title="해율이 스터디 보드 열기">📚 스터디 보드</a>
           <button class="prep-plus" id="noteAdd" type="button" aria-label="알림장 붙여넣기로 추가">＋</button>
         </div>
-        <div class="prep-list" id="prepList"></div>
-        <form class="prep-form" id="prepForm" autocomplete="off">
-          <input id="prepInput" type="text" maxlength="30" placeholder="준비물·알림 추가 (예: 체육복)" aria-label="준비물 추가">
-          <button type="submit">추가</button>
-        </form>
-        <div class="prep-memo">
-          <span>📝 메모</span>
-          <input id="prepMemo" type="text" maxlength="60" placeholder="예: 내일 체육복·우산 챙기기" aria-label="준비물 메모">
+        <div class="prep-scroll"><div class="prep-list" id="prepList"></div></div>
+        <div class="prep-tools">
+          <form class="prep-form" id="prepForm" autocomplete="off">
+            <input id="prepInput" type="text" maxlength="30" placeholder="준비물·알림 추가 (예: 체육복)" aria-label="준비물 추가">
+            <button type="submit">추가</button>
+          </form>
+          <div class="prep-memo">
+            <span>📝 <b>메모</b></span>
+            <input id="prepMemo" type="text" maxlength="60" placeholder="예: 내일 체육복·우산 챙기기" aria-label="준비물 메모">
+          </div>
         </div>
       </div>
     </div>
@@ -3526,6 +3558,7 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     if (!box) return;
     box.innerHTML = "";
     var show = prepList();
+    box.classList.toggle("empty", !show.length);
     var dEl = document.getElementById("prepDate");
     if (dEl) {
       var nd = new Date();
@@ -3550,9 +3583,10 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
       row.setAttribute("aria-checked", n.done ? "true" : "false");
       row.setAttribute("tabindex", "0");
       row.setAttribute("data-id", n.id);
-      row.innerHTML = '<span class="pchk">✓</span><span class="ptype">' + t.emoji + '</span>' +
-        '<span class="ptxt">' + escHtml(n.title) + '</span>' +
-        '<span class="pdate' + (diff >= 0 && diff <= 2 ? " soon" : "") + '">' + escHtml(dtext) + '</span>' +
+      row.innerHTML = '<span class="pchk">✓</span>' +
+        '<div class="pbody"><span class="ptxt">' + escHtml(n.title) + '</span>' +
+        '<span class="pmeta"><span class="ptype">' + t.emoji + '</span>' +
+        '<span class="pdate' + (diff >= 0 && diff <= 2 ? " soon" : "") + '">' + escHtml(dtext) + '</span></span></div>' +
         '<button class="pdel" type="button" aria-label="' + escHtml(n.title) + ' 삭제">✕</button>';
       row.addEventListener("click", function(ev){
         if (ev.target.classList.contains("pdel")) return;
@@ -3564,6 +3598,17 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
       });
       box.appendChild(row);
     });
+    /* 아래에 더 있으면 카드 끝을 살짝 흐려 스크롤이 있다는 걸 보여 준다 */
+    var card = document.getElementById("prepCard");
+    function moreState(){
+      if (!card) return;
+      card.classList.toggle("more", box.scrollHeight - box.scrollTop - box.clientHeight > 2);
+    }
+    moreState();
+    if (!box.__moreHooked) {
+      box.__moreHooked = 1;
+      box.addEventListener("scroll", moreState, { passive:true });
+    }
     var mi = document.getElementById("prepMemo");
     if (mi && !mi.__loaded) {
       mi.value = pmemoAll.byDay[today] || "";
