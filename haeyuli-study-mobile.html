@@ -4908,6 +4908,117 @@ body.mob .dy-viewmeta{font-size:.8rem;}
   .ck-clock{width:min(84vw,34vh,360px);}
 }
 </style>
+<style>
+/* ==================== 🎬 수학 영상 (매스버스 · 키출판사) ==================== */
+.view.mathvid{padding:0;display:flex;flex-direction:column;height:100%;min-height:0;background:none;box-shadow:none;}
+.mv-wrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.55vh;padding:.75vh .85vh;
+  border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px #e6ebf0;}
+.mv-hd{flex:0 0 auto;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;min-width:0;}
+.mv-hd b{font-size:clamp(15px,1.95vh,21px);font-weight:900;color:#1b3f5c;letter-spacing:-.02em;white-space:nowrap;}
+.mv-hd .mv-sub{flex:1 1 10rem;min-width:0;font-size:clamp(10px,1.2vh,13.5px);font-weight:600;color:#93a3b1;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mv-prog{flex:0 0 auto;font-size:clamp(9.5px,1.15vh,13px);font-weight:800;color:#2f8b6b;background:#f2f8f4;
+  padding:.12rem .55rem;border-radius:999px;box-shadow:inset 0 0 0 1px #d7e8de;white-space:nowrap;}
+.mv-ori{flex:0 0 auto;display:inline-flex;align-items:center;gap:.2rem;height:1.65rem;padding:0 .6rem;border-radius:999px;
+  font-size:clamp(9.5px,1.15vh,13px);font-weight:800;color:#3f6479;background:#f5fafd;
+  box-shadow:inset 0 0 0 1.2px #dde8ef;text-decoration:none;white-space:nowrap;}
+.mv-ori:hover{background:#eaf6ff;color:#0e5a86;}
+.mv-intro{flex:0 0 auto;margin:0;font-size:clamp(10px,1.2vh,13.5px);font-weight:600;color:#6c7f8e;line-height:1.45;}
+.mv-intro b{color:#1b5f86;font-weight:800;}
+.mv-top{flex:0 0 auto;display:flex;gap:.45rem;align-items:stretch;flex-wrap:wrap;min-width:0;}
+.mv-go{flex:1 1 18rem;min-width:0;display:flex;align-items:center;gap:.55rem;padding:.5rem .7rem;border-radius:14px;
+  background:linear-gradient(135deg,#2f8ec2,#1c5f88);color:#fff;text-decoration:none;
+  box-shadow:0 3px 10px rgba(28,95,136,.26);}
+.mv-go:hover{filter:brightness(1.06);}
+.mv-go-em{flex:0 0 auto;font-size:clamp(18px,2.5vh,26px);line-height:1;}
+.mv-go-t{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.05rem;}
+.mv-go-t b{font-size:clamp(12.5px,1.55vh,17px);font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.mv-go-t em{font-style:normal;font-size:clamp(9px,1.1vh,12.5px);font-weight:600;color:rgba(255,255,255,.84);line-height:1.25;}
+.mv-go-ar{flex:0 0 auto;font-size:clamp(14px,1.8vh,20px);font-weight:900;}
+.mv-side{flex:0 0 auto;display:flex;gap:.35rem;align-items:stretch;}
+.mv-mini{display:inline-flex;align-items:center;justify-content:center;gap:.25rem;padding:.4rem .65rem;
+  border-radius:12px;font-size:clamp(10px,1.2vh,13.5px);font-weight:800;color:#3f6479;background:#f5fafd;
+  box-shadow:inset 0 0 0 1.2px #dde8ef;text-decoration:none;cursor:pointer;white-space:nowrap;font-family:inherit;border:0;}
+.mv-mini:hover{background:#eaf6ff;color:#0e5a86;}
+.mv-mini.on{background:#e9f6ff;color:#0e5a86;box-shadow:inset 0 0 0 1.6px #9dcde9;}
+
+.mv-chapters{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;align-content:stretch;
+  grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);
+  gap:.6rem;padding-right:.15rem;}
+@media (max-width:900px){ .mv-chapters{grid-template-columns:repeat(2,minmax(0,1fr));} }
+.mv-ch{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.34rem;
+  padding:.6rem .6rem .7rem;border-radius:16px;text-align:center;
+  background:#fbfdff;box-shadow:inset 0 0 0 1.2px #dfeaf2;cursor:pointer;min-width:0;font-family:inherit;border:0;}
+.mv-ch:hover{background:#f2f9ff;box-shadow:inset 0 0 0 1.6px #a9d5ee;}
+.mv-ch:active{transform:scale(.985);}
+.mv-ch-em{font-size:clamp(30px,6vh,62px);line-height:1;filter:drop-shadow(0 2px 3px rgba(20,50,70,.10));}
+.mv-ch-n{font-size:clamp(9.5px,1.2vh,13px);font-weight:900;color:#2c86b8;letter-spacing:.02em;}
+.mv-ch b{font-size:clamp(16px,2.85vh,30px);font-weight:900;color:#17394f;line-height:1.22;letter-spacing:-.03em;}
+.mv-ch em{font-style:normal;font-size:clamp(9.5px,1.15vh,13px);font-weight:700;color:#8b98a4;line-height:1.3;}
+.mv-ch-bar{width:min(100%,13rem);height:.4rem;border-radius:999px;background:#e8eff5;overflow:hidden;margin-top:.15rem;}
+.mv-ch-bar i{display:block;height:100%;background:linear-gradient(90deg,#6ccb99,#2f9e6b);}
+.mv-crumb{flex:0 0 auto;display:flex;align-items:center;gap:.5rem;min-width:0;}
+.mv-crumb[hidden]{display:none;}
+.mv-back{flex:0 0 auto;display:inline-flex;align-items:center;height:1.7rem;padding:0 .6rem;border-radius:999px;
+  font-size:clamp(9.5px,1.15vh,13px);font-weight:800;color:#3f6479;background:#f5fafd;
+  box-shadow:inset 0 0 0 1.2px #dde8ef;cursor:pointer;white-space:nowrap;font-family:inherit;border:0;}
+.mv-back:hover{background:#eaf6ff;color:#0e5a86;}
+.mv-crumb b{flex:0 0 auto;font-size:clamp(11.5px,1.4vh,15.5px);font-weight:900;color:#17394f;white-space:nowrap;}
+.mv-crumb span{flex:1 1 auto;min-width:0;font-size:clamp(9.5px,1.15vh,13px);font-weight:700;color:#8b98a4;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mv-list{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;align-content:start;gap:.3rem;
+  grid-template-columns:repeat(auto-fill,minmax(clamp(240px,25vw,340px),1fr));padding-right:.15rem;}
+.mv-list[hidden]{display:none;}
+.mv-row{position:relative;display:flex;align-items:center;gap:.45rem;padding:.4rem .5rem;border-radius:11px;
+  background:#fbfdff;box-shadow:inset 0 0 0 1.2px #e3ecf3;text-decoration:none;min-width:0;}
+.mv-row:hover{background:#f2f9ff;box-shadow:inset 0 0 0 1.5px #a9d5ee;}
+.mv-row.watched{background:#fbfefc;box-shadow:inset 0 0 0 1.5px #b8e0c9;}
+.mv-row-n{flex:0 0 auto;font-size:clamp(8.5px,1.05vh,11.5px);font-weight:900;color:#5d7890;background:#eef5fa;
+  padding:.08rem .32rem;border-radius:6px;}
+.mv-row-t{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.02rem;}
+.mv-row-t b{font-size:clamp(11.5px,1.45vh,16px);font-weight:800;color:#22303c;line-height:1.25;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mv-row-t em{font-style:normal;font-size:clamp(9px,1.1vh,12.5px);font-weight:600;color:#8b98a4;line-height:1.2;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mv-row-go{flex:0 0 auto;width:1.7rem;height:1.7rem;border-radius:50%;display:grid;place-items:center;
+  background:#e9f4fb;color:#1d7aa8;font-size:.72rem;font-weight:900;}
+.mv-ck{flex:0 0 auto;width:1.55rem;height:1.55rem;border-radius:50%;display:grid;place-items:center;
+  background:#eef3f7;color:#a8b7c3;font-size:.72rem;font-weight:900;cursor:pointer;}
+.mv-ck.on{background:#2f9e6b;color:#fff;}
+
+.mv-embed{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.4rem;}
+.mv-embed[hidden]{display:none;}
+.mv-embar{flex:0 0 auto;display:flex;align-items:center;gap:.45rem;min-width:0;}
+.mv-embar b{flex:0 0 auto;font-size:clamp(11px,1.35vh,15px);font-weight:900;color:#1b3f5c;white-space:nowrap;}
+.mv-embar > span{flex:1 1 auto;min-width:0;font-size:clamp(9px,1.1vh,12.5px);font-weight:600;color:#93a3b1;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mv-frame{flex:1 1 auto;min-height:0;border-radius:12px;overflow:hidden;background:#f4f8fb;
+  box-shadow:inset 0 0 0 1.2px #e1eaf1;}
+.mv-frame[hidden]{display:none;}
+.mv-frame iframe{display:block;width:100%;height:100%;border:0;background:#fff;}
+.mv-noemb{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
+  text-align:center;padding:1rem;border-radius:12px;background:#f7fbfe;box-shadow:inset 0 0 0 1.2px #dfeaf2;}
+.mv-noemb[hidden]{display:none;}
+.mv-noemb b{font-size:clamp(13px,1.6vh,18px);font-weight:900;color:#17394f;}
+.mv-noemb p{margin:0;max-width:34rem;font-size:clamp(10.5px,1.25vh,14px);font-weight:600;color:#6c7f8e;line-height:1.5;}
+.mv-go2{display:inline-flex;align-items:center;gap:.3rem;padding:.5rem .9rem;border-radius:12px;
+  background:linear-gradient(135deg,#2f8ec2,#1c5f88);color:#fff;text-decoration:none;
+  font-size:clamp(11px,1.35vh,15px);font-weight:900;box-shadow:0 3px 10px rgba(28,95,136,.26);}
+body.mob .view.mathvid{height:auto;}
+body.mob .mv-wrap{padding:.6rem .55rem;gap:.5rem;}
+body.mob .mv-hd{gap:.4rem;}
+body.mob .mv-hd .mv-sub{flex:1 1 100%;order:3;white-space:normal;overflow:visible;}
+body.mob .mv-go{flex:1 1 100%;}
+body.mob .mv-side{flex:1 1 100%;}
+body.mob .mv-side .mv-mini{flex:1 1 0;}
+body.mob .mv-chapters{grid-template-columns:1fr 1fr;grid-auto-rows:auto;overflow:visible;gap:.4rem;}
+body.mob .mv-ch{padding:.55rem .45rem .6rem;gap:.22rem;}
+body.mob .mv-ch-em{font-size:1.7rem;}
+body.mob .mv-ch b{font-size:.9rem;}
+body.mob .mv-list{grid-template-columns:1fr;overflow:visible;}
+body.mob .mv-frame{flex:0 0 auto;height:66vh;}
+body.mob .mv-noemb{padding:1.2rem .8rem;}
+</style>
 </head>
 <body class="mob">
 
@@ -5534,6 +5645,50 @@ body.mob .dy-viewmeta{font-size:.8rem;}
         <div class="panel shape-panel" id="shapePanel" data-secblock="shape"></div>
         <div class="panel clock-panel" id="clockPanel" data-secblock="clock"></div>
         <div class="panel gugu-panel" id="guguPanel" data-secblock="gugu"></div>
+      </div>
+    </section>
+
+    <!-- ================= 🎬 수학 영상 (매스버스 · 키출판사) ================= -->
+    <section class="view mathvid" id="viewMathVideo" data-view="math-video" hidden>
+      <div class="mv-wrap">
+        <div class="mv-hd">
+          <b>🎬 수학 영상</b>
+          <span class="mv-sub">매스버스(키출판사) 〈그림으로 개념 잡는 초등수학 1-2〉 6단원 129강 무료</span>
+          <span class="mv-prog" id="mvProg">봤어요 0 / 129</span>
+          <a class="mv-ori" id="mvOri" href="https://mathbus.co.kr/lecture_view/lecture_view.html?msb_idx=3592&amp;mc2_code=241&amp;c1_code=62&amp;selm=" target="_blank" rel="noopener">▶ 오리엔테이션</a>
+        </div>
+        <p class="mv-intro" id="mvIntro"><b>매스버스</b>는 키출판사가 만든 초등·중등 수학 <b>무료 인강</b> 사이트예요. 우리가 쓰는 《그림으로 개념 잡는 초등수학 1-2》 전 단원 <b>129강</b>이 올라와 있어요. 교재를 펴 놓고 같은 쪽(p) 강의를 누르면 돼요 — 해율이는 <b>1단원 100까지의 수</b>부터 보면 돼!</p>
+        <div class="mv-top">
+          <a class="mv-go" id="mvGo" href="https://mathbus.co.kr/lecture_view/lecture_view.html?c1_code=62&amp;selm=" target="_blank" rel="noopener">
+            <span class="mv-go-em" aria-hidden="true">📺</span>
+            <span class="mv-go-t"><b>매스버스 1-2 강의 바로 열기</b><em>새 창에서 1-2 강의 목록이 열려요</em></span>
+            <span class="mv-go-ar" aria-hidden="true">↗</span>
+          </a>
+          <div class="mv-side">
+            <a class="mv-mini" href="https://mathbus.co.kr/" target="_blank" rel="noopener">🏠 매스버스 홈</a>
+            <button class="mv-mini" type="button" id="mvEmbedBtn" aria-pressed="false">👀 이 화면에서 보기</button>
+          </div>
+        </div>
+        <div class="mv-crumb" id="mvCrumb" hidden>
+          <button class="mv-back" type="button" id="mvBack">← 단원 목록</button>
+          <b id="mvCrumbT">1단원</b><span id="mvCrumbS"></span>
+        </div>
+        <div class="mv-chapters" id="mvChapters" aria-label="수학 1-2 단원 고르기"></div>
+        <div class="mv-list" id="mvList" role="list" aria-label="강의 목록" hidden></div>
+        <div class="mv-embed" id="mvEmbed" hidden>
+          <div class="mv-embar">
+            <b>매스버스 강의 목록</b>
+            <span>강의를 누르면 영상이 열려요</span>
+            <a class="mv-mini" id="mvEmbOpen" href="https://mathbus.co.kr/lecture_view/lecture_view.html?c1_code=62&amp;selm=" target="_blank" rel="noopener">새 창으로 ↗</a>
+            <button class="mv-mini" type="button" id="mvEmbClose">✕ 닫기</button>
+          </div>
+          <div class="mv-frame" id="mvFrame" hidden></div>
+          <div class="mv-noemb" id="mvNoEmb" hidden>
+            <b>😅 매스버스가 이 화면 안에는 안 들어와요</b>
+            <p>매스버스 사이트가 화면 속 보기를 막아 두었어요. 아래 버튼을 누르면 새 창에서 바로 열려요.</p>
+            <a class="mv-go2" id="mvNoEmbGo" href="https://mathbus.co.kr/lecture_view/lecture_view.html?c1_code=62&amp;selm=" target="_blank" rel="noopener">📺 새 창으로 바로 열기 ↗</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -8556,7 +8711,7 @@ var SUBJECTS = [
 var SECS = {
   en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"], ["video", "🎬 영어 영상"]],
   ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"]],
-  math:    [["concept", "🔢 수개념"], ["calc", "➕ 연산"], ["think", "🧠 사고력"], ["shape", "🔺 도형"], ["clock", "⏰ 시계 읽기"], ["gugu", "✖️ 구구단 원리"]],
+  math:    [["concept", "🔢 수개념"], ["calc", "➕ 연산"], ["think", "🧠 사고력"], ["shape", "🔺 도형"], ["clock", "⏰ 시계 읽기"], ["gugu", "✖️ 구구단 원리"], ["video", "🎬 수학 영상"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말 빈칸"]],
   history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["video", "🎬 역사 영상"]]
 };
@@ -8566,6 +8721,7 @@ var VIEWID = {
   "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord",
   "study:math:concept":"viewMath", "study:math:calc":"viewMath", "study:math:think":"viewMath",
   "study:math:shape":"viewMath", "study:math:clock":"viewMath", "study:math:gugu":"viewMath",
+  "study:math:video":"viewMathVideo",
   "study:hanja:trace":"viewHanja", "study:hanja:word":"viewHanja",
   "study:history:timeline":"viewHistory", "study:history:goryeo":"viewHistory", "study:history:joseon":"viewHistory",
   "study:history:quiz":"viewHistory", "study:history:video":"viewHistory",
@@ -21195,6 +21351,397 @@ SB.videoHub = { sci: SCI, en: EN, epi: EPI, open: openVid, close: closeVid,
   renderSci: renderSci, renderEng: renderEng, renderEpi: renderEpi };
 })();
 
+</script>
+<script>
+/* =====================================================================
+   🎬 수학 영상 — 매스버스(키출판사) 〈그림으로 개념 잡는 초등수학 1-2〉
+   1단원~6단원 129강 + 오리엔테이션, 강의마다 매스버스 강의 페이지로 바로 열림
+   저장: haeyuli.mathbus.v1 (봤어요 ✓ 체크)
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var KEY = "haeyuli.mathbus.v1";
+var BASE = "https://mathbus.co.kr/lecture_view/";
+var LIST_URL = BASE + "lecture_view.html?c1_code=62&selm=";
+var TOTAL = 129;
+
+var MB_ORI = [[3592, 241, "", "강의 미리", "표지", ""]];
+var MB_CH = [
+  {n:1, t:"100까지의 수", p:"p12~39", lec:[
+    [3593,240,"1-1","60, 70, 80, 90","개념 만나기","p12~13"],
+    [3594,240,"1-1","60, 70, 80, 90","개념 쏙쏙, 개념 익히기","p14~15"],
+    [3595,240,"1-1","60, 70, 80, 90","개념 다지기","p16"],
+    [3596,240,"1-1","60, 70, 80, 90","개념 펼치기","p17"],
+    [3597,240,"1-2","99까지의 수","개념 쏙쏙, 개념 익히기","p18"],
+    [3598,240,"1-2","99까지의 수","개념 다지기 1","p19"],
+    [3599,240,"1-2","99까지의 수","개념 다지기 2","p20"],
+    [3600,240,"1-2","99까지의 수","개념 펼치기 1","p21"],
+    [3601,240,"1-2","99까지의 수","개념 펼치기 2","p22"],
+    [3602,240,"1-2","99까지의 수","개념 펼치기 3","p23"],
+    [3603,240,"1-3","수의 순서","개념 만나기","p24~25"],
+    [3604,240,"1-3","수의 순서","개념 쏙쏙, 개념 익히기","p26"],
+    [3605,240,"1-3","수의 순서","개념 다지기","p27"],
+    [3606,240,"1-3","수의 순서","개념 펼치기 1","p28"],
+    [3607,240,"1-3","수의 순서","개념 펼치기 2","p29"],
+    [3608,240,"1-4","수의 크기 비교","개념 만나기","p30~31"],
+    [3609,240,"1-4","수의 크기 비교","개념 쏙쏙, 개념 익히기","p32"],
+    [3610,240,"1-4","수의 크기 비교","개념 다지기","p33"],
+    [3611,240,"1-4","수의 크기 비교","개념 펼치기 1","p34"],
+    [3612,240,"1-4","수의 크기 비교","개념 펼치기 2","p35"],
+    [3613,240,"1-5","짝수와 홀수","개념 쏙쏙, 개념 익히기","p36~37"],
+    [3614,240,"1-5","짝수와 홀수","개념 다지기","p38"],
+    [3615,240,"1-5","짝수와 홀수","개념 펼치기","p39"],
+  ]},
+  {n:2, t:"덧셈과 뺄셈 (1)", p:"p46~67", lec:[
+    [3616,242,"2-1","세 수의 덧셈 (1)","개념 쏙쏙, 개념 익히기","p46"],
+    [3617,242,"2-1","세 수의 덧셈 (1)","개념 다지기","p47"],
+    [3618,242,"2-2","세 수의 덧셈 (2)","개념 쏙쏙, 개념 익히기","p48"],
+    [3619,242,"2-2","세 수의 덧셈 (2)","개념 다지기 1","p49"],
+    [3620,242,"2-2","세 수의 덧셈 (2)","개념 다지기 2","p50"],
+    [3621,242,"2-2","세 수의 덧셈 (2)","개념 펼치기","p51"],
+    [3622,242,"2-3","세 수의 뺄셈","개념 쏙쏙, 개념 익히기","p52"],
+    [3623,242,"2-3","세 수의 뺄셈","개념 다지기 1","p53"],
+    [3624,242,"2-3","세 수의 뺄셈","개념 다지기 2","p54"],
+    [3625,242,"2-3","세 수의 뺄셈","개념 펼치기","p55"],
+    [3626,242,"2-4","10이 되는 덧셈","개념 쏙쏙, 개념 익히기","p56~57"],
+    [3627,242,"2-4","10이 되는 덧셈","개념 다지기","p58"],
+    [3628,242,"2-4","10이 되는 덧셈","개념 펼치기","p59"],
+    [3629,242,"2-5","10에서 빼기","개념 쏙쏙, 개념 익히기","p60"],
+    [3630,242,"2-5","10에서 빼기","개념 다지기","p61"],
+    [3631,242,"2-5","10에서 빼기","개념 펼치기 1","p62"],
+    [3632,242,"2-5","10에서 빼기","개념 펼치기 2","p63"],
+    [3633,242,"2-6","10을 만들어 더하기","개념 쏙쏙","p64~65"],
+    [3634,242,"2-6","10을 만들어 더하기","개념 익히기","p64~65"],
+    [3635,242,"2-6","10을 만들어 더하기","개념 다지기","p66"],
+    [3636,242,"2-6","10을 만들어 더하기","개념 펼치기","p67"],
+  ]},
+  {n:3, t:"모양과 시각", p:"p74~89", lec:[
+    [3637,243,"3-1","여러 가지 모양 찾기","개념 쏙쏙, 개념 익히기","p74~75"],
+    [3638,243,"3-2","여러 가지 모양 알기","개념 쏙쏙, 개념 익히기","p76"],
+    [3639,243,"3-2","여러 가지 모양 알기","개념 다지기 1","p77"],
+    [3640,243,"3-2","여러 가지 모양 알기","개념 다지기 2","p78"],
+    [3641,243,"3-2","여러 가지 모양 알기","개념 펼치기","p79"],
+    [3642,243,"3-3","여러 가지 모양 꾸미기","개념 쏙쏙, 개념 익히기","p80"],
+    [3643,243,"3-3","여러 가지 모양 꾸미기","개념 다지기","p81"],
+    [3644,243,"3-4","□시","개념 만나기","p82~83"],
+    [3645,243,"3-4","□시","개념 쏙쏙, 개념 익히기","p84"],
+    [3646,243,"3-4","□시","개념 다지기","p85"],
+    [3647,243,"3-5","□시 30분","개념 쏙쏙, 개념 익히기","p86"],
+    [3648,243,"3-5","□시 30분","개념 다지기","p87"],
+    [3649,243,"3-6","시각","개념 쏙쏙, 개념 익히기","p88"],
+    [3650,243,"3-6","시각","개념 다지기","p89"],
+  ]},
+  {n:4, t:"덧셈과 뺄셈 (2)", p:"p96~127", lec:[
+    [3651,244,"4-1","덧셈 (1)","개념 쏙쏙","p96"],
+    [3723,244,"4-1","덧셈 (1)","개념 익히기","p97"],
+    [3652,244,"4-2","덧셈 (2)","개념 쏙쏙, 개념 익히기","p98"],
+    [3653,244,"4-2","덧셈 (2)","개념 다지기 1","p99"],
+    [3654,244,"4-2","덧셈 (2)","개념 다지기 2","p100"],
+    [3655,244,"4-2","덧셈 (2)","개념 펼치기","p101"],
+    [3656,244,"4-3","덧셈 (3)","개념 쏙쏙, 개념 익히기","p102"],
+    [3657,244,"4-3","덧셈 (3)","개념 다지기","p103"],
+    [3658,244,"4-3","덧셈 (3)","개념 펼치기 1","p104"],
+    [3659,244,"4-3","덧셈 (3)","개념 펼치기 2","p105"],
+    [3724,244,"4-4","여러 가지 덧셈","개념 쏙쏙, 개념 익히기","p106~107"],
+    [3725,244,"4-4","여러 가지 덧셈","개념 다지기","p108"],
+    [3726,244,"4-4","여러 가지 덧셈","개념 펼치기","p109"],
+    [3663,244,"4-5","뺄셈 (1)","개념 쏙쏙","p110~111"],
+    [3664,244,"4-5","뺄셈 (1)","개념 익히기","p110~111"],
+    [3665,244,"4-5","뺄셈 (1)","개념 다지기","p112"],
+    [3666,244,"4-5","뺄셈 (1)","개념 펼치기","p113"],
+    [3667,244,"4-6","뺄셈 (2)","개념 쏙쏙, 개념 익히기","p114"],
+    [3668,244,"4-6","뺄셈 (2)","개념 다지기","p115"],
+    [3669,244,"4-7","뺄셈 (3)","개념 쏙쏙, 개념 익히기","p116"],
+    [3670,244,"4-7","뺄셈 (3)","개념 다지기 1","p117"],
+    [3671,244,"4-7","뺄셈 (3)","개념 다지기 2","p118"],
+    [3672,244,"4-7","뺄셈 (3)","개념 펼치기 1","p119"],
+    [3673,244,"4-7","뺄셈 (3)","개념 펼치기 2","p120~121"],
+    [3674,244,"4-8","여러 가지 뺄셈","개념 쏙쏙, 개념 익히기","p122~123"],
+    [3675,244,"4-8","여러 가지 뺄셈","개념 다지기","p124"],
+    [3676,244,"4-8","여러 가지 뺄셈","개념 펼치기 1","p125"],
+    [3677,244,"4-8","여러 가지 뺄셈","개념 펼치기 2","p126"],
+    [3678,244,"4-8","여러 가지 뺄셈","개념 펼치기 3","p127"],
+  ]},
+  {n:5, t:"규칙 찾기", p:"p134~147", lec:[
+    [3679,245,"5-1","규칙 찾기","개념 쏙쏙, 개념 익히기","p134"],
+    [3680,245,"5-1","규칙 찾기","개념 다지기","p135"],
+    [3681,245,"5-2","규칙 만들기","개념 쏙쏙, 개념 익히기","p136"],
+    [3682,245,"5-2","규칙 만들기","개념 다지기 1","p137"],
+    [3683,245,"5-2","규칙 만들기","개념 다지기 2","p138"],
+    [3684,245,"5-2","규칙 만들기","개념 펼치기","p139"],
+    [3685,245,"5-3","수 배열에서 규칙 찾기","개념 쏙쏙, 개념 익히기","p140"],
+    [3686,245,"5-3","수 배열에서 규칙 찾기","개념 다지기","p141"],
+    [3687,245,"5-4","수 배열표에서 규칙 찾기","개념 쏙쏙, 개념 익히기","p142"],
+    [3688,245,"5-4","수 배열표에서 규칙 찾기","개념 다지기","p143"],
+    [3689,245,"5-4","수 배열표에서 규칙 찾기","개념 펼치기 1","p144"],
+    [3690,245,"5-4","수 배열표에서 규칙 찾기","개념 펼치기 2","p145"],
+    [3691,245,"5-5","규칙을 간단하게 나타내기","개념 쏙쏙, 개념 익히기","p146"],
+    [3692,245,"5-5","규칙을 간단하게 나타내기","개념 다지기","p147"],
+  ]},
+  {n:6, t:"덧셈과 뺄셈 (3)", p:"p154~185", lec:[
+    [3693,246,"6-1","(몇십몇) + (몇) (1)","개념 쏙쏙","p154"],
+    [3694,246,"6-1","(몇십몇) + (몇) (1)","개념 익히기","p155"],
+    [3695,246,"6-2","(몇십몇) + (몇) (2)","개념 만나기","p156~157"],
+    [3696,246,"6-2","(몇십몇) + (몇) (2)","개념 쏙쏙, 개념 익히기","p158"],
+    [3697,246,"6-2","(몇십몇) + (몇) (2)","개념 다지기","p159"],
+    [3698,246,"6-3","(몇십) + (몇십)","개념 쏙쏙, 개념 익히기","p160~161"],
+    [3699,246,"6-4","(몇십몇) + (몇십몇)","개념 쏙쏙, 개념 익히기","p162"],
+    [3700,246,"6-4","(몇십몇) + (몇십몇)","개념 다지기 1","p163"],
+    [3701,246,"6-4","(몇십몇) + (몇십몇)","개념 다지기 2","p164"],
+    [3702,246,"6-4","(몇십몇) + (몇십몇)","개념 펼치기 1","p165"],
+    [3703,246,"6-4","(몇십몇) + (몇십몇)","개념 펼치기 2","p166"],
+    [3704,246,"6-4","(몇십몇) + (몇십몇)","개념 펼치기 3","p167"],
+    [3707,246,"6-5","(몇십몇) - (몇) (1)","개념 쏙쏙, 개념 익히기","p168"],
+    [3708,246,"6-5","(몇십몇) - (몇) (1)","개념 다지기","p169"],
+    [3709,246,"6-6","(몇십몇) - (몇) (2)","개념 쏙쏙, 개념 익히기","p170"],
+    [3710,246,"6-6","(몇십몇) - (몇) (2)","개념 다지기","p171"],
+    [3711,246,"6-7","(몇십) - (몇십)","개념 쏙쏙, 개념 익히기","p172~173"],
+    [3712,246,"6-8","(몇십몇) - (몇십몇)","개념 쏙쏙, 개념 익히기","p174"],
+    [3713,246,"6-8","(몇십몇) - (몇십몇)","개념 다지기 1","p175"],
+    [3714,246,"6-8","(몇십몇) - (몇십몇)","개념 다지기 2","p176"],
+    [3715,246,"6-8","(몇십몇) - (몇십몇)","개념 펼치기 1","p177"],
+    [3716,246,"6-8","(몇십몇) - (몇십몇)","개념 펼치기 2","p178"],
+    [3717,246,"6-8","(몇십몇) - (몇십몇)","개념 펼치기 3","p179"],
+    [3718,246,"6-9","덧셈과 뺄셈","개념 만나기","p180~181"],
+    [3719,246,"6-9","덧셈과 뺄셈","개념 쏙쏙","p182~183"],
+    [3720,246,"6-9","덧셈과 뺄셈","개념 익히기","p182~183"],
+    [3721,246,"6-9","덧셈과 뺄셈","개념 다지기","p184"],
+    [3722,246,"6-9","덧셈과 뺄셈","개념 펼치기","p185"],
+  ]},
+];
+var MB_EMO = ["🔢", "➕", "🔺", "🧮", "🧩", "🎯"];
+
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c];
+  });
+}
+var W = {};
+function readW(){
+  try { var v = JSON.parse(localStorage.getItem(KEY) || "{}"); W = (v && v.w) || {}; }
+  catch(e){ W = {}; }
+  return W;
+}
+function saveW(){ try { localStorage.setItem(KEY, JSON.stringify({ w:W })); } catch(e){} }
+function isMobile(){ return (window.innerWidth || 1024) < 900; }
+function lecUrl(idx, mc2, mob){
+  return BASE + (mob ? "lecture_view_m.html" : "lecture_view.html")
+       + "?msb_idx=" + idx + "&mc2_code=" + mc2 + "&c1_code=62&selm=";
+}
+function countWatched(){
+  var n = 0;
+  for (var i = 0; i < MB_CH.length; i++){
+    for (var j = 0; j < MB_CH[i].lec.length; j++) if (W[MB_CH[i].lec[j][0]]) n++;
+  }
+  return n;
+}
+function progText(){ return "봤어요 " + countWatched() + " / " + TOTAL; }
+
+var MV = { ch:null, emb:false, embOk:false, embTried:false, timer:null };
+
+/* ---------- 단원 카드 ---------- */
+function chCard(c, i){
+  var total = c.lec.length, done = 0;
+  for (var k = 0; k < total; k++) if (W[c.lec[k][0]]) done++;
+  var pct = total ? Math.round(done * 100 / total) : 0;
+  var note = total + "강 · " + (c.p ? c.p : "") + (done ? " · " + done + "/" + total + " 봤어요" : "");
+  return '<button class="mv-ch" type="button" data-ch="' + i + '" aria-label="' + esc(c.n + "단원 " + c.t) + '">'
+       + '<span class="mv-ch-em" aria-hidden="true">' + (MB_EMO[i] || "▶") + '</span>'
+       + '<span class="mv-ch-n">' + c.n + '단원</span>'
+       + '<b>' + esc(c.t) + '</b>'
+       + '<em>' + esc(note) + '</em>'
+       + '<span class="mv-ch-bar"><i style="width:' + pct + '%"></i></span>'
+       + '</button>';
+}
+function renderChapters(){
+  var box = $("mvChapters");
+  if (!box) return;
+  box.innerHTML = MB_CH.map(chCard).join("");
+  var p = $("mvProg");
+  if (p) p.textContent = progText();
+}
+
+/* ---------- 강의 줄 ---------- */
+function rowHtml(r, mob){
+  var watched = !!W[r[0]];
+  var meta = r[4] ? (r[4] + (r[5] ? " · " + r[5] : "")) : (r[5] || "");
+  return '<a class="mv-row' + (watched ? " watched" : "") + '" data-idx="' + r[0] + '"'
+       + ' href="' + lecUrl(r[0], r[1], mob) + '" target="_blank" rel="noopener" role="listitem">'
+       + '<span class="mv-row-n">' + esc(r[2] || "▶") + '</span>'
+       + '<span class="mv-row-t"><b>' + esc(r[3]) + '</b><em>' + esc(meta) + '</em></span>'
+       + '<span class="mv-row-go" aria-hidden="true">▶</span>'
+       + '<span class="mv-ck' + (watched ? " on" : "") + '" data-ck="' + r[0] + '" role="button" tabindex="0"'
+       + ' aria-label="봤어요 표시" aria-pressed="' + (watched ? "true" : "false") + '">✓</span>'
+       + '</a>';
+}
+function renderList(){
+  var box = $("mvList");
+  if (!box || MV.ch == null) return;
+  var c = MB_CH[MV.ch], mob = isMobile();
+  box.innerHTML = c.lec.map(function(r){ return rowHtml(r, mob); }).join("");
+  $("mvCrumbT").textContent = c.n + "단원";
+  $("mvCrumbS").textContent = c.t + " · " + c.lec.length + "강 · " + c.p;
+  box.scrollTop = 0;
+}
+
+/* ---------- 화면 전환 ---------- */
+function showChapters(){
+  MV.ch = null;
+  $("mvChapters").hidden = false;
+  $("mvList").hidden = true;
+  $("mvCrumb").hidden = true;
+  renderChapters();
+}
+function showChapter(i){
+  if (!MB_CH[i]) return;
+  MV.ch = i;
+  $("mvChapters").hidden = true;
+  $("mvCrumb").hidden = false;
+  $("mvList").hidden = false;
+  renderList();
+}
+
+/* ---------- 화면 속 보기 (iframe) ---------- */
+function closeEmbed(){
+  MV.emb = false;
+  $("mvEmbed").hidden = true;
+  $("mvIntro").hidden = false;
+  var b = $("mvEmbedBtn");
+  if (b){ b.classList.remove("on"); b.setAttribute("aria-pressed", "false"); b.textContent = "👀 이 화면에서 보기"; }
+  if (MV.ch == null) { $("mvChapters").hidden = false; $("mvCrumb").hidden = true; $("mvList").hidden = true; }
+  else { $("mvChapters").hidden = true; $("mvCrumb").hidden = false; $("mvList").hidden = false; }
+}
+function failEmbed(){
+  MV.embOk = false;
+  $("mvFrame").hidden = true;
+  $("mvFrame").innerHTML = "";
+  $("mvNoEmb").hidden = false;
+}
+function mountFrame(){
+  var box = $("mvFrame");
+  $("mvNoEmb").hidden = true;
+  box.hidden = false;
+  var src = isMobile() ? (BASE + "lecture_view_m.html?c1_code=62&selm=") : LIST_URL;
+  box.innerHTML = '<iframe title="매스버스 1-2 강의 목록" src="' + src + '" allow="fullscreen; autoplay"'
+                + ' referrerpolicy="no-referrer-when-downgrade" loading="eager"></iframe>';
+  var f = box.querySelector("iframe");
+  if (f) {
+    f.addEventListener("load", function(){
+      MV.embOk = true;
+      if (MV.timer) { clearTimeout(MV.timer); MV.timer = null; }
+    });
+    f.addEventListener("error", function(){ failEmbed(); });
+  }
+  MV.timer = setTimeout(function(){
+    MV.timer = null;
+    if (!MV.embOk) failEmbed();
+  }, 9000);
+}
+function openEmbed(){
+  MV.emb = true;
+  $("mvEmbed").hidden = false;
+  $("mvChapters").hidden = true;
+  $("mvList").hidden = true;
+  $("mvCrumb").hidden = true;
+  $("mvIntro").hidden = true;
+  var b = $("mvEmbedBtn");
+  if (b){ b.classList.add("on"); b.setAttribute("aria-pressed", "true"); b.textContent = "✕ 화면 접기"; }
+  if (!MV.embTried){ MV.embTried = true; mountFrame(); }
+}
+
+/* ---------- 봤어요 체크 ---------- */
+function toggleWatched(idx){
+  if (W[idx]) delete W[idx]; else W[idx] = 1;
+  saveW();
+  return !!W[idx];
+}
+function paintRow(el, on){
+  if (!el) return;
+  el.classList.toggle("watched", on);
+  var ck = el.querySelector("[data-ck]");
+  if (ck){ ck.classList.toggle("on", on); ck.setAttribute("aria-pressed", on ? "true" : "false"); }
+}
+
+/* ---------- 이벤트 ---------- */
+function bind(){
+  var wrap = $("viewMathVideo");
+  if (!wrap || wrap.getAttribute("data-mv-bound") === "1") return;
+  wrap.setAttribute("data-mv-bound", "1");
+
+  wrap.addEventListener("click", function(ev){
+    var t = ev.target;
+    var ck = t.closest ? t.closest("[data-ck]") : null;
+    if (ck){
+      ev.preventDefault(); ev.stopPropagation();
+      var idx = ck.getAttribute("data-ck");
+      paintRow(ck.closest(".mv-row"), toggleWatched(idx));
+      var p = $("mvProg"); if (p) p.textContent = progText();
+      return;
+    }
+    var card = t.closest ? t.closest("[data-ch]") : null;
+    if (card){
+      ev.preventDefault();
+      showChapter(parseInt(card.getAttribute("data-ch"), 10));
+      return;
+    }
+    var row = t.closest ? t.closest(".mv-row") : null;
+    if (row){
+      /* 강의를 누르면 자동으로 봤어요 표시 (새 창은 그대로 열림) */
+      var id = row.getAttribute("data-idx");
+      if (!W[id]){ W[id] = 1; saveW(); paintRow(row, true); }
+      var pg = $("mvProg"); if (pg) pg.textContent = progText();
+    }
+  });
+  wrap.addEventListener("keydown", function(ev){
+    if (ev.key !== "Enter" && ev.key !== " ") return;
+    var ck = ev.target && ev.target.closest ? ev.target.closest("[data-ck]") : null;
+    if (!ck) return;
+    ev.preventDefault();
+    var idx = ck.getAttribute("data-ck");
+    paintRow(ck.closest(".mv-row"), toggleWatched(idx));
+    var p = $("mvProg"); if (p) p.textContent = progText();
+  });
+
+  var back = $("mvBack");
+  if (back) back.addEventListener("click", showChapters);
+  var eb = $("mvEmbedBtn");
+  if (eb) eb.addEventListener("click", function(){ if (MV.emb) closeEmbed(); else openEmbed(); });
+  var ec = $("mvEmbClose");
+  if (ec) ec.addEventListener("click", closeEmbed);
+  var no = $("mvNoEmbGo");
+  if (no) no.addEventListener("click", function(){ /* 링크 그대로 새 창 */ });
+  window.addEventListener("resize", function(){
+    if (MV.ch != null && !MV.emb) renderList();
+  });
+}
+
+function init(){
+  if (!$("viewMathVideo")) return;
+  readW();
+  var ori = $("mvOri");
+  if (ori && MB_ORI.length) ori.href = lecUrl(MB_ORI[0][0], MB_ORI[0][1], isMobile());
+  bind();
+  renderChapters();
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+else init();
+
+SB.onShow.math = (function(prev){
+  return function(sec){
+    if (prev) { try { prev.apply(this, arguments); } catch(e){} }
+    if (sec !== "video") return;
+    try {
+      readW();
+      if (!$("mvProg")) return;
+      $("mvProg").textContent = progText();
+      if (MV.emb) return;
+      if (MV.ch == null) renderChapters(); else renderList();
+    } catch(e){ try { console.warn(e); } catch(e2){} }
+  };
+})(SB.onShow.math);
+})();
 </script>
 </body>
 </html>
