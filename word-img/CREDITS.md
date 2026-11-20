@@ -2,7 +2,7 @@
 
 해율이 스터디 보드 `🃏 단어카드·게임` 탭의 **단어 학습** 카드에 쓰는 사진입니다.
 모두 Wikimedia Commons에서 내려받아 16:10 비율 1080×675 WebP로 줄여 저장했습니다(외부 링크가 깨져도 그대로 보이도록 저장소에 넣었습니다).
-동사·동작 낱말(play·jump·sing·smile·build·race·fly·transform·run)은 실제로 그 동작을 하는 장면 사진입니다.
+동사·동작 낱말(play·jump·sing·smile·build·race·fly·transform·adventure)은 실제로 그 동작을 하는 장면 사진입니다.
 
 | 단어 | 파일 | 원본 (Wikimedia Commons) | 저작자 | 라이선스 |
 |---|---|---|---|---|
