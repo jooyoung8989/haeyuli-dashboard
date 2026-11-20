@@ -1993,8 +1993,8 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 .bk-art{position:absolute;inset:0;width:100%;height:100%;}
 .bk-leaf{transition:transform .3s;}
 .bk-star{filter:drop-shadow(0 1px 1px rgba(200,140,0,.35));}
-.bk-stack{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);width:66%;
-  display:flex;flex-direction:column-reverse;align-items:center;gap:.24vh;max-height:72%;pointer-events:none;}
+.bk-stack{position:absolute;left:50%;bottom:4.5%;transform:translateX(-50%);width:54%;
+  display:flex;flex-direction:column-reverse;align-items:center;gap:.24vh;max-height:74%;pointer-events:none;}
 .bk-b{pointer-events:auto;height:1.5vh;min-height:8px;border-radius:.45vh;cursor:pointer;
   box-shadow:inset -.5vh 0 rgba(0,0,0,.16),inset 0 .18vh 0 rgba(255,255,255,.5),0 .16vh .4vh rgba(40,70,50,.22);
   transition:transform .14s,filter .14s;}
@@ -2099,6 +2099,11 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 .bks-b b{font-size:1.06vh;font-weight:900;letter-spacing:-.02em;}
 .bks-b.on{background:#fff;color:#c05f00;box-shadow:0 .28vh .8vh rgba(150,80,0,.22);}
 .bks-b.on i{opacity:1;color:#39b978;font-size:1.25vh;}
+/* 배지에 보상 금액까지 — 두 줄(3일 달성 / +200원) */
+.bks-b{position:relative;flex-direction:column;justify-content:center;gap:.06vh;line-height:1.05;overflow:visible;}
+.bks-b i{position:absolute;top:.3vh;right:.45vh;font-size:.92vh;line-height:1;}
+.bks-b em{font-style:normal;font-size:.88vh;font-weight:900;letter-spacing:-.02em;opacity:.82;line-height:1;}
+.bks-b.on em{opacity:1;color:#c05f00;}
 
 .bk-week{display:flex;flex-direction:column;gap:.45vh;border-radius:1.8vh;padding:.9vh 1.15vh;min-width:0;
   background:#fff;box-shadow:inset 0 0 0 .2vh #e4eef7,0 .3vh .9vh rgba(60,110,150,.08);overflow:hidden;}
@@ -2153,6 +2158,40 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
   .bk-sb.w2{width:2.2vh;}
   .bk-sb.w3{width:2.6vh;}
   .bk-stack{width:72%;}
+}
+
+/* 태블릿 세로(768×1024 등) — 나의 책나무(얇게·세로로 길게) + 책장을 나란히 한 화면에 */
+@media (min-width:701px) and (max-width:960px) and (orientation:portrait){
+  .bookview.rb-hasbooks{display:flex;flex-direction:column;gap:.55rem;height:auto;min-height:0;}
+  .rb-tree-body{display:grid;grid-template-columns:minmax(0,43fr) minmax(0,57fr);gap:.55rem;
+    height:auto;min-height:0;align-items:stretch;}
+  /* 위 배너·막대그래프도 한 줄에 (세로 길이를 두 패널에 넘긴다) */
+  .bk-dash{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:.55rem;}
+  .bk-streak{min-height:0;gap:.5vh;padding:.8vh .9vh;}
+  .bks-fire{width:4.6vh;height:4.6vh;}
+  .bks-txt b{font-size:1.95vh;}
+  .bkw-body{flex-direction:column;gap:.45vh;}
+  .bkw-sums{flex-direction:row;width:auto;gap:.45vh;}
+  .bkw-sum{flex:1 1 0;flex-direction:row;align-items:baseline;justify-content:flex-start;gap:.45vh;padding:.3vh .7vh;}
+  .bkw-sum b{font-size:1.55vh;}
+  .bkw-sum span{font-size:.9vh;white-space:nowrap;}
+  .bkw-bars{min-height:8vh;padding-top:1.2vh;}
+  .bk-panel{padding:.9vh 1vh;}
+  .bk-h .bk-hint{display:none;}
+  .bk-stage{min-height:16vh;}
+  /* 나무 그림을 세로로 키워 빈 하늘을 줄인다 (가로는 무대에서 잘림 — 나무는 가운데라 그대로 보인다) */
+  .bk-art{transform:scale(1.75);transform-origin:50% 100%;}
+  .bk-stack{width:56%;max-height:64%;}
+  .bk-b{height:1.7vh;min-height:9px;}
+  .bk-stats{padding-top:.6vh;}
+  .bk-shelf-panel{gap:.45vh;}
+  .bk-shelf{padding:.55vh .6vh .4vh;}
+  .bk-row{height:auto;flex:1 1 0;min-height:0;padding:0 .3vh .85vh;}
+  .bk-sb.w1{width:2.5vh;}
+  .bk-sb.w2{width:2.9vh;}
+  .bk-sb.w3{width:3.3vh;}
+  .bk-add input,.bk-btn{height:3.9vh;font-size:1.18vh;}
+  .bk-note{font-size:.85vh;line-height:1.25;flex-wrap:wrap;gap:.3vh;word-break:keep-all;}
 }
 
 
@@ -3903,10 +3942,10 @@ body.mob .ha-bub{max-width:5.8rem;margin-bottom:.7rem;}
 /* ==RB-BLOCK-CSS== */
 /* ===== 📚 빨간펜 솔루토이 우리 집 책장 · 하루 한 권 · 독후활동 ===== */
 .bookview.rb-hasbooks{display:flex;flex-direction:column;gap:.75vh;height:100%;min-height:0;}
-.rb-tree-body{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:.9vh;
+.rb-tree-body{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:.9vh;
   flex:1 1 auto;min-height:0;height:100%;}
 body.mob .rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;}
-@media (max-width:900px){.rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;}}
+@media (max-width:700px){.rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;}}
 .rb-hide{display:none !important;}
 .rb-tabs{display:flex;gap:.5vh;padding:.4vh .2vh;flex:0 0 auto;flex-wrap:wrap;}
 .rb-tab{display:flex;align-items:center;gap:.5vh;padding:.85vh 1.4vh;border-radius:999px;background:#f1f6fb;
@@ -12274,11 +12313,20 @@ function bankTotal(d){ var n = 0; (d.bank || []).forEach(function(e){ if (!e.out
 
 function addPiggy(amt, why, rid){
   var d = data();
+  amt = Number(amt) || 0;
   d.piggy = Math.max(0, (Number(d.piggy) || 0) + amt);
   d.log.unshift({ t:(amt > 0 ? "+" : "") + won(amt), amt:amt, at:today() + " " + new Date().toTimeString().slice(0, 5), why:why || "", rid:rid || "" });
   d.log = d.log.slice(0, 600);
   save(d);
+  /* 용돈이 들어오면 별 2개도 같이 (구치파치 음식 사기) — 같은 내역은 한 번만 */
+  if (amt > 0) { try { starGift(rid); } catch(e){} }
   return d;
+}
+/* ⭐ +2 — 내역(rid)마다 한 번씩. rid 가 없으면(엄마 용돈) 넣을 때마다 새 키로 */
+function starGift(rid){
+  if (!SB.earn) return 0;
+  var key = "money:" + (rid ? String(rid) : "gift:" + Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36));
+  return SB.earn(key, 2) ? 2 : 0;
 }
 function renderPiggy(){
   var d = data();
@@ -12478,6 +12526,8 @@ SB.money = {
   },
   addDays: addDays, render: function(){ renderPiggy(); renderBank(); }
 };
+/* 별 +2 는 addPiggy(입금 한 곳)에서 준다 — 보상 모듈의 credit 훅은 두 번 주지 않도록 쉰다 */
+try { SB.money.__starFunnel = 1; } catch(e){}
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); renderPiggy(); });
 else { bind(); renderPiggy(); }
@@ -12591,21 +12641,32 @@ function payout(info){
 
 /* ---------------- 연출 ---------------- */
 function celebrate(days, bal){
+  showPop({
+    kicker: days + "일 연속 달성!",
+    title: days + "일 연속 출석 축하!!!",
+    amount: "5,000원!!! 지급!",
+    sub: days + "일 동안 매일 숙제를 다 끝냈어요!<br>용돈 저금통에 5,000원이 들어갔어요!",
+    bal: bal
+  });
+}
+/* 축하 팝업 공용 — 숙제 잭팟과 독서 보너스가 같은 연출(금빛 가루·폭죽·빵빠레)을 함께 쓴다 */
+function showPop(o, onClose){
+  o = o || {};
   var old = document.getElementById("jpWrap");
   if (old && old.parentNode) old.parentNode.removeChild(old);
   var wrap = document.createElement("div");
   wrap.id = "jpWrap";
-  wrap.className = "jp-wrap";
+  wrap.className = "jp-wrap" + (o.cls ? " " + o.cls : "");
   wrap.innerHTML =
       '<div class="jp-veil"></div>'
     + '<canvas class="jp-canvas" aria-hidden="true"></canvas>'
     + '<div class="jp-card" role="dialog" aria-modal="true" aria-labelledby="jpTitle">'
-    +   '<div class="jp-emo" aria-hidden="true">🎉</div>'
-    +   '<div class="jp-kicker">' + days + '일 연속 달성!</div>'
-    +   '<h2 class="jp-title" id="jpTitle">' + days + '일 연속 출석 축하!!!</h2>'
-    +   '<div class="jp-amount">5,000원!!! 지급!</div>'
-    +   '<p class="jp-sub">' + days + '일 동안 매일 숙제를 다 끝냈어요!<br>용돈 저금통에 5,000원이 들어갔어요!</p>'
-    +   (bal > 0 ? '<div class="jp-bal">지금 저금통 <b>' + Number(bal).toLocaleString("ko-KR") + '원</b></div>' : '')
+    +   '<div class="jp-emo" aria-hidden="true">' + (o.emo || "🎉") + '</div>'
+    +   '<div class="jp-kicker">' + (o.kicker || "") + '</div>'
+    +   '<h2 class="jp-title" id="jpTitle">' + (o.title || "") + '</h2>'
+    +   (o.amount ? '<div class="jp-amount">' + o.amount + '</div>' : '')
+    +   '<p class="jp-sub">' + (o.sub || "") + '</p>'
+    +   (o.bal > 0 ? '<div class="jp-bal">지금 저금통 <b>' + Number(o.bal).toLocaleString("ko-KR") + '원</b></div>' : '')
     +   '<button class="jp-ok" type="button">확인</button>'
     + '</div>';
   document.body.appendChild(wrap);
@@ -12616,6 +12677,7 @@ function celebrate(days, bal){
     closed = true;
     wrap.classList.add("out");
     document.removeEventListener("keydown", onKey, true);
+    try { if (typeof onClose === "function") onClose(); } catch(e){}
     setTimeout(function(){ if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 400);
   }
   function onKey(e){ if (e.key === "Escape" || e.key === "Enter") { e.preventDefault(); close(); } }
@@ -12840,6 +12902,8 @@ SB.streak = {
   celebrate: function(d, bal){ celebrate(d || STEP, bal || 0); },
   clear: function(){ try { localStorage.removeItem(SK); } catch(e){} }
 };
+/* 다른 화면(연속 독서 보너스)도 같은 축하 팝업을 쓸 수 있게 */
+SB.pop = showPop;
 
 /* 처음 열 때도 한 번 확인 — 마지막 체크 직후 앱을 닫았어도 놓치지 않는다 */
 function boot(){
@@ -14170,7 +14234,7 @@ var KEY = "study.readlog.v1";
 var RB_READ = "haeyuli.redpen.read.v1";
 var BOOKS = "study.books.v1";
 var WD = ["일","월","화","수","목","금","토"];
-var MS = [[3,"3일 달성"],[7,"7일 달성"],[14,"14일 도전"],[30,"30일 마스터"]];
+var MS = [[3,"3일 달성",200],[7,"7일 달성",400],[14,"14일 도전",600],[30,"30일 마스터",1000]];
 
 function readJSON(k, fb){
   try { var v = JSON.parse(localStorage.getItem(k) || "null"); return (v == null) ? fb : v; }
@@ -14271,6 +14335,69 @@ function metrics(){
   };
 }
 
+/* ---------- 🎉 연속 독서 보너스 축하 팝업 : 3·7·14·30일 ----------
+   · 입금(200/400/600/1,000원)은 보상 모듈(READ_STEPS)이 한 단계에 한 번만 처리한다.
+   · 여기서는 새로 생긴 보너스 내역(readbonus-N-날짜)을 보고 축하 팝업만 띄운다. */
+var BONUS_SEEN = {}, BONUS_Q = [], BONUS_OPEN = false;
+
+function bonusLabel(n){ return Number(n || 0).toLocaleString("ko-KR") + "원"; }
+function bonusRids(){
+  var out = {}, d = null;
+  try { d = (SB.money && SB.money.data) ? SB.money.data() : readJSON("haeyuli.money.v1", null); } catch(e){ d = null; }
+  var log = (d && Array.isArray(d.log)) ? d.log : [];
+  for (var i = 0; i < log.length; i++){
+    var rid = String((log[i] && log[i].rid) || "");
+    var m = /^readbonus-(\d+)-/.exec(rid);
+    if (m) out[rid] = { th:Number(m[1]), amt:Number(log[i].amt) || 0 };
+  }
+  return out;
+}
+function popBonus(it, done){
+  if (!SB.pop) { try { done(); } catch(e){} return; }
+  var amt = bonusLabel(it.amt);
+  var bal = 0;
+  try { bal = (SB.money && SB.money.data) ? Number(SB.money.data().piggy) || 0 : 0; } catch(e){}
+  SB.pop({
+    kicker: it.th + "일 연속 독서 달성!",
+    title: it.th + "일 연속 독서 축하!",
+    amount: "보너스 " + amt + " 지급!",
+    sub: it.th + "일 동안 하루도 빠짐없이 책을 읽었어요!<br>용돈 저금통에 " + amt + "이 들어갔어요!",
+    bal: bal
+  }, done);
+}
+function popNextBonus(){
+  if (BONUS_OPEN) return;
+  var it = BONUS_Q.shift();
+  if (!it) return;
+  BONUS_OPEN = true;
+  popBonus(it, function(){ BONUS_OPEN = false; setTimeout(function(){ try { popNextBonus(); } catch(e){} }, 320); });
+}
+/* 새 보너스 내역을 찾아 팝업 줄에 넣는다 (이미 본 내역은 다시 띄우지 않는다) */
+function scanBonuses(){
+  var now = bonusRids(), fresh = [], rid;
+  for (rid in now) if (!BONUS_SEEN[rid]) fresh.push(rid);
+  BONUS_SEEN = now;
+  if (!fresh.length) return 0;
+  fresh.sort(function(a, b){ return (now[a] ? now[a].th : 0) - (now[b] ? now[b].th : 0); });
+  for (var i = 0; i < fresh.length; i++) BONUS_Q.push({ th:now[fresh[i]].th, amt:now[fresh[i]].amt });
+  try { popNextBonus(); } catch(e){}
+  return fresh.length;
+}
+/* 보상 모듈이 SB.readlog.render 를 감싼 뒤에 바깥에서 한 번 더 감싼다 */
+function hookBonusPop(){
+  if (!SB.readlog || SB.readlog.__bp) return;
+  var orig = SB.readlog.render;
+  SB.readlog.render = function(){
+    var r = orig.apply(this, arguments);
+    try { scanBonuses(); } catch(e){}
+    return r;
+  };
+  SB.readlog.__bp = 1;
+}
+try { BONUS_SEEN = bonusRids(); } catch(e){}
+setTimeout(function(){ try { scanBonuses(); hookBonusPop(); } catch(e){} }, 1100);
+setTimeout(function(){ try { scanBonuses(); hookBonusPop(); } catch(e){} }, 2400);
+
 /* ---------- 화면 ---------- */
 function mount(view, before){
   if (!view) return null;
@@ -14335,8 +14462,9 @@ function render(){
     if (bd){
       bd.innerHTML = MS.map(function(x){
         var on = m.best >= x[0];
-        return '<span class="bks-b' + (on ? " on" : "") + '" role="listitem" aria-label="' + x[1] + (on ? " 달성" : " 미달성") + '">' +
-          '<i aria-hidden="true">✓</i><b>' + x[1] + '</b></span>';
+        var won = "+" + x[2].toLocaleString("ko-KR") + "원";
+        return '<span class="bks-b' + (on ? " on" : "") + '" role="listitem" aria-label="' + x[1] + " " + won + (on ? " 받음" : "") + '">' +
+          '<i aria-hidden="true">✓</i><b>' + x[1] + '</b><em>' + won + '</em></span>';
       }).join("");
     }
     var wk = m.week;
@@ -14391,6 +14519,31 @@ function addManual(day, n){
   return true;
 }
 
+/* 태블릿 세로에서는 나의 책나무·책장이 한 화면에 들어오도록 높이를 맞춘다 */
+var MQ_TP = "(min-width:701px) and (max-width:960px) and (orientation:portrait)";
+var fitTimer = 0;
+function fitPanels(){
+  var view = $("viewBook");
+  if (!view) return;
+  var on = window.matchMedia ? window.matchMedia(MQ_TP).matches : false;
+  if (!on || view.hidden){ view.style.height = ""; return; }
+  view.style.height = "auto";
+  var top = view.getBoundingClientRect().top + (window.pageYOffset || 0);
+  var avail = Math.round((window.innerHeight || 0) - top - 18);
+  view.style.height = Math.max(420, avail) + "px";
+  var body = $("rbTreeBody");
+  if (body) body.style.height = "";
+}
+function fitSoon(){
+  try { fitPanels(); } catch(e){}
+  clearTimeout(fitTimer);
+  fitTimer = setTimeout(function(){ try { fitPanels(); } catch(e){} }, 120);
+}
+if (window.addEventListener){
+  window.addEventListener("resize", function(){ clearTimeout(fitTimer); fitTimer = setTimeout(function(){ try { fitPanels(); } catch(e){} }, 160); });
+  window.addEventListener("orientationchange", function(){ setTimeout(fitSoon, 260); });
+}
+
 SB.readlog = {
   key: KEY,
   mark: markRedpen,
@@ -14411,6 +14564,8 @@ if (typeof SB.onShow === "object" && SB.onShow){
   SB.onShow.book = function(){
     if (prevShow){ try { prevShow.apply(this, arguments); } catch(e){} }
     render();
+    try { fitSoon(); } catch(e){}
+    try { scanBonuses(); } catch(e){}
   };
 }
 function bootLog(){
@@ -14418,6 +14573,7 @@ function bootLog(){
     var view = $("viewBook"), body = $("rbTreeBody");
     if (view && body && $("rbTabs")) mount(view, body);   /* 하위 탭이 만들어진 뒤에만 제자리에 끼운다 */
     render();
+    try { fitSoon(); } catch(e){}
   } catch(e){}
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootLog);
@@ -15290,6 +15446,8 @@ function payReadBonus(){
 
 /* ───────────────────────── ⭐ 보상금 별 +2 ───────────────────────── */
 function hookStarBonus(){
+  /* ⭐ +2 는 저금통에 돈이 들어오는 한 곳(addPiggy)에서 한 번만 준다 — 엄마 용돈까지 함께 */
+  if (SB.money && SB.money.__starFunnel) return;
   if (!SB.money || !SB.money.credit || SB.money.__star2) return;
   var orig = SB.money.credit;
   SB.money.credit = function(amt, why, rid){
@@ -18941,7 +19099,8 @@ function applyMode(){
   var panels = view.querySelectorAll(".bk-panel");
   for (var i = 0; i < panels.length; i++) panels[i].classList.toggle("rb-hide", !treeOn);
   var dash = $("bkDash");
-  if (dash) dash.classList.toggle("rb-hide", MODE === "act");
+  /* 연속 독서 배너·1주일 그래프는 🌳 북트리 탭에서만 (빨간펜 책장은 목록이 바로 보이게) */
+  if (dash) dash.classList.toggle("rb-hide", MODE !== "tree");
   var sw = $("rbShelfWrap"), aw = $("rbActWrap");
   if (sw) sw.classList.toggle("rb-hide", MODE !== "shelf");
   if (aw) aw.classList.toggle("rb-hide", MODE !== "act");
