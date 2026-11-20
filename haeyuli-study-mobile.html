@@ -2068,6 +2068,83 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
   font-size:1.02vh;font-weight:900;box-shadow:inset 0 0 0 .18vh #cfe9d6;white-space:nowrap;}
 .bk-note .bk-undo[hidden]{display:none;}
 
+
+/* ── 🔥 연속 독서 배너 + 최근 1주일 막대 그래프 (study.readlog.v1) ── */
+.bk-dash{flex:0 0 auto;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:.9vh;min-height:0;}
+.bk-dash.rb-hide{display:none !important;}
+
+.bk-streak{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:.7vh;min-height:15.4vh;
+  border-radius:1.8vh;padding:.9vh 1.1vh;overflow:hidden;
+  background:linear-gradient(135deg,#ff8a2b 0%,#ffa733 46%,#ffc95c 100%);
+  box-shadow:0 .5vh 1.4vh rgba(220,140,30,.28),inset 0 0 0 .18vh rgba(255,255,255,.28);}
+.bk-streak::after{content:"";position:absolute;right:-6vh;top:-7vh;width:17vh;height:17vh;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.34),rgba(255,255,255,0) 68%);pointer-events:none;}
+.bks-top{position:relative;display:flex;align-items:center;gap:.9vh;min-width:0;}
+.bks-fire{flex:0 0 auto;width:5.6vh;height:5.6vh;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 .16vh rgba(255,255,255,.7);}
+.bks-fire svg{width:66%;height:66%;display:block;}
+.bks-txt{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.15vh;}
+.bks-txt b{font-size:2.2vh;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1.15;
+  text-shadow:0 .18vh .4vh rgba(160,80,0,.28);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bks-txt span{font-size:1.12vh;font-weight:900;color:#fff8e8;line-height:1.3;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bks-best{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:.3vh .85vh;border-radius:1vh;background:rgba(255,255,255,.92);box-shadow:0 .2vh .5vh rgba(150,80,0,.16);}
+.bks-best span{font-size:.82vh;font-weight:900;color:#c1863a;line-height:1.2;}
+.bks-best b{font-size:1.45vh;font-weight:900;color:#b25c00;line-height:1.1;}
+.bks-badges{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.45vh;}
+.bks-b{display:flex;align-items:center;justify-content:center;gap:.3vh;height:4.7vh;border-radius:1vh;
+  background:rgba(255,255,255,.2);box-shadow:inset 0 0 0 .14vh rgba(255,255,255,.36);
+  color:#fff6e6;white-space:nowrap;overflow:hidden;}
+.bks-b i{font-style:normal;font-size:1.15vh;font-weight:900;opacity:.34;line-height:1;}
+.bks-b b{font-size:1.06vh;font-weight:900;letter-spacing:-.02em;}
+.bks-b.on{background:#fff;color:#c05f00;box-shadow:0 .28vh .8vh rgba(150,80,0,.22);}
+.bks-b.on i{opacity:1;color:#39b978;font-size:1.25vh;}
+
+.bk-week{display:flex;flex-direction:column;gap:.45vh;border-radius:1.8vh;padding:.9vh 1.15vh;min-width:0;
+  background:#fff;box-shadow:inset 0 0 0 .2vh #e4eef7,0 .3vh .9vh rgba(60,110,150,.08);overflow:hidden;}
+.bkw-head{display:flex;align-items:baseline;gap:.7vh;min-width:0;}
+.bkw-head b{font-size:1.42vh;font-weight:900;color:#1e5478;white-space:nowrap;}
+.bkw-head span{margin-left:auto;font-size:.98vh;font-weight:900;color:#9aacbc;white-space:nowrap;}
+.bkw-body{flex:1 1 auto;display:flex;gap:.8vh;min-height:0;min-width:0;}
+.bkw-sums{flex:0 0 auto;display:flex;flex-direction:column;gap:.4vh;width:15vh;}
+.bkw-sum{flex:1 1 0;display:flex;flex-direction:column;justify-content:center;
+  border-radius:1vh;padding:.25vh .7vh;background:#f2f7fd;box-shadow:inset 0 0 0 .14vh #e2ecf7;}
+.bkw-sum b{font-size:1.8vh;font-weight:900;color:#1c5f9c;line-height:1.15;}
+.bkw-sum span{font-size:.98vh;font-weight:900;color:#7f95a8;line-height:1.2;}
+.bkw-sum.t{background:#eaf3ff;box-shadow:inset 0 0 0 .14vh #cfe3fb;}
+.bkw-sum.t b{color:#1a4f9c;}
+.bkw-bars{flex:1 1 auto;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.3vh;
+  justify-content:center;align-items:stretch;min-height:0;min-width:0;padding-top:1.2vh;}
+.bkw-b{display:flex;flex-direction:column;align-items:center;gap:.1vh;min-width:0;max-width:8.4vh;
+  justify-self:center;width:100%;height:100%;}
+.bkw-track{flex:1 1 auto;width:100%;display:flex;align-items:flex-end;justify-content:center;
+  border-bottom:.1vh solid #eaf1f7;}
+.bkw-pl{position:relative;width:100%;display:flex;align-items:flex-end;justify-content:center;
+  transition:height .35s ease;}
+.bkw-track i{display:block;width:72%;max-width:4.6vh;height:100%;border-radius:.5vh .5vh .1vh .1vh;
+  background:linear-gradient(180deg,#a8c8ef,#7ba8e0);}
+.bkw-b.today .bkw-track i{background:linear-gradient(180deg,#3f83e0,#1d55b8);}
+.bkw-pl i.z{width:34%;background:#dbe7f3;border-radius:.3vh;}
+.bkw-n{position:absolute;left:-45%;right:-45%;bottom:100%;margin-bottom:.15vh;text-align:center;
+  font-style:normal;font-size:.9vh;font-weight:900;color:#8fa5b8;line-height:1;white-space:nowrap;}
+.bkw-b.today .bkw-n{color:#1c5f9c;}
+.bkw-d{display:flex;flex-direction:column;align-items:center;line-height:1.1;height:2.3vh;}
+.bkw-d b{font-size:.98vh;font-weight:900;color:#7f95a8;}
+.bkw-d em{font-style:normal;font-size:.84vh;font-weight:900;color:#a4b6c6;}
+.bkw-b.today .bkw-d b,.bkw-b.today .bkw-d em{color:#1c5f9c;}
+
+@media (max-width:820px), (max-width:960px) and (orientation:portrait){
+  .bk-dash{grid-template-columns:minmax(0,1fr);}
+  .bk-streak{min-height:0;}
+  .bkw-body{flex-direction:column;gap:.55vh;}
+  .bkw-sums{flex-direction:row;width:auto;gap:.55vh;}
+  .bkw-sum{flex:1 1 0;flex-direction:row;align-items:baseline;justify-content:flex-start;gap:.55vh;padding:.35vh .8vh;}
+  .bkw-sum b{font-size:1.7vh;}
+  .bkw-sum span{font-size:.95vh;white-space:nowrap;}
+  .bkw-bars{min-height:9vh;padding-top:1.4vh;}
+}
+
 /* 태블릿 세로 · 좁은 화면 — 한 줄 세로 배치 */
 @media (max-width:820px), (max-width:960px) and (orientation:portrait){
   .bookview{display:flex;flex-direction:column;gap:.7rem;height:auto;}
@@ -3726,6 +3803,36 @@ body.mob .bk-add input{height:2.7rem;font-size:.85rem;border-radius:.7rem;}
 body.mob .bk-btn{height:2.7rem;font-size:.76rem;border-radius:.7rem;padding:0 .7rem;}
 body.mob .bk-note{font-size:.62rem;flex-wrap:wrap;gap:.35rem;}
 body.mob .bk-note .bk-undo{height:2.1rem;font-size:.66rem;border-radius:.55rem;margin-left:0;}
+
+/* ===== 🔥 연속 독서 배너 · 최근 1주일 (휴대폰) ===== */
+body.mob .bk-dash{grid-template-columns:minmax(0,1fr);gap:.6rem;}
+body.mob .bk-streak{padding:.7rem .85rem;border-radius:1rem;gap:.55rem;}
+body.mob .bks-fire{width:2.5rem;height:2.5rem;}
+body.mob .bks-txt b{font-size:1.05rem;white-space:normal;}
+body.mob .bks-txt span{font-size:.68rem;white-space:normal;}
+body.mob .bks-best{padding:.15rem .5rem;border-radius:.55rem;}
+body.mob .bks-best span{font-size:.55rem;}
+body.mob .bks-best b{font-size:.85rem;}
+body.mob .bks-badges{gap:.3rem;}
+body.mob .bks-b{height:2.1rem;border-radius:.55rem;gap:.15rem;}
+body.mob .bks-b b{font-size:.6rem;}
+body.mob .bks-b i{font-size:.7rem;}
+body.mob .bks-b.on i{font-size:.75rem;}
+body.mob .bk-week{padding:.7rem .85rem;border-radius:1rem;}
+body.mob .bkw-head b{font-size:.92rem;}
+body.mob .bkw-head span{font-size:.62rem;}
+body.mob .bkw-body{flex-direction:column;gap:.45rem;}
+body.mob .bkw-sums{flex-direction:row;width:auto;gap:.4rem;}
+body.mob .bkw-sum{border-radius:.6rem;padding:.35rem .6rem;flex-direction:row;align-items:baseline;justify-content:flex-start;gap:.4rem;}
+body.mob .bkw-sum b{font-size:1.05rem;}
+body.mob .bkw-sum span{font-size:.64rem;white-space:nowrap;}
+body.mob .bkw-bars{min-height:5.6rem;gap:.2rem;padding-top:.9rem;}
+body.mob .bkw-n{font-size:.6rem;}
+body.mob .bkw-track i{max-width:1.5rem;}
+body.mob .bkw-b{max-width:2.6rem;}
+body.mob .bkw-d{height:1.5rem;}
+body.mob .bkw-d b{font-size:.62rem;}
+body.mob .bkw-d em{font-size:.55rem;}
 
 /* ===== 💻 온라인 공부 · 🏠 주간표 · 💰 용돈 · 漢 한자 (휴대폰) ===== */
 body.mob .subs{flex-wrap:wrap;overflow:visible;height:auto;padding:.25rem;}
@@ -13764,6 +13871,7 @@ function addBook(title){
   } catch(e){}
   hidePop();
   render(true);
+  try { if (SB.readlog) SB.readlog.render(); } catch(e){}
   return b;
 }
 
@@ -13776,6 +13884,7 @@ function removeBook(id){
   write(list);
   hidePop();
   render();
+  try { if (SB.readlog) SB.readlog.render(); } catch(e){}
   showUndo();
   if (SB.toast) SB.toast("↩ 「" + lastRemoved.book.title + "」을(를) 나무에서 뺐어요");
   return true;
@@ -13789,6 +13898,7 @@ function undoRemove(){
   lastRemoved = null;
   var u = $("bkUndo"); if (u) u.hidden = true;
   render();
+  try { if (SB.readlog) SB.readlog.render(); } catch(e){}
   if (SB.toast) SB.toast("📚 「" + b.title + "」을(를) 다시 쌓았어요!");
   return true;
 }
@@ -13919,6 +14029,291 @@ SB.book = {
   weekStart: weekStart
 };
 })();
+
+/* =====================================================================
+   🔥 연속 독서 기록 — 북트리 위 배너 + 최근 1주일 막대 그래프
+   · 합산: 북트리에 쌓은 책(study.books.v1) + 빨간펜 책장 '읽었어요 ✓'(haeyuli.redpen.read.v1)
+   · 날짜별 장부: study.readlog.v1 = { v:1, days:{ "2026-11-20": { "ser:12": <ts> } } }
+   ===================================================================== */
+(function(){
+"use strict";
+if (window.__BKLOG) return;
+window.__BKLOG = 1;
+var SB = window.SB = window.SB || {};
+function $(id){ return document.getElementById(id); }
+function pad2(n){ return (n < 10 ? "0" : "") + n; }
+function dkey(d){ return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+function parseKey(k){
+  var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(k || ""));
+  if (!m) return null;
+  var d = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+  return isFinite(d.getTime()) ? d : null;
+}
+function todayKey(){
+  try { if (SB.today) { var t = SB.today(); if (parseKey(t)) return t; } } catch(e){}
+  return dkey(new Date());
+}
+
+var KEY = "study.readlog.v1";
+var RB_READ = "haeyuli.redpen.read.v1";
+var BOOKS = "study.books.v1";
+var WD = ["일","월","화","수","목","금","토"];
+var MS = [[3,"3일 달성"],[7,"7일 달성"],[14,"14일 도전"],[30,"30일 마스터"]];
+
+function readJSON(k, fb){
+  try { var v = JSON.parse(localStorage.getItem(k) || "null"); return (v == null) ? fb : v; }
+  catch(e){ return fb; }
+}
+function logStore(){
+  var v = readJSON(KEY, null);
+  if (!v || typeof v !== "object") v = {};
+  if (!v.days || typeof v.days !== "object") v.days = {};
+  v.v = 1;
+  return v;
+}
+function saveLog(l){
+  try {
+    var lim = new Date(); lim.setDate(lim.getDate() - 400);
+    var floor = dkey(lim), d;
+    for (d in l.days) if (String(d) < floor) delete l.days[d];
+    localStorage.setItem(KEY, JSON.stringify(l));
+    return true;
+  } catch(e){ return false; }
+}
+function rbRead(){ var v = readJSON(RB_READ, {}); return (v && typeof v === "object") ? v : {}; }
+function bookList(){
+  try { var v = readJSON(BOOKS, []); return Array.isArray(v) ? v.filter(function(b){ return b && b.date; }) : []; }
+  catch(e){ return []; }
+}
+/* 빨간펜 읽음 시각 → 날짜 (예전 true 값처럼 시각이 없으면 null) */
+function dayOfTs(ts){
+  var n = Number(ts);
+  if (!isFinite(n) || n < 1200000000000) return null;
+  var d = new Date(n);
+  if (!isFinite(d.getTime()) || d.getTime() > Date.now() + 86400000) return null;
+  return dkey(d);
+}
+function rbKeysOn(day, log, rm){
+  var set = {}, k, bucket = log.days[day] || {};
+  for (k in bucket) if (bucket[k]) set[k] = 1;
+  for (k in rm) if (dayOfTs(rm[k]) === day) set[k] = 1;
+  return set;
+}
+function bkCountOn(day, list){
+  var n = 0;
+  for (var i = 0; i < list.length; i++) if (String(list[i].date) === day) n++;
+  return n;
+}
+/* 날짜별 { rb:빨간펜 권수, bk:쌓은 책 권수, all:합계 } */
+function dayMap(log, rm, list){
+  var days = {}, d, k, dd, i, map = {};
+  for (d in log.days) days[d] = 1;
+  for (k in rm){ dd = dayOfTs(rm[k]); if (dd) days[dd] = 1; }
+  for (i = 0; i < list.length; i++){ if (list[i].date) days[String(list[i].date)] = 1; }
+  for (d in days){
+    var rb = Object.keys(rbKeysOn(d, log, rm)).length, bk = bkCountOn(d, list);
+    map[d] = { rb: rb, bk: bk, all: rb + bk };
+  }
+  return map;
+}
+function nOf(map, d){ return (map[d] && map[d].all) || 0; }
+function streakOf(map, t){
+  var d = parseKey(t) || new Date();
+  if (!nOf(map, t)) d.setDate(d.getDate() - 1);        /* 오늘 아직 안 읽었으면 어제까지가 현재 기록 */
+  var n = 0;
+  for (var i = 0; i < 400; i++){
+    if (!nOf(map, dkey(d))) break;
+    n++; d.setDate(d.getDate() - 1);
+  }
+  return n;
+}
+function bestOf(map){
+  var ks = Object.keys(map).filter(function(k){ return map[k].all > 0; }).sort();
+  var run = 0, top = 0, prev = null;
+  for (var i = 0; i < ks.length; i++){
+    var p = prev ? parseKey(prev) : null;
+    if (p) p.setDate(p.getDate() + 1);
+    run = (p && dkey(p) === ks[i]) ? run + 1 : 1;
+    if (run > top) top = run;
+    prev = ks[i];
+  }
+  return top;
+}
+function metrics(){
+  var log = logStore(), rm = rbRead(), list = bookList(), t = todayKey();
+  var map = dayMap(log, rm, list);
+  var st = streakOf(map, t), bt = Math.max(bestOf(map), st);
+  var week = [], d = parseKey(t) || new Date(), i, k;
+  d.setDate(d.getDate() - 6);
+  for (i = 0; i < 7; i++){
+    k = dkey(d);
+    week.push({ key: k, day: d.getDate(), wd: WD[d.getDay()], n: nOf(map, k), today: k === t });
+    d.setDate(d.getDate() + 1);
+  }
+  var sum = 0;
+  for (i = 0; i < week.length; i++) sum += week[i].n;
+  return {
+    today: t, map: map, streak: st, best: bt, week: week,
+    todayN: nOf(map, t), yestN: nOf(map, week[5].key), weekSum: sum,
+    total: (function(){ var n = 0, x; for (x in map) n += map[x].all; return n; })()
+  };
+}
+
+/* ---------- 화면 ---------- */
+function mount(view, before){
+  if (!view) return null;
+  var el = $("bkDash");
+  if (el){
+    /* 이미 만들었으면 제자리(탭 아래·두 패널 위)로 옮긴다 */
+    if (before && before.parentNode === view && el.parentNode !== view) view.insertBefore(el, before);
+    render();
+    return el;
+  }
+  el = document.createElement("div");
+  el.className = "bk-dash"; el.id = "bkDash";
+  el.setAttribute("aria-label", "연속 독서 기록");
+  el.innerHTML =
+    '<div class="bk-streak" id="bkStreak">' +
+      '<div class="bks-top">' +
+        '<span class="bks-fire" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">' +
+          '<path d="M12 23a7 7 0 0 1-7-7c0-3 1.9-5.1 3.6-6.9C10.3 7.3 11.6 6 12 4c.4 2 1.7 3.3 3.4 5.1C17.1 10.9 19 13 19 16a7 7 0 0 1-7 7z" fill="#f26a11"/>' +
+          '<path d="M12.4 22a3.4 3.4 0 0 1-3.4-3.4c0-1.7 1-2.7 1.9-3.7.7-.8 1.3-1.5 1.5-2.4.3 1 .9 1.7 1.5 2.4.9 1 1.7 2 1.7 3.7A3.4 3.4 0 0 1 12.4 22z" fill="#ffd24a"/>' +
+        '</svg></span>' +
+        '<div class="bks-txt"><b id="bkStreakN">0일 연속 독서 중!</b><span id="bkStreakSub">오늘 한 권 읽으면 기록이 시작돼요</span></div>' +
+        '<div class="bks-best"><span>최장</span><b id="bkBestN">0일</b></div>' +
+      '</div>' +
+      '<div class="bks-badges" id="bkBadges" role="list" aria-label="연속 독서 배지"></div>' +
+    '</div>' +
+    '<div class="bk-week">' +
+      '<div class="bkw-head"><b>📊 최근 1주일 독서 기록</b><span id="bkWeekRange"></span></div>' +
+      '<div class="bkw-body">' +
+        '<div class="bkw-sums">' +
+          '<div class="bkw-sum"><b id="bkWeekSum">0권</b><span>최근 7일 읽은 권수</span></div>' +
+          '<div class="bkw-sum t"><b id="bkTodaySum">0권</b><span>오늘 읽은 권수</span></div>' +
+        '</div>' +
+        '<div class="bkw-bars" id="bkWeekBars" aria-label="최근 7일 일간 독서 막대 그래프"></div>' +
+      '</div>' +
+    '</div>';
+  if (before && before.parentNode === view) view.insertBefore(el, before);
+  else view.appendChild(el);
+  render();
+  return el;
+}
+function txt(id, v){ var n = $(id); if (n) n.textContent = v; }
+function subText(m){
+  var diff = m.todayN - m.yestN;
+  if (m.todayN > 0){
+    if (diff > 0) return "어제보다 " + diff + "권 더 읽었어요! · 최장 " + m.best + "일 기록";
+    if (diff === 0) return "어제도 오늘도 " + m.todayN + "권씩 읽었어요 · 최장 " + m.best + "일";
+    return "오늘 " + m.todayN + "권 읽었어요 · 최장 " + m.best + "일 기록";
+  }
+  if (m.streak > 0) return "오늘 한 권 읽으면 " + (m.streak + 1) + "일째! · 최장 " + m.best + "일";
+  if (m.best > 0) return "쉬는 날이었어요 · 다시 " + (m.best >= 3 ? "도전해 볼까요?" : "시작해 볼까요?");
+  return "책을 쌓거나 빨간펜 책장에서 ✓를 누르면 기록돼요";
+}
+function render(){
+  var m;
+  try { m = metrics(); } catch(e){ return; }
+  var has = !!$("bkDash");
+  if (has){
+    txt("bkStreakN", m.streak > 0 ? (m.streak + "일 연속 독서 중!") : "오늘부터 독서 기록 시작!");
+    txt("bkStreakSub", subText(m));
+    txt("bkBestN", m.best + "일");
+    var bd = $("bkBadges");
+    if (bd){
+      bd.innerHTML = MS.map(function(x){
+        var on = m.best >= x[0];
+        return '<span class="bks-b' + (on ? " on" : "") + '" role="listitem" aria-label="' + x[1] + (on ? " 달성" : " 미달성") + '">' +
+          '<i aria-hidden="true">✓</i><b>' + x[1] + '</b></span>';
+      }).join("");
+    }
+    var wk = m.week;
+    txt("bkWeekRange", (wk[0].key.slice(5).replace("-", ".")) + " ~ " + (wk[6].key.slice(5).replace("-", ".")));
+    txt("bkWeekSum", m.weekSum + "권");
+    txt("bkTodaySum", m.todayN + "권");
+    var bars = $("bkWeekBars");
+    if (bars){
+      var max = 1;
+      for (var i = 0; i < wk.length; i++) if (wk[i].n > max) max = wk[i].n;
+      bars.innerHTML = wk.map(function(x){
+        var h = x.n ? Math.max(16, Math.round(x.n / max * 86)) : 5;
+        return '<div class="bkw-b' + (x.today ? " today" : "") + '" title="' + x.key + " · " + x.n + '권">' +
+          '<span class="bkw-track"><span class="bkw-pl" style="height:' + h + '%">' +
+            (x.n ? '<em class="bkw-n">' + x.n + '</em>' : "") +
+            '<i class="' + (x.n ? "" : "z") + '"></i>' +
+          '</span></span>' +
+          '<span class="bkw-d"><b>' + x.day + '</b><em>' + (x.today ? "오늘" : x.wd) + '</em></span>' +
+        '</div>';
+      }).join("");
+    }
+  }
+  /* 책 탭 위쪽 작은 표시도 함께 갱신 */
+  try { if (SB.book && SB.book.render) {} } catch(e){}
+  return m;
+}
+/* 빨간펜 책장 '읽었어요 ✓' → 그 날짜 장부에 기록 (해제 시 그 날 기록에서 뺀다) */
+function markRedpen(key, on, ts){
+  if (!key) return false;
+  var log = logStore(), k;
+  if (on){
+    var d = dayOfTs(ts) || todayKey();
+    log.days[d] = log.days[d] || {};
+    log.days[d][key] = Number(ts) || Date.now();
+  } else {
+    for (k in log.days) if (log.days[k] && log.days[k][key]) delete log.days[k][key];
+  }
+  saveLog(log);
+  render();
+  return true;
+}
+/* 오늘 날짜에 직접 한 권 더 (빨간펜 책장이 아닌 곳에서 읽었을 때 쓸 수 있게) */
+function addManual(day, n){
+  var log = logStore(), d = parseKey(day) ? day : todayKey();
+  log.days[d] = log.days[d] || {};
+  var i = 0, k;
+  for (k in log.days[d]) i++;
+  n = Math.max(1, Number(n) || 1);
+  for (var j = 0; j < n; j++) log.days[d]["manual:" + (i + j + 1)] = Date.now();
+  saveLog(log);
+  render();
+  return true;
+}
+
+SB.readlog = {
+  key: KEY,
+  mark: markRedpen,
+  markRedpen: markRedpen,
+  add: addManual,
+  render: render,
+  refresh: render,
+  mount: mount,
+  metrics: metrics,
+  streak: function(){ return metrics().streak; },
+  best: function(){ return metrics().best; },
+  week: function(){ return metrics().week; }
+};
+
+/* 책 탭이 열릴 때마다 최신으로 */
+if (typeof SB.onShow === "object" && SB.onShow){
+  var prevShow = SB.onShow.book;
+  SB.onShow.book = function(){
+    if (prevShow){ try { prevShow.apply(this, arguments); } catch(e){} }
+    render();
+  };
+}
+function bootLog(){
+  try {
+    var view = $("viewBook"), body = $("rbTreeBody");
+    if (view && body && $("rbTabs")) mount(view, body);   /* 하위 탭이 만들어진 뒤에만 제자리에 끼운다 */
+    render();
+  } catch(e){}
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootLog);
+else setTimeout(bootLog, 0);
+setTimeout(bootLog, 350);
+if (document.readyState !== "loading") setTimeout(bootLog, 0);
+})();
+
 
 /* =====================================================================
    👨‍👩‍👧 가족 숙제·용돈 동기화 — 무료 클라우드(MantleDB), 로그인 없음
@@ -17047,8 +17442,10 @@ function seriesLabel(s){ return s.short || String(s.n).replace("솔루토이 ", 
 
 function setRead(key, on){
   if (!BYKEY[key]) return;
+  var prevTs = read[key];
   if (on) read[key] = Date.now(); else delete read[key];
   wr(K.read, read);
+  try { if (SB.readlog) SB.readlog.markRedpen(key, on, on ? read[key] : prevTs); } catch(e){}
   refreshCard(key);
   refreshCounters();
   var t = rd(K.today, null);
@@ -17334,6 +17731,7 @@ function buildBookView(){
   while (view.firstChild) body.appendChild(view.firstChild);
   view.appendChild(body);
   view.insertBefore(buildTabs(), body);
+  try { if (SB.readlog && SB.readlog.mount) SB.readlog.mount(view, body); } catch(e){}
   view.classList.add("rb-hasbooks");
   var shelf = document.createElement("div");
   shelf.className = "rb-act rb-hide"; shelf.id = "rbShelfWrap";
@@ -17391,6 +17789,8 @@ function applyMode(){
   if (tree) tree.classList.toggle("rb-hide", !treeOn);
   var panels = view.querySelectorAll(".bk-panel");
   for (var i = 0; i < panels.length; i++) panels[i].classList.toggle("rb-hide", !treeOn);
+  var dash = $("bkDash");
+  if (dash) dash.classList.toggle("rb-hide", MODE === "act");
   var sw = $("rbShelfWrap"), aw = $("rbActWrap");
   if (sw) sw.classList.toggle("rb-hide", MODE !== "shelf");
   if (aw) aw.classList.toggle("rb-hide", MODE !== "act");
@@ -17403,6 +17803,7 @@ function applyMode(){
 }
 
 function paintAll(){
+  try { if (SB.readlog) SB.readlog.render(); } catch(e){}
   paintShelves();
   var h = $("rbHome"); if (h) h.innerHTML = homeCard();
   var a = $("rbAskWrap"); if (a) a.innerHTML = askCard();
