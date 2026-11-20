@@ -902,6 +902,9 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
 .cx-line .tx .cx-ch.cur{color:#15803d;background:#dcfce7;}
 .cx-tools .t.rec-on{background:#e8fbf1;color:#0f7a52;box-shadow:inset 0 0 0 .22vh #9fe0bd;}
 .cx-tools .t[disabled]{opacity:.42;}
+.cx-tools.cx-microw .t{min-height:4.4vh;font-size:clamp(10.5px,1.3vh,17px);}
+.cx-tools .t.cx-mic{background:#e9fdf1;color:#0f7a52;box-shadow:inset 0 0 0 .2vh #86efac;}
+.cx-tools .t.cx-mic.rec-on{background:#dcfce7;color:#166534;box-shadow:inset 0 0 0 .28vh #22c55e;}
 .cx-vrow{display:flex;align-items:center;gap:.5vh;margin-top:.1vh;}
 .cx-vnote{flex:1 1 auto;min-width:0;font-size:1.02vh;font-weight:800;color:#7b93a8;line-height:1.4;letter-spacing:-.01em;}
 .cx-vbar{flex:0 0 8vh;height:.7vh;border-radius:1vh;background:#e8f2fa;overflow:hidden;}
@@ -9072,7 +9075,7 @@ function renderClassic(){
         return '<span class="cx-v"><b>' + esc(v[0]) + "</b> " + esc(v[1]) + "</span>";
       }).join("") + "</div>"
     + '<p class="cx-ask">🤔 ' + esc(c.ask) + "</p>"
-    + '<div class="cx-tools"><button class="t" type="button" id="cxRec">🎙️ 따라 읽기 (녹음)</button>'
+    + '<div class="cx-tools cx-microw"><button class="t cx-mic" type="button" id="cxRec">🎙️ 따라 읽기 (녹음)</button>'
     + '<button class="t" type="button" id="cxPlay" disabled>▶️ 내 목소리 듣기</button>'
     + '<button class="t" type="button" id="cxAgain">↺ 다시</button></div>'
     + '<div class="cx-vrow"><span class="cx-vnote" id="cxVNote" role="status">🎙️ 를 누르고 고전을 또박또박 읽어 보세요</span>'
