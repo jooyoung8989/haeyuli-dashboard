@@ -4066,6 +4066,53 @@ body.mob .rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:.15vh 0 .2vh;}
 .rb-home .rb-hq{display:block;font-size:1.3vh;font-weight:800;color:#7f8b99;}
 .rb-home .rb-ha{display:flex;flex-direction:column;gap:.55vh;flex:0 0 auto;}
+/* 📞 피클이랑 통화 — 오늘 읽을 책 카드, 표지 옆 빈 자리 (2026-11-20 요청) */
+.rb-home .rb-call{flex:0 0 auto;display:flex;align-items:center;gap:1vh;border:0;cursor:pointer;
+  padding:1vh 1.6vh 1vh 1vh;border-radius:999px;
+  background:linear-gradient(135deg,#6fdd8b,#27a259);color:#fff;
+  box-shadow:0 .55vh 1.4vh rgba(45,150,90,.3),inset 0 .18vh .35vh rgba(255,255,255,.5);
+  -webkit-tap-highlight-color:transparent;}
+.rb-home .rb-call .ic{position:relative;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  width:4.4vh;height:4.4vh;border-radius:50%;background:rgba(255,255,255,.97);color:#178a4c;line-height:1;
+  box-shadow:0 .25vh .7vh rgba(30,120,70,.28);animation:rbCallRing 1.9s ease-in-out infinite;}
+.rb-home .rb-call .ic svg{width:58%;height:58%;display:block;}
+.rb-home .rb-call .ic::after{content:"";position:absolute;inset:-.35vh;border-radius:50%;
+  border:.22vh solid rgba(255,255,255,.75);animation:rbCallPulse 1.9s ease-out infinite;}
+@keyframes rbCallPulse{0%{transform:scale(.86);opacity:.9}70%{transform:scale(1.22);opacity:0}100%{transform:scale(1.22);opacity:0}}
+@keyframes rbCallRing{0%,64%,100%{transform:rotate(0)}72%{transform:rotate(-13deg)}80%{transform:rotate(11deg)}88%{transform:rotate(-7deg)}}
+.rb-home .rb-call .tx{display:block;text-align:left;min-width:0;}
+.rb-home .rb-call .tx b{display:block;font-size:1.5vh;font-weight:900;letter-spacing:-.01em;white-space:nowrap;line-height:1.2;}
+.rb-home .rb-call .tx i{display:block;font-style:normal;font-size:1.12vh;font-weight:800;color:rgba(255,255,255,.94);
+  white-space:nowrap;line-height:1.25;}
+.rb-home .rb-call:hover{filter:brightness(1.04);}
+.rb-home .rb-call:active{transform:scale(.96);}
+.rb-home .rb-call:focus-visible{outline:.28vh solid #17693d;outline-offset:.25vh;}
+@media (prefers-reduced-motion:reduce){
+  .rb-home .rb-call .ic,.rb-home .rb-call .ic::after{animation:none !important;}
+}
+/* 좁은 화면(태블릿 세로·휴대폰)은 아이콘 + 짧은 이름 타일로 */
+@media (max-width:1000px),(orientation:portrait){
+  .rb-home .rb-call{gap:0;flex-direction:column;justify-content:center;padding:.9vh .9vh .8vh;border-radius:1.5vh;min-width:8.6vh;}
+  .rb-home .rb-call .ic{width:3.4vh;height:3.4vh;}
+  .rb-home .rb-call .ic::after{inset:-.25vh;border-width:.18vh;}
+  .rb-home .rb-call .tx{text-align:center;margin-top:.45vh;}
+  .rb-home .rb-call .tx b{font-size:1.25vh;}
+  .rb-home .rb-call .tx i{display:none;}
+}
+/* 📞 피클 통화 안내 (앱이 자동으로 안 열릴 때) */
+.pk-hint{position:fixed;left:50%;bottom:2.4vh;transform:translateX(-50%);z-index:95;
+  display:flex;align-items:center;gap:1.1vh;width:min(64rem,94vw);padding:1.35vh 1.6vh;
+  border-radius:1.6vh;background:rgba(14,45,70,.97);color:#eaf6ff;
+  box-shadow:0 1.4vh 3.4vh rgba(8,32,55,.42),inset 0 0 0 .16vh rgba(150,215,255,.28);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
+.pk-hint[hidden]{display:none !important;}
+.pk-hint .pk-hx{flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  width:3.2vh;height:3.2vh;border-radius:50%;background:rgba(123,224,138,.18);color:#7be08a;}
+.pk-hint .pk-hx svg{width:58%;height:58%;display:block;}
+.pk-hint .pk-ht{flex:1 1 auto;font-size:1.5vh;font-weight:900;line-height:1.55;letter-spacing:-.01em;}
+.pk-hint .pk-ht b{color:#ffe27a;}
+.pk-hint .pk-hc{flex:0 0 auto;height:3.2vh;padding:0 1.1vh;border-radius:999px;background:rgba(255,255,255,.18);
+  color:#eaf6ff;font-size:1.1vh;font-weight:900;border:0;cursor:pointer;}
 
 /* 독후활동 */
 .rb-act{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:1vh;padding-bottom:1.6vh;}
@@ -4110,6 +4157,18 @@ body.mob .rb-tab{font-size:2.6vw;padding:1.4vw 2.6vw;}
 body.mob .rb-ask-b{font-size:4.2vw;}
 body.mob .rb-home .rb-ht{font-size:4.4vw;}
 body.mob .rb-home .rb-hq,body.mob .rb-home .rb-hs,body.mob .rb-home .rb-hk{font-size:2.5vw;}
+/* 📞 피클 통화 버튼 (휴대폰) — 카드가 화면 밖으로 넘치지 않게 함께 조정 */
+body.mob #viewHome .rb-home{flex:0 1 auto;min-width:0;max-width:100%;gap:2.2vw;padding:1.6vw 1.9vw;}
+body.mob .rb-home .rb-ha{flex:0 0 auto;}
+body.mob .rb-home .rb-call{min-width:0;width:15vw;padding:1.3vw .6vw 1.1vw;border-radius:2.6vw;gap:0;}
+body.mob .rb-home .rb-call .ic{width:7vw;height:7vw;}
+body.mob .rb-home .rb-call .ic::after{inset:-.55vw;border-width:.4vw;}
+body.mob .rb-home .rb-call .tx{margin-top:.9vw;}
+body.mob .rb-home .rb-call .tx b{font-size:2.35vw;}
+body.mob .pk-hint{left:.6rem;right:.6rem;bottom:5.4rem;transform:none;max-width:none;padding:.8rem .9rem;border-radius:1rem;}
+body.mob .pk-hint .pk-hx{width:1.9rem;height:1.9rem;}
+body.mob .pk-hint .pk-ht{font-size:.78rem;}
+body.mob .pk-hint .pk-hc{height:1.9rem;font-size:.7rem;}
 body.mob .rb-btn{font-size:2.7vw;padding:1.5vw 3vw;}
 body.mob .rb-q{font-size:3vw;}
 body.mob .rb-opt{font-size:2.6vw;}
@@ -19727,6 +19786,38 @@ function tabCount(){
   if (n) n.textContent = readCount("") + "/" + BOOKS.length;
 }
 
+/* ---------- 📞 피클이랑 통화 (오늘 읽을 책 카드 표지 옆) ---------- */
+var PK_CALL_URL = "pickle://call";
+var PK_PHONE_SVG = '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>';
+var pkHintTimer = null;
+function pkHideHint(){
+  var h = $("pkHomeHint"); if (h) h.hidden = true;
+  if (pkHintTimer){ clearTimeout(pkHintTimer); pkHintTimer = null; }
+}
+function pkShowHint(){
+  var h = $("pkHomeHint");
+  if (!h){
+    h = document.createElement("div");
+    h.id = "pkHomeHint"; h.className = "pk-hint"; h.setAttribute("role", "status");
+    h.innerHTML = '<span class="pk-hx" aria-hidden="true">' + PK_PHONE_SVG + '</span>' +
+      '<div class="pk-ht">피클 앱이 저절로 안 열리면, 홈 화면에서 <b>피클 앱</b>을 열고 <b>전화</b> 버튼을 눌러 주세요!</div>' +
+      '<button class="pk-hc" type="button" aria-label="안내 닫기">닫기</button>';
+    var cb = h.querySelector(".pk-hc");
+    if (cb) cb.addEventListener("click", pkHideHint);
+    document.body.appendChild(h);
+  }
+  h.hidden = false;
+  if (pkHintTimer) clearTimeout(pkHintTimer);
+  pkHintTimer = setTimeout(pkHideHint, 12000);
+}
+function pkHomeCall(){
+  pkHideHint();
+  try { if (SB.toast) SB.toast("피클이랑 영어로 통화를 걸어 볼까요?"); } catch(e){}
+  try { window.location.href = PK_CALL_URL; } catch(e){}
+  setTimeout(function(){
+    try { if (document.visibilityState === "visible") pkShowHint(); } catch(e){ pkShowHint(); }
+  }, 1200);
+}
 function homeCard(){
   var b = todayBook(false);
   return '<div class="rb-hc">' + cover(b) + '</div>' +
@@ -19736,6 +19827,10 @@ function homeCard(){
       '<span class="rb-hs">' + esc(b.serName) + ' · ' + b.n + '권</span>' +
       '<span class="rb-hq">해율아, 이 책 읽어 봤니?</span>' +
     '</div>' +
+    '<button class="rb-call" type="button" data-rbact="home-call" aria-label="피클이랑 영어로 통화하기" title="피클이랑 영어로 통화하기">' +
+      '<span class="ic" aria-hidden="true">' + PK_PHONE_SVG + '</span>' +
+      '<span class="tx"><b>피클이랑 통화</b><i>영어로 수다 떨기</i></span>' +
+    '</button>' +
     '<div class="rb-ha">' +
       '<button class="rb-btn yes" type="button" data-rbact="home-yes" data-k="' + esc(b.key) + '">읽었어요 ✓</button>' +
       '<button class="rb-btn ghost" type="button" data-rbact="home-next">다른 책</button>' +
@@ -19965,6 +20060,7 @@ document.addEventListener("click", function(e){
     if (a === "act-close"){
       MODE = "shelf"; ACTIVE = null; applyMode(); paintShelves(); return;
     }
+    if (a === "home-call"){ pkHomeCall(); return; }
   }
 
   var sw = el.closest("[data-rbcolor]");
