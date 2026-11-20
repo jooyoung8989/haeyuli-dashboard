@@ -3193,6 +3193,140 @@ body .wk-sub i{font-size:.95rem;}
 .wcgg-opt.no{background:#fff1ef;color:#c0554a;box-shadow:inset 0 0 0 2px #f0a496;}
 .wcgg-msg{min-height:1.7rem;font-size:clamp(12px,1.5vh,17px);font-weight:800;color:#2f8b6b;text-align:center;}
 
+/* =====================================================================
+   📖 그림 동화책 — AR 0.1부터 단계별 창작 그림 동화 (책장 · 펼친 페이지)
+   ===================================================================== */
+.storyview{display:flex;flex-direction:column;height:100%;min-height:0;}
+.pbk-stage{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.7vh;
+  padding:1vh 1.2vh;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px #e6ebf0;}
+.pbk-head{flex:0 0 auto;display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;min-width:0;}
+.pbk-title{display:flex;align-items:baseline;gap:.5rem;min-width:0;}
+.pbk-title b{font-size:clamp(16px,2vh,24px);font-weight:800;color:#1f2a33;letter-spacing:-.02em;white-space:nowrap;}
+.pbk-title span{font-size:clamp(11px,1.3vh,15px);font-weight:600;color:#a9b6c2;white-space:nowrap;}
+.pbk-prog{margin-left:auto;display:inline-flex;align-items:center;height:2rem;padding:0 .8rem;border-radius:999px;
+  background:#fdf6e8;color:#8a5a08;font-size:clamp(11px,1.3vh,15px);font-weight:900;
+  box-shadow:inset 0 0 0 1px #f2dfb4;white-space:nowrap;}
+.pbk-note{margin:0;flex:0 0 auto;font-size:clamp(11px,1.3vh,14px);font-weight:600;color:#a9b6c2;text-align:center;}
+
+/* ---------------- 책장 ---------------- */
+.pbk-shelf{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-auto-rows:minmax(0,1fr);gap:1vh 1vh;padding:.2vh .2vh 1vh;align-content:stretch;}
+.pbk-card{position:relative;display:flex;flex-direction:column;gap:.25rem;min-width:0;padding:.6rem .6rem .7rem;
+  border-radius:16px;text-align:left;background:linear-gradient(170deg,#fffdf8,#fdf9f0);box-shadow:inset 0 0 0 1px #efe2c8;}
+.pbk-card:active{transform:scale(.99);}
+.pbk-cover{position:relative;width:100%;flex:1 1 auto;min-height:96px;border-radius:12px;overflow:hidden;background:#eaf5ff;
+  box-shadow:inset 0 0 0 1px #e2eaf1;}
+.pbk-cover svg{width:100%;height:100%;display:block;}
+.pbk-ar{position:absolute;left:.45rem;top:.45rem;z-index:2;display:inline-flex;align-items:center;height:1.55rem;
+  padding:0 .55rem;border-radius:999px;background:rgba(255,255,255,.95);color:#8a5a08;
+  font-size:clamp(10px,1.15vh,14px);font-weight:900;letter-spacing:-.01em;box-shadow:0 1px 3px rgba(20,40,60,.18);}
+.pbk-flag{position:absolute;right:.45rem;top:.45rem;z-index:2;display:none;align-items:center;height:1.5rem;
+  padding:0 .5rem;border-radius:999px;background:#eafaf1;color:#1f6b4f;
+  font-size:clamp(9px,1.05vh,13px);font-weight:900;box-shadow:inset 0 0 0 1px #b7e2cc;}
+.pbk-card.done .pbk-flag{display:inline-flex;}
+.pbk-card.done{box-shadow:inset 0 0 0 1.5px #bfe3d0;background:linear-gradient(170deg,#fbfffd,#f3fbf6);}
+.pbk-nm{font-size:clamp(14px,1.75vh,21px);font-weight:900;color:#1f2a33;letter-spacing:-.02em;line-height:1.2;}
+.pbk-ko{font-size:clamp(11px,1.25vh,15px);font-weight:700;color:#8b98a4;}
+.pbk-meta{margin-top:.05rem;font-size:clamp(10px,1.15vh,13px);font-weight:700;color:#a9b6c2;line-height:1.3;}
+
+/* ---------------- 펼친 페이지 ---------------- */
+.pbk-read{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.55vh;}
+.pbk-readhead{flex:0 0 auto;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;min-width:0;}
+.pbk-back{flex:0 0 auto;height:2.3rem;padding:0 .85rem;border-radius:999px;background:#f7f9fb;color:#5a6b78;
+  font-size:clamp(11px,1.35vh,16px);font-weight:800;box-shadow:inset 0 0 0 1px #e9eef2;white-space:nowrap;}
+.pbk-back:active{transform:scale(.97);}
+.pbk-book{display:flex;align-items:baseline;gap:.45rem;min-width:0;}
+.pbk-book b{font-size:clamp(15px,1.9vh,23px);font-weight:900;color:#1f2a33;letter-spacing:-.02em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pbk-book .pbk-ar2{display:inline-flex;align-items:center;height:1.5rem;padding:0 .5rem;border-radius:999px;
+  background:#fdf6e8;color:#8a5a08;font-size:clamp(10px,1.15vh,13px);font-weight:900;
+  box-shadow:inset 0 0 0 1px #f2dfb4;white-space:nowrap;}
+.pbk-rate{margin-left:auto;display:flex;gap:.28rem;flex-wrap:wrap;}
+.pbk-rate button{height:2.2rem;padding:0 .65rem;border-radius:999px;background:#f7f9fb;color:#6b7b88;
+  font-size:clamp(10px,1.15vh,13px);font-weight:800;box-shadow:inset 0 0 0 1px #e9eef2;white-space:nowrap;}
+.pbk-rate button.on{background:#eef7ff;color:#175a80;box-shadow:inset 0 0 0 1.6px #7fb8dd;}
+
+.pbk-page{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.55vh;
+  padding:.7vh .8vh .8vh;border-radius:18px;background:linear-gradient(175deg,#fffefb,#fdf8ee);
+  box-shadow:inset 0 0 0 1px #efe4cd;}
+.pbk-art{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;
+  border-radius:14px;overflow:hidden;background:#eaf5ff;box-shadow:inset 0 0 0 1px #e3ebf2;}
+.pbk-art svg{position:absolute;top:0;left:0;width:100%;height:100%;display:block;}
+.pbk-tx{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:.3rem;text-align:center;padding:0 .4rem;}
+.pbk-en{font-family:"Helvetica Neue",Arial,system-ui,sans-serif;font-size:clamp(23px,3.9vh,48px);font-weight:800;
+  color:#1b2b38;letter-spacing:-.02em;line-height:1.22;}
+.pbk-koline{margin:0;font-size:clamp(13px,1.7vh,22px);font-weight:700;color:#7f8d99;line-height:1.35;}
+.pbk-kbtn{align-self:center;height:2rem;padding:0 .8rem;border-radius:999px;background:#f7f9fb;color:#5a6b78;
+  font-size:clamp(10px,1.2vh,14px);font-weight:800;box-shadow:inset 0 0 0 1px #e9eef2;white-space:nowrap;}
+.pbk-kbtn:active{transform:scale(.97);}
+.pbk-foot{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:.55rem;flex-wrap:wrap;}
+.pbk-nav{height:2.9rem;padding:0 1.15rem;border-radius:999px;background:#eef4f8;color:#2b5d7d;
+  font-size:clamp(12px,1.55vh,18px);font-weight:800;box-shadow:inset 0 0 0 1px #c9dbe7;white-space:nowrap;letter-spacing:-.01em;}
+.pbk-nav.go{background:#2f8b6b;color:#fff;box-shadow:none;}
+.pbk-nav[disabled]{opacity:.38;}
+.pbk-nav:active{transform:scale(.98);}
+.pbk-pageno{min-width:5.2rem;text-align:center;font-size:clamp(11px,1.4vh,16px);font-weight:900;color:#8b98a4;white-space:nowrap;}
+.pbk-sayrow{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap;}
+.pbk-say{height:2.9rem;padding:0 1.15rem;border-radius:999px;background:#eef7ff;color:#175a80;
+  font-size:clamp(12px,1.5vh,17px);font-weight:800;box-shadow:inset 0 0 0 1px #cfe4f4;white-space:nowrap;}
+.pbk-say:active{transform:scale(.98);}
+.pbk-mini{height:2.9rem;padding:0 1rem;border-radius:999px;background:#f7f9fb;color:#5a6b78;
+  font-size:clamp(11px,1.4vh,16px);font-weight:800;box-shadow:inset 0 0 0 1px #e9eef2;white-space:nowrap;}
+.pbk-mini.rec.on{background:#fff1ef;color:#b23b2c;box-shadow:inset 0 0 0 1.6px #f0a496;}
+.pbk-mini.recplay[disabled]{opacity:.42;}
+.pbk-mini.recplay.has{background:#eef7ff;color:#175a80;box-shadow:inset 0 0 0 1.6px #cfe4f4;}
+
+/* 마지막 장 — 다 읽었어요 */
+.pbk-fin{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.55vh;padding:1.6vh 1vh;border-radius:18px;text-align:center;
+  background:linear-gradient(175deg,#fbfefa,#f1faf5);box-shadow:inset 0 0 0 1.6px #cfe5d9;}
+.pbk-fin-em{font-size:clamp(44px,8.6vh,86px);line-height:1;}
+.pbk-fin-t{font-size:clamp(20px,3.1vh,38px);font-weight:900;color:#1f2a33;letter-spacing:-.02em;}
+.pbk-fin-p{margin:0;font-size:clamp(12px,1.55vh,19px);font-weight:700;color:#5f7d6d;line-height:1.45;}
+.pbk-fin-star{display:inline-flex;align-items:center;gap:.3rem;height:2.2rem;padding:0 .9rem;border-radius:999px;
+  background:#fff7e6;color:#a97a10;font-size:clamp(12px,1.5vh,18px);font-weight:900;box-shadow:inset 0 0 0 1px #f2dfb4;}
+.pbk-fin-acts{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.5vh;}
+@media (max-width:900px){
+  .pbk-shelf{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+
+/* ---------------- 휴대폰 ---------------- */
+body.mob .storyview{height:auto;}
+body.mob .pbk-stage{padding:.7rem;gap:.6rem;}
+body.mob .pbk-head{gap:.4rem;}
+body.mob .pbk-title b{font-size:1.05rem;}
+body.mob .pbk-title span{display:none;}
+body.mob .pbk-prog{height:1.85rem;padding:0 .55rem;font-size:.7rem;}
+body.mob .pbk-note{display:none;}
+body.mob .pbk-shelf{grid-template-columns:1fr 1fr;grid-auto-rows:auto;gap:.6rem;overflow:visible;padding:0 0 .3rem;align-content:start;}
+body.mob .pbk-card{padding:.5rem .5rem .6rem;border-radius:14px;gap:.2rem;}
+body.mob .pbk-nm{font-size:.86rem;}
+body.mob .pbk-ko{font-size:.7rem;}
+body.mob .pbk-meta{font-size:.64rem;}
+body.mob .pbk-cover{flex:0 0 auto;height:6.1rem;min-height:0;}
+body.mob .pbk-ar{height:1.35rem;padding:0 .42rem;font-size:.6rem;left:.35rem;top:.35rem;}
+body.mob .pbk-flag{height:1.3rem;padding:0 .42rem;font-size:.58rem;right:.35rem;top:.35rem;}
+body.mob .pbk-read{height:auto;gap:.55rem;}
+body.mob .pbk-readhead{gap:.4rem;}
+body.mob .pbk-back{height:2.1rem;padding:0 .7rem;font-size:.76rem;}
+body.mob .pbk-book{min-width:0;}
+body.mob .pbk-book b{font-size:.98rem;}
+body.mob .pbk-book .pbk-ar2{height:1.35rem;font-size:.6rem;padding:0 .42rem;}
+body.mob .pbk-rate{margin-left:0;gap:.25rem;width:100%;}
+body.mob .pbk-rate button{height:2rem;padding:0 .45rem;font-size:.62rem;}
+body.mob .pbk-page{padding:.45rem .45rem .6rem;border-radius:16px;gap:.5rem;}
+body.mob .pbk-art{flex:0 0 auto;height:11.7rem;}
+body.mob .pbk-en{font-size:1.28rem;line-height:1.3;}
+body.mob .pbk-koline{font-size:.86rem;}
+body.mob .pbk-foot{gap:.4rem;}
+body.mob .pbk-nav{height:2.7rem;padding:0 .85rem;font-size:.85rem;}
+body.mob .pbk-pageno{min-width:4.2rem;font-size:.76rem;}
+body.mob .pbk-sayrow{gap:.35rem;}
+body.mob .pbk-say,body.mob .pbk-mini{height:2.7rem;padding:0 .75rem;font-size:.78rem;}
+body.mob .pbk-fin{padding:1.2rem .8rem;}
+body.mob .pbk-fin-t{font-size:1.3rem;}
+body.mob .pbk-fin-p{font-size:.82rem;}
+
 /* ---------------- 👀 사이트워드 ---------------- */
 .sightview{display:flex;flex-direction:column;height:100%;min-height:0;}
 .sw-stage{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.6vh;
@@ -3552,6 +3686,19 @@ body .wk-sub i{font-size:.95rem;}
           <button class="sw-nav" id="swNext" type="button" aria-label="다음 단어">▶</button>
         </div>
         <div class="sw-body" id="swBody"></div>
+      </div>
+    </section>
+
+    <!-- ================= 📖 그림 동화책 (AR 0.1부터) ================= -->
+    <section class="view storyview" id="viewEnBook" data-view="en-book" hidden>
+      <div class="pbk-stage">
+        <div class="pbk-head">
+          <div class="pbk-title"><b>📖 그림 동화책</b><span>AR 0.1부터 한 권씩 · 다 읽으면 별 +1</span></div>
+          <div class="pbk-prog" id="bkProg">0 / 6권</div>
+        </div>
+        <div class="pbk-shelf" id="bkShelf" aria-label="그림 동화책 책장"></div>
+        <div class="pbk-read" id="bkRead" hidden></div>
+        <p class="pbk-note" id="bkNote">마음에 드는 책을 눌러요. ◀ ▶ 로 한 장씩 넘기며 읽어요.</p>
       </div>
     </section>
 
@@ -6416,7 +6563,7 @@ SB.hasAtt = hasAtt;
 /* 오늘(현지 날짜) 어느 과목을 한 번이라도 했는지 — 홈 체크표의 근거 */
 var DAYSUB = "haeyuli.daysub.v1";
 var SUBKEYS = ["en", "ko", "math", "hanja", "history"];
-var SRC_SUB = { sight:"en", phonics:"en", words:"en", talk:"en", call:"en", en:"en", ko:"ko", math:"math", hanja:"hanja", history:"history" };
+var SRC_SUB = { book:"en", sight:"en", phonics:"en", words:"en", talk:"en", call:"en", en:"en", ko:"ko", math:"math", hanja:"hanja", history:"history" };
 function daySubData(){
   var d = readJSON(DAYSUB, null);
   if (!d || typeof d !== "object" || d.date !== TODAY || !d.subs || typeof d.subs !== "object") {
@@ -6569,13 +6716,13 @@ SB.ntfySubject = function(sub){
    과목 안에서 하위 학습 메뉴를 하나씩 크게 본다. */
 var SUBJECTS = [
   { k:"math",    em:"🔢", nm:"수학", desc:"오늘의 연산 · 사고력 · 도형", sec:"concept" },
-  { k:"en",      em:"🔤", nm:"영어", desc:"사이트워드 · 그림 문장 · 퀴즈", sec:"sight" },
+  { k:"en",      em:"🔤", nm:"영어", desc:"그림 동화책 · 사이트워드 · 퀴즈", sec:"sight" },
   { k:"hanja",   em:"漢", nm:"한자", desc:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", sec:"trace" },
   { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄", sec:"quote" },
   { k:"history", em:"🏛️", nm:"역사", desc:"시대 연도표 · 고려·조선 왕 계보", sec:"timeline" }
 ];
 var SECS = {
-  en:      [["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"]],
+  en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"]],
   ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"]],
   math:    [["concept", "🔢 수개념"], ["calc", "➕ 연산"], ["think", "🧠 사고력"], ["shape", "🔺 도형"], ["clock", "⏰ 시계 읽기"], ["gugu", "✖️ 구구단 원리"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말 빈칸"]],
@@ -6583,7 +6730,7 @@ var SECS = {
 };
 var VIEWID = {
   "home:main":"viewHome", "study:hub":"viewStudyHub",
-  "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:test":"viewEnTest", "study:en:call":"viewEnCall",
+  "study:en:book":"viewEnBook", "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:test":"viewEnTest", "study:en:call":"viewEnCall",
   "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord",
   "study:math:concept":"viewMath", "study:math:calc":"viewMath", "study:math:think":"viewMath",
   "study:math:shape":"viewMath", "study:math:clock":"viewMath", "study:math:gugu":"viewMath",
@@ -7029,7 +7176,7 @@ function renderTestResult(){
    출석 도장판
    ===================================================================== */
 var ATTM = { y:0, m:0 };
-var SRC_LABEL = { sight:"👀 사이트워드", phonics:"🔤 파닉스·문장 읽기", words:"🃏 단어카드·테스트", talk:"💬 영어 대화", call:"📞 전화 영어", ko:"📖 국어 공부", math:"🔢 수학 공부", hanja:"漢 한자", history:"🏛️ 역사", room:"🐶 강아지 방", check:"🐾 출석 도장" };
+var SRC_LABEL = { book:"📖 그림 동화책", sight:"👀 사이트워드", phonics:"🔤 파닉스·문장 읽기", words:"🃏 단어카드·테스트", talk:"💬 영어 대화", call:"📞 전화 영어", ko:"📖 국어 공부", math:"🔢 수학 공부", hanja:"漢 한자", history:"🏛️ 역사", room:"🐶 강아지 방", check:"🐾 출석 도장" };
 SB.renderAttend = function(){
   var info = SB.attendInfo(), days = info.days;
   var set = SB.attendedSet ? SB.attendedSet() : {};
@@ -9901,7 +10048,7 @@ var HUB = [
   { k:"math", nm:"수학", badge:["1 2","3 4"], color:"#c1553a", bg:"#fdf3f0",
     d:"오늘의 연산 · 사고력 · 도형", hero:appHero },
   { k:"en", nm:"영어", badge:["a b","c d"], color:"#2f6fb0", bg:"#eff5fb",
-    d:"사이트워드 · 그림 문장 · 퀴즈", hero:enHero },
+    d:"그림 동화책 · 사이트워드 · 퀴즈", hero:enHero },
   { k:"hanja", nm:"한자", badge:["漢",""], color:"#8a5a2b", bg:"#f9f4ec",
     d:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", hero:hanjaHero },
   { k:"ko", nm:"국어", badge:["가","나"], color:"#2f8b6b", bg:"#eef7f2",
@@ -13319,6 +13466,1176 @@ SB.clockState = function(){ return { lv:CK.lv, h:CK.h, m:CK.m, opts:CK.opts.slic
 SB.guguState = function(){ return { dan:GG.dan, mul:GG.mul, quiz:GG.quiz, q:GG.q ? { dan:GG.q.dan, mul:GG.q.mul } : null, opts:GG.opts.slice(), week:weekInfo(), right:GG.right }; };
 SB.guguReset = function(){ try { localStorage.removeItem(GKEY); } catch(e){} GG.dan = weekInfo().dan; GG.mul = 1; renderGugu(); };
 })();
+</script>
+<script>
+/* =====================================================================
+   📖 그림 동화책 — AR 0.1부터 0.6까지 창작 그림 동화
+   책장(표지·AR 배지·다 읽었어요) → 한 장씩 넘기는 동화책(인라인 SVG · 읽어주기 · 녹음)
+   저장: haeyuli.storybook.v1
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var KEY = "haeyuli.storybook.v1";
+var RATE_KEY = "haeyuli.sight.rate.v1";
+var RATES = [0.62, 0.78, 0.95];
+var UID = 0;
+
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c];
+  });
+}
+function readJSON(k, fb){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; } }
+function writeJSON(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+function today(){
+  if (SB.today) return SB.today();
+  var d = new Date();
+  return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+}
+function state(){
+  var s = readJSON(KEY, null);
+  if (!s || typeof s !== "object") s = {};
+  if (!s.done || typeof s.done !== "object" || Object.prototype.toString.call(s.done) === "[object Array]") s.done = {};
+  if (!s.part || typeof s.part !== "object") s.part = {};
+  return s;
+}
+function saveState(s){ return writeJSON(KEY, s); }
+function getRate(){
+  var v = NaN;
+  try { v = parseFloat(localStorage.getItem(RATE_KEY)); } catch(e){ v = NaN; }
+  if (!v || isNaN(v)) return 0.78;
+  var best = RATES[0];
+  for (var i = 0; i < RATES.length; i++) if (Math.abs(RATES[i] - v) < Math.abs(best - v)) best = RATES[i];
+  return best;
+}
+function sayRate(){ return getRate(); }
+
+/* =====================================================================
+   1. 그림 도우미 — 800×260 넓은 그림 (아이패드는 넓게, 휴대폰은 가운데를 봐요)
+   ===================================================================== */
+function nn(n){ return Math.round(n * 10) / 10; }
+
+function sky(u, a, b){
+  return '<defs><linearGradient id="' + u + 's" x1="0" y1="0" x2="0" y2="1">'
+    + '<stop offset="0" stop-color="' + a + '"/><stop offset="1" stop-color="' + b + '"/></linearGradient></defs>'
+    + '<rect x="0" y="0" width="800" height="260" fill="url(#' + u + 's)"/>';
+}
+function sun(x, y, r){
+  var s = '<g>';
+  for (var i = 0; i < 12; i++){
+    var a = i * Math.PI / 6;
+    s += '<line x1="' + nn(x + Math.cos(a) * (r + 7)) + '" y1="' + nn(y + Math.sin(a) * (r + 7)) + '"'
+      + ' x2="' + nn(x + Math.cos(a) * (r + 21)) + '" y2="' + nn(y + Math.sin(a) * (r + 21)) + '"'
+      + ' stroke="#ffd158" stroke-width="4" stroke-linecap="round" opacity=".8"/>';
+  }
+  s += '<circle cx="' + x + '" cy="' + y + '" r="' + (r + 8) + '" fill="#fff3c4" opacity=".65"/>';
+  s += '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#ffd158"/>';
+  s += '<circle cx="' + nn(x - r * 0.3) + '" cy="' + nn(y - r * 0.3) + '" r="' + nn(r * 0.24) + '" fill="#fff6d8" opacity=".85"/>';
+  return s + '</g>';
+}
+function moon(x, y, r){
+  return '<circle cx="' + x + '" cy="' + y + '" r="' + (r + 9) + '" fill="#dfe8ff" opacity=".18"/>'
+    + '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#fff6d0"/>'
+    + '<circle cx="' + nn(x - r * 0.3) + '" cy="' + nn(y - r * 0.15) + '" r="' + nn(r * 0.22) + '" fill="#efe3b8" opacity=".8"/>'
+    + '<circle cx="' + nn(x + r * 0.25) + '" cy="' + nn(y + r * 0.3) + '" r="' + nn(r * 0.16) + '" fill="#efe3b8" opacity=".7"/>'
+    + '<circle cx="' + nn(x + r * 0.2) + '" cy="' + nn(y - r * 0.35) + '" r="' + nn(r * 0.12) + '" fill="#efe3b8" opacity=".7"/>';
+}
+function stars(list){
+  var s = "";
+  for (var i = 0; i < list.length; i++){
+    var p = list[i], r = p[2] || 2;
+    s += '<path d="M' + p[0] + ' ' + (p[1] - r * 2.4) + ' l' + (r * 0.68) + ' ' + (r * 1.6) + ' l' + (r * 1.7) + ' ' + (r * 0.1)
+      + ' l-' + (r * 1.32) + ' ' + (r * 1.05) + ' l' + (r * 0.42) + ' ' + (r * 1.7) + ' l-' + (r * 1.48) + ' -' + (r * 0.95)
+      + ' l-' + (r * 1.48) + ' ' + (r * 0.95) + ' l' + (r * 0.42) + ' -' + (r * 1.7) + ' l-' + (r * 1.32) + ' -' + (r * 1.05)
+      + ' l' + (r * 1.7) + ' -' + (r * 0.1) + ' Z" fill="#fff3bd" opacity="' + (p[3] || .9) + '"/>';
+  }
+  return s;
+}
+function cloud(x, y, s, op){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')" fill="#ffffff" opacity="' + (op || .92) + '">'
+    + '<ellipse cx="0" cy="0" rx="38" ry="19"/>'
+    + '<ellipse cx="-30" cy="6" rx="24" ry="14"/>'
+    + '<ellipse cx="30" cy="6" rx="22" ry="13"/>'
+    + '<ellipse cx="-4" cy="-13" rx="22" ry="15"/>'
+    + '</g>';
+}
+function hills(){
+  return '<path d="M-40 168 q90 -32 180 -4 q80 26 160 0 q90 -28 180 4 q80 26 160 -2 q70 -22 160 2 V262 H-40 Z" fill="#b6dfa9"/>'
+    + '<path d="M-40 198 q120 -22 240 2 q120 24 240 -2 q120 -26 240 4 q90 22 160 0 V262 H-40 Z" fill="#7fc97d"/>';
+}
+function tufts(xs){
+  var s = "";
+  for (var i = 0; i < xs.length; i++){
+    var x = xs[i];
+    s += '<path d="M' + x + ' 240 q3 -13 7 -1 q2 -16 7 -2 q3 -11 6 1" stroke="#5aa85c" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".7"/>';
+  }
+  return s;
+}
+function flower(x, y, s, c){
+  var col = c || "#f38fb0";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<path d="M0 0 v-22" stroke="#4fa84a" stroke-width="3" stroke-linecap="round"/>'
+    + '<path d="M0 -12 q-10 -2 -12 -10 q10 0 12 10 Z" fill="#7fd07a"/>'
+    + '<g fill="' + col + '"><circle cx="0" cy="-30" r="7"/><circle cx="-8" cy="-24" r="7"/><circle cx="8" cy="-24" r="7"/>'
+    + '<circle cx="-5" cy="-16" r="6"/><circle cx="5" cy="-16" r="6"/></g>'
+    + '<circle cx="0" cy="-23" r="4.6" fill="#ffd35c"/>'
+    + '</g>';
+}
+function bush(x, y, s){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<circle cx="-14" cy="-8" r="16" fill="#6cbf6c"/><circle cx="10" cy="-6" r="14" fill="#5db35d"/>'
+    + '<circle cx="0" cy="-16" r="15" fill="#7fd07a"/>'
+    + '</g>';
+}
+function tree(x, y, s, o){
+  o = o || {};
+  var leaf = o.leaf || "#5cb85c", dark = o.dark || "#4aa34f";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="2" rx="30" ry="6" fill="#25422a" opacity=".10"/>'
+    + '<path d="M-8 0 q2 -36 8 -48 q6 12 8 48 Z" fill="#a8763f"/>'
+    + '<path d="M0 -30 l-18 -12 M0 -38 l16 -10" stroke="#8a5d2f" stroke-width="5" stroke-linecap="round"/>'
+    + '<circle cx="-26" cy="-84" r="27" fill="' + dark + '"/>'
+    + '<circle cx="26" cy="-84" r="26" fill="' + dark + '"/>'
+    + '<circle cx="0" cy="-104" r="31" fill="' + leaf + '"/>'
+    + '<circle cx="0" cy="-80" r="27" fill="' + leaf + '"/>'
+    + '<circle cx="-14" cy="-98" r="13" fill="#8adf85" opacity=".45"/>'
+    + '</g>';
+}
+function pine(x, y, s){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<rect x="-5" y="-16" width="10" height="18" rx="3" fill="#8a5d2f"/>'
+    + '<path d="M0 -96 L26 -44 H-26 Z" fill="#3f9a56"/>'
+    + '<path d="M0 -74 L30 -24 H-30 Z" fill="#4aa864"/>'
+    + '<path d="M0 -52 L34 -8 H-34 Z" fill="#57b872"/>'
+    + '</g>';
+}
+function pond(cx, cy, rx, ry){
+  return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="#7ec8ef"/>'
+    + '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (rx * .88) + '" ry="' + (ry * .8) + '" fill="#98d9f6"/>'
+    + '<path d="M' + (cx - rx * .55) + ' ' + (cy + ry * .12) + ' q' + (rx * .35) + ' -8 ' + (rx * .7) + ' 0" stroke="#e6f7ff" stroke-width="3" fill="none" opacity=".8" stroke-linecap="round"/>'
+    + '<path d="M' + (cx - rx * .2) + ' ' + (cy - ry * .34) + ' q' + (rx * .3) + ' -7 ' + (rx * .58) + ' 0" stroke="#e6f7ff" stroke-width="2.6" fill="none" opacity=".7" stroke-linecap="round"/>';
+}
+function lily(x, y, s){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="0" rx="24" ry="9" fill="#5cb85c"/>'
+    + '<path d="M0 0 l6 -7 v14 Z" fill="#7ec8ef"/>'
+    + '<circle cx="-4" cy="-5" r="4.5" fill="#f6a6c1"/>'
+    + '</g>';
+}
+function house(x, y, s, o){
+  o = o || {};
+  var wall = o.wall || "#ffe9c9", roof = o.roof || "#e8775f";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<rect x="-58" y="-96" width="116" height="96" rx="4" fill="' + wall + '"/>'
+    + '<path d="M-72 -94 L0 -154 L72 -94 Z" fill="' + roof + '"/>'
+    + '<rect x="34" y="-146" width="14" height="36" rx="3" fill="#c97a5a"/>'
+    + '<rect x="-14" y="-56" width="30" height="56" rx="3" fill="#b9713f"/>'
+    + '<circle cx="9" cy="-26" r="2.6" fill="#f6d97a"/>'
+    + '<rect x="-48" y="-78" width="28" height="26" rx="3" fill="#c8e9f8" stroke="#8fb5cf" stroke-width="2.5"/>'
+    + '<rect x="22" y="-78" width="28" height="26" rx="3" fill="#c8e9f8" stroke="#8fb5cf" stroke-width="2.5"/>'
+    + '<path d="M-48 -65 h28 M-34 -78 v26 M22 -65 h28 M36 -78 v26" stroke="#8fb5cf" stroke-width="2"/>'
+    + '</g>';
+}
+function road(){
+  return '<rect x="0" y="196" width="800" height="64" fill="#9aa7b2"/>'
+    + '<rect x="0" y="196" width="800" height="6" fill="#b7c2cb"/>'
+    + '<path d="M30 228 h54 M140 228 h54 M250 228 h54 M360 228 h54 M470 228 h54 M580 228 h54 M690 228 h54" stroke="#f4f7f9" stroke-width="6" stroke-linecap="round" opacity=".85"/>';
+}
+function car(x, y, s, o){
+  o = o || {};
+  var c = o.c || "#e8574c", d = o.d || "#c9463c", w = o.w || "#dff1ff";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="4" rx="76" ry="8" fill="#2b3b2b" opacity=".14"/>'
+    + '<path d="M-60 -22 q4 -28 22 -30 h24 q20 2 26 30 Z" fill="' + c + '"/>'
+    + '<path d="M-52 -25 q4 -20 16 -22 h10 v22 Z" fill="' + w + '"/>'
+    + '<path d="M-20 -25 h12 v-22 h6 q14 2 18 22 Z" fill="' + w + '"/>'
+    + '<rect x="-70" y="-26" width="140" height="28" rx="14" fill="' + c + '"/>'
+    + '<rect x="-70" y="-10" width="140" height="12" rx="6" fill="' + d + '"/>'
+    + '<circle cx="-42" cy="2" r="15" fill="#37474f"/><circle cx="-42" cy="2" r="7" fill="#cfd8dc"/>'
+    + '<circle cx="42" cy="2" r="15" fill="#37474f"/><circle cx="42" cy="2" r="7" fill="#cfd8dc"/>'
+    + '<circle cx="64" cy="-16" r="4.6" fill="#ffe08a"/>'
+    + '<path d="M-70 -18 h6" stroke="#fff" stroke-width="3" opacity=".5"/>'
+    + '</g>';
+}
+function bus(x, y, s, o){
+  o = o || {};
+  var c = o.c || "#4a8fd6", d = o.d || "#3973b3";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="4" rx="104" ry="9" fill="#2b3b2b" opacity=".14"/>'
+    + '<rect x="-104" y="-78" width="208" height="78" rx="14" fill="' + c + '"/>'
+    + '<rect x="-104" y="-20" width="208" height="20" rx="8" fill="' + d + '"/>'
+    + '<rect x="-92" y="-66" width="40" height="30" rx="6" fill="#dff1ff"/>'
+    + '<rect x="-42" y="-66" width="40" height="30" rx="6" fill="#dff1ff"/>'
+    + '<rect x="8" y="-66" width="40" height="30" rx="6" fill="#dff1ff"/>'
+    + '<rect x="58" y="-66" width="30" height="60" rx="6" fill="#cfe6fa" opacity=".9"/>'
+    + '<rect x="58" y="-66" width="30" height="60" rx="6" fill="none" stroke="#3973b3" stroke-width="2"/>'
+    + '<circle cx="-70" cy="2" r="17" fill="#37474f"/><circle cx="-70" cy="2" r="8" fill="#cfd8dc"/>'
+    + '<circle cx="62" cy="2" r="17" fill="#37474f"/><circle cx="62" cy="2" r="8" fill="#cfd8dc"/>'
+    + '<circle cx="-100" cy="-12" r="5" fill="#ffe08a"/>'
+    + '</g>';
+}
+
+/* ---- 동물 · 사람 (발이 y=0, 키 약 100 × s) ---- */
+function cat(x, y, s, o){
+  o = o || {};
+  var c = o.c || "#f2a65a", d = o.d || "#d98a3c", l = o.l || "#ffe3c2";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="1" rx="36" ry="6" fill="#25422a" opacity=".10"/>'
+    + '<path d="M26 -30 q26 -2 20 -30" fill="none" stroke="' + d + '" stroke-width="9" stroke-linecap="round"/>'
+    + '<rect x="-22" y="-18" width="10" height="18" rx="5" fill="' + d + '"/>'
+    + '<rect x="6" y="-18" width="10" height="18" rx="5" fill="' + d + '"/>'
+    + '<ellipse cx="-2" cy="-31" rx="29" ry="19" fill="' + c + '"/>'
+    + '<ellipse cx="-9" cy="-25" rx="17" ry="11" fill="' + l + '" opacity=".75"/>'
+    + '<circle cx="-26" cy="-56" r="19" fill="' + c + '"/>'
+    + '<path d="M-41 -66 l-4 -16 l16 9 Z" fill="' + c + '"/>'
+    + '<path d="M-11 -66 l5 -16 l-16 9 Z" fill="' + c + '"/>'
+    + '<path d="M-39 -68 l-3 -9 l9 5 Z" fill="#f7b6b6"/>'
+    + '<path d="M-14 -68 l3 -9 l-9 5 Z" fill="#f7b6b6"/>'
+    + '<circle cx="-33" cy="-58" r="2.9" fill="#22303a"/>'
+    + '<circle cx="-19" cy="-58" r="2.9" fill="#22303a"/>'
+    + '<path d="M-29 -50 q3 3 6 0" stroke="#b0714a" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
+    + '<path d="M-45 -52 h-10 M-45 -48 h-10 M-7 -52 h10 M-7 -48 h10" stroke="#f6e6d6" stroke-width="1.6" stroke-linecap="round"/>'
+    + '</g>';
+}
+function dog(x, y, s, o){
+  o = o || {};
+  var c = o.c || "#cf9560", d = o.d || "#ad7440", l = o.l || "#f4dcbd";
+  if (o.lie){
+    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+      + '<ellipse cx="4" cy="1" rx="42" ry="6" fill="#25422a" opacity=".10"/>'
+      + '<ellipse cx="6" cy="-16" rx="34" ry="16" fill="' + c + '"/>'
+      + '<path d="M36 -18 q18 2 12 -14" fill="none" stroke="' + d + '" stroke-width="9" stroke-linecap="round"/>'
+      + '<ellipse cx="-2" cy="-22" rx="20" ry="9" fill="' + l + '" opacity=".5"/>'
+      + '<ellipse cx="-24" cy="-8" rx="12" ry="6" fill="' + d + '"/>'
+      + '<circle cx="-34" cy="-34" r="17" fill="' + c + '"/>'
+      + '<ellipse cx="-48" cy="-36" rx="8" ry="13" fill="' + d + '" transform="rotate(-12 -48 -36)"/>'
+      + '<ellipse cx="-20" cy="-36" rx="8" ry="13" fill="' + d + '" transform="rotate(12 -20 -36)"/>'
+      + '<ellipse cx="-45" cy="-26" rx="11" ry="8" fill="' + l + '"/>'
+      + '<ellipse cx="-53" cy="-29" rx="4.6" ry="3.6" fill="#3d2b22"/>'
+      + '<path d="M-42 -38 q4 3 7 0 M-32 -38 q4 3 7 0" stroke="#3d2b22" stroke-width="2" fill="none" stroke-linecap="round"/>'
+      + '</g>';
+  }
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="1" rx="37" ry="6" fill="#25422a" opacity=".10"/>'
+    + '<path d="M28 -32 q24 -4 18 -28" fill="none" stroke="' + d + '" stroke-width="10" stroke-linecap="round"/>'
+    + '<rect x="-24" y="-18" width="11" height="18" rx="5" fill="' + d + '"/>'
+    + '<rect x="4" y="-18" width="11" height="18" rx="5" fill="' + d + '"/>'
+    + '<ellipse cx="-2" cy="-32" rx="30" ry="19" fill="' + c + '"/>'
+    + '<ellipse cx="-8" cy="-26" rx="18" ry="11" fill="' + l + '" opacity=".55"/>'
+    + '<circle cx="-27" cy="-56" r="19" fill="' + c + '"/>'
+    + '<ellipse cx="-43" cy="-58" rx="8.5" ry="15" fill="' + d + '" transform="rotate(-12 -43 -58)"/>'
+    + '<ellipse cx="-11" cy="-58" rx="8.5" ry="15" fill="' + d + '" transform="rotate(12 -11 -58)"/>'
+    + '<ellipse cx="-39" cy="-47" rx="13" ry="10" fill="' + l + '"/>'
+    + '<ellipse cx="-49" cy="-50" rx="5.2" ry="4.2" fill="#3d2b22"/>'
+    + '<circle cx="-30" cy="-60" r="2.9" fill="#22303a"/>'
+    + '<circle cx="-16" cy="-60" r="2.9" fill="#22303a"/>'
+    + '<path d="M-41 -42 q4 9 9 0" fill="#f08a8a"/>'
+    + '</g>';
+}
+function bird(x, y, s, o){
+  o = o || {};
+  var c = o.c || "#63b6e9", d = o.d || "#3f8fc4";
+  var rot = o.rot ? ' rotate(' + o.rot + ')' : "";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')' + rot + '">'
+    + '<path d="M-4 -2 q-24 -24 -38 -8 q18 20 38 8 Z" fill="#9fd6f7"/>'
+    + '<ellipse cx="0" cy="6" rx="25" ry="18" fill="' + c + '"/>'
+    + '<ellipse cx="2" cy="12" rx="14" ry="9" fill="#eaf7ff" opacity=".8"/>'
+    + '<circle cx="21" cy="-8" r="13" fill="' + c + '"/>'
+    + '<path d="M32 -8 l13 5 l-13 5 Z" fill="#f7a02e"/>'
+    + '<circle cx="25" cy="-11" r="2.7" fill="#22303a"/>'
+    + '<path d="M-20 4 l-20 12 l22 -1 Z" fill="' + d + '"/>'
+    + '<path d="M0 10 q-20 14 -32 4 q14 -16 32 -4 Z" fill="' + d + '"/>'
+    + '</g>';
+}
+function fish(x, y, s, o){
+  o = o || {};
+  var c = o.c || "#ff9a5b", d = o.d || "#e07a3c";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<path d="M-26 2 l-22 -16 v32 Z" fill="' + d + '"/>'
+    + '<ellipse cx="0" cy="0" rx="30" ry="19" fill="' + c + '"/>'
+    + '<path d="M-4 -19 q10 -13 20 -1 Z" fill="#f7b06f"/>'
+    + '<path d="M-2 18 q10 10 18 0 Z" fill="#f7b06f"/>'
+    + '<circle cx="16" cy="-5" r="3.4" fill="#2b2b2b"/>'
+    + '<path d="M6 7 q8 6 0 8" stroke="' + d + '" stroke-width="3" fill="none" stroke-linecap="round"/>'
+    + '<path d="M-10 -4 q10 4 0 9" stroke="#ffe0c8" stroke-width="2.4" fill="none" opacity=".8"/>'
+    + '</g>';
+}
+function frog(x, y, s, o){
+  o = o || {};
+  var c = o.c || "#74cf6a", d = o.d || "#4ea84a", l = o.l || "#d3f2ac";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="1" rx="32" ry="6" fill="#25422a" opacity=".10"/>'
+    + '<ellipse cx="-30" cy="-6" rx="17" ry="9" fill="' + d + '"/>'
+    + '<ellipse cx="28" cy="-6" rx="17" ry="9" fill="' + d + '"/>'
+    + '<ellipse cx="0" cy="-24" rx="28" ry="21" fill="' + c + '"/>'
+    + '<ellipse cx="0" cy="-17" rx="18" ry="12" fill="' + l + '" opacity=".85"/>'
+    + '<circle cx="-14" cy="-45" r="12" fill="' + c + '"/>'
+    + '<circle cx="14" cy="-45" r="12" fill="' + c + '"/>'
+    + '<circle cx="-14" cy="-45" r="8" fill="#ffffff"/><circle cx="14" cy="-45" r="8" fill="#ffffff"/>'
+    + '<circle cx="-13" cy="-44" r="3.4" fill="#20331c"/><circle cx="15" cy="-44" r="3.4" fill="#20331c"/>'
+    + '<path d="M-12 -30 q12 10 24 0" stroke="' + d + '" stroke-width="3" fill="none" stroke-linecap="round"/>'
+    + '<circle cx="-18" cy="-19" r="3" fill="' + d + '" opacity=".45"/><circle cx="16" cy="-26" r="2.6" fill="' + d + '" opacity=".45"/>'
+    + '</g>';
+}
+function duck(x, y, s, o){
+  o = o || {};
+  var c = o.c || "#ffd94f", d = o.d || "#efb92b";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="1" rx="32" ry="6" fill="#1c3b52" opacity=".12"/>'
+    + '<path d="M-24 -26 q-20 -6 -26 6 q14 12 28 4 Z" fill="' + d + '"/>'
+    + '<ellipse cx="0" cy="-22" rx="30" ry="20" fill="' + c + '"/>'
+    + '<ellipse cx="-2" cy="-16" rx="18" ry="11" fill="#fff0b0" opacity=".65"/>'
+    + '<circle cx="18" cy="-44" r="14" fill="' + c + '"/>'
+    + '<path d="M30 -46 l17 5 l-17 5 Z" fill="#f79b2e"/>'
+    + '<circle cx="22" cy="-47" r="2.7" fill="#3a3218"/>'
+    + '<path d="M-10 -30 q14 8 26 0" stroke="' + d + '" stroke-width="3" fill="none" stroke-linecap="round"/>'
+    + '</g>';
+}
+function bear(x, y, s, o){
+  o = o || {};
+  var c = o.c || "#bb8c5e", d = o.d || "#9a6d43", l = o.l || "#f2dfc6";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="1" rx="34" ry="6" fill="#25422a" opacity=".10"/>'
+    + '<rect x="-20" y="-16" width="14" height="16" rx="7" fill="' + d + '"/>'
+    + '<rect x="6" y="-16" width="14" height="16" rx="7" fill="' + d + '"/>'
+    + '<ellipse cx="0" cy="-34" rx="30" ry="24" fill="' + c + '"/>'
+    + '<ellipse cx="-2" cy="-30" rx="19" ry="15" fill="' + l + '" opacity=".55"/>'
+    + (o.wave
+        ? '<path d="M-24 -44 q-20 -10 -24 -28" stroke="' + c + '" stroke-width="10" fill="none" stroke-linecap="round"/>'
+          + '<circle cx="-49" cy="-75" r="6" fill="' + l + '"/>'
+        : '<path d="M-26 -40 q-12 8 -14 22" stroke="' + c + '" stroke-width="10" fill="none" stroke-linecap="round"/>')
+    + '<path d="M28 -40 q12 8 14 22" stroke="' + c + '" stroke-width="10" fill="none" stroke-linecap="round"/>'
+    + '<circle cx="-24" cy="-64" r="20" fill="' + c + '"/>'
+    + '<circle cx="-39" cy="-80" r="8.5" fill="' + c + '"/><circle cx="-9" cy="-80" r="8.5" fill="' + c + '"/>'
+    + '<circle cx="-39" cy="-80" r="4.6" fill="#e8c9a8"/><circle cx="-9" cy="-80" r="4.6" fill="#e8c9a8"/>'
+    + '<ellipse cx="-32" cy="-56" rx="11" ry="8.5" fill="' + l + '"/>'
+    + '<ellipse cx="-39" cy="-58" rx="4.6" ry="3.8" fill="#4a3427"/>'
+    + '<circle cx="-31" cy="-68" r="2.9" fill="#2a1f18"/><circle cx="-17" cy="-68" r="2.9" fill="#2a1f18"/>'
+    + '<path d="M-34 -48 q4 4 8 0" stroke="#8a5a3a" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
+    + '</g>';
+}
+function rabbit(x, y, s, o){
+  o = o || {};
+  var c = o.c || "#f7f4ee", d = o.d || "#e2dcd2";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="1" rx="30" ry="6" fill="#25422a" opacity=".10"/>'
+    + '<ellipse cx="26" cy="-16" rx="10" ry="10" fill="' + c + '"/>'
+    + '<ellipse cx="0" cy="-26" rx="26" ry="20" fill="' + c + '"/>'
+    + '<circle cx="-14" cy="-54" r="17" fill="' + c + '"/>'
+    + '<ellipse cx="-20" cy="-82" rx="6.5" ry="18" fill="' + c + '" transform="rotate(-8 -20 -82)"/>'
+    + '<ellipse cx="-4" cy="-84" rx="6.5" ry="18" fill="' + c + '" transform="rotate(10 -4 -84)"/>'
+    + '<ellipse cx="-20" cy="-82" rx="3" ry="13" fill="#f6b8c4" transform="rotate(-8 -20 -82)"/>'
+    + '<ellipse cx="-4" cy="-84" rx="3" ry="13" fill="#f6b8c4" transform="rotate(10 -4 -84)"/>'
+    + '<circle cx="-19" cy="-56" r="2.6" fill="#3a332c"/><circle cx="-9" cy="-56" r="2.6" fill="#3a332c"/>'
+    + '<circle cx="-14" cy="-49" r="3" fill="#f0969e"/>'
+    + '</g>';
+}
+function girl(x, y, s, o){
+  o = o || {};
+  var skin = o.skin || "#ffd9b8", hair = o.hair || "#3d2b1f", dress = o.dress || "#f2799b";
+  var tall = o.tall ? 1.12 : 1;
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + (s * tall) + ')">'
+    + '<ellipse cx="0" cy="1" rx="26" ry="5" fill="#25422a" opacity=".10"/>'
+    + '<rect x="-11" y="-20" width="8" height="20" rx="4" fill="' + skin + '"/>'
+    + '<rect x="3" y="-20" width="8" height="20" rx="4" fill="' + skin + '"/>'
+    + '<ellipse cx="-8" cy="0" rx="8" ry="4" fill="#5b6b78"/><ellipse cx="8" cy="0" rx="8" ry="4" fill="#5b6b78"/>'
+    + '<path d="M-16 -58 q16 -6 32 0 l8 38 q-24 10 -48 0 Z" fill="' + dress + '"/>'
+    + (o.wave
+        ? '<path d="M-14 -56 q-16 -8 -18 -30" stroke="' + skin + '" stroke-width="7" fill="none" stroke-linecap="round"/>'
+          + '<circle cx="-33" cy="-89" r="5.4" fill="' + skin + '"/>'
+        : '<path d="M-16 -58 q-10 14 -12 34" stroke="' + skin + '" stroke-width="7" fill="none" stroke-linecap="round"/>')
+    + '<path d="M16 -58 q10 14 12 34" stroke="' + skin + '" stroke-width="7" fill="none" stroke-linecap="round"/>'
+    + '<circle cx="0" cy="-76" r="16" fill="' + skin + '"/>'
+    + '<path d="M-17 -78 q2 -22 17 -22 q15 0 17 22 q-4 -10 -17 -10 q-13 0 -17 10 Z" fill="' + hair + '"/>'
+    + '<path d="M-17 -74 q-8 10 -6 22 q6 -6 8 -14 Z" fill="' + hair + '"/>'
+    + '<path d="M17 -74 q8 10 6 22 q-6 -6 -8 -14 Z" fill="' + hair + '"/>'
+    + '<circle cx="-6" cy="-76" r="2.4" fill="#2f2119"/><circle cx="6" cy="-76" r="2.4" fill="#2f2119"/>'
+    + '<path d="M-4 -69 q4 4 8 0" stroke="#c4643f" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
+    + '<circle cx="-11" cy="-71" r="3" fill="#ffb3a7" opacity=".7"/><circle cx="11" cy="-71" r="3" fill="#ffb3a7" opacity=".7"/>'
+    + '</g>';
+}
+function mom(x, y, s, o){
+  o = o || {};
+  var g = girl(x, y, s, { skin:o.skin, hair:o.hair || "#5a3b28", dress:o.dress || "#7bb4e0", tall:true });
+  return g;
+}
+
+function girlSit(x, y, s, o){
+  o = o || {};
+  var skin = o.skin || "#ffd9b8", hair = o.hair || "#3d2b1f", dress = o.dress || "#f2799b";
+  var k = s * (o.tall ? 1.12 : 1);
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + k + ')">'
+    + '<ellipse cx="0" cy="1" rx="32" ry="6" fill="#25422a" opacity=".10"/>'
+    + '<path d="M-26 -10 q-8 -12 4 -14 q12 -4 24 0 q12 2 4 14 Z" fill="' + skin + '"/>'
+    + '<ellipse cx="26" cy="-6" rx="10" ry="5" fill="#5b6b78"/>'
+    + '<path d="M-18 -52 q18 -6 36 0 l14 42 q-32 12 -64 0 Z" fill="' + dress + '"/>'
+    + '<path d="M-16 -54 q-12 10 -18 24" stroke="' + skin + '" stroke-width="7" fill="none" stroke-linecap="round"/>'
+    + '<path d="M16 -54 q10 10 12 22" stroke="' + skin + '" stroke-width="7" fill="none" stroke-linecap="round"/>'
+    + '<circle cx="0" cy="-70" r="15" fill="' + skin + '"/>'
+    + '<path d="M-16 -72 q2 -21 16 -21 q14 0 16 21 q-4 -9 -16 -9 q-12 0 -16 9 Z" fill="' + hair + '"/>'
+    + '<path d="M-16 -68 q-8 10 -6 21 q6 -6 8 -13 Z" fill="' + hair + '"/>'
+    + '<path d="M16 -68 q8 10 6 21 q-6 -6 -8 -13 Z" fill="' + hair + '"/>'
+    + '<circle cx="-6" cy="-70" r="2.4" fill="#2f2119"/><circle cx="6" cy="-70" r="2.4" fill="#2f2119"/>'
+    + '<path d="M-4 -63 q4 4 8 0" stroke="#c4643f" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
+    + '<circle cx="-11" cy="-65" r="3" fill="#ffb3a7" opacity=".7"/><circle cx="11" cy="-65" r="3" fill="#ffb3a7" opacity=".7"/>'
+    + '</g>';
+}
+
+function bearInBed(x, y, s){
+  var c = "#bb8c5e", d = "#9a6d43", l = "#f2dfc6";
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<rect x="-118" y="-52" width="236" height="16" rx="6" fill="#b98a5c"/>'
+    + '<rect x="-112" y="-98" width="18" height="54" rx="5" fill="#a8763f"/>'
+    + '<rect x="94" y="-72" width="18" height="28" rx="5" fill="#a8763f"/>'
+    + '<rect x="-106" y="-70" width="212" height="22" rx="10" fill="#f4f7fb"/>'
+    + '<rect x="-100" y="-90" width="62" height="26" rx="11" fill="#ffffff"/>'
+    + '<circle cx="-74" cy="-104" r="8.5" fill="' + c + '"/><circle cx="-44" cy="-104" r="8.5" fill="' + c + '"/>'
+    + '<circle cx="-74" cy="-104" r="4.6" fill="#e8c9a8"/><circle cx="-44" cy="-104" r="4.6" fill="#e8c9a8"/>'
+    + '<circle cx="-59" cy="-88" r="20" fill="' + c + '"/>'
+    + '<ellipse cx="-67" cy="-80" rx="11" ry="8.5" fill="' + l + '"/>'
+    + '<ellipse cx="-74" cy="-82" rx="4.6" ry="3.8" fill="#4a3427"/>'
+    + '<path d="M-66 -94 q4 3 7 0 M-56 -94 q4 3 7 0" stroke="#2a1f18" stroke-width="2" fill="none" stroke-linecap="round"/>'
+    + '<path d="M-70 -74 q4 4 8 0" stroke="#8a5a3a" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
+    + '<path d="M-24 -72 q76 -16 150 0 v34 q-76 -14 -150 0 Z" fill="#8fbfe4"/>'
+    + '<path d="M-24 -72 q76 -16 150 0" stroke="#7aaed8" stroke-width="3" fill="none"/>'
+    + '<path d="M-14 -58 q74 -12 134 0" stroke="#ffffff" stroke-width="2.4" fill="none" opacity=".55"/>'
+    + '<path d="M24 -66 q22 -6 44 0" stroke="#ffffff" stroke-width="2" fill="none" opacity=".4"/>'
+    + '</g>';
+}
+
+/* ---- 소품 ---- */
+function ball(x, y, r, c){
+  c = c || "#e8574c";
+  return '<g transform="translate(' + x + ' ' + y + ')">'
+    + '<ellipse cx="0" cy="' + nn(r * .98) + '" rx="' + nn(r * 1.05) + '" ry="' + nn(r * .2) + '" fill="#2b3b2b" opacity=".13"/>'
+    + '<circle cx="0" cy="0" r="' + r + '" fill="' + c + '"/>'
+    + '<path d="M' + (-r) + ' 0 q' + r + ' -' + nn(r * .58) + ' ' + (r * 2) + ' 0" stroke="#ffffff" stroke-width="' + nn(r * .17) + '" fill="none" opacity=".9"/>'
+    + '<path d="M0 ' + (-r) + ' q' + nn(r * .5) + ' ' + r + ' 0 ' + (r * 2) + '" stroke="#ffffff" stroke-width="' + nn(r * .17) + '" fill="none" opacity=".7"/>'
+    + '<circle cx="' + nn(-r * .32) + '" cy="' + nn(-r * .36) + '" r="' + nn(r * .24) + '" fill="#ffffff" opacity=".35"/>'
+    + '</g>';
+}
+function bread(x, y, s){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<path d="M-24 0 q-3 -18 8 -22 q12 -5 26 -1 q12 4 11 23 Z" fill="#e2ab5f"/>'
+    + '<path d="M-22 -3 q6 -12 14 -12 q9 0 12 -6 q9 6 20 5 q6 3 6 13 Z" fill="#f6d59b"/>'
+    + '<path d="M-10 -15 q7 -7 13 0 M4 -18 q6 -6 11 1" stroke="#c98b48" stroke-width="2" fill="none" stroke-linecap="round"/>'
+    + '</g>';
+}
+function basket(x, y, s){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<path d="M-30 -26 q30 -18 60 0 l-8 26 q-22 10 -44 0 Z" fill="#d8a468"/>'
+    + '<path d="M-30 -26 q30 -18 60 0" stroke="#b9843f" stroke-width="4" fill="none"/>'
+    + '<path d="M-27 -17 q27 9 54 0 M-24 -8 q24 8 48 0" stroke="#b9843f" stroke-width="2.4" fill="none"/>'
+    + '<path d="M-16 -27 q16 -20 32 0" stroke="#b9843f" stroke-width="3" fill="none"/>'
+    + '<circle cx="-9" cy="-33" r="6" fill="#e8574c"/><circle cx="8" cy="-35" r="6" fill="#f2b33d"/>'
+    + '<path d="M-10 -39 q4 -8 8 0" stroke="#4fa84a" stroke-width="2" fill="none"/>'
+    + '</g>';
+}
+function blanket(x, y, s){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<ellipse cx="0" cy="-3" rx="144" ry="21" fill="#4f9e70"/>'
+    + '<ellipse cx="0" cy="-6" rx="134" ry="16" fill="#9adaae"/>'
+    + '<path d="M-96 -14 h192 M-120 -6 h240 M-96 2 h192" stroke="#ffffff" stroke-width="2.6" opacity=".55"/>'
+    + '<path d="M-72 -20 v24 M-24 -22 v26 M24 -22 v26 M72 -20 v24" stroke="#ffffff" stroke-width="2.4" opacity=".45"/>'
+    + '<path d="M-140 -3 q140 18 280 0" stroke="#3f8b5e" stroke-width="2" fill="none" opacity=".4"/>'
+    + '</g>';
+}
+function bed(x, y, s){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<rect x="-110" y="-52" width="220" height="16" rx="6" fill="#b98a5c"/>'
+    + '<rect x="-104" y="-96" width="18" height="52" rx="5" fill="#a8763f"/>'
+    + '<rect x="86" y="-70" width="18" height="26" rx="5" fill="#a8763f"/>'
+    + '<rect x="-98" y="-70" width="196" height="22" rx="10" fill="#f4f7fb"/>'
+    + '<path d="M-96 -58 q96 -14 192 0 v-10 q-96 -14 -192 0 Z" fill="#9fc7e8"/>'
+    + '<rect x="-88" y="-84" width="54" height="22" rx="9" fill="#ffffff"/>'
+    + '<path d="M-40 -50 h124 v-8 q-60 -10 -124 0 Z" fill="#7fb4dd"/>'
+    + '</g>';
+}
+function table(x, y, s){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<rect x="-84" y="-58" width="168" height="12" rx="5" fill="#c99a63"/>'
+    + '<rect x="-78" y="-46" width="156" height="8" rx="4" fill="#b0844f"/>'
+    + '<rect x="-72" y="-46" width="10" height="46" rx="4" fill="#b0844f"/>'
+    + '<rect x="62" y="-46" width="10" height="46" rx="4" fill="#b0844f"/>'
+    + '</g>';
+}
+function honey(x, y, s){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<rect x="-16" y="-34" width="32" height="34" rx="7" fill="#f6c860"/>'
+    + '<rect x="-16" y="-34" width="32" height="12" rx="6" fill="#e0a93c"/>'
+    + '<rect x="-11" y="-40" width="22" height="8" rx="3" fill="#c98b3a"/>'
+    + '<path d="M-8 -20 h16" stroke="#fff3c8" stroke-width="3" opacity=".8"/>'
+    + '</g>';
+}
+function note(x, y, s, c){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')" fill="' + (c || "#6a8fd0") + '">'
+    + '<ellipse cx="0" cy="0" rx="7" ry="5.4" transform="rotate(-18)"/>'
+    + '<path d="M5.6 -2 v-24 q10 3 14 12 q-8 -4 -14 2 Z"/>'
+    + '</g>';
+}
+function drops(cx, cy, n, spread, r){
+  var s = "", i;
+  r = r || 5;
+  for (i = 0; i < n; i++){
+    var a = (i / n) * Math.PI * 2 + 0.4;
+    var dx = cx + Math.cos(a) * spread * (0.6 + (i % 3) * 0.2);
+    var dy = cy + Math.sin(a) * spread * 0.5 * (0.6 + (i % 2) * 0.3);
+    s += '<circle cx="' + nn(dx) + '" cy="' + nn(dy) + '" r="' + nn(r * (0.7 + (i % 3) * 0.2)) + '" fill="#bfe9ff" opacity=".95"/>';
+  }
+  return s;
+}
+function whoosh(x, y, s, dir){
+  var d = dir === -1 ? -1 : 1;
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + (s * d) + ' ' + s + ')" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity=".85">'
+    + '<path d="M0 0 h-30"/><path d="M4 14 h-26"/><path d="M0 28 h-22"/>'
+    + '</g>';
+}
+function windowBox(x, y, s, night){
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
+    + '<rect x="-46" y="-52" width="92" height="76" rx="6" fill="' + (night ? "#2f3f70" : "#bfe6f8") + '" stroke="#e2c9a6" stroke-width="6"/>'
+    + '<path d="M0 -50 v72 M-44 -14 h88" stroke="#e2c9a6" stroke-width="5"/>'
+    + (night
+        ? '<circle cx="20" cy="-34" r="9" fill="#fff6d0"/><circle cx="-24" cy="-32" r="2" fill="#fff3bd"/><circle cx="-8" cy="-42" r="2" fill="#fff3bd"/>'
+        : '<circle cx="24" cy="-34" r="10" fill="#ffd158"/><ellipse cx="-18" cy="-30" rx="14" ry="7" fill="#ffffff" opacity=".9"/>')
+    + '<path d="M-46 -52 h92" stroke="#e2c9a6" stroke-width="6"/>'
+    + '</g>';
+}
+function sceneWrap(key, fn, u){
+  var body = "";
+  try { body = fn(u); } catch(e){ body = sky(u, "#bfe3ff", "#eef9ff"); }
+  return '<svg class="pbk-svg" viewBox="0 0 800 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">' + body + "</svg>";
+}
+
+/* ---- 장면 배경 ---- */
+function meadow(u, a, b){
+  return sky(u, a || "#bfe3ff", b || "#eef9ff") + sun(576, 52, 26) + cloud(190, 52, 1) + cloud(510, 34, .78) + cloud(360, 74, .5, .8) + hills();
+}
+function evening(u){
+  return sky(u, "#ffd7a8", "#ffeccf") + sun(586, 74, 32) + cloud(200, 56, .9, .7) + cloud(470, 40, .7, .6) + hills();
+}
+function nightSky(u){
+  return sky(u, "#26315f", "#4b5b96")
+    + stars([[90, 40, 2.4], [170, 78, 1.8], [250, 34, 2], [330, 66, 2.2], [430, 32, 1.7], [500, 74, 2.4], [580, 44, 2], [660, 86, 1.8], [740, 36, 2.2], [120, 110, 1.5], [700, 130, 1.6]])
+    + moon(576, 58, 26)
+    + '<path d="M-40 186 q100 -30 200 -4 q90 24 180 -2 q100 -28 200 4 q80 24 160 -2 V262 H-40 Z" fill="#3d5a72"/>'
+    + '<path d="M-40 214 q120 -20 240 2 q120 22 240 -2 q120 -24 240 4 q90 20 160 0 V262 H-40 Z" fill="#2f4a5e"/>';
+}
+function roomBase(u, wall, floor, night){
+  return '<rect x="0" y="0" width="800" height="260" fill="' + (wall || "#fdf1e2") + '"/>'
+    + '<rect x="0" y="182" width="800" height="78" fill="' + (floor || "#e3c9a6") + '"/>'
+    + '<path d="M0 182 H800" stroke="#d3b58d" stroke-width="3"/>'
+    + windowBox(660, 108, 1, night)
+    + '<rect x="120" y="96" width="130" height="86" rx="8" fill="#fff8ec" stroke="#e8d3b4" stroke-width="4"/>'
+    + '<path d="M136 116 h98 M136 138 h98 M136 160 h70" stroke="#e3cdb0" stroke-width="4" stroke-linecap="round"/>';
+}
+
+/* =====================================================================
+   2. 장면 그림 (책 1~6 · 표지)
+   ===================================================================== */
+var SCENES = {
+  /* ---- AR 0.1 I See! ---- */
+  a1: function(u){
+    return meadow(u) + tree(96, 216, 1.2) + tree(716, 212, .95) + bush(180, 226, .9) + bush(600, 228, .8)
+      + tufts([60, 150, 250, 330, 470, 560, 690])
+      + flower(250, 240, 1, "#f38fb0") + flower(300, 246, .8, "#ffd35c") + flower(520, 244, .9, "#a9a1f5")
+      + cat(400, 234, 1.6) + bird(620, 92, .5) + bird(700, 68, .4);
+  },
+  a2: function(u){
+    return meadow(u) + tree(700, 214, 1.1) + bush(140, 226, 1) + bush(560, 232, .7)
+      + tufts([80, 200, 320, 480, 620, 720])
+      + flower(230, 242, .95, "#ffd35c") + flower(500, 244, .85, "#f38fb0")
+      + dog(400, 234, 1.55) + ball(548, 234, 22, "#e8574c");
+  },
+  a3: function(u){
+    return sky(u, "#bfe3ff", "#eef9ff") + sun(214, 54, 28) + cloud(330, 46, 1) + cloud(620, 66, .9) + cloud(480, 30, .6, .8)
+      + '<path d="M-40 196 q120 -28 240 -2 q120 24 240 -4 q120 -26 240 4 q90 22 160 0 V262 H-40 Z" fill="#a9d8a0"/>'
+      + '<path d="M-40 224 q120 -18 240 2 q120 20 240 -2 q120 -20 240 4 q90 16 160 0 V262 H-40 Z" fill="#7fc97d"/>'
+      + tree(110, 232, .9) + tree(690, 230, .8)
+      + bird(400, 118, 1.5) + bird(600, 76, .8) + bird(240, 82, .6) + bird(520, 140, .5)
+      + tufts([120, 300, 470, 640]);
+  },
+  a4: function(u){
+    return sky(u, "#cdeaff", "#eff9ff") + sun(578, 48, 24) + cloud(180, 44, .9) + cloud(480, 30, .6, .8)
+      + '<path d="M-40 168 q120 -26 240 -2 q120 22 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + '<path d="M-40 198 q120 -20 240 2 q120 22 240 -2 q120 -24 240 4 q90 18 160 0 V262 H-40 Z" fill="#8ecf86"/>'
+      + '<ellipse cx="400" cy="214" rx="240" ry="48" fill="#7ec8ef"/>'
+      + '<ellipse cx="400" cy="214" rx="212" ry="38" fill="#9bdaf7"/>'
+      + '<path d="M250 206 q60 -10 120 0 M420 224 q60 -10 120 0" stroke="#e6f7ff" stroke-width="3" fill="none" opacity=".8" stroke-linecap="round"/>'
+      + lily(280, 226, 1.1) + lily(540, 230, .9)
+      + '<path d="M330 190 v-34 M356 194 v-26 M306 192 v-22" stroke="#4fa84a" stroke-width="3" stroke-linecap="round"/>'
+      + '<path d="M330 162 q-10 -8 -4 -18 M356 174 q-10 -8 -4 -18 M306 176 q-10 -8 -4 -18" stroke="#4fa84a" stroke-width="3" fill="none" stroke-linecap="round"/>'
+      + fish(452, 204, 1.85) + fish(306, 228, 1.05, { c:"#ffc46b", d:"#e2a13c" })
+      + '<circle cx="478" cy="188" r="5" fill="#ffffff" opacity=".8"/><circle cx="490" cy="176" r="3.6" fill="#ffffff" opacity=".7"/>'
+      + '<circle cx="500" cy="164" r="2.6" fill="#ffffff" opacity=".6"/>';
+  },
+  a5: function(u){
+    return sky(u, "#cfe9ff", "#fff6e0") + sun(430, 118, 46)
+      + cloud(180, 60, .9) + cloud(640, 54, .8) + cloud(300, 44, .6, .8) + cloud(520, 36, .5, .75)
+      + '<path d="M-40 190 q120 -34 240 -4 q120 24 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + '<path d="M-40 220 q120 -18 240 2 q120 20 240 -2 q120 -20 240 4 q90 16 160 0 V262 H-40 Z" fill="#7fc97d"/>'
+      + tree(120, 236, 1.05) + tree(700, 238, .85) + tufts([200, 300, 500, 600])
+      + flower(260, 246, .9, "#f38fb0") + flower(540, 248, .85, "#ffd35c");
+  },
+  c1: function(u){
+    return meadow(u) + tree(110, 220, 1.05) + tree(700, 216, .9) + bush(600, 228, .8)
+      + cat(330, 236, 1.4) + bird(480, 96, .85) + bird(560, 118, .55) + tufts([220, 400, 520, 660])
+      + flower(250, 244, .9, "#f38fb0") + flower(470, 248, .8, "#ffd35c");
+  },
+
+  /* ---- AR 0.2 Look at That! ---- */
+  b1: function(u){
+    return sky(u, "#bfe3ff", "#eef9ff") + sun(582, 50, 24) + cloud(190, 46, .9) + cloud(430, 34, .6, .8)
+      + '<path d="M-40 168 q120 -26 240 -2 q120 22 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + house(266, 196, .95) + tree(660, 192, .9) + road()
+      + car(400, 214, 1.5, { c:"#e8574c", d:"#c9463c" })
+      + whoosh(250, 200, .8, -1) + tufts([640, 700]);
+  },
+  b2: function(u){
+    return sky(u, "#bfe3ff", "#eef9ff") + sun(214, 46, 24) + cloud(560, 40, .9) + cloud(360, 26, .55, .8)
+      + '<path d="M-40 168 q120 -26 240 -2 q120 22 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + tree(90, 192, .95) + house(680, 190, .8, { wall:"#f7e7cf", roof:"#7fb4c9" }) + road()
+      + bus(400, 212, 1.5, { c:"#4a8fd6", d:"#3973b3" })
+      + tufts([250, 320]);
+  },
+  b3: function(u){
+    return meadow(u) + tree(400, 236, 1.9) + bush(200, 230, 1) + bush(610, 232, .9)
+      + tufts([130, 260, 540, 680])
+      + flower(250, 244, .95, "#f38fb0") + flower(560, 246, .9, "#ffd35c") + flower(620, 240, .8, "#a9a1f5")
+      + bird(560, 96, .7) + bird(230, 84, .55);
+  },
+  b4: function(u){
+    return sky(u, "#cdeaff", "#f2fbff") + sun(578, 46, 24) + cloud(180, 40, .9) + cloud(480, 30, .6, .8)
+      + '<path d="M-40 170 q120 -26 240 -2 q120 22 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + '<ellipse cx="400" cy="216" rx="260" ry="46" fill="#7ec8ef"/>'
+      + '<ellipse cx="400" cy="216" rx="230" ry="36" fill="#9bdaf7"/>'
+      + lily(250, 228, 1.1) + lily(560, 224, .95)
+      + duck(400, 224, 1.7)
+      + '<path d="M470 206 q26 -3 52 0" stroke="#e6f7ff" stroke-width="3" fill="none" opacity=".8" stroke-linecap="round"/>'
+      + '<path d="M300 240 q26 4 52 0" stroke="#e6f7ff" stroke-width="3" fill="none" opacity=".6" stroke-linecap="round"/>'
+      + tufts([120, 660]);
+  },
+  b5: function(u){
+    return meadow(u, "#bfe3ff", "#fff5f8") + tree(90, 222, 1.1) + bush(700, 228, 1)
+      + tufts([140, 220, 560, 660])
+      + flower(310, 246, 2.1, "#f38fb0") + flower(420, 252, 2.5, "#f6a6c1") + flower(520, 246, 2.1, "#f38fb0")
+      + flower(240, 254, 1.5, "#a9a1f5") + flower(594, 252, 1.5, "#ffd35c")
+      + '<g transform="translate(470 172) scale(1.9)"><path d="M-13 2 q10 -14 0 -20 q-10 6 0 20" fill="#f7b1c8"/><path d="M13 2 q-10 -14 0 -20 q10 6 0 20" fill="#f7b1c8"/><ellipse cx="-6" cy="-2" rx="8" ry="6" fill="#f6a6c1"/><ellipse cx="6" cy="-2" rx="8" ry="6" fill="#f6a6c1"/><path d="M0 -6 v-10" stroke="#8a5a3a" stroke-width="2.4"/><path d="M0 -16 q-6 -6 -4 -10 M0 -16 q6 -6 4 -10" stroke="#8a5a3a" stroke-width="1.6" fill="none"/></g>';
+  },
+  b6: function(u){
+    return meadow(u) + tree(120, 222, 1) + bush(690, 228, .9)
+      + tufts([200, 300, 480, 600])
+      + flower(230, 244, 1, "#ffd35c") + flower(600, 246, 1, "#f38fb0")
+      + girl(400, 238, 1.5, { dress:"#f2799b", wave:true });
+  },
+  c2: function(u){
+    return sky(u, "#bfe3ff", "#eef9ff") + sun(578, 48, 24) + cloud(200, 44, .9) + cloud(470, 32, .6, .8)
+      + '<path d="M-40 168 q120 -26 240 -2 q120 22 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + tree(240, 194, 1) + tree(660, 192, .9) + road()
+      + car(430, 216, 1.35, { c:"#e8574c", d:"#c9463c" })
+      + tufts([300, 540, 600]);
+  },
+
+  /* ---- AR 0.3 Hop, Hop, Frog! ---- */
+  f1: function(u){
+    return meadow(u) + tree(100, 224, 1.05) + bush(700, 228, .9) + tufts([180, 280, 520, 620])
+      + flower(250, 246, .9, "#f38fb0")
+      + frog(330, 236, 1.5) + frog(450, 222, 1.1)
+      + '<path d="M290 196 q30 -26 62 -6" stroke="#ffffff" stroke-width="3" fill="none" opacity=".7" stroke-dasharray="7 7"/>';
+  },
+  f2: function(u){
+    return sky(u, "#cdeaff", "#f2fbff") + sun(578, 46, 24) + cloud(180, 40, .9) + cloud(470, 28, .6, .8)
+      + '<path d="M-40 172 q120 -26 240 -2 q120 22 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + '<ellipse cx="420" cy="222" rx="250" ry="42" fill="#7ec8ef"/>'
+      + '<ellipse cx="420" cy="222" rx="222" ry="33" fill="#9bdaf7"/>'
+      + lily(200, 228, .9) + lily(600, 226, 1)
+      + '<path d="M382 210 q10 -30 22 -10 q8 -26 20 -6 q10 -22 18 4 q10 -16 16 12 Z" fill="#d7f1ff" opacity=".95"/>'
+      + '<ellipse cx="420" cy="212" rx="58" ry="16" fill="none" stroke="#e6f7ff" stroke-width="4" opacity=".9"/>'
+      + '<ellipse cx="420" cy="212" rx="86" ry="24" fill="none" stroke="#e6f7ff" stroke-width="3" opacity=".6"/>'
+      + drops(420, 196, 10, 60, 5)
+      + frog(420, 200, 1.25);
+  },
+  f3: function(u){
+    return sky(u, "#cdeaff", "#f2fbff") + sun(214, 46, 22) + cloud(600, 40, .9) + cloud(390, 28, .55, .8)
+      + '<path d="M-40 172 q120 -26 240 -2 q120 22 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + '<ellipse cx="420" cy="222" rx="250" ry="42" fill="#7ec8ef"/>'
+      + '<ellipse cx="420" cy="222" rx="222" ry="33" fill="#9bdaf7"/>'
+      + lily(250, 230, 1) + lily(590, 226, .9)
+      + frog(420, 210, 1.7)
+      + drops(420, 190, 7, 66, 5) + drops(360, 200, 4, 30, 4)
+      + '<path d="M300 236 q40 6 80 0" stroke="#e6f7ff" stroke-width="3" fill="none" opacity=".7"/>';
+  },
+  f4: function(u){
+    return meadow(u, "#cdeaff", "#f2fbff") + tree(110, 224, 1) + bush(690, 228, .9)
+      + '<ellipse cx="440" cy="226" rx="230" ry="36" fill="#7ec8ef"/>'
+      + '<ellipse cx="440" cy="226" rx="204" ry="28" fill="#9bdaf7"/>'
+      + '<g transform="translate(430 222)"><rect x="-92" y="-18" width="184" height="24" rx="12" fill="#a97b4a"/><ellipse cx="-92" cy="-6" rx="12" ry="12" fill="#8f6538"/><ellipse cx="92" cy="-6" rx="12" ry="12" fill="#8f6538"/><path d="M-60 -12 h120" stroke="#c79a63" stroke-width="3" opacity=".8"/></g>'
+      + frog(430, 202, 1.35) + lily(250, 232, .9)
+      + tufts([170, 640]);
+  },
+  f5: function(u){
+    return nightSky(u)
+      + '<ellipse cx="400" cy="228" rx="250" ry="34" fill="#2b4a63"/>'
+      + '<ellipse cx="400" cy="228" rx="220" ry="26" fill="#35597a"/>'
+      + lily(280, 232, 1) + lily(520, 228, .9)
+      + frog(400, 224, 1.3)
+      + note(480, 160, 1, "#cdd8ff") + note(540, 140, .8, "#cdd8ff")
+      + '<g opacity=".5"><circle cx="180" cy="250" r="3" fill="#9fd6f7"/><circle cx="620" cy="246" r="2.5" fill="#9fd6f7"/></g>';
+  },
+  c3: function(u){
+    return meadow(u) + tree(110, 222, 1) + '<ellipse cx="420" cy="236" rx="220" ry="30" fill="#7ec8ef"/>'
+      + lily(260, 238, .9) + lily(560, 236, .9) + frog(410, 230, 1.5) + drops(410, 210, 5, 40, 4)
+      + tufts([140, 680]) + flower(300, 250, .8, "#f38fb0");
+  },
+
+  /* ---- AR 0.4 A Walk with Puppy ---- */
+  d1: function(u){
+    return sky(u, "#d9f0ff", "#fff8e8") + sun(576, 66, 30) + cloud(200, 50, .9) + cloud(470, 36, .6, .8)
+      + '<path d="M-40 172 q120 -26 240 -2 q120 22 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + '<path d="M120 262 q60 -30 96 -62" stroke="#e2d3b8" stroke-width="40" fill="none" stroke-linecap="round" opacity=".8"/>'
+      + house(250, 196, 1.15, { wall:"#ffe9c9", roof:"#e8775f" })
+      + tree(700, 200, 1) + bush(120, 232, .9)
+      + girl(470, 238, 1.4, { dress:"#f2799b" }) + dog(570, 238, 1.15)
+      + tufts([160, 340, 660]);
+  },
+  d2: function(u){
+    return meadow(u) + tree(100, 220, 1.1) + tree(690, 216, 1) + bush(300, 230, .8)
+      + '<path d="M300 262 q60 -50 140 -44 q80 6 130 -18" stroke="#e2d3b8" stroke-width="40" fill="none" stroke-linecap="round"/>'
+      + girl(340, 236, 1.35, { dress:"#f2799b" }) + dog(450, 238, 1.1)
+      + tufts([160, 520, 610]) + flower(240, 248, .9, "#ffd35c");
+  },
+  d3: function(u){
+    return meadow(u) + tree(700, 218, 1.05) + bush(120, 228, .9)
+      + girl(300, 238, 1.3, { dress:"#f2799b" })
+      + dog(500, 232, 1.25) + whoosh(410, 212, .9, -1) + whoosh(430, 224, .7, -1)
+      + tufts([200, 600, 660]) + flower(240, 250, .85, "#f38fb0");
+  },
+  d4: function(u){
+    return meadow(u) + tree(110, 220, 1.05) + bush(690, 230, .9)
+      + ball(470, 220, 20, "#e8574c")
+      + girl(350, 240, 1.4, { dress:"#f2799b" }) + dog(560, 238, 1.2)
+      + '<path d="M470 200 q-20 -26 -50 -18" stroke="#ffffff" stroke-width="3" fill="none" opacity=".7" stroke-dasharray="6 6"/>'
+      + tufts([180, 300, 640]);
+  },
+  d5: function(u){
+    return meadow(u) + tree(120, 218, 1) + bush(700, 230, .9) + tufts([200, 620])
+      + girl(390, 242, 1.25, { dress:"#f2799b" }) + dog(468, 232, 1.1)
+      + '<path d="M400 232 q22 -18 44 -2" stroke="#ffd9b8" stroke-width="8" fill="none" stroke-linecap="round"/>'
+      + '<path d="M512 216 q6 10 12 0" stroke="#f08a8a" stroke-width="4" fill="none" stroke-linecap="round"/>'
+      + flower(270, 248, .85, "#f38fb0");
+  },
+  d6: function(u){
+    return roomBase(u, "#fdf1e2", "#e3c9a6")
+      + '<rect x="-20" y="204" width="380" height="56" rx="18" fill="#8fc7a6"/>'
+      + '<path d="M-10 220 h350 M-10 236 h350" stroke="#6fae8c" stroke-width="3" opacity=".6"/>'
+      + '<ellipse cx="250" cy="118" rx="34" ry="16" fill="#f6f9fc" opacity=".85"/>'
+      + '<path d="M232 190 q18 -40 40 -52 q6 20 -8 52 Z" fill="#ffffff" opacity=".9"/>'
+      + girlSit(200, 236, 1.3, { dress:"#f2799b" }) + dog(320, 240, 1.25, { lie:true })
+      + '<g transform="translate(414 176)" fill="#8fb0c8" opacity=".85"><text x="0" y="0" font-size="20" font-weight="900">z</text><text x="14" y="-16" font-size="15" font-weight="900">z</text><text x="26" y="-28" font-size="11" font-weight="900">z</text></g>';
+  },
+  c4: function(u){
+    return meadow(u) + tree(110, 220, 1.05) + tree(690, 216, .95)
+      + girl(340, 240, 1.3, { dress:"#f2799b" }) + dog(470, 236, 1.15) + ball(600, 240, 14, "#e8574c")
+      + tufts([200, 280, 520, 640]);
+  },
+
+  /* ---- AR 0.5 Baby Bear's Morning ---- */
+  e1: function(u){
+    return roomBase(u, "#fdefe0", "#e8c9a8")
+      + '<rect x="150" y="182" width="500" height="60" rx="10" fill="#d8b58c"/>'
+      + bearInBed(400, 206, 1.15)
+      + '<path d="M300 122 q20 -14 40 0" stroke="#f0b95c" stroke-width="3" fill="none" opacity=".6"/>'
+      + '<circle cx="470" cy="120" r="4" fill="#f0b95c" opacity=".5"/><circle cx="486" cy="112" r="3" fill="#f0b95c" opacity=".4"/>';
+  },
+  e2: function(u){
+    return roomBase(u, "#fdeedd", "#e8c9a8")
+      + bear(400, 216, 1.6, { c:"#a97a4e", d:"#8a5f3a" })
+      + '<path d="M382 158 q-10 6 -10 16 q8 3 18 1 q-1 -10 -8 -17 Z" fill="#f6f9fc" opacity=".95"/>'
+      + table(410, 214, 1.35)
+      + bread(352, 136, 1.35) + honey(452, 138, 1.1) + bread(210, 236, 1.05)
+      + '<path d="M372 130 q-8 -14 2 -22 M388 132 q-6 -12 4 -20" stroke="#ffffff" stroke-width="3" fill="none" opacity=".65" stroke-linecap="round"/>'
+      + '<g transform="translate(560 120)"><ellipse cx="0" cy="0" rx="20" ry="12" fill="#f6c860" opacity=".5"/><ellipse cx="30" cy="10" rx="14" ry="9" fill="#f6c860" opacity=".35"/></g>';
+  },
+  e3: function(u){
+    return roomBase(u, "#fdf0e2", "#e8c9a8")
+      + bear(420, 218, 1.55)
+      + table(420, 216, 1.3)
+      + '<ellipse cx="420" cy="136" rx="52" ry="11" fill="#f6e3c4"/>'
+      + bread(392, 134, 1.15) + honey(474, 136, 1)
+      + '<circle cx="470" cy="176" r="3.4" fill="#c98b48"/><circle cx="482" cy="182" r="2.6" fill="#c98b48"/>'
+      + '<circle cx="290" cy="252" r="3" fill="#c98b48"/><circle cx="302" cy="256" r="2.4" fill="#c98b48"/>'
+      + note(580, 118, .9, "#e2a13c");
+  },
+  e4: function(u){
+    return roomBase(u, "#e9f4fb", "#dfe9ef")
+      + '<rect x="470" y="150" width="150" height="34" rx="12" fill="#ffffff" stroke="#cbdae4" stroke-width="4"/>'
+      + '<path d="M520 150 v-18 q0 -8 8 -8 h24 q8 0 8 8 v18" stroke="#cbdae4" stroke-width="5" fill="none"/>'
+      + '<path d="M500 132 v-14" stroke="#cbdae4" stroke-width="6" stroke-linecap="round"/>'
+      + '<circle cx="470" cy="120" r="7" fill="#bfe9ff" opacity=".9"/><circle cx="440" cy="104" r="5" fill="#bfe9ff" opacity=".8"/>'
+      + '<circle cx="500" cy="98" r="4" fill="#bfe9ff" opacity=".7"/>'
+      + bear(300, 236, 1.5)
+      + '<path d="M330 174 l26 -34" stroke="#7fb4dd" stroke-width="8" stroke-linecap="round"/>'
+      + '<path d="M356 140 q10 -8 16 4" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>'
+      + '<ellipse cx="300" cy="196" rx="16" ry="9" fill="#ffffff" opacity=".9"/>';
+  },
+  e5: function(u){
+    return sky(u, "#d9f0ff", "#fff8e8") + sun(578, 64, 30) + cloud(200, 48, .9) + cloud(470, 34, .6, .8)
+      + '<path d="M-40 172 q120 -26 240 -2 q120 22 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + house(250, 198, 1.1) + tree(690, 204, 1)
+      + bear(470, 238, 1.4) + '<path d="M420 200 q-10 -14 -2 -24" stroke="#a97a4e" stroke-width="7" fill="none" stroke-linecap="round"/>'
+      + tufts([160, 340, 640]) + flower(560, 246, .9, "#ffd35c");
+  },
+  e6: function(u){
+    return sky(u, "#d9f0ff", "#fff8e8") + sun(214, 60, 28) + cloud(560, 44, .9) + cloud(360, 30, .55, .8)
+      + '<path d="M-40 172 q120 -26 240 -2 q120 22 240 -2 q120 -26 240 4 q90 20 160 0 V262 H-40 Z" fill="#b6dfa9"/>'
+      + '<path d="M120 262 q40 -50 -4 -80" stroke="#e2d3b8" stroke-width="42" fill="none" stroke-linecap="round"/>'
+      + house(150, 196, .9) + tree(720, 202, .95)
+      + bear(400, 240, 1.35) + bear(520, 244, 1.6, { c:"#a97a4e", d:"#8a5f3a", wave:true })
+      + tufts([300, 640]);
+  },
+  c5: function(u){
+    return roomBase(u, "#fdefe0", "#e8c9a8") + bearInBed(400, 208, 1.05)
+      + bread(600, 176, 1.3) + honey(672, 178, 1)
+      + '<path d="M300 132 q20 -14 40 0" stroke="#f0b95c" stroke-width="3" fill="none" opacity=".5"/>';
+  },
+
+  /* ---- AR 0.6 A Picnic in the Park ---- */
+  g1: function(u){
+    return meadow(u) + tree(110, 220, 1.05) + tree(700, 216, .95) + bush(260, 230, .8)
+      + girl(372, 240, 1.3, { dress:"#f2799b" }) + mom(462, 242, 1.35, { dress:"#7bb4e0" })
+      + '<path d="M396 206 q22 -4 38 -2" stroke="#ffd9b8" stroke-width="7" fill="none" stroke-linecap="round"/>'
+      + tufts([180, 320, 620]) + flower(230, 248, .9, "#ffd35c");
+  },
+  g2: function(u){
+    return meadow(u) + tree(700, 214, 1) + bush(140, 228, .9)
+      + girl(370, 240, 1.3, { dress:"#f2799b" })
+      + '<g transform="translate(470 226)"><path d="M-34 -22 q34 -18 68 0 l-8 26 q-26 10 -52 0 Z" fill="#d8a468"/><path d="M-34 -22 q34 -18 68 0" stroke="#b9843f" stroke-width="4" fill="none"/><path d="M-20 -24 q20 -22 40 0" stroke="#b9843f" stroke-width="3" fill="none"/><circle cx="-8" cy="-30" r="7" fill="#e8574c"/><circle cx="12" cy="-32" r="7" fill="#f2b33d"/></g>'
+      + blanket(556, 226, .75)
+      + tufts([240, 320, 640]);
+  },
+  g3: function(u){
+    return meadow(u) + tree(400, 226, 1.7) + bush(120, 230, .9)
+      + blanket(420, 244, 1.05)
+      + basket(596, 232, 1) + bread(316, 236, 1.1) + honey(470, 236, .9)
+      + girlSit(360, 240, 1.2, { dress:"#f2799b" }) + girlSit(456, 242, 1.32, { dress:"#7bb4e0", hair:"#5a3b28" })
+      + tufts([180, 660]);
+  },
+  g4: function(u){
+    return meadow(u) + tree(400, 226, 1.7) + blanket(410, 244, 1.1) + basket(600, 238, .9) + bread(330, 240, 1)
+      + bird(500, 224, 1.3) + '<circle cx="524" cy="208" r="3" fill="#ffffff" opacity=".8"/>'
+      + girl(350, 236, 1.1, { dress:"#f2799b" })
+      + tufts([180, 660]);
+  },
+  g5: function(u){
+    return meadow(u) + tree(400, 226, 1.7) + blanket(410, 244, 1.1) + basket(620, 238, .85)
+      + girl(380, 238, 1.2, { dress:"#f2799b" })
+      + '<path d="M410 210 q30 -8 46 6" stroke="#ffd9b8" stroke-width="8" fill="none" stroke-linecap="round"/>'
+      + bread(452, 216, .9)
+      + bird(520, 226, 1.15) + tufts([180, 680]);
+  },
+  g6: function(u){
+    return meadow(u) + tree(400, 226, 1.6) + blanket(420, 246, 1)
+      + girlSit(366, 240, 1.2, { dress:"#f2799b" }) + girlSit(456, 242, 1.3, { dress:"#7bb4e0", hair:"#5a3b28" })
+      + bird(570, 190, 1.1) + note(620, 160, 1, "#7a9be0") + note(660, 138, .8, "#7a9be0")
+      + tufts([180, 680]);
+  },
+  c6: function(u){
+    return meadow(u) + tree(400, 224, 1.5) + blanket(420, 246, 1)
+      + basket(590, 236, .9) + girlSit(352, 240, 1.2, { dress:"#f2799b" }) + girlSit(446, 242, 1.3, { dress:"#7bb4e0", hair:"#5a3b28" })
+      + bird(600, 186, .9) + note(650, 156, .85, "#7a9be0") + tufts([180, 680]);
+  }
+};
+
+/* =====================================================================
+   3. 책 데이터 — AR 0.1부터 0.6까지
+   ===================================================================== */
+var BOOKS = [
+  { id:"ar01", ar:"AR 0.1", t:"I See!", ko:"내가 봐요", lvl:"2~3단어", cover:"c1",
+    pages:[
+      { en:"I see a cat.", ko:"고양이가 보여요.", art:"a1" },
+      { en:"I see a dog.", ko:"강아지가 보여요.", art:"a2" },
+      { en:"I see a bird.", ko:"새가 보여요.", art:"a3" },
+      { en:"I see a fish.", ko:"물고기가 보여요.", art:"a4" },
+      { en:"I see the sun.", ko:"해님이 보여요.", art:"a5" }
+    ] },
+  { id:"ar02", ar:"AR 0.2", t:"Look at That!", ko:"저것 좀 봐요", lvl:"색깔 · 4~5단어", cover:"c2",
+    pages:[
+      { en:"Look at the red car.", ko:"빨간 자동차를 봐요.", art:"b1" },
+      { en:"Look at the blue bus.", ko:"파란 버스를 봐요.", art:"b2" },
+      { en:"Look at the green tree.", ko:"초록 나무를 봐요.", art:"b3" },
+      { en:"Look at the yellow duck.", ko:"노란 오리를 봐요.", art:"b4" },
+      { en:"Look at the pink flower.", ko:"분홍 꽃을 봐요.", art:"b5" },
+      { en:"Look at me!", ko:"나를 봐요!", art:"b6" }
+    ] },
+  { id:"ar03", ar:"AR 0.3", t:"Hop, Hop, Frog!", ko:"폴짝폴짝 개구리", lvl:"동작 · 의성어", cover:"c3",
+    pages:[
+      { en:"Hop, hop, hop!", ko:"폴짝, 폴짝, 폴짝!", art:"f1" },
+      { en:"Frog jumps in the pond.", ko:"개구리가 연못에 뛰어들어요.", art:"f2" },
+      { en:"Splash! Frog is all wet.", ko:"첨벙! 개구리가 다 젖었어요.", art:"f3" },
+      { en:"Frog sits on a log.", ko:"개구리가 통나무에 앉아요.", art:"f4" },
+      { en:"Croak, croak. Good night!", ko:"개굴개굴. 잘 자요!", art:"f5" }
+    ] },
+  { id:"ar04", ar:"AR 0.4", t:"A Walk with Puppy", ko:"강아지와 산책", lvl:"짧은 문장 2줄", cover:"c4",
+    pages:[
+      { en:"The sun is up. Let us go out!", ko:"해가 떴어요. 나가 볼까요!", art:"d1" },
+      { en:"I walk to the park with my puppy.", ko:"강아지와 공원까지 걸어가요.", art:"d2" },
+      { en:"Puppy runs and runs. He is fast!", ko:"강아지가 달리고 달려요. 정말 빨라요!", art:"d3" },
+      { en:"We play with a red ball.", ko:"우리는 빨간 공으로 놀아요.", art:"d4" },
+      { en:"Puppy licks my hand. It is warm.", ko:"강아지가 내 손을 핥아요. 따뜻해요.", art:"d5" },
+      { en:"We go home and take a nap.", ko:"우리는 집에 가서 낮잠을 자요.", art:"d6" }
+    ] },
+  { id:"ar05", ar:"AR 0.5", t:"Baby Bear's Morning", ko:"아기 곰의 아침", lvl:"문장 2줄", cover:"c5",
+    pages:[
+      { en:"Baby Bear wakes up in his warm bed.", ko:"아기 곰이 따뜻한 침대에서 일어나요.", art:"e1" },
+      { en:"Mama Bear makes honey bread for breakfast.", ko:"엄마 곰이 아침으로 꿀빵을 만들어요.", art:"e2" },
+      { en:"Baby Bear eats it all up. Yum, yum!", ko:"아기 곰이 다 먹어요. 냠냠!", art:"e3" },
+      { en:"He washes his face and brushes his teeth.", ko:"세수도 하고 이를 닦아요.", art:"e4" },
+      { en:"The sun is up. It is time to go out.", ko:"해가 떴어요. 나갈 시간이에요.", art:"e5" },
+      { en:"Mama Bear waves and says bye-bye.", ko:"엄마 곰이 손을 흔들며 바이바이 해요.", art:"e6" }
+    ] },
+  { id:"ar06", ar:"AR 0.6", t:"A Picnic in the Park", ko:"공원 소풍", lvl:"문장 2~3줄", cover:"c6",
+    pages:[
+      { en:"Today is a sunny day. We go to the park.", ko:"오늘은 맑은 날이에요. 우리는 공원에 가요.", art:"g1" },
+      { en:"We carry a big basket and a green blanket.", ko:"큰 바구니와 초록 담요를 가져가요.", art:"g2" },
+      { en:"We sit under the tall tree and eat lunch.", ko:"큰 나무 아래에 앉아 점심을 먹어요.", art:"g3" },
+      { en:"A little bird wants some of our bread.", ko:"작은 새가 우리 빵을 먹고 싶어 해요.", art:"g4" },
+      { en:"We share our bread with the bird.", ko:"우리는 새와 빵을 나눠 먹어요.", art:"g5" },
+      { en:"The bird sings for us. What a happy day!", ko:"새가 우리에게 노래해요. 정말 행복한 날!", art:"g6" }
+    ] }
+];
+var BY_ID = {};
+for (var bi = 0; bi < BOOKS.length; bi++) BY_ID[BOOKS[bi].id] = BOOKS[bi];
+
+/* =====================================================================
+   4. 화면
+   ===================================================================== */
+var UI = { book:"", page:0, ko:false, fin:false };
+
+function bookOf(id){ return BY_ID[id] || null; }
+function doneCount(){
+  var s = state(), n = 0;
+  for (var i = 0; i < BOOKS.length; i++) if (s.done[BOOKS[i].id]) n++;
+  return n;
+}
+function isDone(id){ return !!state().done[id]; }
+function partOf(id){
+  var s = state(), p = s.part[id];
+  return (p && typeof p === "number") ? p : 0;
+}
+function sceneOf(key){
+  var f = SCENES[key];
+  if (!f) return sceneWrap(key, function(u){ return meadow(u); }, "x" + (++UID));
+  return sceneWrap(key, f, "s" + (++UID));
+}
+
+function rateButtons(){
+  var cur = getRate(), out = "";
+  var opts = [[0.62, "🐢 아주 천천히"], [0.78, "🙂 천천히"], [0.95, "🐇 보통"]];
+  for (var i = 0; i < opts.length; i++){
+    var on = Math.abs(opts[i][0] - cur) < 0.001;
+    out += '<button type="button" class="' + (on ? "on" : "") + '" data-rate="' + opts[i][0] + '" aria-pressed="' + (on ? "true" : "false") + '">' + opts[i][1] + "</button>";
+  }
+  return out;
+}
+
+function renderShelf(){
+  var shelf = $("bkShelf"), read = $("bkRead"), note = $("bkNote");
+  if (!shelf) return;
+  UI.book = ""; UI.fin = false;
+  if (read) { read.hidden = true; read.innerHTML = ""; }
+  shelf.hidden = false;
+  var s = state();
+  shelf.innerHTML = BOOKS.map(function(b){
+    var done = !!s.done[b.id], part = partOf(b.id);
+    var meta = b.pages.length + "쪽 · " + b.lvl + (done ? "" : (part > 0 && part < b.pages.length ? " · " + (part + 1) + "쪽까지 읽었어요" : ""));
+    return '<button type="button" class="pbk-card' + (done ? " done" : "") + '" data-book="' + b.id + '" aria-label="' + esc(b.ar + " " + b.t) + '">'
+      + '<span class="pbk-ar">' + esc(b.ar) + "</span>"
+      + '<span class="pbk-flag">✓ 다 읽었어요</span>'
+      + '<span class="pbk-cover">' + sceneOf(b.cover) + "</span>"
+      + '<span class="pbk-nm">' + esc(b.t) + "</span>"
+      + '<span class="pbk-ko">' + esc(b.ko) + "</span>"
+      + '<span class="pbk-meta">' + esc(meta) + "</span>"
+      + "</button>";
+  }).join("");
+  var prog = $("bkProg"); if (prog) prog.textContent = doneCount() + " / " + BOOKS.length + "권";
+  if (note) note.textContent = "마음에 드는 책을 눌러요. ◀ ▶ 로 한 장씩 넘기며 읽어요.";
+}
+
+function pageKey(b, i){ return "book:" + b.id + ":p" + i; }
+
+function renderRead(){
+  var read = $("bkRead"), shelf = $("bkShelf"), note = $("bkNote");
+  if (!read) return;
+  var b = bookOf(UI.book);
+  if (!b) { renderShelf(); return; }
+  shelf.hidden = true; read.hidden = false;
+  var n = b.pages.length;
+  var page = b.pages[UI.page] || b.pages[0];
+  if (note) note.textContent = "🔊 로 읽어 주고, 🎙️ 로 내 목소리를 녹음해 들어 봐요.";
+  var head = '<div class="pbk-readhead">'
+    + '<button type="button" class="pbk-back" data-act="shelf">← 책장</button>'
+    + '<div class="pbk-book"><b>' + esc(b.t) + '</b><span class="pbk-ar2">' + esc(b.ar) + "</span></div>"
+    + '<div class="pbk-rate" role="group" aria-label="읽어주기 속도">' + rateButtons() + "</div>"
+    + "</div>";
+
+  if (UI.fin){
+    var got = UI.got || 0;
+    read.innerHTML = head
+      + '<div class="pbk-fin">'
+      + '<div class="pbk-fin-em" aria-hidden="true">🎉</div>'
+      + '<b class="pbk-fin-t">이 책 다 읽었어요!</b>'
+      + '<p class="pbk-fin-p">「' + esc(b.t) + '」 ' + n + '쪽을 끝까지 읽었어요.<br>'
+      + (got > 0 ? "별을 " + got + "개 받았어요!" : "오늘 별은 이미 받았어요. 내일 또 읽어 봐요!") + "</p>"
+      + '<span class="pbk-fin-star">⭐ ' + (got > 0 ? "별 +" + got : "다 읽었어요 ✓") + "</span>"
+      + '<div class="pbk-fin-acts">'
+      + (nextBook() ? '<button type="button" class="pbk-nav go" data-act="nextbook">다음 책 →</button>' : "")
+      + '<button type="button" class="pbk-nav" data-act="reread">🔁 다시 읽기</button>'
+      + '<button type="button" class="pbk-nav" data-act="shelf">📚 책장 보기</button>'
+      + "</div></div>";
+    if (SB.rec && SB.rec.refresh) SB.rec.refresh();
+    return;
+  }
+
+  var last = UI.page >= n - 1;
+  read.innerHTML = head
+    + '<div class="pbk-page">'
+    + '<div class="pbk-art">' + sceneOf(page.art) + "</div>"
+    + '<div class="pbk-tx">'
+    + '<div class="pbk-en">' + esc(page.en) + "</div>"
+    + (UI.ko ? '<p class="pbk-koline">' + esc(page.ko) + "</p>" : "")
+    + '<button type="button" class="pbk-kbtn" data-act="ko" aria-pressed="' + (UI.ko ? "true" : "false") + '">' + (UI.ko ? "🙈 뜻 가리기" : "💬 뜻 보기") + "</button>"
+    + "</div></div>"
+    + '<div class="pbk-foot">'
+    + '<button type="button" class="pbk-nav" data-act="prev"' + (UI.page <= 0 ? " disabled" : "") + ">◀ 이전 장</button>"
+    + '<span class="pbk-pageno">' + (UI.page + 1) + " / " + n + "쪽</span>"
+    + (last
+        ? '<button type="button" class="pbk-nav go" data-act="finish">🎉 이 책 다 읽었어요!</button>'
+        : '<button type="button" class="pbk-nav" data-act="next">다음 장 ▶</button>')
+    + "</div>"
+    + '<div class="pbk-sayrow">'
+    + '<button type="button" class="pbk-say" data-act="say">🔊 읽어주기</button>'
+    + SB.recBtn(pageKey(b, UI.page), "pbk-mini")
+    + "</div>";
+  if (SB.rec && SB.rec.refresh) SB.rec.refresh();
+}
+
+function nextBook(){
+  for (var i = 0; i < BOOKS.length; i++){
+    if (BOOKS[i].id === UI.book){
+      for (var j = i + 1; j < BOOKS.length; j++) if (!isDone(BOOKS[j].id)) return BOOKS[j];
+      return BOOKS[i + 1] || null;
+    }
+  }
+  return null;
+}
+
+function openBook(id){
+  var b = bookOf(id);
+  if (!b) return;
+  UI.book = id; UI.page = 0; UI.ko = false; UI.fin = false; UI.got = 0;
+  renderRead();
+  var v = $("viewEnBook");
+  if (v && v.scrollTop) v.scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+function goPage(d){
+  var b = bookOf(UI.book); if (!b) return;
+  var p = UI.page + d;
+  if (p < 0 || p >= b.pages.length) return;
+  UI.page = p; UI.ko = false;
+  var s = state(); s.part[b.id] = p; saveState(s);
+  renderRead();
+}
+
+function finishBook(){
+  var b = bookOf(UI.book); if (!b) return;
+  var s = state();
+  s.done[b.id] = { at: today() };
+  s.part[b.id] = b.pages.length - 1;
+  saveState(s);
+  var got = 0;
+  try { got = SB.earn(today() + "|book|" + b.id, 1); } catch(e){}
+  try { SB.markAttendance("book"); } catch(e){}
+  try { if (SB.confetti) SB.confetti(); } catch(e){}
+  UI.fin = true; UI.got = got;
+  renderRead();
+  var prog = $("bkProg"); if (prog) prog.textContent = doneCount() + " / " + BOOKS.length + "권";
+  try { if (SB.toast) SB.toast("🎉 「" + b.t + "」 다 읽었어요!" + (got ? " ⭐ +" + got : "")); } catch(e){}
+}
+
+function setRate(v){
+  try { localStorage.setItem(RATE_KEY, String(v)); } catch(e){}
+  var cur = bookOf(UI.book);
+  var rb = document.querySelectorAll("#bkRead .pbk-rate button");
+  for (var i = 0; i < rb.length; i++){
+    var on = Math.abs(parseFloat(rb[i].getAttribute("data-rate")) - v) < 0.001;
+    rb[i].classList.toggle("on", on);
+    rb[i].setAttribute("aria-pressed", on ? "true" : "false");
+  }
+  if (cur && !UI.fin) sayPage();
+}
+function sayPage(){
+  var b = bookOf(UI.book); if (!b) return;
+  var p = b.pages[UI.page]; if (!p) return;
+  try { SB.speak(p.en, getRate()); } catch(e){}
+}
+
+function onClick(e){
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var card = t.closest("[data-book]");
+  if (card){ e.preventDefault(); openBook(card.getAttribute("data-book")); return; }
+  var rate = t.closest("#bkRead .pbk-rate button[data-rate]");
+  if (rate){ e.preventDefault(); setRate(parseFloat(rate.getAttribute("data-rate"))); return; }
+  var btn = t.closest("[data-act]");
+  if (!btn) return;
+  var act = btn.getAttribute("data-act");
+  if (act === "shelf"){ e.preventDefault(); renderShelf(); return; }
+  if (act === "prev"){ e.preventDefault(); goPage(-1); return; }
+  if (act === "next"){ e.preventDefault(); goPage(1); return; }
+  if (act === "ko"){ e.preventDefault(); UI.ko = !UI.ko; renderRead(); return; }
+  if (act === "say"){ e.preventDefault(); sayPage(); return; }
+  if (act === "finish"){ e.preventDefault(); finishBook(); return; }
+  if (act === "reread"){ e.preventDefault(); var b = bookOf(UI.book); UI.page = 0; UI.ko = false; UI.fin = false; UI.got = 0; renderRead(); return; }
+  if (act === "nextbook"){
+    e.preventDefault();
+    var nb = nextBook();
+    if (nb) openBook(nb.id); else renderShelf();
+    return;
+  }
+}
+
+function bind(){
+  var v = $("viewEnBook");
+  if (v && !v.__b){ v.__b = 1; v.addEventListener("click", onClick); }
+}
+
+SB.storybook = {
+  books: BOOKS,
+  scenes: SCENES,
+  state: state,
+  done: doneCount,
+  open: openBook,
+  render: renderShelf,
+  read: renderRead,
+  page: function(){ return { book:UI.book, page:UI.page, fin:UI.fin }; },
+  scene: sceneOf,
+  rate: getRate
+};
+
+SB.onShow.en = (function(prev){
+  return function(sub){
+    if (prev) { try { prev.apply(this, arguments); } catch(e){} }
+    if (sub === "book") { try { renderShelf(); } catch(e){ try { console.warn(e); } catch(e2){} } }
+  };
+})(SB.onShow.en);
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); });
+else bind();
+})();
+
 </script>
 </body>
 </html>
