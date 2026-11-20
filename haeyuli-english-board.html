@@ -2650,7 +2650,8 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 .gg-pics{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;align-items:flex-start;max-width:100%;}
 .gg-plate{width:clamp(84px,16.5vh,148px);}
 .gg-plate svg{width:100%;height:auto;display:block;}
-.gg-eqbox{display:flex;flex-direction:column;align-items:center;gap:.2rem;}
+.gg-eqbox{display:flex;flex-direction:column;align-items:center;gap:.2rem;max-width:100%;}
+.gg-eqbox .gg-add,.gg-eqbox .gg-mul{max-width:100%;text-align:center;overflow-wrap:anywhere;line-height:1.32;}
 .gg-add{font-size:clamp(15px,2vh,24px);font-weight:900;color:#2f8b6b;letter-spacing:.02em;}
 .gg-mul{font-size:clamp(16px,2.1vh,26px);font-weight:900;color:#1f3a4d;}
 .gg-mul b{color:#0d7fa8;}
@@ -2669,7 +2670,48 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
   color:#33454f;font-size:clamp(16px,2vh,24px);font-weight:900;box-shadow:inset 0 0 0 1.6px #e3e9ef;}
 .gg-opt.ok{background:#eafaf1;color:#1f6b4f;box-shadow:inset 0 0 0 2.4px #7ecfa6;}
 .gg-opt.no{background:#fff1ef;color:#c0554a;box-shadow:inset 0 0 0 2.4px #f0a496;}
-.gg-msg{min-height:1.8rem;font-size:clamp(12px,1.5vh,17px);font-weight:800;color:#b07d10;text-align:center;}
+/* ── 🔄 보기 전환: 📦 묶음 바구니 / 🟦 바둑판(가로·세로) ── */
+.gg-modes{display:flex;gap:.4rem;flex-wrap:wrap;}
+.gg-mode{height:38px;padding:0 14px;border-radius:999px;background:#f7f9fb;color:#4d6d85;font-size:14px;font-weight:900;
+  box-shadow:inset 0 0 0 2px #e6edf3;display:inline-flex;align-items:center;gap:.3rem;white-space:nowrap;}
+.gg-mode.on{background:#e9f7ee;color:#1f7a4f;box-shadow:inset 0 0 0 2.4px #8bd6a8;}
+.gg-mode.on.arr{background:#eef1ff;color:#3f4fa8;box-shadow:inset 0 0 0 2.4px #adb9f0;}
+.gg-arr{gap:.45vh;}
+.gugu-panel.gg-arr-mode{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+.gg-arr .gg-add{font-size:clamp(14px,2.05vh,24px);}
+.gg-arr .gg-mul{font-size:clamp(16px,2.25vh,26px);}
+.gg-arr .gg-wbtn{height:34px;font-size:13px;}
+.gg-board{flex:0 0 auto;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;}
+.gg-grid{display:grid;grid-template-columns:repeat(var(--c,3),var(--cell,30px));gap:var(--gap,5px);
+  user-select:none;-webkit-user-select:none;}
+.gg-cell{width:var(--cell,30px);height:var(--cell,30px);display:grid;place-items:center;background:#fff;
+  border-radius:calc(var(--cell,30px) * .2);
+  box-shadow:inset 0 0 0 var(--bd,2px) #dbe8f3;transition:background .18s ease,box-shadow .18s ease;}
+.gg-cell svg{width:76%;height:76%;display:block;}
+/* 가로 묶기 — 줄마다 이어 붙인 파란 띠 */
+.gg-grid.wrap-row{gap:0;row-gap:var(--bandgap,8px);}
+.gg-grid.wrap-row .gg-cell{border-radius:0;background:#eef7ff;
+  box-shadow:inset 0 var(--bd,2px) 0 #4aa3dc,inset 0 calc(var(--bd,2px) * -1) 0 #4aa3dc;}
+.gg-grid.wrap-row .gg-cell.c-first{border-top-left-radius:calc(var(--cell,30px) * .26);border-bottom-left-radius:calc(var(--cell,30px) * .26);
+  box-shadow:inset var(--bd,2px) 0 0 #4aa3dc,inset 0 var(--bd,2px) 0 #4aa3dc,inset 0 calc(var(--bd,2px) * -1) 0 #4aa3dc;}
+.gg-grid.wrap-row .gg-cell.c-last{border-top-right-radius:calc(var(--cell,30px) * .26);border-bottom-right-radius:calc(var(--cell,30px) * .26);
+  box-shadow:inset calc(var(--bd,2px) * -1) 0 0 #4aa3dc,inset 0 var(--bd,2px) 0 #4aa3dc,inset 0 calc(var(--bd,2px) * -1) 0 #4aa3dc;}
+/* 세로 묶기 — 칸마다 이어 붙인 주황 띠 */
+.gg-grid.wrap-col{gap:0;column-gap:var(--bandgap,8px);}
+.gg-grid.wrap-col .gg-cell{border-radius:0;background:#fff4e8;
+  box-shadow:inset var(--bd,2px) 0 0 #f0913f,inset calc(var(--bd,2px) * -1) 0 0 #f0913f;}
+.gg-grid.wrap-col .gg-cell.r-first{border-top-left-radius:calc(var(--cell,30px) * .26);border-top-right-radius:calc(var(--cell,30px) * .26);
+  box-shadow:inset 0 var(--bd,2px) 0 #f0913f,inset var(--bd,2px) 0 0 #f0913f,inset calc(var(--bd,2px) * -1) 0 0 #f0913f;}
+.gg-grid.wrap-col .gg-cell.r-last{border-bottom-left-radius:calc(var(--cell,30px) * .26);border-bottom-right-radius:calc(var(--cell,30px) * .26);
+  box-shadow:inset 0 calc(var(--bd,2px) * -1) 0 #f0913f,inset var(--bd,2px) 0 0 #f0913f,inset calc(var(--bd,2px) * -1) 0 0 #f0913f;}
+.gg-wrap{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;}
+.gg-wbtn{height:36px;padding:0 13px;border-radius:999px;background:#f4f8fb;color:#4d6d85;font-size:13.5px;font-weight:900;
+  box-shadow:inset 0 0 0 2px #e2ecf4;white-space:nowrap;}
+.gg-wbtn:active{transform:scale(.97);}
+.gg-wbtn.on{background:#eaf6ff;color:#0f6a96;box-shadow:inset 0 0 0 2.4px #7fc4ea;}
+.gg-wbtn.on.col{background:#fff3e8;color:#a15a12;box-shadow:inset 0 0 0 2.4px #f0b072;}
+.gg-same{font-size:.62em;font-weight:900;color:#c07a24;}
+.gg-arrnote{font-size:clamp(12px,1.6vh,17px);font-weight:800;color:#6b8797;text-align:center;line-height:1.35;}
 
 .ck-stage{flex:1 1 auto;align-content:center;}
 .gg-stage{flex:1 1 auto;justify-content:center;}
@@ -2681,6 +2723,11 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 @media (max-width:560px){
   .ck-clock{width:min(60vw,240px);height:min(60vw,240px);}
   .ck-opts{max-width:none;}
+  /* 🟦 바둑판 — 격자가 최대한 크게 보이도록 안내 문구는 접는다 */
+  .gugu-panel.gg-arr-mode .gg-banner{display:none;}
+  .gg-arr .gg-arrnote{display:none;}
+  .gg-arr .gg-add{font-size:clamp(14px,2vh,20px);}
+  .gg-arr .gg-mul{font-size:clamp(16px,2.2vh,23px);}
 }
 
 /* ---------------- 🎮 숫자 게임 ---------------- */
@@ -4206,6 +4253,10 @@ body.mob .dy-viewmeta{font-size:.8rem;}
   .gg-hintline{font-size:clamp(15px,2vh,22px);}
   .gg-opt{height:clamp(52px,7.5vh,84px);font-size:clamp(19px,2.6vh,30px);}
   .gg-msg{font-size:clamp(14px,1.8vh,20px);}
+  .gg-mode{height:clamp(38px,5vh,48px);padding:0 clamp(12px,1.8vh,18px);font-size:clamp(14px,1.9vh,18px);}
+  .gg-wbtn{height:clamp(36px,4.8vh,46px);padding:0 clamp(11px,1.7vh,16px);font-size:clamp(13px,1.8vh,17px);}
+  .gg-arrnote{font-size:clamp(13px,1.8vh,19px);}
+  .gg-arr{gap:.7vh;}
 
   /* 📔 그림일기 — 그림칸·원고지 넉넉하게, 남는 여백 없이 */
   .dy-meta{flex-wrap:nowrap;gap:.45rem;padding:.45rem .55rem;}
@@ -14281,6 +14332,125 @@ SB.family = {
 </script>
 <script>
 /* =====================================================================
+   📚 과목별 200원 — 온라인 공부에서 그날 처음 과목을 끝내면 저금통에 200원
+   · 하루 한 과목 한 번만 (haeyuli.subj200.v1 표식 + 용돈 내역 rid 로 이중 방지)
+   · 완료 판정은 SB.subjectsDone(오늘 한 과목) + 한자 별 원장(오늘|hanja|…)
+   · 입금 뒤 용돈 내역("📚 오늘 수학 공부 완료")과 가족 동기화까지
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var KEY = "haeyuli.subj200.v1";
+var AMT = 200;
+var KEYS = ["en", "ko", "math", "hanja", "history"];
+var NAMES = { en:"영어", ko:"국어", math:"수학", hanja:"한자", history:"역사" };
+
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function today(){
+  try { if (SB.today) return SB.today(); } catch(e){}
+  var d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+function read(){
+  var v = null;
+  try { v = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e){ v = null; }
+  if (!v || typeof v !== "object" || Array.isArray(v)) v = {};
+  if (!v.days || typeof v.days !== "object" || Array.isArray(v.days)) v.days = {};
+  return v;
+}
+function save(v){ try { localStorage.setItem(KEY, JSON.stringify(v)); } catch(e){} }
+function ridOf(date, sub){ return "subj200-" + date + "-" + sub; }
+function seenInLog(rid){
+  try {
+    var d = (SB.money && SB.money.data) ? SB.money.data() : null;
+    var log = (d && Array.isArray(d.log)) ? d.log : [];
+    for (var i = 0; i < log.length; i++) if (log[i] && log[i].rid === rid) return true;
+  } catch(e){}
+  return false;
+}
+/* 오늘 이미 끝낸 과목 */
+function doneSubs(){
+  var out = {};
+  try {
+    var d = SB.subjectsDone ? SB.subjectsDone() : {};
+    for (var i = 0; i < KEYS.length; i++) out[KEYS[i]] = !!d[KEYS[i]];
+  } catch(e){}
+  if (!out.hanja){
+    try {
+      var led = SB.readDash ? SB.readDash().led : {}, pre = today() + "|hanja|";
+      for (var k in led) if (k.indexOf(pre) === 0) { out.hanja = true; break; }
+    } catch(e){}
+  }
+  return out;
+}
+function credit(sub, date){
+  var rid = ridOf(date, sub), bal = 0;
+  try {
+    if (SB.money && SB.money.credit) bal = SB.money.credit(AMT, "📚 오늘 " + (NAMES[sub] || sub) + " 공부 완료", rid);
+  } catch(e){ bal = 0; }
+  return bal;
+}
+SB.subj200 = {
+  amount: AMT,
+  names: NAMES,
+  subjects: KEYS.slice(),
+  done: doneSubs,
+  paid: function(date){
+    var d = read(), day = d.days[date || today()], out = {};
+    if (day && typeof day === "object") for (var i = 0; i < KEYS.length; i++) out[KEYS[i]] = !!day[KEYS[i]];
+    return out;
+  },
+  /* 오늘 끝낸 과목 중 아직 200원을 안 준 과목에 한 번씩 */
+  sync: function(){
+    var date = today(), d = read(), gave = [], bal = 0;
+    if (!d.days[date] || typeof d.days[date] !== "object") d.days[date] = {};
+    var day = d.days[date], done = doneSubs();
+    for (var i = 0; i < KEYS.length; i++){
+      var s = KEYS[i];
+      if (!done[s] || day[s]) continue;
+      day[s] = 1;                       /* 먼저 표시 — 같은 순간에 두 번 불려도 한 번만 */
+      save(d);
+      if (seenInLog(ridOf(date, s))) continue;   /* 다른 기기에서 이미 준 기록 */
+      bal = credit(s, date);
+      gave.push(s);
+    }
+    var keys = Object.keys(d.days).sort();
+    while (keys.length > 60) { delete d.days[keys.shift()]; }
+    save(d);
+    if (gave.length){
+      try {
+        var names = gave.map(function(x){ return NAMES[x] || x; });
+        var msg = (gave.length === 1)
+          ? "📚 " + names[0] + " 공부 완료! 저금통에 200원 들어갔어요 🐷"
+          : "📚 " + names.join("·") + " 공부 완료! 저금통에 " + (AMT * gave.length).toLocaleString("ko-KR") + "원 들어갔어요 🐷";
+        if (SB.toast) SB.toast(msg);
+      } catch(e){}
+      try {
+        if (SB.family && SB.family.sync) setTimeout(function(){ try { SB.family.sync(); } catch(e){} }, 120);
+      } catch(e){}
+    }
+    return { gave:gave, balance:bal };
+  }
+};
+
+/* 과목을 끝낼 때마다 (markAttendance → markDaily → onDaily) */
+SB.onDaily = (function(prev){
+  return function(sub){
+    if (prev) { try { prev.apply(this, arguments); } catch(e){} }
+    try { SB.subj200.sync(); } catch(e){}
+  };
+})(SB.onDaily);
+/* 처음 열 때, 다른 탭·앱에서 돌아올 때도 확인 — 오늘 이미 끝낸 과목이면 여기서 입금 */
+try { setTimeout(function(){ try { SB.subj200.sync(); } catch(e){} }, 600); } catch(e){}
+try {
+  document.addEventListener("visibilitychange", function(){
+    if (!document.hidden) { try { SB.subj200.sync(); } catch(e){} }
+  });
+} catch(e){}
+})();
+</script>
+<script>
+/* =====================================================================
    🎙️ 내 목소리 녹음 — 사이트워드·파닉스에서 읽은 소리를 바로 들어요
    MediaRecorder 로 녹음하고, 마이크 권한이 없으면 앱은 그대로 두고 안내만 해요.
    ===================================================================== */
@@ -15535,7 +15705,9 @@ function ckBind(p){
 
 /* =============================== ✖️ 구구단 원리 =============================== */
 var GKEY = "haeyuli.gugu.v1";
-var GG = { dan:2, mul:1, quiz:false, q:null, opts:[], msg:"", done:false, right:0 };
+var GG = { dan:2, mul:1, quiz:false, q:null, opts:[], msg:"", done:false, right:0, mode:"basket", wrap:"none" };
+var GMKEY = "haeyuli.gugu.mode.v1";
+try { var _gm = localStorage.getItem(GMKEY); if (_gm === "array" || _gm === "basket") GG.mode = _gm; } catch(e){}
 
 function guguStart(){
   var v = readJSON(GKEY, null);
@@ -15575,8 +15747,105 @@ function platesHTML(dan, mul){
   for (var i = 0; i < mul; i++) out += '<div class="gg-plate">' + plateSVG(dan) + '</div>';
   return out;
 }
+
+/* ── 🟦 바둑판(가로·세로) — 한 줄에 dan개씩 mul줄 사과 격자 ── */
+function appleCellSVG(){
+  return '<svg viewBox="0 0 24 24" aria-hidden="true">'
+    + '<circle cx="12" cy="14.2" r="8" fill="#e4574c"/>'
+    + '<path d="M12 6.4q1.1-4.2 4.4-3.5Q15.1 6.6 12 6.4Z" fill="#5fbf74"/>'
+    + '<ellipse cx="9.4" cy="11.4" rx="1.9" ry="2.8" fill="#fff" opacity=".4" transform="rotate(-20 9.4 11.4)"/>'
+    + '</svg>';
+}
+function arrayGridHTML(dan, mul, wrap){
+  var rows = mul, cols = dan;
+  var cls = "gg-grid" + (wrap === "row" ? " wrap-row" : (wrap === "col" ? " wrap-col" : ""));
+  var out = '<div class="' + cls + '" style="--c:' + cols + '" role="img" aria-label="한 줄에 ' + dan + '개씩 ' + mul + '줄, 사과 ' + (dan * mul) + '개">';
+  var cell = appleCellSVG();
+  for (var r = 0; r < rows; r++){
+    for (var c = 0; c < cols; c++){
+      var k = "gg-cell";
+      if (c === 0) k += " c-first";
+      if (c === cols - 1) k += " c-last";
+      if (r === 0) k += " r-first";
+      if (r === rows - 1) k += " r-last";
+      out += '<div class="' + k + '">' + cell + '</div>';
+    }
+  }
+  return out + '</div>';
+}
+function ggFit(){
+  var p = $("guguPanel"); if (!p) return;
+  var board = p.querySelector(".gg-board"); if (!board) return;
+  var grid = board.querySelector(".gg-grid"); if (!grid) return;
+  var rows = GG.mul, cols = GG.dan, wrap = GG.wrap;
+  var pr = p.getBoundingClientRect(), br = board.getBoundingClientRect();
+  var below = 0, tail = p.querySelectorAll(".gg-eqbox, .gg-nav, .gg-arrnote");
+  for (var i = 0; i < tail.length; i++) below += tail[i].getBoundingClientRect().height + 8;
+  var availW = Math.min(board.clientWidth || pr.width - 20, pr.width - 20);
+  var availH = window.innerHeight - br.top - below - 26;
+  var inPanel = pr.bottom - br.top - below - 10;
+  if (inPanel > 90) availH = Math.min(availH, inPanel);
+  if (!isFinite(availH) || availH < 132) availH = Math.max(132, Math.min(availW, 260));
+  var band = (wrap === "row" || wrap === "col") ? Math.max(5, Math.min(13, availH * 0.02)) : 0;
+  var g = Math.max(3, Math.min(7, availH * 0.012));
+  var gapW, gapH;
+  if (wrap === "row"){ gapW = 0; gapH = band; }
+  else if (wrap === "col"){ gapW = band; gapH = 0; }
+  else { gapW = g; gapH = g; }
+  var cw = (availW - 6 - gapW * (cols - 1)) / cols;
+  var ch = (availH - 6 - gapH * (rows - 1)) / rows;
+  var cap = window.innerWidth <= 560 ? 104 : 160;
+  var cell = Math.max(16, Math.min(cw, ch, cap));
+  board.style.height = Math.round(rows * cell + gapH * (rows - 1) + 2) + "px";
+  grid.style.setProperty("--cell", cell.toFixed(1) + "px");
+  grid.style.setProperty("--gap", g.toFixed(1) + "px");
+  grid.style.setProperty("--bandgap", band.toFixed(1) + "px");
+  grid.style.setProperty("--bd", Math.max(1.6, Math.min(4, cell * 0.055)).toFixed(1) + "px");
+}
+function ggChain(n, count){
+  if (count > 5) return "";  /* 6묶음부터는 덧셈을 늘어놓지 않아요 */
+  var a = []; for (var i = 0; i < count; i++) a.push(n);
+  return a.join(" + ") + " = ";
+}
+function guguArrayHTML(){
+  var dan = GG.dan, mul = GG.mul, total = dan * mul;
+  var wrap = (GG.wrap === "row" || GG.wrap === "col") ? GG.wrap : "none";
+  var add, eq, note;
+  if (wrap === "row"){
+    add = '가로로 ' + dan + '개씩 <b>' + mul + '묶음</b> = ' + ggChain(dan, mul) + total;
+    eq = dan + ' × ' + mul + ' = <b>' + total + '</b>';
+    note = '가로 줄이 한 묶음이에요 — 한 줄에 ' + dan + '개씩 ' + mul + '줄';
+  } else if (wrap === "col"){
+    add = '세로로 ' + mul + '개씩 <b>' + dan + '묶음</b> = ' + ggChain(mul, dan) + total;
+    eq = mul + ' × ' + dan + ' = <b>' + total + '</b> <span class="gg-same">가로로 묶어도 같아요</span>';
+    note = '세로 줄이 한 묶음이에요 — 한 줄에 ' + mul + '개씩 ' + dan + '줄';
+  } else {
+    add = '한 줄에 ' + dan + '개씩 ' + mul + '줄 = ' + total + '개';
+    eq = dan + ' × ' + mul + ' = <b>' + total + '</b>';
+    note = '바둑판처럼 놓았어요 · 가로로 묶어도 세로로 묶어도 개수는 같아요';
+  }
+  return '<div class="gg-stage gg-arr">'
+    + '<div class="gg-wrap" role="group" aria-label="묶는 방향">'
+    +   '<button type="button" class="gg-wbtn' + (wrap === "row" ? " on" : "") + '" data-ggwrap="row" aria-pressed="' + (wrap === "row") + '">↔ 가로로 묶기</button>'
+    +   '<button type="button" class="gg-wbtn col' + (wrap === "col" ? " on" : "") + '" data-ggwrap="col" aria-pressed="' + (wrap === "col") + '">↕ 세로로 묶기</button>'
+    + '</div>'
+    + '<div class="gg-board">' + arrayGridHTML(dan, mul, wrap) + '</div>'
+    + '<div class="gg-eqbox">'
+    +   '<div class="gg-add">' + add + '</div>'
+    +   '<div class="gg-mul">' + eq + '</div>'
+    + '</div>'
+    + '<div class="gg-nav">'
+    +   '<button type="button" class="gg-arrow" data-ggmul="-1"' + (mul <= 1 ? " disabled" : "") + '>◀</button>'
+    +   '<span class="gg-mulnow">' + dan + ' × ' + mul + '</span>'
+    +   '<button type="button" class="gg-arrow" data-ggmul="1"' + (mul >= 9 ? " disabled" : "") + '>▶</button>'
+    +   '<button type="button" class="gg-say" data-ggsay="1">🔊 읽어주기</button>'
+    +   '<button type="button" class="gg-quizbtn" data-ggquiz="1">🎯 그림 퀴즈</button>'
+    + '</div>'
+    + '<div class="gg-arrnote">' + note + '</div></div>';
+}
 function guguViewHTML(){
   var dan = GG.dan, mul = GG.mul, total = dan * mul;
+  if (GG.mode === "array") return guguArrayHTML();
   var add = [];
   for (var k = 0; k < mul; k++) add.push(dan);
   return '<div class="gg-stage">'
@@ -15627,6 +15896,10 @@ function renderGugu(){
   if (!GG.dan) GG.dan = w.dan;
   p.innerHTML = '<div class="panel-h"><b>✖️ 구구단 원리</b><span class="ph-no2">이번 주 목표: ' + w.dan + '단 (' + (w.week + 1) + '주차 · ' + w.day + '일째)</span></div>'
     + '<div class="gg-banner">이번 주는 <b>' + w.dan + '단</b>이에요 · 한 주에 한 단씩 그림으로 익혀요</div>'
+    + '<div class="gg-modes" role="group" aria-label="보기 방법">'
+    +   '<button type="button" class="gg-mode' + (GG.mode === "array" ? "" : " on") + '" data-ggmode="basket" aria-pressed="' + (GG.mode !== "array") + '">📦 묶음 바구니</button>'
+    +   '<button type="button" class="gg-mode arr' + (GG.mode === "array" ? " on" : "") + '" data-ggmode="array" aria-pressed="' + (GG.mode === "array") + '">🟦 바둑판(가로·세로)</button>'
+    + '</div>'
     + '<div class="gg-dans" role="group" aria-label="단 고르기">'
     + [2,3,4,5,6,7,8,9].map(function(n){
         var on = n === GG.dan, cur = n === w.dan;
@@ -15635,11 +15908,16 @@ function renderGugu(){
       }).join("")
     + '</div>'
     + (GG.quiz ? guguQuizHTML() : guguViewHTML());
+  try { p.classList.toggle("gg-arr-mode", !GG.quiz && GG.mode === "array"); } catch(e){}
   guguBind(p);
+  if (!GG.quiz && GG.mode === "array"){ try { ggFit(); } catch(e){} try { requestAnimationFrame(ggFit); } catch(e){} }
 }
 function guguSay(){
-  var dan = GG.dan, mul = GG.mul;
-  try { SB.speak(dan + " 곱하기 " + mul + "는 " + (dan * mul), false, "ko-KR"); } catch(e){}
+  var dan = GG.dan, mul = GG.mul, txt;
+  if (GG.mode === "array" && GG.wrap === "col") txt = "세로로 " + mul + "개씩 " + dan + "묶음은 " + (dan * mul);
+  else if (GG.mode === "array" && GG.wrap === "row") txt = "가로로 " + dan + "개씩 " + mul + "묶음은 " + (dan * mul);
+  else txt = dan + " 곱하기 " + mul + "는 " + (dan * mul);
+  try { SB.speak(txt, false, "ko-KR"); } catch(e){}
 }
 function guguAnswer(v, btn){
   if (GG.done || !GG.q) return;
@@ -15678,6 +15956,20 @@ function guguBind(p){
       GG.mul = Math.max(1, Math.min(9, GG.mul + d));
       renderGugu(); return;
     }
+    var md = el.closest("[data-ggmode]");
+    if (md) {
+      var m = md.getAttribute("data-ggmode");
+      GG.mode = (m === "array") ? "array" : "basket";
+      GG.wrap = "none"; GG.quiz = false; GG.q = null; GG.msg = "";
+      try { localStorage.setItem(GMKEY, GG.mode); } catch(e){}
+      renderGugu(); return;
+    }
+    var wr = el.closest("[data-ggwrap]");
+    if (wr) {
+      var wv = wr.getAttribute("data-ggwrap");
+      GG.wrap = (GG.wrap === wv) ? "none" : wv;
+      renderGugu(); return;
+    }
     if (el.closest("[data-ggsay]")) { guguSay(); return; }
     if (el.closest("[data-ggquiz]")) {
       GG.quiz = !GG.quiz; GG.q = null; GG.msg = ""; renderGugu(); return;
@@ -15692,6 +15984,8 @@ function guguBind(p){
 (function initMath2(){
   try { GG.dan = weekInfo().dan; } catch(e){}
   renderClock(); renderGugu();
+  window.addEventListener("resize", function(){ try { if (GG.mode === "array" && !GG.quiz) ggFit(); } catch(e){} });
+  window.addEventListener("orientationchange", function(){ try { setTimeout(function(){ if (GG.mode === "array" && !GG.quiz) ggFit(); }, 260); } catch(e){} });
   SB.onShow.math = (function(prev){
     return function(sec){
       if (prev) { try { prev.apply(this, arguments); } catch(e){} }
@@ -15703,7 +15997,7 @@ function guguBind(p){
   })(SB.onShow.math);
 })();
 SB.clockState = function(){ return { lv:CK.lv, h:CK.h, m:CK.m, opts:CK.opts.slice(), right:CK.right, done:CK.done, label:ckLabel(CK.h, CK.m) }; };
-SB.guguState = function(){ return { dan:GG.dan, mul:GG.mul, quiz:GG.quiz, q:GG.q ? { dan:GG.q.dan, mul:GG.q.mul } : null, opts:GG.opts.slice(), week:weekInfo(), right:GG.right }; };
+SB.guguState = function(){ return { dan:GG.dan, mul:GG.mul, quiz:GG.quiz, mode:GG.mode, wrap:GG.wrap, q:GG.q ? { dan:GG.q.dan, mul:GG.q.mul } : null, opts:GG.opts.slice(), week:weekInfo(), right:GG.right }; };
 SB.guguReset = function(){ try { localStorage.removeItem(GKEY); } catch(e){} GG.dan = weekInfo().dan; GG.mul = 1; renderGugu(); };
 })();
 </script>
