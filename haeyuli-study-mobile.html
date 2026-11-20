@@ -11449,7 +11449,8 @@ function gdReveal(){
   });
   gdFoot();
   var n = 0; for (var i = 0; i < GD.ink.length; i++) if (GD.ink[i]) n++;
-  SB.toast("정답을 옆에 보여 줬어요 · " + n + "/" + GD.items.length + "문제에 답을 썼어요");
+  SB.toast(n ? ("정답을 옆에 보여 줬어요 · " + n + "/" + GD.items.length + "문제에 답을 썼어요")
+             : "정답을 옆에 보여 줬어요 · 답 칸에 쓴 글씨와 맞춰 보세요");
 }
 function gdFinish(){
   if (GD.done) return;
