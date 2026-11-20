@@ -769,7 +769,7 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
 .ps-en .sw{transition:background .15s,color .15s;border-radius:.4vh;padding:0 .12vh;}
 .ps-en .sw.hl{ background:#ffe9a8;color:#7a4c00;}
 .ps-ko{font-size:1.02vh;font-weight:800;color:#8ba4b7;margin-top:.15vh;}
-.ps-tools{display:flex;align-items:center;gap:.3vh;margin-top:.35vh;}
+.ps-tools{display:flex;align-items:center;gap:.3vh;margin-top:.35vh;flex-wrap:wrap;}
 .ps-tools .t{height:2.9vh;padding:0 .65vh;border-radius:999px;background:#fff;font-size:1.02vh;font-weight:900;
   color:#4a7c9c;box-shadow:inset 0 0 0 .16vh #d9eaf5;white-space:nowrap;}
 .ps-tools .t.on{background:#e8fbf1;color:#0f7a52;box-shadow:inset 0 0 0 .2vh #9fe0bd;}
@@ -3150,20 +3150,30 @@ body .wk-sub i{font-size:.95rem;}
 .wcg-modes button.on{background:#fdf6e8;color:#7a5a13;box-shadow:inset 0 0 0 1.6px #e4b25a;}
 .wcg-prog{font-size:clamp(11px,1.3vh,15px);font-weight:800;color:#8b98a4;white-space:nowrap;}
 .wcg-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;}
-.wcg-grid{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:.8vh .8vh;padding:.2vh .2vh 1vh;align-content:start;}
-.wcc{display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.6vh .5vh .7vh;border-radius:14px;
-  background:linear-gradient(170deg,#ffffff,#fbfcfd);box-shadow:inset 0 0 0 1px #e6ebf0;text-align:center;}
-.wcc-art{width:100%;height:clamp(58px,10.5vh,104px);display:flex;align-items:center;justify-content:center;}
+/* 오늘의 15개 머리줄 */
+.wcg-listbar{flex:0 0 auto;display:flex;align-items:center;gap:.55rem;margin:0 0 .6vh;padding:0 .2vh;min-width:0;}
+.wcg-badge{display:inline-flex;align-items:center;height:2rem;padding:0 .85rem;border-radius:999px;
+  background:#fdf6e8;color:#8a5a08;font-size:clamp(12px,1.5vh,18px);font-weight:900;white-space:nowrap;
+  box-shadow:inset 0 0 0 1px #f2dfb4;}
+.wcg-date{font-size:clamp(10px,1.2vh,14px);font-weight:700;color:#a9b6c2;white-space:nowrap;}
+.wcg-scope{margin-left:auto;flex:0 0 auto;height:2rem;padding:0 .85rem;border-radius:999px;background:#f7f9fb;color:#5a6b78;
+  font-size:clamp(10px,1.25vh,15px);font-weight:800;box-shadow:inset 0 0 0 1px #e9eef2;white-space:nowrap;}
+.wcg-scope:active{transform:scale(.97);}
+/* 3열 큼직한 카드 */
+.wcg-grid{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:1vh 1vh;padding:.2vh .2vh 1vh;align-content:start;}
+.wcc{display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:.9vh .8vh 1vh;border-radius:18px;
+  background:linear-gradient(170deg,#ffffff,#fbfcfd);box-shadow:inset 0 0 0 1px #e6ebf0;text-align:center;min-width:0;}
+.wcc-art{width:100%;height:clamp(110px,19vh,200px);display:flex;align-items:center;justify-content:center;}
 .wcc-art svg{width:100%;height:100%;display:block;}
-.wcc-word{display:flex;align-items:center;gap:.3rem;justify-content:center;flex-wrap:nowrap;max-width:100%;}
-.wcc-word b{font-size:clamp(14px,1.8vh,21px);font-weight:800;color:#1f2a33;letter-spacing:-.02em;white-space:nowrap;}
-.wcc-word span{font-size:clamp(10px,1.2vh,13px);font-weight:700;color:#8b98a4;white-space:nowrap;}
-.wcc-sent{display:flex;align-items:center;gap:.25rem;justify-content:center;max-width:100%;}
-.wcc-sent p{margin:0;font-size:clamp(10px,1.25vh,14px);font-weight:700;color:#3f5c6e;line-height:1.3;letter-spacing:-.01em;}
-.wcc-ko{font-size:clamp(9px,1.1vh,12px);font-weight:600;color:#a9b6c2;line-height:1.25;}
-.wcg-say{flex:0 0 auto;width:1.75rem;height:1.75rem;border-radius:50%;background:#eef7ff;color:#175a80;
-  font-size:.78rem;box-shadow:inset 0 0 0 1px #cfe4f4;}
+.wcc-word{display:flex;align-items:center;gap:.4rem;justify-content:center;flex-wrap:wrap;row-gap:.1rem;max-width:100%;}
+.wcc-word b{font-size:clamp(23px,3.3vh,40px);font-weight:900;color:#1f2a33;letter-spacing:-.02em;white-space:nowrap;}
+.wcc-word span{font-size:clamp(15px,2vh,24px);font-weight:800;color:#7d8b97;white-space:nowrap;}
+.wcc-sent{display:flex;align-items:center;gap:.35rem;justify-content:center;max-width:100%;flex-wrap:wrap;row-gap:.1rem;}
+.wcc-sent p{margin:0;min-width:0;font-size:clamp(15px,2.1vh,27px);font-weight:800;color:#33566b;line-height:1.32;letter-spacing:-.01em;}
+.wcc-ko{font-size:clamp(13px,1.8vh,23px);font-weight:700;color:#8b98a4;line-height:1.3;}
+.wcg-say{flex:0 0 auto;width:clamp(2.2rem,4.6vh,3rem);height:clamp(2.2rem,4.6vh,3rem);border-radius:50%;background:#eef7ff;color:#175a80;
+  font-size:clamp(.95rem,1.6vh,1.35rem);box-shadow:inset 0 0 0 1px #cfe4f4;}
 .wcg-say:active{transform:scale(.94);}
 .wcg-hl{color:#c0871b;}
 /* ---- 게임 ---- */
@@ -3260,6 +3270,20 @@ body .wk-sub i{font-size:.95rem;}
 .sw-mini.on{background:#eef7f2;color:#1f6b4f;box-shadow:inset 0 0 0 1.6px #9ad3b6;}
 .sw-mini.wide{background:#f7f9fb;color:#5a6b78;}
 .sw-mini:active{transform:scale(.97);}
+
+/* ---------------- 🎙️ 내 목소리 녹음 ---------------- */
+.sw-play.rec.on,.sw-mini.rec.on{background:#fff1ef;color:#b23b2c;box-shadow:inset 0 0 0 1.6px #f0a496;}
+.sw-play.recplay[disabled],.sw-mini.recplay[disabled]{opacity:.42;}
+.sw-play.recplay.has,.sw-mini.recplay.has{background:#eef7ff;color:#175a80;box-shadow:inset 0 0 0 1.6px #cfe4f4;}
+.sw-rec-row{display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;margin-top:.25rem;}
+.ph-rec{flex:0 0 auto;display:flex;align-items:center;gap:.4vh;flex-wrap:wrap;margin-top:.3vh;}
+.ph-rec-note{font-size:.95vh;font-weight:900;color:#8ba4b7;letter-spacing:-.01em;}
+.phbtn.rec.on{background:#fff1ef;color:#b23b2c;box-shadow:inset 0 0 0 .2vh #f0a496;}
+.phbtn.recplay[disabled]{opacity:.42;}
+.phbtn.recplay.has{background:#eef7ff;color:#175a80;}
+.ps-tools .t.rec.on{background:#fff1ef;color:#b23b2c;box-shadow:inset 0 0 0 .2vh #f0a496;}
+.ps-tools .t.recplay[disabled]{opacity:.42;}
+.ps-tools .t.recplay.has{background:#eef7ff;color:#175a80;box-shadow:inset 0 0 0 .2vh #cfe4f4;}
 
 .sw-s3{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:1.1vh;}
 .sw-qwrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:2vh;align-items:stretch;}
@@ -3653,11 +3677,21 @@ body.mob .wcg-title b{font-size:1.1rem;}
 body.mob .wcg-title span{font-size:.72rem;}
 body.mob .wcg-modes button{height:2.1rem;padding:0 .5rem;font-size:.7rem;}
 body.mob .wcg-prog{font-size:.72rem;}
-body.mob .wcg-grid{grid-template-columns:1fr 1fr;gap:.55rem;overflow:visible;padding:0 0 .4rem;}
-body.mob .wcc-art{height:4.4rem;}
-body.mob .wcc-word b{font-size:1rem;}
-body.mob .wcc-sent p{font-size:.74rem;}
-body.mob .wcc-ko{font-size:.66rem;}
+body.mob .wcg-grid{grid-template-columns:1fr 1fr;gap:.6rem;overflow:visible;padding:0 0 .4rem;}
+body.mob .wcg-listbar{margin:0 0 .45rem;gap:.35rem;}
+body.mob .wcg-badge{height:1.85rem;padding:0 .6rem;font-size:.76rem;}
+body.mob .wcg-date{display:none;}
+body.mob .wcg-scope{height:1.85rem;padding:0 .55rem;font-size:.7rem;}
+body.mob .wcc{padding:.5rem .4rem .55rem;border-radius:14px;gap:.3rem;}
+body.mob .wcc-art{height:6.6rem;}
+body.mob .wcc-word b{font-size:1.28rem;}
+body.mob .wcc-word span{font-size:.82rem;}
+body.mob .wcc-sent p{font-size:.84rem;}
+body.mob .wcc-ko{font-size:.76rem;}
+body.mob .wcg-say{width:1.95rem;height:1.95rem;font-size:.85rem;}
+body.mob .sw-rec-row .sw-mini{height:1.9rem;font-size:.66rem;padding:0 .5rem;}
+body.mob .ph-rec .phbtn{height:2.2rem;padding:0 .6rem;font-size:.68rem;}
+body.mob .ph-rec-note{display:none;}
 body.mob .wcgg-art{width:8.4rem;height:8.4rem;}
 body.mob .wcgg-opt{min-width:5.4rem;height:2.9rem;font-size:.95rem;padding:0 .8rem;}
 body.mob .wcgg-msg{font-size:.82rem;}
@@ -3883,6 +3917,7 @@ body.mob .hk-art svg{width:1.9rem;height:1.9rem;}
                 <div class="ph-wko" id="phWordKo">🐱 고양이</div>
               </div>
             </div>
+            <div class="ph-rec" id="phWordRec"></div>
             <div class="ph-words" id="phWords"></div>
           </div>
           <div class="ph-block grow">
@@ -7175,6 +7210,8 @@ function renderPhonics(){
   }).join("");
   if (wname) wname.textContent = wd[0];
   if (wko) wko.textContent = wd[2] + " " + wd[1];
+  var wrec = $("phWordRec");
+  if (wrec) wrec.innerHTML = '<span class="ph-rec-note">내 목소리</span>' + SB.recBtn("ph:" + L.id + ":w" + wi, "phbtn");
   var wl = $("phWords");
   if (wl) wl.innerHTML = L.words.map(function(w, i){
     return '<button class="pword' + (i === wi ? " on" : "") + '" type="button" data-pw="' + i + '"><span class="e">' + w[2] + '</span><span class="w">' + esc(w[0]) + '</span><span class="k">' + esc(w[1]) + "</span></button>";
@@ -7190,6 +7227,7 @@ function renderPhonics(){
       + '<button class="t" type="button" data-play="1">🔊 전체 듣기</button>'
       + '<button class="t" type="button" data-play="slow">🐢 천천히</button>'
       + '<button class="t' + (ck ? " on" : "") + '" type="button" data-ck="1">' + (ck ? "✅ 읽었어요" : "⬜ 따라 읽었어요") + "</button>"
+      + SB.recBtn("ph:" + L.id + ":s" + i, "t")
       + "</div></div>";
   }).join("");
   var dn = $("phDone");
@@ -7198,6 +7236,7 @@ function renderPhonics(){
     dn.textContent = isDone ? "✅ 완료한 레슨" : "✅ 이 레슨 완료";
     dn.classList.toggle("done", isDone);
   }
+  if (SB.rec && SB.rec.refresh) SB.rec.refresh();
 }
 SB.renderPhonics = renderPhonics;
 
@@ -12298,6 +12337,192 @@ SB.family = {
 </script>
 <script>
 /* =====================================================================
+   🎙️ 내 목소리 녹음 — 사이트워드·파닉스에서 읽은 소리를 바로 들어요
+   MediaRecorder 로 녹음하고, 마이크 권한이 없으면 앱은 그대로 두고 안내만 해요.
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var clips = {};                 /* key -> { url, at, ms } */
+var cur = { key:null, rec:null, chunks:[], stream:null, t0:0, timer:null };
+var player = null;
+var MAX_MS = 15000;             /* 아이가 계속 말해도 15초에서 멈춰요 */
+
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c];
+  });
+}
+function toast(msg){ try { if (SB.toast) SB.toast(msg); } catch(e){} }
+
+function supported(){
+  try {
+    return !!(window.MediaRecorder && navigator && navigator.mediaDevices
+      && typeof navigator.mediaDevices.getUserMedia === "function"
+      && window.URL && window.URL.createObjectURL);
+  } catch(e){ return false; }
+}
+function stopTracks(){
+  try { if (cur.stream && cur.stream.getTracks) cur.stream.getTracks().forEach(function(t){ try { t.stop(); } catch(e){} }); } catch(e){}
+  cur.stream = null;
+}
+function clearTimer(){ if (cur.timer) { clearTimeout(cur.timer); cur.timer = null; } }
+
+/* 화면의 녹음 버튼 상태를 한 번에 맞춘다 */
+function refresh(){
+  try {
+    var rs = document.querySelectorAll("[data-rec]");
+    for (var i = 0; i < rs.length; i++){
+      var k = rs[i].getAttribute("data-rec"), on = (cur.key === k);
+      rs[i].classList.toggle("on", on);
+      rs[i].setAttribute("aria-pressed", on ? "true" : "false");
+      rs[i].textContent = on ? "⏹️ 녹음 중… 누르면 멈춰요" : "🎙️ 녹음하기";
+    }
+    var ps = document.querySelectorAll("[data-recplay]");
+    for (var j = 0; j < ps.length; j++){
+      var kk = ps[j].getAttribute("data-recplay"), ready = has(kk);
+      ps[j].disabled = !ready;
+      ps[j].classList.toggle("has", ready);
+    }
+  } catch(e){}
+}
+function has(key){ return !!(clips[key] && clips[key].url); }
+
+function stop(){
+  var key = cur.key;
+  if (!key) return false;
+  cur.key = null;
+  clearTimer();
+  try { if (cur.rec && cur.rec.state !== "inactive") cur.rec.stop(); } catch(e){}
+  if (!cur.rec) { stopTracks(); }
+  cur.rec = null;
+  refresh();
+  return key;
+}
+function failMsg(err){
+  var name = (err && err.name) || "";
+  if (name === "NotAllowedError" || name === "PermissionDeniedError" || name === "SecurityError") {
+    toast("Safari·Chrome에서 마이크를 허용하면 내 목소리를 녹음해 들을 수 있어요.");
+  } else if (name === "NotFoundError" || name === "DevicesNotFoundError" || name === "OverconstrainedError") {
+    toast("마이크를 찾지 못했어요. 마이크를 켜거나 꽂고 다시 해 봐요.");
+  } else if (name === "NotReadableError" || name === "TrackStartError") {
+    toast("마이크를 다른 앱이 쓰고 있어요. 그 앱을 끄고 다시 해 봐요.");
+  } else {
+    toast("녹음을 시작하지 못했어요. 잠시 뒤 다시 해 봐요.");
+  }
+}
+function start(key){
+  if (!supported()){
+    toast("Safari·Chrome에서 마이크를 허용하면 내 목소리를 녹음해 들을 수 있어요.");
+    return;
+  }
+  if (cur.key) stop();
+  cur.key = key; cur.chunks = []; cur.t0 = Date.now(); cur.rec = null;
+  refresh();
+  var p = null;
+  try { p = navigator.mediaDevices.getUserMedia({ audio:true }); } catch(e){ p = null; }
+  if (!p || typeof p.then !== "function"){
+    cur.key = null; refresh(); failMsg(null);
+    return;
+  }
+  p.then(function(stream){
+    if (cur.key !== key) { try { stream.getTracks().forEach(function(t){ t.stop(); }); } catch(e){} return; }
+    cur.stream = stream;
+    var mr = null;
+    try { mr = new MediaRecorder(stream); } catch(e){ mr = null; }
+    if (!mr){
+      cur.key = null; stopTracks(); refresh(); failMsg(null);
+      return;
+    }
+    cur.rec = mr;
+    mr.ondataavailable = function(ev){ if (ev && ev.data && ev.data.size) cur.chunks.push(ev.data); };
+    mr.onstop = function(){
+      var got = cur.chunks.slice();
+      cur.chunks = []; cur.rec = null;
+      stopTracks(); clearTimer();
+      if (got.length){
+        try {
+          var blob = new Blob(got, { type: (got[0] && got[0].type) || "audio/webm" });
+          if (clips[key] && clips[key].url) { try { URL.revokeObjectURL(clips[key].url); } catch(e){} }
+          clips[key] = { url: URL.createObjectURL(blob), at: Date.now(), ms: Math.max(0, Date.now() - cur.t0) };
+          toast("🎙️ 내 목소리 저장! ▶️ 내 목소리 듣기로 들어 봐요");
+        } catch(e){}
+      }
+      if (cur.key === key) cur.key = null;
+      refresh();
+    };
+    try { mr.start(); } catch(e){
+      cur.key = null; stopTracks(); refresh(); failMsg(null); return;
+    }
+    cur.timer = setTimeout(function(){
+      if (cur.key !== key) return;
+      stop();
+      toast("⏱️ 15초 녹음 끝! ▶️ 로 내 목소리를 들어 봐요");
+    }, MAX_MS);
+    refresh();
+  }, function(err){
+    if (cur.key === key) cur.key = null;
+    stopTracks(); refresh(); failMsg(err);
+  });
+}
+function toggle(key){
+  if (!key) return;
+  if (cur.key === key) { stop(); return; }
+  if (cur.key) stop();
+  start(key);
+}
+function play(key){
+  var c = clips[key];
+  if (!c || !c.url) { toast("먼저 🎙️ 로 내 목소리를 녹음해 봐요"); return false; }
+  try {
+    if (player) { try { player.pause(); } catch(e){} }
+    player = new Audio(c.url);
+    player.onended = function(){ refresh(); };
+    var pr = player.play();
+    if (pr && typeof pr.catch === "function") pr.catch(function(){ toast("소리를 재생하지 못했어요. 🔊 볼륨을 확인해 봐요"); });
+  } catch(e){ toast("소리를 재생하지 못했어요. 🔊 볼륨을 확인해 봐요"); return false; }
+  refresh();
+  return true;
+}
+
+/* 버튼 한 쌍(녹음 · 듣기)을 그린다 — 각 화면이 cls 만 바꿔 씀 */
+function btn(key, cls){
+  cls = cls || "rec-btn";
+  var on = (cur.key === key), h = has(key);
+  return '<button class="' + cls + ' rec" type="button" data-rec="' + esc(key) + '" aria-pressed="' + (on ? "true" : "false") + '">'
+    + (on ? "⏹️ 녹음 중… 누르면 멈춰요" : "🎙️ 녹음하기") + "</button>"
+    + '<button class="' + cls + ' recplay" type="button" data-recplay="' + esc(key) + '"' + (h ? "" : " disabled") + '>▶️ 내 목소리 듣기</button>';
+}
+
+SB.rec = {
+  supported: supported,
+  toggle: toggle,
+  start: start,
+  stop: stop,
+  play: play,
+  has: has,
+  btn: btn,
+  refresh: refresh,
+  state: function(){ return { supported:supported(), key:cur.key, recording:!!cur.key, playing:!!(player && !player.paused && !player.ended) }; },
+  clips: function(){ return Object.keys(clips); }
+};
+SB.recBtn = btn;
+
+/* 화면을 다시 그려도 버튼이 살아 있게 한 곳에서 처리 */
+document.addEventListener("click", function(e){
+  var el = e.target;
+  if (!el || !el.closest) return;
+  var r = el.closest("[data-rec]");
+  if (r) { e.preventDefault(); toggle(r.getAttribute("data-rec")); return; }
+  var p = el.closest("[data-recplay]");
+  if (p) { e.preventDefault(); play(p.getAttribute("data-recplay")); return; }
+});
+window.addEventListener("pagehide", function(){ if (cur.key) stop(); });
+})();
+</script>
+<script>
+/* =====================================================================
    👀 사이트워드 — 오늘의 단어 1개 · 그림 문장 3개 · 이미지 없이 맞추기
    저장: haeyuli.sight.v1
    ===================================================================== */
@@ -12704,6 +12929,7 @@ function step1(){
     + '<div class="sw-s1-acts">'
     + '<button class="sw-play" type="button" data-act="say-word"><span aria-hidden="true">🔊</span> 소리 듣기</button>'
     + '<button class="sw-play ghost" type="button" data-act="say-word-slow"><span aria-hidden="true">🐢</span> 천천히</button>'
+    + SB.recBtn("sight:" + W.w + ":w", "sw-play")
     + "</div>"
     + '<p class="sw-tip">글자를 통째로 보고, 소리를 함께 기억해요. 하루에 한 단어면 충분해요!</p>'
     + '<div class="sw-next-bar">'
@@ -12721,7 +12947,8 @@ function step2(){
       + '<div class="sw-sent-art">' + sceneSVG(s[2]) + "</div>"
       + '<div class="sw-sent-tx">'
       + '<div class="sw-sent-en">' + markSent(s[0], W.w) + "</div>"
-      + '<div class="sw-sent-ko">' + esc(s[1]) + "</div></div>"
+      + '<div class="sw-sent-ko">' + esc(s[1]) + "</div>"
+      + '<div class="sw-rec-row">' + SB.recBtn("sight:" + W.w + ":s" + i, "sw-mini") + "</div></div>"
       + '<div class="sw-sent-acts">'
       + '<button class="sw-mini" type="button" data-act="say-sent" data-i="' + i + '">🔊 듣기</button>'
       + '<button class="sw-mini' + (ck ? " on" : "") + '" type="button" data-act="ck" data-i="' + i + '">' + (ck ? "✅ 공부했어요" : "공부했어요 ✓") + "</button>"
@@ -12781,6 +13008,7 @@ function renderBody(){
   var box = $("swBody"); if (!box) return;
   var html = UI.step === 2 ? step2() : (UI.step === 3 ? step3() : step1());
   box.innerHTML = html;
+  if (SB.rec && SB.rec.refresh) SB.rec.refresh();
   /* 3단계에는 그림(svg)이 절대 없어야 한다 */
   if (UI.step === 3) {
     var svgs = box.querySelectorAll("svg");
@@ -13004,7 +13232,42 @@ var WORDS = [
   ["love",      "사랑",     "I love my mom.",         "나는 엄마를 사랑해요."]
 ];
 
-var UI = { mode:"study", q:null, opts:[], msg:"", bad:{}, pool:[], locked:false, speakNext:false };
+var UI = { mode:"study", scope:"today", q:null, opts:[], msg:"", bad:{}, pool:[], locked:false, speakNext:false };
+
+/* ---------------- ⭐ 오늘의 15개 (날짜 시드 · Asia/Seoul 오늘) ----------------
+   같은 날에는 항상 같은 15개가 나오고, 날이 바뀌면 다른 15개로 바뀝니다. */
+var DAILY_N = 15;
+var DAILY = { date:"", list:[] };
+function daySeed(str){
+  var h = 2166136261, i;
+  for (i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = (h * 16777619) >>> 0; }
+  return h >>> 0;
+}
+function buildDaily(dateStr){
+  var idx = [], i, t;
+  for (i = 0; i < WORDS.length; i++) idx.push(i);
+  var seed = daySeed("wc|" + dateStr);
+  for (i = idx.length - 1; i > 0; i--){
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    var j = seed % (i + 1);
+    t = idx[i]; idx[i] = idx[j]; idx[j] = t;
+  }
+  return idx.slice(0, Math.min(DAILY_N, idx.length)).sort(function(a, b){ return a - b; });
+}
+function dailyList(){
+  var d = today();
+  if (DAILY.date !== d || !DAILY.list.length){ DAILY.date = d; DAILY.list = buildDaily(d); }
+  return DAILY.list;
+}
+function scopeList(){
+  if (UI.scope === "all"){ var out = []; for (var i = 0; i < WORDS.length; i++) out.push(i); return out; }
+  return dailyList();
+}
+function setScope(sc){
+  UI.scope = (sc === "all") ? "all" : "today";
+  UI.pool = []; UI.q = null;
+  renderAll();
+}
 
 function today(){
   if (SB.today) { try { return SB.today(); } catch(e){} }
@@ -13043,9 +13306,18 @@ function cardHTML(w){
 }
 function renderStudy(){
   var body = $("wcgBody"); if (!body) return;
-  body.innerHTML = '<div class="wcg-grid" id="wcgGrid">' + WORDS.map(cardHTML).join("") + '</div>';
-  var p = $("wcgProg"); if (p) p.textContent = WORDS.length + "개 단어";
-  var s = $("wcgSub"); if (s) s.textContent = "그림 → 단어 → 문장 순서로 배워요";
+  var all = UI.scope === "all";
+  var ids = scopeList();
+  var bar = '<div class="wcg-listbar">'
+    + '<span class="wcg-badge" id="wcgBadge">' + (all ? "📚 전체 " + WORDS.length + "개" : "⭐ 오늘의 단어 " + ids.length + "개") + '</span>'
+    + '<span class="wcg-date">' + today() + '</span>'
+    + '<button class="wcg-scope" type="button" data-scope="' + (all ? "today" : "all") + '">'
+    + (all ? "⭐ 오늘 " + DAILY_N + "개만 보기" : "전체 " + WORDS.length + "개 보기") + '</button>'
+    + '</div>';
+  body.innerHTML = bar + '<div class="wcg-grid" id="wcgGrid">'
+    + ids.map(function(i){ return cardHTML(WORDS[i]); }).join("") + '</div>';
+  var p = $("wcgProg"); if (p) p.textContent = all ? "전체 " + WORDS.length + "개" : "오늘 " + ids.length + "개";
+  var s = $("wcgSub"); if (s) s.textContent = all ? "전체 단어 복습" : "오늘의 15개 · 그림 → 단어 → 문장";
 }
 
 /* ---------------- 🎮 단어 게임 ---------------- */
@@ -13058,13 +13330,16 @@ function shuffle(a){
   return a;
 }
 function pickQ(){
+  var set = scopeList();
   if (!UI.pool || !UI.pool.length) {
-    UI.pool = shuffle(WORDS.map(function(_, i){ return i; }));
+    UI.pool = shuffle(set);
   }
   var idx = UI.pool.pop();
+  if (idx == null || set.indexOf(idx) < 0) idx = set[Math.floor(Math.random() * set.length)];
   var pool = [];
   for (var i = 0; i < WORDS.length; i++) if (i !== idx) pool.push(i);
-  var others = shuffle(pool).slice(0, 2);
+  var inner = pool.filter(function(k){ return set.indexOf(k) >= 0; });
+  var others = shuffle(inner.length >= 2 ? inner : pool).slice(0, 2);
   UI.q = idx;
   UI.msg = "";
   UI.bad = {};
@@ -13143,6 +13418,8 @@ function bind(){
     body.addEventListener("click", function(e){
       var el = e.target;
       if (!el || !el.closest) return;
+      var sc = el.closest("[data-scope]");
+      if (sc) { setScope(sc.getAttribute("data-scope")); return; }
       var s = el.closest("[data-say]");
       if (s) { say(s.getAttribute("data-say")); return; }
       var act = el.closest("[data-act]");
@@ -13162,6 +13439,13 @@ function bind(){
 }
 SB.renderWordCards = function(){ bind(); renderAll(); };
 SB.wordCardWords = WORDS;
+/* 검증용: 오늘의 15개 목록과 화면 범위 */
+SB.wordCardDaily = function(){
+  var list = dailyList();
+  return { date:today(), count:list.length, total:WORDS.length, scope:UI.scope,
+           words:list.map(function(i){ return WORDS[i][0]; }) };
+};
+SB.wordCardScope = function(s){ if (s) setScope(s); return UI.scope; };
 /* 검증·디버그용: 지금 문제와 보기(정답은 opts 중 word) */
 SB.wordCardQuiz = function(){
   return UI.q == null ? null : { word:WORDS[UI.q][0], opts:UI.opts.slice(), solved:solvedCount() };
