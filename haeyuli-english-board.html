@@ -1775,8 +1775,29 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 /* =====================================================================
    📞 전화 영어 — 통화 화면(타이머·아바타) + 대화 기록(자막·빠른 말풍선)
    ===================================================================== */
-.callview{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.28fr);grid-template-rows:auto minmax(0,1fr);gap:1vh;height:100%;min-height:0;}
+.callview{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.28fr);grid-template-rows:auto auto minmax(0,1fr);gap:1vh;height:100%;min-height:0;}
 .callview[hidden]{display:none !important;}
+
+/* ---------------- 🎚️ 레벨 1 · 레벨 2 선택 ---------------- */
+.call-level{grid-column:1 / -1;display:flex;align-items:center;gap:.6vh;flex-wrap:wrap;
+  padding:.45vh 1vh;border-radius:1.3vh;background:rgba(255,255,255,.92);
+  box-shadow:inset 0 0 0 .16vh #deeaf3,0 .3vh .9vh rgba(60,110,150,.08);}
+.call-level .lv-k{flex:0 0 auto;font-size:1.02vh;font-weight:900;color:#7d94a6;letter-spacing:.01em;white-space:nowrap;}
+.lv-chip{flex:0 0 auto;display:flex;align-items:center;gap:.45vh;height:3.1vh;padding:0 1.05vh;border-radius:999px;
+  background:#f3f9fd;color:#547891;box-shadow:inset 0 0 0 .16vh #dbe9f3;white-space:nowrap;transition:transform .12s;}
+.lv-chip:active{transform:scale(.97);}
+.lv-chip b{font-size:1.12vh;font-weight:900;letter-spacing:-.01em;}
+.lv-chip span{font-size:.96vh;font-weight:800;color:#93a9ba;}
+.lv-chip.on{background:linear-gradient(135deg,#d7f2ff,#a2ddff);color:#0b5b7d;
+  box-shadow:inset 0 0 0 .18vh #7cc9ee,0 .3vh .8vh rgba(40,140,190,.16);}
+.lv-chip.on span{color:#0d6f9e;}
+.lv-chip[data-lv="2"].on{background:linear-gradient(135deg,#ffe9b8,#ffcf5c);color:#6a4300;
+  box-shadow:inset 0 0 0 .18vh #e8b93c,0 .3vh .8vh rgba(220,160,40,.2);}
+.lv-chip[data-lv="2"].on span{color:#8a6a1c;}
+.call-level .lv-note{margin-left:auto;font-size:.98vh;font-weight:800;color:#93a9ba;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;min-width:0;}
+.call-level .ce-lv,.ct-empty .ce-lv{margin-top:.3vh;padding:.28vh .9vh;border-radius:999px;background:#eef8ff;
+  box-shadow:inset 0 0 0 .16vh #cfe8f7;font-size:1.02vh;font-weight:900;color:#2f6a8c;}
 
 /* ---------------- 📅 오늘의 전화 영어 주제 배너 ---------------- */
 .call-topic{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:.5vh 1.1vh;
@@ -1954,6 +1975,13 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
   .ctp-tip{flex:1 1 100%;max-width:none;margin-left:0;padding:.35rem 0 0;border-left:0;
     border-top:.08rem dashed #ecd79f;font-size:.72rem;}
   .ct-empty .ce-topic{font-size:.8rem;}
+  .call-level{gap:.4rem;padding:.4rem .55rem;border-radius:.9rem;}
+  .call-level .lv-k{font-size:.68rem;}
+  .lv-chip{height:2.2rem;padding:0 .7rem;}
+  .lv-chip b{font-size:.78rem;}
+  .lv-chip span{font-size:.68rem;}
+  .call-level .lv-note{margin-left:0;flex:1 0 100%;font-size:.68rem;}
+  .ct-empty .ce-lv{font-size:.74rem;}
   .call-phone{min-height:21rem;padding:1.1rem 1rem 1.4rem;border-radius:1.4rem;gap:1rem;}
   .cp-avatar{width:8.6rem;}
   .cp-name b{font-size:1.25rem;}
@@ -5074,6 +5102,14 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
           <div class="ctp-line"><b class="ctp-t" id="ctpTitle">좋아하는 동물</b><span class="ctp-en" id="ctpEn">What animal do you like?</span></div>
         </div>
         <div class="ctp-tip" id="ctpTip">'I like dogs!'처럼 좋아하는 동물을 말해 봐요</div>
+      </div>
+
+      <!-- 🎚️ 레벨 1(단답형) · 레벨 2(두세 마디 대화) 선택 -->
+      <div class="call-level" id="callLevel" data-lv="1" role="group" aria-label="전화 영어 레벨 선택">
+        <span class="lv-k">🎚️ 레벨</span>
+        <button class="lv-chip on" type="button" data-lv="1" aria-pressed="true"><b>🌱 레벨 1</b><span>단답형 · 한 마디</span></button>
+        <button class="lv-chip" type="button" data-lv="2" aria-pressed="false"><b>💬 레벨 2</b><span>두세 마디 대화</span></button>
+        <span class="lv-note" id="lvNote">짧은 질문 → 한 마디로 대답해요</span>
       </div>
 
       <!-- 왼쪽: 진짜 전화처럼 생긴 통화 화면 -->
@@ -10888,8 +10924,12 @@ function writeJSON(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); retu
    1. 전화 영어 시나리오 (7~8세 눈높이 · 짧은 질문 · 바로 쓸 수 있는 대답)
      · 인사는 늘 첫 질문, 그 다음 질문은 '오늘의 주제'
    --------------------------------------------------------------------- */
-var GREETING = { q:"Hello? This is Emma. How are you today?",
+var GREETING = { id:"greeting", q:"Hello? This is Emma. How are you today?",
                  ko:"여보세요? 나는 엠마 선생님이야. 오늘 기분 어때?",
+                 l2en:"Hello? This is Emma, your English teacher, and I am so happy to call you!",
+                 l2ko:"여보세요? 나는 엠마 영어 선생님이고, 네게 전화해서 정말 기뻐!",
+                 q2:"How are you today?",
+                 ko2:"오늘 기분 어때?",
                  quick:[["I'm good!", "좋아!"], ["I'm happy!", "행복해!"], ["I'm sleepy!", "졸려!"]] };
 
 /* 📅 오늘의 전화 영어 주제 — 날짜로 하루에 하나씩 돌아가는 8가지 (7~8세 눈높이) */
@@ -10945,16 +10985,126 @@ function rebuildScript(){
   return SCRIPT;
 }
 rebuildScript();
-var CLOSE = { q:"Goodbye, Haeyul! You did great. See you next time!",
+var CLOSE = { id:"close", q:"Goodbye, Haeyul! You did great. See you next time!",
               ko:"안녕, 해율아! 정말 잘했어. 다음에 또 전화하자!" };
 var PRAISE = ["Good job!", "Nice!", "Great!", "Wonderful!", "Well done!", "Perfect!"];
+
+/* ---------------------------------------------------------------------
+   1-b. 💬 레벨 2(두세 마디 대화)용 문장
+     · L2_REACT : 해율이 대답에 대한 칭찬·리액션 한 문장
+     · L2_CHAT  : 그 주제에 대해 한 마디 더 해 주는 관련 이야기 한 문장
+     · L2_QUICK : 두세 마디로 길게 말하는 추천 답변 (레벨 2 말풍선)
+   --------------------------------------------------------------------- */
+var L2_REACT = [["Wow, great answer!", "와, 정말 멋진 대답이야!"],
+                ["That is wonderful!", "정말 멋져!"],
+                ["Oh, I like that too!", "오, 나도 그거 좋아해!"],
+                ["Really? How nice!", "정말? 참 좋다!"],
+                ["Thank you for telling me!", "이야기해 줘서 고마워!"],
+                ["You spoke so well!", "아주 잘 말했어!"]];
+var L2_CHAT = {
+  greeting:{ en:"We can talk about many fun things today.", ko:"오늘은 재미있는 이야기를 많이 할 수 있어." },
+  animal:{ en:"Animals are our good friends.", ko:"동물은 우리의 좋은 친구야." },
+  color:{ en:"Colors make our world beautiful.", ko:"색깔은 우리 세상을 예쁘게 만들어." },
+  food:{ en:"Yummy food makes us happy.", ko:"맛있는 음식은 우리를 행복하게 해." },
+  family:{ en:"Families love each other so much.", ko:"가족은 서로 정말 많이 사랑해." },
+  toy:{ en:"Playing outside is so much fun.", ko:"밖에서 노는 건 정말 재미있어." },
+  number:{ en:"Numbers are fun to count.", ko:"숫자는 세는 게 재미있어." },
+  school:{ en:"School is where we meet our friends.", ko:"학교는 친구를 만나는 곳이야." },
+  birthday:{ en:"Birthdays are happy days with cake.", ko:"생일은 케이크를 먹는 행복한 날이야." },
+  close:{ en:"I will call you again soon.", ko:"조만간 또 전화할게." }
+};
+var L2_QUICK = {
+  greeting:[["I'm good, thank you!", "좋아, 고마워!"], ["I'm happy today!", "오늘 행복해!"], ["I'm a little sleepy.", "조금 졸려."]],
+  animal:[["I like dogs. They are cute!", "강아지 좋아! 강아지는 귀여워!"],
+          ["I like cats. They are soft!", "고양이 좋아! 고양이는 부드러워!"],
+          ["I like rabbits. They can jump!", "토끼 좋아! 토끼는 잘 뛰어!"]],
+  color:[["I like blue. My bag is blue!", "파란색 좋아! 내 가방이 파란색이야!"],
+         ["I like yellow. It is like the sun!", "노란색 좋아! 해 같아!"],
+         ["I like pink. My shoes are pink!", "분홍색 좋아! 내 신발이 분홍색이야!"]],
+  food:[["I like pizza. It is so yummy!", "피자 좋아! 정말 맛있어!"],
+        ["I like kimchi. It is a little spicy!", "김치 좋아! 조금 매워!"],
+        ["I like ice cream. It is cold and sweet!", "아이스크림 좋아! 차갑고 달아!"]],
+  family:[["There are four people. Mom, dad and me!", "네 명이야. 엄마, 아빠, 나!"],
+          ["I have a little brother. He is funny!", "남동생 있어! 웃겨!"],
+          ["We are three people. We live with grandma!", "세 명이야. 할머니랑 살아!"]],
+  toy:[["I like to run. I am very fast!", "달리기 좋아! 나는 아주 빨라!"],
+       ["I like ball games. I play with dad!", "공놀이 좋아! 아빠랑 해!"],
+       ["I like drawing. I draw animals!", "그림 그리기 좋아! 동물을 그려!"]],
+  number:[["I am seven. I go to school!", "일곱 살이야! 학교 다녀!"],
+          ["I am seven years old. I am tall!", "일곱 살이야! 키가 커!"],
+          ["I am seven. I like math!", "일곱 살이야! 수학 좋아!"]],
+  school:[["Yes, I do. I like my friends!", "응, 좋아! 친구들이 좋아!"],
+          ["Yes! I like music class.", "응! 음악 시간이 좋아."],
+          ["No, I don't. I like home better.", "아니, 집이 더 좋아."]],
+  birthday:[["It's in May. I eat cake!", "5월이야! 케이크 먹어!"],
+            ["It's in April. I get presents!", "4월이야! 선물 받아!"],
+            ["It's in winter. It is cold!", "겨울이야! 추워!"]],
+  close:[]
+};
+function chatOf(step){ return (step && L2_CHAT[step.id]) || null; }
+function quickOf(step, lv){ return (lv >= 2 && step && L2_QUICK[step.id]) ? L2_QUICK[step.id] : (step ? step.quick : []); }
+/* 레벨 1 = 질문 한 마디 / 레벨 2 = 이야기 한 마디 + 질문 */
+function scriptSay(s, lv){
+  if (!s) return { en:"", ko:"" };
+  if (lv >= 2 && s.l2en) return { en: s.l2en + " " + (s.q2 || s.q), ko: (s.l2ko ? s.l2ko + " " : "") + (s.ko2 || s.ko) };
+  return { en: s.q, ko: s.ko };
+}
+/* 레벨 2의 내장(폴백) 응답 — 칭찬 한 문장 + 관련 이야기 한 문장 + 다음 질문 한 문장 */
+function builtinLine(step, next, lv){
+  var tgt = next || CLOSE;
+  if (lv >= 2) {
+    var react = L2_REACT[(C.turns - 1) % L2_REACT.length];
+    var chat = chatOf(step);
+    return { en: react[0] + " " + (chat ? chat.en + " " : "") + tgt.q,
+             ko: react[1] + " " + (chat ? chat.ko + " " : "") + tgt.ko };
+  }
+  var praise = PRAISE[(C.turns - 1) % PRAISE.length];
+  return { en: praise + " " + tgt.q, ko: tgt.ko };
+}
+
+/* ---------------------------------------------------------------------
+   1-c. 🎚️ 레벨 1(단답형) · 레벨 2(두세 마디 대화) 선택 — localStorage 저장
+   --------------------------------------------------------------------- */
+var LKEY = "haeyuli.call.level";
+var LEVEL_NAME = { 1:"🌱 레벨 1 · 단답형", 2:"💬 레벨 2 · 두세 마디 대화" };
+var LEVEL_NOTE = { 1:"짧은 질문 → 한 마디로 대답해요",
+                   2:"칭찬 + 이야기 + 질문 · 두세 마디씩 주고받아요" };
+function readLevel(){ try { return (parseInt(localStorage.getItem(LKEY), 10) === 2) ? 2 : 1; } catch(e){ return 1; } }
+function level(){ return (C.level === 2) ? 2 : 1; }
+function paintLevel(){
+  var lv = level();
+  var box = $("callLevel"); if (box) box.setAttribute("data-lv", lv);
+  var v = $("viewEnCall"); if (v) v.setAttribute("data-lv", lv);
+  var chips = document.querySelectorAll("#callLevel .lv-chip");
+  for (var i = 0; i < chips.length; i++) {
+    var on = (parseInt(chips[i].getAttribute("data-lv"), 10) === lv);
+    chips[i].classList.toggle("on", on);
+    chips[i].setAttribute("aria-pressed", on ? "true" : "false");
+  }
+  var nt = $("lvNote"); if (nt) nt.textContent = LEVEL_NOTE[lv];
+  var e = $("callEmptyLv"); if (e) e.textContent = "지금은 " + LEVEL_NAME[lv] + " 모드예요";
+  return lv;
+}
+function setLevel(n){
+  var lv = (parseInt(n, 10) === 2) ? 2 : 1;
+  if (C.level === lv) { paintLevel(); return lv; }
+  C.level = lv;
+  writeJSON(LKEY, lv);
+  paintLevel();
+  if (C.phase === "live" && C.quickIdx != null && SCRIPT[C.quickIdx]) {
+    renderQuick(quickOf(SCRIPT[C.quickIdx], lv));
+  }
+  try { SB.toast(lv === 2 ? "💬 레벨 2 · 두세 마디 대화로 바꿨어요" : "🌱 레벨 1 · 단답형으로 바꿨어요"); } catch(e){}
+  return lv;
+}
 
 /* ---------------------------------------------------------------------
    2. 상태
    --------------------------------------------------------------------- */
 var KEY = "haeyuli.call.v1";
 var C = { phase:"idle", step:0, turns:0, sec:0, timer:null, slow:false, ko:true,
-          last:null, lastChild:"", lines:[] };
+          last:null, lastChild:"", lines:[], level:1, quickIdx:null };
+C.level = readLevel();
 
 function store(){
   var s = readJSON(KEY, {});
@@ -10987,6 +11137,7 @@ function clearLog(){
     + '<div class="ce-h">아직 통화가 없어요</div>'
     + '<div class="ce-s">📞 통화 시작을 누르면 Emma 선생님이 영어로 전화를 걸어요</div>'
     + '<div class="ce-topic" id="callEmptyTopic">오늘은 <b>' + esc(t.em) + ' ' + esc(t.nm) + '</b> 이야기 해요 · ' + esc(t.q) + '</div>'
+    + '<div class="ce-lv" id="callEmptyLv">지금은 ' + LEVEL_NAME[level()] + ' 모드예요</div>'
     + '<div class="ct-steps"><span><b>1</b> 선생님이 영어로 질문해요</span><span><b>2</b> 🎙️ 말하기·말풍선·입력으로 대답해요</span><span><b>3</b> 칭찬과 다음 질문이 바로 이어져요</span></div>';
   b.appendChild(em);
 }
@@ -11099,8 +11250,10 @@ function startCall(){
 
 function ask(i){
   var s = SCRIPT[i] || CLOSE;
-  teacherSay(s.q, s.ko);
-  renderQuick(s.quick);
+  var say = scriptSay(s, level());
+  teacherSay(say.en, say.ko);
+  C.quickIdx = i;
+  renderQuick(quickOf(s, level()));
   if (i >= SCRIPT.length) { var en = $("callEnd"); if (en) en.classList.add("beat"); }
 }
 
@@ -11116,22 +11269,23 @@ function answer(text, src){
   var step = SCRIPT[Math.min(C.step, SCRIPT.length - 1)];
   var next = SCRIPT[C.step + 1] || null;
   C.step++;
-  var praise = PRAISE[(C.turns - 1) % PRAISE.length];
-  var builtin = praise + " " + (next ? next.q : CLOSE.q);
-  var builtinKo = next ? next.ko : CLOSE.ko;
+  var lv = level();
+  var fb = builtinLine(step, next, lv);
+  var builtin = fb.en, builtinKo = fb.ko;
+  C.quickIdx = next ? C.step : null;
   if (aiReady()) {
     var row = addLine("t", "…", "선생님이 대답을 듣고 있어요", { typing:true });
     aiReply(text, step, next).then(function(r){
       removeRow(row);
       if (r && r.say) teacherSay(r.say, r.ko || builtinKo);
       else teacherSay(builtin, builtinKo);
-      renderQuick(next ? next.quick : []);
+      renderQuick(next ? quickOf(next, level()) : []);
       if (!next) { var b = $("callEnd"); if (b) b.classList.add("beat"); }
     });
   } else {
     setTimeout(function(){
       teacherSay(builtin, builtinKo);
-      renderQuick(next ? next.quick : []);
+      renderQuick(next ? quickOf(next, level()) : []);
       if (!next) { var b = $("callEnd"); if (b) b.classList.add("beat"); }
     }, 300);
   }
@@ -11186,28 +11340,34 @@ function tailEN(n){
   return C.lines.slice(-n).map(function(l){ return (l.who === "t" ? "Emma" : "Haeyul") + ": " + l.en; }).join("\n") || "(just started)";
 }
 function aiReply(text, step, next){
-  var tp = todayTopic();
+  var tp = todayTopic(), lv = level(), long = (lv >= 2);
   var sys = "You are Emma, a warm English teacher on a phone call with Haeyul, a 7-8 year old Korean child learning basic English. "
-    + "Speak in ONE or TWO very short sentences, at most 12 words in total, using only very easy elementary English words. "
-    + "First give a tiny happy reaction (1-3 words), then ask exactly ONE simple question with 3-6 words. "
+    + (long
+      ? "Speak in TWO or THREE very short sentences, at most 28 words in total, using only very easy elementary English words. "
+        + "First give a happy reaction to her answer (one short sentence), then say one short related fact or feeling about the topic (one sentence), "
+        + "then ask exactly ONE easy question with 3-7 words. Keep it warm and natural, like a friendly teacher chatting. "
+      : "Speak in ONE or TWO very short sentences, at most 12 words in total, using only very easy elementary English words. "
+        + "First give a tiny happy reaction (1-3 words), then ask exactly ONE simple question with 3-6 words. ")
     + "No long sentences, no difficult words, no idioms, no markdown. "
     + "Today's phone lesson topic is " + tp.q + " (Korean: " + tp.nm + "). Keep asking about today's topic first; "
     + "only change the topic if Haeyul wants to talk about something else. "
-    + "Return ONLY minified JSON with keys: say (English, max 12 words), ko (Korean meaning of say).";
+    + "Return ONLY minified JSON with keys: say (English, max " + (long ? 28 : 12) + " words), ko (Korean meaning of say).";
   var user = "Phone lesson so far:\n" + tailEN(8)
+    + "\nLevel: " + (long ? "level 2 (reaction + one short related idea + one easy question, 2-3 sentences)"
+                            : "level 1 (very short: tiny reaction + one easy question)")
     + "\nToday's topic (ask about this first): " + tp.q + " / " + tp.nm
     + "\nEmma just asked: " + step.q
     + "\nHaeyul answered: " + text
     + (next ? "\nEasy next topic: " + next.q : "");
-  return Promise.resolve(E.aiJSON(sys, user, 160)).then(function(raw){
+  return Promise.resolve(E.aiJSON(sys, user, long ? 240 : 160)).then(function(raw){
     var s = String(raw || "").trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
     var o = null;
     try { o = JSON.parse(s); } catch(e){ var m = s.match(/\{[\s\S]*\}/); if (m) { try { o = JSON.parse(m[0]); } catch(e2){} } }
     if (!o || !o.say) return null;
     var say = String(o.say).replace(/\s+/g, " ").trim();
     if (!say) return null;
-    if (say.split(/\s+/).length > 16) return null;   /* 너무 길면 내장 문장으로 */
-    return { say: say.slice(0, 120), ko: String(o.ko || "").slice(0, 140) };
+    if (say.split(/\s+/).length > (long ? 36 : 16)) return null;   /* 너무 길면 내장 문장으로 */
+    return { say: say.slice(0, long ? 220 : 120), ko: String(o.ko || "").slice(0, long ? 240 : 140) };
   }).catch(function(){ return null; });
 }
 
@@ -11298,6 +11458,11 @@ function bind(){
     if (C.last && C.last.en) SB.speak(C.last.en, C.slow);
     else SB.toast("먼저 📞 통화를 시작해 주세요!");
   });
+  var lvb = $("callLevel");
+  if (lvb) lvb.addEventListener("click", function(e){
+    var c = e.target && e.target.closest ? e.target.closest(".lv-chip") : null;
+    if (c) setLevel(c.getAttribute("data-lv"));
+  });
   var pk = $("pickleCall"); if (pk) pk.addEventListener("click", pickleCall);
   var pc = $("pickleHintClose"); if (pc) pc.addEventListener("click", hideHint);
   window.addEventListener("pagehide", hideHint);
@@ -11308,6 +11473,7 @@ function enter(){
   if (!inited) { bind(); inited = true; clearLog(); }
   rebuildScript();
   paintTopic();
+  paintLevel();
   setPhase(C.phase === "live" || C.phase === "ringing" ? C.phase : "idle");
   paintIdle();
   var t = $("callTimer"); if (t) t.textContent = fmt(C.sec);
@@ -11324,6 +11490,7 @@ SB.onShow.en = function(sub){
 
 SB.call = {
   enter: enter, start: startCall, end: endCall, answer: answer,
+  setLevel: setLevel, level: level, paintLevel: paintLevel,
   state: C, script: SCRIPT, fmt: fmt,
   topics: TOPICS, topicFor: topicFor, todayTopic: todayTopic, paintTopic: paintTopic,
   pickle: pickleCall, showHint: showHint, hideHint: hideHint
