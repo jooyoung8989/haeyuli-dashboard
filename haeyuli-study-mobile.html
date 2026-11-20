@@ -1996,13 +1996,27 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 .bk-star{filter:drop-shadow(0 1px 1px rgba(200,140,0,.35));}
 .bk-stack{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);width:66%;
   display:flex;flex-direction:column-reverse;align-items:center;gap:.24vh;max-height:72%;pointer-events:none;}
-.bk-b{pointer-events:auto;height:1.5vh;min-height:8px;border-radius:.45vh;cursor:pointer;
-  box-shadow:inset -.5vh 0 rgba(0,0,0,.16),inset 0 .18vh 0 rgba(255,255,255,.5),0 .16vh .4vh rgba(40,70,50,.22);
+.bk-b{pointer-events:auto;height:2.1vh;min-height:11px;border-radius:.5vh;cursor:pointer;
+  box-shadow:inset -.45vh 0 rgba(120,95,75,.11),inset 0 .16vh 0 rgba(255,255,255,.72),0 .16vh .38vh rgba(90,110,95,.16);
   transition:transform .14s,filter .14s;}
 .bk-b:hover,.bk-b:focus-visible{transform:translateY(-.25vh);filter:brightness(1.06);outline:none;}
 .bk-b.in{animation:bkdrop .46s cubic-bezier(.28,1.35,.5,1);}
 @keyframes bkdrop{0%{transform:translateY(-34vh) rotate(-6deg);opacity:.25}62%{transform:translateY(0) rotate(1deg);opacity:1}100%{transform:none}}
 .bk-more{font-size:1vh;font-weight:900;color:#6f8d7c;background:#ffffffcc;border-radius:999px;padding:.1vh .6vh;}
+/* 나무 그림 대신 — 바닥에 점선 책 윤곽 3단 가이드 */
+.bk-guide{position:absolute;left:50%;bottom:10%;transform:translateX(-50%);width:58%;
+  display:flex;flex-direction:column;align-items:center;gap:.5vh;pointer-events:none;z-index:1;}
+.bk-gslot{width:100%;height:3.2vh;border-radius:.55vh;border:.2vh dashed #a6c8b6;
+  background:rgba(255,255,255,.46);box-shadow:inset 0 0 0 .12vh rgba(255,255,255,.6);}
+.bk-gslot.s2{width:92%;height:3vh;background:rgba(255,255,255,.36);border-color:#b0cdbe;}
+.bk-gslot.s3{width:84%;height:3vh;background:rgba(255,255,255,.28);border-color:#bad4c6;}
+.bk-stack{z-index:2;bottom:10%;}
+.bk-guide::before{content:"";position:absolute;left:50%;bottom:-1.8vh;transform:translateX(-50%);
+  width:82%;height:10vh;border-radius:50%;z-index:-1;
+  background:radial-gradient(ellipse at center,rgba(190,222,203,.42),rgba(190,222,203,0) 72%);}
+.bk-gcap{position:absolute;left:50%;bottom:1.1%;transform:translateX(-50%);z-index:1;pointer-events:none;
+  padding:.18vh .85vh;border-radius:999px;border:.12vh dashed #b0cfbf;background:rgba(255,255,255,.8);
+  font-size:1.14vh;font-weight:900;color:#5a806d;letter-spacing:-.02em;white-space:nowrap;}
 .bk-empty{position:absolute;left:50%;bottom:28%;transform:translateX(-50%);width:80%;text-align:center;
   font-size:1.1vh;font-weight:900;color:#6f8d7c;line-height:1.5;background:rgba(255,255,255,.82);
   border-radius:1vh;padding:.5vh .7vh;}
@@ -2041,7 +2055,7 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 .bk-row::after{content:"";position:absolute;left:0;right:0;bottom:0;height:.8vh;border-radius:.4vh;
   background:linear-gradient(180deg,#dcbb92,#b98f5e);box-shadow:0 .28vh .55vh rgba(120,80,40,.2);}
 .bk-sb{display:block;position:relative;border-radius:.32vh .32vh 0 0;cursor:pointer;transform-origin:bottom center;
-  box-shadow:inset -.35vh 0 rgba(0,0,0,.14),0 .18vh .35vh rgba(80,60,30,.16);
+  box-shadow:inset -.35vh 0 rgba(120,95,75,.11),inset 0 .14vh 0 rgba(255,255,255,.55),0 .18vh .35vh rgba(80,60,30,.13);
   transition:transform .18s ease,filter .18s;}
 .bk-sb::before{content:"";position:absolute;left:.35vh;right:.5vh;top:14%;height:.22vh;border-radius:1vh;
   background:rgba(255,255,255,.6);}
@@ -2093,18 +2107,21 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 .bks-best span{font-size:.82vh;font-weight:900;color:#c1863a;line-height:1.2;}
 .bks-best b{font-size:1.45vh;font-weight:900;color:#b25c00;line-height:1.1;}
 .bks-badges{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.45vh;}
+/* 배지 — 미달성도 또렷하게(연한 크림 바탕 + 진한 갈색 글씨), 달성은 금빛 바탕 + 초록 체크 */
 .bks-b{display:flex;align-items:center;justify-content:center;gap:.3vh;height:4.7vh;border-radius:1vh;
-  background:rgba(255,255,255,.2);box-shadow:inset 0 0 0 .14vh rgba(255,255,255,.36);
-  color:#fff6e6;white-space:nowrap;overflow:hidden;}
-.bks-b i{font-style:normal;font-size:1.15vh;font-weight:900;opacity:.34;line-height:1;}
-.bks-b b{font-size:1.06vh;font-weight:900;letter-spacing:-.02em;}
-.bks-b.on{background:#fff;color:#c05f00;box-shadow:0 .28vh .8vh rgba(150,80,0,.22);}
-.bks-b.on i{opacity:1;color:#39b978;font-size:1.25vh;}
+  background:rgba(255,248,232,.82);box-shadow:inset 0 0 0 .14vh rgba(255,255,255,.75),0 .12vh .35vh rgba(150,80,0,.14);
+  color:#8a4a05;white-space:nowrap;overflow:hidden;}
+.bks-b i{font-style:normal;font-size:1.15vh;font-weight:900;opacity:.42;color:#b5762a;line-height:1;}
+.bks-b b{font-size:1.08vh;font-weight:900;letter-spacing:-.02em;color:#7d3f00;}
+.bks-b.on{background:linear-gradient(160deg,#fffdf6,#ffe6a8);color:#a45400;
+  box-shadow:0 .28vh .8vh rgba(150,80,0,.24),inset 0 0 0 .16vh #ffcf63;}
+.bks-b.on i{opacity:1;color:#23a35c;font-size:1.3vh;}
+.bks-b.on b{color:#8f4a00;}
 /* 배지에 보상 금액까지 — 두 줄(3일 달성 / +200원) */
 .bks-b{position:relative;flex-direction:column;justify-content:center;gap:.06vh;line-height:1.05;overflow:visible;}
 .bks-b i{position:absolute;top:.3vh;right:.45vh;font-size:.92vh;line-height:1;}
-.bks-b em{font-style:normal;font-size:.88vh;font-weight:900;letter-spacing:-.02em;opacity:.82;line-height:1;}
-.bks-b.on em{opacity:1;color:#c05f00;}
+.bks-b em{font-style:normal;font-size:.92vh;font-weight:900;letter-spacing:-.02em;color:#9a5510;line-height:1;}
+.bks-b.on em{color:#b45c00;}
 
 .bk-week{display:flex;flex-direction:column;gap:.45vh;border-radius:1.8vh;padding:.9vh 1.15vh;min-width:0;
   background:#fff;box-shadow:inset 0 0 0 .2vh #e4eef7,0 .3vh .9vh rgba(60,110,150,.08);overflow:hidden;}
@@ -5769,7 +5786,16 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
         <div class="pg-card pg-logcard">
           <div class="pg-ch"><b>📒 용돈 기입장</b><span id="pgMonthSum">이번 달 0원</span></div>
           <div class="pg-months" id="pgMonths" role="tablist" aria-label="월 고르기"></div>
-          <ul class="pg-log pg-ledger" id="pgLedger"></ul>
+          <div class="pg-cal">
+            <div class="pg-cal-head"><b id="pgCalTitle">이번 달</b>
+              <span class="pg-cal-legend"><i class="in">+ 받은 돈</i><i class="out">− 쓴 돈</i></span></div>
+            <div class="pg-cal-week" aria-hidden="true"><span class="sun">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span class="sat">토</span></div>
+            <div class="pg-cal-grid" id="pgCalGrid" role="grid" aria-label="날짜별 용돈 달력"></div>
+          </div>
+          <div class="pg-day">
+            <div class="pg-day-head"><b id="pgDayTitle">상세 내역</b><span id="pgDaySum"></span></div>
+            <ul class="pg-log pg-ledger" id="pgLedger"></ul>
+          </div>
         </div>
       </aside>
     </section>
@@ -5969,15 +5995,12 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
       <div class="bk-panel">
         <div class="bk-h"><b>📚 나의 책나무</b><span class="bk-today" id="bkToday">오늘 0권</span></div>
         <div class="bk-stage" id="bkStage">
-          <svg class="bk-art" viewBox="0 0 240 260" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
-            <ellipse cx="120" cy="250" rx="88" ry="9" fill="#cfe9c8" opacity=".85"/>
-            <path d="M118 250 C116 212 114 182 112 158 C110 134 108 112 104 96" stroke="#b07b4e" stroke-width="11" fill="none" stroke-linecap="round"/>
-            <path d="M124 250 C126 214 130 186 138 164 C146 140 154 118 164 102" stroke="#c08a5a" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <path d="M112 178 C100 170 90 160 84 148" stroke="#b07b4e" stroke-width="6" fill="none" stroke-linecap="round"/>
-            <path d="M136 168 C148 160 158 148 164 136" stroke="#c08a5a" stroke-width="5" fill="none" stroke-linecap="round"/>
-            <g id="bkLeaves"></g>
-            <g id="bkStars"></g>
-          </svg>
+          <div class="bk-guide" aria-hidden="true">
+            <span class="bk-gslot s3"></span>
+            <span class="bk-gslot s2"></span>
+            <span class="bk-gslot s1"></span>
+          </div>
+          <div class="bk-gcap">📚 여기에 책을 쌓아요</div>
           <div class="bk-stack" id="bkStack" aria-label="쌓은 책"></div>
           <div class="bk-pop" id="bkPop" hidden>
             <div class="bk-pop-t" id="bkPopTitle"></div>
@@ -14534,7 +14557,18 @@ function esc(s){
 }
 function pad2(n){ return n < 10 ? "0" + n : "" + n; }
 var KEY = "study.books.v1";
-var COLORS = ["#ff8f6b","#ffc95c","#7ed0a0","#6bb7ef","#b79bff","#f78fb3","#5fd0d0","#ffa94d","#9dd36b","#7f9cf5"];
+/* 파스텔 책 색 — 피치 · 버터 · 민트 · 스카이 · 라벤더 · 블러시 · 아쿠아 · 살구 · 세이지 · 라일락 */
+var COLORS = ["#ffd2be","#ffeaa7","#c0e8d2","#b7dcf1","#d3c9f0","#f9c7d7","#c1e6e0","#ffdcb6","#ccdcb4","#e2d5f2"];
+/* 예전에 저장된 원색 책도 파스텔로 보이게 */
+var PALE_MAP = {"#ff8f6b":"#ffd2be","#ffc95c":"#ffeaa7","#7ed0a0":"#c0e8d2","#6bb7ef":"#b7dcf1","#b79bff":"#d3c9f0",
+                "#f78fb3":"#f9c7d7","#5fd0d0":"#c1e6e0","#ffa94d":"#ffdcb6","#9dd36b":"#ccdcb4","#7f9cf5":"#e2d5f2"};
+function pale(c){
+  var k = String(c || "").toLowerCase(), h = 0, i;
+  if (PALE_MAP[k]) return PALE_MAP[k];
+  if (COLORS.indexOf(k) >= 0) return k;
+  for (i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) % 997;
+  return COLORS[h % COLORS.length];
+}
 var LEAF = [[102,88],[90,78],[78,92],[112,72],[124,62],[140,74],[154,86],[166,98],[176,112],[86,112],[150,108],[120,46],[132,88],[96,104],[162,126],[70,104]];
 var STAR = [[82,64],[160,66],[120,36],[62,92],[184,96]];
 var LEAF_COLORS = ["#7ed0a0","#9dd36b","#6fc9a0","#b6e07a","#5fbf8f","#8fdcae"];
@@ -14606,7 +14640,7 @@ function buildShelf(){
       var ht = 58 + ((n * 17) % 34);              /* 58 ~ 91% */
       var wc = "w" + (1 + (n % 3));
       h += '<span class="bk-sb ' + wc + '" data-i="' + n + '" tabindex="0" role="button" aria-label="책장에서 책 꺼내기"'
-         + ' style="height:' + ht + '%;background:linear-gradient(180deg,' + c + ' 0%,' + c + ' 72%,rgba(0,0,0,.12) 100%)"></span>';
+         + ' style="height:' + ht + '%;background:linear-gradient(180deg,' + c + ' 0%,' + c + ' 72%,rgba(120,100,80,.14) 100%)"></span>';
     }
     h += "</div>";
   }
@@ -14625,18 +14659,12 @@ function render(justAdded){
   var h = shown.map(function(b, i){
     var w = 42 + ((i * 5) % 4) * 8;               /* 42 ~ 66% */
     return '<span class="bk-b" data-id="' + esc(b.id) + '" tabindex="0" role="button" title="' + esc(b.title) + '"'
-         + ' style="width:' + w + '%;background:' + (b.color || COLORS[i % COLORS.length]) + '"></span>';
+         + ' style="width:' + w + '%;background:' + pale(b.color || COLORS[i % COLORS.length]) + '"></span>';
   }).join("");
   if (list.length > shown.length) h += '<span class="bk-more">+' + (list.length - shown.length) + "권</span>";
   stack.innerHTML = h;
   var olds = stack.parentNode.querySelectorAll(".bk-empty");
   for (var k = 0; k < olds.length; k++) olds[k].parentNode.removeChild(olds[k]);
-  if (!list.length) {
-    var e = document.createElement("div");
-    e.className = "bk-empty";
-    e.textContent = "아직 나무에 쌓은 책이 없어요 🌱 책장에서 책을 골라 보세요!";
-    stack.parentNode.appendChild(e);
-  }
   if (justAdded) {
     var bars = stack.querySelectorAll(".bk-b");
     if (bars.length) bars[bars.length - 1].classList.add("in");
@@ -16404,8 +16432,48 @@ function paintFill(){
   }
 }
 
-/* ── 📒 월별 기입장 ── */
+/* ── 📒 월별 기입장 — 달력 + 고른 날 상세 ── */
+var DAYS = ["일", "월", "화", "수", "목", "금", "토"];
+var SEL = "";                     /* 고른 날 YYYY-MM-DD */
 function monthKey(){ return MONTH || thisMonth(); }
+function dayOf(at){ return String(at || "").slice(0, 10); }
+function nf(n){ return (Number(n) || 0).toLocaleString("ko-KR"); }
+function monthRows(key){
+  var log = money().log || [], out = [], i;
+  for (i = 0; i < log.length; i++) if (monthOf(log[i].at) === key) out.push(log[i]);
+  return out;
+}
+function sumOf(rows){
+  var inc = 0, exp = 0, i, n;
+  for (i = 0; i < rows.length; i++){
+    n = Number(rows[i].amt) || 0;
+    if (n > 0) inc += n; else exp += Math.abs(n);
+  }
+  return { inc:inc, exp:exp, n:rows.length };
+}
+function dayDate(ds){ var p = String(ds).split("-"); return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])); }
+function dayLabel(ds){
+  var d = dayDate(ds);
+  return (d.getMonth() + 1) + "월 " + d.getDate() + "일 (" + DAYS[d.getDay()] + ")";
+}
+function clockOf(at){
+  var s = String(at || ""), hm = s.length > 11 ? s.slice(11, 16) : "", p, h;
+  if (!hm) return "";
+  p = hm.split(":"); h = Number(p[0]) || 0;
+  return (h < 12 ? "오전 " : "오후 ") + (h % 12 === 0 ? 12 : (h % 12)) + ":" + (p[1] || "00");
+}
+/* 그 달에서 처음 고를 날 — 오늘에 기록이 있으면 오늘, 없으면 가장 최근 기록일 */
+function pickDay(key){
+  var rows = monthRows(key), tk = today(), best = "", hasToday = false, i, d;
+  for (i = 0; i < rows.length; i++){
+    d = dayOf(rows[i].at);
+    if (d > best) best = d;
+    if (d === tk) hasToday = true;
+  }
+  if (key === thisMonth() && hasToday) return tk;
+  if (best) return best;
+  return key === thisMonth() ? tk : key + "-01";
+}
 function renderMonths(){
   var box = $("pgMonths"); if (!box) return;
   var log = money().log || [], y = monthKey().slice(0, 4), sel = monthKey(), h = "";
@@ -16417,34 +16485,81 @@ function renderMonths(){
   }
   if (box.innerHTML !== h) box.innerHTML = h;
 }
-function renderLedger(){
-  var list = $("pgLedger"); if (!list) return;
-  var d = money(), log = d.log || [], sel = monthKey();
-  var rows = [], inc = 0, exp = 0, i;
-  for (i = 0; i < log.length; i++){
-    if (monthOf(log[i].at) !== sel) continue;
-    rows.push(log[i]);
-    if (Number(log[i].amt) > 0) inc += Number(log[i].amt);
-    else exp += Math.abs(Number(log[i].amt) || 0);
+/* 달력 — 날마다 받은 돈(+)/쓴 돈(−)을 배지로 */
+function renderCal(){
+  var grid = $("pgCalGrid"); if (!grid) return;
+  var key = monthKey(), rows = monthRows(key), by = {}, i, p, d, ds, s, wd;
+  for (i = 0; i < rows.length; i++){
+    var dd = dayOf(rows[i].at);
+    if (!by[dd]) by[dd] = [];
+    by[dd].push(rows[i]);
   }
-  var sum = $("pgMonthSum");
+  var y = Number(key.slice(0, 4)), m = Number(key.slice(5, 7));
+  var days = new Date(y, m, 0).getDate(), lead = new Date(y, m - 1, 1).getDay();
+  var tk = today(), h = "";
+  for (p = 0; p < lead; p++) h += '<span class="pg-c pg-cx" aria-hidden="true"></span>';
+  for (d = 1; d <= days; d++){
+    ds = key + "-" + pad2(d);
+    s = sumOf(by[ds] || []);
+    wd = (lead + d - 1) % 7;
+    h += '<button type="button" class="pg-c' + (s.n ? " has" : "") + (ds === SEL ? " sel" : "")
+      + (ds === tk ? " tod" : "") + (wd === 0 ? " sun" : (wd === 6 ? " sat" : "")) + '"'
+      + ' data-pgd="' + ds + '" aria-pressed="' + (ds === SEL) + '"'
+      + ' aria-label="' + dayLabel(ds) + (s.n ? (" 받은 " + nf(s.inc) + "원, 쓴 " + nf(s.exp) + "원") : " 내역 없음") + '">'
+      +   '<i class="pg-cd">' + d + '</i>'
+      +   (s.inc ? '<em class="pg-ci">+' + nf(s.inc) + '</em>' : '')
+      +   (s.exp ? '<em class="pg-co">−' + nf(s.exp) + '</em>' : '')
+      + '</button>';
+  }
+  if (grid.innerHTML !== h) grid.innerHTML = h;
+  if ($("pgCalTitle")) $("pgCalTitle").textContent = y + "년 " + m + "월";
+}
+/* 고른 날의 상세 내역 — 뭘로 받았고 어디에 썼는지 시간까지 */
+function renderLedger(){
+  var key = monthKey(), sum, list, all, rows, s;
+  if (!SEL || String(SEL).slice(0, 7) !== key) SEL = pickDay(key);
+  renderCal();
+  all = sumOf(monthRows(key));
+  sum = $("pgMonthSum");
   if (sum){
-    sum.innerHTML = rows.length
-      ? ('받음 <b class="in">+' + won(inc) + '</b> · 씀 <b class="out">-' + won(exp) + '</b>')
+    sum.innerHTML = all.n
+      ? ('받음 <b class="in">+' + won(all.inc) + '</b> · 씀 <b class="out">−' + won(all.exp) + '</b>')
       : '이 달 내역 없음';
   }
+  rows = monthRows(key).filter(function(x){ return dayOf(x.at) === SEL; });
+  list = $("pgLedger");
+  if ($("pgDayTitle")) $("pgDayTitle").textContent = dayLabel(SEL) + " 상세 내역";
+  s = sumOf(rows);
+  if ($("pgDaySum")){
+    $("pgDaySum").innerHTML = rows.length
+      ? ('<b class="in">+' + nf(s.inc) + '</b> <b class="out">−' + nf(s.exp) + '</b>')
+      : '';
+  }
+  if (!list) return;
   if (!rows.length){
-    list.innerHTML = '<li class="empty">' + sel.slice(5).replace(/^0/, "") + '월에는 아직 내역이 없어요</li>';
+    list.innerHTML = '<li class="empty">' + dayLabel(SEL) + '에는 내역이 없어요</li>';
     return;
   }
+  rows = rows.slice().sort(function(a, b){
+    var x = String(a.at), y = String(b.at);
+    return x < y ? -1 : (x > y ? 1 : 0);
+  });
   list.innerHTML = rows.map(function(x){
-    var plus = Number(x.amt) > 0;
-    var when = String(x.at || "").slice(5);
+    var amt = Number(x.amt) || 0, plus = amt > 0;
     return '<li class="' + (plus ? "in" : "out") + '">'
-      +   '<b>' + esc(x.t) + '</b>'
-      +   '<span>' + (x.why ? esc(x.why) + " · " : "") + esc(when) + '</span>'
+      +   '<b class="amt">' + (plus ? "+" : "−") + nf(Math.abs(amt)) + '원</b>'
+      +   '<span class="why">' + esc(x.why || (plus ? "용돈" : "지출")) + '</span>'
+      +   '<span class="tm">' + esc(clockOf(x.at)) + '</span>'
       + '</li>';
   }).join("");
+}
+/* 날짜를 눌렀을 때 상세 내역이 화면 밖이면 부드럽게 끌어온다 */
+function revealDay(){
+  var day = $("pgDay"); if (!day) return;
+  try {
+    var r = day.getBoundingClientRect(), vh = window.innerHeight || 0;
+    if (r.bottom > vh - 6) day.scrollIntoView({ block:"nearest", behavior:"smooth" });
+  } catch(e){}
 }
 function renderAll(){ paintFill(); renderMonths(); renderLedger(); }
 
@@ -16554,13 +16669,49 @@ function mountStyle(){
     ".pg-ch b{white-space:nowrap;}",
     ".pg-ch span b{font-size:.85rem;}",
     ".pg-ch span .in{color:#15805a;} .pg-ch span .out{color:#c0554a;}",
-    /* 기입장 목록 */
-    ".pg-ledger{max-height:22vh;}",
-    ".pg-ledger li{flex-direction:column;align-items:flex-start;gap:.05rem;padding:.34rem .5rem;}",
-    ".pg-ledger li b{font-size:.95rem;}",
-    ".pg-ledger li span{font-size:.76rem;line-height:1.35;}",
-    ".pg-ledger li.in{background:#f3fcf7;} .pg-ledger li.in b{color:#15805a;}",
-    ".pg-ledger li.out{background:#fff7f5;} .pg-ledger li.out b{color:#c0554a;}",
+    /* 기입장 — 달력 */
+    ".pg-logcard{flex:0 0 auto;min-height:0;overflow:visible;order:1;}",
+    ".pg-side .cp-card{order:2;}",
+    ".pg-months{flex:0 0 auto;}",
+    ".pg-cal{max-width:46rem;margin-top:.1vh;}",
+    ".pg-cal-head{display:flex;align-items:baseline;gap:.5rem;margin:.25vh 0 .45vh;}",
+    ".pg-cal-head b{font-size:.92rem;font-weight:900;color:#1e5478;white-space:nowrap;}",
+    ".pg-cal-legend{margin-left:.7rem;display:flex;gap:.45rem;font-size:.66rem;font-weight:900;white-space:nowrap;opacity:.92;}",
+    ".pg-cal-legend i{font-style:normal;}",
+    ".pg-cal-legend .in{color:#15805a;} .pg-cal-legend .out{color:#c0554a;}",
+    ".pg-cal-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.14rem;margin-bottom:.14rem;}",
+    ".pg-cal-week span{text-align:center;font-size:.68rem;font-weight:900;color:#9db4c6;line-height:1.1;}",
+    ".pg-cal-week .sun{color:#e0786a;} .pg-cal-week .sat{color:#5b8fd6;}",
+    ".pg-cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.14rem;}",
+    ".pg-c{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.02rem;",
+    "  min-height:clamp(1.9rem,3.9vh,2.7rem);padding:.16rem .04rem .12rem;border-radius:.42rem;overflow:hidden;",
+    "  background:#f7fafc;box-shadow:inset 0 0 0 .08rem #e9f0f6;}",
+    ".pg-c.pg-cx{background:none;box-shadow:none;}",
+    ".pg-c .pg-cd{font-style:normal;font-size:clamp(.66rem,1.3vh,.86rem);font-weight:900;color:#7f97a9;line-height:1.14;}",
+    ".pg-c.sun .pg-cd{color:#cf7a6c;} .pg-c.sat .pg-cd{color:#6f9ec2;}",
+    ".pg-c em{font-style:normal;display:block;max-width:100%;padding:0 .05rem;",
+    "  font-size:clamp(.5rem,1.02vh,.75rem);font-weight:900;line-height:1.22;white-space:nowrap;overflow:hidden;",
+    "  letter-spacing:-.03em;font-variant-numeric:tabular-nums;}",
+    ".pg-c .pg-ci{color:#15805a;} .pg-c .pg-co{color:#c0554a;}",
+    ".pg-c.has{background:#fff;box-shadow:inset 0 0 0 .1rem #dcebf6;}",
+    ".pg-c.tod .pg-cd{background:#2f9ad6;color:#fff;border-radius:999px;padding:0 .3rem;box-shadow:0 .1rem .2rem rgba(40,130,190,.3);}",
+    ".pg-c.sel{background:#eaf7ff;box-shadow:inset 0 0 0 .16rem #56b3e4;}",
+    ".pg-c.sel .pg-cd{color:#0d6f9e;} .pg-c.tod.sel .pg-cd{color:#fff;}",
+    ".pg-c:active{transform:scale(.97);}",
+    "/* 기입장 — 고른 날 상세 */",
+    ".pg-day{margin-top:.55vh;display:flex;flex-direction:column;min-height:0;max-width:46rem;}",
+    ".pg-day-head{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;padding-top:.15vh;}",
+    ".pg-day-head b{font-size:.9rem;font-weight:900;color:#1e5478;}",
+    ".pg-day-head span{margin-left:auto;font-size:.75rem;font-weight:900;white-space:nowrap;}",
+    ".pg-day-head span b{font-size:.78rem;}",
+    ".pg-day-head span .in{color:#15805a;} .pg-day-head span .out{color:#c0554a;}",
+    ".pg-ledger{gap:.2rem;padding-top:.1vh;overflow:visible;}",
+    ".pg-ledger li{flex-wrap:nowrap;align-items:baseline;gap:.45rem;padding:.36rem .5rem;border-radius:.55rem;}",
+    ".pg-ledger li .amt{flex:0 0 auto;font-size:.92rem;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap;}",
+    ".pg-ledger li.in .amt{color:#15805a;} .pg-ledger li.out .amt{color:#c0554a;}",
+    ".pg-ledger li .why{flex:1 1 auto;min-width:0;font-size:.84rem;font-weight:800;color:#44647c;line-height:1.3;overflow-wrap:anywhere;}",
+    ".pg-ledger li .tm{flex:0 0 auto;font-size:.7rem;font-weight:800;color:#9db4c6;white-space:nowrap;}",
+    ".pg-ledger li.in{background:#f3fcf7;} .pg-ledger li.out{background:#fff7f5;}",
     ".sp-now{margin:0 0 .6vh;font-size:.98rem;font-weight:900;color:#1e5478;}",
     ".sp-now b{color:#0d6f9e;}",
     ".sp-lock{background:none;box-shadow:none;padding:0;margin-top:1vh;}",
@@ -16581,8 +16732,21 @@ function bind(){
     months.addEventListener("click", function(e){
       var b = e.target.closest("[data-pgm]");
       if (!b) return;
-      MONTH = b.getAttribute("data-pgm");
+      var key = b.getAttribute("data-pgm");
+      if (key === monthKey()) return;
+      MONTH = key; SEL = "";
       renderMonths(); renderLedger();
+    });
+  }
+  var cal = $("pgCalGrid");
+  if (cal && !cal.__b){
+    cal.__b = 1;
+    cal.addEventListener("click", function(e){
+      var b = e.target.closest("[data-pgd]");
+      if (!b) return;
+      SEL = b.getAttribute("data-pgd");
+      renderLedger();
+      revealDay();
     });
   }
   var modal = $("pgSpendModal");
@@ -16620,7 +16784,8 @@ if (SB.money && SB.money.credit && !SB.money.__pgu){
 SB.piggyUI = {
   goal: GOAL,
   level: level,
-  month: function(m){ if (m){ MONTH = m; renderMonths(); renderLedger(); } return monthKey(); },
+  month: function(m){ if (m){ if (m !== monthKey()) SEL = ""; MONTH = m; renderMonths(); renderLedger(); } return monthKey(); },
+  day: function(d){ if (d){ SEL = d; renderLedger(); } return SEL; },
   months: function(){
     var out = [], log = money().log || [], y = monthKey().slice(0, 4);
     for (var m = 1; m <= 12; m++){
