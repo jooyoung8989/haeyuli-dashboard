@@ -4417,8 +4417,23 @@ function saveFav(){ writeJSON(FAV_KEY, favList()); }
 function pruneFav(){
   var known = {}, a = favList();
   for (var i=0;i<QUESTIONS.length;i++) known[favIdOf(i)] = 1;
+  /* 📦 이전 세트도 즐겨찾기 대상: 세트가 바뀌어도 사용자가 찜한 문항을 지우지 않는다 */
+  if (typeof PREV_QUESTIONS !== "undefined"){
+    for (var k=0;k<PREV_QUESTIONS.length;k++) known[prevFavId(PREV_QUESTIONS[k])] = 1;
+  }
   var keep = a.filter(function(id){ return !!known[id]; });
   if (keep.length !== a.length){ state.fav = keep; saveFav(); }
+}
+function prevFavId(q){ return q ? (q.id ? String(q.id) : "q"+hashSeed(q.q)) : ""; }
+function isPrevFav(i){ return favList().indexOf(prevFavId(PREV_QUESTIONS[i])) >= 0; }
+function prevFavCount(){ var n = 0; for (var i=0;i<PREV_QUESTIONS.length;i++) if (isPrevFav(i)) n++; return n; }
+function mainFavCount(){ var n = 0; for (var i=0;i<QUESTIONS.length;i++) if (isFav(i)) n++; return n; }
+function togglePrevFav(i){
+  var q = PREV_QUESTIONS[i]; if (!q) return;
+  var id = prevFavId(q), a = favList(), k = a.indexOf(id);
+  if (k >= 0) a.splice(k, 1); else a.push(id);
+  saveFav(); paintPrev(); renderCats();
+  toast(k >= 0 ? "즐겨찾기에서 뺐어요." : "⭐ 이전 세트 즐겨찾기에 담았어요. ‘📦 이전 질문 보기’ 안 ⭐ 칩에서 모아 볼 수 있어요.");
 }
 function favBtnHTML(i, extraCls){
   var on = isFav(i);
@@ -4449,7 +4464,7 @@ function toggleFav(i){
 }
 function updateFavBar(){
   var bar = $("favBar");
-  var n = favList().length;
+  var n = mainFavCount();
   if (bar) bar.hidden = state.qCat !== "fav";
   var cnt = $("favBarCount"); if (cnt) cnt.textContent = n + "문항";
   var b = $("favAllAns");
@@ -4479,7 +4494,7 @@ function setAnsAll(on){
 function renderCats(){
   pruneFav();
   var h = '<button type="button" class="cat'+(state.qCat==="all"?" on":"")+'" data-cat="all">전체 '+QUESTIONS.length+'</button>';
-  h += '<button type="button" class="cat favcat'+(state.qCat==="fav"?" on":"")+'" data-cat="fav">⭐ 즐겨찾기 ('+favList().length+')</button>';
+  h += '<button type="button" class="cat favcat'+(state.qCat==="fav"?" on":"")+'" data-cat="fav">⭐ 즐겨찾기 ('+mainFavCount()+')</button>';
   QCATS.forEach(function(c){
     var n = QUESTIONS.filter(function(q){ return q.cat===c.id; }).length;
     if (!n) return;   /* 문항이 없는 분류(체험판)는 숨김 */
@@ -7638,6 +7653,7 @@ function paintPrev(){
   var chips = $("prevCats");
   if (chips){
     var h = '<button type="button" class="cat' + (state.prevCat === "all" ? " on" : "") + '" data-cat="all">전체 ' + PREV_QUESTIONS.length + '</button>';
+    h += '<button type="button" class="cat favcat' + (state.prevCat === "fav" ? " on" : "") + '" data-cat="fav">⭐ 즐겨찾기 (' + prevFavCount() + ')</button>';
     QCATS.forEach(function(c){
       var n = PREV_QUESTIONS.filter(function(q){ return q.cat === c.id; }).length;
       if (!n) return;
@@ -7646,17 +7662,25 @@ function paintPrev(){
     chips.innerHTML = h;
   }
   var list = PREV_QUESTIONS.map(function(q,i){ return {q:q, i:i}; });
-  if (state.prevCat !== "all") list = list.filter(function(x){ return x.q.cat === state.prevCat; });
+  if (state.prevCat === "fav") list = list.filter(function(x){ return isPrevFav(x.i); });
+  else if (state.prevCat !== "all") list = list.filter(function(x){ return x.q.cat === state.prevCat; });
   var out = "";
   list.forEach(function(x){
-    var q = x.q, i = x.i;
+    var q = x.q, i = x.i, on = isPrevFav(i);
     out += '<div class="qcard' + (state.openPrev === i ? " open" : "") + '" data-pqi="' + i + '">' +
+      '<button class="favbtn' + (on ? " on" : "") + '" type="button" data-pfav="' + i + '" aria-pressed="' + (on ? "true" : "false") + '" aria-label="' + (on ? "즐겨찾기 해제" : "즐겨찾기 추가") + '" title="즐겨찾기">' + (on ? "★" : "☆") + '</button>' +
       '<button class="qhead" type="button" aria-expanded="' + (state.openPrev === i ? "true" : "false") + '">' +
         '<span class="qn">' + (i+1) + '</span><span class="qt">' + esc(q.q) + '</span><span class="ar" aria-hidden="true">▼</span>' +
       '</button>' +
       '<div class="qbody">' + qBodyHTML(q, i, "qp") + '</div></div>';
   });
-  $("prevList").innerHTML = out || '<div class="note tiny" style="margin-top:10px"><span>📦</span><div>이 분류에 보관된 이전 문항이 없습니다.</div></div>';
+  $("prevList").innerHTML = out || '<div class="note tiny" style="margin-top:10px"><span>📦</span><div>' + (state.prevCat === "fav" ? '이전 세트에 찜한 문항이 없습니다. 카드의 ☆를 누르면 모을 수 있어요.' : '이 분류에 보관된 이전 문항이 없습니다.') + '</div></div>';
+  Array.prototype.forEach.call($("prevList").querySelectorAll("[data-pfav]"), function(b){
+    b.addEventListener("click", function(e){
+      e.stopPropagation();
+      togglePrevFav(parseInt(b.getAttribute("data-pfav"), 10));
+    });
+  });
   Array.prototype.forEach.call($("prevList").querySelectorAll(".qcard"), function(card){
     var i = parseInt(card.getAttribute("data-pqi"), 10);
     card.querySelector(".qhead").addEventListener("click", function(){
@@ -7830,6 +7854,7 @@ window.PIC = {
   mineRecUpdate: mineRecUpdate, mineRecStart: mineRecStart, mineRecStop: mineRecStop,
   personalSeg: personalSeg, mineSave: mineSave,
   prevQuestions: PREV_QUESTIONS, renderPrev: renderPrev, paintPrev: paintPrev,
+  prevFav: { isFav: isPrevFav, toggle: togglePrevFav, idOf: prevFavId, count: prevFavCount },
   draftPaint: draftPaint, draftEval: draftEval, drafts: drafts
 };
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
