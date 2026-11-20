@@ -3647,6 +3647,168 @@ body.mob .ha-tama img{width:3.1rem;height:3.5rem;}
 body.mob .ha-bub{max-width:5.8rem;margin-bottom:.7rem;}
 
 </style>
+<style id="rbStyle" data-rb="1">
+/* ==RB-BLOCK-CSS== */
+/* ===== 📚 빨간펜 솔루토이 우리 집 책장 · 하루 한 권 · 독후활동 ===== */
+.bookview.rb-hasbooks{display:flex;flex-direction:column;gap:.75vh;height:100%;min-height:0;}
+.rb-tree-body{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:.9vh;
+  flex:1 1 auto;min-height:0;height:100%;}
+body.mob .rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;}
+@media (max-width:900px){.rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;}}
+.rb-hide{display:none !important;}
+.rb-tabs{display:flex;gap:.5vh;padding:.4vh .2vh;flex:0 0 auto;flex-wrap:wrap;}
+.rb-tab{display:flex;align-items:center;gap:.5vh;padding:.85vh 1.4vh;border-radius:999px;background:#f1f6fb;
+  box-shadow:inset 0 0 0 .18vh #dbe7f2;color:#4b6b82;font-size:1.45vh;font-weight:900;white-space:nowrap;}
+.rb-tab.on{background:linear-gradient(135deg,#e8f6ff,#d3ecff);color:#0f6a96;box-shadow:inset 0 0 0 .26vh #6fc0ea,0 .3vh .8vh rgba(60,130,180,.18);}
+.rb-tab .rb-tab-n{margin-left:.2vh;font-size:1.2vh;color:#8aa4b6;font-weight:900;}
+
+/* 오늘의 질문 카드 (책 탭) */
+.rb-ask{display:flex;align-items:center;gap:1.4vh;padding:1.2vh 1.6vh;border-radius:1.8vh;flex:0 0 auto;
+  background:linear-gradient(120deg,#fff9ea,#fff4fb);box-shadow:inset 0 0 0 .2vh #f2dfb6;}
+.rb-ask-c{width:7.6vh;flex:0 0 auto;border-radius:.9vh;overflow:hidden;background:#fff;box-shadow:0 .4vh 1vh rgba(120,90,40,.16);}
+.rb-ask-c img{width:100%;display:block;aspect-ratio:3/4;object-fit:cover;}
+.rb-ask-t{flex:1 1 auto;min-width:0;}
+.rb-ask-q{font-size:1.32vh;font-weight:900;color:#a8762a;letter-spacing:.02em;}
+.rb-ask-b{display:block;font-size:2.1vh;font-weight:900;color:#2a3646;line-height:1.25;margin:.2vh 0 .3vh;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rb-ask-s{font-size:1.25vh;color:#8b8f98;font-weight:800;}
+.rb-ask-a{display:flex;flex-direction:column;gap:.5vh;flex:0 0 auto;}
+.rb-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4vh;border-radius:999px;
+  padding:.85vh 1.5vh;font-size:1.4vh;font-weight:900;white-space:nowrap;
+  box-shadow:inset 0 0 0 .2vh #d7e3ee;background:#fff;color:#476379;}
+.rb-btn.yes{background:linear-gradient(135deg,#39b978,#2aa267);color:#fff;box-shadow:0 .35vh .9vh rgba(40,150,100,.28);}
+.rb-btn.ghost{background:#f6f9fc;color:#7b8fa1;}
+.rb-btn.act{background:linear-gradient(135deg,#f7b733,#f0932b);color:#fff;box-shadow:0 .35vh .9vh rgba(220,150,30,.3);}
+.rb-btn:active{transform:scale(.97);}
+
+/* 시리즈 칩 · 진행률 */
+.rb-chips{display:flex;gap:.5vh;flex-wrap:wrap;flex:0 0 auto;padding:.2vh 0;}
+.rb-chip{display:flex;align-items:center;gap:.45vh;padding:.7vh 1.2vh;border-radius:999px;background:#fff;
+  box-shadow:inset 0 0 0 .16vh #e2ebf3;color:#4b6b82;font-size:1.32vh;font-weight:900;}
+.rb-chip b{font-size:1.15vh;color:#9aabb9;font-weight:900;}
+.rb-chip.on{background:#eaf7ef;color:#1f7a4d;box-shadow:inset 0 0 0 .24vh #7fce9f;}
+
+.rb-prog{display:flex;align-items:center;gap:1vh;flex:0 0 auto;}
+.rb-prog b{font-size:1.5vh;color:#2a3646;font-weight:900;}
+.rb-bar{flex:1 1 auto;min-width:6vh;height:1.1vh;border-radius:999px;background:#dfe8f1;overflow:hidden;box-shadow:inset 0 0 0 .12vh #cfdce8;}
+.rb-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#5ec2ee,#39b978);}
+.rb-prog span{font-size:1.35vh;font-weight:900;color:#3f7f9e;}
+
+/* 책 그리드 */
+.rb-shelf{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(11.4vh,1fr));gap:1vh;padding:.3vh .4vh 1.4vh;align-content:start;}
+.rb-book{position:relative;display:flex;flex-direction:column;border-radius:1.2vh;background:#fff;padding:.55vh;
+  box-shadow:0 .35vh .9vh rgba(90,120,150,.14);}
+.rb-book img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:.8vh;background:#eef3f8;display:block;}
+.rb-book .rb-bn{position:absolute;top:.9vh;left:.9vh;background:rgba(20,40,60,.62);color:#fff;font-size:1.05vh;
+  font-weight:900;padding:.15vh .5vh;border-radius:.5vh;}
+.rb-book .rb-bt{font-size:1.18vh;font-weight:900;color:#33475c;line-height:1.22;margin:.45vh .15vh .1vh;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8vh;}
+.rb-book .rb-ba{display:flex;gap:.3vh;margin-top:.2vh;}
+.rb-book .rb-chk{flex:1 1 auto;border-radius:.7vh;padding:.5vh 0;font-size:1.1vh;font-weight:900;
+  background:#f2f6fa;color:#8fa3b4;box-shadow:inset 0 0 0 .14vh #e2ebf3;}
+.rb-book .rb-chk.on{background:#eafaf1;color:#1f7a4d;box-shadow:inset 0 0 0 .18vh #8fd6ac;}
+.rb-book .rb-pen{flex:0 0 auto;border-radius:.7vh;padding:.5vh .6vh;font-size:1.1vh;background:#fff7e8;color:#b57b16;
+  box-shadow:inset 0 0 0 .14vh #f2e0bb;}
+.rb-book.read{background:#f7fdf9;}
+.rb-book.read img{opacity:.92;}
+.rb-book.read::after{content:"✓";position:absolute;top:.55vh;right:.6vh;width:2.1vh;height:2.1vh;border-radius:50%;
+  background:#39b978;color:#fff;font-size:1.25vh;font-weight:900;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 .25vh .6vh rgba(40,150,100,.35);}
+
+/* 홈 카드 */
+.rb-home{grid-column:1/-1;flex:0 0 auto;display:flex;align-items:center;gap:1.5vh;padding:1.3vh 1.7vh;border-radius:2vh;
+  background:linear-gradient(120deg,#eef8ff,#f7f1ff 60%,#fff6ec);box-shadow:inset 0 0 0 .2vh #dbe8f6,0 .4vh 1.2vh rgba(80,120,170,.12);}
+.rb-home .rb-hc{width:8.4vh;flex:0 0 auto;border-radius:1vh;overflow:hidden;background:#fff;box-shadow:0 .5vh 1.2vh rgba(70,100,140,.2);}
+.rb-home .rb-hc img{width:100%;display:block;aspect-ratio:3/4;object-fit:cover;}
+.rb-home .rb-hi{flex:1 1 auto;min-width:0;}
+.rb-home .rb-hk{font-size:1.25vh;font-weight:900;color:#5b7fa3;letter-spacing:.02em;}
+.rb-home .rb-hs{display:block;font-size:1.22vh;font-weight:900;color:#9aa6b4;}
+.rb-home .rb-ht{display:block;font-size:2.3vh;font-weight:900;color:#22303f;line-height:1.2;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:.15vh 0 .2vh;}
+.rb-home .rb-hq{display:block;font-size:1.3vh;font-weight:800;color:#7f8b99;}
+.rb-home .rb-ha{display:flex;flex-direction:column;gap:.55vh;flex:0 0 auto;}
+
+/* 독후활동 */
+.rb-act{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:1vh;padding-bottom:1.6vh;}
+.rb-act-h{display:flex;align-items:center;gap:1.2vh;flex:0 0 auto;}
+.rb-act-h img{width:6.4vh;border-radius:.8vh;box-shadow:0 .4vh 1vh rgba(70,100,140,.18);}
+.rb-act-h b{display:block;font-size:1.9vh;color:#22303f;line-height:1.25;}
+.rb-act-h span{font-size:1.3vh;font-weight:900;color:#8b9aa8;}
+.rb-step{border-radius:1.4vh;background:#fff;padding:1.1vh 1.4vh;box-shadow:inset 0 0 0 .18vh #e6eef5;}
+.rb-step-h{display:flex;align-items:center;gap:.6vh;margin-bottom:.7vh;flex-wrap:wrap;}
+.rb-step-h b{font-size:1.5vh;color:#2a3646;}
+.rb-step-h span{font-size:1.2vh;font-weight:900;color:#9aa9b7;}
+.rb-q{font-size:1.5vh;font-weight:900;color:#33475c;margin:.2vh 0 .6vh;}
+.rb-opts{display:flex;flex-wrap:wrap;gap:.55vh;}
+.rb-opt{padding:.7vh 1.3vh;border-radius:999px;background:#f4f8fc;box-shadow:inset 0 0 0 .16vh #dfe9f2;
+  font-size:1.35vh;font-weight:900;color:#49677f;}
+.rb-opt.ok{background:#e9faf0;color:#1f7a4d;box-shadow:inset 0 0 0 .22vh #7fd0a0;}
+.rb-opt.no{background:#fdeeec;color:#b3413a;box-shadow:inset 0 0 0 .22vh #efb6b1;}
+.rb-rec{display:flex;flex-wrap:wrap;gap:.6vh;align-items:center;}
+.rb-rec .rec,.rb-rec .recplay{border-radius:999px;padding:.75vh 1.3vh;font-size:1.32vh;font-weight:900;
+  background:#f2f7fc;color:#3d6c8c;box-shadow:inset 0 0 0 .16vh #d9e6f1;}
+.rb-rec .recplay[disabled]{opacity:.45;}
+.rb-canvas-box{position:relative;border-radius:1.2vh;overflow:hidden;background:#fff;
+  box-shadow:inset 0 0 0 .2vh #e2ebf3;}
+.rb-canvas-box canvas{display:block;width:100%;height:26vh;touch-action:none;cursor:crosshair;background:#fff;}
+.rb-pal{display:flex;flex-wrap:wrap;gap:.5vh;align-items:center;margin-top:.7vh;}
+.rb-sw{width:2.6vh;height:2.6vh;border-radius:50%;box-shadow:inset 0 0 0 .16vh rgba(0,0,0,.12);}
+.rb-sw.on{box-shadow:0 0 0 .3vh #22303f,inset 0 0 0 .1vh #fff;transform:scale(1.06);}
+.rb-tool{padding:.6vh 1.1vh;border-radius:999px;background:#f4f8fc;box-shadow:inset 0 0 0 .16vh #dfe9f2;
+  font-size:1.25vh;font-weight:900;color:#49677f;}
+.rb-tool.on{background:#e8f4ff;color:#176a96;box-shadow:inset 0 0 0 .22vh #79c3e8;}
+.rb-art-thumb{display:flex;align-items:center;gap:.8vh;margin-top:.6vh;}
+.rb-art-thumb img{width:12vh;border-radius:.8vh;box-shadow:0 .3vh .8vh rgba(70,100,140,.2);}
+.rb-art-thumb span{font-size:1.2vh;font-weight:900;color:#8b9aa8;}
+.rb-done{display:flex;align-items:center;gap:.8vh;font-size:1.3vh;font-weight:900;color:#1f7a4d;}
+.rb-empty{padding:2vh;text-align:center;color:#93a3b1;font-size:1.4vh;font-weight:900;}
+
+/* 휴대폰 */
+body.mob .rb-shelf{grid-template-columns:repeat(auto-fill,minmax(26vw,1fr));gap:1.5vw;}
+body.mob .rb-book .rb-bt{font-size:2.1vw;min-height:5vw;}
+body.mob .rb-book .rb-chk,body.mob .rb-book .rb-pen{font-size:1.9vw;padding:.8vw 0;}
+body.mob .rb-tab{font-size:2.6vw;padding:1.4vw 2.6vw;}
+body.mob .rb-ask-b{font-size:4.2vw;}
+body.mob .rb-home .rb-ht{font-size:4.4vw;}
+body.mob .rb-home .rb-hq,body.mob .rb-home .rb-hs,body.mob .rb-home .rb-hk{font-size:2.5vw;}
+body.mob .rb-btn{font-size:2.7vw;padding:1.5vw 3vw;}
+body.mob .rb-q{font-size:3vw;}
+body.mob .rb-opt{font-size:2.6vw;}
+body.mob .rb-canvas-box canvas{height:34vw;}
+
+/* 리딩앤 바로가기 */
+.rb-ext{display:inline-flex;align-items:center;gap:.4vh;text-decoration:none;
+  background:linear-gradient(135deg,#fff2e8,#ffe6f0);color:#b5482f !important;
+  box-shadow:inset 0 0 0 .2vh #f6c6ae;border-radius:999px;font-weight:900;}
+.rb-ext:active{transform:scale(.97);}
+
+/* ===== 홈: 이번 주 출석 띠 없애고 숙제 칸을 길게 (2026-11-20 요청) ===== */
+.wk-attlbl,.wk-attrow{display:none !important;}
+#viewHome .weekboard{gap:.45vh;padding:.8vh 1vh;}
+#viewHome .wk-head{gap:.6vh;}
+#viewHome .wk-grid{gap:.5vh;}
+#viewHome .wk-day{padding:.55vh .5vh;gap:.22vh;}
+#viewHome .wk-dh{gap:.25vh;}
+#viewHome .wk-dh b{font-size:.98rem;}
+#viewHome .wk-dh span{font-size:.74rem;}
+#viewHome .wk-edit{width:1.6rem;height:1.6rem;font-size:.8rem;}
+#viewHome .wk-subs{gap:.16rem;}
+#viewHome .wk-sub{padding:.1rem .34rem;font-size:.74rem;gap:.12rem;}
+#viewHome .wk-sub i{font-size:.8rem;}
+#viewHome .wk-hwlist{gap:.06rem;min-height:1rem;}
+#viewHome .wk-hwitem{gap:.12rem;align-items:center;}
+#viewHome .wk-hwchk{width:1.1rem;height:1.1rem;font-size:.76rem;}
+#viewHome .wk-hwtx{font-size:.82rem;line-height:1.12;letter-spacing:-.015em;}
+#viewHome .wk-hwdel{width:.95rem;height:.95rem;font-size:.58rem;}
+#viewHome .wk-hwadd{gap:.18rem;margin-top:.15rem;}
+#viewHome .wk-hwin{height:1.85rem;font-size:16px;border-radius:.42rem;}
+#viewHome .wk-hwbtn{width:1.85rem;height:1.85rem;font-size:1rem;border-radius:.42rem;}
+body.mob #viewHome .wk-hwchk{width:1.45rem;height:1.45rem;font-size:1rem;}
+body.mob #viewHome .wk-hwtx{font-size:1rem;}
+
+/* ==/RB-BLOCK-CSS== */
+</style>
 </head>
 <body>
 
@@ -6560,11 +6722,13 @@ function updateEngineInfo(){
   el.aiModel.placeholder = provider === "gemini" ? GEMINI_DEFAULT : (provider === "openai" ? "gpt-4o-mini" : "기본 모델을 써도 좋아요");
 }
 function openSettings(){
-  el.aiProvider.value = state.ai.provider;
-  el.aiKey.value = state.ai.key;
-  el.aiModel.value = state.ai.model;
-  el.dashUrl.value = state.settings.dashUrl;
-  updateEngineInfo();
+  try {
+    if (el.aiProvider) el.aiProvider.value = state.ai.provider;
+    if (el.aiKey) el.aiKey.value = state.ai.key;
+    if (el.aiModel) el.aiModel.value = state.ai.model;
+    if (el.dashUrl) el.dashUrl.value = state.settings.dashUrl;
+    updateEngineInfo();
+  } catch(e){}
   openModal("settingsModal");
 }
 function saveSettings(){
@@ -6660,7 +6824,7 @@ function setKoView(on){
    15. 이벤트
    ========================================================= */
 function bind(){
-  el.topics.addEventListener("click", function(e){
+  if (el.topics) el.topics.addEventListener("click", function(e){
     var b = e.target.closest ? e.target.closest(".topic") : null;
     if (!b) return;
     startTalk("topic", b.getAttribute("data-topic"), {});
@@ -6670,50 +6834,50 @@ function bind(){
     b.addEventListener("click", function(){ setLevel(parseInt(b.getAttribute("data-lv"), 10)); });
   });
 
-  el.autoRead.addEventListener("click", function(){ setAutoRead(!state.autoRead); });
-  el.btnKo.addEventListener("click", function(){ setKoView(!state.koView); });
-  el.btnSpeak.addEventListener("click", function(){ speak(el.bubbleEn.textContent, false); });
-  el.btnSlow.addEventListener("click", function(){ speak(el.bubbleEn.textContent, true); });
+  if (el.autoRead) el.autoRead.addEventListener("click", function(){ setAutoRead(!state.autoRead); });
+  if (el.btnKo) el.btnKo.addEventListener("click", function(){ setKoView(!state.koView); });
+  if (el.btnSpeak) el.btnSpeak.addEventListener("click", function(){ speak(el.bubbleEn.textContent, false); });
+  if (el.btnSlow) el.btnSlow.addEventListener("click", function(){ speak(el.bubbleEn.textContent, true); });
 
-  el.btnSettings.addEventListener("click", openSettings);
-  el.btnSaveSettings.addEventListener("click", saveSettings);
-  el.btnResetTalk.addEventListener("click", resetTalk);
-  el.aiProvider.addEventListener("change", updateEngineInfo);
+  if (el.btnSettings) el.btnSettings.addEventListener("click", openSettings);
+  if (el.btnSaveSettings) el.btnSaveSettings.addEventListener("click", saveSettings);
+  if (el.btnResetTalk) el.btnResetTalk.addEventListener("click", resetTalk);
+  if (el.aiProvider) el.aiProvider.addEventListener("change", updateEngineInfo);
 
-  el.btnEditWords.addEventListener("click", openWords);  el.btnSaveWords.addEventListener("click", saveWords);
-  el.btnPreset.addEventListener("click", presetWords);
+  if (el.btnEditWords) el.btnEditWords.addEventListener("click", openWords);  if (el.btnSaveWords) el.btnSaveWords.addEventListener("click", saveWords);
+  if (el.btnPreset) el.btnPreset.addEventListener("click", presetWords);
 
-  el.finishBtn.addEventListener("click", toggleDaily);
-  el.btnInterest.addEventListener("click", startInterest);
+  if (el.finishBtn) el.finishBtn.addEventListener("click", toggleDaily);
+  if (el.btnInterest) el.btnInterest.addEventListener("click", startInterest);
 
-  el.learnPill.addEventListener("click", function(){
+  if (el.learnPill) el.learnPill.addEventListener("click", function(){
     renderLearnList();
     openModal("learnModal");
   });
 
-  el.btnMicEn.addEventListener("click", function(){ listen("en-US", el.btnMicEn); });
-  el.btnMicKo.addEventListener("click", function(){ listen("ko-KR", el.btnMicKo); });
-  el.btnHint.addEventListener("click", showHints);
+  if (el.btnMicEn) el.btnMicEn.addEventListener("click", function(){ listen("en-US", el.btnMicEn); });
+  if (el.btnMicKo) el.btnMicKo.addEventListener("click", function(){ listen("ko-KR", el.btnMicKo); });
+  if (el.btnHint) el.btnHint.addEventListener("click", showHints);
 
-  el.btnSend.addEventListener("click", function(){ handleChild(el.answerInput.value, "type"); });
-  el.answerInput.addEventListener("keydown", function(e){
+  if (el.btnSend) el.btnSend.addEventListener("click", function(){ handleChild(el.answerInput.value, "type"); });
+  if (el.answerInput) el.answerInput.addEventListener("keydown", function(e){
     if (e.key === "Enter") { e.preventDefault(); handleChild(el.answerInput.value, "type"); }
   });
 
-  el.hints.addEventListener("click", function(e){
+  if (el.hints) el.hints.addEventListener("click", function(e){
     var b = e.target.closest ? e.target.closest(".hint") : null;
     if (!b) return;
     if (b.hasAttribute("data-repeat")) { if (lastCoach) handleChild(lastCoach.en, "repeat"); }
     else handleChild(b.getAttribute("data-say"), "hint");
   });
 
-  el.wwGrid.addEventListener("click", function(e){
+  if (el.wwGrid) el.wwGrid.addEventListener("click", function(e){
     var chk = e.target.closest ? e.target.closest(".wk") : null;
     if (chk) { e.stopPropagation(); toggleWord(parseInt(chk.getAttribute("data-check"), 10)); return; }
     var card = e.target.closest ? e.target.closest(".ww") : null;
     if (card) speakWord(card, card.getAttribute("data-word"));
   });
-  el.wwGrid.addEventListener("keydown", function(e){
+  if (el.wwGrid) el.wwGrid.addEventListener("keydown", function(e){
     if (e.key !== "Enter" && e.key !== " ") return;
     var card = e.target.closest ? e.target.closest(".ww") : null;
     if (!card) return;
@@ -6721,14 +6885,14 @@ function bind(){
     speakWord(card, card.getAttribute("data-word"));
   });
 
-  el.coachWords.addEventListener("click", function(e){
+  if (el.coachWords) el.coachWords.addEventListener("click", function(e){
     var b = e.target.closest ? e.target.closest(".wcard") : null;
     if (b) speak(b.getAttribute("data-wspeak"), false);
   });
 
-  el.scSpeak.addEventListener("click", function(){ if (lastCoach) speak(lastCoach.en, false); });
-  el.scSlow.addEventListener("click", function(){ if (lastCoach) speak(lastCoach.en, true); });
-  el.scSave.addEventListener("click", function(){
+  if (el.scSpeak) el.scSpeak.addEventListener("click", function(){ if (lastCoach) speak(lastCoach.en, false); });
+  if (el.scSlow) el.scSlow.addEventListener("click", function(){ if (lastCoach) speak(lastCoach.en, true); });
+  if (el.scSave) el.scSave.addEventListener("click", function(){
     if (!lastCoach) return;
     speak(lastCoach.en, false);
     saveSentence(lastCoach.en, lastCoach.ko);
@@ -6738,7 +6902,7 @@ function bind(){
     b.addEventListener("click", function(){ closeModal(b.getAttribute("data-close")); });
   });
   ["settingsModal","wordsModal","learnModal"].forEach(function(id){
-    $(id).addEventListener("click", function(e){ if (e.target === this) closeModal(id); });
+    var _md = $(id); if (_md) _md.addEventListener("click", function(e){ if (e.target === this) closeModal(id); });
   });
   document.addEventListener("keydown", function(e){
     if (e.key === "Escape") { ["settingsModal","wordsModal","learnModal"].forEach(closeModal); }
@@ -15059,6 +15223,733 @@ if (document.readyState === "loading") document.addEventListener("DOMContentLoad
 else bind();
 })();
 
+</script>
+<script id="rbScript" data-rb="1">
+/* ==RB-BLOCK-JS== */
+window.__RB_DATA=[["sci","솔루토이 과학","🔬","본책 34권 + 별책 1권",[[1,"파릇파릇 봄의 산과 들","book-img/sci_01.webp"],[2,"울창한 여름의 산과 들","book-img/sci_02.webp"],[3,"울긋불긋 가을의 산과 들","book-img/sci_03.webp"],[4,"하얀 겨울의 산과 들","book-img/sci_04.webp"],[5,"생명의 늪 신비한 동굴","book-img/sci_05.webp"],[6,"구불구불 강","book-img/sci_06.webp"],[7,"숨 쉬는 갯벌","book-img/sci_07.webp"],[8,"깊고 깊은 바닷속","book-img/sci_08.webp"],[9,"우리 주변의 동물","book-img/sci_09.webp"],[10,"우리 주변의 식물","book-img/sci_10.webp"],[11,"작은 생물과 생태계","book-img/sci_11.webp"],[12,"우리는 환경 지킴이","book-img/sci_12.webp"],[13,"신기한 우리 몸","book-img/sci_13.webp"],[14,"알쏭달쏭 몸속 탐험","book-img/sci_14.webp"],[15,"다섯 가지 감각","book-img/sci_15.webp"],[16,"쑥쑥 자라는 우리 몸","book-img/sci_16.webp"],[17,"사막에서 북극까지","book-img/sci_17.webp"],[18,"빙글빙글 우리 지구","book-img/sci_18.webp"],[19,"변화무쌍한 날씨","book-img/sci_19.webp"],[20,"폭발하는 화산 흔들리는 지진","book-img/sci_20.webp"],[21,"오래전 지구","book-img/sci_21.webp"],[22,"별을 찾아서","book-img/sci_22.webp"],[23,"머나먼 우주","book-img/sci_23.webp"],[24,"정확하게 재어 보기","book-img/sci_24.webp"],[25,"여러 가지 에너지와 힘","book-img/sci_25.webp"],[26,"밀고 당기는 자석","book-img/sci_26.webp"],[27,"찌릿찌릿 전기","book-img/sci_27.webp"],[28,"밝은 빛 까만 그림자","book-img/sci_28.webp"],[29,"소리의 비밀","book-img/sci_29.webp"],[30,"다양한 물체와 물질","book-img/sci_30.webp"],[31,"섞여 있는 혼합물","book-img/sci_31.webp"],[32,"녹고 녹이는 물질","book-img/sci_32.webp"],[33,"물의 놀라운 변신","book-img/sci_33.webp"],[34,"활활 타오르는 불","book-img/sci_34.webp"],[35,"나만의 생생 실험실","book-img/sci_35.webp"]]],["math","솔루토이 수학","🔢","본책 30권 + 별책 2권",[[1,"물고기꼬리의 물고기 세기","book-img/math_01.webp"],[2,"한솔이와 두솔이의 용돈 모으기","book-img/math_02.webp"],[3,"꼬마 용 마꼬","book-img/math_03.webp"],[4,"멋진 공연을 해 볼까?","book-img/math_04.webp"],[5,"증조할머니와 홍시","book-img/math_05.webp"],[6,"도도의 행복 나누기 여행","book-img/math_06.webp"],[7,"내 고구마야","book-img/math_07.webp"],[8,"네쌍둥이의 생일 케이크","book-img/math_08.webp"],[9,"돌배와 이방","book-img/math_09.webp"],[10,"산타 할아버지를 기다리며","book-img/math_10.webp"],[11,"현아와 구름","book-img/math_11.webp"],[12,"세모 샘을 찾아간 삼 형제","book-img/math_12.webp"],[13,"네모난 엽서","book-img/math_13.webp"],[14,"뾰족 발 외계인 뭉뚝 발 외계인","book-img/math_14.webp"],[15,"달려, 도란아!","book-img/math_15.webp"],[16,"집수리 대장 비버","book-img/math_16.webp"],[17,"코끼리 치마는 너무 짧아","book-img/math_17.webp"],[18,"사막 여행을 떠난 꼬물이","book-img/math_18.webp"],[19,"마법 약을 삼킨 리탄","book-img/math_19.webp"],[20,"소원을 들어주는 약국","book-img/math_20.webp"],[21,"소미의 돌잔치","book-img/math_21.webp"],[22,"형제의 농사짓기","book-img/math_22.webp"],[23,"어떤 계절이 가장 좋아?","book-img/math_23.webp"],[24,"뒤죽박죽 궁전","book-img/math_24.webp"],[25,"오색 돌이 사라졌어요","book-img/math_25.webp"],[26,"동주의 빠른 길 찾기 대작전","book-img/math_26.webp"],[27,"토비네 채소밭에 생긴 일","book-img/math_27.webp"],[28,"잘못 놓인 벽돌","book-img/math_28.webp"],[29,"아주아주 큰 이불","book-img/math_29.webp"],[30,"명탐정 마르코","book-img/math_30.webp"]]],["kor","솔루토이 국어","📖","본책 30권 + 별책 2권",[[1,"박죽이가 잡혀갔어요!","book-img/kor_01.webp"],[2,"아버지를 구한 소리","book-img/kor_02.webp"],[3,"다람쥐 공주님의 신랑감 찾기","book-img/kor_03.webp"],[4,"호동 왕자의 입맛을 찾아라!","book-img/kor_04.webp"],[5,"그 말이 그 말이었어?","book-img/kor_05.webp"],[6,"해리의 엉망진창 도시 여행","book-img/kor_06.webp"],[7,"마법사가 되고 싶어!","book-img/kor_07.webp"],[8,"일기장 오 형제","book-img/kor_08.webp"],[9,"박 도령이 보낸 편지","book-img/kor_09.webp"],[10,"꾀꼬리의 금메달","book-img/kor_10.webp"],[11,"대장 고양이의 선택","book-img/kor_11.webp"],[12,"우리들의 보금자리","book-img/kor_12.webp"],[13,"쌍둥이 형제와 피노키오","book-img/kor_13.webp"],[14,"햇솜이네 마을 잔치에 오세요","book-img/kor_14.webp"],[15,"설우야, 설명을 부탁해","book-img/kor_15.webp"],[16,"한밤중에 생긴 일","book-img/kor_16.webp"],[17,"펭귄들아, 위험해!","book-img/kor_17.webp"],[18,"나는야 발표왕","book-img/kor_18.webp"],[19,"원숭이는 우기기 대장이에요","book-img/kor_19.webp"],[20,"도깨비방망이를 돌려주세요","book-img/kor_20.webp"],[21,"멍구야, 고맙데이","book-img/kor_21.webp"],[22,"나비 모둠 친구들아, 누리집에서 만나!","book-img/kor_22.webp"],[23,"수목원에서 만난 친구","book-img/kor_23.webp"],[24,"제중원에 간 궁녀 달이","book-img/kor_24.webp"],[25,"아기 돼지 삼 형제, 그 후","book-img/kor_25.webp"],[26,"잃어버린 만년필을 찾아서","book-img/kor_26.webp"],[27,"시간 여행자를 뽑습니다","book-img/kor_27.webp"],[28,"놀이공원의 꼬마 유령","book-img/kor_28.webp"],[29,"비단을 잘 팔려면","book-img/kor_29.webp"],[30,"모아 왕의 왕궁 짓기","book-img/kor_30.webp"]]],["hist","솔루토이 한국사","🏛️","본책 31권 + 별책 2권",[[1,"선사 시대, 초기 국가 시대에는 어떻게 살았을까?","book-img/hist_01.webp"],[2,"삼국 시대에는 어떻게 살았을까?","book-img/hist_02.webp"],[3,"남북국 시대에는 어떻게 살았을까?","book-img/hist_03.webp"],[4,"고려 시대에는 어떻게 살았을까?","book-img/hist_04.webp"],[5,"조선 전기에는 어떻게 살았을까?","book-img/hist_05.webp"],[6,"조선 후기에는 어떻게 살았을까?","book-img/hist_06.webp"],[7,"근대에는 어떻게 살았을까?","book-img/hist_07.webp"],[8,"현대에는 어떻게 살고 있을까?","book-img/hist_08.webp"],[9,"옛날에도 아파트에 살았을까?","book-img/hist_09.webp"],[10,"옛날에도 청바지를 입었을까?","book-img/hist_10.webp"],[11,"옛날에도 과자를 먹었을까?","book-img/hist_11.webp"],[12,"옛날에도 귀를 뚫었을까?","book-img/hist_12.webp"],[13,"옛날에도 책을 읽었을까?","book-img/hist_13.webp"],[14,"옛날에도 동요를 불렀을까?","book-img/hist_14.webp"],[15,"옛날에도 그림을 그렸을까?","book-img/hist_15.webp"],[16,"옛날에도 찰흙 놀이를 했을까?","book-img/hist_16.webp"],[17,"옛날에도 마트에 갔을까?","book-img/hist_17.webp"],[18,"옛날에도 돈을 썼을까?","book-img/hist_18.webp"],[19,"옛날에도 회사에 다녔을까?","book-img/hist_19.webp"],[20,"옛날에도 다른 나라에 갔을까?","book-img/hist_20.webp"],[21,"옛날에도 세뱃돈을 받았을까?","book-img/hist_21.webp"],[22,"옛날에도 학교에 다녔을까?","book-img/hist_22.webp"],[23,"옛날에도 게임을 했을까?","book-img/hist_23.webp"],[24,"옛날에도 결혼식을 했을까?","book-img/hist_24.webp"],[25,"옛날에도 약속을 잘 지켰을까?","book-img/hist_25.webp"],[26,"옛날에도 부자로 살았을까?","book-img/hist_26.webp"],[27,"옛날에도 귀신을 믿었을까?","book-img/hist_27.webp"],[28,"옛날에도 자동차를 탔을까?","book-img/hist_28.webp"],[29,"옛날에도 전화를 했을까?","book-img/hist_29.webp"],[30,"옛날에도 세탁기를 썼을까?","book-img/hist_30.webp"],[31,"옛날에도 총을 쐈을까?","book-img/hist_31.webp"],[32,"개념 쏙쏙쏙 역사 교과서","book-img/hist_32.webp"],[33,"역사 인물 누구일까?","book-img/hist_33.webp"]]],["geo","솔루토이 지리","🌏","본책 35권 + 별책 2권",[[1,"빙글빙글 계절 요리조리 날씨","book-img/geo_01.webp"],[2,"우리가 사는 마을","book-img/geo_02.webp"],[3,"토토를 찾아라!","book-img/geo_03.webp"],[4,"달이 별이의 우리나라 여행","book-img/geo_04.webp"],[5,"구석구석 우리 땅 여행","book-img/geo_05.webp"],[6,"둥글둥글 지구 한 바퀴","book-img/geo_06.webp"],[7,"별별 세계 기후 여행","book-img/geo_07.webp"],[8,"와우! 생활 모습이 달라요","book-img/geo_08.webp"],[9,"숨바꼭질 대작전","book-img/geo_09.webp"],[10,"왜 나만 따라 하니?","book-img/geo_10.webp"],[11,"우동 맛 지키는 복 고양이","book-img/geo_11.webp"],[12,"겁쟁이가 아니야","book-img/geo_12.webp"],[13,"음매! 하고 우는 개","book-img/geo_13.webp"],[14,"뚜엉의 생일","book-img/geo_14.webp"],[15,"무타킨과 영혼의 인형","book-img/geo_15.webp"],[16,"도시의 오마르와 사막의 사카카","book-img/geo_16.webp"],[17,"천재 영화감독 무스타파","book-img/geo_17.webp"],[18,"나타샤의 모스크바 여행","book-img/geo_18.webp"],[19,"돌아온 헤라클레스","book-img/geo_19.webp"],[20,"비토의 선물","book-img/geo_20.webp"],[21,"카르멘의 편지","book-img/geo_21.webp"],[22,"앤드루, 어디 가니?","book-img/geo_22.webp"],[23,"돌돌 마녀의 향수","book-img/geo_23.webp"],[24,"할머니는 잔소리 대왕","book-img/geo_24.webp"],[25,"야나 할머니의 벽화 이야기","book-img/geo_25.webp"],[26,"노르웨이 삼총사","book-img/geo_26.webp"],[27,"내가 진짜 여신인 이유","book-img/geo_27.webp"],[28,"내 생일은 독립 기념일","book-img/geo_28.webp"],[29,"아마존에서 온 친구","book-img/geo_29.webp"],[30,"콜케를 찾아서","book-img/geo_30.webp"],[31,"미안해, 사하르","book-img/geo_31.webp"],[32,"이다음에 어른이 되면","book-img/geo_32.webp"],[33,"아기 고릴라 토마","book-img/geo_33.webp"],[34,"만델라의 편지","book-img/geo_34.webp"],[35,"캥거루 버스를 탄 제임스","book-img/geo_35.webp"],[36,"자신만만 지리 대탐험","book-img/geo_36.webp"],[37,"뚝딱뚝딱 세계 문화 만들기","book-img/geo_37.webp"]]],["world","솔루토이 세계사","🗺️","본책 34권 + 별책 1권",[[1,"고대 이야기","book-img/world_01.webp"],[2,"중세 이야기 1","book-img/world_02.webp"],[3,"중세 이야기 2","book-img/world_03.webp"],[4,"근대 이야기 1","book-img/world_04.webp"],[5,"근대 이야기 2","book-img/world_05.webp"],[6,"현대 이야기","book-img/world_06.webp"],[7,"치이테 왕자의 4대 문명 모험","book-img/world_07.webp"],[8,"다리우스 1세와 페르시아고양이","book-img/world_08.webp"],[9,"그리스인의 진정한 우승","book-img/world_09.webp"],[10,"알렉산드로스 대왕의 동방 모험","book-img/world_10.webp"],[11,"로마를 아낀 내 친구, 카이사르","book-img/world_11.webp"],[12,"아소카왕에게 배우는 평등","book-img/world_12.webp"],[13,"만리장성의 365번째 돌","book-img/world_13.webp"],[14,"신의 왕국 비잔티움 제국","book-img/world_14.webp"],[15,"중세 유럽에 살고 싶어!","book-img/world_15.webp"],[16,"아라비아에 내린 신의 계시","book-img/world_16.webp"],[17,"200년의 전쟁, 십자군 이야기","book-img/world_17.webp"],[18,"세상을 바꾼 중국의 네 가지 발명","book-img/world_18.webp"],[19,"나는 칭기즈 칸의 후예","book-img/world_19.webp"],[20,"무사가 되고 싶은 겐지","book-img/world_20.webp"],[21,"피렌체를 찾아온 마법사들","book-img/world_21.webp"],[22,"콜럼버스와 꼬마 선원","book-img/world_22.webp"],[23,"타지마할과 황제의 꿈","book-img/world_23.webp"],[24,"베르사유 궁전의 재봉사","book-img/world_24.webp"],[25,"홍차와 미국의 독립","book-img/world_25.webp"],[26,"마리 앙투아네트의 눈물","book-img/world_26.webp"],[27,"증기 기관차를 탄 로봇 삼 형제","book-img/world_27.webp"],[28,"청나라의 마지막 궁녀 이야기","book-img/world_28.webp"],[29,"세계를 뒤흔든 총알 하나","book-img/world_29.webp"],[30,"붉은 광장의 일기장","book-img/world_30.webp"],[31,"누가 히틀러를 말려 주세요!","book-img/world_31.webp"],[32,"아프리카 국경선의 비밀","book-img/world_32.webp"],[33,"베를린 장벽을 넘은 우정","book-img/world_33.webp"],[34,"살기 좋은 세계를 만들어요!","book-img/world_34.webp"]]],["hero","솔루토이 위인","🌟","본책 30권 + 별책 1권",[[1,"세상을 탐구한 화가 레오나르도 다빈치","book-img/hero_01.webp"],[2,"어린 왕자를 쓴 작가 생텍쥐페리","book-img/hero_02.webp"],[3,"곤충의 생활을 연구한 곤충학자 파브르","book-img/hero_03.webp"],[4,"세상을 바꾼 발명가 에디슨","book-img/hero_04.webp"],[5,"꺼지지 않는 열정을 그린 화가 고흐","book-img/hero_05.webp"],[6,"자신만의 그림을 그리는 화가 피카소","book-img/hero_06.webp"],[7,"마음을 담아 작곡하는 음악가 모차르트","book-img/hero_07.webp"],[8,"건축물에 자연을 담은 건축가 가우디","book-img/hero_08.webp"],[9,"생물의 변화를 연구한 생물학자 다윈","book-img/hero_09.webp"],[10,"대한 독립 만세를 외친 승려 한용운","book-img/hero_10.webp"],[11,"듣지 못하는 열정의 작곡가 베토벤","book-img/hero_11.webp"],[12,"소박한 이웃을 그린 화가 박수근","book-img/hero_12.webp"],[13,"나라를 사랑한 시인 윤동주","book-img/hero_13.webp"],[14,"자연을 섬세하게 그린 화가 신사임당","book-img/hero_14.webp"],[15,"비행의 꿈을 이룬 발명가 라이트 형제","book-img/hero_15.webp"],[16,"소처럼 우직하게 그림을 그린 화가 이중섭","book-img/hero_16.webp"],[17,"진심으로 백성을 사랑한 왕 세종 대왕","book-img/hero_17.webp"],[18,"백성을 위해 지도를 만든 지리학자 김정호","book-img/hero_18.webp"],[19,"수많은 생명을 구한 미생물학자 파스퇴르","book-img/hero_19.webp"],[20,"사과로 우주의 힘을 밝혀낸 과학자 뉴턴","book-img/hero_20.webp"],[21,"우주의 진실을 밝힌 천문학자 갈릴레이","book-img/hero_21.webp"],[22,"독립 만세 운동을 이끈 소녀 유관순","book-img/hero_22.webp"],[23,"조선의 바다를 지킨 장군 이순신","book-img/hero_23.webp"],[24,"노예를 해방시킨 대통령 링컨","book-img/hero_24.webp"],[25,"인도의 독립을 이끈 평화 지도자 간디","book-img/hero_25.webp"],[26,"평화를 사랑한 화학자 노벨","book-img/hero_26.webp"],[27,"아프리카 작은 마을의 위대한 의사 슈바이처","book-img/hero_27.webp"],[28,"가난한 사람들의 어머니 테레사","book-img/hero_28.webp"],[29,"사람들의 희망이 된 사회 운동가 헬렌 켈러","book-img/hero_29.webp"],[30,"나눔을 실천한 강철왕 카네기","book-img/hero_30.webp"],[31,"꿈 쑥쑥 직업 체험관","book-img/hero_31.webp"]]]];
+/* ===== 📚 빨간펜 솔루토이 '우리 집 책장' · 하루 한 권 · 독후활동 =====
+   자료: 교원 빨간펜 공식 상품 페이지(kyowonedu.com)의 전집 '전체 도서 보기' 권 목록·표지
+   표지 이미지: repo book-img/ (168px webp) */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+  return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c]; }); }
+function rd(k, fb){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; } }
+function wr(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+function pad2(n){ return (n < 10 ? "0" : "") + n; }
+function todayKey(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate()); }
+
+/* ---------- 1. 책 목록 (공식 확인본) ---------- */
+var RB = window.RB = window.RB || {};
+var SRC = window.__RB_DATA || [];
+var SERIES = [], BOOKS = [], BYKEY = {};
+SRC.forEach(function(s){
+  var ser = { k:s[0], n:s[1], e:s[2], c:s[3], books:[] };
+  s[4].forEach(function(b){
+    var o = { key:s[0] + ":" + b[0], ser:s[0], serName:s[1], em:s[2], n:b[0], t:b[1], img:b[2] };
+    ser.books.push(o); BOOKS.push(o); BYKEY[o.key] = o;
+  });
+  SERIES.push(ser);
+});
+
+/* ---------- 2. 저장 ---------- */
+var K = {
+  read:  "haeyuli.redpen.read.v1",
+  today: "haeyuli.redpen.today.v1",
+  art:   "haeyuli.redpen.art.v1",
+  quiz:  "haeyuli.redpen.quiz.v1"
+};
+var read = rd(K.read, {}) || {};
+var art  = rd(K.art, {}) || {};
+var quiz = rd(K.quiz, {}) || {};
+
+function isRead(k){ return !!read[k]; }
+function readCount(serKey){
+  if (!serKey) { var n = 0; BOOKS.forEach(function(b){ if (read[b.key]) n++; }); return n; }
+  var s = SERIES.filter(function(x){ return x.k === serKey; })[0];
+  return s ? s.books.filter(function(b){ return read[b.key]; }).length : 0;
+}
+function seriesOf(k){ return SERIES.filter(function(s){ return s.k === k; })[0]; }
+
+function setRead(key, on){
+  if (!BYKEY[key]) return;
+  if (on) read[key] = Date.now(); else delete read[key];
+  wr(K.read, read);
+  refreshCard(key);
+  refreshCounters();
+  var t = rd(K.today, null);
+  if (t && t.k === key){ var h = $("rbHome"); if (h) h.innerHTML = homeCard(); var aw = $("rbAskWrap"); if (aw) aw.innerHTML = askCard(); }
+  RB.sync();
+}
+/* 카드 한 장만 다시 그린다 (230장 전체를 다시 만들지 않게) */
+function refreshCard(key){
+  var el = document.querySelector('[data-book="' + key.replace(/"/g, '\\"') + '"]');
+  if (!el) return;
+  var b = BYKEY[key], on = isRead(key);
+  el.classList.toggle("read", on);
+  var chk = el.querySelector("[data-rbtoggle]");
+  if (chk){ chk.classList.toggle("on", on); chk.textContent = on ? "✓ 읽었어요" : "읽었어요"; }
+}
+function refreshCounters(){
+  var n = $("rbTabN"); if (n) n.textContent = readCount("") + "/" + BOOKS.length;
+  var chips = $("rbChips");
+  if (chips && chips.children.length){
+    chips.children[0].innerHTML = '전체 <b>' + readCount("") + "/" + BOOKS.length + '</b>';
+    for (var i = 0; i < SERIES.length; i++){
+      var el = chips.children[i + 1];
+      if (!el) continue;
+      el.innerHTML = SERIES[i].e + " " + esc(SERIES[i].n.replace("솔루토이 ", "")) +
+        ' <b>' + readCount(SERIES[i].k) + "/" + SERIES[i].books.length + '</b>';
+    }
+  }
+  var pr = document.querySelector("#rbShelfWrap .rb-prog");
+  if (pr){
+    var c = CHIP ? readCount(CHIP) : readCount(""), tot = CHIP ? seriesOf(CHIP).books.length : BOOKS.length;
+    var bar = pr.querySelector(".rb-bar i"), sp = pr.querySelector("span");
+    if (bar) bar.style.width = Math.round(c / tot * 100) + "%";
+    if (sp) sp.textContent = c + " / " + tot + "권";
+  }
+  var h = $("rbHome");
+  if (h && h.innerHTML.indexOf("읽었어요") >= 0){ /* 홈 카드는 오늘 책이 읽히면 다시 */ }
+  if (!$("rbHome")) return;
+}
+
+/* ---------- 3. 오늘의 책 ---------- */
+function unreadList(excludeKey){
+  var out = BOOKS.filter(function(b){ return !read[b.key] && b.key !== excludeKey; });
+  return out.length ? out : BOOKS;
+}
+function pickFor(date, excludeKey){
+  var pool = unreadList(excludeKey);
+  var seed = 0, ds = String(date);
+  for (var i = 0; i < ds.length; i++) seed = (seed * 31 + ds.charCodeAt(i)) % 100000;
+  return pool[seed % pool.length];
+}
+function todayBook(rotate){
+  var d = todayKey();
+  var t = rd(K.today, null);
+  if (rotate){
+    var prev = (t && t.d === d) ? t.k : null;
+    var pick = pickFor(d, prev);
+    wr(K.today, { d:d, k:pick.key, n:(prev ? 1 : 0) });
+    return pick;
+  }
+  if (t && t.d === d && BYKEY[t.k] && !isRead(t.k)) return BYKEY[t.k];
+  var p = pickFor(d);
+  wr(K.today, { d:d, k:p.key, n:(t && t.d === d ? (t.n || 0) : 0) });
+  return p;
+}
+
+/* ---------- 4. 문제 (시리즈별) ---------- */
+var QS = {
+  sci: [
+    ["물을 얼리면 어떻게 될까요?", ["얼음이 돼요", "사라져요", "불이 돼요"], 0],
+    ["해는 어느 쪽에서 뜰까요?", ["동쪽", "서쪽", "북쪽"], 0],
+    ["식물이 잘 자라려면 무엇이 필요할까요?", ["물과 햇빛", "소리와 바람", "돌과 모래"], 0],
+    ["무지개는 언제 잘 보일까요?", ["비 온 뒤 해가 날 때", "한밤중에", "눈이 올 때"], 0]
+  ],
+  math: [
+    ["3 + 4 는 얼마일까요?", ["7", "6", "8"], 0],
+    ["10에서 3을 빼면?", ["7", "6", "13"], 0],
+    ["세모(삼각형)의 변은 몇 개일까요?", ["3개", "4개", "5개"], 0],
+    ["5, 10, 15, 다음 수는?", ["20", "18", "25"], 0]
+  ],
+  kor: [
+    ["받침이 있는 글자는 어느 것일까요?", ["강", "가", "고"], 0],
+    ["이야기가 끝났을 때 찍는 문장 부호는?", ["마침표(.)", "쉼표(,)", "따옴표(\")"], 0],
+    ["웃어른께 말할 때 쓰는 말은?", ["높임말", "반말", "혼잣말"], 0],
+    ["‘ㅏ’는 어떤 소리일까요?", ["아", "이", "우"], 0]
+  ],
+  hist: [
+    ["한글을 만든 임금님은?", ["세종대왕", "정조", "태조"], 0],
+    ["거북선을 만든 장군은?", ["이순신", "강감찬", "김유신"], 0],
+    ["고조선을 세운 사람은?", ["단군왕검", "주몽", "온조"], 0],
+    ["옛날 책을 만들던 곳은?", ["교서관", "마트", "놀이터"], 0]
+  ],
+  geo: [
+    ["우리나라의 수도는?", ["서울", "부산", "울산"], 0],
+    ["지구에서 가장 넓은 바다는?", ["태평양", "동해", "서해"], 0],
+    ["우리나라에서 가장 큰 섬은?", ["제주도", "울릉도", "독도"], 0],
+    ["해가 지는 쪽은?", ["서쪽", "동쪽", "남쪽"], 0]
+  ],
+  world: [
+    ["피라미드가 있는 나라는?", ["이집트", "중국", "그리스"], 0],
+    ["만리장성이 있는 나라는?", ["중국", "일본", "인도"], 0],
+    ["콜럼버스가 찾아간 곳은?", ["아메리카", "호주", "아프리카"], 0],
+    ["로마 제국은 어느 나라 반도에서 시작했을까요?", ["이탈리아", "이집트", "인도"], 0]
+  ],
+  hero: [
+    ["사과로 만유인력을 알아낸 과학자는?", ["뉴턴", "에디슨", "파브르"], 0],
+    ["‘모나리자’를 그린 화가는?", ["레오나르도 다빈치", "고흐", "피카소"], 0],
+    ["독립 만세를 외친 소녀는?", ["유관순", "신사임당", "헬렌 켈러"], 0],
+    ["나는 칭기즈 칸의 후예 — 칭기즈 칸은 어느 나라 사람일까요?", ["몽골", "중국", "일본"], 0]
+  ]
+};
+function quizFor(book){
+  var pool = QS[book.ser] || QS.sci;
+  var a = pool[book.n % pool.length], b = pool[(book.n + 2) % pool.length];
+  return [a, b];
+}
+
+/* ---------- 5. 화면 만들기 ---------- */
+var MODE = "tree";           /* tree | shelf | act */
+var ACTIVE = null;           /* 독후활동 중인 책 key */
+var CHIP = "";               /* 시리즈 필터 */
+
+function cover(b){ return b.img ? '<img src="' + esc(b.img) + '" alt="' + esc(b.t) + ' 표지" loading="lazy">' : ""; }
+
+function buildTabs(){
+  var box = document.createElement("div");
+  box.className = "rb-tabs"; box.id = "rbTabs";
+  box.setAttribute("role", "tablist");
+  box.innerHTML =
+    '<button class="rb-tab on" type="button" data-rbtab="tree" role="tab" aria-pressed="true">🌳 북트리</button>' +
+    '<button class="rb-tab" type="button" data-rbtab="shelf" role="tab" aria-pressed="false">📚 우리 집 빨간펜 책장<span class="rb-tab-n" id="rbTabN"></span></button>';
+  return box;
+}
+
+function askCard(){
+  var b = todayBook(false);
+  return '<div class="rb-ask" id="rbAsk">' +
+    '<div class="rb-ask-c">' + cover(b) + '</div>' +
+    '<div class="rb-ask-t">' +
+      '<span class="rb-ask-q">오늘 해율이에게 물어보는 책</span>' +
+      '<b class="rb-ask-b">《' + esc(b.t) + '》 읽어 봤니?</b>' +
+      '<span class="rb-ask-s">' + esc(b.serName) + ' · ' + b.n + '권</span>' +
+    '</div>' +
+    '<div class="rb-ask-a">' +
+      '<button class="rb-btn yes" type="button" data-rbact="ask-yes" data-k="' + esc(b.key) + '">네, 읽었어요 ✓</button>' +
+      '<button class="rb-btn ghost" type="button" data-rbact="ask-next">다른 책 보기</button>' +
+    '</div></div>';
+}
+
+function shelfHTML(){
+  var chips = '<button class="rb-chip' + (CHIP === "" ? " on" : "") + '" type="button" data-rbchip="">전체 <b>' +
+      readCount("") + "/" + BOOKS.length + '</b></button>';
+  SERIES.forEach(function(s){
+    chips += '<button class="rb-chip' + (CHIP === s.k ? " on" : "") + '" type="button" data-rbchip="' + s.k + '">' +
+      s.e + " " + esc(s.n.replace("솔루토이 ", "")) + ' <b>' + readCount(s.k) + "/" + s.books.length + '</b></button>';
+  });
+
+  var list = CHIP ? (seriesOf(CHIP) ? seriesOf(CHIP).books : []) : BOOKS;
+  var grid = list.map(function(b){
+    var on = isRead(b.key);
+    return '<div class="rb-book' + (on ? " read" : "") + '" data-book="' + esc(b.key) + '">' +
+      cover(b) + '<span class="rb-bn">' + b.n + '</span>' +
+      '<div class="rb-bt">' + esc(b.t) + '</div>' +
+      '<div class="rb-ba">' +
+        '<button class="rb-chk' + (on ? " on" : "") + '" type="button" data-rbtoggle="' + esc(b.key) + '">' + (on ? "✓ 읽었어요" : "읽었어요") + '</button>' +
+        '<button class="rb-pen" type="button" data-rbopen="' + esc(b.key) + '" aria-label="독후활동">📝</button>' +
+      '</div></div>';
+  }).join("");
+
+  var prog = "";
+  if (CHIP && seriesOf(CHIP)) {
+    var s = seriesOf(CHIP), c = readCount(CHIP);
+    prog = '<div class="rb-prog"><b>' + esc(s.n) + '</b><div class="rb-bar"><i style="width:' +
+      Math.round(c / s.books.length * 100) + '%"></i></div><span>' + c + " / " + s.books.length + '권</span></div>';
+  } else {
+    var c2 = readCount("");
+    prog = '<div class="rb-prog"><b>우리 집 책장</b><div class="rb-bar"><i style="width:' +
+      Math.round(c2 / BOOKS.length * 100) + '%"></i></div><span>' + c2 + " / " + BOOKS.length + '권</span></div>';
+  }
+
+  return '<div class="rb-askwrap" id="rbAskWrap">' + askCard() + '</div>' +
+         '<div class="rb-chips" id="rbChips">' + chips + '</div>' + prog +
+         '<div class="rb-shelf" id="rbShelf">' + (grid || '<div class="rb-empty">책을 찾지 못했어요</div>') + '</div>';
+}
+
+function actHTML(b){
+  var qs = quizFor(b);
+  var q = qs.map(function(x, i){
+    return '<div class="rb-q">' + (i + 1) + '. ' + esc(x[0]) + '</div><div class="rb-opts" data-qi="' + i + '">' +
+      x[1].map(function(o, j){
+        return '<button class="rb-opt" type="button" data-rbq="' + i + '" data-oi="' + j + '">' + esc(o) + '</button>';
+      }).join("") + '</div>';
+  }).join("");
+  var recKey = "rb:" + b.key;
+  var recBtn = (SB.rec && SB.rec.btn) ? SB.rec.btn(recKey) : '<span class="rb-empty">이 기기에서는 녹음이 안 돼요</span>';
+  var hadArt = !!art[b.key];
+  return '<div class="rb-act-h">' + cover(b) +
+      '<div><b>' + esc(b.t) + '</b><span>' + esc(b.serName) + ' · ' + b.n + '권 · 독후활동</span></div>' +
+      '<button class="rb-btn ghost" type="button" data-rbact="act-close" style="margin-left:auto">← 책장으로</button>' +
+    '</div>' +
+    '<div class="rb-step"><div class="rb-step-h"><b>① 책 문제</b><span>맞히면 ⭐ 별을 받아요</span></div>' +
+      '<div id="rbQuiz">' + q + '</div><div id="rbQuizMsg" class="rb-done" style="margin-top:.6vh"></div></div>' +
+    '<div class="rb-step"><div class="rb-step-h"><b>② 줄거리 말하기</b><span>녹음하고 바로 들어 봐요</span></div>' +
+      '<p class="rb-q" style="font-weight:800;color:#7f8b99">“이 책에서 무슨 일이 있었는지” 해율이 목소리로 들려줄래?</p>' +
+      '<div class="rb-rec" id="rbRec">' + recBtn + '</div></div>' +
+    '<div class="rb-step"><div class="rb-step-h"><b>③ 기억나는 장면 그리기</b><span>손가락으로 그려요</span></div>' +
+      '<div class="rb-canvas-box"><canvas id="rbCanvas" width="720" height="420" aria-label="그림 그리는 곳"></canvas></div>' +
+      '<div class="rb-pal" id="rbPal"></div>' +
+      '<div class="rb-pal" style="margin-top:.5vh">' +
+        '<button class="rb-tool" type="button" data-rbtool="brush">🖌 붓</button>' +
+        '<button class="rb-tool" type="button" data-rbtool="erase">🧽 지우개</button>' +
+        '<button class="rb-tool" type="button" data-rbtool="clear">🗑 전체 지우기</button>' +
+        '<button class="rb-tool on" type="button" data-rbtool="save">💾 그림 저장</button>' +
+      '</div>' +
+      '<div class="rb-art-thumb" id="rbArtThumb"' + (hadArt ? "" : " hidden") + '>' +
+        (hadArt ? '<img src="' + art[b.key] + '" alt="내가 그린 그림"><span>내가 그린 그림이에요 ✓</span>' : "") +
+      '</div></div>';
+}
+
+function buildBookView(){
+  var view = $("viewBook"); if (!view || $("rbTabs")) return;
+  /* 원래의 두 패널(책나무·책장)은 한 덩어리로 감싸고, 그 위에 하위 탭을 둔다 */
+  var body = document.createElement("div");
+  body.className = "rb-tree-body"; body.id = "rbTreeBody";
+  while (view.firstChild) body.appendChild(view.firstChild);
+  view.appendChild(body);
+  view.insertBefore(buildTabs(), body);
+  view.classList.add("rb-hasbooks");
+  var shelf = document.createElement("div");
+  shelf.className = "rb-act rb-hide"; shelf.id = "rbShelfWrap";
+  view.appendChild(shelf);
+  var act = document.createElement("div");
+  act.className = "rb-act rb-hide"; act.id = "rbActWrap";
+  view.appendChild(act);
+  paintShelves();
+  applyMode();
+}
+
+var BUILT = null;
+function paintShelves(force){
+  var w = $("rbShelfWrap"); if (!w) return;
+  if (!force && BUILT === CHIP && w.children.length){ tabCount(); return; }
+  w.innerHTML = shelfHTML();
+  BUILT = CHIP;
+  tabCount();
+}
+function tabCount(){
+  var n = $("rbTabN");
+  if (n) n.textContent = readCount("") + "/" + BOOKS.length;
+}
+
+function homeCard(){
+  var b = todayBook(false);
+  return '<div class="rb-hc">' + cover(b) + '</div>' +
+    '<div class="rb-hi">' +
+      '<span class="rb-hk">📖 오늘 읽을 책 · 하루 한 권</span>' +
+      '<b class="rb-ht">《' + esc(b.t) + '》</b>' +
+      '<span class="rb-hs">' + esc(b.serName) + ' · ' + b.n + '권</span>' +
+      '<span class="rb-hq">해율아, 이 책 읽어 봤니?</span>' +
+    '</div>' +
+    '<div class="rb-ha">' +
+      '<button class="rb-btn yes" type="button" data-rbact="home-yes" data-k="' + esc(b.key) + '">읽었어요 ✓</button>' +
+      '<button class="rb-btn ghost" type="button" data-rbact="home-next">다른 책</button>' +
+    '</div>';
+}
+function buildHome(){
+  var view = $("viewHome"); if (!view || $("rbHome")) return;
+  var el = document.createElement("section");
+  el.className = "rb-home"; el.id = "rbHome";
+  el.setAttribute("aria-label", "오늘 읽을 책 — 하루 한 권");
+  el.innerHTML = homeCard();
+  var att = $("homeAtt");
+  if (att && att.nextSibling) view.insertBefore(el, att.nextSibling);
+  else view.insertBefore(el, view.firstChild);
+}
+
+function applyMode(){
+  var treeOn = (MODE === "tree");
+  var view = $("viewBook"); if (!view) return;
+  var tree = $("rbTreeBody");
+  if (tree) tree.classList.toggle("rb-hide", !treeOn);
+  var panels = view.querySelectorAll(".bk-panel");
+  for (var i = 0; i < panels.length; i++) panels[i].classList.toggle("rb-hide", !treeOn);
+  var sw = $("rbShelfWrap"), aw = $("rbActWrap");
+  if (sw) sw.classList.toggle("rb-hide", MODE !== "shelf");
+  if (aw) aw.classList.toggle("rb-hide", MODE !== "act");
+  var tabs = document.querySelectorAll("#rbTabs .rb-tab");
+  for (var j = 0; j < tabs.length; j++){
+    var on = tabs[j].getAttribute("data-rbtab") === (MODE === "act" ? "shelf" : MODE);
+    tabs[j].classList.toggle("on", on);
+    tabs[j].setAttribute("aria-pressed", on ? "true" : "false");
+  }
+}
+
+function paintAll(){
+  paintShelves();
+  var h = $("rbHome"); if (h) h.innerHTML = homeCard();
+  var a = $("rbAskWrap"); if (a) a.innerHTML = askCard();
+  var n = $("rbTabN"); if (n) n.textContent = readCount("") + "/" + BOOKS.length;
+}
+
+/* ---------- 6. 독후활동 ---------- */
+var draw = { ctx:null, color:"#22303f", erasing:false, drawing:false, last:null, key:null };
+
+function openActivity(key){
+  ACTIVE = key;
+  var b = BYKEY[key]; if (!b) return;
+  if (!isRead(key)) setRead(key, true);
+  MODE = "act";
+  applyMode();
+  var w = $("rbActWrap");
+  if (w) w.innerHTML = actHTML(b);
+  initQuiz(b);
+  initPalette();
+  initCanvas(key);
+  var view = $("viewBook");
+  if (view) view.scrollTop = 0;
+}
+
+function initQuiz(b){
+  var msg = $("rbQuizMsg");
+  var solved = quiz[b.key] || { ok:0 };
+  function paintMsg(){
+    if (!msg) return;
+    msg.textContent = solved.ok >= 1 ? "정답이야! 정말 잘했어 ⭐" : "";
+  }
+  paintMsg();
+  var box = $("rbQuiz"); if (!box) return;
+  box.addEventListener("click", function(e){
+    var el = e.target; if (!el || !el.closest) return;
+    var btn = el.closest("[data-rbq]"); if (!btn) return;
+    var qi = parseInt(btn.getAttribute("data-rbq"), 10), oi = parseInt(btn.getAttribute("data-oi"), 10);
+    var qs = quizFor(b), right = qs[qi][2];
+    var opts = box.querySelectorAll('[data-qi="' + qi + '"] .rb-opt');
+    for (var i = 0; i < opts.length; i++){
+      opts[i].classList.remove("ok", "no");
+      if (i === right) opts[i].classList.add("ok");
+    }
+    if (oi === right){
+      if (!solved[qi]){
+        solved[qi] = 1; solved.ok = (solved.ok || 0) + 1;
+        quiz[b.key] = solved; wr(K.quiz, quiz);
+      }
+      if (SB.earn){ try { SB.earn("rbquiz:" + b.key, 1); } catch(e){} }
+      if (SB.starFX) SB.starFX(1, "정답이야! 🎉"); else if (SB.toast) SB.toast("정답이야! ⭐ +1");
+      paintMsg();
+    } else {
+      btn.classList.add("no");
+      if (SB.toast) SB.toast("아쉬워요! 다시 골라 볼까요?");
+    }
+  });
+}
+
+var PALETTE = ["#22303f", "#e0524b", "#f0932b", "#f5d13b", "#43b26a", "#3f8fd0", "#8a6fd8", "#ffffff"];
+function initPalette(){
+  var box = $("rbPal"); if (!box) return;
+  box.innerHTML = PALETTE.map(function(c){
+    return '<button class="rb-sw' + (c === draw.color ? " on" : "") + '" type="button" data-rbcolor="' + c +
+      '" style="background:' + c + '" aria-label="색 ' + c + '"></button>';
+  }).join("");
+}
+
+function initCanvas(key){
+  var cv = $("rbCanvas"); if (!cv) return;
+  var dpr = Math.min(2, window.devicePixelRatio || 1);
+  var rect = cv.getBoundingClientRect();
+  var W = Math.max(320, Math.round(rect.width || 720)), H = Math.max(160, Math.round(rect.height || 420));
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  var ctx = cv.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, W, H);
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+  draw.ctx = ctx; draw.key = key; draw.erasing = false;
+  if (art[key]){
+    var im = new Image();
+    im.onload = function(){ try { ctx.drawImage(im, 0, 0, W, H); } catch(e){} };
+    im.src = art[key];
+  }
+  function pos(e){
+    var r = cv.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (W / r.width), y: (e.clientY - r.top) * (H / r.height) };
+  }
+  cv.addEventListener("pointerdown", function(e){
+    if (e.button && e.button !== 0) return;
+    cv.setPointerCapture(e.pointerId);
+    draw.drawing = true; draw.last = pos(e);
+    dot(draw.last);
+    e.preventDefault();
+  });
+  cv.addEventListener("pointermove", function(e){
+    if (!draw.drawing) return;
+    var p = pos(e);
+    stroke(draw.last, p);
+    draw.last = p;
+    e.preventDefault();
+  });
+  function end(e){ draw.drawing = false; draw.last = null; }
+  cv.addEventListener("pointerup", end);
+  cv.addEventListener("pointercancel", end);
+  cv.addEventListener("pointerleave", function(e){ if (draw.drawing) end(e); });
+}
+function brushStyle(){
+  var ctx = draw.ctx; if (!ctx) return;
+  ctx.globalCompositeOperation = draw.erasing ? "destination-out" : "source-over";
+  ctx.strokeStyle = draw.color; ctx.fillStyle = draw.color;
+  ctx.lineWidth = draw.erasing ? 22 : 6;
+}
+function dot(p){
+  var ctx = draw.ctx; if (!ctx) return;
+  brushStyle();
+  ctx.beginPath(); ctx.arc(p.x, p.y, (draw.erasing ? 11 : 3), 0, Math.PI * 2); ctx.fill();
+}
+function stroke(a, b){
+  var ctx = draw.ctx; if (!ctx) return;
+  brushStyle();
+  ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+}
+function saveCanvas(){
+  var cv = $("rbCanvas"); if (!cv || !draw.key) return;
+  var url;
+  try { url = cv.toDataURL("image/webp", 0.72); } catch(e){ try { url = cv.toDataURL("image/png"); } catch(e2){ return; } }
+  if (String(url).length > 900000){ try { url = cv.toDataURL("image/png"); } catch(e){} }
+  art[draw.key] = url;
+  wr(K.art, art);
+  var th = $("rbArtThumb");
+  if (th){ th.hidden = false; th.innerHTML = '<img src="' + url + '" alt="내가 그린 그림"><span>내가 그린 그림이에요 ✓</span>'; }
+  if (SB.toast) SB.toast("💾 그림을 저장했어요!");
+  RB.sync();
+}
+
+/* ---------- 7. 이벤트 ---------- */
+document.addEventListener("click", function(e){
+  var el = e.target; if (!el || !el.closest) return;
+
+  var tab = el.closest("[data-rbtab]");
+  if (tab){
+    var m = tab.getAttribute("data-rbtab");
+    MODE = (m === "shelf") ? "shelf" : "tree";
+    applyMode();
+    if (MODE === "shelf") paintShelves();
+    return;
+  }
+  var chip = el.closest("[data-rbchip]");
+  if (chip){ CHIP = chip.getAttribute("data-rbchip"); paintShelves(true); return; }
+
+  var tg = el.closest("[data-rbtoggle]");
+  if (tg){
+    var key = tg.getAttribute("data-rbtoggle");
+    var on = !isRead(key);
+    setRead(key, on);
+    if (on && SB.toast) SB.toast("📚 " + BYKEY[key].t + " — 읽었어요로 표시했어요!");
+    return;
+  }
+  var op = el.closest("[data-rbopen]");
+  if (op){
+    var k2 = op.getAttribute("data-rbopen");
+    if (!isRead(k2)) setRead(k2, true);
+    openActivity(k2);
+    return;
+  }
+
+  var act = el.closest("[data-rbact]");
+  if (act){
+    var a = act.getAttribute("data-rbact");
+    if (a === "ask-next" || a === "home-next"){
+      todayBook(true);
+      paintAll();
+      if (SB.toast) SB.toast("📖 다른 책을 골랐어요!");
+      return;
+    }
+    if (a === "ask-yes" || a === "home-yes"){
+      var k3 = act.getAttribute("data-k") || (todayBook(false) || {}).key;
+      if (k3){
+        if (!isRead(k3)) setRead(k3, true);
+        if (SB.go) SB.go("book");
+        openActivity(k3);
+        if (SB.toast) SB.toast("📚 읽은 책으로 표시했어요 · 독후활동을 해 볼까요?");
+      }
+      return;
+    }
+    if (a === "act-close"){
+      MODE = "shelf"; ACTIVE = null; applyMode(); paintShelves(); return;
+    }
+  }
+
+  var sw = el.closest("[data-rbcolor]");
+  if (sw){
+    draw.color = sw.getAttribute("data-rbcolor"); draw.erasing = false;
+    var sws = document.querySelectorAll("#rbPal .rb-sw");
+    for (var i = 0; i < sws.length; i++) sws[i].classList.toggle("on", sws[i] === sw);
+    return;
+  }
+  var tool = el.closest("[data-rbtool]");
+  if (tool){
+    var t = tool.getAttribute("data-rbtool");
+    if (t === "brush"){ draw.erasing = false; if (SB.toast) SB.toast("🖌 붓으로 그려요"); }
+    if (t === "erase"){ draw.erasing = true; if (SB.toast) SB.toast("🧽 지우개 — 문질러 지워요"); }
+    if (t === "clear"){
+      var cv = $("rbCanvas");
+      if (cv && draw.ctx){
+        var r = cv.getBoundingClientRect();
+        draw.ctx.save(); draw.ctx.globalCompositeOperation = "source-over";
+        draw.ctx.fillStyle = "#ffffff"; draw.ctx.fillRect(0, 0, r.width || cv.width, r.height || cv.height);
+        draw.ctx.restore();
+      }
+    }
+    if (t === "save") saveCanvas();
+    return;
+  }
+  /* 홈 카드 본문을 눌러도 책 탭으로 */
+  var hcard = el.closest("#rbHome .rb-hi, #rbHome .rb-hc");
+  if (hcard && SB.go){ SB.go("book"); MODE = "shelf"; applyMode(); paintShelves(); return; }
+});
+
+/* ---------- 8. 가족 동기화(별도 문서) ---------- */
+var SYNCING = false;
+RB.sync = function(){
+  try {
+    if (SYNCING) return;
+    if (typeof apiGet !== "function" || typeof apiPut !== "function" || typeof fam !== "function") return;
+    var code = (fam() || {}).code; if (!code) return;
+    SYNCING = true;
+    var ns = code + "-books";
+    apiGet(ns).then(function(cloud){
+      var remote = (cloud && cloud.books) || {};
+      var merged = {}, k;
+      for (k in remote) if (remote[k] && (!read[k] || remote[k] > read[k])) merged[k] = remote[k];
+      for (k in read) if (read[k] && (!merged[k] || read[k] > merged[k])) merged[k] = read[k];
+      var rart = (cloud && cloud.art) || {}, ak, artChanged = false;
+      for (ak in rart) if (rart[ak] && !art[ak]) { art[ak] = rart[ak]; artChanged = true; }
+      if (artChanged) wr(K.art, art);
+      var changed = JSON.stringify(merged) !== JSON.stringify(read);
+      read = merged; wr(K.read, read); if (changed) paintAll();
+      return apiPut(ns, { v:1, books: merged, art: art, at: Date.now() }).then(function(){ SYNCING = false; });
+    }).catch(function(){ SYNCING = false; });
+  } catch(e){ SYNCING = false; }
+};
+
+/* ---------- 8-b. 리딩앤 바로가기 (온라인 공부 → 영어) ---------- */
+var EXT_LINKS = [
+  ["rbRnLink", "🔗 리딩앤", "https://www.readingn.com", "리딩앤 사이트 열기 (새 창)"],
+  ["rbPmLink", "🔗 파닉스 몬스터", "https://m.alist.co.kr/PM2nd/index_real.asp", "파닉스 몬스터 사이트 열기 (새 창)"]
+];
+function addReadingN(){
+  try {
+    EXT_LINKS.forEach(function(x){
+      var old = document.getElementById(x[0]); if (old && old.parentNode) old.parentNode.removeChild(old);
+    });
+    if (!SB || SB.current !== "study" || SB.subject !== "en") return;
+    var box = document.getElementById("subs2");
+    var host = (box && !box.hidden) ? box : document.getElementById("subs");
+    if (!host || host.hidden) return;
+    EXT_LINKS.forEach(function(x){
+      var a = document.createElement("a");
+      a.id = x[0]; a.className = "subtab rb-ext";
+      a.href = x[2]; a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.textContent = x[1];
+      a.setAttribute("aria-label", x[3]);
+      host.appendChild(a);
+    });
+  } catch(e){}
+}
+
+/* ---------- 8-c. 숙제를 다 하면 출석 도장까지 자동으로 ---------- */
+var ATTK = "haeyuli.attend.v1";
+function localToday(){ var d = new Date(); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+function attStore(){
+  try { var v = JSON.parse(localStorage.getItem(ATTK) || "{}"); if (!v || typeof v !== "object") v = {}; if (!v.days || typeof v.days !== "object") v.days = {}; return v; }
+  catch(e){ return { days:{} }; }
+}
+function syncAttendance(){
+  try {
+    var board = document.getElementById("weekBoard"); if (!board) return;
+    var complete = !!board.querySelector(".wk-today.ok");
+    var t = localToday(), att = attStore(), rec = att.days[t];
+    var stamped = !!(rec && rec.star);
+    if (complete && !stamped){
+      if (SB.markAttendance) SB.markAttendance("check");
+      if (SB.week && SB.week.render) SB.week.render();
+      if (SB.toast) SB.toast("🐾 숙제를 다 했으니 출석 도장도 찍었어요!");
+    } else if (!complete && stamped){
+      var ks = Object.keys(rec.src || {});
+      /* 우리가 자동으로 찍은 도장만 되돌린다 (직접 찍은 도장은 그대로) */
+      if (ks.length === 1 && ks[0] === "check"){
+        delete att.days[t];
+        try { localStorage.setItem(ATTK, JSON.stringify(att)); } catch(e){}
+        if (SB.renderAttend) SB.renderAttend();
+        if (SB.onAttend) SB.onAttend();
+        if (SB.week && SB.week.render) SB.week.render();
+      }
+    }
+  } catch(e){ try { (window.__rbErrs = window.__rbErrs || []).push("att:" + e); } catch(e2){} }
+}
+function watchWeekBoard(){
+  var board = document.getElementById("weekBoard");
+  if (!board || board.__rbWatch) return;
+  board.__rbWatch = 1;
+  var tm = null;
+  try {
+    new MutationObserver(function(){ clearTimeout(tm); tm = setTimeout(syncAttendance, 90); })
+      .observe(board, { childList:true, subtree:true });
+  } catch(e){}
+  syncAttendance();
+}
+
+/* ---------- 8-d. 톱니바퀴(설정) 안전망 ---------- */
+function openSettingsSafe(){
+  try {
+    var m = $("settingsModal");
+    if (m) m.hidden = false;
+    return !!(m && !m.hidden);
+  } catch(e){ return false; }
+}
+function wireSettings(){
+  var b = $("btnSettings");
+  if (b && !b.__rbSet){
+    b.__rbSet = 1;
+    b.addEventListener("click", function(){
+      var m = $("settingsModal");
+      if (!m) return;
+      /* 예전 요소가 없어 다른 스크립트가 멈췄다면 여기서 직접 연다 */
+      setTimeout(function(){ if (m.hidden) openSettingsSafe(); }, 30);
+    });
+  }
+  var modal = $("settingsModal");
+  if (modal && !modal.__rbClose){
+    modal.__rbClose = 1;
+    modal.addEventListener("click", function(e){
+      if (e.target === modal){ modal.hidden = true; return; }
+      var c = e.target.closest ? e.target.closest("[data-close]") : null;
+      if (c && c.getAttribute("data-close") === "settingsModal") modal.hidden = true;
+    });
+  }
+  if (!document.__rbEsc){
+    document.__rbEsc = 1;
+    document.addEventListener("keydown", function(e){
+      if (e.key !== "Escape") return;
+      var m = $("settingsModal"); if (m && !m.hidden) m.hidden = true;
+    });
+  }
+}
+
+/* ---------- 9. 시작 ---------- */
+function boot(){
+  try {
+    buildBookView();
+    buildHome();
+    /* 책 탭이 열릴 때마다 최신 상태로 (기존 책나무 그리기는 그대로 살린다) */
+    SB.onShow = SB.onShow || {};
+    var oldBook = SB.onShow.book;
+    SB.onShow.book = function(){ if (oldBook) { try { oldBook.apply(this, arguments); } catch(e){} }
+      paintShelves(); if (MODE !== "act") applyMode(); };
+    var oldChips = SB.renderChips;
+    SB.renderChips = function(){ if (oldChips) { try { oldChips.apply(this, arguments); } catch(e){} } addReadingN(); };
+    var oldHome = SB.onShow.home;
+    SB.onShow.home = function(){ try { buildHome(); var h = $("rbHome"); if (h) h.innerHTML = homeCard(); } catch(e){} if (oldHome) try { oldHome.apply(this, arguments); } catch(e){}
+      try { watchWeekBoard(); syncAttendance(); } catch(e){} };
+    paintAll();
+    addReadingN();
+    watchWeekBoard();
+    wireSettings();
+    RB.sync();
+  } catch(e){
+    try { (window.__rbErrs = window.__rbErrs || []).push(String(e)); } catch(e2){}
+  }
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+else setTimeout(boot, 0);
+window.RB = { series:SERIES, books:BOOKS, read:function(){ return read; }, isRead:isRead,
+  setRead:setRead, open:openActivity, today:function(){ return todayBook(false); },
+  stats:function(){ return { total:BOOKS.length, read:readCount("") }; } };
+})();
+
+/* ==/RB-BLOCK-JS== */
 </script>
 </body>
 </html>
