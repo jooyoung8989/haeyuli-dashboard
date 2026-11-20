@@ -3394,6 +3394,7 @@ body .wk-sub i{font-size:.95rem;}
 .hv-b{font-style:normal;padding:.1rem .5rem;border-radius:999px;font-size:clamp(10px,1.25vh,14px);font-weight:900;}
 .hv-b.geni{background:#fff2e3;color:#a9611b;}
 .hv-b.ebs{background:#eaf2ff;color:#1f5fa8;}
+.hv-b.world{background:#e6f7ee;color:#0f6b4a;}
 .hv-note{font-size:clamp(11px,1.4vh,16px);font-weight:600;color:#6b7a88;line-height:1.35;}
 .hv-empty{padding:2vh;text-align:center;font-weight:700;color:#8b98a4;font-size:clamp(13px,1.6vh,18px);}
 .hv-modal{position:fixed;inset:0;z-index:95;display:flex;align-items:center;justify-content:center;
@@ -5623,8 +5624,8 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
       </div>
       <div class="hist-block" data-secblock="video">
         <div class="hist-head">
-          <div class="hist-title"><b>🎬 역사 영상</b><span>지니스쿨 역사 · EBS 역사가 술술</span></div>
-          <div class="hv-filter" id="hvFilter" role="group" aria-label="시대 고르기"></div>
+          <div class="hist-title"><b>🎬 역사 영상</b><span>지니스쿨 역사 · EBS 역사가 술술 · 🌍 EBS 시간을 달리는 세계사</span></div>
+          <div class="hv-filter" id="hvFilter" role="group" aria-label="시대·세계사 고르기"></div>
         </div>
         <div class="hv-list" id="hvList"></div>
       </div>
@@ -14024,7 +14025,7 @@ else { bind(); render(); }
 })();
 
 /* =====================================================================
-   🎯 역사 사진 퀴즈 · 🎬 역사 영상 (지니스쿨 · EBS 역사가 술술)
+   🎯 역사 사진 퀴즈 · 🎬 역사 영상 (지니스쿨 · EBS 역사가 술술 · EBS 세계사)
    ===================================================================== */
 (function(){
 "use strict";
@@ -14213,7 +14214,7 @@ function finish(){
   if (got > 0 && SB.starFX){ try { SB.starFX(got, "역사 퀴즈 완주!"); } catch(err){} }
 }
 
-/* ---------- 영상 16편 (지니스쿨 역사 · EBS 키즈 '역사가 술술') ---------- */
+/* ---------- 영상 26편 (지니스쿨 역사 · EBS 키즈 '역사가 술술' · EBS '시간을 달리는 세계사') ---------- */
 var VIDS = [
  { id:"ii7PobQgBeQ", era:"pre",    src:"geni", len:"4:41",  title:"구석기와 신석기, 뭐가 다를까?", note:"뗀석기·간석기를 비교해요" },
  { id:"dajNcGW2w7s", era:"pre",    src:"geni", len:"8:43",  title:"단군 할아버지와 고조선 이야기", note:"곰과 호랑이 이야기로 배워요" },
@@ -14230,12 +14231,22 @@ var VIDS = [
  { id:"rgj76OtkHD0", era:"joseon", src:"ebs",  len:"16:48", title:"술술 풀리는 조선시대 이야기", note:"조선 500년을 한 번에" },
  { id:"xt5GtNjj774", era:"modern", src:"geni", len:"3:49",  title:"일제에게 나라를 빼앗기다", note:"잊지 말아야 할 슬픈 역사" },
  { id:"SYcfVkdJsXw", era:"modern", src:"geni", len:"9:05",  title:"대한 독립 만세 · 광복", note:"독립을 위해 싸운 사람들" },
- { id:"kpXOUAH8oT0", era:"modern", src:"ebs",  len:"17:37", title:"전봉준 · 주시경 이야기", note:"농민의 편에 선 전봉준, 한글을 지킨 주시경" }
+ { id:"kpXOUAH8oT0", era:"modern", src:"ebs",  len:"17:37", title:"전봉준 · 주시경 이야기", note:"농민의 편에 선 전봉준, 한글을 지킨 주시경" },
+ { id:"XF9Biyga_9U", era:"world", src:"world", len:"28:10", title:"알렉산드로스 대왕 · 한니발 장군", note:"그리스와 카르타고의 큰 장군" },
+ { id:"YndAdOyRLU8", era:"world", src:"world", len:"27:28", title:"카이사르 · 옥타비아누스", note:"로마를 크게 키운 두 사람" },
+ { id:"coFeJS0YqFY", era:"world", src:"world", len:"26:51", title:"중국 최초의 통일 · 진시황", note:"만리장성을 쌓은 첫 황제" },
+ { id:"1IG6GtFLQ_Q", era:"world", src:"world", len:"26:41", title:"십자군 전쟁", note:"성지를 두고 200년 싸움" },
+ { id:"WBGXIEU70C0", era:"world", src:"world", len:"26:15", title:"칭기즈 칸 · 몽골 제국", note:"초원에서 세상을 삼킨 제국" },
+ { id:"NiIMOokuBcU", era:"world", src:"world", len:"26:49", title:"백 년 전쟁 · 잔 다르크", note:"프랑스를 구한 소녀 장수" },
+ { id:"51HXYH67Mm0", era:"world", src:"world", len:"26:13", title:"르네상스 · 레오나르도 다 빈치", note:"모나리자를 그린 천재" },
+ { id:"hIM-iCDCx3M", era:"world", src:"world", len:"27:37", title:"이사벨 1세 · 콜럼버스", note:"신대륙을 찾아간 항해" },
+ { id:"FZv8uaKRuNU", era:"world", src:"world", len:"27:32", title:"프랑스 혁명 · 나폴레옹", note:"왕이 사라진 프랑스" },
+ { id:"BSHeLTJgZNQ", era:"world", src:"world", len:"27:07", title:"링컨 · 미국 남북 전쟁", note:"노예제를 끝낸 대통령" }
 ];
-var VERAS = [["all","전체"], ["pre","선사·고조선"], ["three","삼국·남북국"], ["goryeo","고려"], ["joseon","조선"], ["modern","근현대"]];
+var VERAS = [["all","전체"], ["world","🌍 세계사"], ["pre","선사·고조선"], ["three","삼국·남북국"], ["goryeo","고려"], ["joseon","조선"], ["modern","근현대"]];
 var VS = { era:"all" };
-var SRCNAME = { geni:"지니스쿨 역사", ebs:"EBS 역사가 술술" };
-var SRCBADGE = { geni:"지니스쿨", ebs:"EBS" };
+var SRCNAME = { geni:"지니스쿨 역사", ebs:"EBS 역사가 술술", world:"EBS 시간을 달리는 세계사" };
+var SRCBADGE = { geni:"지니스쿨", ebs:"EBS", world:"EBS 세계사" };
 
 function renderFilter(){
   var box = $("hvFilter"); if (!box) return;
