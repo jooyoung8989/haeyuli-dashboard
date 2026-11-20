@@ -6367,9 +6367,9 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
         <ol class="ntfy-guide">
           <li>엄마 폰에 무료 <b>ntfy</b> 앱을 설치해요.</li>
           <li>앱에서 <b>+</b>를 눌러 위 토픽 코드를 구독해요.</li>
-          <li>과목을 끝낼 때마다 알림이 도착해요.</li>
+          <li>과목을 끝낼 때마다, <b>오늘 숙제를 다 체크하면</b> 알림이 도착해요.</li>
         </ol>
-        <p class="hintline">토픽 코드는 <b>이 기기에만</b> 저장돼요. 코드를 아는 사람만 알림을 받을 수 있어요.</p>
+        <p class="hintline">가족 코드를 연결하면 이 토픽이 <b>다른 기기에도 함께</b> 맞춰져요. 코드를 아는 사람만 알림을 받을 수 있어요.</p>
       </div>
       <div class="fam-box" id="famBox">
         <div class="fam-h"><b>👨‍👩‍👧 가족 숙제·용돈 동기화</b><span>무료 클라우드</span></div>
@@ -8784,13 +8784,54 @@ SB.subjectsDoneCount = function(){
 /* ------------------------ 🔔 엄마 폰 공부 알림 (ntfy) ------------------------ */
 /* 토픽 코드는 이 브라우저 localStorage 에만 저장한다(코드에 실서비스 토픽을 넣지 않는다). */
 var NT_TOPIC = "study.ntfy.topic.v1", NT_ON = "study.ntfy.enabled.v1", NT_SENT = "study.ntfy.sent.v1";
+var NT_HW = "study.ntfy.hw.v1", NT_AT = "study.ntfy.at.v1";
 var SUBNAMES = { en:"영어", ko:"국어", math:"수학", social:"사회", science:"과학" };
 function ntTopic(){ try { return String(localStorage.getItem(NT_TOPIC) || "").trim(); } catch(e){ return ""; } }
 function ntOn(){ try { var v = localStorage.getItem(NT_ON); return v === null ? !!ntTopic() : v === "1"; } catch(e){ return false; } }
 SB.ntfyTopic = ntTopic;
 SB.ntfyOn = ntOn;
-SB.ntfySetTopic = function(t){ try { localStorage.setItem(NT_TOPIC, String(t == null ? "" : t).trim()); } catch(e){} };
-SB.ntfySetOn = function(v){ try { localStorage.setItem(NT_ON, v ? "1" : "0"); } catch(e){} };
+/* 알림 설정을 마지막으로 바꾼 시각 — 가족 코드 동기화에서 어느 기기 설정이 최신인지 가리는 기준 */
+function ntAtVal(){ try { return parseInt(localStorage.getItem(NT_AT), 10) || 0; } catch(e){ return 0; } }
+function ntBump(){ try { localStorage.setItem(NT_AT, String(Date.now())); } catch(e){} }
+function ntFamTouch(){ try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){} }
+SB.ntfyAt = ntAtVal;
+SB.ntfyState = function(){ return { topic:ntTopic(), on:ntOn(), at:ntAtVal() }; };
+SB.ntfySetTopic = function(t){
+  var v = String(t == null ? "" : t).trim(), was = ntTopic();
+  try { localStorage.setItem(NT_TOPIC, v); } catch(e){}
+  if (v !== was){ ntBump(); ntFamTouch(); }        /* 바뀌면 다른 기기로도 올린다 */
+};
+SB.ntfySetOn = function(v){
+  var now = !!v, was = ntOn();
+  try { localStorage.setItem(NT_ON, now ? "1" : "0"); } catch(e){}
+  if (now !== was){ ntBump(); ntFamTouch(); }
+};
+/* 가족 코드로 받은 알림 설정을 이 기기에 적용 */
+SB.ntfyApply = function(n){
+  try {
+    if (!n || typeof n !== "object") return false;
+    var t = String(n.topic == null ? "" : n.topic).trim();
+    var on = (n.on === undefined) ? !!t : !!n.on;
+    var at = Math.max(0, parseInt(n.at, 10) || 0);
+    var cur = SB.ntfyState();
+    if (t === cur.topic && on === cur.on) return false;
+    try {
+      localStorage.setItem(NT_TOPIC, t);
+      localStorage.setItem(NT_ON, on ? "1" : "0");
+      localStorage.setItem(NT_AT, String(at || Math.max(cur.at, Date.now())));
+    } catch(e){}
+    SB.ntfyRefresh();
+    return true;
+  } catch(e){ return false; }
+};
+/* 설정 화면의 토픽 칸·알림 스위치를 지금 값에 맞춘다 (동기화로 값이 바뀌었을 때) */
+SB.ntfyRefresh = function(){
+  try {
+    var tin = $("ntfyTopic"), ton = $("ntfyOn");
+    if (tin) tin.value = ntTopic();
+    if (ton) ton.checked = ntOn();
+  } catch(e){}
+};
 SB.ntfyNewTopic = function(){
   var abc = "abcdefghijkmnpqrstuvwxyz23456789", out = "haeyul-study-", buf = null;
   try { if (window.crypto && crypto.getRandomValues) { buf = new Uint8Array(16); crypto.getRandomValues(buf); } } catch(e){ buf = null; }
@@ -8800,24 +8841,79 @@ SB.ntfyNewTopic = function(){
   }
   return out;
 };
+/* ntfy는 HTTP 헤더 값을 ASCII로만 받는다. 아이폰 사파리·안드로이드 크롬도 한글이 섞인 헤더를 보내면
+   fetch가 TypeError를 내고 알림이 조용히 사라진다. 그래서 제목은 RFC 2047(=?UTF-8?B?...?=, ASCII만)로
+   감싸 보내고 한글 본문은 body(UTF-8)에 넣는다 — ntfy.sh가 제목을 한글로 풀어 알림에 띄운다.
+   (index.html은 영문 고정 Title + 한글 본문을 쓴다. 두 방식 모두 헤더가 ASCII라 실패하지 않는다.) */
 function ntHdr(s){
-  try { return "=?UTF-8?B?" + btoa(unescape(encodeURIComponent(String(s)))) + "?="; } catch(e){ return "ntfy"; }
+  var t = String(s == null ? "" : s).replace(/[\r\n]+/g, " ").trim() || "해율이 스터디 보드";
+  try {
+    var b = btoa(unescape(encodeURIComponent(t)));
+    if (b) return "=?UTF-8?B?" + b + "?=";
+  } catch(e){}
+  return "Haeyuli Study";                          /* 인코딩이 안 되면 영문 ASCII 제목 */
 }
 function ntPost(topic, title, body, priority){
+  topic = String(topic == null ? "" : topic).replace(/[\r\n]+/g, "").trim();
   if (!topic) return null;
+  var t2 = String(title == null ? "" : title).replace(/[\r\n]+/g, " ").trim() || "해율이 스터디 보드";
+  var b2 = String(body == null ? "" : body);
   var url = "https://ntfy.sh/" + encodeURIComponent(topic);
-  var headers = { "Title": ntHdr(title || "해율이 스터디 보드"), "Tags": "books" };
+  var headers = { "Title": ntHdr(t2), "Tags": "books" };
   if (priority) headers["Priority"] = priority;
+  var rec = SB.lastNtfy = { url:url, topic:topic, title:t2, body:b2, headers:headers, at:Date.now(), ok:null, status:0 };
+  var pr;
   try {
-    var pr = fetch(url, { method:"POST", headers:headers, body:String(body || "") });
-    if (pr && pr.catch) pr.catch(function(){});     /* 실패는 조용히 무시 */
-    SB.lastNtfy = { url:url, title:title, body:body };
-    return url;
-  } catch(e){ return null; }
+    pr = fetch(url, { method:"POST", cache:"no-store", headers:headers, body:b2 }).then(function(r){
+      rec.ok = !!r.ok; rec.status = r.status;
+      if (!r.ok) rec.error = "ntfy HTTP " + r.status;
+      return { ok:!!r.ok, status:r.status, url:url, error:rec.error || "" };
+    }, function(e){
+      rec.ok = false; rec.error = String((e && e.message) || e);
+      return { ok:false, status:0, url:url, error:rec.error };
+    });
+  } catch(e){
+    /* 헤더·본문 문제로 fetch가 던진 경우 — 화면은 멈추지 않게 결과만 돌려준다 */
+    rec.ok = false; rec.error = String((e && e.message) || e);
+    pr = Promise.resolve({ ok:false, status:0, url:url, error:rec.error });
+  }
+  return pr;                                       /* { ok, status, url } 로 끝난다 (거절되지 않음) */
 }
 SB.ntfySend = function(title, body, priority){
   if (!ntOn()) return null;
   return ntPost(ntTopic(), title, body, priority);
+};
+/* 🏠 홈 숙제 — 오늘 숙제를 다 체크한 순간 엄마 폰으로 알림 (하루 한 번) */
+SB.ntfyHwAlert = function(st){
+  try {
+    if (!st || !ntTopic() || !ntOn()) return null;
+    var day = String(st.date || (SB.today ? SB.today() : TODAY));
+    var hwAll = (st.hwTotal > 0) && (st.hwDone >= st.hwTotal);
+    if (!hwAll && !st.complete) return null;        /* 오늘 숙제가 남았으면 보내지 않는다 */
+    if (SB._ntHwTryAt && (Date.now() - SB._ntHwTryAt) < 60000) return null;   /* 실패 직후 반복 방지 */
+    var log = readJSON(NT_HW, null);
+    if (!log || typeof log !== "object" || Array.isArray(log)) log = {};
+    if (log[day]) return null;                      /* 같은 날 두 번 보내지 않는다 */
+    log[day] = Date.now();
+    var keys = Object.keys(log).sort();
+    for (var i = 0; i < keys.length - 60; i++) delete log[keys[i]];
+    writeJSON(NT_HW, log);
+    SB._ntHwTryAt = Date.now();
+    var stars = SB.starsNow ? SB.starsNow() : 0;
+    var rest = st.subTotal ? (" · 오늘 과목 " + st.subDone + "/" + st.subTotal) : "";
+    var bodyTxt = (st.hwTotal ? "오늘 숙제 " + st.hwTotal + "개를 모두 끝냈어요!" : "오늘 할 일을 모두 마쳤어요!")
+                + rest + " (⭐ " + stars + "개)";
+    var pr = SB.ntfySend("🎉 해율이가 오늘 숙제를 다 했어요!", bodyTxt, "high");
+    if (pr && pr.then) pr.then(function(r){
+      if (r && r.ok) return;
+      SB._ntHwTryAt = 0;                            /* 못 보냈으면 기록을 지워 다음에 다시 보낸다 */
+      try {
+        var l2 = readJSON(NT_HW, null);
+        if (l2 && l2[day]) { delete l2[day]; writeJSON(NT_HW, l2); }
+      } catch(e){}
+    });
+    return bodyTxt;
+  } catch(e){ return null; }
 };
 SB.ntfyTest = function(){
   var topic = ntTopic();
@@ -8852,7 +8948,17 @@ SB.ntfySubject = function(sub){
     }
     log[TODAY] = day;
     writeJSON(NT_SENT, log);
-    SB.ntfySend(out.title, out.body, out.priority);
+    var pr2 = SB.ntfySend(out.title, out.body, out.priority);
+    if (pr2 && pr2.then) pr2.then(function(r){
+      if (r && r.ok) return;
+      try {                                     /* 못 보냈으면 기록을 되돌려 다음 번에 다시 보낸다 */
+        var l2 = readJSON(NT_SENT, null);
+        if (l2 && l2[TODAY]) {
+          if (out.priority) delete l2[TODAY].all; else delete l2[TODAY][sub];
+          writeJSON(NT_SENT, l2);
+        }
+      } catch(e){}
+    });
     return out;
   } catch(e){ return null; }
 };
@@ -8892,8 +8998,13 @@ SB.ntfySubject = function(sub){
     } catch(e){ fallback(); }
   });
   if (bTest) bTest.addEventListener("click", function(){
-    var url = SB.ntfyTest();
-    SB.toast(url ? "📲 테스트 알림을 보냈어요! 엄마 폰을 확인해 보세요." : "먼저 토픽 코드를 입력해 주세요.");
+    var pr = SB.ntfyTest();
+    if (!pr) { SB.toast("먼저 토픽 코드를 입력해 주세요."); return; }
+    SB.toast("📲 테스트 알림을 보내는 중…");
+    if (pr.then) pr.then(function(r){
+      SB.toast((r && r.ok) ? "📲 테스트 알림을 보냈어요! 엄마 폰을 확인해 보세요."
+                           : "⚠️ 알림을 보내지 못했어요 · 인터넷과 토픽 코드를 확인해 주세요.");
+    });
   });
   sync();
 })();
@@ -14115,6 +14226,7 @@ function toggleSubDone(day, key){
   savePlan(p);
   render();
   try { if (SB.family && SB.family.sync) SB.family.sync(); } catch(e){}
+  hwAlertIfDone();
   return !cur;
 }
 function savePlan(p){ writeObj(PLAN_KEY, p); touchFam(); }
@@ -14266,13 +14378,25 @@ function addHw(day, text){
   touchFam();
   return true;
 }
+/* 🎉 오늘 숙제를 전부 체크한 순간 엄마 폰으로 알림 — 이 기기에서 직접 누른 순간에만 보낸다
+   (가족 동기화로 다른 기기의 완료 상태를 받은 경우까지 보내면 같은 알림이 두 번 온다) */
+function hwAlertIfDone(){
+  try {
+    var st = todayStatus();
+    if (!st) return null;
+    var hwAll = st.hwTotal > 0 && st.hwDone >= st.hwTotal;
+    if (!hwAll && !st.complete) return null;
+    if (SB.ntfyHwAlert) return SB.ntfyHwAlert(st);
+  } catch(e){}
+  return null;
+}
 function toggleHw(id){
   var w = hwWeek(), found = false;
   for (var d = 0; d < 7; d++) {
     var list = w.days[String(d)] || [];
     for (var i = 0; i < list.length; i++) if (list[i].id === id) { list[i].done = !list[i].done; list[i].t = Date.now(); found = true; }
   }
-  if (found) { saveHwWeek(w); render(); touchFam(); }
+  if (found) { saveHwWeek(w); render(); touchFam(); hwAlertIfDone(); }
   return found;
 }
 function delHw(id){
@@ -17102,6 +17226,8 @@ var K = {
   rbUn: "haeyuli.redpen.unread.v1", rbLog: "study.readlog.v1",
   mathset: "haeyuli.mathset.v1"
 };
+/* 🔔 ntfy 알림 설정도 같은 가족 코드 문서로 오간다 */
+var NTK = { topic: "study.ntfy.topic.v1", on: "study.ntfy.enabled.v1", at: "study.ntfy.at.v1" };
 
 function read(k, fb){
   try { var v = JSON.parse(localStorage.getItem(k) || "null"); return (v && typeof v === "object") ? v : fb; }
@@ -17112,6 +17238,39 @@ function fam(){ var f = read(FAM_KEY, {}); return (f && typeof f === "object") ?
 function saveFam(f){ write(FAM_KEY, f); }
 function nsOf(code){ return "haeyuli-" + String(code || "").toLowerCase(); }
 function toast(t){ if (SB.toast) SB.toast(t); }
+
+/* ---------------- 🔔 ntfy 알림 설정 (토픽 · 켜짐) ----------------
+   · 한 기기에서 토픽을 만들거나 켜면 같은 가족 코드의 다른 기기에도 자동으로 맞춘다
+   · 토픽이 없는 기기는 있는 쪽을 받는다. 둘 다 있으면 마지막에 바꾼 쪽(at 최신)이 이긴다 */
+function ntRead(){
+  var t = "", on = false, at = 0;
+  try { t = String(localStorage.getItem(NTK.topic) || "").trim(); } catch(e){}
+  try { var v = localStorage.getItem(NTK.on); on = (v === null) ? !!t : v === "1"; } catch(e){}
+  try { at = num(localStorage.getItem(NTK.at)); } catch(e){}
+  return { topic:t, on:!!on, at:at };
+}
+function ntSave(n){
+  try {
+    localStorage.setItem(NTK.topic, String(n.topic || ""));
+    localStorage.setItem(NTK.on, n.on ? "1" : "0");
+    localStorage.setItem(NTK.at, String(num(n.at) || Date.now()));
+    return true;
+  } catch(e){ return false; }
+}
+function mergeNtfy(l, c){
+  l = (l && typeof l === "object") ? l : {};
+  c = (c && typeof c === "object") ? c : {};
+  var lt = String(l.topic || "").trim(), ct = String(c.topic || "").trim();
+  var la = num(l.at), ca = num(c.at);
+  var lo = (l.on === undefined) ? !!lt : !!l.on, co = (c.on === undefined) ? !!ct : !!c.on;
+  var pick;
+  if (!lt && !ct) return { topic:"", on:false, at:Math.max(la, ca, 1) };
+  else if (!lt) pick = { topic:ct, on:co, at:ca };                       /* 이 기기엔 아직 없다 — 있는 쪽을 쓴다 */
+  else if (!ct) pick = { topic:lt, on:lo, at:la };
+  else if (ct !== lt) pick = (ca > la) ? { topic:ct, on:co, at:ca } : { topic:lt, on:lo, at:la };
+  else pick = (ca > la) ? { topic:ct, on:co, at:ca } : ((la > ca) ? { topic:lt, on:lo, at:la } : { topic:lt, on:(lo || co), at:Math.max(la, ca) });
+  return { topic:pick.topic, on:!!pick.on, at:num(pick.at) || Math.max(la, ca, 1) };
+}
 
 function snap(){
   var pl = read(K.plan, { days:{} });
@@ -17125,6 +17284,7 @@ function snap(){
     study: read(K.study, {}),
     coupons: read(K.coupons, { items:[], issued:{} }),
     mathset: read(K.mathset, {}),
+    ntfy: ntRead(),
     rb: {
       read: read(K.rbRead, {}),
       today: (rbT && rbT.d && rbT.k) ? rbT : null,
@@ -17134,9 +17294,9 @@ function snap(){
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -17408,6 +17568,7 @@ function buildDoc(local, cloud, base, code){
     coupons: mergeCoupons(local.coupons, c.coupons),
     rb: mergeRb(local.rb, c.rb),
     mathset: mergeMathset(local.mathset, c.mathset),
+    ntfy: mergeNtfy(local.ntfy, c.ntfy),
     at: Date.now()
   };
 }
@@ -17434,6 +17595,16 @@ function applyDoc(doc){
     var dl = (doc.rb.log && doc.rb.log.days) || null;
     if (dl && JSON.stringify(dl) !== JSON.stringify((cur.log && cur.log.days) || {})) { write(K.rbLog, { v:1, days:dl }); rbChanged = true; }
     if (rbChanged) changed = true;
+  }
+  /* 🔔 ntfy 알림 설정 — 다른 기기에서 만든 토픽·켜짐 상태를 이 기기에도 반영 */
+  if (doc.ntfy && typeof doc.ntfy === "object"){
+    var ncur = ntRead(), nnew = mergeNtfy(ncur, doc.ntfy);
+    if (nnew.topic !== ncur.topic || nnew.on !== ncur.on){
+      ntSave(nnew);
+      changed = true;
+      try { if (SB.ntfyRefresh) SB.ntfyRefresh(); } catch(e){}
+      if (nnew.topic && nnew.topic !== ncur.topic) toast("🔔 가족 코드로 알림 토픽을 맞췄어요");
+    }
   }
   if (changed) rerender(rbChanged);
   if (mathChanged) { try { if (SB.mathSetChanged) SB.mathSetChanged(); } catch(e){} }
@@ -17467,7 +17638,8 @@ function pullPush(manual){
     if (!cloud){
       var doc = {
         v:1, code:f.code, plan:local.plan, hw:local.hw, money:local.money,
-        done:local.done, study:local.study, coupons:local.coupons, rb:local.rb, mathset:local.mathset, at:Date.now()
+        done:local.done, study:local.study, coupons:local.coupons, rb:local.rb, mathset:local.mathset,
+        ntfy:local.ntfy, at:Date.now()
       };
       return apiPut(f.code, doc).then(function(){ return true; });
     }
@@ -17531,7 +17703,7 @@ function createCode(){
   saveFam({ code:code, base:num(s.money.piggy), lastSync:0, sig:"", lastError:"", at:Date.now() });
   paint();
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
-  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, at:Date.now() })
+  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, at:Date.now() })
     .then(function(){
       var g = fam();
       g.base = num(s.money.piggy); g.lastSync = Date.now(); g.sig = sigOf(s); g.lastError = "";
@@ -17557,6 +17729,14 @@ function joinCode(){
     if (cloud.study) write(K.study, cloud.study);
     if (cloud.coupons) write(K.coupons, cloud.coupons);
     if (cloud.mathset && typeof cloud.mathset === "object"){ write(K.mathset, cloud.mathset); try { if (SB.mathSetChanged) SB.mathSetChanged(); } catch(e){} }
+    /* 🔔 알림 토픽 — 가족이 이미 쓰던 토픽이 있으면 그 토픽을 이 기기에도 맞춘다 */
+    if (cloud.ntfy && typeof cloud.ntfy === "object"){
+      var ctn = String(cloud.ntfy.topic || "").trim(), lnow = ntRead();
+      if (ctn){
+        ntSave({ topic:ctn, on:(cloud.ntfy.on !== false), at:Math.max(num(cloud.ntfy.at), lnow.at, 1) });
+        try { if (SB.ntfyRefresh) SB.ntfyRefresh(); } catch(e){}
+      }
+    }
     var gotRb = false;
     if (cloud.rb && typeof cloud.rb === "object"){
       if (cloud.rb.read) { write(K.rbRead, cloud.rb.read); gotRb = true; }
