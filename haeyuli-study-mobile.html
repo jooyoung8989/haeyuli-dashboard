@@ -4481,6 +4481,51 @@ body.mob .dy-viewmeta{font-size:.8rem;}
   .dy-viewart img{max-height:32vh;}
   .dy-viewink img{max-height:30vh;}
 }
+
+/* ================= 🎉 5일 연속 출석 잭팟 ================= */
+.jp-wrap{position:fixed;inset:0;z-index:9700;display:flex;align-items:center;justify-content:center;padding:1rem;animation:jpFade .25s ease-out both;}
+.jp-wrap.out{animation:jpOut .38s ease-in both;}
+.jp-veil{position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,rgba(255,214,74,.34),rgba(90,48,4,.62) 66%,rgba(38,18,0,.76) 100%);animation:jpVeil .5s ease-out both;}
+.jp-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+.jp-card{position:relative;z-index:2;width:min(30rem,93vw);max-height:93vh;max-height:93dvh;overflow:auto;text-align:center;
+  background:linear-gradient(168deg,#fffdf4 0%,#ffeec2 52%,#ffd97a 100%);
+  border-radius:1.7rem;padding:clamp(.9rem,3.2vh,1.7rem) clamp(.85rem,3.2vw,1.6rem) clamp(.85rem,2.8vh,1.3rem);
+  box-shadow:0 1.4rem 3.4rem rgba(80,36,0,.5),inset 0 0 0 .5rem rgba(255,255,255,.5),0 0 0 .24rem #ffc107;
+  animation:jpPop .6s cubic-bezier(.18,1.5,.4,1) both;}
+.jp-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(112deg,transparent 34%,rgba(255,255,255,.72) 47%,transparent 60%);
+  background-size:260% 100%;animation:jpShine 2.8s ease-in-out .35s infinite;}
+.jp-emo{font-size:clamp(2rem,5.6vh,3rem);line-height:1;animation:jpBob 1s ease-in-out infinite;}
+.jp-kicker{display:inline-block;margin:.35rem 0 .15rem;padding:.2rem .72rem;border-radius:999px;background:#ffeaa6;
+  color:#7a4a00;font-size:clamp(.68rem,1.5vh,.82rem);font-weight:900;letter-spacing:.06em;}
+.jp-title{margin:.4rem 0 .05rem;font-size:clamp(1.28rem,3.5vh,1.95rem);font-weight:900;color:#8a4b00;letter-spacing:-.01em;
+  text-shadow:0 .1rem 0 #fff,0 .3rem .9rem rgba(200,120,0,.32);}
+.jp-amount{margin:.3rem 0 .1rem;font-size:clamp(1.85rem,6.2vh,3.1rem);font-weight:900;line-height:1.06;letter-spacing:-.02em;
+  background:linear-gradient(180deg,#fff7bd 0%,#ffc32b 45%,#ff7a00 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 .1rem .16rem rgba(150,76,0,.38));animation:jpPulse 1.15s ease-in-out infinite;}
+.jp-sub{margin:.55rem 0 0;font-size:clamp(.82rem,1.95vh,1.02rem);line-height:1.5;font-weight:800;color:#7a5220;}
+.jp-bal{margin:.5rem 0 0;font-size:clamp(.76rem,1.75vh,.92rem);font-weight:900;color:#8a5a12;background:#fff4cd;border-radius:.8rem;padding:.4rem .6rem;}
+.jp-bal b{color:#c25100;font-size:1.06em;}
+.jp-ok{margin-top:clamp(.7rem,2.2vh,1.05rem);width:100%;height:clamp(2.9rem,6.4vh,3.5rem);border:0;border-radius:1rem;cursor:pointer;
+  font-size:clamp(1rem,2.4vh,1.2rem);font-weight:900;color:#5a2f00;
+  background:linear-gradient(180deg,#ffe98a,#ffc021 55%,#ff9d00);
+  box-shadow:0 .35rem 0 #cc7a00,0 .7rem 1.4rem rgba(200,120,0,.35);}
+.jp-ok:active{transform:translateY(.18rem);box-shadow:0 .18rem 0 #cc7a00,0 .4rem .9rem rgba(200,120,0,.35);}
+@keyframes jpFade{from{opacity:0;}to{opacity:1;}}
+@keyframes jpOut{to{opacity:0;transform:scale(.97);}}
+@keyframes jpVeil{from{opacity:0;}to{opacity:1;}}
+@keyframes jpPop{0%{opacity:0;transform:scale(.6) rotate(-3deg);}60%{opacity:1;}100%{opacity:1;transform:scale(1) rotate(0deg);}}
+@keyframes jpBob{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-.35rem) rotate(4deg);}}
+@keyframes jpPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.055);}}
+@keyframes jpShine{0%{background-position:180% 0;}55%,100%{background-position:-60% 0;}}
+@media (max-height:430px){
+  .jp-card{padding:.6rem .8rem;border-radius:1.2rem;}
+  .jp-emo{font-size:1.5rem;}
+  .jp-title{font-size:1.05rem;}
+  .jp-amount{font-size:1.6rem;}
+  .jp-sub{font-size:.72rem;margin-top:.25rem;}
+  .jp-ok{height:2.3rem;margin-top:.45rem;font-size:.9rem;}
+}
 </style>
 <style id="portraitFit">
 /* ================= 세로 모드(태블릿 세로·휴대폰) — 큼직하게, 빈 여백 없이 ================= */
@@ -11668,14 +11713,17 @@ function bindTrace(){
       });
     }
   });
-  var chips = $("hjChips");
-  if (chips && !chips.__b) {
-    chips.__b = 1;
-    chips.addEventListener("click", function(e){
-      var b = e.target.closest("[data-hj]"); if (!b) return;
-      pickChar(parseInt(b.getAttribute("data-hj"), 10));
-    });
-  }
+  ["hjChips", "hjWordChips"].forEach(function(id){
+    var box = $(id);
+    if (box && !box.__b) {
+      box.__b = 1;
+      box.addEventListener("click", function(e){
+        var b = e.target && e.target.closest ? e.target.closest("[data-hj]") : null;
+        if (!b) return;
+        pickChar(parseInt(b.getAttribute("data-hj"), 10));
+      });
+    }
+  });
   var sb = $("hjStrokeBtn");
   if (sb && !sb.__b) { sb.__b = 1; sb.addEventListener("click", function(){ playStrokes(); }); }
   var cl = $("hjClear");
@@ -12173,6 +12221,7 @@ function render(){
   }
   h += '</div>';
   box.innerHTML = h;
+  try { if (st && SB.streak) SB.streak.note(st); } catch(e){}
 }
 
 function addHw(day, text){
@@ -12354,10 +12403,10 @@ function data(){
 function save(d){ try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} }
 function bankTotal(d){ var n = 0; (d.bank || []).forEach(function(e){ if (!e.out) n += Number(e.amt) || 0; }); return n; }
 
-function addPiggy(amt, why){
+function addPiggy(amt, why, rid){
   var d = data();
   d.piggy = Math.max(0, (Number(d.piggy) || 0) + amt);
-  d.log.unshift({ t:(amt > 0 ? "+" : "") + won(amt), amt:amt, at:today() + " " + new Date().toTimeString().slice(0, 5), why:why || "" });
+  d.log.unshift({ t:(amt > 0 ? "+" : "") + won(amt), amt:amt, at:today() + " " + new Date().toTimeString().slice(0, 5), why:why || "", rid:rid || "" });
   d.log = d.log.slice(0, 20);
   save(d);
   return d;
@@ -12553,11 +12602,386 @@ SB.money = {
   question: function(){ return { a:LOCK.a, b:LOCK.b, sum:LOCK.a + LOCK.b }; },
   answer: answer, pick: function(v){ pick = v; renderBank(); },
   setDayOffset: function(n){ M.offset = Number(n) || 0; renderBank(); renderPiggy(); },
+  credit: function(amt, why, rid){
+    var dd = addPiggy(Number(amt) || 0, why || "", rid || "");
+    renderPiggy(); try { flyCoins(Number(amt) || 0); } catch(e){}
+    return Number(dd.piggy) || 0;
+  },
   addDays: addDays, render: function(){ renderPiggy(); renderBank(); }
 };
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); renderPiggy(); });
 else { bind(); renderPiggy(); }
+})();
+
+/* =====================================================================
+   🎉 5일 연속 숙제 출석 잭팟 — 매일 숙제를 다 끝내면 5일마다 용돈 5,000원
+   · 그날의 과목·숙제를 "전부" 체크한 날만 1일로 센다 (haeyuli.hwstreak.v1)
+   · 5·10·15일째… 한 회차에 한 번만 지급 (새로고침·체크 해제 후 재체크해도 중복 없음)
+   · 금빛 가루·금화 비 + 폭죽 + 빵빠레 연출
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var SK = "haeyuli.hwstreak.v1", MONEY_KEY = "haeyuli.money.v1", DONE_KEY = "haeyuli.hwdone.v1";
+var STEP = 5, REWARD = 5000;
+
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function iso(d){ return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+function today(){ return iso(new Date()); }
+function shift(ds, n){
+  var p = String(ds).split("-");
+  var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  d.setDate(d.getDate() + n);
+  return iso(d);
+}
+function readJSON(k){
+  try { var v = JSON.parse(localStorage.getItem(k) || "null"); return (v && typeof v === "object") ? v : null; }
+  catch(e){ return null; }
+}
+function writeJSON(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+
+function state(){
+  var s = readJSON(SK) || {};
+  if (!s.days || typeof s.days !== "object" || Array.isArray(s.days)) s.days = {};
+  if (!s.paid || typeof s.paid !== "object" || Array.isArray(s.paid)) s.paid = {};
+  return s;
+}
+/* 숙제를 다 끝낸 날 = 우리 기록 + 기존 숙제 완료 기록(가족 동기화됨) */
+function allDays(){
+  var s = state(), out = {}, m = readJSON(DONE_KEY) || {}, k;
+  for (k in m) if (m[k] && m[k].d) out[k] = 1;
+  for (k in s.days) if (s.days[k]) out[k] = s.days[k];
+  return out;
+}
+function streakLen(days, end){
+  var n = 0, d = end;
+  while (days[d] && n < 5000) { n++; d = shift(d, -1); }
+  return n;
+}
+function roundOf(n){ return (n > 0 && n % STEP === 0) ? (n / STEP) : 0; }
+
+/* 보너스 회차 표식 — 용돈 내역에 남겨 다른 기기에서도 중복 지급을 막는다 */
+function ridOf(date, n){ return "streak" + STEP + "-" + date + "-" + n; }
+function seenInLog(rid){
+  if (!rid) return false;
+  var d = null;
+  try { d = (SB.money && SB.money.data) ? SB.money.data() : readJSON(MONEY_KEY); } catch(e){ d = readJSON(MONEY_KEY); }
+  var log = (d && Array.isArray(d.log)) ? d.log : [];
+  for (var i = 0; i < log.length; i++) if (log[i] && log[i].rid === rid) return true;
+  return false;
+}
+function credit(amt, why, rid){
+  if (SB.money && SB.money.credit) {
+    try { var p = SB.money.credit(amt, why, rid); if (typeof p === "number") return p; } catch(e){}
+  }
+  var d = readJSON(MONEY_KEY) || {};
+  d.piggy = Math.max(0, (Number(d.piggy) || 0) + amt);
+  d.log = Array.isArray(d.log) ? d.log : [];
+  d.log.unshift({ t:(amt > 0 ? "+" : "") + (Number(amt) || 0).toLocaleString("ko-KR") + "원",
+    amt:amt, at:today() + " " + new Date().toTimeString().slice(0, 5), why:why || "", rid:rid || "" });
+  d.log = d.log.slice(0, 20);
+  writeJSON(MONEY_KEY, d);
+  try { if (SB.money && SB.money.render) SB.money.render(); } catch(e){}
+  return d.piggy;
+}
+
+/* 오늘 상태를 기록하고 연속 일수를 다시 센다 */
+function note(st){
+  if (!st || !st.date) return null;
+  var s = state(), days = allDays(), changed = false;
+  var ok = !!(st.complete && Number(st.total) > 0 && Number(st.done) >= Number(st.total));
+  if (ok) {
+    if (s.days[st.date] !== Number(st.done)) { s.days[st.date] = Number(st.done); changed = true; }
+  } else if (s.days[st.date] != null) {
+    delete s.days[st.date]; changed = true;          /* 체크를 풀면 오늘은 연속에서 빠진다 */
+  }
+  var n = streakLen(allDays(), st.date), round = roundOf(n), rid = round ? ridOf(st.date, n) : "";
+  if (round && !s.paid[st.date] && seenInLog(rid)) { s.paid[st.date] = REWARD; changed = true; }
+  if (changed) { s.at = Date.now(); writeJSON(SK, s); }
+  return { date:st.date, days:n, round:round, rid:rid, paid:!!s.paid[st.date] };
+}
+
+function payout(info){
+  if (!info || !info.round) return false;
+  var s = state();
+  if (s.paid[info.date]) return false;
+  if (seenInLog(info.rid)) { s.paid[info.date] = REWARD; writeJSON(SK, s); return false; }
+  s.paid[info.date] = REWARD;
+  s.lastPaid = { date:info.date, days:info.days, amt:REWARD, at:Date.now() };
+  s.at = Date.now();
+  writeJSON(SK, s);                       /* 먼저 기록 — 같은 순간에 두 번 불려도 한 번만 */
+  var bal = 0;
+  try { bal = credit(REWARD, "🎉 5일 연속 출석 보너스", info.rid); } catch(e){ bal = 0; }
+  try { celebrate(info.days, bal); } catch(e){}
+  try {
+    if (SB.family && SB.family.sync) setTimeout(function(){ try { SB.family.sync(); } catch(e){} }, 120);
+  } catch(e){}
+  return true;
+}
+
+/* ---------------- 연출 ---------------- */
+function celebrate(days, bal){
+  var old = document.getElementById("jpWrap");
+  if (old && old.parentNode) old.parentNode.removeChild(old);
+  var wrap = document.createElement("div");
+  wrap.id = "jpWrap";
+  wrap.className = "jp-wrap";
+  wrap.innerHTML =
+      '<div class="jp-veil"></div>'
+    + '<canvas class="jp-canvas" aria-hidden="true"></canvas>'
+    + '<div class="jp-card" role="dialog" aria-modal="true" aria-labelledby="jpTitle">'
+    +   '<div class="jp-emo" aria-hidden="true">🎉</div>'
+    +   '<div class="jp-kicker">' + days + '일 연속 달성!</div>'
+    +   '<h2 class="jp-title" id="jpTitle">' + days + '일 연속 출석 축하!!!</h2>'
+    +   '<div class="jp-amount">5,000원!!! 지급!</div>'
+    +   '<p class="jp-sub">' + days + '일 동안 매일 숙제를 다 끝냈어요!<br>용돈 저금통에 5,000원이 들어갔어요!</p>'
+    +   (bal > 0 ? '<div class="jp-bal">지금 저금통 <b>' + Number(bal).toLocaleString("ko-KR") + '원</b></div>' : '')
+    +   '<button class="jp-ok" type="button">확인</button>'
+    + '</div>';
+  document.body.appendChild(wrap);
+
+  var closed = false;
+  function close(){
+    if (closed) return;
+    closed = true;
+    wrap.classList.add("out");
+    document.removeEventListener("keydown", onKey, true);
+    setTimeout(function(){ if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 400);
+  }
+  function onKey(e){ if (e.key === "Escape" || e.key === "Enter") { e.preventDefault(); close(); } }
+  var ok = wrap.querySelector(".jp-ok");
+  if (ok) { ok.addEventListener("click", close); try { ok.focus(); } catch(e){} }
+  document.addEventListener("keydown", onKey, true);
+
+  try { runFX(wrap.querySelector(".jp-canvas"), 7000); } catch(e){}
+  try { fanfare(); } catch(e){}
+}
+
+function runFX(cv, ms){
+  if (!cv || !cv.getContext) return;
+  var ctx = cv.getContext("2d");
+  var W = 1, H = 1, dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+  function size(){
+    W = Math.max(1, cv.clientWidth || window.innerWidth);
+    H = Math.max(1, cv.clientHeight || window.innerHeight);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  size();
+  var onR = function(){ try { size(); } catch(e){} };
+  window.addEventListener("resize", onR);
+
+  var GOLD = ["#fff9d6", "#ffe680", "#ffd24a", "#ffb300", "#ffc107", "#ff9d00"];
+  var fall = [], sparks = [], rings = [];
+  var t0 = performance.now(), last = t0, acc = 0, nextBurst = 0, burstN = 0, raf = 0, stopped = false;
+
+  function rnd(a, b){ return a + Math.random() * (b - a); }
+  function pick(a){ return a[(Math.random() * a.length) | 0]; }
+
+  var warm = true;
+  function addFall(n){
+    for (var i = 0; i < n; i++){
+      var coin = Math.random() < 0.16;
+      fall.push({
+        coin:coin, x:rnd(-24, W + 24), y:(warm ? rnd(-H * 0.15, H * 0.95) : rnd(-H * 0.7, -8)),
+        vx:rnd(-30, 30), vy:coin ? rnd(120, 230) : rnd(80, 200),
+        r:coin ? rnd(5.5, 10) : rnd(1.3, 3.3),
+        a:rnd(.5, 1), rot:rnd(0, 6.283), vr:rnd(-5, 5),
+        c:pick(GOLD), sw:rnd(0, 6.283), sws:rnd(1.2, 3.2)
+      });
+    }
+  }
+  function burst(x, y){
+    var n = 56 + ((Math.random() * 34) | 0);
+    for (var i = 0; i < n; i++){
+      var an = (i / n) * 6.2832 + rnd(-.08, .08);
+      var sp = rnd(90, 350);
+      sparks.push({
+        x:x, y:y, vx:Math.cos(an) * sp, vy:Math.sin(an) * sp,
+        r:rnd(1.5, 3.4), life:rnd(.55, 1.2), age:0,
+        c: Math.random() < .8 ? pick(GOLD) : "hsl(" + Math.round(rnd(0, 360)) + ",95%,63%)"
+      });
+    }
+    rings.push({ x:x, y:y, r:2, max:rnd(90, 200), a:.9, w:rnd(2, 4.5) });
+  }
+
+  function stop(){
+    if (stopped) return;
+    stopped = true;
+    try { cancelAnimationFrame(raf); } catch(e){}
+    window.removeEventListener("resize", onR);
+    try { ctx.clearRect(0, 0, W, H); } catch(e){}
+  }
+
+  function frame(now){
+    if (stopped) return;
+    if (!cv.parentNode) { stop(); return; }
+    var dt = Math.min(.05, (now - last) / 1000);
+    last = now;
+    var el = now - t0;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = "lighter";
+
+    /* 1) 하늘에서 금빛 가루·금화 */
+    if (el < ms - 1400){ acc += dt; while (acc > 0.028) { addFall(3); acc -= 0.028; } }
+
+    /* 2) 폭죽 — 가운데·양쪽에서 펑펑 */
+    if (el > nextBurst && burstN < 18 && el < ms - 600){
+      var spots = [[W * .5, H * .12], [W * .09, H * .2], [W * .91, H * .2], [W * .12, H * .56],
+                   [W * .88, H * .56], [W * .5, H * .88], [W * .24, H * .08], [W * .76, H * .08],
+                   [W * .3, H * .42], [W * .7, H * .42]];
+      var sp0 = spots[burstN % spots.length];
+      burst(sp0[0] + rnd(-W * .05, W * .05), Math.max(H * .12, sp0[1] + rnd(-H * .05, H * .05)));
+      nextBurst = el + (burstN < 5 ? 210 : 360);
+      burstN++;
+    }
+
+    for (var i = fall.length - 1; i >= 0; i--){
+      var p = fall[i];
+      p.vy += (p.coin ? 90 : 34) * dt;
+      p.vx += Math.sin(el / 520 + p.sw) * (p.coin ? 8 : 26) * dt;
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      p.rot += p.vr * dt;
+      if (p.y > H + 40 || p.x < -60 || p.x > W + 60) { fall.splice(i, 1); continue; }
+      if (p.coin){
+        ctx.save();
+        ctx.globalAlpha = p.a * .95;
+        ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+        ctx.scale(Math.max(.28, Math.abs(Math.cos(p.rot))), 1);
+        var g = ctx.createRadialGradient(-p.r * .3, -p.r * .35, p.r * .15, 0, 0, p.r);
+        g.addColorStop(0, "#fffbe0"); g.addColorStop(.45, "#ffd24a"); g.addColorStop(1, "#e08a00");
+        ctx.beginPath(); ctx.arc(0, 0, p.r, 0, 6.2832); ctx.fillStyle = g; ctx.fill();
+        ctx.lineWidth = Math.max(1, p.r * .22); ctx.strokeStyle = "rgba(255,246,180,.95)"; ctx.stroke();
+        ctx.restore();
+      } else {
+        ctx.save();
+        ctx.globalAlpha = p.a;
+        var g2 = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4.2);
+        g2.addColorStop(0, "#fffdf0"); g2.addColorStop(.35, p.c); g2.addColorStop(1, "rgba(255,190,20,0)");
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 4.2, 0, 6.2832); ctx.fillStyle = g2; ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    for (var j = sparks.length - 1; j >= 0; j--){
+      var s = sparks[j];
+      s.age += dt;
+      if (s.age >= s.life) { sparks.splice(j, 1); continue; }
+      s.vy += 240 * dt;
+      s.vx *= (1 - 1.9 * dt); s.vy *= (1 - 1.1 * dt);
+      s.x += s.vx * dt; s.y += s.vy * dt;
+      var k = 1 - s.age / s.life;
+      ctx.globalAlpha = Math.max(0, k) * .95;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r * (0.55 + k * 0.75), 0, 6.2832);
+      ctx.fillStyle = s.c; ctx.fill();
+      ctx.globalAlpha = Math.max(0, k) * .28;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 3.4, 0, 6.2832); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    for (var m = rings.length - 1; m >= 0; m--){
+      var r = rings[m];
+      r.r += (r.max - r.r) * Math.min(1, 7 * dt) + 120 * dt;
+      r.a -= dt * 1.5;
+      if (r.a <= 0) { rings.splice(m, 1); continue; }
+      ctx.globalAlpha = Math.max(0, r.a);
+      ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, 6.2832);
+      ctx.lineWidth = r.w; ctx.strokeStyle = "rgba(255,240,170,.85)"; ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+
+    if (el > ms && !fall.length && !sparks.length) { stop(); return; }
+    raf = requestAnimationFrame(frame);
+  }
+  try { addFall(90); } catch(e){}
+  warm = false;
+  raf = requestAnimationFrame(frame);
+}
+
+/* 빵빠레 — Web Audio 로 짧은 축하 화음 (소리 막힌 환경에서도 조용히 넘어간다) */
+function fanfare(){
+  var AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  var ac = null;
+  try { ac = new AC(); } catch(e){ return; }
+  try { if (ac.state === "suspended" && ac.resume) { var r = ac.resume(); if (r && r.catch) r.catch(function(){}); } } catch(e){}
+
+  var now = ac.currentTime + 0.03;
+  var master = ac.createGain();
+  master.gain.setValueAtTime(0.0001, now);
+  master.gain.exponentialRampToValueAtTime(0.26, now + 0.05);
+  master.gain.setValueAtTime(0.26, now + 1.5);
+  master.gain.exponentialRampToValueAtTime(0.0001, now + 2.6);
+  master.connect(ac.destination);
+
+  function brass(freq, t, dur, vol){
+    var o1 = ac.createOscillator(), o2 = ac.createOscillator();
+    var f = ac.createBiquadFilter(), g = ac.createGain();
+    o1.type = "sawtooth"; o2.type = "square";
+    o1.frequency.setValueAtTime(freq, t); o2.frequency.setValueAtTime(freq, t);
+    o1.detune.setValueAtTime(-6, t); o2.detune.setValueAtTime(7, t);
+    f.type = "lowpass";
+    f.frequency.setValueAtTime(700, t);
+    f.frequency.linearRampToValueAtTime(3400, t + 0.05);
+    f.frequency.exponentialRampToValueAtTime(1500, t + Math.max(.08, dur));
+    f.Q.setValueAtTime(1.1, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.028);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(.09, dur));
+    o1.connect(f); o2.connect(f); f.connect(g); g.connect(master);
+    o1.start(t); o2.start(t);
+    o1.stop(t + dur + .05); o2.stop(t + dur + .05);
+  }
+  /* 빰-빠-빠-빰! */
+  var seq = [[523.25, 0.00, .15, .16], [659.25, 0.13, .15, .16], [783.99, 0.26, .16, .17],
+             [1046.50, 0.39, .30, .19], [783.99, 0.62, .13, .15], [1046.50, 0.75, .30, .19]];
+  seq.forEach(function(s){ try { brass(s[0], now + s[1], s[2], s[3]); } catch(e){} });
+  /* 마지막 화음 (도-미-솔-도) */
+  [523.25, 659.25, 783.99, 1046.5].forEach(function(fq){
+    try { brass(fq, now + 1.02, 1.3, 0.085); } catch(e){}
+  });
+  /* 심벌 느낌의 짧은 노이즈 */
+  try {
+    var len = Math.floor(ac.sampleRate * 0.9);
+    var buf = ac.createBuffer(1, len, ac.sampleRate), ch = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6);
+    var src = ac.createBufferSource(); src.buffer = buf;
+    var hp = ac.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 4800;
+    var ng = ac.createGain(); ng.gain.value = 0.14;
+    src.connect(hp); hp.connect(ng); ng.connect(master);
+    src.start(now + 1.02);
+  } catch(e){}
+
+  setTimeout(function(){ try { if (ac.close) ac.close(); } catch(e){} }, 4200);
+}
+
+SB.streak = {
+  STEP: STEP,
+  REWARD: REWARD,
+  note: function(st){ var info = note(st); try { if (info && info.round && !info.paid) payout(info); } catch(e){} return info; },
+  info: function(){
+    var t = today(), s = state(), n = streakLen(allDays(), t);
+    return { date:t, days:n, round:roundOf(n), paid:!!s.paid[t] };
+  },
+  days: function(){ return allDays(); },
+  paid: function(){ return state().paid; },
+  celebrate: function(d, bal){ celebrate(d || STEP, bal || 0); },
+  clear: function(){ try { localStorage.removeItem(SK); } catch(e){} }
+};
+
+/* 처음 열 때도 한 번 확인 — 마지막 체크 직후 앱을 닫았어도 놓치지 않는다 */
+function boot(){
+  try {
+    var st = (SB.week && SB.week.markTodayDone) ? SB.week.markTodayDone() : null;
+    if (!st && SB.week && SB.week.todayStatus) st = SB.week.todayStatus();
+    if (st && SB.streak) SB.streak.note(st);
+  } catch(e){}
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+else boot();
 })();
 
 /* =====================================================================
