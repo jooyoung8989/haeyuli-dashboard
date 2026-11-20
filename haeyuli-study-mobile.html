@@ -1354,6 +1354,8 @@ body.ms-dragging .ms-piece{cursor:grabbing;}
 .mathview[data-sec="think"] .think-art{height:min(36vh,400px);}
 .mathview[data-sec="shape"] .shape-art{height:min(32vh,340px);}
 .cs-main{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:2vh;}
+#mcOld{max-width:64rem;margin:0 auto;width:100%;}
+#conceptTabs{flex:0 0 auto;}
 .mathview[data-sec="calc"] .gd-eq{font-size:clamp(24px,3.8vh,46px);}
 .mathview[data-sec="calc"] .gd-stack{font-size:clamp(22px,3.5vh,42px);}
 .mathview[data-sec="calc"] .gd-ans{font-size:clamp(22px,3.4vh,40px);}
@@ -6049,7 +6051,19 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
     <section class="view mathview" id="viewMath" data-view="math" hidden>
       <div class="panel math-concept" data-secblock="concept">
         <div class="panel-h"><b>🔢 수세기</b><span class="ph-no2" id="mcLevel">레벨 1 · 50~100</span></div>
+        <div class="mc-tabs" id="conceptTabs">
+          <button class="mini on" type="button" data-cm2="count">🔢 수세기</button>
+          <button class="mini" type="button" data-cm2="ten">🔟 10 만들기</button>
+          <button class="mini" type="button" data-cm2="split">🍎 가르기·모으기</button>
+        </div>
         <div class="cs-body" id="countBody"></div>
+        <div class="mc-body" id="mcOld" hidden>
+          <div class="tenframe" id="tenFrame"></div>
+          <div class="mc-split" id="mcSplit" hidden></div>
+          <div class="mc-count"><b id="mcCount">0</b><span>개</span></div>
+          <div class="mc-task" id="mcTask"></div>
+          <div class="mc-answer" id="mcAnswer"></div>
+        </div>
       </div>
       <div class="panel math-calc" data-secblock="calc">
         <div class="panel-h"><b>➕ 기탄 연산 드릴</b><span class="ph-no2" id="calcProg">0 / 10</span></div>
@@ -11602,6 +11616,289 @@ function countRender(){
   })(ops[i]);
 }
 
+/* ---------------------------- 🔟 10 만들기 · 🍎 가르기·모으기 (옛 놀이 그대로) ---------------------------- */
+var MC = { mode:"count", n:0, ten:6, split:{ a:0, b:0, target:7 }, splitDone:false };
+
+/* ---------------- 🍎 가르기 · 모으기 (그림 조각 드래그) ---------------- */
+var MS = { mode:"split", n:7, fruit:0, pool:[], a:[], b:[], merged:[], done:false, init:false, msg:"" };
+function msArt(){
+  if (MS.fruit === 1) {
+    return '<svg viewBox="0 0 40 40" aria-hidden="true">'
+      + '<path d="M20 12 q-12 -4 -13 9 q-2 13 13 17 q15 -4 13 -17 q-1 -13 -13 -9 Z" fill="#e2483f"/>'
+      + '<path d="M20 12 l-7 -5 l5 -1 l2 3 l2 -3 l5 1 Z" fill="#4fae63"/>'
+      + '<g fill="#ffe08a"><circle cx="15" cy="22" r="1.3"/><circle cx="25" cy="21" r="1.3"/><circle cx="20" cy="29" r="1.3"/></g></svg>';
+  }
+  return '<svg viewBox="0 0 40 40" aria-hidden="true">'
+    + '<path d="M20 13 q-14 -5 -16 8 q-2 14 16 16 q18 -2 16 -16 q-2 -13 -16 -8 Z" fill="#e4574c"/>'
+    + '<path d="M20 13 v-6" stroke="#7a4b22" stroke-width="2.4" stroke-linecap="round"/>'
+    + '<path d="M20 7 q7 -7 11 -2 q-5 6 -11 2 Z" fill="#5fbf74"/>'
+    + '<ellipse cx="12" cy="22" rx="3" ry="5" fill="#fff" opacity=".3" transform="rotate(-20 12 22)"/></svg>';
+}
+function msNew(mode){
+  if (mode) MS.mode = mode;
+  MS.fruit = Math.floor(Math.random() * 2);
+  MS.n = 5 + Math.floor(Math.random() * 6);          /* 5~10개 */
+  MS.done = false;
+  MS.msg = "";
+  MS.init = true;
+  var ids = [], i;
+  for (i = 0; i < MS.n; i++) ids.push(i);
+  MS.pool = []; MS.a = []; MS.b = []; MS.merged = [];
+  MS.sa = 0; MS.sb = 0;
+  if (MS.mode === "merge") {
+    var cut = 1 + Math.floor(Math.random() * (MS.n - 1));
+    MS.a = ids.slice(0, cut);
+    MS.b = ids.slice(cut);
+    MS.sa = MS.a.length;
+    MS.sb = MS.b.length;
+  } else {
+    MS.pool = ids;
+  }
+  msRender();
+}
+function msPieceHTML(id){
+  return '<button class="ms-piece" type="button" data-piece="' + id + '" aria-label="그림 조각">' + msArt() + '</button>';
+}
+function msBoxHTML(list, cls, drop, label){
+  return '<div class="ms-basket ' + cls + '" data-drop="' + drop + '">'
+    + '<span class="ms-btitle">' + label + ' <b>' + list.length + '</b></span>'
+    + '<div class="ms-pieces">'
+    + (list.length ? list.map(msPieceHTML).join("") : '<span class="ms-empty">여기로 끌어다 놓아요</span>')
+    + '</div></div>';
+}
+function msRender(){
+  var box = $("mcSplit"); if (!box) return;
+  if (!MS.init) { msNew("split"); return; }
+  var a = MS.a.length, b = MS.b.length, pool = MS.pool.length, mg = MS.merged.length;
+  var eq, task;
+  if (MS.mode === "split") {
+    eq = MS.n + " → " + a + " 과 " + b;
+    task = '<b>' + MS.n + '개</b>를 왼쪽·오른쪽 바구니로 끌어 나눠 보세요';
+  } else {
+    eq = MS.sa + " + " + MS.sb + " = " + (mg === MS.sa + MS.sb ? MS.sa + MS.sb : "?");
+    task = '두 바구니의 그림을 <b>모으기 바구니</b>로 끌어 모아 보세요';
+  }
+  var h = '<div class="ms-top">'
+    + '<div class="ms-modes" role="group" aria-label="가르기 모으기">'
+    +   '<button type="button" data-sm="split" class="' + (MS.mode === "split" ? "on" : "") + '">가르기</button>'
+    +   '<button type="button" data-sm="merge" class="' + (MS.mode === "merge" ? "on" : "") + '">모으기</button>'
+    + '</div>'
+    + '<div class="ms-eq" id="msEq">' + eq + '</div>'
+    + '<button class="mini" type="button" data-msnew="1">🔄 새 문제</button>'
+    + '</div>'
+    + '<div class="ms-taskline">' + task + '</div>';
+  if (MS.mode === "split") {
+    h += '<div class="ms-basket ms-pool" data-drop="pool"><span class="ms-btitle">남은 조각 <b>' + pool + '</b></span>'
+      + '<div class="ms-pieces">' + (pool ? MS.pool.map(msPieceHTML).join("") : '<span class="ms-empty">다 옮겼어요 👍</span>') + '</div></div>'
+      + '<div class="ms-two">' + msBoxHTML(MS.a, "red", "a", "왼쪽 바구니") + msBoxHTML(MS.b, "blue", "b", "오른쪽 바구니") + '</div>';
+  } else {
+    h += '<div class="ms-two">' + msBoxHTML(MS.a, "red", "a", "왼쪽 바구니") + msBoxHTML(MS.b, "blue", "b", "오른쪽 바구니") + '</div>'
+      + '<div class="ms-basket ms-merge" data-drop="merged"><span class="ms-btitle">모으기 바구니 <b>' + mg + '</b></span>'
+      + '<div class="ms-pieces">' + (mg ? MS.merged.map(msPieceHTML).join("") : '<span class="ms-empty">여기로 끌어다 모아요</span>') + '</div></div>';
+  }
+  h += '<div class="ms-msg">' + (MS.msg || "") + '</div>';
+  box.innerHTML = h;
+  box.hidden = MC.mode !== "split";
+  msBind(box);
+
+  /* 성공 판정 — 감점 없이 칭찬하고 다음 문제로 */
+  var ok = false;
+  if (MS.mode === "split") ok = (pool === 0 && a > 0 && b > 0);
+  else ok = (mg === MS.sa + MS.sb && MS.sa > 0 && MS.sb > 0);
+  if (ok && !MS.done) {
+    MS.done = true;
+    var key = SB.today() + "|math|split|" + MS.mode;
+    var got = 0;
+    try { got = SB.earn(key, 1); } catch(e){}
+    try { SB.markAttendance("math"); } catch(e){}
+    MS.msg = MS.mode === "split"
+      ? "🎉 " + MS.n + " → " + a + " 과 " + b + " 로 나눴어요!"
+      : "🎉 " + MS.sa + " + " + MS.sb + " = " + (MS.sa + MS.sb) + " 로 모았어요!";
+    box.querySelector(".ms-msg").textContent = MS.msg;
+    try { if (got) SB.starFX(got, MS.msg); else { if (SB.confetti) SB.confetti(); } } catch(e){}
+    try { SB.speak(MS.mode === "split" ? (MS.n + "는 " + a + " 더하기 " + b) : (MS.sa + " 더하기 " + MS.sb + "는 " + (MS.sa + MS.sb)), false, "ko-KR"); } catch(e){}
+    setTimeout(function(){ if (MS.done) msNew(MS.mode); }, 2100);
+  }
+}
+function msMove(id, target){
+  var lists = { pool:MS.pool, a:MS.a, b:MS.b, merged:MS.merged };
+  for (var k in lists) {
+    var i = lists[k].indexOf(id);
+    if (i >= 0) { if (k === target) { msRender(); return; } lists[k].splice(i, 1); break; }
+  }
+  if (lists[target]) lists[target].push(id);
+  MS.msg = "";
+  msRender();
+}
+function msTap(id){
+  var inPool = MS.pool.indexOf(id) >= 0, inA = MS.a.indexOf(id) >= 0, inB = MS.b.indexOf(id) >= 0;
+  if (MS.mode === "split") {
+    if (inPool) msMove(id, MS.a.length <= MS.b.length ? "a" : "b");
+    else msMove(id, "pool");
+  } else {
+    if (inA || inB) msMove(id, "merged");
+    else if (inA === false && MS.merged.indexOf(id) >= 0) msMove(id, MS.a.length <= MS.b.length ? "a" : "b");
+  }
+}
+function msBind(box){
+  if (box.__b) return;
+  box.__b = 1;
+  var drag = null;
+  box.addEventListener("click", function(e){
+    var el = e.target;
+    if (!el || !el.closest) return;
+    var sm = el.closest("[data-sm]");
+    if (sm) { MS.mode = sm.getAttribute("data-sm"); MS.msg = ""; msNew(MS.mode); return; }
+    if (el.closest("[data-msnew]")) { msNew(MS.mode); return; }
+  });
+  box.addEventListener("pointerdown", function(e){
+    var p = e.target && e.target.closest ? e.target.closest(".ms-piece") : null;
+    if (!p) return;
+    e.preventDefault();
+    var r = p.getBoundingClientRect();
+    drag = { id:parseInt(p.getAttribute("data-piece"), 10), sx:e.clientX, sy:e.clientY,
+             moved:false, ghost:null, w:r.width, h:r.height };
+    try { p.setPointerCapture(e.pointerId); } catch(err){}
+  });
+  box.addEventListener("pointermove", function(e){
+    if (!drag) return;
+    var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+    if (!drag.moved && (Math.abs(dx) + Math.abs(dy)) > 7) {
+      drag.moved = true;
+      var g = document.createElement("div");
+      g.className = "ms-ghost";
+      g.innerHTML = msArt();
+      g.style.width = drag.w + "px";
+      g.style.height = drag.h + "px";
+      document.body.appendChild(g);
+      drag.ghost = g;
+      document.body.classList.add("ms-dragging");
+    }
+    if (drag.ghost) {
+      drag.ghost.style.left = (e.clientX - drag.w / 2) + "px";
+      drag.ghost.style.top = (e.clientY - drag.h / 2) + "px";
+      var under = document.elementFromPoint(e.clientX, e.clientY);
+      var drop = under && under.closest ? under.closest("[data-drop]") : null;
+      var all = box.querySelectorAll("[data-drop]");
+      for (var i = 0; i < all.length; i++) all[i].classList.toggle("ms-over", all[i] === drop);
+    }
+  });
+  function finish(e, cancelled){
+    if (!drag) return;
+    var d = drag; drag = null;
+    document.body.classList.remove("ms-dragging");
+    if (d.ghost && d.ghost.parentNode) d.ghost.parentNode.removeChild(d.ghost);
+    var all = box.querySelectorAll("[data-drop]");
+    for (var i = 0; i < all.length; i++) all[i].classList.remove("ms-over");
+    if (cancelled) return;
+    var target = null;
+    if (d.moved) {
+      var el = document.elementFromPoint(e.clientX, e.clientY);
+      var drop = el && el.closest ? el.closest("[data-drop]") : null;
+      if (drop) target = drop.getAttribute("data-drop");
+    }
+    if (!target) { msTap(d.id); return; }
+    msMove(d.id, target);
+  }
+  box.addEventListener("pointerup", function(e){ finish(e, false); });
+  box.addEventListener("pointercancel", function(e){ finish(e, true); });
+  window.addEventListener("pointerup", function(e){ if (drag) finish(e, false); });
+}
+SB.msState = function(){ return { mode:MS.mode, n:MS.n, pool:MS.pool.slice(), a:MS.a.slice(), b:MS.b.slice(), merged:MS.merged.slice(), msg:MS.msg }; };
+SB.msNew = msNew;
+
+function renderFrame(){
+  var f = $("tenFrame"); if (!f) return;
+  var filled = MC.mode === "split" ? (MC.split.a + MC.split.b) : MC.n;
+  if (MC.mode === "ten") filled = MC.ten;
+  var cells = "";
+  for (var i = 0; i < 10; i++) cells += '<button class="tcell' + (i < filled ? " on" : "") + '" type="button" data-cell="' + i + '" aria-label="' + (i+1) + '번째 칸"></button>';
+  f.innerHTML = cells;
+  var c = $("mcCount"); if (c) c.textContent = filled;
+}
+function renderOldConcept(){
+  var s = store();
+  var tabs = document.querySelectorAll("[data-mc]");
+  for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle("on", tabs[i].getAttribute("data-mc") === MC.mode);
+  var tn = $("tenFrame");
+  if (tn) tn.hidden = MC.mode === "split";
+  var mb0 = document.querySelector(".mc-body");
+  if (mb0 && MC.mode !== "split") mb0.classList.remove("ms-mode");
+  var cc = $("mcCount");
+  if (cc && cc.parentNode) cc.parentNode.hidden = MC.mode === "split";
+  var sp = $("mcSplit"); if (sp) sp.hidden = MC.mode !== "split";
+  var hint = $("mcHint"), task = $("mcTask"), ans = $("mcAnswer");
+  renderFrame();
+  if (MC.mode === "count") {
+    if (hint) hint.textContent = "칸을 눌러 구슬을 넣고, 개수를 세어 보세요";
+    if (task) task.innerHTML = '지금 <b>' + MC.n + '</b>개! <button class="mini" type="button" id="mcSay">🔊 숫자 읽기</button>';
+    if (ans) ans.innerHTML = '<button class="mini" type="button" data-quick="1">1개</button><button class="mini" type="button" data-quick="5">5개</button><button class="mini" type="button" data-quick="10">10개</button><button class="mini" type="button" data-clear="1">비우기</button>';
+  } else if (MC.mode === "ten") {
+    var need = 10 - MC.ten;
+    if (hint) hint.textContent = "10칸을 가득 채우면 10이 돼요";
+    if (task) task.innerHTML = '구슬이 <b>' + MC.ten + '</b>개 있어요. 10을 만들려면 <b>몇 개</b> 더 넣어야 할까요?';
+    if (ans) {
+      var opts = [need, need + 1, Math.max(0, need - 1), need + 2].filter(function(v, i, arr){ return v >= 0 && v <= 10 && arr.indexOf(v) === i; }).slice(0, 4);
+      opts = SB.shuffle(opts);
+      ans.innerHTML = opts.map(function(v){ return '<button class="mc-opt" type="button" data-ten="' + v + '">' + v + "개</button>"; }).join("");
+    }
+  } else {
+    if (hint) hint.textContent = "그림을 손가락으로 끌어다 바구니에 담아 보세요";
+    if (task) task.innerHTML = "";
+    if (ans) ans.innerHTML = "";
+    var mb = document.querySelector(".mc-body");
+    if (mb) mb.classList.add("ms-mode");
+    msRender();
+  }
+}
+function bindConcept(){
+  var f = $("tenFrame");
+  if (f) f.addEventListener("click", function(e){
+    var c = e.target.closest("[data-cell]"); if (!c) return;
+    var idx = parseInt(c.getAttribute("data-cell"), 10);
+    if (MC.mode === "split") return;
+    if (MC.mode === "count") {
+      MC.n = idx + 1 === MC.n ? idx : Math.max(MC.n, idx + 1);
+      SB.speak(String(MC.n), false, "ko-KR");
+      var got = 0;
+      if (MC.n === 10) got = SB.earn(SB.today() + "|math|count10", 1);
+      if (got) SB.starFX(got, "10칸을 가득 채웠어요!");
+      renderOldConcept();
+    }
+  });
+  var ans = $("mcAnswer");
+  if (ans) ans.addEventListener("click", function(e){
+    var q = e.target.closest("[data-quick]");
+    if (q) { MC.n = parseInt(q.getAttribute("data-quick"), 10); SB.speak(String(MC.n), false, "ko-KR"); renderOldConcept(); return; }
+    var t = e.target.closest("[data-ten]");
+    if (t) {
+      var v = parseInt(t.getAttribute("data-ten"), 10), need = 10 - MC.ten;
+      if (v === need) {
+        var got = SB.earn(SB.today() + "|math|concept", 1);
+        SB.markAttendance("math");
+        MC.ten = 1 + Math.floor(Math.random() * 9);
+        if (got) SB.starFX(got, "10 만들기 성공! " + MC.ten + "개에는 " + (10 - MC.ten) + "개를 더해요");
+        else SB.toast("정답! 10을 만들었어요 🌟");
+        renderOldConcept();
+      } else { SB.toast("한 번 더 세어 볼까? 10칸에서 " + MC.ten + "개를 빼면 돼요"); }
+      return;
+    }
+    var add = e.target.closest("[data-add]");
+    if (add) {
+      var side = add.getAttribute("data-add");
+      if (MC.split.a + MC.split.b < MC.split.target) MC.split[side]++;
+      else SB.toast("구슬을 다 썼어요! 비우기로 다시 해 봐요");
+      renderOldConcept(); return;
+    }
+    if (e.target.closest("[data-clear]")) { MC.n = 0; MC.split.a = 0; MC.split.b = 0; MC.splitDone = false; renderOldConcept(); return; }
+    if (e.target.closest("[data-newsplit]")) { MC.split = { a:0, b:0, target:5 + Math.floor(Math.random() * 5) }; MC.splitDone = false; renderOldConcept(); return; }
+  });
+  document.addEventListener("click", function(e){
+    if (e.target.closest("#mcSay")) SB.speak(MC.n + "개", false, "ko-KR");
+  });
+}
+
+
 /* ---------------------------- 🖼️ 그림 사고력 (초1 사고력 문제집형 문장제) ---------------------------- */
 function thKid(x, y, shirt, hair){
   return '<g transform="translate(' + x + ',' + y + ')">'
@@ -12154,16 +12451,40 @@ SB.mathSetChanged = function(){
   gdNew();
 };
 SB.onShow.math = function(){
-  if (!CT.q) countNew(); else countRender();
+  if (CMO.mode === "count"){ if (!CT.q) countNew(); else countRender(); }
+  else { try { renderOldConcept(); } catch(e){} }
   if (!GD.items.length) gdNew(); else gdCount();
   paintThink();
   paintShape();
 };
+var CMO = { mode:"count" };
+function setConceptMode(m){
+  CMO.mode = m;
+  var tabs = document.querySelectorAll("#conceptTabs [data-cm2]"), i;
+  for (i = 0; i < tabs.length; i++) tabs[i].classList.toggle("on", tabs[i].getAttribute("data-cm2") === m);
+  var cb = $("countBody"), old = $("mcOld"), lv = $("mcLevel");
+  if (cb) cb.hidden = (m !== "count");
+  if (old) old.hidden = (m === "count");
+  if (lv) lv.style.display = (m === "count") ? "" : "none";
+  if (m !== "count"){ MC.mode = m; try { renderOldConcept(); } catch(e){} }
+}
+function bindConceptTabs(){
+  var box = $("conceptTabs");
+  if (!box || box.__ct) return;
+  box.__ct = 1;
+  box.addEventListener("click", function(e){
+    var b = e.target && e.target.closest ? e.target.closest("[data-cm2]") : null;
+    if (!b) return;
+    setConceptMode(b.getAttribute("data-cm2"));
+  });
+}
 function initMath(){
   msetLoad();
   countNew();
   gdNew();
   renderThink();
+  bindConceptTabs();
+  bindConcept();
   bindSettingsTabs();
   renderLearnPane();
 }
