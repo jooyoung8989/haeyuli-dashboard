@@ -6722,11 +6722,13 @@ function updateEngineInfo(){
   el.aiModel.placeholder = provider === "gemini" ? GEMINI_DEFAULT : (provider === "openai" ? "gpt-4o-mini" : "기본 모델을 써도 좋아요");
 }
 function openSettings(){
-  el.aiProvider.value = state.ai.provider;
-  el.aiKey.value = state.ai.key;
-  el.aiModel.value = state.ai.model;
-  el.dashUrl.value = state.settings.dashUrl;
-  updateEngineInfo();
+  try {
+    if (el.aiProvider) el.aiProvider.value = state.ai.provider;
+    if (el.aiKey) el.aiKey.value = state.ai.key;
+    if (el.aiModel) el.aiModel.value = state.ai.model;
+    if (el.dashUrl) el.dashUrl.value = state.settings.dashUrl;
+    updateEngineInfo();
+  } catch(e){}
   openModal("settingsModal");
 }
 function saveSettings(){
@@ -6822,7 +6824,7 @@ function setKoView(on){
    15. 이벤트
    ========================================================= */
 function bind(){
-  el.topics.addEventListener("click", function(e){
+  if (el.topics) el.topics.addEventListener("click", function(e){
     var b = e.target.closest ? e.target.closest(".topic") : null;
     if (!b) return;
     startTalk("topic", b.getAttribute("data-topic"), {});
@@ -6832,50 +6834,50 @@ function bind(){
     b.addEventListener("click", function(){ setLevel(parseInt(b.getAttribute("data-lv"), 10)); });
   });
 
-  el.autoRead.addEventListener("click", function(){ setAutoRead(!state.autoRead); });
-  el.btnKo.addEventListener("click", function(){ setKoView(!state.koView); });
-  el.btnSpeak.addEventListener("click", function(){ speak(el.bubbleEn.textContent, false); });
-  el.btnSlow.addEventListener("click", function(){ speak(el.bubbleEn.textContent, true); });
+  if (el.autoRead) el.autoRead.addEventListener("click", function(){ setAutoRead(!state.autoRead); });
+  if (el.btnKo) el.btnKo.addEventListener("click", function(){ setKoView(!state.koView); });
+  if (el.btnSpeak) el.btnSpeak.addEventListener("click", function(){ speak(el.bubbleEn.textContent, false); });
+  if (el.btnSlow) el.btnSlow.addEventListener("click", function(){ speak(el.bubbleEn.textContent, true); });
 
-  el.btnSettings.addEventListener("click", openSettings);
-  el.btnSaveSettings.addEventListener("click", saveSettings);
-  el.btnResetTalk.addEventListener("click", resetTalk);
-  el.aiProvider.addEventListener("change", updateEngineInfo);
+  if (el.btnSettings) el.btnSettings.addEventListener("click", openSettings);
+  if (el.btnSaveSettings) el.btnSaveSettings.addEventListener("click", saveSettings);
+  if (el.btnResetTalk) el.btnResetTalk.addEventListener("click", resetTalk);
+  if (el.aiProvider) el.aiProvider.addEventListener("change", updateEngineInfo);
 
-  el.btnEditWords.addEventListener("click", openWords);  el.btnSaveWords.addEventListener("click", saveWords);
-  el.btnPreset.addEventListener("click", presetWords);
+  if (el.btnEditWords) el.btnEditWords.addEventListener("click", openWords);  if (el.btnSaveWords) el.btnSaveWords.addEventListener("click", saveWords);
+  if (el.btnPreset) el.btnPreset.addEventListener("click", presetWords);
 
-  el.finishBtn.addEventListener("click", toggleDaily);
-  el.btnInterest.addEventListener("click", startInterest);
+  if (el.finishBtn) el.finishBtn.addEventListener("click", toggleDaily);
+  if (el.btnInterest) el.btnInterest.addEventListener("click", startInterest);
 
-  el.learnPill.addEventListener("click", function(){
+  if (el.learnPill) el.learnPill.addEventListener("click", function(){
     renderLearnList();
     openModal("learnModal");
   });
 
-  el.btnMicEn.addEventListener("click", function(){ listen("en-US", el.btnMicEn); });
-  el.btnMicKo.addEventListener("click", function(){ listen("ko-KR", el.btnMicKo); });
-  el.btnHint.addEventListener("click", showHints);
+  if (el.btnMicEn) el.btnMicEn.addEventListener("click", function(){ listen("en-US", el.btnMicEn); });
+  if (el.btnMicKo) el.btnMicKo.addEventListener("click", function(){ listen("ko-KR", el.btnMicKo); });
+  if (el.btnHint) el.btnHint.addEventListener("click", showHints);
 
-  el.btnSend.addEventListener("click", function(){ handleChild(el.answerInput.value, "type"); });
-  el.answerInput.addEventListener("keydown", function(e){
+  if (el.btnSend) el.btnSend.addEventListener("click", function(){ handleChild(el.answerInput.value, "type"); });
+  if (el.answerInput) el.answerInput.addEventListener("keydown", function(e){
     if (e.key === "Enter") { e.preventDefault(); handleChild(el.answerInput.value, "type"); }
   });
 
-  el.hints.addEventListener("click", function(e){
+  if (el.hints) el.hints.addEventListener("click", function(e){
     var b = e.target.closest ? e.target.closest(".hint") : null;
     if (!b) return;
     if (b.hasAttribute("data-repeat")) { if (lastCoach) handleChild(lastCoach.en, "repeat"); }
     else handleChild(b.getAttribute("data-say"), "hint");
   });
 
-  el.wwGrid.addEventListener("click", function(e){
+  if (el.wwGrid) el.wwGrid.addEventListener("click", function(e){
     var chk = e.target.closest ? e.target.closest(".wk") : null;
     if (chk) { e.stopPropagation(); toggleWord(parseInt(chk.getAttribute("data-check"), 10)); return; }
     var card = e.target.closest ? e.target.closest(".ww") : null;
     if (card) speakWord(card, card.getAttribute("data-word"));
   });
-  el.wwGrid.addEventListener("keydown", function(e){
+  if (el.wwGrid) el.wwGrid.addEventListener("keydown", function(e){
     if (e.key !== "Enter" && e.key !== " ") return;
     var card = e.target.closest ? e.target.closest(".ww") : null;
     if (!card) return;
@@ -6883,14 +6885,14 @@ function bind(){
     speakWord(card, card.getAttribute("data-word"));
   });
 
-  el.coachWords.addEventListener("click", function(e){
+  if (el.coachWords) el.coachWords.addEventListener("click", function(e){
     var b = e.target.closest ? e.target.closest(".wcard") : null;
     if (b) speak(b.getAttribute("data-wspeak"), false);
   });
 
-  el.scSpeak.addEventListener("click", function(){ if (lastCoach) speak(lastCoach.en, false); });
-  el.scSlow.addEventListener("click", function(){ if (lastCoach) speak(lastCoach.en, true); });
-  el.scSave.addEventListener("click", function(){
+  if (el.scSpeak) el.scSpeak.addEventListener("click", function(){ if (lastCoach) speak(lastCoach.en, false); });
+  if (el.scSlow) el.scSlow.addEventListener("click", function(){ if (lastCoach) speak(lastCoach.en, true); });
+  if (el.scSave) el.scSave.addEventListener("click", function(){
     if (!lastCoach) return;
     speak(lastCoach.en, false);
     saveSentence(lastCoach.en, lastCoach.ko);
@@ -6900,7 +6902,7 @@ function bind(){
     b.addEventListener("click", function(){ closeModal(b.getAttribute("data-close")); });
   });
   ["settingsModal","wordsModal","learnModal"].forEach(function(id){
-    $(id).addEventListener("click", function(e){ if (e.target === this) closeModal(id); });
+    var _md = $(id); if (_md) _md.addEventListener("click", function(e){ if (e.target === this) closeModal(id); });
   });
   document.addEventListener("keydown", function(e){
     if (e.key === "Escape") { ["settingsModal","wordsModal","learnModal"].forEach(closeModal); }
@@ -15879,6 +15881,26 @@ function watchWeekBoard(){
   syncAttendance();
 }
 
+/* ---------- 8-d. 톱니바퀴(설정) 안전망 ---------- */
+function openSettingsSafe(){
+  try {
+    var m = $("settingsModal");
+    if (m) m.hidden = false;
+    return !!(m && !m.hidden);
+  } catch(e){ return false; }
+}
+function wireSettings(){
+  var b = $("btnSettings");
+  if (!b || b.__rbSet) return;
+  b.__rbSet = 1;
+  b.addEventListener("click", function(){
+    var m = $("settingsModal");
+    if (!m) return;
+    /* 예전 요소가 없어 다른 스크립트가 멈췄다면 여기서 직접 연다 */
+    setTimeout(function(){ if (m.hidden) openSettingsSafe(); }, 30);
+  });
+}
+
 /* ---------- 9. 시작 ---------- */
 function boot(){
   try {
@@ -15897,6 +15919,7 @@ function boot(){
     paintAll();
     addReadingN();
     watchWeekBoard();
+    wireSettings();
     RB.sync();
   } catch(e){
     try { (window.__rbErrs = window.__rbErrs || []).push(String(e)); } catch(e2){}
