@@ -1009,6 +1009,55 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
   .stage-card{padding:.9vh 1.4vh .8vh;}
   .set-card{padding:1.3vh 1.8vh;gap:.9vh;}
 }
+
+/* ============ 👨‍👩‍👧 가족 코드 · 등원 준비 배너 ============ */
+.fsbar{position:fixed;left:50%;top:8.6vh;transform:translate(-50%,-170%);z-index:70;
+  display:flex;align-items:center;gap:.9vh;max-width:min(94vw,86vh);min-width:0;
+  padding:1.05vh 1.7vh;border-radius:999px;background:#fff;
+  box-shadow:0 .6vh 1.8vh rgba(84,120,100,.22),inset 0 0 0 .22vh #e2efe8;
+  font-size:1.65vh;font-weight:900;color:#2f6b4f;white-space:nowrap;
+  opacity:0;pointer-events:none;
+  transition:transform .42s cubic-bezier(.2,1.25,.4,1),opacity .28s;}
+.fsbar.show{transform:translate(-50%,0);opacity:1;pointer-events:auto;}
+.fsbar .fst{min-width:0;overflow:hidden;text-overflow:ellipsis;}
+.fsbar .fse{font-size:2.1vh;line-height:1;flex:0 0 auto;}
+.fsbar .fsn{color:#1f7a4b;font-size:1.85vh;flex:0 0 auto;}
+.fsbar .fsat{flex:0 0 auto;font-size:1.45vh;font-weight:900;color:#8a5f06;background:#fff4d2;border-radius:999px;padding:.3vh .9vh;}
+.fsbar.done{background:linear-gradient(135deg,#fff9e0,#ffe0a0);color:#7a4f00;
+  box-shadow:0 .9vh 2.4vh rgba(199,138,18,.30),inset 0 0 0 .26vh #f2c96a;
+  font-size:1.95vh;padding:1.35vh 2.1vh;gap:1.1vh;}
+.fsbar.done .fse{font-size:2.7vh;animation:fsParty 1.6s ease-in-out infinite;}
+@keyframes fsParty{0%,100%{transform:rotate(-8deg) scale(1);}50%{transform:rotate(8deg) scale(1.12);}}
+.fsbar .fsx{flex:0 0 auto;width:3.2vh;height:3.2vh;border-radius:50%;background:rgba(255,255,255,.75);
+  color:#a3832f;font-size:1.15vh;font-weight:900;display:grid;place-items:center;}
+.fsbar.conn{left:auto;right:1.3vh;transform:translate(0,-170%);padding:.9vh 1.5vh;}
+.fsbar.conn.show{transform:translate(0,0);}
+.fslink{display:flex;align-items:center;gap:.7vh;font-size:1.55vh;font-weight:900;color:#2f6b4f;white-space:nowrap;}
+.fslink b{font-size:1.65vh;color:#1f7a4b;}
+.fsbar.tiny{background:rgba(255,255,255,.94);box-shadow:0 .3vh 1vh rgba(84,120,100,.16),inset 0 0 0 .18vh #e6efe9;
+  font-size:1.4vh;padding:.7vh 1.4vh;color:#5b7a6b;gap:.6vh;}
+@media (prefers-reduced-motion:reduce){ .fsbar{transition:opacity .2s;} .fsbar.done .fse{animation:none;} }
+
+/* 가족 코드 모달 */
+.fam-off-card,.fam-on-card{display:flex;flex-direction:column;gap:1.1vh;min-height:0;}
+.fam-on-card[hidden],.fam-off-card[hidden]{display:none;}
+.fam-note{margin:0;font-size:1.5vh;font-weight:700;color:#5b6a62;line-height:1.55;}
+.fam-note b{color:#2f6b4f;}
+.fam-or{margin:.2vh 0;text-align:center;font-size:1.2vh;font-weight:800;color:#a9b6ae;}
+.fam-in-row{display:flex;gap:.7vh;align-items:center;}
+.fam-in-row input{flex:1;min-width:0;min-height:5vh;border-radius:1.2vh;border:.24vh solid #e2ebe6;
+  background:#fafcfb;padding:0 1.2vh;font-size:1.6vh;font-weight:900;letter-spacing:.18vh;
+  text-transform:uppercase;color:#33413a;outline:none;}
+.fam-in-row input:focus{border-color:#8fd7ae;background:#fff;}
+.fam-in-row .btn{flex:0 0 auto;min-height:5vh;padding:0 1.7vh;}
+.fam-code{display:flex;align-items:center;gap:.9vh;background:#f4fbf6;border-radius:1.4vh;
+  padding:1.1vh 1.4vh;box-shadow:inset 0 0 0 .2vh #dcefe3;}
+.fam-code em{font-style:normal;font-size:1.3vh;font-weight:800;color:#7f958a;}
+.fam-code b{font-size:2.4vh;font-weight:900;letter-spacing:.25vh;color:#1f7a4b;}
+.fam-code .btn{margin-left:auto;}
+.fam-state{font-size:1.35vh;font-weight:800;color:#6b7c74;}
+.fam-state.err{color:#c0522c;}
+.fam-hint{font-size:1.22vh;font-weight:700;color:#93a49b;line-height:1.45;}
 </style>
 </head>
 <body>
@@ -1429,9 +1478,10 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
           <button class="btn btn-danger" id="resetPuppy">강아지 처음부터</button>
         </div>
         <div class="info-card" style="flex:1">
-          <span class="ttl">🐾 기억해 두세요</span>
-          <p>체크한 내용, 모은 별, 아빠 출근표는 이 기기(아이패드)에만 저장돼요.</p>
-          <p>날씨는 울산 북구 매곡동 기준이에요.</p>
+          <span class="ttl">👨‍👩‍👧 가족 코드</span>
+          <p id="famInfoText">가족 코드를 연결하면 해율이가 등원 준비를 다 했을 때 <b>엄마 폰에도 🎉 등원 준비 완료!</b> 배너가 떠요.</p>
+          <button class="btn btn-primary" id="famOpen" type="button">👨‍👩‍👧 가족 코드 연결</button>
+          <p>체크한 내용·모은 별·아빠 출근표는 이 기기에 저장되고, 날씨는 울산 북구 매곡동 기준이에요.</p>
         </div>
       </div>
     </div>
@@ -1464,6 +1514,35 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     <div class="modal-foot">
       <button class="btn btn-primary" id="noteSave" type="button">저장</button>
       <button class="btn btn-ghost" id="noteCancel" type="button">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 👨‍👩‍👧 가족 코드 · 등원 준비 배너 -->
+<div class="fsbar" id="fsBar" role="status" aria-live="polite"></div>
+
+<!-- 👨‍👩‍👧 가족 코드 연결 -->
+<div class="modal" id="famModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-label="가족 코드 연결">
+    <div class="modal-head"><span>👨‍👩‍👧 가족 코드 연결</span><button id="famClose" type="button" aria-label="닫기">✕</button></div>
+    <div class="fam-off-card" id="famOff">
+      <p class="fam-note">엄마 폰과 아이패드가 <b>같은 가족 코드</b>를 쓰면, 해율이가 등원 준비를 다 했을 때 엄마 폰 위에 <b>🎉 등원 준비 완료!</b> 배너가 떠요.</p>
+      <button class="btn btn-primary" id="famCreate" type="button">✨ 가족 코드 만들기</button>
+      <div class="fam-or">또는 이미 만든 가족 코드 넣기</div>
+      <div class="fam-in-row">
+        <input id="famCodeIn" type="text" maxlength="8" autocomplete="off" spellcheck="false" placeholder="가족 코드" aria-label="가족 코드">
+        <button class="btn btn-ghost" id="famJoin" type="button">연결</button>
+      </div>
+      <div class="fam-hint">학습 보드에서 쓰던 6자리 코드를 그대로 넣어도 돼요. 등원 준비는 따로 저장돼요.</div>
+    </div>
+    <div class="fam-on-card" id="famOn" hidden>
+      <div class="fam-code"><em>가족 코드</em><b id="famCodeVal">—</b><button class="btn btn-ghost" id="famCopy" type="button">📋 복사</button></div>
+      <div class="fam-state" id="famState">연결됨</div>
+      <div class="fam-in-row">
+        <button class="btn btn-primary" id="famSyncNow" type="button">🔄 지금 동기화</button>
+        <button class="btn btn-ghost" id="famLeave" type="button">연결 해제</button>
+      </div>
+      <div class="fam-hint">엄마 폰에서도 이 코드를 넣으면 같은 등원 준비를 함께 봐요. 20초마다 자동으로 맞춰요.</div>
     </div>
   </div>
 </div>
@@ -4019,6 +4098,28 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     renderCountdown(now);
   }
 
+  /* ================= 👨‍👩‍👧 가족 동기화 브리지 ================= */
+  window.YULI = {
+    today: function(){ return today; },
+    keys: function(){ return TASK_KEYS.slice(); },
+    tasks: function(){ return tasksToday(); },
+    name: function(){ return settings.name || "해율이"; },
+    applyTasks: function(map){
+      var t = tasksToday(), changed = false;
+      Object.keys(map || {}).forEach(function(k){
+        if (t[k] !== map[k]) { t[k] = map[k]; changed = true; }
+      });
+      if (!changed) return false;
+      writeJSON(KEY.tasks, tasksAll);
+      renderCards();
+      renderDashBottom();
+      renderStars(false);
+      renderCountdown(new Date());
+      return true;
+    },
+    refresh: function(){ renderCards(); renderDashBottom(); renderCountdown(new Date()); }
+  };
+
   /* ================= boot ================= */
   function init(){
     buildClock();
@@ -4071,6 +4172,502 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
+})();
+
+/* =====================================================================
+   👨‍👩‍👧 가족 코드 등원 준비 동기화 — 무료 클라우드(MantleDB), 로그인 없음
+   · 아이패드에서 등원 준비 네 가지를 다 체크하면 클라우드에 바로 올린다
+   · 엄마 폰에서 같은 가족 코드를 넣으면 위쪽에 🎉 등원 준비 완료! 배너가 뜬다
+   · 학습 보드(haeyuli-<코드>)와 섞이지 않게 'haeyuli-dash-<코드>' 로 따로 저장한다
+   ===================================================================== */
+(function(){
+"use strict";
+var API = "https://mantledb.sh/v2/";
+var NSP = "haeyuli-dash-";
+var KFAM = "yuli.famsync.v1";
+var KHIDE = "yuli.famsync.hide.v1";
+var POLL = 20000;
+var KEEP = 8;
+
+function $(id){ return document.getElementById(id); }
+function num(n){ n = Number(n); return isFinite(n) ? n : 0; }
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+  });
+}
+function readJ(k, fb){
+  try { var v = JSON.parse(localStorage.getItem(k) || "null"); return (v === null) ? fb : v; } catch(e){ return fb; }
+}
+function writeJ(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+function dayKeyOf(d){
+  d = d || new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+function curDay(){
+  try { if (window.YULI && YULI.today) return YULI.today(); } catch(e){}
+  return dayKeyOf();
+}
+function tkeys(){
+  try { if (window.YULI && YULI.keys) return YULI.keys(); } catch(e){}
+  return ["breakfast", "wash", "dress", "bag"];
+}
+function kidName(){
+  try { if (window.YULI && YULI.name) return YULI.name() || "해율이"; } catch(e){}
+  return "해율이";
+}
+function tasksNow(){
+  try { if (window.YULI && YULI.tasks) return YULI.tasks() || {}; } catch(e){}
+  return {};
+}
+function toastMsg(t){
+  var el = $("toast");
+  if (!el) return;
+  el.textContent = t;
+  el.classList.add("show");
+  clearTimeout(toastMsg._t);
+  toastMsg._t = setTimeout(function(){ el.classList.remove("show"); }, 3200);
+}
+function fmtHM(ts){
+  if (!ts) return "";
+  var d = new Date(num(ts));
+  return pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+}
+
+/* ---------------- 저장된 연결 상태 ---------------- */
+var F = readJ(KFAM, null);
+if (!F || typeof F !== "object") F = {};
+if (!F.base || typeof F.base !== "object") F.base = { v:1, days:{} };
+if (!F.base.days || typeof F.base.days !== "object") F.base.days = {};
+function saveF(){ writeJ(KFAM, F); }
+function baseDays(){
+  if (!F.base || typeof F.base !== "object") F.base = { v:1, days:{} };
+  if (!F.base.days || typeof F.base.days !== "object") F.base.days = {};
+  return F.base.days;
+}
+function hideState(){
+  var h = readJ(KHIDE, null);
+  return (h && typeof h === "object") ? h : {};
+}
+function saveHide(h){ writeJ(KHIDE, h); }
+
+function nsOf(code){ return NSP + String(code || "").toLowerCase(); }
+function newCode(){
+  var A = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ", out = "";
+  for (var i = 0; i < 6; i++) out += A.charAt(Math.floor(Math.random() * A.length));
+  return out;
+}
+
+/* ---------------- 클라우드 ---------------- */
+function apiGetNs(ns){
+  return fetch(API + encodeURIComponent(ns) + "/data?t=" + Date.now(),
+               { cache:"no-store", mode:"cors" })
+    .then(function(r){
+      if (r.status === 404) return null;
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    });
+}
+function apiGet(code){ return apiGetNs(nsOf(code)); }
+function apiPut(code, doc){
+  return fetch(API + encodeURIComponent(nsOf(code)) + "/data", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(doc)
+  }).then(function(r){
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return true;
+  });
+}
+
+/* ---------------- 이 기기 상태 → 날짜 기록 ---------------- */
+function prune(days){
+  var ks = Object.keys(days).sort();
+  if (ks.length > KEEP) ks.slice(0, ks.length - KEEP).forEach(function(k){ delete days[k]; });
+  return days;
+}
+function localize(dk){
+  var days = baseDays();
+  var d = days[dk];
+  if (!d || typeof d !== "object") d = days[dk] = { items:{}, doneAt:0 };
+  if (!d.items || typeof d.items !== "object") d.items = {};
+  var t = tasksNow(), kk = tkeys();
+  kk.forEach(function(k){
+    var v = (t[k] === true);
+    var rec = d.items[k];
+    if (!rec || typeof rec !== "object") {
+      /* 이 기기에 처음 생긴 기록 — 지금 완료돼 있으면 이 기기에서 한 일로 본다 */
+      d.items[k] = { v:v, t: v ? Date.now() : 1 };
+      return;
+    }
+    if (rec.v !== v) { rec.v = v; rec.t = Date.now(); }
+    else if (!num(rec.t)) rec.t = 1;
+  });
+  settle(d, kk);
+  prune(days);
+  return d;
+}
+function settle(d, kk){
+  kk = kk || tkeys();
+  var all = kk.every(function(k){ return d.items[k] && d.items[k].v; });
+  if (all && !num(d.doneAt)) {
+    d.doneAt = Math.max.apply(null, kk.map(function(k){ return num(d.items[k] && d.items[k].t); }));
+  } else if (!all && num(d.doneAt)) {
+    d.doneAt = 0;
+  }
+  return d;
+}
+function mergeDays(remoteDays, kk){
+  var days = baseDays();
+  var rdays = (remoteDays && typeof remoteDays === "object") ? remoteDays : {};
+  var all = {};
+  Object.keys(days).forEach(function(k){ all[k] = 1; });
+  Object.keys(rdays).forEach(function(k){ all[k] = 1; });
+  var out = {};
+  Object.keys(all).forEach(function(dk){
+    var a = (days[dk] && typeof days[dk] === "object") ? days[dk] : { items:{}, doneAt:0 };
+    var b = (rdays[dk] && typeof rdays[dk] === "object") ? rdays[dk] : { items:{}, doneAt:0 };
+    var ai = a.items || {}, bi = b.items || {}, items = {}, ks = {};
+    Object.keys(ai).forEach(function(k){ ks[k] = 1; });
+    Object.keys(bi).forEach(function(k){ ks[k] = 1; });
+    Object.keys(ks).forEach(function(k){
+      var x = ai[k], y = bi[k];
+      var xt = x ? num(x.t) : -1, yt = y ? num(y.t) : -1;
+      if (!x) { items[k] = { v: !!(y && y.v), t: yt }; return; }
+      if (!y) { items[k] = { v: !!(x && x.v), t: xt }; return; }
+      var pick;
+      if (yt > xt) pick = y;
+      else if (xt > yt) pick = x;
+      else pick = (y.v && !x.v) ? y : x;         /* 같은 시각이면 '했다'를 남긴다 */
+      items[k] = { v: !!pick.v, t: Math.max(xt, yt) };
+    });
+    var rec = { items: items, doneAt: Math.max(num(a.doneAt), num(b.doneAt)) };
+    settle(rec, kk);
+    out[dk] = rec;
+  });
+  F.base = { v:1, days: prune(out) };
+  return out;
+}
+
+/* ---------------- 화면 반영 ---------------- */
+function applyToday(){
+  var dk = curDay(), d = baseDays()[dk];
+  if (!d || !d.items) return;
+  var map = {};
+  tkeys().forEach(function(k){ map[k] = !!(d.items[k] && d.items[k].v); });
+  if (window.YULI && YULI.applyTasks) YULI.applyTasks(map);
+}
+
+var lastBarHTML = "";
+function renderBar(){
+  var bar = $("fsBar");
+  if (!bar) return;
+  var h = hideState(), dk = curDay(), kk = tkeys(), nm = kidName();
+  var html, cls;
+  if (!F.code) {
+    if (h.conn) { bar.className = "fsbar"; lastBarHTML = ""; return; }
+    html = '<button type="button" class="fslink" id="fsLink">👨‍👩‍👧 <b>가족 코드 연결</b></button>';
+    cls = "fsbar conn show";
+  } else {
+    var d = baseDays()[dk];
+    var done = 0;
+    if (d && d.items) kk.forEach(function(k){ if (d.items[k] && d.items[k].v) done++; });
+    if (done >= kk.length) {
+      var at = fmtHM(d && d.doneAt);
+      if (h.done === dk) {
+        html = '<span class="fse">✅</span><span class="fst">' + esc(nm) + ' 등원 준비 완료</span>' +
+               (at ? '<span class="fsat">' + at + '</span>' : "");
+        cls = "fsbar tiny show";
+      } else {
+        html = '<span class="fse">🎉</span><span class="fst">' + esc(nm) + ' 등원 준비 완료!</span>' +
+               (at ? '<span class="fsat">' + at + '</span>' : "") +
+               '<button type="button" class="fsx" id="fsHide" aria-label="배너 닫기">✕</button>';
+        cls = "fsbar done show";
+      }
+    } else {
+      html = '<span class="fse">🎒</span><span class="fst">' + esc(nm) + ' 등원 준비</span>' +
+             '<b class="fsn">' + done + '/' + kk.length + '</b>';
+      cls = "fsbar show";
+    }
+  }
+  if (html === lastBarHTML && bar.className === cls) return;
+  lastBarHTML = html;
+  bar.className = cls;
+  bar.innerHTML = html;
+  var link = $("fsLink");
+  if (link && !link.__b) { link.__b = 1; link.addEventListener("click", openModal); }
+  if (F.code) {
+    var x = $("fsHide");
+    if (x && !x.__b) {
+      x.__b = 1;
+      x.addEventListener("click", function(){
+        var hh = hideState(); hh.done = curDay(); saveHide(hh); renderBar();
+      });
+    }
+  }
+  placeBar();
+}
+function placeBar(){
+  var bar = $("fsBar"), nav = document.querySelector(".nav");
+  if (!bar || !nav) return;
+  bar.style.top = Math.round(nav.getBoundingClientRect().bottom + 6) + "px";
+}
+
+/* ---------------- 연결 상태 표시 ---------------- */
+function fmtLast(ts){
+  if (!ts) return "아직";
+  var d = new Date(num(ts));
+  return (d.getHours() < 12 ? "오전 " : "오후 ") + ((d.getHours() % 12) || 12) + ":" + pad2(d.getMinutes());
+}
+function setState(msg, err){
+  var el = $("famState");
+  if (!el) return;
+  if (msg) { el.textContent = msg; el.classList.toggle("err", !!err); return; }
+  if (!F.code) { el.textContent = "아직 연결하지 않았어요"; el.classList.remove("err"); return; }
+  if (F.lastError) {
+    el.textContent = "⚠️ 연결은 됐는데 마지막 동기화가 실패했어요 (" + fmtLast(F.lastSync) + ")";
+    el.classList.add("err");
+    return;
+  }
+  el.textContent = "✅ 연결됨 · 마지막 동기화 " + fmtLast(F.lastSync);
+  el.classList.remove("err");
+}
+function paint(){
+  var on = !!F.code;
+  var off = $("famOff"), onEl = $("famOn");
+  if (off) off.hidden = on;
+  if (onEl) onEl.hidden = !on;
+  var cv = $("famCodeVal");
+  if (cv) cv.textContent = on ? F.code : "—";
+  var ob = $("famOpen");
+  if (ob) ob.textContent = on ? "👨‍👩‍👧 가족 코드 " + F.code : "👨‍👩‍👧 가족 코드 연결";
+  var it = $("famInfoText");
+  if (it) {
+    it.innerHTML = on
+      ? "가족 코드 <b>" + esc(F.code) + "</b> 로 연결됐어요. 해율이가 등원 준비를 다 하면 엄마 폰에도 <b>🎉 배너</b>가 떠요."
+      : "가족 코드를 연결하면 해율이가 등원 준비를 다 했을 때 <b>엄마 폰에도 🎉 등원 준비 완료!</b> 배너가 떠요.";
+  }
+  setState();
+  renderBar();
+}
+
+/* ---------------- 동기화 ---------------- */
+var busy = false;
+function syncOnce(manual){
+  if (!F.code) {
+    if (manual) toastMsg("가족 코드를 먼저 만들어 주세요");
+    return Promise.resolve(false);
+  }
+  if (busy) return Promise.resolve(false);
+  busy = true;
+  var dk = curDay();
+  localize(dk);
+  if (manual) setState("동기화하는 중…");
+
+  return apiGet(F.code).then(function(remote){
+    var rdays = (remote && typeof remote === "object" && remote.days) ? remote.days : null;
+    var out = mergeDays(rdays, tkeys());
+    applyToday();
+    var doc = { v:1, code:F.code, name:kidName(), at: Date.now(), days: out };
+    var changed = !rdays || JSON.stringify(out) !== JSON.stringify(rdays) ||
+                  !remote || remote.code !== doc.code || remote.name !== doc.name;
+    var step = changed ? apiPut(F.code, doc) : Promise.resolve(true);
+    return step.then(function(){
+      F.lastSync = Date.now();
+      F.lastError = "";
+      saveF();
+      paint();
+      if (manual) toastMsg("🔄 가족 등원 준비를 맞췄어요");
+      return true;
+    });
+  }).catch(function(e){
+    F.lastError = String((e && e.message) || e || "오류");
+    saveF();
+    setState("", true);
+    renderBar();
+    if (manual) toastMsg("동기화하지 못했어요 · 인터넷을 확인해 주세요");
+    return false;
+  }).then(function(r){ busy = false; return r; });
+}
+
+var pushTimer = null;
+function pushSoon(){
+  if (!F.code) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(function(){ syncOnce(false); }, 180);
+}
+
+/* ---------------- 코드 만들기 · 연결 · 해제 ---------------- */
+function createCode(){
+  if (F.code) return;
+  var code = newCode();
+  F = { code:code, base:{ v:1, days:{} }, lastSync:0, lastError:"", at: Date.now() };
+  localize(curDay());
+  saveF();
+  paint();
+  setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
+  /* 새 코드는 바로 올린다 (없는 코드를 먼저 조회하지 않도록) */
+  var doc = { v:1, code:code, name:kidName(), at: Date.now(), days: F.base.days };
+  apiPut(code, doc).then(function(){
+    F.lastSync = Date.now(); F.lastError = ""; saveF(); paint();
+    toastMsg("✅ 가족 코드 " + code + " 로 연결했어요");
+  }).catch(function(e){
+    F.lastError = String((e && e.message) || e || "오류"); saveF(); paint();
+    setState("클라우드에 올리지 못했어요 · 인터넷을 확인한 뒤 🔄 지금 동기화를 눌러 주세요", true);
+  });
+}
+function joinCode(){
+  var inp = $("famCodeIn");
+  var code = String((inp && inp.value) || "").toUpperCase().replace(/[^0-9A-Z]/g, "").slice(0, 8);
+  if (code.length < 4) { toastMsg("가족 코드를 정확히 넣어 주세요"); return; }
+  setState("코드를 확인하는 중…");
+  apiGet(code).then(function(remote){
+    if (remote && typeof remote === "object" && remote.days) return remote;
+    /* 아직 등원 준비를 올린 기기가 없을 수 있어요 — 학습 보드에서 쓰던 코드인지 한 번 더 본다 */
+    return apiGetNs("haeyuli-" + code.toLowerCase()).then(function(old){
+      return (old && typeof old === "object") ? { days:{} } : null;
+    });
+  }).then(function(remote){
+    if (!remote) {
+      setState("그 코드를 찾지 못했어요 · 코드를 다시 확인해 주세요", true);
+      toastMsg("그 코드를 찾지 못했어요");
+      return;
+    }
+    F = { code:code, base:{ v:1, days:{} }, lastSync:0, lastError:"", at: Date.now() };
+    saveF();
+    if (inp) inp.value = "";
+    mergeDays(remote.days, tkeys());
+    saveF();
+    applyToday();
+    paint();
+    toastMsg("🔗 가족 코드 " + code + " 로 연결했어요");
+    closeModal();
+    syncOnce(false);
+  }).catch(function(e){
+    setState("인터넷 연결을 확인해 주세요", true);
+    toastMsg("인터넷 연결을 확인해 주세요");
+  });
+}
+function leaveCode(){
+  if (!F.code) return;
+  var ok = true;
+  try { ok = window.confirm("이 기기에서 가족 코드 연결을 끊을까요?\n이 기기에 있는 등원 체크는 그대로 남아요."); } catch(e){}
+  if (!ok) return;
+  F = { base:{ v:1, days:{} } };
+  saveF();
+  paint();
+  toastMsg("이 기기만 쓰는 상태로 돌아왔어요");
+}
+function copyCode(){
+  var code = F.code || "";
+  if (!code) return;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(function(){ toastMsg("가족 코드 " + code + " 를 복사했어요"); });
+      return;
+    }
+  } catch(e){}
+  var ta = document.createElement("textarea");
+  ta.value = code; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); toastMsg("가족 코드 " + code + " 를 복사했어요"); } catch(e){}
+  document.body.removeChild(ta);
+}
+
+/* ---------------- 모달 ---------------- */
+function openModal(){
+  var m = $("famModal");
+  if (!m) return;
+  paint();
+  m.classList.add("show");
+  m.setAttribute("aria-hidden", "false");
+}
+function closeModal(){
+  var m = $("famModal");
+  if (!m) return;
+  m.classList.remove("show");
+  m.setAttribute("aria-hidden", "true");
+}
+
+/* ---------------- 시작 ---------------- */
+function bind(){
+  function on(id, fn, ev){
+    var el = $(id);
+    if (el && !el.__fs) { el.__fs = 1; el.addEventListener(ev || "click", fn); }
+  }
+  on("famOpen", openModal);
+  on("famClose", closeModal);
+  on("famCreate", createCode);
+  on("famJoin", joinCode);
+  on("famCopy", copyCode);
+  on("famSyncNow", function(){ syncOnce(true); });
+  on("famLeave", leaveCode);
+  var m = $("famModal");
+  if (m && !m.__fs) {
+    m.__fs = 1;
+    m.addEventListener("click", function(e){ if (e.target === m) closeModal(); });
+  }
+  var inp = $("famCodeIn");
+  if (inp && !inp.__fs) {
+    inp.__fs = 1;
+    inp.addEventListener("keydown", function(e){
+      if (e.key === "Enter") { e.preventDefault(); joinCode(); }
+    });
+  }
+  /* 아이패드에서 체크를 바꾸면 바로 올린다 */
+  document.addEventListener("click", function(e){
+    var c = e.target && e.target.closest ? e.target.closest("#cards .card") : null;
+    if (!c) return;
+    setTimeout(function(){
+      if (window.YULI && YULI.refresh) YULI.refresh();   /* 첫 화면 '등원 준비 n/4' 도 같이 맞춘다 */
+      if (F.code) pushSoon();
+    }, 40);
+  }, true);
+  var rt = $("resetToday");
+  if (rt && !rt.__fs) { rt.__fs = 1; rt.addEventListener("click", function(){ setTimeout(pushSoon, 120); }); }
+}
+
+function start(){
+  bind();
+  paint();
+  placeBar();
+  window.addEventListener("resize", placeBar);
+  window.addEventListener("orientationchange", function(){ setTimeout(placeBar, 250); });
+
+  if (F.code) setTimeout(function(){ syncOnce(false); }, 1000);
+
+  setInterval(function(){
+    if (!F.code || document.hidden) return;
+    syncOnce(false);
+  }, POLL);
+
+  setInterval(renderBar, 15000);        /* 날짜가 바뀌면 배너도 새로 */
+
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden) return;
+    renderBar();
+    if (F.code) syncOnce(false);
+  });
+  window.addEventListener("focus", function(){ if (F.code) syncOnce(false); });
+  window.addEventListener("online", function(){ if (F.code) syncOnce(false); });
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+else start();
+
+window.FAMSYNC = {
+  code: function(){ return F.code || ""; },
+  state: function(){ return F; },
+  sync: function(){ return syncOnce(true); },
+  create: createCode,
+  join: joinCode,
+  leave: leaveCode,
+  open: openModal,
+  close: closeModal,
+  bar: renderBar,
+  day: function(){ return baseDays()[curDay()] || null; }
+};
 })();
 </script>
 </body>
