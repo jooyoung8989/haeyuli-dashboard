@@ -20512,6 +20512,7 @@ function buildTabs(){
   box.innerHTML =
     '<button class="rb-tab on" type="button" data-rbtab="tree" role="tab" aria-pressed="true">🌳 북트리</button>' +
     '<button class="rb-tab" type="button" data-rbtab="shelf" role="tab" aria-pressed="false">📚 우리 집 빨간펜 책장<span class="rb-tab-n" id="rbTabN"></span></button>' +
+    '<button class="rb-tab" type="button" data-rbtab="engbook" role="tab" aria-pressed="false">📖 영어책 읽어주기</button>' +
     '<button class="rb-tab" type="button" data-rbtab="korbook" role="tab" aria-pressed="false">📕 한글책 읽어주기</button>';
   return box;
 }
@@ -20636,6 +20637,22 @@ function buildBookView(){
       '<div class="sci-row" id="kbRow" hidden></div>' +
     '</div>';
   view.appendChild(kwrap);
+  /* 📖 영어책 읽어주기 — 한글책 읽어주기와 같은 2단 영상관 */
+  var ewrap = document.createElement("div");
+  ewrap.className = "rb-act rb-hide eb-act"; ewrap.id = "rbEngWrap";
+  ewrap.innerHTML =
+    '<div class="sci-hub" id="ebHub">' +
+      '<div class="sci-hd">' +
+        '<b>📖 영어책 읽어주기</b>' +
+        '<span class="sci-sub">유튜브로 나가지 않고 보드 안에서 재생돼요</span>' +
+        '<button class="sci-back" id="ebBack" type="button" hidden>← 채널 목록</button>' +
+        '<span class="sci-now" id="ebNow"></span>' +
+        '<span class="sci-cnt" id="ebCnt"></span>' +
+      '</div>' +
+      '<div class="sci-list" id="ebList"></div>' +
+      '<div class="sci-row" id="ebRow" hidden></div>' +
+    '</div>';
+  view.appendChild(ewrap);
   paintShelves();
   applyMode();
 }
@@ -20739,6 +20756,8 @@ function applyMode(){
   if (aw) aw.classList.toggle("rb-hide", MODE !== "act");
   var kw = $("rbKorWrap");
   if (kw) kw.classList.toggle("rb-hide", MODE !== "korbook");
+  var ew = $("rbEngWrap");
+  if (ew) ew.classList.toggle("rb-hide", MODE !== "engbook");
   var tabs = document.querySelectorAll("#rbTabs .rb-tab");
   for (var j = 0; j < tabs.length; j++){
     var on = tabs[j].getAttribute("data-rbtab") === (MODE === "act" ? "shelf" : MODE);
@@ -20909,10 +20928,11 @@ document.addEventListener("click", function(e){
   var tab = el.closest("[data-rbtab]");
   if (tab){
     var m = tab.getAttribute("data-rbtab");
-    MODE = (m === "shelf" || m === "korbook") ? m : "tree";
+    MODE = (m === "shelf" || m === "korbook" || m === "engbook") ? m : "tree";
     applyMode();
     if (MODE === "shelf") paintShelves();
     if (MODE === "korbook" && SB.videoHub && SB.videoHub.renderKB) SB.videoHub.renderKB();
+    if (MODE === "engbook" && SB.videoHub && SB.videoHub.renderEB) SB.videoHub.renderEB();
     return;
   }
   var chip = el.closest("[data-rbchip]");
@@ -21889,6 +21909,36 @@ body.mob .vid-ck{width:1.55rem;height:1.55rem;font-size:.82rem;}
 .vh-src{font-size:clamp(11px,1.35vh,15px);font-weight:700;color:#9fb3c4;}
 
 
+/* 📖 영어책 읽어주기 (책 탭) — 🔬 과학 영상관과 같은 2단 UX */
+.eb-act{overflow-y:auto;}
+.eb-act .sci-hub{flex:1 1 auto;min-height:0;}
+#ebList{grid-template-columns:repeat(3,minmax(0,1fr));gap:.8vh;align-content:center;grid-auto-rows:minmax(0,9.4rem);}
+#ebList .sci-big{padding:1.2vh 1.3vh;align-items:center;gap:1vh;}
+#ebList .sci-big-em{font-size:clamp(26px,4.4vh,44px);}
+#ebList .sci-big-tx{gap:.3rem;}
+#ebList .sci-big-tx b{font-size:clamp(14px,2.3vh,22px);word-break:keep-all;overflow-wrap:anywhere;}
+#ebList .eb-bl{white-space:normal;font-size:clamp(11px,1.66vh,16px);color:#7e93a2;line-height:1.3;font-weight:700;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+#ebList .eb-n{white-space:nowrap;font-size:clamp(10px,1.42vh,15px);font-weight:900;color:#2f8b6b;
+  background:#f2f8f4;border-radius:999px;padding:.1rem .6rem;box-shadow:inset 0 0 0 1px #d7e8de;align-self:flex-start;}
+/* 영상 목록은 가로 스크롤 대신 판 안에 다 펼쳐 보이게 (한 채널 10편 기준 4×3) */
+#ebRow{flex-wrap:wrap;align-content:center;overflow-x:hidden;overflow-y:auto;gap:.9vh .8vh;}
+#ebRow .vid-card{flex:0 0 calc(25% - .6vh);min-width:0;max-width:none;}
+@media (max-width: 940px){
+  #ebRow .vid-card{flex:0 0 calc(33.333% - .55vh);}
+}
+body.mob #ebRow .vid-card{flex:0 0 calc(50% - .25rem);}
+@media (max-width: 940px){
+  #ebList{grid-template-columns:1fr 1fr;}
+  #ebHub .sci-back{order:-1;}
+  #ebHub .sci-hd b{flex:0 1 auto;}
+}
+body.mob #ebList{grid-template-columns:1fr 1fr;gap:.5rem;align-content:start;grid-auto-rows:auto;}
+body.mob #ebList .sci-big{align-items:flex-start;padding:.6rem .55rem;}
+body.mob #ebList .sci-big-tx b{font-size:.72rem;}
+body.mob #ebList .eb-bl{font-size:.58rem;}
+body.mob #ebList .eb-n{font-size:.55rem;}
+
 /* 📕 한글책 읽어주기 (책 탭) — 🔬 과학 영상관과 같은 2단 UX */
 .kb-act{overflow-y:auto;}
 .kb-act .sci-hub{flex:1 1 auto;min-height:0;}
@@ -22115,6 +22165,7 @@ var EPI = [{"k":"harry","em":"🐰","nm":"해리더버니","en":"Harry the Bunny
 
 
 
+var EB = [{"k":"oceanhouse","em":"🐾","nm":"Oceanhouse Media","ch":"@OceanhouseMedia","url":"https://www.youtube.com/@OceanhouseMedia","bl":"그림이 움직여요 · Little Critter·Dr. Seuss","vids":[{"id":"OSbBoU95AYk","len":"3:58","t":"Just Grandpa and Me","n":"할아버지와 함께한 하루 · Little Critter"},{"id":"TE7MiXPiUug","len":"4:42","t":"Just Helping My Dad","n":"아빠를 도와드리려다 벌어진 소동"},{"id":"45bAqPKjDYM","len":"3:42","t":"Just Me and My Puppy","n":"나와 내 강아지 · 강아지 돌보기"},{"id":"anfDyqZdJj4","len":"3:05","t":"The New Baby","n":"새로 온 아기 · 형이 된 기분"},{"id":"fAghGEZrnDc","len":"5:06","t":"Just Me and My Mom","n":"엄마와 나, 시내 나들이"},{"id":"BlNAwSDatUc","len":"5:16","t":"The New Potty","n":"새 변기 · 화장실 연습 이야기"},{"id":"quacnV_GKcM","len":"3:29","t":"When I Get Bigger","n":"내가 크면 다 할 수 있어"},{"id":"SpiTLNJZJcw","len":"3:41","t":"Just Grandma and Me","n":"할머니와 바닷가 소풍"},{"id":"bN8e4J0X9tM","len":"5:50","t":"Just Going to the Dentist","n":"치과에 가는 날"},{"id":"KBx1scO1S80","len":"3:01","t":"Just For You","n":"엄마를 위한 깜짝 선물"}]},{"k":"eundo","em":"📗","nm":"Eundo Bookclub","ch":"@EundoBookclub","url":"https://www.youtube.com/@EundoBookclub","bl":"천천히 또박또박 · Biscuit·레벨별 리더스","vids":[{"id":"_dNSzKjYQBQ","len":"5:57","t":"Biscuit Goes to School","n":"비스킷이 학교에 가요 [My First]"},{"id":"ye8MmR9x35Y","len":"6:23","t":"Biscuit Feeds the Pets","n":"비스킷이 동물 친구들에게 밥을 줘요"},{"id":"MbGz4ZsDktI","len":"6:29","t":"Biscuit and the Lost Teddy Bear","n":"잃어버린 곰인형을 찾아서"},{"id":"eebsDvoQOBY","len":"6:34","t":"Biscuit Loves the Library","n":"비스킷과 도서관"},{"id":"0w7gYhplRYg","len":"7:11","t":"Biscuit and the Big Parade","n":"비스킷과 커다란 퍼레이드"},{"id":"CrQcyzXNkyE","len":"6:13","t":"Biscuit's Big Friend","n":"비스킷의 커다란 친구"},{"id":"Op8zy4g37_k","len":"6:44","t":"There Was an Old Lady Who Swallowed a Fly","n":"파리 한 마리를 삼킨 할머니 · 누적 동시"},{"id":"yXsS_UPTK0o","len":"6:49","t":"The Enormous Turnip","n":"커다란 무를 뽑아라! · 옛이야기"},{"id":"Crvr5p6gCJU","len":"10:10","t":"What Do You Do in the Morning?","n":"아침에 뭐 해? [Level K] 회화 표현"},{"id":"2Bdf_cYBINA","len":"6:30","t":"Do You Have a Ball?","n":"공 있어? [Level K] 묻고 답하기"}]},{"k":"klein","em":"👴","nm":"Mr. Klein's Story Time","ch":"@MrKleinsStoryTime","url":"https://www.youtube.com/@MrKleinsStoryTime","bl":"30년 교사 구연동화 · 베렌스타인 베어","vids":[{"id":"ry-MpE29c_M","len":"3:47","t":"Chicka Chicka I Love Mom","n":"칙카 칙카, 엄마를 사랑해 · ABC 리듬"},{"id":"CNqa70gjKdk","len":"4:01","t":"Chicka Chicka I Love Dad","n":"칙카 칙카, 아빠를 사랑해"},{"id":"_bBNIvYmjNA","len":"5:26","t":"Dad","n":"아빠와 함께하는 하루"},{"id":"uJUcqp7_mc0","len":"4:13","t":"Toad on the Go","n":"두꺼비의 신나는 외출"},{"id":"QrPyeJt5T5I","len":"4:52","t":"Go Home Flash","n":"집에 가자, 플래시"},{"id":"4dacTdDmf6o","len":"3:53","t":"The Goodbye Book","n":"안녕이라고 말하는 법 · 이별 그림책"},{"id":"OYr7go916Yk","len":"7:04","t":"The Berenstain Bears: Jobs Around Town","n":"베렌스테인 베어 · 동네의 여러 직업"},{"id":"NSLtMKTBhgY","len":"9:20","t":"The Berenstain Bears: When I Grow Up","n":"베렌스테인 베어 · 내가 크면"},{"id":"Hky1YkJm7nQ","len":"9:44","t":"Scaredy Squirrel at the Beach","n":"겁 많은 다람쥐, 바닷가에 가다"},{"id":"2bnJWVGyEBE","len":"10:16","t":"The Berenstain Bears: The Forgiving Tree","n":"베렌스테인 베어 · 용서하는 마음"}]},{"k":"readalouds","em":"🎈","nm":"Storytime Read Alouds","ch":"@StorytimeReadAlouds","url":"https://www.youtube.com/@StorytimeReadAlouds","bl":"베스트셀러 그림책 · Pete the Cat·Mo Willems","vids":[{"id":"U9rwAc6tWxM","len":"2:14","t":"Little Gorilla","n":"아기 고릴라가 자라요"},{"id":"5xGiHrtWTRY","len":"2:41","t":"Will the Pigeon Graduate?","n":"비둘기, 졸업할 수 있을까? · Mo Willems"},{"id":"Au8UlTaeoGk","len":"3:03","t":"Is Your Mama a Llama?","n":"네 엄마는 라마니? · 운율 문답"},{"id":"A-LTsTLftEQ","len":"3:45","t":"Little Blue Truck","n":"꼬마 파란 트럭 · 의성어 가득"},{"id":"-4nNuABpO7g","len":"3:58","t":"Don't Touch That Flower!","n":"그 꽃 만지지 마! · 봄 이야기"},{"id":"l-7xE4WNMGk","len":"4:03","t":"I Am Invited to a Party!","n":"파티에 초대받았어! · Elephant & Piggie"},{"id":"YDAhOlN6RFw","len":"4:41","t":"There Is a Bird on Your Head!","n":"머리에 새가 앉았어! · Elephant & Piggie"},{"id":"qqHBNq0EDjI","len":"4:47","t":"Giraffes Can't Dance","n":"기린은 춤을 못 춰? · 자신감"},{"id":"ZzgiqVf_07I","len":"5:10","t":"Dragons Love Tacos","n":"용들은 타코를 좋아해"},{"id":"1bpyKoCv6_Y","len":"5:46","t":"Bad Kitty","n":"말썽꾸러기 배드 키티"}]},{"k":"awnie","em":"🏡","nm":"Storytime at Awnie's House","ch":"@awnieshouse","url":"https://www.youtube.com/@awnieshouse","bl":"다정한 선생님 톤 · Pete the Cat·데이빗","vids":[{"id":"UK3L350OM6U","len":"2:49","t":"Good Night World, I Love You So","n":"잘 자요 세상아 · 잠자리 동화"},{"id":"2gTe0TkKowM","len":"5:01","t":"First Day Jitters","n":"첫날의 두근두근"},{"id":"boE4RNt3Law","len":"5:08","t":"Pete the Cat: Pete at the Beach","n":"피트 더 캣 · 바닷가"},{"id":"I2GAS1vhouk","len":"5:39","t":"Frankenstein Doesn't Wear Earmuffs","n":"프랑켄슈타인은 귀마개를 안 써 · 할로윈"},{"id":"GOsDKTQgcog","len":"6:40","t":"The Hallo-Wiener","n":"할로윈 핫도그 강아지 · Dav Pilkey"},{"id":"pmDqWjvnRgg","len":"7:13","t":"Big Pumpkin","n":"커다란 호박 · 할로윈"},{"id":"9DiJIklsYtw","len":"9:30","t":"The Couch Potato","n":"소파 감자 · 밖으로 나가기"},{"id":"KvL39aolRDc","len":"11:16","t":"Stellaluna","n":"아기 박쥐 스텔라루나"},{"id":"NyLQwkcpjsM","len":"11:50","t":"Chrysanthemum","n":"이름이 예쁜 쥐 크리산세멈 · Kevin Henkes"},{"id":"QAuX_kZ14nI","len":"12:22","t":"The Sour Grape","n":"신 포도 · 서운한 마음 다루기"}]},{"k":"kidtime","em":"🧸","nm":"KidTimeStoryTime","ch":"@KidTimeStoryTime","url":"https://www.youtube.com/@KidTimeStoryTime","bl":"손인형 프릿지와 티키타카 · 리액션 영어","vids":[{"id":"phsQPLgxMqg","len":"5:37","t":"Never Let a Unicorn Make Slime","n":"유니콘에게 슬라임을 맡기지 마"},{"id":"DxizlqyCsNE","len":"6:47","t":"When Pencil Met Eraser","n":"연필이 지우개를 만났을 때"},{"id":"bLf2VsAeBUo","len":"7:13","t":"First Day Jitters","n":"첫날의 두근두근"},{"id":"XZU48z4UfF8","len":"8:21","t":"Pout-Pout Fish and the Bully-Bully Shark","n":"뚱한 물고기와 심술 상어"},{"id":"GewEpCGLszk","len":"8:56","t":"Turkey Trouble","n":"칠면조의 변장 대작전 · 추수감사절"},{"id":"xWcqog93ze8","len":"9:14","t":"Green Eggs and Ham","n":"초록 달걀과 햄 · Dr. Seuss"},{"id":"BIKBV3iD7iY","len":"11:56","t":"We Will Rock Our Classmates","n":"우리는 반 친구들을 흔들 거야 · 공연"},{"id":"hFEVHleCOU0","len":"13:11","t":"Enemy Pie","n":"원수 파이 · 친구가 되는 법"},{"id":"aKaNVQOQYug","len":"13:34","t":"The Day the Crayons Quit","n":"크레용들이 그만두던 날"},{"id":"8dMvY1DHUM4","len":"14:12","t":"The Toast of the Town","n":"마을의 주인공이 된 토스트"}]},{"k":"family","em":"🌈","nm":"StoryTimeFamily","ch":"@StoryTimeFamily","url":"https://www.youtube.com/@StoryTimeFamily","bl":"미국 초등 필독서 · 글자 강조 Read-Along","vids":[{"id":"okUpA5y3NLQ","len":"4:39","t":"A Trip to the Beach","n":"바닷가 여행 · 나만의 방법 찾기"},{"id":"1LJkfOI-3bA","len":"4:41","t":"The Poopy Taco","n":"웃긴 타코 이야기 · 나누기"},{"id":"mzy69gP_CDg","len":"8:07","t":"Lines, Squiggles, Letters, Words","n":"선과 글자가 세상을 읽는 법"},{"id":"b5uTdnEEGGM","len":"8:13","t":"Echidnas Can't Cuddle","n":"가시두더지는 안을 수 없어 · 나를 받아들이기"},{"id":"Lybzo4J0K-g","len":"8:13","t":"Leo and the Octopus","n":"레오와 문어 · 친구 만들기"},{"id":"U-F3d3egtdQ","len":"8:53","t":"Take Ted Instead","n":"테드를 데려가 · 잠자리 동화"},{"id":"TB3sq4SvktI","len":"9:15","t":"Jo and the No","n":"용기 내는 법을 배우는 조"},{"id":"JsW6QTRN2Y8","len":"9:42","t":"Let's All Say Yes!","n":"모두 함께 '좋아!'라고 말해요"},{"id":"E2AeTFjgoUo","len":"10:05","t":"Milo's Monster","n":"마일로의 괴물 · 질투라는 감정"},{"id":"G3EMGaAf89k","len":"11:15","t":"Olive","n":"마음을 여는 올리브"}]},{"k":"vooks","em":"🎬","nm":"Vooks","ch":"@vooksstorybooks","url":"https://www.youtube.com/@vooksstorybooks","bl":"그림책이 움직이는 애니메이션 동화","vids":[{"id":"89lZPgsEXcg","len":"3:53","t":"What Color Is Bear's Underwear?","n":"곰의 속옷은 무슨 색?"},{"id":"CiRekxwH4jY","len":"4:01","t":"Flamingo Flamenco","n":"플라밍고 플라멩코"},{"id":"TGCuAdkwFOA","len":"5:38","t":"Polly the Parrot and the Wonderful Words","n":"앵무새 폴리 · 멋진 말들"},{"id":"wFB5xm-FuRc","len":"5:38","t":"Your Great Big Adventure Starts Here!","n":"커다란 모험이 시작돼요"},{"id":"P0j42-rY5mA","len":"6:05","t":"Koko the Kangaroo and the Big-Hearted Belongings","n":"캥거루 코코 · 나눔"},{"id":"_kxXvUni1tE","len":"6:19","t":"Leroy the Lion and the Incredible Influence","n":"사자 리로이 · 좋은 영향"},{"id":"1LPT3ch0-sM","len":"6:33","t":"Pass It On!","n":"이어서 전해요! · 나눔 릴레이"},{"id":"Ulp7U4STuUY","len":"6:50","t":"Does a Bear Poo in the Woods!?","n":"곰은 숲에서 응가할까? · 웃긴 과학"},{"id":"ZC8D3eO2dDM","len":"7:48","t":"Because I'm New!","n":"내가 새로 왔으니까 · 전학 첫날"},{"id":"0PlpexIHHx4","len":"11:53","t":"Mr. Crums Potato Predicament","n":"미스터 크럼의 감자 소동"}]},{"k":"storyline","em":"🎭","nm":"Storyline Online","ch":"@StorylineOnline","url":"https://www.youtube.com/@StorylineOnline","bl":"할리우드 배우 구연동화 · SAG 재단","vids":[{"id":"qg6KK0iv9QI","len":"7:12","t":"Room on the Broom","n":"케이트 윈슬렛 · 빗자루 위의 방"},{"id":"UZViXNxFYXE","len":"7:10","t":"Professor Nincompoop","n":"브라이언 크랜스턴 · 닌컴풋 교수"},{"id":"iqhBuvcQ1A8","len":"7:23","t":"Ricky, the Rock That Couldn't Roll","n":"마리사 보데 · 굴러가지 못하는 돌"},{"id":"n9QmzlVbUbA","len":"7:35","t":"Otters vs. Badgers","n":"우조 아두바 · 수달 대 오소리"},{"id":"yt_GmmOx06Y","len":"8:08","t":"The Most Magnificent Thing","n":"올리비아 먼 · 세상에서 제일 멋진 것"},{"id":"iN63vWT2ZRI","len":"8:45","t":"Henry and the Buccaneer Bunnies","n":"제시카 채스테인 · 해적 토끼 헨리"},{"id":"cmC_MoDmMNw","len":"8:59","t":"Stone Soup","n":"캐시 베이츠 · 돌멩이 수프"},{"id":"B0TIeshtX5I","len":"9:16","t":"The Three Billy Goats Gruff","n":"게리 올드만 · 세 마리 염소"},{"id":"qch8dml-p4w","len":"9:53","t":"Going Down Home with Daddy","n":"제프리 라이트 · 아빠와 고향으로"},{"id":"uezGdrm9XI8","len":"11:25","t":"The Three Questions","n":"메릴 스트립 · 세 가지 질문 (톨스토이)"}]}];
 /* ---------------- 📕 한글책 읽어주기 (책 탭 · 유튜브 이탈 방지) ----------------
    채널 큰 카드 9개 → 채널을 누르면 그 채널 우리말 동화 영상만 쫙 → ← 채널 목록
    영상은 보드 안 모달에서 바로 재생하고 ✕로 바로 닫는다(유튜브로 나가지 않게).
@@ -22184,6 +22235,9 @@ var IDX = {};
   KB.forEach(function(c){ c.vids.forEach(function(v){
     IDX[v.id] = { v:v, ch:c, dir:"korbook-img" };
   }); });
+  EB.forEach(function(c){ c.vids.forEach(function(v){
+    IDX[v.id] = { v:v, ch:c, dir:"engbook-img" };
+  }); });
   EN.forEach(function(g){ g.chans.forEach(function(c){ c.vids.forEach(function(v){
     IDX[v.id] = { v:v, ch:c, dir:"eng-vid" };
   }); }); });
@@ -22235,6 +22289,64 @@ function renderSci(){
   if (cnt) cnt.textContent = cur.vids.length + "편";
   row.innerHTML = cur.vids.map(function(v){ return cardHTML(v, "sci-vid"); }).join("");
   try { row.scrollLeft = 0; } catch(e){}
+}
+
+/* ---------------- 📖 영어책 읽어주기 (책 탭 · 유튜브 이탈 방지) ----------------
+   채널 큰 카드 9개 → 채널을 누르면 그 채널 원서 리드어라우드만 쫙 → ← 채널 목록
+   영상은 보드 안 모달에서 바로 재생하고 ✕로 바로 닫는다(유튜브로 나가지 않게).
+   썸네일은 engbook-img/ 로컬 저장본, 봤어요 ✓ 는 localStorage 에 남는다.
+   영상 ID 는 YouTube oEmbed 로 채널명까지 확인한 실제 ID 만 쓴다. */
+function ebChan(k){
+  for (var i = 0; i < EB.length; i++) if (EB[i].k === k) return EB[i];
+  return null;
+}
+function ebWatched(c){
+  var w = watchedAll(), n = 0;
+  for (var i = 0; i < c.vids.length; i++) if (w[c.vids[i].id]) n++;
+  return n;
+}
+function ebCard(v, on){
+  return '<div class="vid-card vid-ep' + (on ? " watched" : "") + '" data-vid="' + v.id + '"'
+    + ' role="button" tabindex="0" aria-label="' + esc(v.t) + ' 영상 보기">'
+    + '<span class="vid-th"><img src="engbook-img/' + v.id + '.jpg" alt="" width="320" height="180"'
+    + ' loading="lazy" decoding="async">'
+    + '<span class="vid-pl" aria-hidden="true">▶</span>'
+    + '<span class="vid-len">' + esc(v.len) + '</span>'
+    + '<button class="vid-ck' + (on ? " on" : "") + '" type="button" data-ebck="' + v.id + '"'
+    + ' aria-pressed="' + (on ? "true" : "false") + '" aria-label="' + esc(v.t) + ' 봤어요 표시">✓</button>'
+    + '</span>'
+    + '<span class="vid-bd"><span class="vid-t">' + esc(v.t) + '</span>'
+    + '<span class="vid-n">' + esc(v.n) + '</span></span></div>';
+}
+var ebK = "";
+function renderEB(){
+  var list = $("ebList"), row = $("ebRow"), back = $("ebBack"), now = $("ebNow"), cnt = $("ebCnt");
+  if (!list || !row) return;
+  var cur = ebK ? ebChan(ebK) : null;
+  if (!cur){
+    list.hidden = false; row.hidden = true;
+    if (back) back.hidden = true;
+    if (now) now.textContent = "";
+    if (cnt) cnt.textContent = "";
+    list.innerHTML = EB.map(function(c){
+      var n = ebWatched(c);
+      return '<button class="sci-big" type="button" data-eb="' + c.k + '"'
+        + ' aria-label="' + esc(c.nm) + " 영상 " + c.vids.length + '편 보기">'
+        + '<span class="sci-big-em" aria-hidden="true">' + c.em + '</span>'
+        + '<span class="sci-big-tx"><b>' + esc(c.nm) + '</b>'
+        + '<span class="eb-bl">' + esc(c.bl) + '</span>'
+        + '<span class="eb-n">' + c.vids.length + '편 · ' + (n ? n + "편 봤어요 ✓" : "아직 안 봤어요") + '</span></span>'
+        + '<span class="sci-big-go" aria-hidden="true">▶</span></button>';
+    }).join("");
+    return;
+  }
+  list.hidden = true; row.hidden = false;
+  if (back) back.hidden = false;
+  if (now) now.textContent = cur.em + " " + cur.nm;
+  if (cnt) cnt.textContent = cur.vids.length + "편 중 " + ebWatched(cur) + "편 봤어요 ✓";
+  var w = watchedAll();
+  row.innerHTML = cur.vids.map(function(v){ return ebCard(v, !!w[v.id]); }).join("");
+  try { row.scrollTop = 0; } catch(e){}
 }
 
 /* ---------------- 🎬 영어 영상 (영어 탭) ---------------- */
@@ -22368,6 +22480,43 @@ function bind(){
     row.addEventListener("click", function(e){
       var c = e.target.closest ? e.target.closest("[data-vid]") : null;
       if (c) openVid(c.getAttribute("data-vid"));
+    });
+  }
+  var ebl = $("ebList");
+  if (ebl && !ebl.__vb){
+    ebl.__vb = 1;
+    ebl.addEventListener("click", function(e){
+      var b = e.target.closest ? e.target.closest("[data-eb]") : null;
+      if (!b) return;
+      ebK = b.getAttribute("data-eb");
+      renderEB();
+    });
+  }
+  var ebb = $("ebBack");
+  if (ebb && !ebb.__vb){
+    ebb.__vb = 1;
+    ebb.addEventListener("click", function(){ ebK = ""; renderEB(); });
+  }
+  var ebr = $("ebRow");
+  if (ebr && !ebr.__vb){
+    ebr.__vb = 1;
+    ebr.addEventListener("click", function(e){
+      var ck = e.target.closest ? e.target.closest("[data-ebck]") : null;
+      if (ck){
+        setWatched(ck.getAttribute("data-ebck"), !ck.classList.contains("on"));
+        renderEB();
+        return;
+      }
+      var c = e.target.closest ? e.target.closest("[data-vid]") : null;
+      if (c) openVid(c.getAttribute("data-vid"));
+    });
+    ebr.addEventListener("keydown", function(e){
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var c = e.target.closest ? e.target.closest("[data-vid]") : null;
+      if (c && !(e.target.closest && e.target.closest("[data-ebck]"))){
+        e.preventDefault();
+        openVid(c.getAttribute("data-vid"));
+      }
     });
   }
   var kbl = $("kbList");
@@ -22516,13 +22665,14 @@ function syncExtBar(){
 }
 
 function init(){
-  try { bind(); renderSci(); renderEng(); renderKB(); hook(); syncExtBar(); } catch(e){ try { console.warn(e); } catch(e2){} }
+  try { bind(); renderSci(); renderEng(); renderKB(); renderEB(); hook(); syncExtBar(); } catch(e){ try { console.warn(e); } catch(e2){} }
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
 else init();
 
 SB.videoHub = { sci: SCI, en: EN, epi: EPI, kb: KB, open: openVid, close: closeVid,
-  renderSci: renderSci, renderEng: renderEng, renderEpi: renderEpi, renderKB: renderKB };
+  renderSci: renderSci, renderEng: renderEng, renderEpi: renderEpi, renderKB: renderKB,
+  eb: EB, renderEB: renderEB };
 })();
 
 /* =====================================================================
