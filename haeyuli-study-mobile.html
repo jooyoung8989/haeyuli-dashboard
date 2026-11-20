@@ -5208,12 +5208,20 @@ body.mob .dy-viewmeta{font-size:.8rem;}
         <div class="sci-hub" id="sciHub">
           <div class="sci-hd">
             <b>🔬 재미있는 과학 영상관</b>
-            <span class="sci-sub">고구마머리 · 사물궁이 · Nat Geo Kids · SciShow Kids</span>
-            <div class="sci-chips" id="sciChips" role="group" aria-label="과학 채널 고르기"></div>
-            <a class="sci-open" id="sciOpen" href="https://www.youtube.com" target="_blank" rel="noopener">채널 ↗</a>
+            <button class="sci-back" id="sciBack" type="button" hidden>← 채널 목록</button>
+            <span class="sci-now" id="sciNow"></span>
+            <span class="sci-cnt" id="sciCnt"></span>
           </div>
-          <div class="sci-row" id="sciRow"></div>
+          <div class="sci-list" id="sciList"></div>
+          <div class="sci-row" id="sciRow" hidden></div>
         </div>
+        <!-- ===== 📺 EBS 초등 만점왕 바로가기 ===== -->
+        <a class="ebs-card" id="ebsCard" href="https://primary.ebs.co.kr/course/series/list?seriesId=S00053"
+           target="_blank" rel="noopener noreferrer" aria-label="EBS 초등 만점왕 강의 목록 새 창으로 열기">
+          <span class="ebs-em" aria-hidden="true">📺</span>
+          <span class="ebs-tx"><b>EBS 초등 만점왕</b><span>1·2학년 수학 · 국어 인강 보러 가기</span></span>
+          <span class="ebs-go">새 창으로 열기 ↗</span>
+        </a>
 
       </div>
     </section>
@@ -5246,7 +5254,6 @@ body.mob .dy-viewmeta{font-size:.8rem;}
         <div class="ep-bar" id="epBar" hidden>
           <div class="ep-chips" id="epChips" role="group" aria-label="만화 채널 고르기"></div>
           <span class="ep-count" id="epCount"></span>
-          <a class="ev-chan ep-open" id="epOpen" href="https://www.youtube.com" target="_blank" rel="noopener">채널 ↗</a>
         </div>
         <div class="ev-grid" id="evGrid"></div>
       </div>
@@ -20603,6 +20610,7 @@ else boot();
 </script>
 
 
+
 <!-- ===== 공용 영상 모달 (🔬 과학 영상관 · 🎬 영어 영상) ===== -->
 <style id="vidHubCss">
 /* =====================================================================
@@ -20615,17 +20623,37 @@ else boot();
 .sci-hd b{flex:0 0 auto;font-size:clamp(15px,1.95vh,21px);font-weight:900;color:#17506e;letter-spacing:-.02em;white-space:nowrap;}
 .sci-sub{flex:0 1 auto;min-width:0;font-size:clamp(10px,1.25vh,14px);font-weight:600;color:#93a3b1;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis;}
-.sci-chips{flex:1 1 13rem;min-width:0;display:flex;align-items:center;gap:.35rem;flex-wrap:nowrap;
-  overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:.1rem 0;}
-.sci-chips::-webkit-scrollbar{display:none;}
-.sci-chip{display:inline-flex;align-items:center;gap:.28rem;height:1.95rem;padding:0 .7rem;border-radius:999px;
-  font-size:clamp(11px,1.38vh,15px);font-weight:800;color:#45606f;background:#fff;
-  box-shadow:inset 0 0 0 1.3px #dde8ef;white-space:nowrap;}
-.sci-chip:active{transform:scale(.97);}
-.sci-chip.on{background:#e9f6ff;color:#0e5a86;box-shadow:inset 0 0 0 1.7px #9dcde9;}
-.sci-open{flex:0 0 auto;display:inline-flex;align-items:center;gap:.25rem;height:1.95rem;padding:0 .75rem;border-radius:999px;
-  font-size:clamp(11px,1.35vh,15px);font-weight:900;color:#fff;background:#2b6f96;white-space:nowrap;
-  box-shadow:0 2px 6px rgba(43,111,150,.28);}
+.sci-back{flex:0 0 auto;display:inline-flex;align-items:center;height:1.95rem;padding:0 .8rem;border-radius:999px;
+  font-size:clamp(11px,1.4vh,15px);font-weight:900;color:#0e5a86;background:#fff;
+  box-shadow:inset 0 0 0 1.4px #b9dcf2;white-space:nowrap;}
+.sci-back[hidden]{display:none;}
+.sci-back:active{transform:scale(.97);}
+.sci-now{flex:0 1 auto;min-width:0;font-size:clamp(12px,1.5vh,16px);font-weight:900;color:#17506e;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;}
+.sci-now:empty,.sci-cnt:empty{display:none;}
+.sci-cnt{flex:0 0 auto;font-size:clamp(10.5px,1.3vh,14px);font-weight:800;color:#2f8b6b;background:#f2f8f4;
+  padding:.15rem .6rem;border-radius:999px;box-shadow:inset 0 0 0 1px #d7e8de;white-space:nowrap;}
+.sci-list{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8vh;}
+.sci-big{display:flex;align-items:center;gap:.7rem;min-width:0;padding:.9vh 1vh;border-radius:14px;text-align:left;
+  background:linear-gradient(160deg,#ffffff,#f7fbfe);box-shadow:inset 0 0 0 1.3px #dbe9f2;}
+.sci-big:active{transform:scale(.985);}
+.sci-big-em{flex:0 0 auto;font-size:clamp(20px,3.4vh,34px);line-height:1;}
+.sci-big-tx{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.1rem;}
+.sci-big-tx b{font-size:clamp(12px,1.55vh,17px);font-weight:900;color:#17506e;letter-spacing:-.02em;line-height:1.2;}
+.sci-big-tx span{font-size:clamp(9.5px,1.15vh,12.5px);font-weight:700;color:#8ba3b3;white-space:nowrap;}
+.sci-big-go{flex:0 0 auto;width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;
+  background:#e9f6ff;color:#0e5a86;font-size:.85rem;font-weight:900;box-shadow:inset 0 0 0 1.2px #b9dcf2;}
+
+/* 📺 EBS 초등 만점왕 */
+.ebs-card{flex:0 0 auto;display:flex;align-items:center;gap:.7rem;min-height:2.5rem;padding:.4vh 1.1vh;border-radius:14px;overflow:hidden;
+  background:linear-gradient(135deg,#fff7ea,#fdeef4);box-shadow:inset 0 0 0 1.2px #f3d9c6;text-decoration:none;}
+.ebs-card:active{transform:scale(.99);}
+.ebs-em{flex:0 0 auto;font-size:clamp(16px,2.4vh,24px);line-height:1;}
+.ebs-tx{flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;}
+.ebs-tx b{font-size:clamp(12px,1.5vh,16px);font-weight:900;color:#9a4b1e;letter-spacing:-.02em;}
+.ebs-tx span{font-size:clamp(10px,1.2vh,13px);font-weight:700;color:#b58a6e;}
+.ebs-go{flex:0 0 auto;font-size:clamp(10px,1.2vh,13px);font-weight:900;color:#fff;background:#c2600f;
+  padding:.22rem .7rem;border-radius:999px;white-space:nowrap;}
 .sci-row{flex:1 1 auto;min-height:0;display:flex;gap:.75vh;overflow-x:auto;overflow-y:hidden;
   padding:0 0 .3vh;scrollbar-width:thin;}
 .sci-row::-webkit-scrollbar{height:6px;}
@@ -20703,15 +20731,14 @@ body.mob .vid-ck{width:1.55rem;height:1.55rem;font-size:.82rem;}
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .vh-ch{flex:0 0 auto;font-size:clamp(10px,1.25vh,14px);font-weight:800;color:#8fd0f2;
   background:rgba(90,190,240,.16);padding:.1rem .5rem;border-radius:999px;white-space:nowrap;}
-.vh-x{margin-left:auto;flex:0 0 auto;width:2.4rem;height:2.4rem;border-radius:50%;
-  background:rgba(255,255,255,.16);color:#fff;font-weight:900;font-size:1rem;}
+.vh-x{margin-left:auto;flex:0 0 auto;height:2.8rem;padding:0 1.1rem;border-radius:999px;
+  display:inline-flex;align-items:center;gap:.3rem;background:rgba(255,255,255,.2);color:#fff;
+  font-weight:900;font-size:clamp(12px,1.5vh,16px);letter-spacing:-.01em;}
 .vh-frame{aspect-ratio:16/9;background:#000;}
 .vh-frame iframe{width:100%;height:100%;border:0;display:block;}
 .vh-foot{display:flex;align-items:center;gap:.7vh;padding:.9vh 1.2vh;flex-wrap:wrap;}
-.vh-open{height:2.9rem;display:inline-flex;align-items:center;gap:.3rem;padding:0 1.3rem;border-radius:999px;
-  background:#e5372b;color:#fff;font-weight:900;font-size:clamp(12px,1.5vh,16px);}
-.vh-chan{height:2.9rem;display:inline-flex;align-items:center;gap:.3rem;padding:0 1.1rem;border-radius:999px;
-  background:rgba(255,255,255,.14);color:#dff1fb;font-weight:800;font-size:clamp(12px,1.45vh,15px);}
+.vh-open{display:inline-flex;align-items:center;gap:.3rem;padding:0;background:none;color:#7fa6bd;
+  font-weight:700;font-size:clamp(10px,1.2vh,13px);text-decoration:underline;text-underline-offset:2px;}
 .vh-src{font-size:clamp(11px,1.35vh,15px);font-weight:700;color:#9fb3c4;}
 
 /* 🔗 파닉스 몬스터 바로가기 바 (영어 탭) */
@@ -20733,15 +20760,26 @@ body.mob .ext-go{font-size:.66rem;padding:.1rem .4rem;}
 @media (max-width: 940px){
   .sci-hd b{flex:1 1 auto;}
   .sci-sub{display:none;}
-  .sci-chips{order:3;flex:1 1 100%;}
-  .sci-open{order:2;}
+  .sci-list{grid-template-columns:1fr 1fr;gap:.6vh;}
+  .sci-hd{flex-wrap:wrap;}
   .ev-steps{flex:1 1 100%;}
 }
 body.mob .sci-hub{padding:.6rem .6rem .55rem;border-radius:14px;gap:.4rem;}
 body.mob .sci-hd b{font-size:1rem;}
 body.mob .sci-sub{display:none;}
-body.mob .sci-chips{margin-left:0;flex:1 1 auto;gap:.3rem;}
-body.mob .sci-chip,body.mob .sci-open{height:1.8rem;font-size:.68rem;padding:0 .55rem;}
+body.mob .sci-chip{height:1.8rem;font-size:.68rem;padding:0 .55rem;}
+body.mob .sci-list{grid-template-columns:1fr 1fr;gap:.5rem;}
+body.mob .sci-big{padding:.6rem .55rem;gap:.4rem;border-radius:12px;}
+body.mob .sci-big-em{font-size:1.4rem;}
+body.mob .sci-big-tx b{font-size:.72rem;}
+body.mob .sci-big-tx span{font-size:.58rem;}
+body.mob .sci-big-go{width:1.5rem;height:1.5rem;font-size:.62rem;}
+body.mob .sci-back{height:1.8rem;font-size:.66rem;padding:0 .55rem;}
+body.mob .ebs-card{padding:.55rem .6rem;border-radius:12px;gap:.45rem;}
+body.mob .ebs-em{font-size:1.2rem;}
+body.mob .ebs-tx b{font-size:.76rem;}
+body.mob .ebs-tx span{font-size:.6rem;}
+body.mob .ebs-go{font-size:.6rem;padding:.18rem .5rem;}
 body.mob .sci-row{gap:.5rem;}
 body.mob .vid-card,body.mob .sci-row .vid-card{flex:0 0 auto;width:9.4rem;min-width:0;max-width:none;border-radius:10px;}
 body.mob .vid-t{font-size:.7rem;}
@@ -20755,7 +20793,8 @@ body.mob .ev-chan{height:1.8rem;font-size:.66rem;padding:0 .55rem;}
 body.mob .ev-grid{grid-template-columns:1fr 1fr;overflow:visible;gap:.5rem;padding-bottom:.4rem;}
 body.mob .vh-modal{padding:.6rem;}
 body.mob .vh-box{width:100%;max-height:88vh;}
-body.mob .vh-open,body.mob .vh-chan{height:2.5rem;font-size:.78rem;}
+body.mob .vh-open{font-size:.66rem;}
+body.mob .vh-x{height:2.4rem;padding:0 .85rem;font-size:.8rem;}
 
 </style>
 <div class="vh-modal" id="vhModal" hidden>
@@ -20763,12 +20802,11 @@ body.mob .vh-open,body.mob .vh-chan{height:2.5rem;font-size:.78rem;}
     <div class="vh-top">
       <b id="vhTitle">영상</b>
       <span class="vh-ch" id="vhCh"></span>
-      <button class="vh-x" id="vhClose" type="button" aria-label="영상 닫기">✕</button>
+      <button class="vh-x" id="vhClose" type="button" aria-label="영상 닫기">✕ 닫기</button>
     </div>
     <div class="vh-frame" id="vhFrame"></div>
     <div class="vh-foot">
-      <a class="vh-open" id="vhOpen" href="https://www.youtube.com" target="_blank" rel="noopener">▶ 유튜브 앱/새 창으로 열기</a>
-      <a class="vh-chan" id="vhChan" href="https://www.youtube.com" target="_blank" rel="noopener">📺 채널 열기</a>
+      <a class="vh-open" id="vhOpen" href="https://www.youtube.com" target="_blank" rel="noopener">영상이 안 나오면 유튜브에서 열기</a>
       <span class="vh-src" id="vhSrc"></span>
     </div>
   </div>
@@ -20788,40 +20826,8 @@ function esc(s){
   });
 }
 
-/* ---------------- 🔬 과학 채널 4개 · 영상 16편 ---------------- */var SCI = [
-  { k:"goguma", em:"🍠", nm:"고구마머리 과학", ch:"@고구마머리",
-    url:"https://www.youtube.com/channel/UC29S0y5vK0XTCke45dGWT6w",
-    vids:[
-      { id:"QcRr-oR9nOw", len:"3:13", t:"만약 내 몸속 원자의 빈 공간을 전부 없앤다면?", n:"내 몸이 99.99% 텅 비어 있다고?" },
-      { id:"7mVvBulNAvo", len:"9:30", t:"만약 내 키가 매일 두 배씩 커진다면?", n:"하루하루 커지는 나, 어디까지?" },
-      { id:"dvfOrnJdWCI", len:"4:56", t:"만약 달에서 수영한다면 어떨까?", n:"달에서는 물이 동글동글 떠다녀요" },
-      { id:"FWBESn5YKGw", len:"8:07", t:"만약 물 대신 콜라만 마시면 어떻게 될까?", n:"제로콜라는 괜찮을까?" }
-    ] },
-  { k:"sci", em:"💡", nm:"사물궁이 잡학지식", ch:"@사물궁이",
-    url:"https://www.youtube.com/channel/UC7F6UDq3gykPZHWRhrj_BDw",
-    vids:[
-      { id:"OJV20cIhGfk", len:"3:57", t:"오레오를 반으로 나누면 왜 크림이 한쪽에 붙을까?", n:"과자로 배우는 과학" },
-      { id:"Z8eXd6gQmvA", len:"4:40", t:"올빼미는 어떻게 소리 없이 날까?", n:"부엉이의 깃털 비밀" },
-      { id:"w_oVhqxh-00", len:"4:53", t:"우주의 빈 공간에는 무엇이 있을까?", n:"텅 빈 것 같지만 가득해요" },
-      { id:"0buchIZwiTQ", len:"6:46", t:"초식동물은 풀만 먹는데 왜 몸집이 클까?", n:"풀만 먹고 어떻게 클까?" }
-    ] },
-  { k:"natgeo", em:"🦁", nm:"National Geographic Kids", ch:"@natgeokids",
-    url:"https://www.youtube.com/channel/UCXVCgDuD_QCkI7gTKU7-tpg",
-    vids:[
-      { id:"AH7KGVjXOkE", len:"6:32", t:"The Floor REALLY IS Lava! (화산 이야기)", n:"용암은 정말 몇 도일까?" },
-      { id:"ziUQS2I_Lco", len:"6:08", t:"Baby Penguins: 아기 펭귄", n:"솜털에서 바다 다이버로" },
-      { id:"PZ5ZJYuD1vw", len:"6:02", t:"How does a Beaver build a Dam?", n:"비버는 댐을 어떻게 지을까?" },
-      { id:"DLRdkTUJ-kY", len:"6:04", t:"Sea Otters: 바다수달", n:"다시마 숲의 작은 수호자" }
-    ] },
-  { k:"scishow", em:"🧪", nm:"SciShow Kids", ch:"@SciShowKids",
-    url:"https://www.youtube.com/channel/UCRFIPG2u1DxKLNuE3y2SjHA",
-    vids:[
-      { id:"8qdYCpSW2eY", len:"5:48", t:"The Biggest Volcano Ever is in Space!", n:"우주에서 가장 큰 화산" },
-      { id:"r2xP7heE0wk", len:"8:11", t:"How Eyes Let Us See The World", n:"우리 눈은 어떻게 볼까?" },
-      { id:"f-FsMRCutlI", len:"5:34", t:"Water Made the Grand Canyon!", n:"물이 만든 그랜드캐니언" },
-      { id:"5Ssty1ejoek", len:"5:28", t:"Where Can We Find Water?", n:"물은 어디에 있을까?" }
-    ] }
-];
+var SCI = [{"k":"goguma","em":"🍠","nm":"고구마머리 과학","ch":"@고구마머리","url":"https://www.youtube.com/channel/UC29S0y5vK0XTCke45dGWT6w","vids":[{"id":"QcRr-oR9nOw","len":"3:13","t":"만약 내 몸속 원자의 빈 공간을 전부 없앤다면?","n":"내 몸이 99.99% 텅 비어 있다고?"},{"id":"7mVvBulNAvo","len":"9:30","t":"만약 내 키가 매일 두 배씩 커진다면?","n":"하루하루 커지는 나, 어디까지?"},{"id":"dvfOrnJdWCI","len":"4:56","t":"만약 달에서 수영한다면 어떨까?","n":"달에서는 물이 동글동글 떠다녀요"},{"id":"FWBESn5YKGw","len":"8:07","t":"만약 물 대신 콜라만 마시면 어떻게 될까?","n":"제로콜라는 괜찮을까?"},{"id":"oP3MZNwm4fE","len":"3:39","t":"만약 규모 15.0 지진이 발생한다면?","n":"상상 속 가장 큰 지진"},{"id":"o3T2gSq87C8","len":"9:31","t":"만약 지구에 산이 모두 사라진다면?","n":"한국은 살기 좋을까?"},{"id":"EJBY0wi5oX0","len":"8:32","t":"만약 남극이 전부 녹아 사라진다면?","n":"바다가 얼마나 올라갈까?"},{"id":"2LKlfbRSDAs","len":"5:09","t":"만약 바다가 하루 만에 사라진다면?","n":"사막지구 vs 금성"},{"id":"TEY_jloszM4","len":"6:39","t":"만약 블랙홀에 1나노초 동안 있으면?","n":"0.000000001초의 세계"},{"id":"q-9FEYufDsA","len":"9:13","t":"만약 지구 바다를 화성으로 옮긴다면?","n":"화성에 바다를 만들면"},{"id":"QFQgwTc9_FY","len":"12:43","t":"우주에서 가장 큰 별을 찾아서","n":"지구 1.3경 개가 들어가는 별"},{"id":"UNObyDB8Oig","len":"5:10","t":"만약 태양보다 1조 배 밝은 빛을 쏜다면?","n":"눈이 어떻게 될까?"}]},{"k":"sci","em":"💡","nm":"사물궁이 잡학지식","ch":"@사물궁이","url":"https://www.youtube.com/channel/UC7F6UDq3gykPZHWRhrj_BDw","vids":[{"id":"OJV20cIhGfk","len":"3:57","t":"오레오를 반으로 나누면 왜 크림이 한쪽에 붙을까?","n":"과자로 배우는 과학"},{"id":"Z8eXd6gQmvA","len":"4:40","t":"올빼미는 어떻게 소리 없이 날까?","n":"부엉이 깃털의 비밀"},{"id":"w_oVhqxh-00","len":"4:53","t":"우주의 빈 공간에는 무엇이 있을까?","n":"텅 빈 것 같지만 가득해요"},{"id":"0buchIZwiTQ","len":"6:46","t":"초식동물은 풀만 먹는데 왜 몸집이 클까?","n":"풀만 먹고 어떻게 클까?"},{"id":"ODWk3ScxSyo","len":"3:23","t":"냉장고 문 열 때마다 전기요금 얼마씩 늘까?","n":"냉장고의 비밀"},{"id":"IeAQkGvq2Pw","len":"6:33","t":"속도 제한이 없다면 자동차는 얼마나 빨라질까?","n":"한계는 어디까지"},{"id":"cdb-jRmQhSg","len":"4:53","t":"사람의 눈은 144Hz를 구분할 수 있을까?","n":"눈이 보는 속도"},{"id":"IPJeBBCnwis","len":"5:11","t":"잠을 덜 자면 몸에서는 무슨 일이 벌어질까?","n":"잠이 부족하면?"},{"id":"QVV3KupUU98","len":"6:18","t":"스포츠카 디자인의 일반 승용차는 왜 없을까?","n":"멋진 차의 비밀"},{"id":"yKSuPt2aS0w","len":"3:57","t":"성인이 성장 호르몬을 맞으면 어떻게 될까?","n":"키가 클 수 있을까?"},{"id":"COXgs5AA_b0","len":"3:34","t":"독을 계속 먹어 내성을 키우면 만독불침?","n":"정말 가능할까"},{"id":"FkrJTMhm9FA","len":"4:16","t":"SNS에서 보던 얼굴 요가는 정말 효과가 있을까?","n":"얼굴이 작아질까?"}]},{"k":"natgeo","em":"🦁","nm":"내셔널 지오그래픽 키즈","ch":"@natgeokids","url":"https://www.youtube.com/channel/UCXVCgDuD_QCkI7gTKU7-tpg","vids":[{"id":"AH7KGVjXOkE","len":"6:32","t":"The Floor REALLY IS Lava!","n":"용암은 정말 몇 도일까?"},{"id":"ziUQS2I_Lco","len":"6:08","t":"Baby Penguins: 아기 펭귄","n":"솜털에서 바다 다이버로"},{"id":"PZ5ZJYuD1vw","len":"6:02","t":"How does a Beaver build a Dam?","n":"비버는 댐을 어떻게 지을까?"},{"id":"DLRdkTUJ-kY","len":"6:04","t":"Sea Otters: 바다수달","n":"다시마 숲의 작은 수호자"},{"id":"nKni5xQ0DFw","len":"44:13","t":"Baby Animals Down Under","n":"호주 아기 동물들"},{"id":"RtY1z8-qGYE","len":"24:30","t":"Silly Animal Names","n":"웃긴 동물 이름들"},{"id":"OFLJN2J0-l8","len":"26:49","t":"Craziest Animal Illusions","n":"동물 착시 놀이"},{"id":"5rYfZXlqLvM","len":"41:38","t":"Made in a Day: Tractors and Sauce","n":"공장에서 만드는 법"},{"id":"sZuusYKOcVY","len":"44:04","t":"AFV: Animal Edition","n":"웃긴 동물 영상 모음"},{"id":"iZooMGvvZdo","len":"29:33","t":"Building the Pyramids","n":"피라미드는 어떻게?"},{"id":"EQpTtkRBInA","len":"19:42","t":"Greeking Out: Baby Hermes","n":"그리스 신화 이야기"},{"id":"X5AvTuQ0jYI","len":"1:20","t":"Kids React to Wolves Up Close","n":"늑대를 가까이서"}]},{"k":"scishow","em":"🧪","nm":"SciShow Kids","ch":"@SciShowKids","url":"https://www.youtube.com/channel/UCRFIPG2u1DxKLNuE3y2SjHA","vids":[{"id":"8qdYCpSW2eY","len":"5:48","t":"The Biggest Volcano Ever is in Space!","n":"우주에서 가장 큰 화산"},{"id":"r2xP7heE0wk","len":"8:11","t":"How Eyes Let Us See The World","n":"우리 눈은 어떻게 볼까?"},{"id":"f-FsMRCutlI","len":"5:34","t":"Water Made the Grand Canyon!","n":"물이 만든 그랜드캐니언"},{"id":"5Ssty1ejoek","len":"5:28","t":"Where Can We Find Water?","n":"물은 어디에 있을까?"},{"id":"6WNHyAXIN8c","len":"8:22","t":"How Ears Let Us Hear the World!","n":"귀는 어떻게 들을까?"},{"id":"vKxpbmdPSyk","len":"7:47","t":"Senses You Didnt Know You Have","n":"몰랐던 감각들"},{"id":"kKqd0_cydZM","len":"6:47","t":"Iceland: A Land of Ice AND Fire!","n":"얼음과 불의 나라"},{"id":"0U4lOGo593k","len":"7:15","t":"Yellowstone: The First National Park","n":"옐로스톤 국립공원"},{"id":"HhXnRfyUbeQ","len":"6:15","t":"The Fiordlands of New Zealand!","n":"뉴질랜드 피오르"},{"id":"vD-ZwMjRDPU","len":"6:45","t":"Water's Amazing Journey","n":"물의 신기한 여행"},{"id":"1bRTC3cfJIk","len":"16:44","t":"Water Has Superpowers","n":"물의 초능력"},{"id":"0jKoOUZ1GBM","len":"8:24","t":"Every Kind of Volcano","n":"여러 가지 화산"}]}];
+
 
 /* ---------------- 🎬 영어 영상 21개 채널 · 3단계 ---------------- */
 var EN = [
@@ -20924,27 +20930,38 @@ function cardHTML(v, dir){
     + '<span class="vid-n">' + esc(v.n) + '</span></span></button>';
 }
 
-/* ---------------- 🔬 과학 영상관 (온라인 공부 첫 화면) ---------------- */
-var sciK = SCI[0].k;
-function sciCur(){
-  for (var i = 0; i < SCI.length; i++) if (SCI[i].k === sciK) return SCI[i];
-  return SCI[0];
+/* ---------------- 🔬 과학 영상관 (온라인 공부 첫 화면) ----------------
+   목록(큰 채널 카드 4개) → 채널을 누르면 그 채널 영상만 쫙 → ← 채널 목록
+   영상은 보드 안 모달에서 바로 재생하고 ✕로 바로 닫는다(유튜브로 나가지 않게) */
+var sciK = "";
+function sciChan(k){
+  for (var i = 0; i < SCI.length; i++) if (SCI[i].k === k) return SCI[i];
+  return null;
 }
 function renderSci(){
-  var chips = $("sciChips"), row = $("sciRow"), link = $("sciOpen");
-  if (!chips || !row) return;
-  var cur = sciCur();
-  chips.innerHTML = SCI.map(function(c){
-    var on = c.k === sciK;
-    return '<button class="sci-chip' + (on ? " on" : "") + '" type="button" data-sci="' + c.k + '"'
-      + ' aria-pressed="' + (on ? "true" : "false") + '">' + c.em + " " + esc(c.nm) + "</button>";
-  }).join("");
-  if (link){
-    link.href = cur.url;
-    link.textContent = cur.ch + " 채널 ↗";
-    link.setAttribute("aria-label", cur.nm + " 유튜브 채널 열기");
+  var list = $("sciList"), row = $("sciRow"), back = $("sciBack"), now = $("sciNow"), cnt = $("sciCnt");
+  if (!list || !row) return;
+  var cur = sciK ? sciChan(sciK) : null;
+  if (!cur){
+    list.hidden = false; row.hidden = true;
+    if (back) back.hidden = true;
+    if (now) now.textContent = "";
+    if (cnt) cnt.textContent = "";
+    list.innerHTML = SCI.map(function(c){
+      return '<button class="sci-big" type="button" data-sci="' + c.k + '"'
+        + ' aria-label="' + esc(c.nm) + " 영상 " + c.vids.length + '편 보기">'
+        + '<span class="sci-big-em" aria-hidden="true">' + c.em + '</span>'
+        + '<span class="sci-big-tx"><b>' + esc(c.nm) + '</b><span>' + c.vids.length + '편 · 눌러서 보기</span></span>'
+        + '<span class="sci-big-go" aria-hidden="true">▶</span></button>';
+    }).join("");
+    return;
   }
+  list.hidden = true; row.hidden = false;
+  if (back) back.hidden = false;
+  if (now) now.textContent = cur.em + " " + cur.nm;
+  if (cnt) cnt.textContent = cur.vids.length + "편";
   row.innerHTML = cur.vids.map(function(v){ return cardHTML(v, "sci-vid"); }).join("");
+  try { row.scrollLeft = 0; } catch(e){}
 }
 
 /* ---------------- 🎬 영어 영상 (영어 탭) ---------------- */
@@ -20970,8 +20987,7 @@ function renderEng(){
   if (bar) bar.hidden = true;
   var g = EN[evG];
   if (chans) chans.innerHTML = g.chans.map(function(c){
-    return '<a class="ev-chan" href="' + c.url + '" target="_blank" rel="noopener"'
-      + ' aria-label="' + esc(c.nm) + ' 유튜브 채널 열기">' + c.em + " " + esc(c.nm) + " ↗</a>";
+    return '<span class="ev-chan">' + c.em + " " + esc(c.nm) + "</span>";
   }).join("");
   grid.innerHTML = g.chans.map(function(c){
     return c.vids.map(function(v){ return cardHTML(v, "eng-vid"); }).join("");
@@ -21011,7 +21027,7 @@ function epiCard(v, on){
     + '<span class="vid-n">' + esc(v.n) + '</span></span></div>';
 }
 function renderEpi(){
-  var chips = $("epChips"), grid = $("evGrid"), cnt = $("epCount"), op = $("epOpen");
+  var chips = $("epChips"), grid = $("evGrid"), cnt = $("epCount");
   if (!grid) return;
   var cur = epiCur(), w = watchedAll();
   if (chips) chips.innerHTML = EPI.map(function(c){
@@ -21021,7 +21037,6 @@ function renderEpi(){
   }).join("");
   var n = cur.vids.filter(function(v){ return !!w[v.id]; }).length;
   if (cnt) cnt.textContent = cur.vids.length + "편 중 " + n + "편 봤어요 ✓";
-  if (op){ op.href = cur.url; op.textContent = cur.ch + " 채널 ↗"; }
   grid.innerHTML = cur.vids.map(function(v){ return epiCard(v, !!w[v.id]); }).join("");
   try { grid.scrollTop = 0; } catch(e){}
 }
@@ -21030,7 +21045,7 @@ function renderEpi(){
 function openVid(id){
   var it = IDX[id]; if (!it) return;
   var m = $("vhModal"), f = $("vhFrame"), t = $("vhTitle"), c = $("vhCh"),
-      o = $("vhOpen"), cn = $("vhChan"), s = $("vhSrc");
+      o = $("vhOpen"), s = $("vhSrc");
   if (!m || !f) return;
   if (t) t.textContent = it.v.t + (it.v.n ? " · " + it.v.n : "");
   if (c) c.textContent = it.ch.em + " " + it.ch.nm;
@@ -21040,7 +21055,6 @@ function openVid(id){
     + ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"'
     + ' referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
   if (o) o.href = "https://www.youtube.com/watch?v=" + it.v.id + (it.v.s ? "&t=" + it.v.s : "");
-  if (cn) cn.href = it.ch.url;
   if (s) s.textContent = it.ch.ch + (it.v.len || it.v.d ? " · " + (it.v.len || it.v.d) : "");
   m.hidden = false;
 }
@@ -21052,16 +21066,22 @@ function closeVid(){
 
 /* ---------------- 이벤트 · 화면 연결 ---------------- */
 function bind(){
-  var chips = $("sciChips");
-  if (chips && !chips.__vb){
-    chips.__vb = 1;
-    chips.addEventListener("click", function(e){
+  var list = $("sciList");
+  if (list && !list.__vb){
+    list.__vb = 1;
+    list.addEventListener("click", function(e){
       var b = e.target.closest ? e.target.closest("[data-sci]") : null;
       if (!b) return;
       sciK = b.getAttribute("data-sci");
       renderSci();
     });
-  }  var row = $("sciRow");
+  }
+  var back = $("sciBack");
+  if (back && !back.__vb){
+    back.__vb = 1;
+    back.addEventListener("click", function(){ sciK = ""; renderSci(); });
+  }
+  var row = $("sciRow");
   if (row && !row.__vb){
     row.__vb = 1;
     row.addEventListener("click", function(e){
