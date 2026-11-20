@@ -4697,6 +4697,26 @@ body.mob #viewHome .rb-home-row,body.mob #viewHome .weekboard{grid-row:auto !imp
 .rb-canvas-box canvas{height:clamp(140px,24vh,230px);}
 body.mob .rb-canvas-box canvas{height:clamp(150px,34vw,260px);}
 
+/* ---------------- 🏆 과목 진행 배지(3개 기준) · 홈 진행 줄 · 📞 전화영어 ---------------- */
+.s2c-cnt{flex:0 0 auto;margin-left:auto;font-size:clamp(10px,1.2vh,13px);font-weight:900;color:#b07a12;
+  background:#fff6e0;border-radius:999px;padding:.08rem .45rem;box-shadow:inset 0 0 0 1px #f2e0b8;line-height:1.5;}
+#viewHome{grid-template-rows:auto auto auto minmax(0,1fr);}
+#viewHome .home-prog{grid-column:1/-1;grid-row:2;display:flex;align-items:center;gap:.45vh;min-width:0;overflow:hidden;}
+#viewHome .rb-home-row{grid-row:3;}
+#viewHome .weekboard{grid-row:4 !important;}
+#viewHome .hp-lb{flex:0 0 auto;font-size:clamp(9px,1.05vh,12px);font-weight:900;color:#5d6f7d;white-space:nowrap;}
+#viewHome .hp-chip{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:.3vh;
+  height:clamp(20px,2.6vh,27px);padding:0 .4vh;border:0;border-radius:.65vh;cursor:pointer;overflow:hidden;
+  background:#f4f8fb;box-shadow:inset 0 0 0 1px #e3ecf3;color:#5f7181;
+  font-family:inherit;font-size:clamp(9px,1.05vh,12px);font-weight:800;white-space:nowrap;}
+#viewHome .hp-chip i{font-style:normal;overflow:hidden;text-overflow:ellipsis;}
+#viewHome .hp-chip b{flex:0 0 auto;font-size:clamp(9px,1.05vh,12px);color:#c0871b;}
+#viewHome .hp-chip.on{background:#eef9f2;box-shadow:inset 0 0 0 1px #cfe5d9;color:#1f6b4f;}
+#viewHome .hp-chip.on b{color:#1f6b4f;}
+body.mob #viewHome .home-prog{gap:.35rem;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;}
+body.mob #viewHome .hp-lb{font-size:.62rem;}
+body.mob #viewHome .hp-chip{flex:0 0 auto;height:1.9rem;padding:0 .45rem;border-radius:.6rem;font-size:.62rem;gap:.2rem;}
+body.mob #viewHome .hp-chip b{font-size:.62rem;}
 /* ==/RB-BLOCK-CSS== */
 </style>
 <style id="diary-css">
@@ -5425,7 +5445,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
           <div class="hub2-prog" id="hubProg">오늘 완료 0 / 5과목</div>
         </div>
         <div class="hub2-grid" id="hubGrid"></div>
-        <p class="hub2-note">공부 다 하면 200원!!!! 열심히 모아 봐요!</p>
+        <p class="hub2-note">한 과목에 3개씩! 다 하면 200원!!!! 열심히 모아 봐요!</p>
         <!-- ===== 🔬 재미있는 과학 영상관 (5과목 카드 아래) ===== -->
         <div class="sci-hub" id="sciHub">
           <div class="sci-hd">
@@ -5510,6 +5530,9 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
           </div>
         </div>
       </aside>
+
+      <!-- 오늘 공부 진행 — 과목마다 학습 3개를 채우면 완료(+200원) -->
+      <div class="home-prog" id="homeProg" role="group" aria-label="오늘 공부 진행"></div>
 
       <div class="home-party" id="homeParty" hidden>
         <div class="party-sparks" aria-hidden="true"><span>✨</span><span>🌟</span><span>🎉</span><span>⭐</span><span>✨</span></div>
@@ -8685,24 +8708,38 @@ function daySubData(){
   return d;
 }
 SB.daySubData = daySubData;
+/* 과목 완료 기준 — 한 과목에서 학습 활동·문항을 3개 이상 해야 '완료' (저금통 200원도 이때) */
+var NEED = 3;
+function subCount(d, sub){ return Math.max(0, parseInt(d.subs[sub], 10) || 0); }
 SB.markDaily = function(sub){
   if (!sub || SUBKEYS.indexOf(sub) < 0) return false;
   var d = daySubData();
-  var was = d.subs[sub] || 0;
+  var was = subCount(d, sub);
   d.subs[sub] = was + 1;
   writeJSON(DAYSUB, d);
-  if (was === 0) SB.ntfySubject(sub);        /* 오늘 처음 끝낸 과목만 엄마 폰으로 알림 */
+  if (was + 1 === NEED) SB.ntfySubject(sub);   /* 3개를 채워 그 과목을 끝낸 순간에만 엄마 폰으로 알림 */
   if (SB.onDaily) { try { SB.onDaily(sub); } catch(e){} }
   return true;
 };
+/* 오늘 그 과목을 몇 개 했는지 — 3개가 되어야 완료 */
+SB.subjCount = function(sub){ return subCount(daySubData(), sub); };
+SB.subjNeed = NEED;
+SB.subjProgress = function(){
+  var d = daySubData(), out = {};
+  for (var i = 0; i < SUBKEYS.length; i++){
+    var n = subCount(d, SUBKEYS[i]);
+    out[SUBKEYS[i]] = { n:n, need:NEED, left:Math.max(0, NEED - n), done:(n >= NEED) };
+  }
+  return out;
+};
 SB.subjectsDone = function(){
   var d = daySubData(), out = {};
-  for (var i = 0; i < SUBKEYS.length; i++) out[SUBKEYS[i]] = !!(d.subs[SUBKEYS[i]] > 0);
+  for (var i = 0; i < SUBKEYS.length; i++) out[SUBKEYS[i]] = (subCount(d, SUBKEYS[i]) >= NEED);
   return out;
 };
 SB.subjectsDoneCount = function(){
   var d = daySubData(), n = 0;
-  for (var i = 0; i < SUBKEYS.length; i++) if (d.subs[SUBKEYS[i]] > 0) n++;
+  for (var i = 0; i < SUBKEYS.length; i++) if (subCount(d, SUBKEYS[i]) >= NEED) n++;
   return n;
 };
 
@@ -9593,6 +9630,22 @@ function buildParty(){
   }).join("");
 }
 
+/* ---------------- 오늘 공부 진행 (과목마다 3개를 채우면 완료) ---------------- */
+function renderProg(){
+  var box = $("homeProg"); if (!box) return;
+  function hpEsc(v){ return String(v == null ? "" : v).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+  var pr = null;
+  try { pr = (SB.subjProgress ? SB.subjProgress() : null); } catch(e){ pr = null; }
+  if (!pr) { box.innerHTML = ""; return; }
+  box.innerHTML = '<span class="hp-lb">오늘 공부</span>' + SUBS.map(function(s){
+    var p = pr[s.k] || { n:0, need:3 };
+    var need = Number(p.need) || 3, n = Math.min(Number(p.n) || 0, need), on = (n >= need);
+    return '<button class="hp-chip' + (on ? " on" : "") + '" type="button" data-home="' + s.k + '"'
+      + ' aria-label="' + hpEsc(s.nm) + (on ? " 3개 완료, 200원" : " " + n + "개 완료, " + (need - n) + "개 더 하면 200원") + '">'
+      +   '<i>' + hpEsc(s.nm) + '</i><b>' + (on ? "✓ " : "") + n + '/' + need + '</b></button>';
+  }).join("");
+}
+
 function render(){
   var d = (SB.subjectsDone ? SB.subjectsDone() : {});
   var n = countDone(d), full = n >= 5;
@@ -9602,6 +9655,7 @@ function render(){
   if (v) v.classList.toggle("is-party", full);
   buildParty();
   renderAtt();
+  renderProg();
   if (full && !celebrated && visible()) {
     celebrated = true;
     try { SB.confetti(); } catch(e){}
@@ -11867,8 +11921,11 @@ function endCall(){
   var note = $("callNote");
   if (note) note.textContent = "통화를 마쳤어요! 📞 다시 걸기를 누르면 또 전화할 수 있어요";
   renderQuick([]);
-  if (got > 0) { try { SB.confetti(); } catch(e){} SB.toast("📞 전화 영어 완료! ⭐ +" + got); }
-  else if (turns > 0) SB.toast("📞 전화 영어 완료! 오늘 영어 끝났어요 🎉");
+  /* 📞 전화영어 무조건 +100원 — 통화 한 번에 한 번 (1문장이라도 말했으면) */
+  var phone = 0;
+  try { if (SB.phone100 && turns > 0) phone = SB.phone100.emma(turns, true); } catch(e){ phone = 0; }
+  if (got > 0) { try { SB.confetti(); } catch(e){} SB.toast("📞 전화 영어 완료! ⭐ +" + got + (phone ? " · 🐷 +100원" : "")); }
+  else if (turns > 0) SB.toast(phone ? "📞 전화 영어 완료! 🐷 저금통에 100원 들어갔어요" : "📞 전화 영어 완료! 오늘 영어 끝났어요 🎉");
 }
 
 /* ---------------------------------------------------------------------
@@ -11957,6 +12014,7 @@ function showHint(){
 }
 function pickleCall(){
   hideHint();
+  try { if (SB.phone100) SB.phone100.pickle(); } catch(e){}     /* 📞 피클이랑 통화 +100원 */
   try { window.location.href = "pickle://call"; } catch(e){}
   setTimeout(function(){
     try { if (document.visibilityState === "visible") showHint(); } catch(e){ showHint(); }
@@ -12768,35 +12826,40 @@ function hanjaToday(){
 function doneMap(){
   var d = SB.subjectsDone ? SB.subjectsDone() : {};
   var out = {};
-  HUB.forEach(function(s){
-    out[s.k] = s.k === "hanja" ? (!!d.hanja || hanjaToday()) : !!d[s.k];
-  });
+  HUB.forEach(function(s){ out[s.k] = !!d[s.k]; });   /* 과목 안 3개를 채워야 완료 */
   return out;
 }
 SB.renderHub = function(){
   var box = $("hubGrid"); if (!box) return;
-  var d = doneMap(), n = 0;
+  var d = doneMap(), n = 0, pr = (SB.subjProgress ? SB.subjProgress() : {});
   HUB.forEach(function(s){ if (d[s.k]) n++; });
   var prog = $("hubProg");
-  if (prog) prog.textContent = "오늘 완료 " + n + " / " + HUB.length + "과목";
+  if (prog) prog.textContent = "오늘 완료 " + n + " / " + HUB.length + "과목 · 한 과목에 3개씩";
   box.innerHTML = HUB.map(function(s){
     var on = !!d[s.k];
     var at = on ? (doneAt(s.k) || "") : "";
-    return '<button class="s2c' + (on ? " s2c-done" : "") + '" type="button" data-subj="' + s.k + '"'
-      + ' aria-label="' + esc(s.nm) + (on ? " 오늘 공부 끝, 200원 달성, 한 번 더 해 볼까요" : " 공부 시작하기, 다 하면 200원") + '">'
+    var pg = pr[s.k] || { n:(on ? 3 : 0), need:3, left:0 };
+    var need = Number(pg.need) || 3, cnt = Math.min(Number(pg.n) || 0, need), left = Math.max(0, need - cnt);
+    var rw = on
+      ? '<b>✓ ' + need + '/' + need + ' 완료 (+200원)</b><br>오늘 ' + esc(s.nm) + ' 공부 끝' + (at ? ' · ' + esc(at) : "")
+      : (cnt > 0
+          ? '<b>진행 ' + cnt + '/' + need + '</b><br>' + left + '개 더 하면 <b>200원!</b>'
+          : '3개 하면 <b>200원!!!!</b>');
+    return '<button class="s2c' + (on ? " s2c-done" : '') + '" type="button" data-subj="' + s.k + '"'
+      + ' aria-label="' + esc(s.nm) + (on ? " 오늘 공부 끝, 3개 완료 200원 달성, 한 번 더 해 볼까요"
+          : (cnt > 0 ? " 오늘 " + cnt + "개 했어요, " + left + "개 더 하면 200원" : " 공부 시작하기, 3개 하면 200원")) + '">'
       + '<span class="s2c-top">'
       +   '<span class="s2c-badge" style="background:' + s.color + '" aria-hidden="true">' + s.badge.map(function(b, i){
             return b ? "<b>" + esc(b) + "</b>" : ""; }).join("") + '</span>'
       +   '<b class="s2c-nm">' + esc(s.nm) + '</b>'
+      +   (cnt > 0 && !on ? '<span class="s2c-cnt">' + cnt + '/' + need + '</span>' : '')
       + '</span>'
       + '<span class="s2c-d">' + esc(s.d) + '</span>'
       + '<span class="s2c-hero" aria-hidden="true">' + s.hero() + '</span>'
       + '<span class="s2c-rw">'
       +   '<span class="s2c-coin" aria-hidden="true">' + (on ? coinWin() : coinIdle()) + '</span>'
-      +   '<span class="s2c-rwt">' + (on
-              ? '<b>200원 달성! 🎉</b><br>오늘 ' + esc(s.nm) + ' 공부 끝' + (at ? ' · ' + esc(at) : "")
-              : '다 하면 <b>200원!!!!</b>') + '</span>'
-      +   '<span class="s2c-go">' + (on ? "한 번 더 해 볼까요?" : "시작하기 ▶") + '</span>'
+      +   '<span class="s2c-rwt">' + rw + '</span>'
+      +   '<span class="s2c-go">' + (on ? "한 번 더 해 볼까요?" : (cnt > 0 ? "이어서 하기 ▶" : "시작하기 ▶")) + '</span>'
       + '</span>'
       + '</button>';
   }).join("");
@@ -12818,7 +12881,13 @@ SB.onShow.study = function(sec){
 SB.onDaily = (function(prev){
   return function(sub){
     if (prev) { try { prev(sub); } catch(e){} }
-    try { markDone(sub); SB.renderHub(); } catch(e){}
+    try {
+      /* 3개를 채워 그 과목이 '완료'가 된 순간에 완료 시각을 남긴다 */
+      var ok = true;
+      try { ok = !(SB.subjCount && SB.subjNeed) || (SB.subjCount(sub) >= SB.subjNeed); } catch(e2){ ok = true; }
+      if (ok) markDone(sub);
+      SB.renderHub();
+    } catch(e){}
   };
 })(SB.onDaily);
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); SB.renderHub(); });
@@ -16105,9 +16174,9 @@ SB.family = {
 </script>
 <script>
 /* =====================================================================
-   📚 과목별 200원 — 온라인 공부에서 그날 처음 과목을 끝내면 저금통에 200원
+   📚 과목별 200원 — 온라인 공부에서 한 과목에 학습 3개를 채워 끝내면 저금통에 200원
    · 하루 한 과목 한 번만 (haeyuli.subj200.v1 표식 + 용돈 내역 rid 로 이중 방지)
-   · 완료 판정은 SB.subjectsDone(오늘 한 과목) + 한자 별 원장(오늘|hanja|…)
+   · 완료 판정은 SB.subjectsDone(오늘 그 과목에서 3개 이상) — 어떤 과목이든 3개가 기준
    · 입금 뒤 용돈 내역("📚 오늘 수학 공부 완료")과 가족 동기화까지
    ===================================================================== */
 (function(){
@@ -16142,18 +16211,12 @@ function seenInLog(rid){
   return false;
 }
 /* 오늘 이미 끝낸 과목 */
-function doneSubs(){
+function doneSubs(){                 /* 과목 안에서 학습 3개를 채운 과목만 '완료' (SB.subjectsDone 과 같은 기준) */
   var out = {};
   try {
     var d = SB.subjectsDone ? SB.subjectsDone() : {};
     for (var i = 0; i < KEYS.length; i++) out[KEYS[i]] = !!d[KEYS[i]];
   } catch(e){}
-  if (!out.hanja){
-    try {
-      var led = SB.readDash ? SB.readDash().led : {}, pre = today() + "|hanja|";
-      for (var k in led) if (k.indexOf(pre) === 0) { out.hanja = true; break; }
-    } catch(e){}
-  }
   return out;
 }
 function credit(sub, date){
@@ -16220,6 +16283,50 @@ try {
     if (!document.hidden) { try { SB.subj200.sync(); } catch(e){} }
   });
 } catch(e){}
+})();
+</script>
+
+<script>
+/* =====================================================================
+   📞 전화영어 +100원 — 엠마 선생님 통화를 마쳐도, 피클이랑 통화를 걸어도 저금통에 100원
+   · 통화 한 번에 한 번(+100원) · 용돈 내역 "📞 전화영어 (+100원)" · 짧은 쿨다운(2초)으로 더블클릭만 막음
+   · 엠마: 1문장이라도 말하고 통화를 끊으면 입금 / 피클: 📲 피클 통화 버튼을 누르면 입금
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+if (SB.phone100) return;
+var AMT = 100, COOL = 2000, LAST = {};
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function today(){
+  try { if (SB.today) return SB.today(); } catch(e){}
+  var d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+function credit(src, quiet){
+  src = String(src || "call");
+  var now = Date.now();
+  if (now - (LAST[src] || 0) < COOL) return 0;      /* 같은 버튼 연속 누름·중복 이벤트만 막는다 */
+  LAST[src] = now;
+  var rid = "phone100-" + today() + "-" + src + "-" + now.toString(36);
+  var bal = 0;
+  try {
+    if (SB.money && SB.money.credit) bal = SB.money.credit(AMT, "📞 전화영어 (+100원)", rid);
+  } catch(e){ bal = 0; }
+  if (!quiet) {
+    try { if (SB.confetti) SB.confetti(); } catch(e){}
+    try { if (SB.toast) SB.toast("📞 전화영어! 저금통에 100원 들어갔어요 🐷"); } catch(e){}
+  }
+  return Number(bal) || 0;
+}
+SB.phone100 = {
+  amount: AMT,
+  /* 엠마 선생님 통화 — 1문장이라도 말했으면 무조건 100원 */
+  emma: function(turns, quiet){ return (Number(turns) > 0) ? credit("emma", quiet) : 0; },
+  /* 📲 피클이랑 통화 버튼 — 누르면 무조건 100원 */
+  pickle: function(quiet){ return credit("pickle", quiet); },
+  credit: credit
+};
 })();
 </script>
 <script>
@@ -16659,7 +16766,8 @@ function mountRewardGuide(){
   box.innerHTML =
       '<div class="rewd-h"><b>🎁 보상 설명</b><span>엄마가 언제든 확인</span></div>'
     + '<ul class="rewd-list">'
-    +   '<li><b>📚 온라인 공부 한 과목</b><span>수학 · 영어 · 한자 · 국어 · 역사 — 과목마다 <em>하루 1번</em> 끝내면 <em>+200원</em></span></li>'
+    +   '<li><b>📚 온라인 공부 한 과목</b><span>수학 · 영어 · 한자 · 국어 · 역사 — 과목마다 <em>학습 3개</em>를 끝내면 <em>+200원</em></span></li>'
+    +   '<li><b>📞 전화영어</b><span>엠마 선생님과 통화를 마치거나 📲 피클이랑 통화를 걸면 <em>통화마다 +100원</em></span></li>'
     +   '<li><b>📝 숙제 5일 연속</b><span>그날 숙제를 <em>전부</em> 체크한 날이 5일 이어지면 <em>+5,000원</em> (10·15·20일도 5일마다)</span></li>'
     +   '<li><b>🏆 숙제 30일 연속</b><span>한 달 내리 다 하면 <em>🎟️ 원하는 거 사기 쿠폰</em> 1장 · 60·90일도 한 장씩</span></li>'
     +   '<li><b>📖 연속 독서 보너스</b><span>북트리 책 + 빨간펜 ‘읽었어요 ✓’ 합산 — 3일 <em>+200원</em> · 7일 <em>+400원</em> · 14일 <em>+600원</em> · 30일 <em>+1,000원</em></span></li>'
@@ -20455,6 +20563,7 @@ function pkShowHint(){
 function pkHomeCall(){
   pkHideHint();
   try { if (SB.toast) SB.toast("피클이랑 영어로 통화를 걸어 볼까요?"); } catch(e){}
+  try { if (SB.phone100) SB.phone100.pickle(); } catch(e){}     /* 📞 피클이랑 통화 +100원 */
   try { window.location.href = PK_CALL_URL; } catch(e){}
   setTimeout(function(){
     try { if (document.visibilityState === "visible") pkShowHint(); } catch(e){ pkShowHint(); }
