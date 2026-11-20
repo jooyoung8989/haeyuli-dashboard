@@ -14472,7 +14472,9 @@ function renderRead(){
   shelf.hidden = true; read.hidden = false;
   var n = b.pages.length;
   var page = b.pages[UI.page] || b.pages[0];
-  if (note) note.textContent = "🔊 로 읽어 주고, 🎙️ 로 내 목소리를 녹음해 들어 봐요.";
+  if (note) note.textContent = UI.fin
+    ? "다음 책도 골라 볼까요? 📚"
+    : "🔊 로 읽어 주고, 🎙️ 로 내 목소리를 녹음해 들어 봐요.";
   var head = '<div class="pbk-readhead">'
     + '<button type="button" class="pbk-back" data-act="shelf">← 책장</button>'
     + '<div class="pbk-book"><b>' + esc(b.t) + '</b><span class="pbk-ar2">' + esc(b.ar) + "</span></div>"
