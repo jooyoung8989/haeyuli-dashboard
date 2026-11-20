@@ -3647,6 +3647,11 @@ body.mob .ha-bub{max-width:5.8rem;margin-bottom:.7rem;}
 <style id="rbStyle" data-rb="1">
 /* ==RB-BLOCK-CSS== */
 /* ===== 📚 빨간펜 솔루토이 우리 집 책장 · 하루 한 권 · 독후활동 ===== */
+.bookview.rb-hasbooks{display:flex;flex-direction:column;gap:.75vh;height:100%;min-height:0;}
+.rb-tree-body{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:.9vh;
+  flex:1 1 auto;min-height:0;height:100%;}
+body.mob .rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;}
+@media (max-width:900px){.rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;}}
 .rb-hide{display:none !important;}
 .rb-tabs{display:flex;gap:.5vh;padding:.4vh .2vh;flex:0 0 auto;flex-wrap:wrap;}
 .rb-tab{display:flex;align-items:center;gap:.5vh;padding:.85vh 1.4vh;border-radius:999px;background:#f1f6fb;
@@ -15463,7 +15468,13 @@ function actHTML(b){
 
 function buildBookView(){
   var view = $("viewBook"); if (!view || $("rbTabs")) return;
-  view.insertBefore(buildTabs(), view.firstChild);
+  /* 원래의 두 패널(책나무·책장)은 한 덩어리로 감싸고, 그 위에 하위 탭을 둔다 */
+  var body = document.createElement("div");
+  body.className = "rb-tree-body"; body.id = "rbTreeBody";
+  while (view.firstChild) body.appendChild(view.firstChild);
+  view.appendChild(body);
+  view.insertBefore(buildTabs(), body);
+  view.classList.add("rb-hasbooks");
   var shelf = document.createElement("div");
   shelf.className = "rb-act rb-hide"; shelf.id = "rbShelfWrap";
   view.appendChild(shelf);
