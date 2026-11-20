@@ -3317,6 +3317,80 @@ body .wk-sub i{font-size:.95rem;}
 .hd-say:active,.hd-go:active{transform:scale(.98);}
 
 /* =====================================================================
+/* =====================================================================
+   🌍 세계사 연표 · ⚖️ 같은 시대 한국 vs 세계
+   ===================================================================== */
+.wv-list,.wc-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.2vh .35vh 1.2vh;}
+.wv-list{display:flex;flex-direction:column;gap:.68vh;}
+/* ---- 🌍 세계사 연표 카드 ---- */
+.wv-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:1.1vh;
+  padding:.74vh 1.1vh;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px #e6ebf0;}
+.wv-art{width:clamp(54px,7.6vh,92px);aspect-ratio:11/9;border-radius:12px;overflow:hidden;display:grid;place-items:center;
+  background:#f7fafc;box-shadow:inset 0 0 0 1px #e9eef2;}
+.wv-art svg{width:100%;height:100%;display:block;}
+.wv-main{display:flex;flex-direction:column;gap:.25vh;min-width:0;}
+.wv-top{display:flex;align-items:center;gap:.5vh;flex-wrap:wrap;}
+.wv-ep{padding:.06rem .52rem;border-radius:999px;font-size:clamp(10px,1.2vh,13px);font-weight:900;letter-spacing:.01em;}
+.wv-ep.anc{background:#f7efe0;color:#8a6a26;}
+.wv-ep.mid{background:#e9f3ec;color:#2f6b4c;}
+.wv-ep.mod{background:#e9f1fa;color:#2c5f8f;}
+.wv-ep.now{background:#f1edfb;color:#5b4a9a;}
+.wv-yr{font-size:clamp(11px,1.35vh,15px);font-weight:800;color:#8b98a4;}
+.wv-nm{font-size:clamp(15px,1.95vh,23px);font-weight:800;color:#202a33;letter-spacing:-.03em;line-height:1.22;}
+.wv-tx{margin:0;font-size:clamp(12.5px,1.58vh,18px);font-weight:600;color:#46535f;line-height:1.5;}
+.wv-tx b{color:#1d5b7a;font-weight:900;}
+.wv-say{flex:0 0 auto;width:clamp(32px,4.4vh,44px);height:clamp(32px,4.4vh,44px);border-radius:50%;
+  background:#f5f7f9;box-shadow:inset 0 0 0 1.5px #e3e9ef;font-size:clamp(13px,1.7vh,19px);line-height:1;}
+.wv-say:active{transform:scale(.95);}
+/* ---- ⚖️ 한국 vs 세계 타임라인 ---- */
+.wc-list{position:relative;display:flex;flex-direction:column;gap:.82vh;}
+.wc-row{display:grid;grid-template-columns:1.3rem minmax(0,1fr);gap:.7vh;}
+.wc-rail{position:relative;display:flex;flex-direction:column;align-items:center;}
+.wc-dot{flex:0 0 auto;width:.78rem;height:.78rem;border-radius:50%;background:#e4b25a;box-shadow:0 0 0 3px #fbf8f0;margin-top:1.1vh;}
+.wc-line{flex:1 1 auto;width:2px;border-radius:2px;background:#ece6d8;margin-top:.25vh;}
+.wc-row:last-child .wc-line{background:linear-gradient(#ece6d8,rgba(236,230,216,0));}
+.wc-body{display:flex;flex-direction:column;gap:.42vh;min-width:0;padding-bottom:.2vh;}
+.wc-when{display:flex;align-items:center;gap:.55vh;flex-wrap:wrap;}
+.wc-when b{font-size:clamp(12.5px,1.6vh,18px);font-weight:900;color:#77561a;background:#fbf8f0;
+  padding:.12rem .62rem;border-radius:999px;box-shadow:inset 0 0 0 1.5px #ecdfc4;white-space:nowrap;}
+.wc-when span{font-size:clamp(11.5px,1.45vh,16px);font-weight:800;color:#6f7d8a;}
+.wc-say{margin-left:auto;flex:0 0 auto;width:clamp(30px,4vh,38px);height:clamp(30px,4vh,38px);border-radius:50%;
+  background:#f5f7f9;box-shadow:inset 0 0 0 1.5px #e3e9ef;font-size:clamp(12px,1.5vh,16px);line-height:1;}
+.wc-say:active{transform:scale(.95);}
+.wc-pair{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:.5vh;align-items:stretch;}
+.wc-card{display:flex;flex-direction:column;gap:.24vh;padding:.72vh .9vh;border-radius:14px;min-width:0;}
+.wc-card.kr{background:#eff7fc;box-shadow:inset 0 0 0 1.5px #cfe2f1;}
+.wc-card.wd{background:#fdf7ee;box-shadow:inset 0 0 0 1.5px #f0e1c7;}
+.wc-cap{display:flex;align-items:center;gap:.35vh;flex-wrap:wrap;}
+.wc-cap i{font-style:normal;font-size:clamp(12px,1.5vh,17px);font-weight:900;color:#2a5c7d;letter-spacing:-.02em;}
+.wc-card.wd .wc-cap i{color:#8a5a12;}
+.wc-cap em{font-style:normal;font-size:clamp(9.5px,1.2vh,13px);font-weight:800;color:#7d8b98;
+  background:rgba(255,255,255,.8);padding:.02rem .42rem;border-radius:999px;white-space:nowrap;}
+.wc-tx{margin:0;font-size:clamp(12.5px,1.55vh,18px);font-weight:600;color:#33414d;line-height:1.5;word-break:keep-all;}
+.wc-tx b{color:#1b4f6e;font-weight:900;}
+.wc-card.wd .wc-tx b{color:#8a4f12;}
+.wc-vs{display:grid;place-items:center;align-self:center;width:1.7rem;font-size:.62rem;font-weight:900;
+  color:#b09455;letter-spacing:.02em;}
+.wc-hint{margin:.1vh 0 0;padding:.35vh .8vh;border-radius:10px;background:#fffaf0;box-shadow:inset 0 0 0 1.5px #f2e6cb;
+  font-size:clamp(11.5px,1.42vh,16px);font-weight:800;color:#8a6a26;line-height:1.45;word-break:keep-all;}
+@media (max-width:820px), (max-width:960px) and (orientation:portrait){
+  .wv-list,.wc-scroll{overflow:visible;}
+  .wv-card{padding:.8vh .85vh;gap:.8vh;}
+  .wv-art{width:clamp(56px,7.6vh,86px);}
+  .wc-pair{gap:.45vh;}
+  .wc-card{padding:.75vh .8vh;}
+}
+@media (max-width:460px){
+  .wc-vs{width:.75rem;font-size:0;}
+  .wc-card{padding:.7vh .7vh;}
+  .wc-tx{font-size:12.5px;line-height:1.45;}
+  .wc-cap i{font-size:12px;}
+  .wc-row{grid-template-columns:1rem minmax(0,1fr);}
+  .wv-card{grid-template-columns:auto minmax(0,1fr) auto;gap:.6vh;padding:.7vh .7vh;}
+  .wv-tx{font-size:12.5px;}
+}
+
+/* =====================================================================
    🎯 역사 사진 퀴즈 · 🎬 역사 영상
    ===================================================================== */
 .hq-meter{margin-left:auto;display:flex;align-items:center;gap:.8vh;font-weight:900;color:#4b6a80;}
@@ -6105,6 +6179,20 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
         </div>
         <div class="hv-list" id="hvList"></div>
       </div>
+      <div class="hist-block" data-secblock="world">
+        <div class="hist-head">
+          <div class="hist-title"><b>🌍 세계사 연표</b><span>고대 문명부터 우주까지 · 큰일이 일어난 순서대로</span></div>
+        </div>
+        <div class="wv-list" id="wvList" aria-label="세계사 연표"></div>
+      </div>
+      <div class="hist-block" data-secblock="compare">
+        <div class="hist-head">
+          <div class="hist-title"><b>⚖️ 한국 vs 세계</b><span>같은 때, 우리나라는? 저쪽은?</span></div>
+        </div>
+        <div class="wc-scroll">
+          <div class="wc-list" id="wcList" aria-label="같은 시대 한국과 세계 비교"></div>
+        </div>
+      </div>
       <div class="hv-modal" id="hvModal" hidden>
         <div class="hv-box" role="dialog" aria-modal="true" aria-label="역사 영상 재생">
           <div class="hv-top"><b id="hvTitle">역사 영상</b>
@@ -8870,14 +8958,15 @@ var SUBJECTS = [
   { k:"en",      em:"🔤", nm:"영어", desc:"그림 동화책 · 사이트워드 · 퀴즈", sec:"sight" },
   { k:"hanja",   em:"漢", nm:"한자", desc:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", sec:"trace" },
   { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄", sec:"quote" },
-  { k:"history", em:"🏛️", nm:"역사", desc:"연도표 · 왕 계보 · 사진 퀴즈 · 영상", sec:"timeline" }
+  { k:"history", em:"🏛️", nm:"역사", desc:"연도표 · 왕 계보 · 사진 퀴즈 · 영상 · 세계사", sec:"timeline" }
 ];
 var SECS = {
   en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"], ["video", "🎬 영어 영상"]],
   ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"]],
   math:    [["concept", "🔢 수개념"], ["calc", "➕ 연산"], ["think", "🧠 사고력"], ["shape", "🔺 도형"], ["clock", "⏰ 시계 읽기"], ["gugu", "✖️ 구구단 원리"], ["video", "🎬 수학 영상"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말 빈칸"]],
-  history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["video", "🎬 역사 영상"]]
+  history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["video", "🎬 역사 영상"],
+            ["world", "🌍 세계사 연표"], ["compare", "⚖️ 한국 vs 세계"]]
 };
 var VIEWID = {
   "home:main":"viewHome", "study:hub":"viewStudyHub",
@@ -8889,6 +8978,7 @@ var VIEWID = {
   "study:hanja:trace":"viewHanja", "study:hanja:word":"viewHanja",
   "study:history:timeline":"viewHistory", "study:history:goryeo":"viewHistory", "study:history:joseon":"viewHistory",
   "study:history:quiz":"viewHistory", "study:history:video":"viewHistory",
+  "study:history:world":"viewHistory", "study:history:compare":"viewHistory",
   "book:main":"viewBook", "piggy:main":"viewPiggy", "bank:main":"viewBank",
   "attend:main":"viewAttend", "room:main":"viewRoom", "diary:main":"viewDiary"
 };
@@ -12788,7 +12878,7 @@ var HUB = [
   { k:"ko", nm:"국어", badge:["가","나"], color:"#2f8b6b", bg:"#eef7f2",
     d:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄", hero:koHero },
   { k:"history", nm:"역사", badge:["史",""], color:"#6a5aa8", bg:"#f2f0fa",
-    d:"연도표 · 왕 계보 · 사진 퀴즈 · 영상", hero:histHero }
+    d:"연도표 · 왕 계보 · 사진 퀴즈 · 영상 · 세계사", hero:histHero }
 ];
 
 function hubRec(){
@@ -22905,6 +22995,300 @@ SB.onShow.math = (function(prev){
     } catch(e){ try { console.warn(e); } catch(e2){} }
   };
 })(SB.onShow.math);
+})();
+</script>
+<script id="hist-world-compare">
+/* =====================================================================
+   🌍 세계사 연표 · ⚖️ 같은 시대 한국 vs 세계 (역사 탭 하위 메뉴)
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+if (SB.histWorld) return;
+function $(id){ return document.getElementById(id); }
+function e(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+    return ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[c];
+  });
+}
+
+/* ---------- 그림 (아이 눈높이 미니 SVG) ---------- */
+var ART = {
+  pyramid: function(){
+    return '<svg viewBox="0 0 120 100" aria-hidden="true" focusable="false">'
+      + '<rect width="120" height="100" fill="#fdf2dd"/>'
+      + '<circle cx="96" cy="19" r="10" fill="#ffc93c"/>'
+      + '<path d="M2 84 L26 44 L50 84 Z" fill="#d8ba7c"/>'
+      + '<path d="M30 84 L62 20 L94 84 Z" fill="#efd9a2"/>'
+      + '<path d="M62 20 L94 84 L62 84 Z" fill="#cfae70"/>'
+      + '<rect x="0" y="84" width="120" height="11" rx="3" fill="#ecd8b0"/>'
+      + '<path d="M58 84 v-10 h9 v10 Z" fill="#9c7a44"/>'
+      + "</svg>";
+  },
+  temple: function(){
+    return '<svg viewBox="0 0 120 100" aria-hidden="true" focusable="false">'
+      + '<rect width="120" height="100" fill="#eef7fe"/>'
+      + '<path d="M8 40 L60 13 L112 40 Z" fill="#c3d9ea" stroke="#7a97ae" stroke-width="2.6"/>'
+      + '<rect x="12" y="44" width="96" height="9" fill="#f6fafd" stroke="#86a3ba" stroke-width="2"/>'
+      + '<g fill="#ffffff" stroke="#86a3ba" stroke-width="2.2">'
+      + '<rect x="20" y="56" width="12" height="22"/><rect x="42" y="56" width="12" height="22"/>'
+      + '<rect x="64" y="56" width="12" height="22"/><rect x="86" y="56" width="12" height="22"/></g>'
+      + '<g stroke="#b8cddd" stroke-width="1.6">'
+      + '<path d="M26 58 v18 M48 58 v18 M70 58 v18 M92 58 v18"/></g>'
+      + '<rect x="6" y="80" width="108" height="9" rx="3" fill="#c9dbe9"/>'
+      + '<rect x="2" y="90" width="116" height="5" rx="2" fill="#dde9f2"/>'
+      + "</svg>";
+  },
+  castle: function(){
+    var c = "";
+    for (var i = 0; i < 5; i++) c += '<rect x="' + (28 + i * 14) + '" y="40" width="8" height="10" fill="#f0e9db" stroke="#d8cbb2" stroke-width="1.6"/>';
+    return '<svg viewBox="0 0 120 100" aria-hidden="true" focusable="false">'
+      + '<rect width="120" height="100" fill="#eef4f2"/>'
+      + '<circle cx="98" cy="18" r="7" fill="#ffe08a"/>'
+      + '<rect x="28" y="48" width="64" height="40" fill="#f6f1e6" stroke="#d8cbb2" stroke-width="2"/>'
+      + c
+      + '<rect x="10" y="34" width="20" height="54" fill="#efe8da" stroke="#d8cbb2" stroke-width="2"/>'
+      + '<rect x="90" y="34" width="20" height="54" fill="#efe8da" stroke="#d8cbb2" stroke-width="2"/>'
+      + '<path d="M6 36 L20 16 L34 36 Z" fill="#c1553a"/>'
+      + '<path d="M86 36 L100 16 L114 36 Z" fill="#c1553a"/>'
+      + '<path d="M20 16 v-8 l11 4 l-11 4 Z" fill="#e4b25a"/>'
+      + '<rect x="18" y="52" width="5" height="12" rx="2" fill="#8a6a3f"/>'
+      + '<rect x="97" y="52" width="5" height="12" rx="2" fill="#8a6a3f"/>'
+      + '<path d="M52 88 v-16 a8 8 0 0 1 16 0 v16 Z" fill="#a3805a"/>'
+      + '<path d="M32 60 h56" stroke="#e2d7c3" stroke-width="2"/>'
+      + "</svg>";
+  },
+  crusade: function(){
+    return '<svg viewBox="0 0 120 100" aria-hidden="true" focusable="false">'
+      + '<rect width="120" height="100" fill="#f6ecda"/>'
+      + '<path d="M20 88 L44 26" stroke="#96794a" stroke-width="4.4" stroke-linecap="round"/>'
+      + '<path d="M100 88 L76 26" stroke="#96794a" stroke-width="4.4" stroke-linecap="round"/>'
+      + '<path d="M44 22 l-7 6 l2 -10 Z" fill="#7d8b98"/>'
+      + '<path d="M76 22 l7 6 l-2 -10 Z" fill="#7d8b98"/>'
+      + '<path d="M60 18 L92 28 V54 q0 24 -32 32 q-32 -8 -32 -32 V28 Z" fill="#cfe0f4" stroke="#5f89b3" stroke-width="2.6"/>'
+      + '<rect x="55" y="28" width="10" height="46" rx="1.5" fill="#ffffff"/>'
+      + '<rect x="43" y="41" width="34" height="10" rx="1.5" fill="#ffffff"/>'
+      + "</svg>";
+  },
+  renaissance: function(){
+    return '<svg viewBox="0 0 120 100" aria-hidden="true" focusable="false">'
+      + '<rect width="120" height="100" fill="#fbf3e4"/>'
+      + '<path d="M30 94 L58 20 L86 94" stroke="#9a7440" stroke-width="3.4" fill="none" stroke-linecap="round"/>'
+      + '<rect x="34" y="26" width="52" height="46" rx="2" fill="#fffefb" stroke="#c9a86a" stroke-width="2.4"/>'
+      + '<circle cx="75" cy="38" r="7" fill="#ffc93c"/>'
+      + '<path d="M34 62 q13 -16 26 0 q9 -9 26 0 v10 H34 Z" fill="#cfe4cb"/>'
+      + '<path d="M34 68 q15 -9 28 0" stroke="#a6c9a0" stroke-width="2.2" fill="none"/>'
+      + '<ellipse cx="96" cy="60" rx="16" ry="13" fill="#f6ddb9" stroke="#c9a86a" stroke-width="2"/>'
+      + '<g><circle cx="89" cy="55" r="3" fill="#c1553a"/><circle cx="98" cy="53" r="3" fill="#2f8b6b"/>'
+      + '<circle cx="104" cy="61" r="3" fill="#2f6fb0"/><circle cx="92" cy="65" r="3" fill="#e0a41f"/></g>'
+      + '<path d="M86 95 L99 69" stroke="#7a4f24" stroke-width="2.8" stroke-linecap="round"/>'
+      + '<path d="M99 69 l5 -7 l5 5 l-5 7 Z" fill="#c3d4e4"/>'
+      + "</svg>";
+  },
+  ship: function(){
+    return '<svg viewBox="0 0 120 100" aria-hidden="true" focusable="false">'
+      + '<rect width="120" height="100" fill="#e9f4fc"/>'
+      + '<circle cx="98" cy="20" r="8" fill="#ffe08a"/>'
+      + '<rect x="58" y="14" width="3" height="56" fill="#8a5a2b"/>'
+      + '<path d="M61 18 q22 12 22 34 H61 Z" fill="#fffdf6" stroke="#dcd3c0" stroke-width="1.6"/>'
+      + '<path d="M57 24 q-19 10 -19 28 h19 Z" fill="#fffdf6" stroke="#dcd3c0" stroke-width="1.6"/>'
+      + '<path d="M60 14 v-8 l12 4 l-12 4 Z" fill="#c1553a"/>'
+      + '<path d="M20 70 h80 l-10 15 H30 Z" fill="#b07a4a"/>'
+      + '<path d="M20 70 h80" stroke="#8a5a2b" stroke-width="2"/>'
+      + '<g stroke="#8ec9ea" stroke-width="3" fill="none" stroke-linecap="round">'
+      + '<path d="M6 90 q10 -6 20 0 t20 0 t20 0 t20 0"/></g>'
+      + "</svg>";
+  },
+  train: function(){
+    return '<svg viewBox="0 0 120 100" aria-hidden="true" focusable="false">'
+      + '<rect width="120" height="100" fill="#f2f6f9"/>'
+      + '<circle cx="30" cy="24" r="8" fill="#e2eaf1"/><circle cx="18" cy="14" r="5" fill="#ecf1f5"/>'
+      + '<rect x="26" y="34" width="13" height="20" rx="2" fill="#4a5a66"/>'
+      + '<rect x="23" y="29" width="19" height="7" rx="3" fill="#3d4c57"/>'
+      + '<rect x="24" y="52" width="50" height="24" rx="7" fill="#c1553a"/>'
+      + '<rect x="30" y="58" width="30" height="5" rx="2.5" fill="#e0836a"/>'
+      + '<rect x="72" y="40" width="26" height="36" rx="3" fill="#5f7d92"/>'
+      + '<rect x="78" y="46" width="14" height="13" rx="2" fill="#d7ecf8"/>'
+      + '<rect x="6" y="86" width="108" height="5" rx="2" fill="#b9c4cc"/>'
+      + '<circle cx="40" cy="78" r="9" fill="#465661"/><circle cx="80" cy="78" r="9" fill="#465661"/>'
+      + '<g fill="#dfe8ee"><circle cx="40" cy="78" r="3"/><circle cx="80" cy="78" r="3"/></g>'
+      + "</svg>";
+  },
+  rocket: function(){
+    return '<svg viewBox="0 0 120 100" aria-hidden="true" focusable="false">'
+      + '<rect width="120" height="100" fill="#1f2d3d"/>'
+      + '<g fill="#ffffff" opacity=".9"><circle cx="16" cy="20" r="1.8"/><circle cx="34" cy="10" r="1.4"/>'
+      + '<circle cx="24" cy="40" r="1.4"/><circle cx="108" cy="56" r="1.6"/><circle cx="12" cy="62" r="1.4"/></g>'
+      + '<circle cx="96" cy="24" r="11" fill="#e8e3d4"/>'
+      + '<g fill="#d5cfbc"><circle cx="92" cy="21" r="3"/><circle cx="100" cy="28" r="2"/><circle cx="99" cy="19" r="1.6"/></g>'
+      + '<path d="M52 14 q17 22 17 44 v20 H35 V58 q0 -22 17 -44 Z" fill="#f6f9fc" stroke="#c3cfda" stroke-width="2"/>'
+      + '<circle cx="52" cy="48" r="7" fill="#8ec9ea" stroke="#c3cfda" stroke-width="1.5"/>'
+      + '<path d="M35 62 L22 84 h13 Z" fill="#c1553a"/>'
+      + '<path d="M69 62 L82 84 H69 Z" fill="#c1553a"/>'
+      + '<path d="M43 80 h18 l-9 16 Z" fill="#ffb347"/>'
+      + '<path d="M47 80 h10 l-5 9 Z" fill="#ffe08a"/>'
+      + "</svg>";
+  }
+};
+
+/* ---------- 🌍 세계사 연표 8장 ---------- */
+var WORLD = [
+  { ep:"고대", cls:"anc", art:"pyramid", yr:"기원전 3500년쯤", nm:"문명이 처음 생겼어요",
+    tx:"큰 강 옆에 도시가 생기고 <b>쐐기문자</b>로 글을 썼어요. 이집트에서는 왕의 무덤인 <b>피라미드</b>를 쌓았어요.",
+    say:"기원전 3500년쯤, 큰 강 옆에 도시가 생기고 쐐기문자로 글을 썼어요. 이집트에서는 왕의 무덤인 피라미드를 쌓았어요." },
+  { ep:"고대", cls:"anc", art:"temple", yr:"기원전 800년 ~ 기원후 476년", nm:"그리스와 로마",
+    tx:"그리스는 <b>민주주의</b>와 <b>올림픽</b>을 만들었어요. 로마는 길·목욕탕·콜로세움이 있는 <b>큰 제국</b>을 만들었지요.",
+    say:"그리스는 민주주의와 올림픽을 만들었어요. 로마는 길과 목욕탕, 콜로세움이 있는 큰 제국을 만들었지요." },
+  { ep:"중세", cls:"mid", art:"castle", yr:"476년 ~ 1400년", nm:"기사와 성의 시대",
+    tx:"갑옷을 입은 <b>기사</b>가 말을 타고 성을 지켰어요. 왕·영주·농민으로 나뉘어 살았어요.",
+    say:"갑옷을 입은 기사가 말을 타고 성을 지켰어요. 왕과 영주와 농민으로 나뉘어 살았어요." },
+  { ep:"중세", cls:"mid", art:"crusade", yr:"1096년 ~ 1291년", nm:"십자군 전쟁",
+    tx:"유럽 사람들이 성지 예루살렘을 차지하려고 <b>200년</b> 동안 싸웠어요. 싸우면서 동쪽의 물건과 지식을 배워 왔어요.",
+    say:"유럽 사람들이 성지 예루살렘을 차지하려고 200년 동안 싸웠어요. 싸우면서 동쪽의 물건과 지식을 배워 왔어요." },
+  { ep:"근대", cls:"mod", art:"renaissance", yr:"1400년 ~ 1600년", nm:"르네상스 — 다시 피어난 예술",
+    tx:"다빈치가 〈모나리자〉를 그렸어요. 구텐베르크가 <b>인쇄기</b>를 만들자 책이 빠르게 퍼졌지요.",
+    say:"다빈치가 모나리자를 그렸어요. 구텐베르크가 인쇄기를 만들자 책이 빠르게 퍼졌지요." },
+  { ep:"근대", cls:"mod", art:"ship", yr:"1492년 ~ 1522년", nm:"대항해시대 — 바다 너머로",
+    tx:"콜럼버스가 <b>1492년</b>에 배를 타고 아메리카에 닿았어요. 마젤란의 배는 처음으로 세계를 한 바퀴 돌았어요.",
+    say:"콜럼버스가 1492년에 배를 타고 아메리카에 닿았어요. 마젤란의 배는 처음으로 세계를 한 바퀴 돌았어요." },
+  { ep:"근대", cls:"mod", art:"train", yr:"1760년 ~ 1850년", nm:"산업혁명과 프랑스 혁명",
+    tx:"<b>증기기관</b>이 기차와 배를 움직였어요. 프랑스 백성은 왕을 몰아내고 <b>자유·평등</b>을 외쳤어요.",
+    say:"증기기관이 기차와 배를 움직였어요. 프랑스 백성은 왕을 몰아내고 자유와 평등을 외쳤어요." },
+  { ep:"현대", cls:"now", art:"rocket", yr:"1903년 ~ 지금", nm:"비행기와 우주",
+    tx:"라이트 형제가 <b>1903년</b>에 비행기를 띄웠어요. <b>1969년</b>에는 사람이 달에 발을 디뎠고, 지금은 화성에 로봇을 보내요.",
+    say:"라이트 형제가 1903년에 비행기를 띄웠어요. 1969년에는 사람이 달에 발을 디뎠고, 지금은 화성에 로봇을 보내요." }
+];
+
+/* ---------- ⚖️ 같은 시대 한국 vs 세계 9장 ---------- */
+var COMPARE = [
+  { when:"기원전 2333년쯤", era:"청동기 · 고조선",
+    kr:{ nm:"고조선", tag:"청동기", tx:"단군이 <b>고조선</b>을 세웠다는 이야기. 사람들은 <b>고인돌</b>(큰 돌무덤)을 만들고 청동 칼을 썼어요." },
+    wd:{ nm:"이집트", tag:"피라미드", tx:"왕의 무덤인 <b>피라미드</b>를 쌓았어요. 사람 키의 25배가 넘는 돌탑이에요." },
+    hint:"👉 고인돌과 피라미드, 둘 다 '큰 돌로 만든 무덤'이에요!",
+    say:"기원전 2333년쯤. 우리나라는 고조선. 사람들은 고인돌을 만들고 청동 칼을 썼어요. 이집트는 왕의 무덤인 피라미드를 쌓았어요." },
+  { when:"4세기", era:"삼국시대",
+    kr:{ nm:"고구려·백제·신라", tag:"삼국", tx:"세 나라가 힘을 겨뤘어요. 고구려 <b>광개토대왕</b>은 땅을 크게 넓혔어요." },
+    wd:{ nm:"로마 제국", tag:"지중해", tx:"로마는 지중해를 다 감싼 큰 나라였어요. <b>실크로드</b>로 비단과 향신료가 오갔지요." },
+    hint:"👉 우리는 세 나라가 다툴 때, 로마는 하나로 큰 제국을 이뤘어요.",
+    say:"4세기. 우리나라는 삼국시대, 고구려 광개토대왕이 땅을 넓혔어요. 세계는 로마 제국, 실크로드로 비단이 오갔어요." },
+  { when:"918년 ~ 1392년", era:"고려",
+    kr:{ nm:"고려", tag:"팔만대장경", tx:"<b>팔만대장경</b>을 나무에 새기고, 세계에서 처음으로 <b>금속활자</b>로 책을 찍었어요." },
+    wd:{ nm:"유럽 중세", tag:"십자군", tx:"기사들이 <b>십자군 전쟁</b>을 했어요. 마르코 폴로는 실크로드를 따라 중국까지 다녀왔어요." },
+    hint:"👉 우리는 책을 찍을 때, 유럽은 성당을 높이 쌓고 있었어요.",
+    say:"고려 시대. 우리는 팔만대장경을 새기고 금속활자로 책을 찍었어요. 유럽은 십자군 전쟁을 하고, 마르코 폴로가 중국까지 다녀왔어요." },
+  { when:"1392년 ~ 1450년", era:"조선 세종",
+    kr:{ nm:"조선", tag:"한글", tx:"세종대왕이 백성이 쉽게 읽으라고 <b>한글</b>을 만들었어요. 비를 재는 <b>측우기</b>도 만들었지요." },
+    wd:{ nm:"유럽 르네상스", tag:"다빈치", tx:"<b>다빈치</b>가 〈모나리자〉를 그렸어요. 구텐베르크의 <b>인쇄기</b>로 책이 쏟아졌어요." },
+    hint:"👉 세종의 한글 vs 구텐베르크의 인쇄기 — 둘 다 '글이 퍼지는' 발명!",
+    say:"조선 세종 때. 세종대왕이 한글을 만들고 측우기를 만들었어요. 유럽에서는 다빈치가 모나리자를 그리고, 인쇄기로 책이 쏟아졌어요." },
+  { when:"1492년 ~ 1598년", era:"임진왜란",
+    kr:{ nm:"조선", tag:"활·거북선", tx:"이순신 장군의 <b>거북선</b>이 바다를 지켰어요. 땅에서는 <b>활과 화살</b>로 싸웠지요." },
+    wd:{ nm:"유럽·일본", tag:"조총", tx:"1492년 콜럼버스가 아메리카에 닿았어요. 일본 군대는 <b>조총</b>, 유럽 배는 <b>대포</b>를 썼어요." },
+    hint:"👉 우리는 활, 저쪽은 총!",
+    say:"임진왜란 때. 우리는 거북선과 활로 싸웠어요. 저쪽은 조총과 대포를 썼지요." },
+  { when:"1776년 ~ 1800년", era:"조선 정조",
+    kr:{ nm:"조선", tag:"수원화성", tx:"정조가 <b>수원화성</b>을 쌓았어요. 정약용의 <b>거중기</b>로 무거운 돌을 가볍게 들었지요." },
+    wd:{ nm:"프랑스·미국·영국", tag:"혁명", tx:"미국 <b>독립 선언</b>(1776), 프랑스 <b>혁명</b>(1789). 영국에서는 <b>증기기관</b>이 돌아갔어요." },
+    hint:"👉 정조의 거중기 vs 와트의 증기기관 — 둘 다 '힘을 아끼는 기계'!",
+    say:"조선 정조 때. 우리는 수원화성을 쌓고 거중기로 돌을 들었어요. 미국은 독립을 선언하고, 프랑스는 혁명을 일으키고, 영국은 증기기관이 돌아갔어요." },
+  { when:"1876년 ~ 1910년", era:"개항과 대한제국",
+    kr:{ nm:"대한제국", tag:"개항", tx:"1876년 나라 문을 열었어요. <b>전차·전등·전화</b>가 들어왔지만, 1910년 나라를 빼앗겼어요." },
+    wd:{ nm:"세계", tag:"산업혁명", tx:"<b>증기기차</b>가 사람과 짐을 실어 날랐어요. 1903년에는 <b>비행기</b>가 처음 하늘을 날았어요." },
+    hint:"👉 전차가 달리던 그때, 하늘에는 비행기가 처음 날았어요.",
+    say:"개항기. 우리는 전차와 전등이 들어왔고, 1910년 나라를 빼앗겼어요. 세계는 증기기차가 달리고, 1903년 비행기가 처음 날았어요." },
+  { when:"1950년 ~ 1970년", era:"한국전쟁과 그 뒤",
+    kr:{ nm:"대한민국", tag:"전쟁", tx:"1950년 <b>한국전쟁</b>으로 마을이 불탔어요. 그 폐허 위에 다시 학교와 공장을 세웠어요." },
+    wd:{ nm:"세계", tag:"우주 경쟁", tx:"미국과 소련이 <b>우주 경쟁</b>을 했어요. <b>1969년</b> 아폴로 11호가 달에 착륙했지요." },
+    hint:"👉 우리는 다시 일어서던 때, 세계는 달로 가고 있었어요.",
+    say:"1950년 한국전쟁으로 마을이 불탔어요. 우리는 다시 학교와 공장을 세웠어요. 그때 세계는 우주 경쟁을 하고, 1969년 사람이 달에 착륙했어요." },
+  { when:"2020년대", era:"지금",
+    kr:{ nm:"대한민국", tag:"K-pop", tx:"<b>K-pop</b>·드라마·영화가 세계를 뒤덮었어요. 우리가 만든 <b>반도체·휴대폰</b>이 세계에서 쓰여요." },
+    wd:{ nm:"세계", tag:"AI", tx:"<b>인공지능</b>이 글과 그림을 만들고, <b>화성</b>에는 로봇이 돌아다녀요. 인터넷으로 지구 반대편과 바로 이야기해요." },
+    hint:"👉 지금은 우리 노래가 지구 반대편에서도 들려요!",
+    say:"지금. 우리는 K-pop과 드라마, 반도체로 세계와 만나요. 세계는 인공지능이 글과 그림을 만들고, 화성에 로봇을 보내요." }
+];
+
+/* ---------- 그리기 ---------- */
+function renderWorld(){
+  var box = $("wvList"); if (!box || box.__done) return;
+  box.innerHTML = WORLD.map(function(w, i){
+    return '<article class="wv-card">'
+      + '<span class="wv-art" aria-hidden="true">' + ART[w.art]() + '</span>'
+      + '<div class="wv-main">'
+      +   '<div class="wv-top"><span class="wv-ep ' + w.cls + '">' + e(w.ep) + '</span>'
+      +   '<span class="wv-yr">' + e(w.yr) + '</span></div>'
+      +   '<b class="wv-nm">' + e(w.nm) + '</b>'
+      +   '<p class="wv-tx">' + w.tx + '</p>'
+      + '</div>'
+      + '<button class="wv-say" type="button" data-wsay="' + i + '" aria-label="' + e(w.nm) + ' 읽어주기">🔊</button>'
+      + '</article>';
+  }).join("");
+  box.__done = 1;
+}
+function renderCompare(){
+  var box = $("wcList"); if (!box || box.__done) return;
+  box.innerHTML = COMPARE.map(function(c, i){
+    return '<div class="wc-row">'
+      + '<div class="wc-rail" aria-hidden="true"><span class="wc-dot"></span><span class="wc-line"></span></div>'
+      + '<div class="wc-body">'
+      +   '<div class="wc-when"><b>' + e(c.when) + '</b><span>' + e(c.era) + '</span>'
+      +   '<button class="wc-say" type="button" data-csay="' + i + '" aria-label="' + e(c.era) + ' 읽어주기">🔊</button></div>'
+      +   '<div class="wc-pair">'
+      +     '<div class="wc-card kr"><div class="wc-cap"><i>🇰🇷 ' + e(c.kr.nm) + '</i><em>' + e(c.kr.tag) + '</em></div>'
+      +       '<p class="wc-tx">' + c.kr.tx + '</p></div>'
+      +     '<span class="wc-vs" aria-hidden="true">VS</span>'
+      +     '<div class="wc-card wd"><div class="wc-cap"><i>🌍 ' + e(c.wd.nm) + '</i><em>' + e(c.wd.tag) + '</em></div>'
+      +       '<p class="wc-tx">' + c.wd.tx + '</p></div>'
+      +   '</div>'
+      +   (c.hint ? '<p class="wc-hint">' + e(c.hint) + '</p>' : '')
+      + '</div></div>';
+  }).join("");
+  box.__done = 1;
+}
+
+function bindSay(){
+  var b1 = $("wvList");
+  if (b1 && !b1.__sb) {
+    b1.__sb = 1;
+    b1.addEventListener("click", function(ev){
+      var t = ev.target.closest("[data-wsay]"); if (!t) return;
+      var w = WORLD[parseInt(t.getAttribute("data-wsay"), 10)];
+      if (w && SB.speak) { SB.speak(w.nm + ". " + w.say, false, "ko-KR"); try { SB.markAttendance("history"); } catch(e2){} }
+    });
+  }
+  var b2 = $("wcList");
+  if (b2 && !b2.__sb) {
+    b2.__sb = 1;
+    b2.addEventListener("click", function(ev){
+      var t = ev.target.closest("[data-csay]"); if (!t) return;
+      var c = COMPARE[parseInt(t.getAttribute("data-csay"), 10)];
+      if (c && SB.speak) { SB.speak(c.say, false, "ko-KR"); try { SB.markAttendance("history"); } catch(e2){} }
+    });
+  }
+}
+
+function showChip(){
+  var box = $("subs2"); if (!box) return;
+  var on = box.querySelector(".subtab.on"); if (!on) return;
+  var l = on.offsetLeft, w = on.offsetWidth, sl = box.scrollLeft, cw = box.clientWidth;
+  if (l < sl || l + w > sl + cw) {
+    var want = Math.max(0, l - 6);
+    try { box.scrollTo({ left: want, behavior: "smooth" }); } catch(e3){ box.scrollLeft = want; }
+  }
+}
+function renderAll(){ renderWorld(); renderCompare(); bindSay(); setTimeout(showChip, 60); }
+
+SB.onShow.history = (function(prev){
+  return function(sec){
+    if (prev) { try { prev.apply(this, arguments); } catch(e1){} }
+    if (sec === "world") { renderWorld(); setTimeout(showChip, 40); }
+    else if (sec === "compare") { renderCompare(); setTimeout(showChip, 40); }
+  };
+})(SB.onShow.history);
+
+SB.histWorld = { world:WORLD, compare:COMPARE, render:renderAll };
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", renderAll);
+else renderAll();
 })();
 </script>
 </body>
