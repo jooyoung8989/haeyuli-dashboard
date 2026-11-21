@@ -9052,6 +9052,8 @@ function unlockSpeech(){
 function stopSpeech(){
   try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){}
 }
+/* 다른 모듈(전화 영어)에서도 쓸 수 있게 내보낸다 */
+try { window.unlockSpeech = unlockSpeech; window.isIOSDevice = isIOSDevice; window.stopSpeech = stopSpeech; } catch(e){}
 
 if (window.speechSynthesis) {
   pickVoices();
@@ -16641,6 +16643,9 @@ function aiReply(text, step, next){
 /* ---------------------------------------------------------------------
    6. 말하기(음성 인식)
    --------------------------------------------------------------------- */
+/* 이 모듈에서 쓰는 목소리 열기 · 기기 판별 (ENG 모듈에서 넘겨받음) */
+function unlockSpeech(){ try { if (window.unlockSpeech) window.unlockSpeech(); } catch(e){} }
+function isIOSDevice(){ try { return window.isIOSDevice ? window.isIOSDevice() : false; } catch(e){ return false; } }
 var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 /* ── 마이크: ① 음성 인식(크롬) ② 막히면 녹음 → AI 받아쓰기(아이패드 사파리) ── */
 var MIC = { rec:null, chunks:[], stream:null, on:false };
