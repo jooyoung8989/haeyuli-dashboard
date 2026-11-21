@@ -5240,6 +5240,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
   box-shadow:inset 0 0 0 .16vh #cfe8f7;}
 .tg-pick-b:active{transform:scale(.97);}
 .tg-acts{display:grid;grid-template-columns:repeat(3,1fr);gap:.3vh;}
+.tg-acts.n2{grid-template-columns:repeat(2,1fr);}
 .tg-acts button{height:3.4vh;border-radius:.9vh;background:linear-gradient(135deg,#ffffff,#f4f9ff);
   font-size:.95vh;font-weight:900;color:#2f6b8f;box-shadow:inset 0 0 0 .16vh #d7e9f6;white-space:nowrap;overflow:hidden;}
 .tg-acts button:active{transform:scale(.97);}
@@ -5353,6 +5354,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
   .tg-ask{font-size:.72rem;}
   .tg-pick-b{height:2.2rem;font-size:.72rem;}
   .tg-acts{grid-template-columns:repeat(3,1fr);gap:.25rem;}
+  .tg-acts.n2{grid-template-columns:repeat(2,1fr);}
   .tg-acts button{height:2.4rem;font-size:.66rem;}
   .tg-school-b{height:2.2rem;font-size:.7rem;}
   .tg-school span{font-size:.62rem;}
@@ -10297,7 +10299,7 @@ var BYID = {}; ITEMS.forEach(function(it){ BYID[it.id] = it; });
 
 /* 돌봄 행동 — 별을 써서 성장 포인트를 쌓아요 */
 var CARE = {
-  warm: { em:"🤲", nm:"따뜻하게 품어주기", cost:1, grow:2, joy:4,  say:"따뜻해... 꿈틀꿈틀!" },
+  warm: { em:"🤲", nm:"따뜻하게 품기", cost:1, grow:2, joy:4,  say:"따뜻해... 꿈틀꿈틀!" },
   feed: { em:"🍚", nm:"밥 주기",           cost:1, grow:3, hunger:-22, joy:6,  say:"냠냠! 맛있어~" },
   play: { em:"🎾", nm:"놀아주기",          cost:2, grow:6, hunger:2,   joy:16, say:"같이 놀자! 신나~" },
   pat:  { em:"🤍", nm:"쓰다듬기",          cost:0, grow:0, joy:5,  say:"기분 좋아~" }
@@ -10511,7 +10513,7 @@ function paintGrow(){
   var acts = p.stage === 0
     ? ["warm","pat"]
     : ["feed","play","pat"];
-  h += '<div class="tg-acts">' + acts.map(function(k){
+  h += '<div class="tg-acts' + (acts.length === 2 ? " n2" : "") + '">' + acts.map(function(k){
       var c = CARE[k];
       return '<button type="button" data-care="' + k + '">' + c.em + " " + esc(c.nm) + (c.cost ? " ⭐" + c.cost : " 무료") + '</button>';
     }).join("") + '</div>';
