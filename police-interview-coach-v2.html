@@ -8433,6 +8433,8 @@ function refreshNow(){
     moved = true;
     try { location.replace(target); }
     catch (e) { try { location.reload(); } catch (e2) {} }
+    /* 혹시 이동이 일어나지 않았으면(오프라인·스킴 거부 등) 1.5초 뒤 버튼을 되살린다 */
+    setTimeout(function(){ refPaint(false); }, 1500);
   }
   var timer = setTimeout(go, 2500);          /* 서버 응답이 늦어도 2.5초 뒤에는 그대로 이동 */
   try {
