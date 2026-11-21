@@ -939,6 +939,21 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
 .recbtn:active{transform:scale(.96)}
 @keyframes recpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.42;transform:scale(.8)}}
 
+/* ---------- 🔄 상단 새로고침 (홈화면 추가·스탠드얼론 포함) ---------- */
+.refbtn{
+  flex:0 0 auto;width:38px;height:38px;min-width:38px;border-radius:12px;display:grid;place-items:center;
+  font-size:17px;line-height:1;color:#fff;
+  background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,.07));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 2px 8px rgba(0,0,0,.18);
+  -webkit-tap-highlight-color:transparent;
+}
+.refbtn .rfic{display:block;line-height:1;transition:transform .2s ease}
+.refbtn:active{transform:scale(.96)}
+.refbtn:active .rfic{transform:rotate(-90deg)}
+.refbtn.busy{pointer-events:none;background:linear-gradient(160deg,rgba(244,227,172,.34),rgba(244,227,172,.12))}
+.refbtn.busy .rfic{animation:refspin .7s linear infinite}
+@keyframes refspin{to{transform:rotate(360deg)}}
+
 /* ---------- 🎙️ 녹음 제목 입력·삭제 확인 ---------- */
 .recdlg{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;
   padding:calc(var(--sat) + 18px) 16px calc(var(--sab) + 18px);background:rgba(8,17,34,.56)}
@@ -992,7 +1007,8 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
   .recbtn{min-width:36px;height:36px;padding:0 6px;font-size:16px;border-radius:11px}
   .recbtn.on{padding:0 8px 0 7px}
   .recbtn .rectime{font-size:11.5px}
-  .maker{padding:2px 6px}
+  .maker{display:none}          /* 좁은 폭: 헤더 대신 하단 .appfoot 에 ‘만든이 박주영’ 유지 */
+  .refbtn{width:36px;height:36px;min-width:36px;border-radius:11px;font-size:16px}
   .callbtn{width:36px;height:36px;min-width:36px;border-radius:11px;font-size:16px}
   .dday{min-width:52px;padding:3px 8px}
   .recdlgbox{padding:16px 14px 12px}
@@ -1035,6 +1051,7 @@ textarea#answerText:focus,.answerc textarea:focus{outline:none;border-color:#8aa
     <button class="recbtn" id="recBtn" type="button" aria-label="내 목소리 녹음" title="내 목소리 녹음" aria-pressed="false"><span class="recdot" aria-hidden="true"></span><span class="recic" id="recIcon" aria-hidden="true">🎙️</span><span class="recstop" aria-hidden="true"></span><span class="rectime" id="recTime" hidden>00:00</span></button>
     <span class="maker" title="만든이 박주영">만든이 박주영</span>
     <button class="callbtn" id="callInterview" type="button" aria-label="전화 면접 시작" title="전화 면접 시작">📞</button>
+    <button class="refbtn" id="refreshApp" type="button" aria-label="새로고침" title="최신 버전으로 새로고침" aria-busy="false"><span class="rfic" aria-hidden="true">🔄</span></button>
     <button class="dday empty" id="ddayChip" type="button" aria-label="면접일 설정">
       <b id="ddayMain">면접일</b><span id="ddaySub">설정</span>
     </button>
@@ -8369,8 +8386,71 @@ function recInit(){
   recLoad();
 }
 
+/* =========================================================
+   11. 🔄 상단 새로고침 — 홈화면 추가(PWA·스탠드얼론)에서도 최신 서버 판으로
+   · 주소의 _r 값만 새 timestamp 로 바꿔 캐시를 비켜 간다
+     (?pass= 같은 다른 파라미터·#해시는 그대로 둔다)
+   · 저장된 내 답안·3분 발표 초안·즐겨찾기·녹음(localStorage·IndexedDB)은 지우지 않는다
+   · 녹음 중에는 사고를 막기 위해 먼저 ⏹ 로 멈추게 안내만 한다
+   ========================================================= */
+var REF_PARAM = "_r";
+function refStrip(search){
+  var s = String(search || "");
+  if (!s) return "";
+  var parts = s.replace(/^\?/, "").split("&"), keep = [];
+  for (var i = 0; i < parts.length; i++){
+    if (!parts[i]) continue;
+    if (parts[i].split("=")[0] === REF_PARAM) continue;   /* 기존 _r 은 빼고 새 값만 남긴다 */
+    keep.push(parts[i]);
+  }
+  return keep.length ? "?" + keep.join("&") : "";
+}
+function refreshURL(){
+  var ts = String(Date.now());
+  var base = refStrip(location.search);
+  return location.pathname + (base ? base + "&" : "?") + REF_PARAM + "=" + ts + (location.hash || "");
+}
+function refPaint(busy){
+  var b = document.getElementById("refreshApp");
+  if (!b) return;
+  if (busy){
+    b.classList.add("busy"); b.setAttribute("aria-busy", "true");
+    b.setAttribute("aria-label", "새로고침 중"); b.setAttribute("title", "새로고침 중…");
+  } else {
+    b.classList.remove("busy"); b.setAttribute("aria-busy", "false");
+    b.setAttribute("aria-label", "새로고침"); b.setAttribute("title", "최신 버전으로 새로고침");
+  }
+}
+function refreshNow(){
+  if (recState.recording || recState.starting || recState.finishing){
+    toast("🎙️ 녹음 중이에요. ⏹ 로 멈춘 뒤 새로고침해 주세요.");
+    return false;
+  }
+  var target = refreshURL(), moved = false;
+  refPaint(true);
+  function go(){
+    if (moved) return;
+    moved = true;
+    try { location.replace(target); }
+    catch (e) { try { location.reload(); } catch (e2) {} }
+  }
+  var timer = setTimeout(go, 2500);          /* 서버 응답이 늦어도 2.5초 뒤에는 그대로 이동 */
+  try {
+    fetch(location.pathname, { cache: "no-store", credentials: "same-origin" })
+      .then(function(){ clearTimeout(timer); go(); })
+      .catch(function(){ clearTimeout(timer); go(); });
+  } catch (e) { clearTimeout(timer); go(); }
+  return true;
+}
+(function bindRefresh(){
+  var b = document.getElementById("refreshApp");
+  if (b) b.addEventListener("click", refreshNow);
+  refPaint(false);
+})();
+
 window.PIC = {
   state: state, analyze: analyze, blindCheck: blindCheck, syllables: syllables,
+  refresh: { now: refreshNow, url: refreshURL, strip: refStrip, param: REF_PARAM },
   selectTopic: selectTopic, selectLawTopic: selectLawTopic, setView: setView,
   openQuestion: function(i){ state.openQ = i; renderQuestions(); syncPersonalConsole(); },
   console: function(){ return consoleAPIs["speechConsoleHost"]; },
