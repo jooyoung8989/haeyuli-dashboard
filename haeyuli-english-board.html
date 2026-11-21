@@ -4345,10 +4345,11 @@ body .wk-sub i{font-size:.95rem;}
   font-size:clamp(10px,1.15vh,13px);font-weight:800;box-shadow:inset 0 0 0 1px #e9eef2;white-space:nowrap;}
 .pbk-rate button.on{background:#eef7ff;color:#175a80;box-shadow:inset 0 0 0 1.6px #7fb8dd;}
 
-.pbk-page{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.55vh;
+.pbk-page{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:.9vh;
   padding:.7vh .8vh .8vh;border-radius:18px;background:linear-gradient(175deg,#fffefb,#fdf8ee);
   box-shadow:inset 0 0 0 1px #efe4cd;}
-.pbk-art{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;
+.pbk-art{position:relative;flex:0 0 auto;width:100%;aspect-ratio:2.4/1;min-height:140px;
+  display:flex;align-items:center;justify-content:center;
   border-radius:14px;overflow:hidden;background:#eaf5ff;box-shadow:inset 0 0 0 1px #e3ebf2;}
 .pbk-art svg{position:absolute;top:0;left:0;width:100%;height:100%;display:block;}
 .pbk-tx{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:.3rem;text-align:center;padding:0 .4rem;}
@@ -6020,6 +6021,156 @@ body.mob .htt-cards{grid-template-columns:1fr;}
 }
 
 </style>
+<style>
+/* ---------------- 그림 동화책 — 그림이 보이도록 화면 높이를 채운다 ---------------- */
+.storyview{height:100%;min-height:0;}
+.storyview .pbk-stage{height:100%;min-height:0;}
+body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
+
+/* ================= 🦉 단어키우기 (오답노트 · 엄마 리포트 · 단어 마을) ================= */
+.wgview{display:block;height:100%;min-height:0;}
+.wgview[hidden]{display:none!important;}
+.wg-wrap{display:flex;flex-direction:column;height:100%;min-height:0;gap:.7vh;padding:1vh 1.1vh 1.2vh;}
+.wg-wrap [hidden]{display:none!important;}
+.wg-head{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:.6vh .9vh;}
+.wg-title{display:flex;flex-direction:column;min-width:0;margin-right:auto;}
+.wg-title b{font-size:clamp(17px,2.4vh,26px);font-weight:900;color:#1e5478;letter-spacing:-.03em;}
+.wg-title span{font-size:clamp(10px,1.35vh,14px);font-weight:800;color:#8aa6b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wg-modes{display:flex;flex-wrap:wrap;gap:.45vh;}
+.wg-md{height:3.5vh;min-height:2.1rem;padding:0 1.05vh;border-radius:999px;background:#f2f8fc;color:#5b7f96;
+  font-size:clamp(11px,1.45vh,15px);font-weight:900;box-shadow:inset 0 0 0 .16vh #dfeaf2;white-space:nowrap;}
+.wg-md i{font-style:normal;margin-left:.25em;padding:0 .38em;border-radius:999px;background:#ffe6a8;color:#8a6410;font-size:.86em;}
+.wg-md.on{background:#fff;color:#0d6f9e;box-shadow:inset 0 0 0 .2vh #9fd3ee,0 .2vh .6vh rgba(40,100,140,.12);}
+.wg-md.rev.on{box-shadow:inset 0 0 0 .2vh #ffc47a,0 .2vh .6vh rgba(160,110,20,.14);color:#a06312;}
+.wg-themes{flex:0 0 auto;display:flex;gap:.4vh;overflow-x:auto;padding:.1vh 0 .25vh;scrollbar-width:none;}
+.wg-themes::-webkit-scrollbar{display:none;}
+.wg-th{height:3.1vh;min-height:1.9rem;padding:0 .85vh;border-radius:999px;background:#fff;color:#5f7f93;
+  font-size:clamp(10px,1.3vh,14px);font-weight:900;box-shadow:inset 0 0 0 .16vh #e6eef4;white-space:nowrap;display:inline-flex;align-items:center;gap:.25em;}
+.wg-th i{font-style:normal;font-size:.82em;color:#a9bfcd;font-weight:900;}
+.wg-th.on{background:#eaf7ff;color:#0d6f9e;box-shadow:inset 0 0 0 .2vh #9fd3ee;}
+.wg-th.on i{color:#4d9dc4;}
+.wg-body{flex:1 1 auto;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;}
+
+/* ---------- 퀴즈 카드 ---------- */
+.wg-meta{display:flex;align-items:center;gap:.6vh;flex-wrap:wrap;margin-bottom:.7vh;}
+.wg-no{font-size:clamp(11px,1.45vh,15px);font-weight:900;color:#9db4c4;}
+.wg-mk{font-size:clamp(10px,1.35vh,14px);font-weight:900;color:#4a8fb5;background:#eef8fe;padding:.2em .6em;border-radius:999px;}
+.wg-badge{font-style:normal;font-size:clamp(9px,1.25vh,13px);font-weight:900;color:#b06a12;background:#fff2dc;padding:.2em .55em;border-radius:999px;}
+.wg-st{margin-left:auto;font-size:clamp(11px,1.5vh,16px);font-weight:900;color:#8a6410;}
+.wg-face{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4vh;
+  background:linear-gradient(180deg,#f4fbff,#eef7fd);border-radius:18px;padding:1.4vh 1vh;box-shadow:inset 0 0 0 1px #e2eef7;}
+.wg-em{font-size:clamp(38px,8vh,86px);line-height:1.05;}
+.wg-en{font-size:clamp(28px,5.2vh,58px);font-weight:900;color:#1b4c6b;letter-spacing:-.01em;word-break:break-word;text-align:center;}
+.wg-ko{font-size:clamp(24px,4.2vh,44px);font-weight:900;color:#1b4c6b;}
+.wg-spk{font-size:clamp(17px,2.4vh,26px);background:#fff;border-radius:999px;padding:.28em .7em;box-shadow:inset 0 0 0 1.5px #cfe6f4;color:#3b7fa5;}
+.wg-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8vh;margin-top:1vh;}
+.wg-opt{min-height:6.4vh;padding:.9vh .8vh;border-radius:16px;background:#fff;color:#25506d;
+  font-size:clamp(16px,2.4vh,28px);font-weight:900;box-shadow:inset 0 0 0 1.5px #dbe9f2,0 .2vh .6vh rgba(40,90,130,.06);}
+.wg-opt:active{transform:scale(.985);}
+.wg-opt.wrong{box-shadow:inset 0 0 0 2px #ffb3b3;background:#fff4f4;color:#c05252;}
+.wg-opt.right{box-shadow:inset 0 0 0 2.5px #63c79a;background:#eefbf4;color:#1f7a52;}
+.wg-fb{margin-top:.8vh;min-height:2.4vh;}
+.wg-ok{font-size:clamp(14px,2vh,22px);font-weight:900;color:#1f8a5c;}
+.wg-ok em{font-style:normal;color:#a06a12;font-size:.92em;}
+.wg-no2{font-size:clamp(13px,1.9vh,21px);font-weight:900;color:#b85555;line-height:1.4;}
+.wg-no2 b{color:#173f59;}
+.wg-no2 span{display:block;font-size:.82em;color:#9db4c4;font-weight:800;margin-top:.2em;}
+.wg-next{margin-top:.6vh;min-height:4.6vh;padding:.6vh 1.6vh;border-radius:999px;background:#3f93bd;color:#fff;
+  font-size:clamp(14px,1.9vh,20px);font-weight:900;box-shadow:0 .3vh .8vh rgba(40,110,150,.25);}
+.wg-ghost{margin-top:.6vh;margin-left:.5vh;min-height:4.6vh;padding:.6vh 1.4vh;border-radius:999px;background:#fff;color:#3f7f9f;
+  font-size:clamp(13px,1.8vh,19px);font-weight:900;box-shadow:inset 0 0 0 1.5px #cfe6f4;}
+.wg-done{display:flex;flex-direction:column;align-items:center;gap:.6vh;padding:2.4vh 1vh;background:#fff;border-radius:20px;
+  box-shadow:inset 0 0 0 1px #e6eff5;}
+.wg-done-em{font-size:clamp(44px,9vh,96px);}
+.wg-done b{font-size:clamp(17px,2.6vh,30px);color:#1e5478;}
+.wg-done-row{display:flex;gap:.9vh;flex-wrap:wrap;justify-content:center;font-size:clamp(12px,1.6vh,17px);font-weight:900;color:#5d8296;}
+.wg-done-btns{display:flex;gap:.5vh;flex-wrap:wrap;justify-content:center;margin-top:.4vh;}
+
+/* ---------- 철자 쓰기 ---------- */
+.wg-slots{display:flex;justify-content:center;align-items:flex-end;gap:.35em;margin-top:1vh;flex-wrap:wrap;}
+.wg-slot{display:inline-flex;align-items:center;justify-content:center;width:1.5em;height:1.9em;border-radius:8px;
+  background:#fff;box-shadow:inset 0 -.32vh 0 #dbe9f2;font-style:normal;
+  font-size:clamp(20px,3.2vh,38px);font-weight:900;color:#1b4c6b;}
+.wg-slot.sp{width:.7em;background:none;box-shadow:none;}
+.wg-slot.dash{width:.8em;background:none;box-shadow:none;color:#9db4c4;}
+.wg-type{display:flex;gap:.5vh;margin-top:1.1vh;}
+.wg-in{flex:1 1 auto;min-width:0;height:5.4vh;min-height:2.6rem;border-radius:14px;padding:0 1.1vh;background:#fff;
+  box-shadow:inset 0 0 0 1.6px #cfe6f4;font-size:clamp(17px,2.4vh,26px);font-weight:900;color:#17415c;letter-spacing:.04em;}
+.wg-in:focus{outline:none;box-shadow:inset 0 0 0 2px #7fc4e8;}
+.wg-go{height:5.4vh;min-height:2.6rem;padding:0 1.6vh;border-radius:14px;background:#3f93bd;color:#fff;
+  font-size:clamp(14px,1.9vh,20px);font-weight:900;}
+
+/* ---------- 엄마 리포트 ---------- */
+.wg-rep{background:#fff;border-radius:20px;padding:1.4vh 1.2vh;box-shadow:inset 0 0 0 1px #e6eff5;}
+.wg-rep-h{display:flex;align-items:baseline;gap:.6vh;flex-wrap:wrap;margin-bottom:1vh;}
+.wg-rep-h b{font-size:clamp(16px,2.2vh,24px);color:#1e5478;}
+.wg-rep-h span{font-size:clamp(10px,1.3vh,14px);font-weight:800;color:#9db4c4;}
+.wg-rep-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6vh;}
+.wg-stat{display:flex;flex-direction:column;align-items:center;gap:.1em;padding:.85vh .4vh;border-radius:14px;background:#f6fbfe;
+  box-shadow:inset 0 0 0 1px #e5f0f7;}
+.wg-stat b{font-size:clamp(16px,2.3vh,26px);color:#173f59;font-weight:900;}
+.wg-stat span{font-size:clamp(9px,1.2vh,13px);font-weight:800;color:#8aa6b8;text-align:center;}
+.wg-rep-sec{margin-top:1.1vh;}
+.wg-rep-t{display:flex;align-items:center;gap:.5vh;margin-bottom:.5vh;}
+.wg-rep-t b{font-size:clamp(13px,1.8vh,19px);color:#25506d;}
+.wg-legend{margin-left:auto;font-size:clamp(9px,1.2vh,13px);font-weight:800;color:#a9bfcd;}
+.wg-mini{margin-left:auto;height:2.9vh;min-height:1.8rem;padding:0 .9vh;border-radius:999px;background:#eef8fe;color:#2f7ea6;
+  font-size:clamp(10px,1.3vh,14px);font-weight:900;box-shadow:inset 0 0 0 1.4px #bfe0f1;}
+.wg-empty{font-size:clamp(12px,1.6vh,17px);font-weight:800;color:#8aa6b8;padding:.6vh 0;}
+.wg-wlist{display:flex;flex-direction:column;gap:.4vh;}
+.wg-wrow{display:flex;align-items:center;gap:.55vh;padding:.6vh .7vh;border-radius:12px;background:#fff7f7;
+  box-shadow:inset 0 0 0 1px #ffe1e1;text-align:left;}
+.wg-wem{font-size:clamp(15px,2.1vh,22px);}
+.wg-wrow b{font-size:clamp(13px,1.8vh,20px);color:#173f59;font-weight:900;}
+.wg-wrow span{font-size:clamp(11px,1.45vh,16px);font-weight:800;color:#7f9aab;}
+.wg-wn{margin-left:auto;font-style:normal;font-size:clamp(10px,1.3vh,14px);font-weight:900;color:#c05252;background:#ffe8e8;
+  padding:.12em .55em;border-radius:999px;}
+.wg-bars{display:flex;align-items:flex-end;gap:.5vh;height:9vh;min-height:4rem;padding:.5vh .2vh 0;}
+.wg-bar{flex:1 1 0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:.2vh;height:100%;}
+.wg-bar i{width:100%;max-width:2.6rem;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,#8ed3f5,#5cb0dd);min-height:3px;}
+.wg-bar span{font-size:clamp(8px,1.1vh,12px);font-weight:800;color:#9db4c4;}
+.wg-note-t{font-size:clamp(10px,1.35vh,14px);font-weight:800;color:#8aa6b8;line-height:1.45;}
+
+/* ---------- 단어 마을 ---------- */
+.wg-town{background:#fff;border-radius:20px;padding:1.2vh 1.1vh;box-shadow:inset 0 0 0 1px #e6eff5;}
+.wg-town-h{display:flex;align-items:baseline;gap:.6vh;flex-wrap:wrap;margin-bottom:.8vh;}
+.wg-town-h b{font-size:clamp(16px,2.2vh,24px);color:#1e5478;}
+.wg-town-h span{margin-left:auto;font-size:clamp(11px,1.5vh,16px);font-weight:900;color:#8a6410;}
+.wg-map{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:.35vh;padding:.7vh;border-radius:16px;
+  background:linear-gradient(180deg,#d9f0ff 0%,#eaf9ef 34%,#d8f2c9 100%);box-shadow:inset 0 0 0 1px #cfe6f4;}
+.wg-tile{aspect-ratio:1;min-height:clamp(26px,5.4vh,54px);border-radius:9px;background:rgba(255,255,255,.22);
+  box-shadow:inset 0 0 0 1px rgba(140,190,150,.35);display:flex;align-items:center;justify-content:center;}
+.wg-tile.has{background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px #b9dcc0,0 1px 2px rgba(60,110,70,.12);}
+.wg-it{font-size:clamp(15px,3vh,32px);line-height:1;}
+.wg-placing{margin-top:.6vh;padding:.5vh .8vh;border-radius:12px;background:#fff8e8;box-shadow:inset 0 0 0 1.4px #ffe1a8;
+  font-size:clamp(11px,1.5vh,16px);font-weight:900;color:#9a6a12;display:flex;align-items:center;gap:.5vh;flex-wrap:wrap;}
+.wg-shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(5.4rem,1fr));gap:.5vh;margin-top:.8vh;}
+.wg-buy{position:relative;display:flex;flex-direction:column;align-items:center;gap:.1vh;padding:.6vh .3vh;border-radius:14px;
+  background:#f7fbfe;box-shadow:inset 0 0 0 1.4px #e0edf6;}
+.wg-buy.off{opacity:.5;}
+.wg-bem{font-size:clamp(17px,2.6vh,28px);line-height:1.05;}
+.wg-buy b{font-size:clamp(9px,1.2vh,13px);color:#25506d;font-weight:900;text-align:center;line-height:1.2;}
+.wg-buy i{font-style:normal;font-size:clamp(9px,1.2vh,13px);font-weight:900;color:#a07a12;}
+.wg-bagn{position:absolute;top:.25vh;right:.35vh;font-style:normal;font-size:clamp(8px,1vh,11px);font-weight:900;
+  color:#fff;background:#5cb98a;border-radius:999px;padding:0 .35em;}
+
+@media (max-width:520px){
+  .wg-wrap{height:auto;padding:.8vh .8vh 2vh;}
+  .wg-body{overflow:visible;}
+  .wg-opts{grid-template-columns:repeat(2,minmax(0,1fr));gap:.6vh;}
+  .wg-rep-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .wg-modes{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;width:100%;padding-bottom:.2vh;}
+  .wg-modes::-webkit-scrollbar{display:none;}
+  .wg-md{flex:0 0 auto;height:2.9vh;min-height:1.9rem;font-size:11px;padding:0 .7vh;}
+  .wg-title span{display:none;}
+  .wg-tile{min-height:0;}
+  .wg-bars{height:7vh;}
+}
+@media (max-height:720px){
+  .wg-em{font-size:clamp(32px,6.4vh,64px);}
+  .wg-en{font-size:clamp(24px,4.4vh,46px);}
+}
+</style>
 </head>
 <body>
 
@@ -6356,6 +6507,19 @@ body.mob .htt-cards{grid-template-columns:1fr;}
         <div class="wcg-body" id="wcgBody"></div>
       </div>
     </section>
+
+    <!-- ================= 🦉 단어키우기 (단어 퀴즈 · 오답노트 · 엄마 리포트 · 단어 마을) ================= -->
+    <section class="view wgview" id="viewWordGrow" data-view="en-wordgrow" hidden>
+      <div class="wg-wrap">
+        <div class="wg-head">
+          <div class="wg-title"><b>🦉 단어키우기</b><span>초등 필수 영단어 · 틀린 낱말은 자동으로 오답노트에 담겨요</span></div>
+          <div class="wg-modes" id="wgModes"></div>
+        </div>
+        <div class="wg-themes" id="wgTheme" hidden></div>
+        <div class="wg-body" id="wgBody"></div>
+      </div>
+    </section>
+
   </main>
 
     <!-- ================= 🎬 영어 영상 (흘려듣기 21개 채널 + 한 편씩) ================= -->
@@ -10235,25 +10399,55 @@ SB.ntfySubject = function(sub){
    온라인 공부 안에서 과목(영어·국어·수학·사회·과학·한자)을 고르고,
    과목 안에서 하위 학습 메뉴를 하나씩 크게 본다. */
 var SUBJECTS = [
-  { k:"math",    em:"🔢", nm:"수학", desc:"오늘의 연산 · 사고력 · 도형", sec:"concept" },
+  { k:"math",    em:"🔢", nm:"수학", desc:"연산 · 도형·시계 · 사고력 · 1·2학년", sec:"concept" },
   { k:"en",      em:"🔤", nm:"영어", desc:"그림 동화책 · 사이트워드 · 퀴즈 · 월팸", sec:"sight" },
   { k:"hanja",   em:"漢", nm:"한자", desc:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", sec:"trace" },
   { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄 · 글자 키보드 · 문장 쓰기 · 어휘·개념", sec:"quote" },
   { k:"history", em:"🏛️", nm:"역사", desc:"연도표 · 왕 계보 · 사진 퀴즈 · 영상 · 세계사", sec:"timeline" }
 ];
 var SECS = {
-  en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"], ["video", "🎬 영어 영상"], ["wolpaem", "🏰 월팸"]],
+  en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"], ["wordgrow", "🦉 단어키우기"], ["video", "🎬 영어 영상"], ["wolpaem", "🏰 월팸"]],
   ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"], ["key", "⌨️ 글자 키보드"], ["write", "✍️ 받아쓰기"], ["vocab", "🌱 어휘·개념"]],
-  math:    [["concept", "🔢 수세기"], ["calc", "➕ 기탄 연산"], ["think", "🧠 그림 사고력"], ["shape", "🔺 도형 이름"], ["clock", "⏰ 시계 읽기"], ["gugu", "✖️ 구구단 원리"], ["saem", "🧮 하루 셈하기"], ["base1", "📘 기초수학 1"], ["grade2", "2️⃣ 2학년 수학"], ["video", "🎬 수학 영상"]],
+  /* 수학은 큰 탭 5개(GROUPS)로 묶고, 그 안에서 알약 전환기로 10가지를 그대로 쓴다 */
+  math:    [["calc", "➕ 기탄 연산"], ["saem", "🧮 하루 셈하기"], ["concept", "🔢 수세기"], ["gugu", "✖️ 구구단 원리"],
+            ["shape", "🔺 도형 이름"], ["clock", "⏰ 시계 읽기"],
+            ["think", "🧠 그림 사고력"],
+            ["base1", "📘 1학년 현행"], ["grade2", "2️⃣ 2학년 선행"],
+            ["video", "🎬 수학 영상"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말·뜻 쓰기"], ["text", "🏫 교과서 핵심한자"]],
   history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["war", "⚔️ 전쟁사"], ["video", "🎬 역사 영상"],
             ["world", "🌍 세계사 연표"], ["compare", "⚖️ 한국 vs 세계"]]
 };
+/* 수학 하위 탭 10개 → 5개 큰 탭. 큰 탭을 누르면 그 안의 알약 전환기(secs)가 열린다 */
+var GROUPS = {
+  math: [
+    { k:"g_calc",   em:"🔢", nm:"연산",         secs:["calc", "saem", "concept", "gugu"] },
+    { k:"g_shape",  em:"📐", nm:"도형·시계",    secs:["shape", "clock"] },
+    { k:"g_think",  em:"🧩", nm:"사고력",       secs:["think"] },
+    { k:"g_course", em:"📘", nm:"1·2학년 과정", secs:["base1", "grade2"] },
+    { k:"g_video",  em:"🎬", nm:"수학 영상",    secs:["video"] }
+  ]
+};
+function grpOf(subject, sec){
+  var g = GROUPS[subject]; if (!g) return null;
+  for (var i = 0; i < g.length; i++) if (g[i].secs.indexOf(sec) >= 0) return g[i];
+  return null;
+}
+function grpByKey(subject, k){
+  var g = GROUPS[subject]; if (!g || !k) return null;
+  for (var i = 0; i < g.length; i++) if (g[i].k === k) return g[i];
+  return null;
+}
+var GLAST = {};
+function grpTarget(subject, g){
+  var last = GLAST[subject + ":" + g.k];
+  return (last && g.secs.indexOf(last) >= 0) ? last : g.secs[0];
+}
 var VIEWID = {
   "home:main":"viewHome", "study:hub":"viewStudyHub",
   "study:en:video":"viewEnVideo", "study:en:book":"viewEnBook", "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:test":"viewEnTest", "study:en:call":"viewEnCall",
   "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord", "study:ko:key":"viewKoKey", "study:ko:write":"viewKoWrite", "study:ko:vocab":"viewKoVocab",
-  "study:en:wolpaem":"viewEnWolpaem",
+  "study:en:wolpaem":"viewEnWolpaem", "study:en:wordgrow":"viewWordGrow",
   "study:math:concept":"viewMath", "study:math:calc":"viewMath", "study:math:think":"viewMath",
   "study:math:shape":"viewMath", "study:math:clock":"viewMath", "study:math:gugu":"viewMath",
   "study:math:saem":"viewMathSaem", "study:math:base1":"viewMathBase1",
@@ -10297,20 +10491,36 @@ function subjById(k){
 }
 function renderChips(){
   var box = document.getElementById("subs"), box2 = document.getElementById("subs2");
+  var grps = (SB.current === "study" && SB.subject && GROUPS[SB.subject]) ? GROUPS[SB.subject] : null;
+  var curGrp = grps ? grpOf(SB.subject, SB.sub[SB.subject]) : null;
   if (box) {
     if (SB.current === "study") {
       box.hidden = !SB.subject;
       var back = SB.subject ? '<button class="subtab sback" type="button" data-back="1">← 과목 목록</button>' : "";
-      box.innerHTML = !SB.subject ? "" : back + SUBJECTS.map(function(s){
-        var on = s.k === SB.subject;
-        return '<button class="subtab subj' + (on ? " on" : "") + '" type="button" data-subj="' + s.k + '" aria-pressed="' + (on ? "true" : "false") + '">'
-             + '<span class="sj-e" aria-hidden="true">' + s.em + '</span>' + s.nm + '</button>';
-      }).join("");
+      if (!SB.subject) box.innerHTML = "";
+      else if (grps) {                     /* 수학: 큰 탭 5개 */
+        box.innerHTML = back + grps.map(function(g){
+          var on = !!(curGrp && curGrp.k === g.k);
+          return '<button class="subtab' + (on ? " on" : "") + '" type="button" data-sub="' + g.k + '" aria-pressed="' + (on ? "true" : "false") + '">'
+               + '<span class="sj-e" aria-hidden="true">' + g.em + '</span>' + g.nm + '</button>';
+        }).join("");
+      } else {
+        box.innerHTML = back + SUBJECTS.map(function(s){
+          var on = s.k === SB.subject;
+          return '<button class="subtab subj' + (on ? " on" : "") + '" type="button" data-subj="' + s.k + '" aria-pressed="' + (on ? "true" : "false") + '">'
+               + '<span class="sj-e" aria-hidden="true">' + s.em + '</span>' + s.nm + '</button>';
+        }).join("");
+      }
     } else { box.hidden = true; box.innerHTML = ""; }
   }
   if (box2) {
-    var list = SB.current === "study" ? SECS[SB.subject] : null;
-    if (list && list.length) {
+    var list = null;
+    if (SB.current === "study" && SECS[SB.subject]) {
+      list = curGrp ? SECS[SB.subject].filter(function(x){ return curGrp.secs.indexOf(x[0]) >= 0; })
+                    : SECS[SB.subject];
+    }
+    /* 큰 탭 안에 하나뿐이면 알약 전환기는 숨긴다 */
+    if (list && list.length > (curGrp ? 1 : 0)) {
       box2.hidden = false;
       box2.innerHTML = list.map(function(x){
         var on = x[0] === SB.sub[SB.subject];
@@ -10346,12 +10556,16 @@ SB.go = function(tab, sub, sec){
       if (SB.onShow.study) { try { SB.onShow.study("hub"); } catch(e){ try { console.warn(e); } catch(e2){} } }
       return;
     }
+    if (grpByKey(subject, sub)) sec = sub;          /* 큰 탭(그룹)을 눌렀을 때 */
     var list = SECS[subject], use = sec, ok = false;
     if (list) for (var li = 0; li < list.length; li++) if (list[li][0] === use) ok = true;
+    var gpick = grpByKey(subject, use);
+    if (gpick) { use = grpTarget(subject, gpick); ok = true; }
     if (!ok) use = SB.sub[subject] || (list && list[0] ? list[0][0] : "main");
     var vid = VIEWID["study:" + subject + ":" + use];
     if (!vid) return;
     SB.current = "study"; SB.subject = subject; SB.sub[subject] = use;
+    var gnow = grpOf(subject, use); if (gnow) GLAST[subject + ":" + gnow.k] = use;
     var v = onlyView(vid);
     applySec(v, use);
     renderChips();
@@ -21277,6 +21491,7 @@ function snap(){
     study: read(K.study, {}),
     coupons: read(K.coupons, { items:[], issued:{} }),
     mathset: read(K.mathset, {}),
+    wg: read("haeyuli.wordgrow.v1", null),
     ntfy: ntRead(),
     rb: {
       read: read(K.rbRead, {}),
@@ -21287,9 +21502,9 @@ function snap(){
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -21548,6 +21763,56 @@ function mergeRb(lr, cr){
   return out;
 }
 
+/* 🦉 단어키우기 오답노트 — 기기마다 푼 만큼 합친다
+   · 낱말별 틀린 횟수·연속 정답은 큰 쪽, 마을·주제·모드는 마지막에 손댄(at 최신) 쪽 */
+function mergeWg(l, c){
+  l = (l && typeof l === "object" && !Array.isArray(l)) ? l : null;
+  c = (c && typeof c === "object" && !Array.isArray(c)) ? c : null;
+  if (!l && !c) return null;
+  if (!l) return c;
+  if (!c) return l;
+  var pick = (num(c.at) > num(l.at)) ? c : l;
+  var out = { v:1, q:Math.max(num(l.q), num(c.q)), ok:Math.max(num(l.ok), num(c.ok)),
+              seq:Math.max(num(l.seq), num(c.seq)), stars:Math.max(num(l.stars), num(c.stars)),
+              days:{}, wrong:{}, master:{}, seen:{},
+              town:(pick.town && typeof pick.town === "object") ? pick.town : {},
+              bag:(pick.bag && typeof pick.bag === "object") ? pick.bag : {},
+              theme:pick.theme || "all", mode:(pick.mode === "spell" ? "spell" : "choice"),
+              at:Math.max(num(l.at), num(c.at), 1) };
+  var k, a, b;
+  [["days", 1], ["seen", 1]].forEach(function(pair){
+    var key = pair[0], src = [l[key], c[key]];
+    src.forEach(function(m){
+      if (!m || typeof m !== "object") return;
+      for (var kk in m){
+        if (key === "days"){
+          var x = m[kk]; if (!x || typeof x !== "object") continue;
+          var o = out.days[kk] || { q:0, ok:0 };
+          out.days[kk] = { q:Math.max(num(o.q), num(x.q)), ok:Math.max(num(o.ok), num(x.ok)) };
+        } else {
+          out.seen[kk] = Math.max(num(out.seen[kk]), num(m[kk]));
+        }
+      }
+    });
+  });
+  [["wrong", true], ["master", false]].forEach(function(pair){
+    var key = pair[0];
+    [l[key], c[key]].forEach(function(m){
+      if (!m || typeof m !== "object") return;
+      for (k in m){
+        a = m[k];
+        if (!a) continue;
+        if (key === "master"){ out.master[k] = Math.max(num(out.master[k]), num(a)); continue; }
+        if (typeof a !== "object") continue;
+        b = out.wrong[k] || { n:0, st:0, at:0 };
+        out.wrong[k] = { n:Math.max(num(b.n), num(a.n)), st:Math.max(num(b.st), num(a.st)),
+                         at:Math.max(num(b.at), num(a.at)) };
+      }
+    });
+  });
+  return out;
+}
+
 function buildDoc(local, cloud, base, code){
   var c = cloud || {};
   return {
@@ -21561,6 +21826,7 @@ function buildDoc(local, cloud, base, code){
     coupons: mergeCoupons(local.coupons, c.coupons),
     rb: mergeRb(local.rb, c.rb),
     mathset: mergeMathset(local.mathset, c.mathset),
+    wg: mergeWg(local.wg, c.wg),
     ntfy: mergeNtfy(local.ntfy, c.ntfy),
     at: Date.now()
   };
@@ -21578,6 +21844,16 @@ function applyDoc(doc){
   /* 📐 수학 진도 설정 — 다른 기기에서 엄마가 바꾼 단계를 이 기기에도 반영 */
   if (doc.mathset && typeof doc.mathset === "object" && JSON.stringify(doc.mathset) !== JSON.stringify(s.mathset || {})){
     write(K.mathset, doc.mathset); changed = true; mathChanged = true;
+  }
+  /* 🦉 단어키우기 오답노트·마을 */
+  if (doc.wg && typeof doc.wg === "object"){
+    var wgcur = read("haeyuli.wordgrow.v1", null);
+    var wgnew = mergeWg(wgcur, doc.wg);
+    if (wgnew && JSON.stringify(wgnew) !== JSON.stringify(wgcur)){
+      write("haeyuli.wordgrow.v1", wgnew);
+      changed = true;
+      try { if (SB.wgRefresh) SB.wgRefresh(); } catch(e){}
+    }
   }
   /* 📖 빨간펜 책 — 오늘 읽을 책·읽은 책·독서 기록 */
   if (doc.rb && typeof doc.rb === "object"){
@@ -25363,7 +25639,7 @@ function windowBox(x, y, s, night){
 function sceneWrap(key, fn, u){
   var body = "";
   try { body = fn(u); } catch(e){ body = sky(u, "#bfe3ff", "#eef9ff"); }
-  return '<svg class="pbk-svg" viewBox="0 0 800 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">' + body + "</svg>";
+  return '<svg class="pbk-svg" viewBox="0 0 800 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">' + body + "</svg>";
 }
 
 /* ---- 장면 배경 ---- */
@@ -25578,9 +25854,10 @@ var SCENES = {
   },
   d5: function(u){
     return meadow(u) + tree(120, 218, 1) + bush(700, 230, .9) + tufts([200, 620])
-      + girl(390, 242, 1.25, { dress:"#f2799b" }) + dog(468, 232, 1.1)
+      + girl(376, 242, 1.25, { dress:"#f2799b" }) + dog(470, 236, 1.55)
       + '<path d="M400 232 q22 -18 44 -2" stroke="#ffd9b8" stroke-width="8" fill="none" stroke-linecap="round"/>'
-      + '<path d="M512 216 q6 10 12 0" stroke="#f08a8a" stroke-width="4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M520 178 q7 12 14 0" stroke="#f08a8a" stroke-width="5" fill="none" stroke-linecap="round"/>'
+      + '<path d="M527 190 l-6 -6 a5 5 0 0 1 6 -7 a5 5 0 0 1 6 7 Z" fill="#f2798f"/>'
       + flower(270, 248, .85, "#f38fb0");
   },
   d6: function(u){
@@ -25666,11 +25943,17 @@ var SCENES = {
       + tufts([180, 320, 620]) + flower(230, 248, .9, "#ffd35c");
   },
   g2: function(u){
-    return meadow(u) + tree(700, 214, 1) + bush(140, 228, .9)
-      + girl(370, 240, 1.3, { dress:"#f2799b" })
-      + '<g transform="translate(470 226)"><path d="M-34 -22 q34 -18 68 0 l-8 26 q-26 10 -52 0 Z" fill="#d8a468"/><path d="M-34 -22 q34 -18 68 0" stroke="#b9843f" stroke-width="4" fill="none"/><path d="M-20 -24 q20 -22 40 0" stroke="#b9843f" stroke-width="3" fill="none"/><circle cx="-8" cy="-30" r="7" fill="#e8574c"/><circle cx="12" cy="-32" r="7" fill="#f2b33d"/></g>'
-      + blanket(556, 226, .75)
-      + tufts([240, 320, 640]);
+    return meadow(u) + tree(706, 214, .95) + bush(130, 228, .9)
+      + mom(352, 242, 1.25, { dress:"#7bb4e0" }) + girl(452, 240, 1.22, { dress:"#f2799b" })
+      /* 큰 바구니를 둘이 함께 들고 있어요 */
+      + basket(404, 214, 1.35)
+      + '<path d="M392 196 q14 -8 22 -4" stroke="#ffd9b8" stroke-width="7" fill="none" stroke-linecap="round"/>'
+      + '<path d="M432 194 q-12 -6 -20 -4" stroke="#ffd9b8" stroke-width="7" fill="none" stroke-linecap="round"/>'
+      /* 접어 든 초록 담요 */
+      + '<g transform="translate(596 228)"><rect x="-40" y="-20" width="80" height="26" rx="9" fill="#8fd3a8"/>'
+      + '<rect x="-40" y="-20" width="80" height="9" rx="5" fill="#b6e6c6"/>'
+      + '<path d="M-22 -20 v26 M6 -20 v26" stroke="#ffffff" stroke-width="2.4" opacity=".6"/></g>'
+      + tufts([240, 320, 660]) + flower(180, 248, .8, "#ffd35c");
   },
   g3: function(u){
     return meadow(u) + tree(400, 226, 1.7) + bush(120, 230, .9)
@@ -30636,6 +30919,569 @@ SB.onShow.hanja = (function(prev){
 })(SB.onShow.hanja);
 
 SB.hanjaText = { data:DATA, state:H };
+})();
+
+</script>
+<script>
+/* =====================================================================
+   🦉 단어키우기 — 초등 필수 영단어 800+ · 오답노트 자동 복습 · 엄마 리포트 · 단어 마을
+   · 뜻 고르기(4지선다) / 철자 쓰기 두 가지 퀴즈, 정답마다 ⭐ +2
+   · 틀린 낱말은 오답노트에 자동 저장(localStorage + 가족 코드 동기화)
+     → 🔁 오답 복습에서 먼저 나오고, 두 번 연속 맞히면 졸업
+   · 모은 별로 마을에 나무·집·공룡·놀이기구를 사서 배치
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var root = document.getElementById("viewWordGrow");
+if (!root) return;
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+  return ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[c]; }); }
+function disp(en){ return String(en || "").replace(/~/g, " "); }
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function todayKey(){
+  try { if (SB.today) return SB.today(); } catch(e){}
+  var d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+function shuffle(a){
+  a = a.slice();
+  for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var x = a[i]; a[i] = a[j]; a[j] = x; }
+  return a;
+}
+
+/* ------------------------------ 낱말 데이터 ------------------------------ */
+var T = [{"k":"cvc","lv":1,"nm":"첫 낱말","em":"🐣","w":[["cat","고양이","🐱"],["hat","모자","🎩"],["bat","박쥐","🦇"],["mat","매트","🟫"],["rat","쥐","🐭"],["sad","슬픈","😢"],["hen","암탉","🐔"],["pen","펜","🖊️"],["ten","열","🔟"],["bed","침대","🛏️"],["red","빨간","🔴"],["net","그물","🥅"],["pig","돼지","🐷"],["big","큰","🐘"],["sit","앉다","🪑"],["hit","치다","🏓"],["pin","핀","📌"],["six","여섯","6️⃣"],["dog","강아지","🐶"],["box","상자","📦"],["fox","여우","🦊"],["hot","뜨거운","🔥"],["pot","냄비","🍲"],["mop","걸레","🧽"],["sun","해","☀️"],["bus","버스","🚌"],["cup","컵","🥤"],["bug","벌레","🐛"],["run","달리다","🏃"],["nut","견과류","🥜"],["map","지도","🗺️"],["log","통나무","🪵"],["gum","껌","🍬"],["ship","배","🚢"],["shop","가게","🏪"],["fish","물고기","🐟"],["shell","조개껍데기","🐚"],["shoe","신발","👟"],["wash","씻다","🧼"],["chip","과자칩","🍟"],["chin","턱","😀"],["chair","의자","🪑"],["lunch","점심","🍱"],["cheese","치즈","🧀"],["peach","복숭아","🍑"],["this","이것","👇"],["that","저것","👉"],["thin","얇은","📄"],["bath","목욕","🛁"],["three","셋","3️⃣"],["mother","어머니","👩"],["duck","오리","🦆"],["sock","양말","🧦"],["kick","차다","⚽"],["king","왕","🤴"],["ring","반지","💍"],["sing","노래하다","🎤"],["star","별","⭐"],["stop","멈추다","🛑"],["spin","돌다","🌀"],["tree","나무","🌳"],["trip","여행","🧳"],["step","걸음","👣"],["cake","케이크","🍰"],["name","이름","📛"],["bike","자전거","🚲"],["kite","연","🪁"],["gate","문","🚪"],["five","다섯","5️⃣"],["nose","코","👃"],["home","집","🏠"],["rose","장미","🌹"],["bone","뼈","🦴"],["cute","귀여운","🥰"],["tube","관","🧪"]]},{"k":"animal","lv":1,"nm":"동물","em":"🦁","w":[["lion","사자","🦁"],["tiger","호랑이","🐯"],["bear","곰","🐻"],["elephant","코끼리","🐘"],["monkey","원숭이","🐵"],["rabbit","토끼","🐰"],["horse","말","🐴"],["cow","소","🐮"],["sheep","양","🐑"],["goat","염소","🐐"],["chicken","닭","🐔"],["chick","병아리","🐤"],["bird","새","🐦"],["eagle","독수리","🦅"],["owl","부엉이","🦉"],["penguin","펭귄","🐧"],["dolphin","돌고래","🐬"],["whale","고래","🐋"],["shark","상어","🦈"],["octopus","문어","🐙"],["crab","게","🦀"],["turtle","거북","🐢"],["frog","개구리","🐸"],["snake","뱀","🐍"],["crocodile","악어","🐊"],["zebra","얼룩말","🦓"],["giraffe","기린","🦒"],["deer","사슴","🦌"],["wolf","늑대","🐺"],["squirrel","다람쥐","🐿️"],["hedgehog","고슴도치","🦔"],["bee","꿀벌","🐝"],["ant","개미","🐜"],["butterfly","나비","🦋"],["dragonfly","잠자리","🪰"],["spider","거미","🕷️"],["ladybug","무당벌레","🐞"],["snail","달팽이","🐌"],["worm","지렁이","🪱"],["camel","낙타","🐪"],["kangaroo","캥거루","🦘"],["panda","판다","🐼"],["koala","코알라","🐨"],["seal","물개","🦭"],["starfish","불가사리","⭐"],["jellyfish","해파리","🪼"],["seahorse","해마","🐴"],["shrimp","새우","🦐"],["puppy","강아지","🐕"],["kitten","새끼 고양이","🐈"],["calf","송아지","🐄"],["piglet","새끼 돼지","🐖"],["lamb","새끼 양","🐑"],["duckling","새끼 오리","🦆"],["cub","새끼 짐승","🐻"],["tail","꼬리","🦎"],["wing","날개","🪽"],["feather","깃털","🪶"],["fur","털","🧸"],["beak","부리","🐤"],["paw","발바닥","🐾"],["nest","둥지","🪺"],["horn","뿔","🦏"],["whisker","수염","🐱"],["fin","지느러미","🐟"],["claw","발톱","🦅"],["den","굴","🕳️"],["hive","벌집","🍯"],["web","거미줄","🕸️"],["farm","농장","🚜"],["zoo","동물원","🦓"],["otter","수달","🦦"],["parrot","앵무새","🦜"],["peacock","공작","🦚"],["rhino","코뿔소","🦏"],["hippo","하마","🦛"]]},{"k":"food","lv":1,"nm":"음식","em":"🍎","w":[["apple","사과","🍎"],["banana","바나나","🍌"],["orange","오렌지","🍊"],["grape","포도","🍇"],["strawberry","딸기","🍓"],["watermelon","수박","🍉"],["pear","배","🍐"],["plum","자두","🟣"],["cherry","체리","🍒"],["lemon","레몬","🍋"],["melon","멜론","🍈"],["pineapple","파인애플","🍍"],["mango","망고","🥭"],["kiwi","키위","🥝"],["tomato","토마토","🍅"],["potato","감자","🥔"],["carrot","당근","🥕"],["onion","양파","🧅"],["cucumber","오이","🥒"],["pumpkin","호박","🎃"],["corn","옥수수","🌽"],["cabbage","양배추","🥬"],["broccoli","브로콜리","🥦"],["mushroom","버섯","🍄"],["bean","콩","🫘"],["rice","밥","🍚"],["bread","빵","🍞"],["milk","우유","🥛"],["water","물","💧"],["juice","주스","🧃"],["tea","차","🍵"],["soup","수프","🍲"],["salad","샐러드","🥗"],["sandwich","샌드위치","🥪"],["pizza","피자","🍕"],["hamburger","햄버거","🍔"],["noodle","국수","🍜"],["egg","계란","🥚"],["butter","버터","🧈"],["jam","잼","🍓"],["honey","꿀","🍯"],["sugar","설탕","🧂"],["salt","소금","🧂"],["pepper","후추","🌶️"],["oil","기름","🫗"],["flour","밀가루","🌾"],["cookie","쿠키","🍪"],["candy","사탕","🍬"],["chocolate","초콜릿","🍫"],["ice~cream","아이스크림","🍦"],["pie","파이","🥧"],["donut","도넛","🍩"],["popcorn","팝콘","🍿"],["snack","간식","🍿"],["breakfast","아침밥","🍳"],["dinner","저녁밥","🍽️"],["beef","소고기","🥩"],["pork","돼지고기","🥓"],["ham","햄","🍖"],["sausage","소시지","🌭"],["fork","포크","🍴"],["spoon","숟가락","🥄"],["knife","칼","🔪"],["chopsticks","젓가락","🥢"],["plate","접시","🍽️"],["bowl","그릇","🥣"],["bottle","병","🍼"],["pancake","팬케이크","🥞"],["taco","타코","🌮"],["sushi","초밥","🍣"],["cereal","시리얼","🥣"],["yogurt","요거트","🍨"]]},{"k":"school","lv":2,"nm":"학교","em":"🏫","w":[["school","학교","🏫"],["teacher","선생님","👩‍🏫"],["student","학생","🧑‍🎓"],["classroom","교실","🏫"],["desk","책상","🪑"],["blackboard","칠판","🖤"],["book","책","📕"],["notebook","공책","📒"],["pencil","연필","✏️"],["eraser","지우개","🧽"],["ruler","자","📏"],["crayon","크레용","🖍️"],["marker","마커","🖊️"],["scissors","가위","✂️"],["glue","풀","🧴"],["backpack","책가방","🎒"],["paper","종이","📄"],["library","도서관","📚"],["playground","운동장","🛝"],["gym","체육관","🏀"],["music","음악","🎵"],["art","미술","🎨"],["math","수학","🔢"],["science","과학","🔬"],["English","영어","🔤"],["Korean","한국어","🇰🇷"],["history","역사","🏛️"],["homework","숙제","📝"],["lesson","수업","📖"],["test","시험","📝"],["quiz","퀴즈","❓"],["question","질문","❔"],["answer","대답","✅"],["friend","친구","👫"],["classmate","반 친구","🧒"],["principal","교장 선생님","👨‍💼"],["lunchbox","도시락","🍱"],["uniform","교복","👕"],["bell","종","🔔"],["chalk","분필","🖍️"],["board","게시판","📋"],["schedule","시간표","🗓️"],["grade","학년","🏅"],["semester","학기","📅"],["vacation","방학","🏖️"],["field~trip","소풍","🚌"],["sports~day","운동회","🏃"],["clock","시계","⏰"],["globe","지구본","🌍"],["alphabet","알파벳","🔠"],["word","단어","🔤"],["sentence","문장","📝"],["letter","글자","🔡"],["story","이야기","📖"],["picture","그림","🖼️"],["pencil~case","필통","🧰"]]},{"k":"house","lv":2,"nm":"집·물건","em":"🏠","w":[["house","집","🏠"],["room","방","🚪"],["kitchen","부엌","🍳"],["bathroom","화장실","🛁"],["bedroom","침실","🛏️"],["living~room","거실","🛋️"],["door","문","🚪"],["window","창문","🪟"],["wall","벽","🧱"],["floor","바닥","🟫"],["roof","지붕","🏠"],["stairs","계단","🪜"],["table","탁자","🪑"],["sofa","소파","🛋️"],["pillow","베개","🛏️"],["blanket","담요","🛌"],["mirror","거울","🪞"],["lamp","전등","💡"],["candle","초","🕯️"],["television","텔레비전","📺"],["computer","컴퓨터","💻"],["telephone","전화기","☎️"],["refrigerator","냉장고","🧊"],["stove","가스레인지","🔥"],["sink","싱크대","🚰"],["bathtub","욕조","🛁"],["towel","수건","🧺"],["soap","비누","🧼"],["toothbrush","칫솔","🪥"],["toothpaste","치약","🧴"],["comb","빗","💈"],["brush","붓","🖌️"],["key","열쇠","🔑"],["basket","바구니","🧺"],["jar","단지","🫙"],["bag","가방","👜"],["umbrella","우산","☂️"],["toy","장난감","🧸"],["doll","인형","🪆"],["ball","공","⚽"],["balloon","풍선","🎈"],["puzzle","퍼즐","🧩"],["block","블록","🧱"],["robot","로봇","🤖"],["piano","피아노","🎹"],["guitar","기타","🎸"],["drum","북","🥁"],["camera","카메라","📷"],["radio","라디오","📻"],["fan","선풍기","🌀"],["heater","난로","🔥"],["broom","빗자루","🧹"],["bucket","양동이","🪣"],["rope","밧줄","🪢"],["needle","바늘","🧵"],["hammer","망치","🔨"],["nail","못","🔩"],["ladder","사다리","🪜"],["fence","울타리","🚧"],["garden","정원","🌷"],["yard","마당","🏡"],["shelf","선반","🗄️"],["drawer","서랍","🗄️"],["carpet","카펫","🟥"],["curtain","커튼","🪟"],["teddy~bear","곰인형","🧸"]]},{"k":"body","lv":2,"nm":"몸·건강","em":"🧒","w":[["body","몸","🧍"],["head","머리","🧠"],["hair","머리카락","💇"],["face","얼굴","😊"],["eye","눈","👁️"],["ear","귀","👂"],["mouth","입","👄"],["tooth","이","🦷"],["tongue","혀","👅"],["lip","입술","💋"],["cheek","뺨","😊"],["neck","목","🧣"],["shoulder","어깨","🤷"],["arm","팔","💪"],["elbow","팔꿈치","💪"],["hand","손","✋"],["finger","손가락","👆"],["thumb","엄지손가락","👍"],["chest","가슴","🫀"],["leg","다리","🦵"],["knee","무릎","🦵"],["foot","발","🦶"],["toe","발가락","🦶"],["heel","발뒤꿈치","🦶"],["skin","피부","🧴"],["heart","심장","❤️"],["blood","피","🩸"],["brain","뇌","🧠"],["sick","아픈","🤒"],["fever","열","🤒"],["cough","기침","😷"],["sneeze","재채기","🤧"],["medicine","약","💊"],["hospital","병원","🏥"],["doctor","의사","👨‍⚕️"],["dentist","치과 의사","🦷"],["healthy","건강한","💪"],["tired","피곤한","😴"],["sleep","잠","😴"],["dream","꿈","💭"],["clean","깨끗한","✨"],["dirty","더러운","🧻"],["strong","힘센","💪"],["weak","약한","🫠"],["bandage","붕대","🩹"],["injection","주사","💉"],["mask","마스크","😷"],["fingernail","손톱","💅"],["wrist","손목","⌚"],["ankle","발목","🦶"],["breath","숨","😮‍💨"]]},{"k":"family","lv":2,"nm":"가족·사람","em":"👨‍👩‍👧","w":[["family","가족","👨‍👩‍👧"],["father","아버지","👨"],["mom","엄마","👩"],["dad","아빠","🧔"],["parents","부모님","👫"],["grandmother","할머니","👵"],["grandfather","할아버지","👴"],["sister","자매","👧"],["brother","형제","👦"],["baby","아기","👶"],["son","아들","👦"],["daughter","딸","👧"],["uncle","삼촌","🧔"],["aunt","이모","👩"],["cousin","사촌","🧒"],["nephew","조카","👦"],["niece","조카딸","👧"],["neighbor","이웃","🏘️"],["boy","소년","👦"],["girl","소녀","👧"],["man","남자","👨"],["woman","여자","👩"],["child","어린이","🧒"],["people","사람들","👥"],["person","사람","🧍"],["age","나이","🎂"],["birthday","생일","🎂"],["wedding","결혼식","💒"],["police~officer","경찰관","👮"],["firefighter","소방관","👨‍🚒"],["cook","요리사","👨‍🍳"],["singer","가수","🎤"],["artist","화가","🎨"],["writer","작가","✍️"],["pilot","조종사","👨‍✈️"],["farmer","농부","👨‍🌾"],["driver","운전기사","🚗"],["queen","여왕","👸"],["princess","공주","👸"],["prince","왕자","🤴"],["hero","영웅","🦸"],["guest","손님","🙋"],["twin","쌍둥이","👯"]]},{"k":"verb","lv":3,"nm":"동작","em":"🏃","w":[["walk","걷다","🚶"],["jump","뛰어오르다","🦘"],["hop","깡충 뛰다","🐇"],["skip","건너뛰다","🤸"],["swim","수영하다","🏊"],["fly","날다","🕊️"],["climb","오르다","🧗"],["fall","떨어지다","🍂"],["stand","서다","🧍"],["lie","눕다","🛌"],["wake","깨다","⏰"],["eat","먹다","🍽️"],["drink","마시다","🥤"],["help","돕다","🤝"],["open","열다","🔓"],["close","닫다","🔒"],["push","밀다","🤜"],["pull","당기다","🪢"],["throw","던지다","🏐"],["catch","잡다","🧤"],["hold","들고 있다","🤲"],["carry","나르다","🎒"],["put","놓다","📥"],["take","가져가다","🫴"],["give","주다","🎁"],["make","만들다","🔨"],["draw","그리다","✏️"],["paint","칠하다","🖌️"],["write","쓰다","✍️"],["read","읽다","📖"],["dance","춤추다","💃"],["play","놀다","🎮"],["laugh","웃다","😂"],["cry","울다","😭"],["smile","미소 짓다","🙂"],["shout","소리치다","📢"],["whisper","속삭이다","🤫"],["listen","듣다","👂"],["hear","들리다","🔉"],["look","쳐다보다","👀"],["see","보다","👁️"],["watch","지켜보다","📺"],["think","생각하다","💭"],["know","알다","💡"],["learn","배우다","📚"],["teach","가르치다","👩‍🏫"],["study","공부하다","📖"],["work","일하다","🛠️"],["rest","쉬다","😌"],["wait","기다리다","⌛"],["find","찾다","🔍"],["buy","사다","🛒"],["sell","팔다","💰"],["win","이기다","🏆"],["try","해 보다","💪"],["practice","연습하다","🔁"],["ride","타다","🚴"],["drive","운전하다","🚗"],["wear","입다","👕"],["turn","돌다","🔄"],["start","시작하다","🚦"],["finish","끝내다","🏁"],["love","사랑하다","❤️"],["like","좋아하다","👍"],["want","원하다","🙏"],["need","필요하다","🫱"],["have","가지다","🤲"],["go","가다","➡️"],["come","오다","⬅️"],["meet","만나다","🤝"]]},{"k":"adj","lv":3,"nm":"형용사","em":"🌈","w":[["small","작은","🐜"],["tall","키 큰","🦒"],["short","짧은","📏"],["long","긴","📐"],["fast","빠른","⚡"],["slow","느린","🐢"],["cold","추운","🥶"],["warm","따뜻한","🌤️"],["cool","시원한","🧊"],["new","새로운","🆕"],["old","오래된","🕰️"],["young","어린","🐣"],["happy","행복한","😊"],["angry","화난","😠"],["scared","무서운","😨"],["funny","우스운","🤣"],["kind","친절한","🤗"],["brave","용감한","🦁"],["smart","똑똑한","🧠"],["beautiful","아름다운","🌸"],["pretty","예쁜","💐"],["full","가득한","🈵"],["empty","빈","🕳️"],["heavy","무거운","🏋️"],["light","가벼운","🪶"],["hard","단단한","🪨"],["soft","부드러운","🧸"],["loud","시끄러운","📢"],["quiet","조용한","🤫"],["bright","밝은","💡"],["dark","어두운","🌑"],["easy","쉬운","🙂"],["difficult","어려운","😖"],["good","좋은","👍"],["bad","나쁜","👎"],["right","맞는","✅"],["wrong","틀린","❌"],["same","같은","🟰"],["different","다른","🔀"],["many","많은","🔢"],["few","적은","🤏"],["wet","젖은","💦"],["dry","마른","🌵"],["sweet","단","🍯"],["sour","신","🍋"],["salty","짠","🧂"],["spicy","매운","🌶️"],["delicious","맛있는","😋"],["hungry","배고픈","🍽️"],["thirsty","목마른","🥤"],["busy","바쁜","🏃"],["free","한가한","🕊️"],["careful","조심하는","⚠️"],["dangerous","위험한","☠️"],["safe","안전한","🛟"],["wide","넓은","🛣️"],["narrow","좁은","🛤️"],["deep","깊은","🌊"],["high","높은","⛰️"],["low","낮은","⬇️"]]},{"k":"time","lv":3,"nm":"시간·숫자","em":"⏰","w":[["one","하나","1️⃣"],["two","둘","2️⃣"],["four","넷","4️⃣"],["seven","일곱","7️⃣"],["eight","여덟","8️⃣"],["nine","아홉","9️⃣"],["eleven","열하나","1️⃣1️⃣"],["twelve","열둘","1️⃣2️⃣"],["twenty","스물","2️⃣0️⃣"],["thirty","서른","3️⃣0️⃣"],["forty","마흔","4️⃣0️⃣"],["fifty","쉰","5️⃣0️⃣"],["hundred","백","💯"],["first","첫째","🥇"],["second","둘째","🥈"],["third","셋째","🥉"],["morning","아침","🌅"],["noon","정오","🕛"],["afternoon","오후","🌤️"],["evening","저녁","🌆"],["night","밤","🌙"],["today","오늘","📅"],["tomorrow","내일","➡️"],["yesterday","어제","⬅️"],["week","주","🗓️"],["month","달","📆"],["year","해","🎉"],["day","날","☀️"],["hour","시간","⏳"],["minute","분","⏱️"],["moment","잠깐","✨"],["Monday","월요일","1️⃣"],["Tuesday","화요일","2️⃣"],["Wednesday","수요일","3️⃣"],["Thursday","목요일","4️⃣"],["Friday","금요일","5️⃣"],["Saturday","토요일","6️⃣"],["Sunday","일요일","7️⃣"],["spring","봄","🌱"],["summer","여름","🏖️"],["autumn","가을","🍁"],["winter","겨울","⛄"],["new~year","새해","🎊"],["weekend","주말","🎈"],["weekday","평일","📘"],["calendar","달력","📅"],["season","계절","🍂"],["early","일찍","🌅"],["late","늦게","🌃"],["always","항상","♾️"],["sometimes","가끔","🤔"],["never","절대 안","🚫"],["again","다시","🔁"],["soon","곧","⏩"],["now","지금","⌛"],["before","전에","⏪"],["after","후에","⏩"]]},{"k":"nature","lv":4,"nm":"날씨·자연","em":"🌤️","w":[["weather","날씨","🌤️"],["sunny","화창한","☀️"],["cloudy","흐린","☁️"],["rainy","비 오는","🌧️"],["snowy","눈 오는","🌨️"],["windy","바람 부는","🌬️"],["stormy","폭풍우의","⛈️"],["rain","비","🌧️"],["snow","눈","❄️"],["wind","바람","🌬️"],["cloud","구름","☁️"],["sky","하늘","🌌"],["moon","달","🌕"],["earth","지구","🌍"],["world","세계","🌎"],["mountain","산","⛰️"],["hill","언덕","🌄"],["river","강","🏞️"],["lake","호수","🏞️"],["sea","바다","🌊"],["beach","해변","🏖️"],["island","섬","🏝️"],["forest","숲","🌲"],["flower","꽃","🌸"],["grass","풀","🌱"],["leaf","잎","🍃"],["seed","씨앗","🌰"],["root","뿌리","🪴"],["branch","나뭇가지","🌿"],["stone","돌","🪨"],["sand","모래","🏖️"],["mud","진흙","🟤"],["field","들판","🌾"],["rainbow","무지개","🌈"],["thunder","천둥","🌩️"],["lightning","번개","⚡"],["ice","얼음","🧊"],["fire","불","🔥"],["air","공기","💨"],["pond","연못","🦆"],["cave","동굴","🕳️"],["desert","사막","🏜️"],["jungle","정글","🌴"],["volcano","화산","🌋"],["wave","파도","🌊"],["shadow","그림자","🌑"],["fog","안개","🌫️"],["frost","서리","❄️"],["puddle","물웅덩이","💧"]]},{"k":"place","lv":4,"nm":"교통·장소","em":"🚌","w":[["car","자동차","🚗"],["train","기차","🚆"],["subway","지하철","🚇"],["taxi","택시","🚕"],["truck","트럭","🚚"],["bicycle","자전거","🚴"],["motorcycle","오토바이","🏍️"],["airplane","비행기","✈️"],["helicopter","헬리콥터","🚁"],["boat","배","⛵"],["rocket","로켓","🚀"],["ambulance","구급차","🚑"],["police~car","경찰차","🚓"],["fire~truck","소방차","🚒"],["road","길","🛣️"],["street","거리","🏙️"],["bridge","다리","🌉"],["tunnel","터널","🚇"],["station","역","🚉"],["airport","공항","🛫"],["harbor","항구","⚓"],["crosswalk","횡단보도","🚸"],["traffic~light","신호등","🚦"],["sign","표지판","🪧"],["ticket","표","🎫"],["passenger","승객","🧳"],["seat","좌석","💺"],["wheel","바퀴","🛞"],["engine","엔진","⚙️"],["market","시장","🏬"],["supermarket","슈퍼마켓","🛒"],["bakery","빵집","🥖"],["restaurant","식당","🍴"],["bank","은행","🏦"],["post~office","우체국","📮"],["museum","박물관","🏛️"],["park","공원","🌳"],["cinema","영화관","🎬"],["bookstore","서점","📚"],["pharmacy","약국","💊"],["factory","공장","🏭"],["city","도시","🏙️"],["town","작은 도시","🏘️"],["village","마을","🏡"],["country","나라","🌏"],["apartment","아파트","🏢"],["elevator","엘리베이터","🛗"],["escalator","에스컬레이터","🪜"],["corner","모퉁이","📐"]]},{"k":"color","lv":4,"nm":"색·모양·감정","em":"🎨","w":[["blue","파란","🔵"],["yellow","노란","🟡"],["green","초록","🟢"],["black","검은","⚫"],["white","흰","⚪"],["brown","갈색","🟤"],["pink","분홍","🌸"],["purple","보라","🟣"],["gray","회색","🔘"],["gold","금색","🥇"],["silver","은색","🥈"],["circle","동그라미","⭕"],["square","네모","🟦"],["triangle","세모","🔺"],["rectangle","직사각형","▭"],["oval","타원","🥚"],["diamond","마름모","🔷"],["cube","정육면체","🧊"],["line","선","➖"],["dot","점","⚫"],["joy","기쁨","😄"],["fear","두려움","😨"],["surprise","놀람","😲"],["worry","걱정","😟"],["shy","수줍은","😳"],["proud","자랑스러운","😌"],["sorry","미안한","🙇"],["lonely","외로운","🧍"],["excited","신나는","🤩"],["bored","심심한","😐"],["calm","차분한","😌"],["curious","궁금한","🤔"],["silly","익살스러운","🤪"],["honest","정직한","🤝"],["polite","예의 바른","🙇"],["patient","참을성 있는","⏳"],["thankful","고마운","🙏"],["cheerful","명랑한","😁"],["upset","속상한","😞"],["gentle","부드러운","🕊️"]]},{"k":"life","lv":4,"nm":"옷·생활","em":"👕","w":[["clothes","옷","👕"],["shirt","셔츠","👔"],["t-shirt","티셔츠","👕"],["pants","바지","👖"],["jeans","청바지","👖"],["skirt","치마","👗"],["dress","원피스","👗"],["coat","코트","🧥"],["jacket","재킷","🧥"],["sweater","스웨터","🧶"],["vest","조끼","🦺"],["boots","부츠","👢"],["sandals","샌들","🩴"],["slippers","슬리퍼","🥿"],["cap","야구 모자","🧢"],["scarf","목도리","🧣"],["gloves","장갑","🧤"],["belt","벨트","🪢"],["tie","넥타이","👔"],["glasses","안경","👓"],["sunglasses","선글라스","🕶️"],["necklace","목걸이","📿"],["earrings","귀걸이","💎"],["button","단추","🔘"],["zipper","지퍼","🤐"],["pocket","주머니","👝"],["size","크기","📏"],["shower","샤워","🚿"],["iron","다리미","🧺"],["purse","핸드백","👛"],["wallet","지갑","👝"],["money","돈","💰"],["coin","동전","🪙"],["price","가격","🏷️"],["sale","할인","🏷️"],["gift","선물","🎁"],["party","파티","🎉"],["picnic","소풍","🧺"],["camping","캠핑","🏕️"],["travel","여행","✈️"],["photo","사진","📷"],["letterbox","우편함","📮"],["stamp","우표","📮"],["raincoat","우비","🧥"]]}];
+var ALL = [], BYEN = {};
+for (var ti = 0; ti < T.length; ti++){
+  var th = T[ti];
+  th.w = th.w.map(function(w){ return [w[0], w[1], w[2], ti]; });
+  th.map = {};
+  th.w.forEach(function(w){ th.map[w[0]] = w; ALL.push(w); BYEN[w[0]] = w; });
+}
+
+/* ------------------------------ 마을 아이템 ------------------------------ */
+var ITEMS = [
+  { id:"bush",     em:"🌿", nm:"덤불",     cost:6  },
+  { id:"tree",     em:"🌳", nm:"나무",     cost:10 },
+  { id:"flower",   em:"🌷", nm:"꽃",       cost:10 },
+  { id:"cloud",    em:"☁️", nm:"구름",     cost:12 },
+  { id:"bench",    em:"🪑", nm:"나무 의자", cost:14 },
+  { id:"dog",      em:"🐶", nm:"강아지",   cost:16 },
+  { id:"cat",      em:"🐱", nm:"고양이",   cost:16 },
+  { id:"duck",     em:"🦆", nm:"오리",     cost:18 },
+  { id:"cherry",   em:"🌸", nm:"벚꽃 나무", cost:22 },
+  { id:"tama",     em:"🐣", nm:"다마고치 친구", cost:26 },
+  { id:"house",    em:"🏠", nm:"빨간 지붕 집", cost:32 },
+  { id:"slide",    em:"🛝", nm:"미끄럼틀", cost:34 },
+  { id:"dino",     em:"🦕", nm:"공룡",     cost:40 },
+  { id:"fountain", em:"⛲", nm:"분수대",   cost:50 },
+  { id:"rainbow",  em:"🌈", nm:"무지개",   cost:60 },
+  { id:"wheel",    em:"🎡", nm:"놀이기구", cost:70 }
+];
+var ITEMBY = {};
+ITEMS.forEach(function(it){ ITEMBY[it.id] = it; });
+var TOWN_COLS = 8, TOWN_ROWS = 5, TOWN_CELLS = TOWN_COLS * TOWN_ROWS;
+
+/* ------------------------------ 저장 ------------------------------ */
+var KEY = "haeyuli.wordgrow.v1";
+var ST = null;
+function blank(){
+  return { v:1, q:0, ok:0, seq:0, stars:0, days:{}, wrong:{}, master:{}, seen:{},
+           town:{}, bag:{}, theme:"all", mode:"choice", at:0 };
+}
+function load(){
+  var o = null;
+  try { o = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e){ o = null; }
+  var d = blank();
+  if (o && typeof o === "object" && !Array.isArray(o)){
+    for (var k in d) if (o[k] !== undefined && o[k] !== null) d[k] = o[k];
+    ["days","wrong","master","seen","town","bag"].forEach(function(kk){
+      if (!d[kk] || typeof d[kk] !== "object" || Array.isArray(d[kk])) d[kk] = {};
+    });
+    if (typeof d.q !== "number" || !isFinite(d.q)) d.q = 0;
+    if (typeof d.ok !== "number" || !isFinite(d.ok)) d.ok = 0;
+    if (typeof d.seq !== "number" || !isFinite(d.seq)) d.seq = 0;
+    if (typeof d.stars !== "number" || !isFinite(d.stars)) d.stars = 0;
+    if (typeof d.theme !== "string" || (d.theme !== "all" && !T.some(function(t){ return t.k === d.theme; }))) d.theme = "all";
+    if (d.mode !== "spell") d.mode = "choice";
+  }
+  ST = d;
+  return ST;
+}
+function save(){
+  ST.at = Date.now();
+  try { localStorage.setItem(KEY, JSON.stringify(ST)); } catch(e){}
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
+}
+function dayOf(dk){
+  dk = dk || todayKey();
+  var d = ST.days[dk];
+  if (!d || typeof d !== "object") d = ST.days[dk] = { q:0, ok:0 };
+  if (typeof d.q !== "number") d.q = 0;
+  if (typeof d.ok !== "number") d.ok = 0;
+  return d;
+}
+function wrongN(){ return Object.keys(ST.wrong).length; }
+function streakDays(){
+  var n = 0, d = new Date();
+  if (!ST.days[todayKey()]) d.setDate(d.getDate() - 1);
+  for (var i = 0; i < 400; i++){
+    var k = d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+    var v = ST.days[k];
+    if (!v || (!v.q && !v.ok)) break;
+    n++; d.setDate(d.getDate() - 1);
+  }
+  return n;
+}
+function themeName(k){
+  if (k === "all") return "전체";
+  for (var i = 0; i < T.length; i++) if (T[i].k === k) return T[i].nm;
+  return "전체";
+}
+function poolOf(k){
+  if (k === "all") return ALL;
+  for (var i = 0; i < T.length; i++) if (T[i].k === k) return T[i].w;
+  return ALL;
+}
+
+/* ------------------------------ 화면 상태 ------------------------------ */
+var UI = { grp:"learn", round:[], qi:0, cur:null, answered:false, right:0, gained:0,
+           done:false, placing:"", picked:"", rule:0 };
+
+function speak(t){
+  if (!t) return;
+  try { if (window.unlockSpeech) unlockSpeech(); } catch(e){}
+  try { SB.speak(t, false, "en-US"); } catch(e){}
+}
+
+/* ------------------------------ 문제 만들기 ------------------------------ */
+function buildRound(){
+  var arr = [];
+  if (UI.grp === "review"){
+    var keys = Object.keys(ST.wrong).filter(function(k){ return BYEN[k]; });
+    keys.sort(function(a, b){
+      var A = ST.wrong[a] || {}, B = ST.wrong[b] || {};
+      return ((B.n || 0) - (A.n || 0)) || ((A.at || 0) - (B.at || 0));
+    });
+    arr = keys.slice(0, 10).map(function(k){ return BYEN[k]; });
+    if (arr.length < 10){
+      var rest = shuffle(poolOf("all").filter(function(w){ return keys.indexOf(w[0]) < 0; }));
+      arr = arr.concat(rest.slice(0, 10 - arr.length));
+    }
+  } else {
+    arr = shuffle(poolOf(ST.theme)).slice(0, 10);
+  }
+  UI.round = arr;
+  UI.qi = 0; UI.right = 0; UI.gained = 0; UI.done = false;
+  showQ();
+}
+
+function optionsFor(w, pool){
+  var out = [w], used = {}, i;
+  used[w[1]] = 1;
+  var cand = shuffle(pool.filter(function(x){ return x[1] !== w[1] && x[0] !== w[0]; }));
+  for (i = 0; i < cand.length && out.length < 4; i++){
+    if (used[cand[i][1]]) continue;
+    used[cand[i][1]] = 1; out.push(cand[i]);
+  }
+  if (out.length < 4){
+    var more = shuffle(ALL.filter(function(x){ return !used[x[1]] && x[0] !== w[0]; }));
+    for (i = 0; i < more.length && out.length < 4; i++){ used[more[i][1]] = 1; out.push(more[i]); }
+  }
+  return shuffle(out);
+}
+
+function showQ(){
+  var w = UI.round[UI.qi];
+  if (!w) return endRound();
+  UI.cur = w; UI.answered = false; UI.picked = "";
+  ST.seen[w[0]] = (ST.seen[w[0]] || 0) + 1;
+  save();
+  var box = $("wgBody");
+  if (!box) return;
+  var total = UI.round.length, n = UI.qi + 1;
+  var mode = ST.mode === "spell" ? "spell" : "choice";
+  var wrong = ST.wrong[w[0]];
+  var badge = wrong ? '<i class="wg-badge">틀린 적 ' + (wrong.n || 1) + '번</i>' : "";
+  var html = "";
+  html += '<div class="wg-meta"><span class="wg-no">' + n + " / " + total + '</span>'
+        + '<span class="wg-mk">' + (UI.grp === "review" ? "🔁 오답 복습" : (mode === "spell" ? "⌨️ 철자 쓰기" : "🃏 뜻 고르기")) + "</span>"
+        + badge
+        + '<span class="wg-st">⭐ <b data-stars>' + ((SB.starsNow && SB.starsNow()) || 0) + "</b></span></div>";
+  if (mode === "spell"){
+    html += '<div class="wg-face"><span class="wg-em">' + esc(w[2]) + '</span>'
+          + '<span class="wg-ko">' + esc(w[1]) + '</span>'
+          + '<button class="wg-spk" type="button" data-say="1" aria-label="' + esc(disp(w[0])) + ' 듣기">🔊</button></div>'
+          + '<div class="wg-slots" id="wgSlots">' + slotsHTML(w[0]) + "</div>"
+          + '<div class="wg-type"><input id="wgIn" class="wg-in" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="영어로 써 봐요" aria-label="영어 철자 입력">'
+          + '<button class="wg-go" type="button" data-go="1">확인</button></div>'
+          + '<div class="wg-fb" id="wgFb"></div>';
+  } else {
+    var opts = optionsFor(w, poolOf(ST.theme).length >= 4 ? poolOf(ST.theme) : ALL);
+    html += '<div class="wg-face"><span class="wg-em">' + esc(w[2]) + '</span>'
+          + '<span class="wg-en">' + esc(disp(w[0])) + '</span>'
+          + '<button class="wg-spk" type="button" data-say="1" aria-label="' + esc(disp(w[0])) + ' 듣기">🔊</button></div>'
+          + '<div class="wg-opts" id="wgOpts">' + opts.map(function(o){
+              return '<button class="wg-opt" type="button" data-opt="' + esc(o[0]) + '">' + esc(o[1]) + "</button>";
+            }).join("") + "</div>"
+          + '<div class="wg-fb" id="wgFb"></div>';
+  }
+  box.innerHTML = html;
+  var inp = $("wgIn");
+  if (inp){
+    inp.addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); checkSpell(); } });
+    setTimeout(function(){ try { inp.focus(); } catch(e){} }, 60);
+  }
+  if (mode === "choice") setTimeout(function(){ speak(w[0]); }, 120);
+}
+
+function slotsHTML(en){
+  var s = disp(en);
+  return s.split("").map(function(c){
+    if (c === " ") return '<i class="wg-slot sp"></i>';
+    if (c === "-") return '<i class="wg-slot dash">-</i>';
+    return '<i class="wg-slot"></i>';
+  }).join("");
+}
+
+function paintSlots(typed){
+  var box = $("wgSlots");
+  if (!box) return;
+  var s = disp(UI.cur[0]);
+  var cells = box.querySelectorAll(".wg-slot");
+  var ti = 0, ci = 0;
+  for (; ci < cells.length; ci++){
+    var c = s.charAt(ci);
+    if (c === " " || c === "-") continue;
+    cells[ci].textContent = ti < typed.length ? typed.charAt(ti) : "";
+    ti++;
+  }
+}
+
+function checkSpell(){
+  if (UI.answered) return;
+  var inp = $("wgIn");
+  if (!inp) return;
+  var typed = String(inp.value || "");
+  paintSlots(typed);
+  var norm = function(x){ return String(x || "").toLowerCase().replace(/[\s\-_.]/g, ""); };
+  if (norm(typed) === norm(UI.cur[0])) right();
+  else wrong("철자가 조금 달랐어요.");
+}
+
+function right(){
+  if (UI.answered) return;
+  UI.answered = true;
+  var w = UI.cur;
+  ST.q++; ST.ok++;
+  var day = dayOf(); day.q++; day.ok++;
+  var d = ST.wrong[w[0]], grad = false;
+  if (d){
+    d.st = (d.st || 0) + 1;
+    if (d.st >= 2){ delete ST.wrong[w[0]]; ST.master[w[0]] = Date.now(); grad = true; }
+  }
+  ST.seq++;
+  var got = 0;
+  try { got = SB.earn(todayKey() + "|wg|" + ST.seq, 2) || 0; } catch(e){ got = 0; }
+  ST.stars += got; UI.gained += got; UI.right++;
+  save();
+  renderHead();
+  var opts = document.querySelectorAll("#wgOpts .wg-opt");
+  for (var i = 0; i < opts.length; i++){
+    if (opts[i].getAttribute("data-opt") === w[0]) opts[i].className = "wg-opt right";
+    else opts[i].disabled = true;
+  }
+  var fb = $("wgFb");
+  if (fb) fb.innerHTML = '<div class="wg-ok">딱 맞았어! ' + (got ? "⭐ +" + got : "") + (grad ? ' <em>오답노트 졸업! 🎓</em>' : "") + "</div>";
+  speak(w[0]);
+  if (got) { try { SB.confetti(); } catch(e){} }
+  setTimeout(function(){ if (UI.answered) next(); }, 820);
+}
+
+function wrong(msg, retry){
+  var w = UI.cur;
+  if (!retry){
+    var d = ST.wrong[w[0]];
+    if (!d) d = ST.wrong[w[0]] = { n:0, st:0, at:0 };
+    d.n = (d.n || 0) + 1; d.st = 0; d.at = Date.now();
+    ST.q++;
+    var day = dayOf(); day.q++;
+    save();
+    renderHead();
+  }
+  var fb = $("wgFb");
+  if (retry){
+    if (fb) fb.innerHTML = '<div class="wg-no2">' + esc(msg) + '</div>';
+    return;
+  }
+  UI.answered = true;
+  var opts = document.querySelectorAll("#wgOpts .wg-opt");
+  for (var i = 0; i < opts.length; i++){
+    if (opts[i].getAttribute("data-opt") === w[0]) opts[i].className = "wg-opt right";
+    else opts[i].disabled = true;
+  }
+  if (fb) fb.innerHTML = '<div class="wg-no2">아쉬워요! <b>' + esc(disp(w[0])) + "</b> = " + esc(w[1])
+    + ' <span>오답노트에 담아 뒀어요</span></div><button class="wg-next" type="button" data-next="1">다음 ➡️</button>';
+  speak(w[0]);
+}
+
+function next(){
+  UI.qi++;
+  if (UI.qi >= UI.round.length) return endRound();
+  showQ();
+}
+
+function endRound(){
+  UI.done = true;
+  var box = $("wgBody");
+  if (!box) return;
+  var total = UI.round.length, rightN = UI.right;
+  if (rightN > 0){
+    try { SB.markAttendance("en"); } catch(e){}
+    try { SB.markDaily("en"); } catch(e){}
+  }
+  var pct = total ? Math.round(rightN * 100 / total) : 0;
+  var msg = pct >= 90 ? "완벽해요! 🦉 최고!" : (pct >= 60 ? "잘했어요! 🎉" : "한 번 더 하면 더 잘할 거예요 💪");
+  box.innerHTML = '<div class="wg-done">'
+    + '<div class="wg-done-em">🦉</div>'
+    + "<b>" + msg + "</b>"
+    + '<div class="wg-done-row"><span>' + rightN + " / " + total + "문제</span><span>정답률 " + pct + "%</span><span>⭐ +" + UI.gained + "</span></div>"
+    + '<div class="wg-done-btns"><button class="wg-next" type="button" data-again="1">한 번 더 🔁</button>'
+    + '<button class="wg-ghost" type="button" data-grp="review">🔁 오답 복습</button></div></div>';
+}
+
+/* ------------------------------ 리포트 ------------------------------ */
+function renderReport(){
+  var box = $("wgBody");
+  if (!box) return;
+  var day = dayOf();
+  var accAll = ST.q ? Math.round(ST.ok * 100 / ST.q) : 0;
+  var accToday = day.q ? Math.round(day.ok * 100 / day.q) : 0;
+  var seenN = Object.keys(ST.seen).length;
+  var wrongs = Object.keys(ST.wrong).filter(function(k){ return BYEN[k]; })
+    .map(function(k){ return [k, ST.wrong[k]]; })
+    .sort(function(a, b){ return (b[1].n || 0) - (a[1].n || 0); }).slice(0, 8);
+  var s = "";
+  s += '<div class="wg-rep-h"><b>📊 엄마 리포트</b><span>' + esc(todayKey()) + " · 해율이의 단어 기록</span></div>";
+  s += '<div class="wg-rep-grid">'
+     + stat(day.q + "문제", "오늘 푼 문제")
+     + stat(accToday + "%", "오늘 정답률")
+     + stat(accAll + "%", "전체 정답률")
+     + stat(seenN + "개", "만난 낱말 / " + ALL.length)
+     + stat(streakDays() + "일", "연속 학습")
+     + stat("⭐ " + ST.stars, "단어로 모은 별")
+     + "</div>";
+  s += '<div class="wg-rep-sec"><div class="wg-rep-t"><b>😢 자주 틀린 낱말</b>'
+     + (wrongs.length ? '<button class="wg-mini" type="button" data-grp="review">🔁 오답 복습 시작</button>' : "")
+     + "</div>";
+  if (!wrongs.length) s += '<p class="wg-empty">아직 틀린 낱말이 없어요. 정말 잘하고 있어요! 🌟</p>';
+  else s += '<div class="wg-wlist">' + wrongs.map(function(x){
+      var w = BYEN[x[0]], n = x[1].n || 1;
+      return '<button class="wg-wrow" type="button" data-sayw="' + esc(w[0]) + '">'
+        + '<span class="wg-wem">' + esc(w[2]) + "</span>"
+        + "<b>" + esc(disp(w[0])) + "</b><span>" + esc(w[1]) + "</span>"
+        + '<i class="wg-wn">' + n + "번</i>🔊</button>";
+    }).join("") + "</div>";
+  s += "</div>";
+  /* 최근 7일 */
+  var bars = "";
+  for (var i = 6; i >= 0; i--){
+    var d = new Date(); d.setDate(d.getDate() - i);
+    var k = d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+    var v = ST.days[k] || { q:0, ok:0 };
+    var h = Math.min(100, Math.round((v.q || 0) * 10));
+    bars += '<div class="wg-bar"><i style="height:' + Math.max(4, h) + '%"></i><span>' + (d.getMonth() + 1) + "/" + d.getDate() + "</span></div>";
+  }
+  s += '<div class="wg-rep-sec"><div class="wg-rep-t"><b>🗓 최근 7일</b><span class="wg-legend">막대 = 푼 문제 수</span></div><div class="wg-bars">' + bars + "</div></div>";
+  s += '<div class="wg-rep-sec"><div class="wg-rep-t"><b>🏘️ 단어 마을</b></div><p class="wg-note-t">지금까지 ' + Object.keys(ST.town).length + "칸을 꾸몄어요. 모은 별 ⭐" + ST.stars + "개.</p></div>";
+  box.innerHTML = '<div class="wg-rep">' + s + "</div>";
+}
+function stat(v, l){ return '<div class="wg-stat"><b>' + esc(v) + "</b><span>" + esc(l) + "</span></div>"; }
+
+/* ------------------------------ 마을 ------------------------------ */
+function renderTown(){
+  var box = $("wgBody");
+  if (!box) return;
+  var stars = (SB.starsNow && SB.starsNow()) || 0;
+  var s = "";
+  s += '<div class="wg-town-h"><b>🏘️ 단어 마을</b><span>⭐ <b data-stars>' + stars + "</b>개로 꾸며요</span></div>";
+  s += '<div class="wg-map" id="wgMap">';
+  for (var r = 0; r < TOWN_ROWS; r++){
+    for (var c = 0; c < TOWN_COLS; c++){
+      var key = r + "-" + c, it = ST.town[key] ? ITEMBY[ST.town[key]] : null;
+      s += '<button class="wg-tile' + (it ? " has" : "") + '" type="button" data-cell="' + key + '" aria-label="' + (it ? it.nm + " 자리" : "빈 자리") + '">'
+        + (it ? '<span class="wg-it">' + it.em + "</span>" : "") + "</button>";
+    }
+  }
+  s += "</div>";
+  if (UI.placing){
+    var p = ITEMBY[UI.placing];
+    s += '<div class="wg-placing">' + (p ? p.em + " " + esc(p.nm) : "") + " — 놓을 자리를 눌러 주세요 "
+       + '<button class="wg-mini" type="button" data-cancel="1">그만</button></div>';
+  }
+  s += '<div class="wg-shop" id="wgShop">' + ITEMS.map(function(it){
+    var n = ST.bag[it.id] || 0;
+    var can = stars >= it.cost;
+    return '<button class="wg-buy' + (can ? "" : " off") + '" type="button" data-buy="' + it.id + '">'
+      + '<span class="wg-bem">' + it.em + "</span><b>" + esc(it.nm) + "</b><i>⭐" + it.cost + "</i>"
+      + (n ? '<em class="wg-bagn">' + n + "</em>" : "") + "</button>";
+  }).join("") + "</div>";
+  s += '<p class="wg-note-t">가게 물건을 누르면 별을 쓰고 사요. 놓인 물건을 누르면 다시 옮길 수 있어요.</p>';
+  box.innerHTML = '<div class="wg-town">' + s + "</div>";
+}
+
+function buy(id){
+  var it = ITEMBY[id];
+  if (!it) return;
+  var stars = (SB.starsNow && SB.starsNow()) || 0;
+  if (stars < it.cost){
+    SB.toast("별이 " + (it.cost - stars) + "개 더 필요해요. 낱말 퀴즈로 별을 모아요! ⭐");
+    return;
+  }
+  if (!SB.spend || !SB.spend(it.cost)){ SB.toast("별을 쓰지 못했어요. 잠시 뒤 다시 해 봐요."); return; }
+  ST.bag[id] = (ST.bag[id] || 0) + 1;
+  UI.placing = id;
+  save();
+  SB.toast(it.em + " " + it.nm + "를 샀어요! 놓을 자리를 눌러 주세요");
+  renderTown();
+}
+
+function place(key){
+  if (!UI.placing) return;
+  if (ST.town[key]){ SB.toast("이미 물건이 있어요. 다른 자리를 눌러 주세요."); return; }
+  var id = UI.placing;
+  if (!ST.bag[id]){ UI.placing = ""; renderTown(); return; }
+  ST.bag[id]--;
+  if (!ST.bag[id]) delete ST.bag[id];
+  ST.town[key] = id;
+  UI.placing = ST.bag[id] ? id : "";
+  save();
+  var it = ITEMBY[id];
+  SB.toast((it ? it.em + " " + it.nm : "물건") + "를 놓았어요!");
+  renderTown();
+}
+
+function lift(key){
+  var id = ST.town[key];
+  if (!id) return;
+  delete ST.town[key];
+  ST.bag[id] = (ST.bag[id] || 0) + 1;
+  UI.placing = id;
+  save();
+  var it = ITEMBY[id];
+  SB.toast((it ? it.em + " " + it.nm : "물건") + "를 들었어요. 놓을 자리를 눌러 주세요");
+  renderTown();
+}
+
+/* ------------------------------ 전체 그리기 ------------------------------ */
+function renderHead(){
+  var th = $("wgTheme");
+  if (th){
+    var show = (UI.grp === "learn");
+    th.hidden = !show;
+    if (show){
+      var html = '<button class="wg-th' + (ST.theme === "all" ? " on" : "") + '" type="button" data-th="all">✨ 전체</button>';
+      html += T.map(function(t){
+        return '<button class="wg-th' + (ST.theme === t.k ? " on" : "") + '" type="button" data-th="' + esc(t.k) + '">'
+          + t.em + " " + esc(t.nm) + '<i>Lv' + t.lv + "</i></button>";
+      }).join("");
+      th.innerHTML = html;
+    }
+  }
+  var modes = $("wgModes");
+  if (modes){
+    var m = ST.mode;
+    modes.innerHTML = '<button class="wg-md' + (UI.grp !== "review" && m === "choice" ? " on" : "") + '" type="button" data-mode="choice">🃏 뜻 고르기</button>'
+      + '<button class="wg-md' + (UI.grp !== "review" && m === "spell" ? " on" : "") + '" type="button" data-mode="spell">⌨️ 철자 쓰기</button>'
+      + '<button class="wg-md rev' + (UI.grp === "review" ? " on" : "") + '" type="button" data-grp="review">🔁 오답노트 <i>' + wrongN() + "</i></button>"
+      + '<button class="wg-md' + (UI.grp === "report" ? " on" : "") + '" type="button" data-grp="report">📊 엄마 리포트</button>'
+      + '<button class="wg-md' + (UI.grp === "town" ? " on" : "") + '" type="button" data-grp="town">🏘️ 단어 마을</button>';
+  }
+}
+
+function go(grp){
+  UI.grp = grp || "learn";
+  UI.placing = "";
+  renderHead();
+  if (UI.grp === "report") return renderReport();
+  if (UI.grp === "town") return renderTown();
+  buildRound();
+}
+
+SB.wgRefresh = function(){
+  load();
+  renderHead();
+  if (UI.grp === "report") return renderReport();
+  if (UI.grp === "town") return renderTown();
+  if (!UI.round.length || UI.done) return buildRound();
+  showQ();
+};
+
+/* ------------------------------ 이벤트 ------------------------------ */
+root.addEventListener("click", function(e){
+  var t = e.target;
+  function near(sel){ return t && t.closest ? t.closest(sel) : null; }
+  var b;
+  if ((b = near("[data-grp]"))){
+    var g = b.getAttribute("data-grp");
+    if (g === "review" && !wrongN()){ SB.toast("오답노트가 비어 있어요! 문제를 풀면 자동으로 담겨요 ✨"); }
+    go(g);
+    return;
+  }
+  if ((b = near("[data-mode]"))){
+    ST.mode = b.getAttribute("data-mode") === "spell" ? "spell" : "choice";
+    save();
+    UI.grp = "learn";
+    renderHead();
+    buildRound();
+    return;
+  }
+  if ((b = near("[data-th]"))){
+    ST.theme = b.getAttribute("data-th");
+    save();
+    UI.grp = "learn";
+    renderHead();
+    buildRound();
+    return;
+  }
+  if ((b = near("[data-say]"))){ speak(UI.cur ? UI.cur[0] : ""); return; }
+  if ((b = near("[data-sayw]"))){ speak(b.getAttribute("data-sayw")); return; }
+  if ((b = near("[data-opt]"))){
+    if (UI.answered) return;
+    var en = b.getAttribute("data-opt");
+    if (en === UI.cur[0]) right();
+    else { b.classList.add("wrong"); wrong("다시 골라 볼까요?"); }
+    return;
+  }
+  if ((b = near("[data-go]"))){ checkSpell(); return; }
+  if ((b = near("[data-next]"))){ next(); return; }
+  if ((b = near("[data-again]"))){ UI.grp = "learn"; renderHead(); buildRound(); return; }
+  if ((b = near("[data-buy]"))){ buy(b.getAttribute("data-buy")); return; }
+  if ((b = near("[data-cancel]"))){ UI.placing = ""; renderTown(); return; }
+  if ((b = near("[data-cell]"))){
+    var key = b.getAttribute("data-cell");
+    if (UI.placing) place(key); else if (ST.town[key]) lift(key);
+    return;
+  }
+});
+
+root.addEventListener("input", function(e){
+  if (e.target && e.target.id === "wgIn") paintSlots(String(e.target.value || ""));
+});
+
+/* ------------------------------ 시작 ------------------------------ */
+load();
+renderHead();
+var prevEn = SB.onShow && SB.onShow.en;
+SB.onShow.en = function(sub){
+  if (prevEn){ try { prevEn(sub); } catch(e){} }
+  if (sub === "wordgrow"){
+    try { SB.wgRefresh(); } catch(e){ try { console.warn(e); } catch(e2){} }
+  }
+};
 })();
 
 </script>
