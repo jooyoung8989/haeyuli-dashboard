@@ -10239,124 +10239,124 @@ var esc = SB.esc;
 var KEY = "haeyuli.ko.v1";
 
 var DAYS = [
-  { em:"🌱", q:"천 리 길도 한 걸음부터.", src:"속담", mean:"아무리 먼 길도 첫걸음부터 시작돼요. 큰일도 작은 것부터 해 보아요.",
-    words:[["천 리","아주아주 먼 거리"],["한 걸음","발을 한 번 내딛는 것"],["시작","처음으로 해 보는 것"]],
-    blanks:[{ s:"천 리 길도 □부터.", a:"한 걸음", o:["한 걸음","한 번","한숨"] },{ s:"먼 길도 □부터 시작해요.", a:"첫걸음", o:["첫걸음","마지막","뛰기"] }] },
-  { em:"🥚", q:"시작이 반이다.", src:"속담", mean:"무언가를 시작하면 이미 절반은 해낸 것과 같아요. 용기 내어 첫걸음을 떼어 봐요.",
-    words:[["시작","처음으로 해 보는 것"],["반","둘로 똑같이 나눈 하나"],["끝","마지막이 되는 때"]],
-    blanks:[{ s:"□이 반이다.", a:"시작", o:["시작","끝","중간"] },{ s:"용기 내어 □을 떼어 봐요.", a:"첫걸음", o:["첫걸음","두 걸음","뒷걸음"] }] },
-  { em:"🐦", q:"낮말은 새가 듣고 밤말은 쥐가 듣는다.", src:"속담", mean:"나쁜 말은 꼭 다른 사람에게 들려요. 말을 할 때는 늘 조심해요.",
-    words:[["낮말","낮에 하는 말"],["밤말","밤에 하는 말"],["조심","잘 살피는 것"]],
-    blanks:[{ s:"낮말은 □가 듣는다.", a:"새", o:["새","쥐","개"] },{ s:"밤말은 □가 듣는다.", a:"쥐", o:["쥐","새","고양이"] }] },
-  { em:"🏔️", q:"고생 끝에 낙이 온다.", src:"속담", mean:"힘든 일을 참고 견디면 마지막에는 즐거운 일이 생겨요.",
-    words:[["고생","힘들고 어려운 일"],["낙","즐겁고 기쁜 일"],["끝","마지막이 되는 때"]],
-    blanks:[{ s:"고생 끝에 □이 온다.", a:"낙", o:["낙","눈","잠"] },{ s:"어려운 일이 끝나면 □이 와요.", a:"기쁨", o:["기쁨","슬픔","걱정"] }] },
-  { em:"🐢", q:"급할수록 돌아가라.", src:"속담", mean:"마음이 급할수록 서두르지 말고 차근차근 하는 게 좋아요.",
-    words:[["급하다","빨리 서두르는 것"],["돌아가다","멀리 둘러서 가는 것"],["차근차근","하나씩 천천히"]],
-    blanks:[{ s:"급할수록 □가라.", a:"돌아", o:["돌아","뛰어","날아"] },{ s:"일은 □ 하는 게 좋아요.", a:"차근차근", o:["차근차근","우당탕","후다닥"] }] },
-  { em:"💬", q:"말 한마디에 천 냥 빚을 갚는다.", src:"속담", mean:"따뜻한 말 한마디가 아주 큰 힘이 돼요. 좋은 말을 많이 해요.",
-    words:[["한마디","짧은 말 한 번"],["천 냥","아주 많은 돈"],["빚","나중에 갚아야 할 것"]],
-    blanks:[{ s:"말 □에 천 냥 빚을 갚는다.", a:"한마디", o:["한마디","한 번","한숨"] },{ s:"따뜻한 □이 큰 힘이 돼요.", a:"말", o:["말","밥","눈"] }] },
-  { em:"🛤️", q:"아는 길도 물어 가라.", src:"속담", mean:"잘 안다고 생각해도 한 번 더 확인하는 게 안전해요.",
-    words:[["길","다니는 곳"],["묻다","모르는 것을 물어보다"],["확인","맞는지 살펴봄"]],
-    blanks:[{ s:"아는 □도 물어 가라.", a:"길", o:["길","집","산"] },{ s:"한 번 더 □하는 게 좋아요.", a:"확인", o:["확인","걱정","소리"] }] },
-  { em:"🌉", q:"돌다리도 두들겨 보고 건너라.", src:"속담", mean:"아무리 안전해 보여도 조심해서 살펴보고 행동해요.",
-    words:[["돌다리","돌로 만든 다리"],["두들기다","톡톡 치다"],["조심","잘 살피는 것"]],
-    blanks:[{ s:"돌다리도 □ 보고 건너라.", a:"두들겨", o:["두들겨","밟아","던져"] },{ s:"안전해도 □해야 해요.", a:"조심", o:["조심","소리","달리기"] }] },
-  { em:"🌟", q:"실패는 성공의 어머니.", src:"명언", mean:"한 번 잘못해도 괜찮아요. 실패에서 배우면 성공에 가까워져요.",
-    words:[["실패","잘 안 되고 틀리는 것"],["성공","하려던 일을 잘 해내는 것"],["도전","용기 내어 해 보는 것"]],
-    blanks:[{ s:"실패는 □의 어머니.", a:"성공", o:["성공","실패","숙제"] },{ s:"틀려도 다시 □해 봐요.", a:"도전", o:["도전","포기","시작"] }] },
-  { em:"🐜", q:"티끌 모아 태산.", src:"속담", mean:"아주 작은 것도 많이 모으면 큰 산처럼 커져요. 작은 노력도 소중해요.",
-    words:[["티끌","아주 작은 먼지"],["태산","아주 큰 산"],["모으다","한데 담아 두다"]],
-    blanks:[{ s:"티끌 □ 태산.", a:"모아", o:["모아","버려","던져"] },{ s:"작은 것도 □ 두면 커져요.", a:"모아", o:["모아","먹어","숨겨"] }] },
-  { em:"📚", q:"오늘 할 일을 내일로 미루지 마라.", src:"좋은 문장", mean:"하기로 한 일은 그날 바로 하는 습관이 중요해요.",
-    words:[["오늘","지금 지나고 있는 날"],["미루다","다음으로 넘기다"],["습관","자꾸 되풀이하는 행동"]],
-    blanks:[{ s:"오늘 할 일을 내일로 □지 마라.", a:"미루", o:["미루","옮기","접"] },{ s:"바로 하는 □을 길러요.", a:"습관", o:["습관","숙제","친구"] }] },
-  { em:"😊", q:"웃는 얼굴에 침 뱉을 수 없다.", src:"속담", mean:"웃으며 다정하게 대하면 다른 사람도 나를 좋게 대해 줘요.",
-    words:[["얼굴","눈·코·입이 있는 곳"],["침","입안에 있는 물"],["친절","다정하고 따뜻한 마음"]],
-    blanks:[{ s:"웃는 □에 침 뱉을 수 없다.", a:"얼굴", o:["얼굴","손","신발"] },{ s:"□하게 대하면 마음이 통해요.", a:"친절", o:["친절","심술","장난"] }] },
-  { em:"🤝", q:"백지장도 맞들면 낫다.", src:"속담", mean:"혼자 하기 힘든 일도 둘이 함께하면 쉽게 할 수 있어요.",
-    words:[["백지장","아주 얇은 종이 한 장"],["맞들다","둘이 함께 들다"],["협동","힘을 합쳐 함께 하는 것"]],
-    blanks:[{ s:"백지장도 □들면 낫다.", a:"맞", o:["맞","혼자","하나"] },{ s:"함께하는 □이 중요해요.", a:"협동", o:["협동","경쟁","심부름"] }] },
-  { em:"🌈", q:"비 온 뒤에 땅이 굳는다.", src:"속담", mean:"어려운 일을 지나고 나면 더 단단해지고 좋아져요.",
-    words:[["비","하늘에서 내리는 물"],["땅","발을 딛고 서는 곳"],["튼튼","단단하고 굳센 것"]],
-    blanks:[{ s:"비 온 뒤에 □이 굳는다.", a:"땅", o:["땅","집","꽃"] },{ s:"어려움 뒤에 더 □해져요.", a:"튼튼", o:["튼튼","약해져","작아져"] }] },
-  { em:"🚀", q:"꿈을 크게 꾸고 작은 일부터 해 보자.", src:"좋은 문장", mean:"멀리 있는 꿈도 지금 할 수 있는 작은 일부터 시작하면 이룰 수 있어요.",
-    words:[["꿈","되고 싶은 것"],["크게","넓고 대단하게"],["작은 일","별것 아닌 일 같아도 필요한 일"]],
-    blanks:[{ s:"꿈을 □ 꾸고 작은 일부터 해요.", a:"크게", o:["크게","작게","낮게"] },{ s:"꿈은 □ 일부터 시작해요.", a:"작은", o:["작은","큰","먼"] }] }
+  { em:"💧", q:"낙숫물이 댓돌을 뚫는다.", src:"속담", mean:"처마에서 떨어지는 작은 물방울도 오래오래 떨어지면 단단한 돌에 구멍을 내요. 작은 노력도 꾸준히 하면 큰일을 이뤄요.",
+    words:[["낙숫물","처마 끝에서 뚝뚝 떨어지는 물"],["댓돌","마루 아래에 놓은 디딤돌"],["뚫는다","구멍이 나게 한다"]],
+    blanks:[{ s:"낙숫물이 □을 뚫는다.", a:"댓돌", o:["댓돌","나무","종이"] },{ s:"작은 일도 □ 하면 이룰 수 있어요.", a:"꾸준히", o:["꾸준히","한 번","가끔"] }] },
+  { em:"🗣️", q:"말이 씨가 된다.", src:"속담", mean:"내가 한 말이 씨앗처럼 자라서 정말 그런 일이 생겨요. 그래서 좋은 말을 해야 해요.",
+    words:[["말","입으로 하는 소리"],["씨","앞으로 자라날 바탕"],["조심","잘 살피는 것"]],
+    blanks:[{ s:"□이 씨가 된다.", a:"말", o:["말","밥","꽃"] },{ s:"좋은 말을 하면 좋은 일이 □.", a:"생겨요", o:["생겨요","없어져요","숨었어요"] }] },
+  { em:"🐒", q:"원숭이도 나무에서 떨어진다.", src:"속담", mean:"나무를 아주 잘 타는 원숭이도 가끔 떨어져요. 잘하는 친구도 실수할 수 있으니 놀리지 말아요.",
+    words:[["원숭이","나무를 잘 타는 동물"],["떨어진다","위에서 아래로 내려간다"],["실수","잘못하는 것"]],
+    blanks:[{ s:"원숭이도 □에서 떨어진다.", a:"나무", o:["나무","물","집"] },{ s:"잘하는 사람도 □할 수 있어요.", a:"실수", o:["실수","칭찬","노래"] }] },
+  { em:"🌤️", q:"하늘이 무너져도 솟아날 구멍이 있다.", src:"속담", mean:"아무리 큰 걱정이 생겨도 꼭 좋은 길이 있어요. 너무 걱정 말고 천천히 찾아봐요.",
+    words:[["하늘","위에 펼쳐진 넓은 곳"],["무너지다","아래로 와르르 내려앉다"],["구멍","뚫려 있는 자리"]],
+    blanks:[{ s:"하늘이 □져도 솟아날 구멍이 있다.", a:"무너", o:["무너","넘","흔"] },{ s:"아무리 힘들어도 □이 있어요.", a:"희망", o:["희망","걱정","숙제"] }] },
+  { em:"👣", q:"매일 한 걸음씩 걸으면 산도 넘는다.", src:"좋은 문장", mean:"아주 높은 산도 한 걸음씩 걸으면 넘을 수 있어요. 오늘 할 수 있는 만큼만 해 봐요.",
+    words:[["한 걸음","발을 한 번 내딛는 것"],["매일","날마다"],["넘는다","위로 올라 건너간다"]],
+    blanks:[{ s:"매일 한 □씩 걸으면 산도 넘는다.", a:"걸음", o:["걸음","숨","눈"] },{ s:"오늘도 조금씩 □ 해 봐요.", a:"노력", o:["노력","걱정","심부름"] }] },
+  { em:"🐯", q:"호랑이도 제 말 하면 온다.", src:"속담", mean:"남의 이야기를 하고 있으면 그 사람이 정말 나타나요. 친구 이야기는 좋은 말로 해요.",
+    words:[["호랑이","줄무늬가 있는 무서운 동물"],["제 말","자기 이야기"],["온다","이쪽으로 다가온다"]],
+    blanks:[{ s:"호랑이도 제 □ 하면 온다.", a:"말", o:["말","밥","잠"] },{ s:"친구 이야기를 할 때는 □ 말로 해요.", a:"좋은", o:["좋은","나쁜","이상한"] }] },
+  { em:"🛒", q:"빈 수레가 요란하다.", src:"속담", mean:"아무것도 없는 수레가 더 시끄러워요. 잘 모르면서 자랑만 하지 말고 조용히 배워요.",
+    words:[["수레","바퀴가 달린 짐차"],["요란하다","시끄럽고 어수선하다"],["자랑","뽐내는 것"]],
+    blanks:[{ s:"빈 □가 요란하다.", a:"수레", o:["수레","자루","상자"] },{ s:"잘 모르면 □하지 말고 배워요.", a:"자랑", o:["자랑","인사","웃음"] }] },
+  { em:"🤝", q:"어려울 때 친구가 진짜 친구다.", src:"좋은 문장", mean:"힘들 때 곁에 있어 주는 사람이 진짜 친구예요. 나도 친구가 힘들 때 손을 잡아 줘요.",
+    words:[["어려울 때","힘들고 잘 안 될 때"],["친구","가깝게 지내는 사람"],["진짜","가짜가 아닌 것"]],
+    blanks:[{ s:"어려울 때 □가 진짜 친구다.", a:"친구", o:["친구","선생님","장난감"] },{ s:"힘들 때 손을 □ 주면 친구예요.", a:"잡아", o:["잡아","놓아","밀어"] }] },
+  { em:"🍎", q:"하루 사과 한 개면 의사가 필요 없다.", src:"속담", mean:"사과처럼 몸에 좋은 것을 매일 먹으면 병이 잘 안 생겨요. 골고루 먹고 많이 움직여요.",
+    words:[["사과","빨갛고 둥근 과일"],["의사","아픈 사람을 고치는 사람"],["건강","몸이 튼튼한 것"]],
+    blanks:[{ s:"하루 □ 한 개면 의사가 필요 없다.", a:"사과", o:["사과","우유","빵"] },{ s:"몸이 □하려면 골고루 먹어요.", a:"튼튼", o:["튼튼","졸려","피곤"] }] },
+  { em:"✋", q:"먼저 손 내밀면 친구가 된다.", src:"좋은 문장", mean:"새 친구에게 먼저 다가가 손을 내밀면 금방 친해져요. 용기 내어 먼저 인사해 봐요.",
+    words:[["내밀다","앞으로 쭉 내어 보이다"],["먼저","남보다 앞서"],["인사","만나거나 헤어질 때 하는 말"]],
+    blanks:[{ s:"먼저 손 □면 친구가 된다.", a:"내밀", o:["내밀","숨기","흔들"] },{ s:"먼저 □하면 사이가 좋아져요.", a:"인사", o:["인사","소리","장난"] }] },
+  { em:"🌟", q:"어두운 밤일수록 별은 더 밝게 빛난다.", src:"좋은 문장", mean:"어둡고 힘든 때일수록 작은 용기가 더 반짝여요. 오늘도 너의 별을 찾아봐요.",
+    words:[["어둡다","빛이 없어 캄캄하다"],["별","밤하늘에 빛나는 것"],["빛나다","반짝반짝 빛을 내다"]],
+    blanks:[{ s:"어두운 밤일수록 □은 더 밝게 빛난다.", a:"별", o:["별","해","구름"] },{ s:"힘들 때도 □을 내 봐요.", a:"용기", o:["용기","걱정","고개"] }] },
+  { em:"📖", q:"배우고 때로 익히면 즐겁다.", src:"명언", mean:"공자님이 한 말이에요. 배우고 자꾸 익히면 저절로 즐거워져요. 오늘도 하나 배워 봐요.",
+    words:[["배우다","새것을 익히다"],["익히다","반복해서 몸에 붙게 하다"],["즐겁다","기분이 좋다"]],
+    blanks:[{ s:"배우고 때로 □으면 즐겁다.", a:"익히", o:["익히","잊","놀"] },{ s:"오늘도 하나 더 □ 보아요.", a:"배워", o:["배워","버려","잊어"] }] },
+  { em:"🧦", q:"세 살 적 버릇이 여든까지 간다.", src:"속담", mean:"어릴 때 생긴 버릇은 오래오래 남아요. 좋은 버릇은 어릴 때 들이는 게 좋아요.",
+    words:[["버릇","자꾸 되풀이하는 굳은 행동"],["여든","나이 여든 살"],["어릴 때","나이가 적을 때"]],
+    blanks:[{ s:"세 살 적 □이 여든까지 간다.", a:"버릇", o:["버릇","노래","숙제"] },{ s:"좋은 습관은 □ 때 만들어요.", a:"어릴", o:["어릴","늦","저녁"] }] },
+  { em:"🥛", q:"한 번 엎지른 물은 다시 담을 수 없다.", src:"속담", mean:"쏟은 물은 주워 담을 수 없어요. 말이나 행동을 하기 전에 한 번 더 생각해요.",
+    words:[["엎지르다","그릇을 넘어뜨려 쏟다"],["담다","그릇에 넣다"],["물","마시고 씻는 것"]],
+    blanks:[{ s:"한 번 □ 물은 다시 담을 수 없다.", a:"엎지른", o:["엎지른","마신","데운"] },{ s:"하기 전에 한 번 더 □해요.", a:"조심", o:["조심","소리","웃음"] }] },
+  { em:"💗", q:"작은 친절이 큰 기쁨을 만든다.", src:"좋은 문장", mean:"작은 도움도 다른 사람에게는 큰 기쁨이 돼요. 오늘 누구에게 작은 친절을 해 볼까요?",
+    words:[["친절","다정하고 도와주는 마음"],["기쁨","즐겁고 좋은 마음"],["작은","크기가 적은"]],
+    blanks:[{ s:"작은 □이 큰 기쁨을 만든다.", a:"친절", o:["친절","심술","소리"] },{ s:"먼저 □하면 마음이 따뜻해져요.", a:"도와주", o:["도와주","부탁하","혼내"] }] }
 ];
 
 var CLASSIC = [
-  { id:"hungbu", em:"🐦", title:"흥부전", lines:[
-      "흥부는 마음이 착했지만 아주 가난했어요.",
-      "어느 날 다친 제비의 다리를 정성껏 고쳐 주었지요.",
-      "이듬해 제비가 물어 온 박씨를 심었더니 박이 주렁주렁 열렸어요.",
-      "박을 타자 쌀과 보물이 나와, 흥부는 이웃과 나누며 행복하게 살았답니다."],
-    vocab:[["제비","봄에 찾아오는 새"],["정성","마음을 다해 돌보는 것"],["주렁주렁","많이 매달려 있는 모양"]],
-    ask:"흥부가 복을 받은 까닭은 무엇일까요?" },
-  { id:"byeoljubu", em:"🐢", title:"별주부전 (토끼전)", lines:[
-      "용왕님이 병이 나자, 별주부 거북이 약을 구하러 나섰어요.",
-      "토끼의 간이 약이라고 해서 토끼를 꾀어 바다로 데려갔지요.",
-      "토끼는 꾀를 내어 '간을 씻어 두고 왔다'고 말했어요.",
-      "결국 토끼는 살아서 육지로 돌아왔답니다."],
-    vocab:[["용왕","바다 나라의 임금"],["꾀","머리를 써서 내는 지혜"],["간","몸속에 있는 큰 장기"]],
-    ask:"토끼는 어떻게 살아서 돌아올 수 있었을까요?" },
-  { id:"simcheong", em:"🌊", title:"심청전", lines:[
-      "심청이는 눈먼 아버지를 위해 공양미 삼백 석을 약속했어요.",
-      "뱃사람들을 따라 깊고 험한 인당수에 몸을 던졌지요.",
-      "용왕은 착한 심청이를 살려 연꽃 속에 넣어 두었어요.",
-      "심청이는 왕비가 되어 아버지의 눈을 뜨게 했답니다."],
-    vocab:[["공양미","절에 바치는 쌀"],["인당수","깊고 험한 바다"],["연꽃","물 위에 피는 꽃"]],
-    ask:"심청이가 아버지를 위해 한 일은 무엇일까요?" },
-  { id:"honggildong", em:"🏹", title:"홍길동전", lines:[
-      "홍길동은 서자로 태어나 집안 사람들에게 따돌림을 받았어요.",
-      "집을 떠난 그는 도술을 익혀 활빈당을 만들었지요.",
-      "가난한 사람을 돕고, 나쁜 관리의 재물을 빼앗았어요.",
-      "마지막에는 율도국이라는 나라를 세웠답니다."],
-    vocab:[["서자","본부인이 아닌 어머니의 아들"],["도술","신기한 재주"],["활빈당","가난한 사람을 돕는 무리"]],
-    ask:"홍길동은 왜 나쁜 관리의 재물을 빼앗았을까요?" },
-  { id:"kongjwi", em:"👡", title:"콩쥐팥쥐", lines:[
-      "콩쥐는 계모와 팥쥐에게 늘 힘든 일을 떠맡았어요.",
-      "소와 두레박, 참새가 나타나 콩쥐를 도와주었지요.",
-      "잔치에 가려다 꽃신을 잃어버렸어요.",
-      "신하가 꽃신의 임자를 찾아, 콩쥐는 감사와 혼인했답니다."],
-    vocab:[["계모","새로 들어온 어머니"],["두레박","우물에서 물을 푸는 통"],["꽃신","꽃무늬가 있는 신발"]],
-    ask:"콩쥐를 도와준 것은 무엇이었나요?" },
-  { id:"jeonuchi", em:"🪄", title:"전우치전", lines:[
-      "전우치는 신기한 도술을 부리는 아이였어요.",
-      "사람을 작게 만들거나 구름 위를 걸었지요.",
-      "탐관오리의 창고를 열어 가난한 사람들에게 나눠 주었어요.",
-      "마지막에는 하늘로 올라가 버렸답니다."],
-    vocab:[["도술","신기한 재주"],["탐관오리","욕심 많고 나쁜 관리"],["창고","물건을 쌓아 두는 곳"]],
-    ask:"전우치는 무엇으로 사람들을 도왔을까요?" },
-  { id:"seonnyeo", em:"🦌", title:"선녀와 나무꾼", lines:[
-      "나무꾼은 사냥꾼에게서 사슴을 살려 주었어요.",
-      "사슴이 가르쳐 준 곳에서 날개옷을 숨기고 선녀와 살았지요.",
-      "선녀는 날개옷을 찾아 두 아이를 안고 하늘로 날아갔어요.",
-      "나무꾼은 매달린 바구니를 타고 하늘로 올라갔답니다."],
-    vocab:[["선녀","하늘에서 내려온 여인"],["날개옷","하늘을 나는 옷"],["사슴","뿔이 있는 동물"]],
-    ask:"나무꾼이 사슴을 도와준 일은 어떤 결과를 가져왔나요?" },
-  { id:"janghwa", em:"👭", title:"장화홍련전", lines:[
-      "장화와 홍련은 새어머니에게 미움을 받았어요.",
-      "새어머니는 홍련을 못 연못에 밀어 넣었어요.",
-      "동생을 잃은 장화도 슬픔을 이기지 못했지요.",
-      "새 부사가 이 일을 밝혀 내자, 자매는 다시 살아났답니다."],
-    vocab:[["새어머니","아버지의 새 아내"],["부사","고을을 다스리던 벼슬"],["밝혀내다","숨은 일을 알아내다"]],
-    ask:"부사는 어떻게 자매를 도왔을까요?" },
-  { id:"ondal", em:"👑", title:"온달과 평강공주", lines:[
-      "평강공주는 바보라 불리는 온달과 혼인했어요.",
-      "공주는 온달에게 글과 활쏘기를 가르쳤지요.",
-      "온달은 열심히 배워 훌륭한 장수가 되었어요.",
-      "나라를 지키다 목숨을 바쳤답니다."],
-    vocab:[["장수","싸움을 이끄는 사람"],["활쏘기","활로 화살을 쏘는 일"],["공주","임금의 딸"]],
-    ask:"온달이 훌륭한 장수가 될 수 있었던 힘은 무엇일까요?" },
-  { id:"goldaxe", em:"🪓", title:"금도끼 은도끼", lines:[
-      "나무꾼은 연못에 쇠도끼를 빠뜨렸어요.",
-      "산신령이 금도끼와 은도끼를 보여 주었어요.",
-      "나무꾼은 '제 쇠도끼가 아닙니다'라고 정직하게 말했어요.",
-      "산신령은 세 도끼를 모두 주었답니다."],
-    vocab:[["산신령","산을 지키는 신"],["정직","거짓이 없는 마음"],["연못","물이 고인 곳"]],
-    ask:"나무꾼이 세 도끼를 모두 받은 까닭은 무엇일까요?" }
+  { id:"haenimdalnim", em:"☀️", title:"해님 달님", lines:[
+      "옛날에 호랑이가 엄마인 척하며 오누이 집에 찾아왔어요.",
+      "오누이는 재빨리 도망쳐 우물가 나무 위로 올라갔지요.",
+      "하늘에서 내려온 동아줄을 타고 둘은 하늘로 올라갔어요.",
+      "오빠는 해님이 되고 동생은 달님이 되었답니다."],
+    vocab:[["오누이","오빠와 여동생"],["동아줄","굵고 튼튼한 새끼줄"],["해님","하늘에 뜬 해"]],
+    ask:"오누이가 하늘로 올라간 방법은 무엇일까요?" },
+  { id:"patjuk", em:"🥣", title:"팥죽 할멈과 호랑이", lines:[
+      "팥죽 할멈에게 호랑이가 자꾸 찾아와 괴롭혔어요.",
+      "할멈은 알밤과 맷돌, 송곳에게 도와달라고 했지요.",
+      "호랑이가 굴뚝으로 내려오자 알밤이 펑 하고 튀었어요.",
+      "친구들의 도움으로 할멈은 호랑이를 물리쳤답니다."],
+    vocab:[["맷돌","곡식을 가는 둥근 돌"],["굴뚝","연기가 빠져 나가는 길"],["알밤","껍질에 싸인 밤"]],
+    ask:"할멈을 도와준 것은 무엇이었나요?" },
+  { id:"hokburi", em:"👴", title:"혹부리 영감", lines:[
+      "혹이 달린 할아버지가 산에서 노래하자 도깨비가 모였어요.",
+      "도깨비들은 신기한 노래라며 혹을 떼어 주었지요.",
+      "욕심 많은 이웃 할아버지도 노래를 부르러 갔어요.",
+      "잘 부르지 못하자 혹을 하나 더 달고 돌아왔답니다."],
+    vocab:[["혹","피부에 볼록하게 나온 것"],["도깨비","옛이야기에 나오는 신기한 존재"],["욕심","자꾸 더 가지려는 마음"]],
+    ask:"이웃 할아버지에게 혹이 하나 더 생긴 까닭은 무엇일까요?" },
+  { id:"cheonggaeguri", em:"🐸", title:"청개구리", lines:[
+      "청개구리는 엄마가 하는 말을 늘 반대로만 했어요.",
+      "엄마는 마지막으로 산에 묻어 달라고 했지요.",
+      "청개구리는 이번에는 엄마 말을 따라 냇가에 묻었어요.",
+      "그래서 비가 오면 엄마가 떠내려갈까 봐 슬피 운답니다."],
+    vocab:[["청개구리","초록빛 개구리"],["반대로","거꾸로"],["냇가","냇물 옆"]],
+    ask:"청개구리가 비가 올 때 우는 까닭은 무엇일까요?" },
+  { id:"turtlehare", em:"🐢", title:"토끼와 거북이", lines:[
+      "토끼는 거북이를 비웃으며 경주를 하자고 했어요.",
+      "토끼는 한참 앞서가다 나무 아래에서 잠이 들었지요.",
+      "거북이는 쉬지 않고 한 걸음씩 계속 걸었어요.",
+      "깨어난 토끼보다 거북이가 먼저 결승선에 닿았답니다."],
+    vocab:[["경주","빨리 달리기 시합"],["결승선","도착하는 줄"],["비웃다","깔보며 웃다"]],
+    ask:"거북이가 이길 수 있었던 힘은 무엇일까요?" },
+  { id:"antgrass", em:"🐜", title:"개미와 베짱이", lines:[
+      "여름 내내 개미는 겨울 먹이를 부지런히 모았어요.",
+      "베짱이는 노래만 부르며 놀기만 했지요.",
+      "추운 겨울이 오자 베짱이는 먹을 것이 없었어요.",
+      "착한 개미는 베짱이에게 먹이를 나누어 주었답니다."],
+    vocab:[["베짱이","여름에 우는 곤충"],["부지런히","쉬지 않고 열심히"],["나누다","여럿이 함께 쓰거나 먹다"]],
+    ask:"개미가 베짱이에게 해 준 일은 무엇일까요?" },
+  { id:"countrymouse", em:"🐭", title:"시골 쥐와 서울 쥐", lines:[
+      "시골 쥐가 서울 쥐를 만나 맛있는 밥을 대접했어요.",
+      "서울 쥐는 서울에는 더 맛있는 것이 많다고 자랑했지요.",
+      "서울에 간 시골 쥐는 고양이를 만나 깜짝 놀랐어요.",
+      "시골 쥐는 조용하고 편한 시골집이 좋다며 돌아왔답니다."],
+    vocab:[["대접","잘 차려서 먹이기"],["자랑","뽐내는 것"],["편하다","마음이 편안하다"]],
+    ask:"시골 쥐가 다시 시골로 돌아간 까닭은 무엇일까요?" },
+  { id:"myeongsim_hyo", em:"💗", title:"명심보감 · 효도", lines:[
+      "명심보감에는 마음을 밝게 하는 좋은 말이 가득해요.",
+      "부모님의 사랑은 바다처럼 깊고 산처럼 커요.",
+      "그래서 옛사람들은 효도를 가장 큰 착한 일로 꼽았지요.",
+      "오늘은 부모님을 안아 드리며 고맙다고 말해 보아요."],
+    vocab:[["명심보감","마음을 밝히는 옛날 책"],["효도","부모님을 잘 돌보는 일"],["꼽다","여럿 중에 골라 세다"]],
+    ask:"옛사람들이 가장 큰 착한 일로 꼽은 것은 무엇일까요?" },
+  { id:"goldgoose", em:"🪿", title:"황금알을 낳는 거위", lines:[
+      "욕심 많은 주인이 황금알을 낳는 거위를 키웠어요.",
+      "하루에 한 개씩 나오는 황금알이 자꾸 아쉬웠지요.",
+      "거위 뱃속에 알이 가득 있을 거라며 거위를 죽였어요.",
+      "뱃속에는 알이 하나도 없어서 모두를 잃고 말았답니다."],
+    vocab:[["황금알","금으로 된 알"],["뱃속","배 안"],["잃다","가지고 있던 것을 놓치다"]],
+    ask:"주인이 모두를 잃은 까닭은 무엇일까요?" },
+  { id:"tigerpersimmon", em:"🐯", title:"호랑이와 곶감", lines:[
+      "아이가 울자 엄마가 호랑이 온다며 곶감을 주었어요.",
+      "그 말을 들은 호랑이는 곶감이 제일 무서운 줄 알았지요.",
+      "도둑은 호랑이를 곶감인 줄 알고 무서워했어요.",
+      "호랑이와 도둑은 서로 무서워하며 달아났답니다."],
+    vocab:[["곶감","말린 감"],["무섭다","겁이 나는 것"],["도둑","남의 것을 가져가는 사람"]],
+    ask:"호랑이가 곶감을 무서워한 까닭은 무엇일까요?" }
 ];
 
 function store(){ var s = readJSON(KEY, {}); if (typeof s.day !== "number") s.day = 0; if (typeof s.cx !== "number") s.cx = 0; if (!s.quiz || typeof s.quiz !== "object") s.quiz = {}; return s; }
@@ -10974,18 +10974,19 @@ function $(id){ return document.getElementById(id); }
 function esc(s){ return SB.esc(s); }
 
 var OPP = [
-  ["크다","작다"],["높다","낮다"],["길다","짧다"],["빠르다","느리다"],["뜨겁다","차갑다"],
-  ["밝다","어둡다"],["무겁다","가볍다"],["넓다","좁다"],["많다","적다"],["웃다","울다"],
-  ["열다","닫다"],["주다","받다"],["앞","뒤"],["위","아래"],["낮","밤"],["새것","헌것"]
+  ["기쁘다","슬프다"],["깨끗하다","더럽다"],["가깝다","멀다"],["어렵다","쉽다"],
+  ["강하다","약하다"],["시작","끝"],["안","밖"],["왼쪽","오른쪽"],
+  ["처음","마지막"],["일어서다","앉다"],["차다","비다"],["맛있다","맛없다"],
+  ["맑다","흐리다"],["조용하다","시끄럽다"],["덥다","춥다"],["이기다","지다"]
 ];
 var SIM = [
-  ["기쁘다","즐겁다"],["조용하다","고요하다"],["튼튼하다","단단하다"],["빠르다","재빠르다"],
-  ["예쁘다","곱다"],["다정하다","친절하다"],["신기하다","재미있다"],["슬프다","서운하다"]
+  ["재미있다","신나다"],["씩씩하다","용감하다"],["예쁘다","아름답다"],["튼튼하다","건강하다"],
+  ["무섭다","두렵다"],["반갑다","기쁘다"],["시원하다","서늘하다"],["똑똑하다","영리하다"]
 ];
 var MEAN = [
-  ["고요하다","조용하고 잠잠하다"],["재빠르다","아주 빠르다"],["든든하다","믿음직하고 튼튼하다"],
-  ["다정하다","따뜻하고 친절하다"],["아끼다","소중히 여겨 함부로 쓰지 않다"],["나누다","여럿이 함께 쓰거나 먹다"],
-  ["기르다","돌보아서 자라게 하다"],["반갑다","만나서 기쁘다"]
+  ["신나다","아주 즐겁고 기분이 좋다"],["용감하다","겁이 없고 씩씩하다"],["부지런하다","미루지 않고 열심히 일한다"],
+  ["정직하다","거짓말하지 않고 바르다"],["배려하다","남을 먼저 생각하고 도와주다"],["아름답다","보기에 곱고 마음씨가 좋다"],
+  ["시원하다","바람이 불어 기분이 좋다"],["소중하다","아주 중요하고 귀하다"]
 ];
 
 var W = { qs:[], i:0, score:0, live:false, pairs:[] };
@@ -11734,361 +11735,306 @@ function thKid(x, y, shirt, hair){
 function svgWrap(inner, label){
   return '<svg viewBox="0 0 360 180" role="img" aria-label="' + label + '" preserveAspectRatio="xMidYMid meet">' + inner + '</svg>';
 }
-var SC_BUS = svgWrap(
-    '<rect width="360" height="180" fill="#eaf7ff"/>'
-  + '<rect y="126" width="360" height="54" fill="#e3f1dc"/>'
-  + '<rect y="122" width="360" height="6" fill="#c9e2c2"/>'
-  + '<rect x="0" y="0" width="360" height="46" fill="#dcf0fc"/>'
-  + '<rect x="8" y="30" width="5" height="98" fill="#9fb6c4"/>'
-  + '<circle cx="10.5" cy="26" r="14" fill="#ffd166" stroke="#d9a521" stroke-width="2.4"/>'
-  + '<rect x="4" y="20" width="13" height="10" rx="2.4" fill="#8a5a08"/>'
-  + '<rect x="6" y="22" width="9" height="4" rx="1" fill="#fff6de"/>'
-  + '<circle cx="7" cy="31" r="1.7" fill="#8a5a08"/><circle cx="14" cy="31" r="1.7" fill="#8a5a08"/>'
-  + thKid(50, 78, "#e4574c")
-  + thKid(94, 78, "#2f8fc4")
-  + thKid(138, 78, "#f2b93b")
-  + thKid(182, 78, "#5fbf74")
-  + thKid(226, 78, "#8a6ad8")
-  + thKid(270, 78, "#ef8b3c")
-  + '<g transform="translate(300,58)"><rect width="60" height="66" rx="8" fill="#ffcf5c" stroke="#e0a927" stroke-width="2"/>'
-  + '<rect x="6" y="8" width="48" height="24" rx="4" fill="#cfeaf7"/>'
-  + '<circle cx="14" cy="70" r="7" fill="#46586a"/><circle cx="46" cy="70" r="7" fill="#46586a"/></g>',
-  "버스 정류장에 아이들이 한 줄로 서 있어요");
+/* ---------- 🖼️ 그림 사고력 · 새 그림 (11/21) ---------- */
+var SN_PLATE = svgWrap(
+    '<rect width="360" height="180" fill="#fffdf6"/>'
+  + '<ellipse cx="180" cy="146" rx="152" ry="24" fill="#eef3f7" stroke="#c9d7e2" stroke-width="2.4"/>'
+  + '<circle cx="92" cy="112" r="16" fill="#e2483f"/><path d="M92 96 v-7 m0 0 q6 -6 12 -3 q-3 8 -10 6Z" stroke="#7a4b22" stroke-width="2" fill="#5fbf74"/>'
+  + '<circle cx="128" cy="112" r="16" fill="#e2483f"/><path d="M128 96 v-7 m0 0 q6 -6 12 -3 q-3 8 -10 6Z" stroke="#7a4b22" stroke-width="2" fill="#5fbf74"/>'
+  + '<circle cx="164" cy="112" r="16" fill="#e2483f"/><path d="M164 96 v-7 m0 0 q6 -6 12 -3 q-3 8 -10 6Z" stroke="#7a4b22" stroke-width="2" fill="#5fbf74"/>'
+  + '<ellipse cx="218" cy="114" rx="12" ry="17" fill="#c9d95a"/><path d="M218 97 v-8" stroke="#7a4b22" stroke-width="2"/>'
+  + '<ellipse cx="250" cy="114" rx="12" ry="17" fill="#c9d95a"/><path d="M250 97 v-8" stroke="#7a4b22" stroke-width="2"/>'
+  + '<ellipse cx="282" cy="114" rx="12" ry="17" fill="#c9d95a"/><path d="M282 97 v-8" stroke="#7a4b22" stroke-width="2"/>'
+  + '<ellipse cx="314" cy="114" rx="12" ry="17" fill="#c9d95a"/><path d="M314 97 v-8" stroke="#7a4b22" stroke-width="2"/>',
+  "접시에 사과 세 개와 배 네 개가 담겨 있어요");
 
-function thBeast(x, y, body, kind){
-  var s = '<g transform="translate(' + x + ',' + y + ')">';
-  s += '<ellipse cx="0" cy="0" rx="19" ry="12" fill="' + body + '"/>';
-  s += '<rect x="-13" y="9" width="4.6" height="11" rx="2" fill="' + body + '"/>';
-  s += '<rect x="-3" y="9" width="4.6" height="11" rx="2" fill="' + body + '"/>';
-  s += '<rect x="7" y="9" width="4.6" height="11" rx="2" fill="' + body + '"/>';
-  if (kind === "lion") s += '<circle cx="19" cy="-11" r="13" fill="#d99a3e"/>';
-  s += '<circle cx="19" cy="-10" r="9" fill="' + body + '"/>';
-  if (kind === "rabbit"){
-    s += '<ellipse cx="15" cy="-27" rx="3.2" ry="9" fill="' + body + '"/>';
-    s += '<ellipse cx="23" cy="-27" rx="3.2" ry="9" fill="' + body + '"/>';
+function snSeat(x, y, filled){
+  var s = '<rect x="' + x + '" y="' + y + '" width="62" height="30" rx="8" fill="' + (filled ? "#cfe4f7" : "#fffaf0")
+        + '" stroke="' + (filled ? "#4a7fc0" : "#d4c4a4") + '" stroke-width="2"' + (filled ? "" : ' stroke-dasharray="5 4"') + '/>';
+  if (filled){
+    s += '<circle cx="' + (x + 31) + '" cy="' + (y + 14) + '" r="8" fill="#ffdcc0"/>'
+      + '<path d="M' + (x + 25) + ' ' + (y + 12) + ' q1.4 -8 6 -8 q4.6 0 6 8 q-2.6 -3.4 -6 -3.4 q-3.4 0 -6 3.4Z" fill="#3b2b23"/>'
+      + '<circle cx="' + (x + 28) + '" cy="' + (y + 14) + '" r="1" fill="#3c4b5c"/><circle cx="' + (x + 34) + '" cy="' + (y + 14) + '" r="1" fill="#3c4b5c"/>';
   }
-  if (kind === "cat"){
-    s += '<path d="M13 -18 l3 -8 l4 7 Z" fill="' + body + '"/>';
-    s += '<path d="M22 -18 l4 -8 l3 8 Z" fill="' + body + '"/>';
-  }
-  if (kind === "dog"){
-    s += '<ellipse cx="13" cy="-16" rx="3" ry="6" fill="#8a5f3c"/>';
-  }
-  if (kind === "turtle"){
-    s += '<path d="M-14 -2 a15 12 0 0 1 28 0 Z" fill="#5e9a4e"/>';
-    s += '<circle cx="19" cy="-10" r="7" fill="#8fca7a"/>';
-  }
-  s += '<circle cx="22" cy="-12" r="1.4" fill="#2f3b47"/>';
-  return s + '</g>';
+  return s;
 }
-var SC_RACE = svgWrap(
+var SN_SEATS = svgWrap(
     '<rect width="360" height="180" fill="#eef9ff"/>'
-  + '<rect y="128" width="360" height="52" fill="#f0e6d2"/>'
-  + '<rect x="0" y="122" width="360" height="8" fill="#d9c9a8"/>'
-  + '<rect x="330" y="18" width="6" height="110" fill="#9fb6c4"/>'
-  + '<path d="M336 20 l22 10 l-22 10 Z" fill="#e4574c"/>'
-  + '<circle cx="40" cy="46" r="13" fill="#fff" stroke="#2f8fc4" stroke-width="2.4"/>'
-  + '<text x="40" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#2f8fc4" font-family="system-ui,sans-serif">1</text>'
-  + '<circle cx="105" cy="46" r="13" fill="#fff" stroke="#2f8fc4" stroke-width="2.4"/>'
-  + '<text x="105" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#2f8fc4" font-family="system-ui,sans-serif">2</text>'
-  + '<circle cx="170" cy="46" r="13" fill="#fff" stroke="#2f8fc4" stroke-width="2.4"/>'
-  + '<text x="170" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#2f8fc4" font-family="system-ui,sans-serif">3</text>'
-  + '<circle cx="235" cy="46" r="13" fill="#fff" stroke="#2f8fc4" stroke-width="2.4"/>'
-  + '<text x="235" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#2f8fc4" font-family="system-ui,sans-serif">4</text>'
-  + '<circle cx="300" cy="46" r="13" fill="#fff" stroke="#2f8fc4" stroke-width="2.4"/>'
-  + '<text x="300" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#2f8fc4" font-family="system-ui,sans-serif">5</text>'
-  + thBeast(40, 100, "#f2f0ee", "rabbit")
-  + thBeast(105, 100, "#7cb96a", "turtle")
-  + thBeast(170, 104, "#e2a13c", "lion")
-  + thBeast(235, 100, "#b9b3ad", "cat")
-  + thBeast(300, 100, "#c98f5e", "dog"),
-  "달리기 경주에서 동물들이 1등부터 5등까지 들어왔어요");
+  + '<rect x="18" y="18" width="324" height="146" rx="18" fill="#ffe9a8" stroke="#e0a927" stroke-width="2.4"/>'
+  + '<rect x="36" y="30" width="288" height="30" rx="8" fill="#cfeaf7" stroke="#8fbdd8" stroke-width="2"/>'
+  + snSeat(48, 76, false) + snSeat(122, 76, true) + snSeat(196, 76, false) + snSeat(270, 76, false)
+  + snSeat(48, 120, true) + snSeat(122, 120, false) + snSeat(196, 120, false) + snSeat(270, 120, true),
+  "버스 좌석 여덟 개 중 다섯 개가 비어 있어요");
 
-var SC_APT = svgWrap(
-    '<rect width="360" height="180" fill="#eaf7ff"/>'
+function snEgg(x, y, filled){
+  var s = '<ellipse cx="' + x + '" cy="' + y + '" rx="24" ry="18" fill="' + (filled ? "#fffdf6" : "#c8b79b")
+        + '" stroke="' + (filled ? "#cbb89c" : "#b3a184") + '" stroke-width="2"' + (filled ? "" : ' stroke-dasharray="5 4"') + '/>';
+  if (filled) s += '<ellipse cx="' + (x - 7) + '" cy="' + (y - 6) + '" rx="7" ry="5" fill="#ffffff" opacity=".9"/>';
+  return s;
+}
+var SN_EGG = svgWrap(
+    '<rect width="360" height="180" fill="#fffaf2"/>'
+  + '<rect x="20" y="34" width="320" height="114" rx="14" fill="#e9dfd0" stroke="#c9bba6" stroke-width="2.4"/>'
+  + snEgg(52, 66, true) + snEgg(116, 66, true) + snEgg(180, 66, true) + snEgg(244, 66, false) + snEgg(308, 66, false)
+  + snEgg(52, 118, true) + snEgg(116, 118, true) + snEgg(180, 118, true) + snEgg(244, 118, true) + snEgg(308, 118, false),
+  "달걀판 열 칸 중 일곱 칸에 달걀이 있어요");
+var SN_UMB = svgWrap(
+    '<rect width="360" height="180" fill="#f2f9ff"/>'
   + '<rect y="150" width="360" height="30" fill="#e3f1dc"/>'
-  + '<rect x="120" y="10" width="130" height="140" rx="6" fill="#ffe9c9" stroke="#e0b86e" stroke-width="2.4"/>'
-  + '<rect x="150" y="20" width="70" height="10" rx="3" fill="#f4c986"/>'
-  + '<rect x="132" y="24" width="106" height="22" rx="3" fill="#fffaf0" stroke="#e8d3ac"/>'
-  + '<rect x="132" y="50" width="106" height="22" rx="3" fill="#fffaf0" stroke="#e8d3ac"/>'
-  + '<rect x="132" y="76" width="106" height="22" rx="3" fill="#eaf7ff" stroke="#8fc0da" stroke-width="2"/>'
-  + '<rect x="132" y="102" width="106" height="22" rx="3" fill="#fffaf0" stroke="#e8d3ac"/>'
-  + '<rect x="132" y="128" width="106" height="22" rx="3" fill="#fffaf0" stroke="#e8d3ac"/>'
-  + '<text x="112" y="40" text-anchor="end" font-size="12" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">5층</text>'
-  + '<text x="112" y="66" text-anchor="end" font-size="12" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">4층</text>'
-  + '<text x="112" y="92" text-anchor="end" font-size="12" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">3층</text>'
-  + '<text x="112" y="118" text-anchor="end" font-size="12" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">2층</text>'
-  + '<text x="112" y="144" text-anchor="end" font-size="12" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">1층</text>'
-  + '<circle cx="170" cy="87" r="7" fill="#ffdcc0"/>'
-  + '<path d="M163 84 q1.2 -8 7 -8 q5.8 0 7 8 q-3 -3.6 -7 -3.6 q-4 0 -7 3.6Z" fill="#3b2b23"/>'
-  + '<circle cx="167.6" cy="87.6" r="1" fill="#3c4b5c"/><circle cx="172.4" cy="87.6" r="1" fill="#3c4b5c"/>'
-  + '<text x="254" y="92" font-size="12" font-weight="900" fill="#b8860b" font-family="system-ui,sans-serif">해율이</text>',
-  "아파트 3층 창문에 해율이가 있어요");
+  + '<g transform="translate(60,0)"><path d="M-34 62 A34 26 0 0 1 34 62 Z" fill="#e4574c" stroke="#b53c2f" stroke-width="2"/>'
+  + '<path d="M0 62 v34 q0 8 -8 8" stroke="#8a5a2b" stroke-width="3" fill="none" stroke-linecap="round"/></g>'
+  + '<g transform="translate(180,0)"><path d="M-34 62 A34 26 0 0 1 34 62 Z" fill="#5fbf74" stroke="#3f9a70" stroke-width="2"/>'
+  + '<path d="M0 62 v34 q0 8 -8 8" stroke="#8a5a2b" stroke-width="3" fill="none" stroke-linecap="round"/></g>'
+  + '<g transform="translate(300,0)"><path d="M-34 62 A34 26 0 0 1 34 62 Z" fill="#8a6ad8" stroke="#6b4fbb" stroke-width="2"/>'
+  + '<path d="M0 62 v34 q0 8 -8 8" stroke="#8a5a2b" stroke-width="3" fill="none" stroke-linecap="round"/></g>'
+  + thKid(45, 96, "#e4574c") + thKid(75, 96, "#2f8fc4")
+  + thKid(165, 96, "#f2b93b") + thKid(195, 96, "#5fbf74")
+  + thKid(285, 96, "#f08a3c") + thKid(315, 96, "#8a6ad8"),
+  "우산 세 개 아래에 친구가 두 명씩 서 있어요");
 
-var SC_SCALE = svgWrap(
+function snMilk(x, y){
+  return '<g transform="translate(' + x + ',' + y + ')">'
+    + '<path d="M0 10 L6 0 L18 0 L24 10 L24 40 L0 40 Z" fill="#ffffff" stroke="#8fbdd8" stroke-width="2"/>'
+    + '<rect x="3" y="18" width="18" height="14" rx="2" fill="#cfeaf7"/>'
+    + '<path d="M0 10 L24 10" stroke="#8fbdd8" stroke-width="2"/>'
+    + '</g>';
+}
+var SN_MILK = svgWrap(
+    '<rect width="360" height="180" fill="#f7fbff"/>'
+  + '<rect x="10" y="92" width="112" height="8" rx="4" fill="#cfdde8"/>'
+  + '<rect x="126" y="92" width="112" height="8" rx="4" fill="#cfdde8"/>'
+  + '<rect x="242" y="92" width="112" height="8" rx="4" fill="#cfdde8"/>'
+  + snMilk(16, 48) + snMilk(43, 48) + snMilk(70, 48) + snMilk(97, 48)
+  + snMilk(132, 48) + snMilk(159, 48) + snMilk(186, 48) + snMilk(213, 48)
+  + snMilk(248, 48) + snMilk(275, 48) + snMilk(302, 48) + snMilk(329, 48),
+  "우유가 네 개씩 세 묶음으로 놓여 있어요");
+var SN_BAL = svgWrap(
     '<rect width="360" height="180" fill="#f7fbff"/>'
   + '<rect x="174" y="40" width="12" height="104" fill="#b7c7d3"/>'
   + '<path d="M140 148 L220 148 L190 100 L170 100 Z" fill="#cbd8e2"/>'
-  + '<rect x="60" y="46" width="240" height="8" rx="4" fill="#8aa9bd"/>'
+  + '<rect x="56" y="42" width="248" height="8" rx="4" fill="#8aa9bd"/>'
   + '<circle cx="180" cy="46" r="7" fill="#6f8fa5"/>'
-  + '<path d="M62 50 L20 96 M62 50 L104 96" stroke="#8aa9bd" stroke-width="3"/>'
-  + '<path d="M298 50 L256 96 M298 50 L340 96" stroke="#8aa9bd" stroke-width="3"/>'
-  + '<rect x="16" y="96" width="92" height="8" rx="4" fill="#cbd8e2"/>'
-  + '<rect x="252" y="96" width="92" height="8" rx="4" fill="#cbd8e2"/>'
-  + '<circle cx="46" cy="84" r="14" fill="#e2483f"/><circle cx="78" cy="84" r="14" fill="#e2483f"/>'
-  + '<path d="M46 70 v-6 M78 70 v-6" stroke="#7a4b22" stroke-width="2.4" stroke-linecap="round"/>'
-  + '<circle cx="268" cy="86" r="10" fill="#f5a623"/><circle cx="292" cy="86" r="10" fill="#f5a623"/>'
-  + '<circle cx="316" cy="86" r="10" fill="#f5a623"/>',
-  "양팔저울 왼쪽에 사과 2개, 오른쪽에 귤 3개가 놓여 있고 수평이에요");
+  + '<path d="M62 46 L20 96 M62 46 L104 96" stroke="#8aa9bd" stroke-width="3"/>'
+  + '<path d="M298 46 L256 96 M298 46 L340 96" stroke="#8aa9bd" stroke-width="3"/>'
+  + '<rect x="12" y="96" width="96" height="8" rx="4" fill="#cbd8e2"/>'
+  + '<rect x="252" y="96" width="96" height="8" rx="4" fill="#cbd8e2"/>'
+  + '<circle cx="42" cy="82" r="14" fill="#e2483f"/><path d="M42 68 v-6 m0 0 q5 -5 10 -2 q-2 7 -9 5Z" stroke="#7a4b22" stroke-width="2" fill="#5fbf74"/>'
+  + '<circle cx="70" cy="86" r="10" fill="#f5a623"/><circle cx="92" cy="86" r="10" fill="#f5a623"/>'
+  + '<circle cx="266" cy="86" r="10" fill="#f5a623"/><circle cx="288" cy="86" r="10" fill="#f5a623"/>'
+  + '<circle cx="310" cy="86" r="10" fill="#f5a623"/><circle cx="332" cy="86" r="10" fill="#f5a623"/>',
+  "양팔저울 왼쪽에 사과 하나와 귤 두 개, 오른쪽에 귤 네 개가 놓여 수평이에요");
 
-var SC_FRUIT = svgWrap(
-    '<rect width="360" height="180" fill="#fbfff6"/>'
-  + '<path d="M70 96 h220 l-24 66 h-172 Z" fill="#e2c08d" stroke="#c39f6b" stroke-width="2.4"/>'
-  + '<path d="M78 108 h204 M84 122 h192" stroke="#c39f6b" stroke-width="1.6"/>'
-  + '<circle cx="118" cy="80" r="15" fill="#e2483f"/><circle cx="150" cy="74" r="15" fill="#e2483f"/><circle cx="182" cy="80" r="15" fill="#e2483f"/>'
-  + '<ellipse cx="222" cy="78" rx="13" ry="16" fill="#c9d95a"/><ellipse cx="258" cy="80" rx="13" ry="16" fill="#c9d95a"/>'
-  + '<circle cx="98" cy="52" r="12" fill="#f08a3c"/><circle cx="130" cy="42" r="12" fill="#f08a3c"/>'
-  + '<circle cx="166" cy="46" r="12" fill="#f08a3c"/><circle cx="206" cy="40" r="12" fill="#f08a3c"/>',
-  "바구니에 사과 3개, 배 2개, 감 4개가 담겨 있어요");
-
-var SC_MATCH = svgWrap(
-    '<rect width="360" height="180" fill="#fffdf6"/>'
-  + '<g stroke="#c99a5b" stroke-width="6" stroke-linecap="round">'
-  + '<path d="M70 120 L110 50"/><path d="M110 50 L150 120"/><path d="M70 120 L150 120"/>'
-  + '<path d="M210 120 L250 50"/><path d="M250 50 L290 120"/><path d="M210 120 L290 120"/>'
-  + '</g>'
-  + '<g fill="#e4574c"><circle cx="70" cy="120" r="5"/><circle cx="110" cy="50" r="5"/><circle cx="150" cy="120" r="5"/>'
-  + '<circle cx="210" cy="120" r="5"/><circle cx="250" cy="50" r="5"/><circle cx="290" cy="120" r="5"/></g>',
-  "성냥개비로 삼각형을 두 개 만들었어요");
-
-var SC_BLOCK = svgWrap(
-    '<rect width="360" height="180" fill="#f8fcff"/>'
-  + '<g stroke="#c96a48" stroke-width="2.2">'
-  + '<rect x="96" y="112" width="46" height="46" fill="#ffc0a8"/>'
-  + '<rect x="144" y="112" width="46" height="46" fill="#ffdf9e"/>'
-  + '<rect x="192" y="112" width="46" height="46" fill="#a8e0c0"/>'
-  + '</g>'
-  + '<g stroke="#4a7fc0" stroke-width="2.2"><rect x="120" y="66" width="46" height="46" fill="#bcd8ff"/>'
-  + '<rect x="168" y="66" width="46" height="46" fill="#e0c8ff"/></g>',
-  "쌓기나무가 아래에 3개, 위에 2개 있어요");
-
-var SC_PASS = svgWrap(
-    '<rect width="360" height="180" fill="#eef9ff"/>'
-  + '<rect y="150" width="360" height="30" fill="#e3f1dc"/>'
-  + '<rect x="40" y="34" width="230" height="106" rx="12" fill="#ffcf5c" stroke="#e0a927" stroke-width="2.4"/>'
-  + '<rect x="50" y="44" width="210" height="40" rx="5" fill="#cfeaf7"/>'
-  + '<g fill="#4d6d85">'
-  + '<circle cx="68" cy="64" r="8"/><circle cx="96" cy="64" r="8"/><circle cx="124" cy="64" r="8"/><circle cx="152" cy="64" r="8"/>'
-  + '<circle cx="180" cy="64" r="8"/><circle cx="208" cy="64" r="8"/><circle cx="236" cy="64" r="8"/>'
-  + '<circle cx="252" cy="64" r="8"/>'
-  + '</g>'
-  + '<circle cx="70" cy="146" r="10" fill="#46586a"/><circle cx="240" cy="146" r="10" fill="#46586a"/>'
-  + '<text x="286" y="60" font-size="13" font-weight="900" fill="#c1553a" font-family="system-ui,sans-serif">3명</text>'
-  + '<path d="M296 66 v22 m0 0 l-7 -8 m7 8 l7 -8" stroke="#c1553a" stroke-width="3" fill="none" stroke-linecap="round"/>'
-  + thKid(300, 108, "#8a6ad8") + thKid(334, 108, "#2f8fc4") + thKid(316, 124, "#5fbf74"),
-  "버스에 8명이 타고 있었는데 3명이 내렸어요");
-
-var SC_PATTERN = svgWrap(
-    '<rect width="360" height="180" fill="#fffdf8"/>'
-  + '<circle cx="44" cy="90" r="20" fill="#e4574c"/>'
-  + '<circle cx="92" cy="90" r="20" fill="#2f8fc4"/>'
-  + '<circle cx="140" cy="90" r="20" fill="#f2b93b"/>'
-  + '<circle cx="188" cy="90" r="20" fill="#e4574c"/>'
-  + '<circle cx="236" cy="90" r="20" fill="#2f8fc4"/>'
-  + '<circle cx="284" cy="90" r="20" fill="#f2b93b"/>'
-  + '<circle cx="334" cy="90" r="20" fill="#fff" stroke="#9fb6c4" stroke-width="3" stroke-dasharray="6 5"/>'
-  + '<text x="334" y="99" text-anchor="middle" font-size="22" font-weight="900" fill="#9fb6c4" font-family="system-ui,sans-serif">?</text>',
-  "빨강, 파랑, 노랑 구슬이 차례로 꿰어진 목걸이");
-
-var SC_STAIR = svgWrap(
-    '<rect width="360" height="180" fill="#f7fbff"/>'
-  + '<g fill="#d6e8f5" stroke="#8fbdd8" stroke-width="2">'
-  + '<rect x="40" y="120" width="70" height="30"/><rect x="110" y="90" width="70" height="60"/>'
-  + '<rect x="180" y="60" width="70" height="90"/><rect x="250" y="30" width="70" height="120"/>'
-  + '</g>'
-  + thKid(62, 74, "#5fbf74")
-  + '<text x="330" y="26" text-anchor="end" font-size="13" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">한 번에 3칸씩</text>',
-  "해율이가 계단을 한 번에 3칸씩 올라가요");
-
-var SC_CANDY = svgWrap(
+function snCandle(x, y){
+  return '<rect x="' + x + '" y="' + y + '" width="6" height="22" rx="2" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="1.4"/>'
+    + '<circle cx="' + (x + 3) + '" cy="' + (y - 4) + '" r="3" fill="#ffb347"/>';
+}
+var SN_CAKE = svgWrap(
     '<rect width="360" height="180" fill="#fff9fc"/>'
-  + '<g fill="#f08a3c" stroke="#c96f27" stroke-width="1.6">'
-  + '<rect x="26" y="30" width="20" height="14" rx="7"/><rect x="66" y="30" width="20" height="14" rx="7"/>'
-  + '<rect x="106" y="30" width="20" height="14" rx="7"/><rect x="146" y="30" width="20" height="14" rx="7"/>'
-  + '<rect x="186" y="30" width="20" height="14" rx="7"/><rect x="226" y="30" width="20" height="14" rx="7"/>'
-  + '<rect x="266" y="30" width="20" height="14" rx="7"/><rect x="306" y="30" width="20" height="14" rx="7"/>'
-  + '<rect x="120" y="62" width="20" height="14" rx="7"/><rect x="210" y="62" width="20" height="14" rx="7"/>'
-  + '</g>'
-  + '<ellipse cx="110" cy="136" rx="62" ry="18" fill="#eaf3fa" stroke="#9fb6c4" stroke-width="2.4"/>'
-  + '<ellipse cx="250" cy="136" rx="62" ry="18" fill="#eaf3fa" stroke="#9fb6c4" stroke-width="2.4"/>'
-  + '<text x="110" y="168" text-anchor="middle" font-size="13" font-weight="900" fill="#8aa2b6" font-family="system-ui,sans-serif">접시 1</text>'
-  + '<text x="250" y="168" text-anchor="middle" font-size="13" font-weight="900" fill="#8aa2b6" font-family="system-ui,sans-serif">접시 2</text>',
-  "사탕 10개와 접시 2개가 있어요");
-
-var SC_LINE = svgWrap(
-    '<rect width="360" height="180" fill="#eef9ff"/>'
-  + '<rect y="132" width="360" height="48" fill="#e3f1dc"/>'
-  + '<path d="M112 42 H70 m0 0 l12 -8 m-12 8 l12 8" stroke="#c1553a" stroke-width="3" fill="none" stroke-linecap="round"/>'
-  + '<text x="34" y="48" font-size="13" font-weight="900" fill="#c1553a" font-family="system-ui,sans-serif">앞</text>'
-  + thKid(96, 84, "#5fbf74") + thKid(156, 84, "#2f8fc4") + thKid(216, 84, "#f2b93b") + thKid(276, 84, "#f08a3c")
-  + '<path d="M216 50 l0 -10 m-6 6 l6 -6 l6 6" stroke="#b8860b" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
-  + '<text x="216" y="34" text-anchor="middle" font-size="12" font-weight="900" fill="#b8860b" font-family="system-ui,sans-serif">해율이</text>',
-  "아이 네 명이 한 줄로 서 있고 세 번째가 해율이예요");
-
-var SC_LEGS = svgWrap(
-    '<rect width="360" height="180" fill="#fbfff6"/>'
-  + '<rect y="132" width="360" height="48" fill="#e3f1dc"/>'
-  + '<g stroke="#d9a521" stroke-width="2.4" fill="#ffe08a">'
-  + '<ellipse cx="80" cy="92" rx="26" ry="20"/><circle cx="104" cy="68" r="13"/>'
-  + '<path d="M104 62 l0 -10 l10 4 Z" fill="#e4574c"/>'
-  + '<ellipse cx="184" cy="92" rx="26" ry="20"/><circle cx="208" cy="68" r="13"/>'
-  + '<path d="M208 62 l0 -10 l10 4 Z" fill="#e4574c"/>'
-  + '</g>'
-  + '<g stroke="#c9821f" stroke-width="3.4" stroke-linecap="round">'
-  + '<path d="M72 110 v20 M88 110 v20"/>'
-  + '<path d="M176 110 v20 M192 110 v20"/>'
-  + '</g>'
-  + '<g stroke="#8a5f3c" stroke-width="2.4" fill="#c98f5e">'
-  + '<ellipse cx="292" cy="100" rx="30" ry="20"/><circle cx="324" cy="78" r="15"/>'
-  + '<path d="M314 66 l-6 -10 M332 66 l6 -10" stroke="#8a5f3c" stroke-width="3"/>'
-  + '</g>'
-  + '<g stroke="#8a5f3c" stroke-width="3" stroke-linecap="round">'
-  + '<path d="M272 118 v16 M284 118 v16 M302 118 v16 M314 118 v16"/>'
-  + '</g>',
-  "닭 두 마리와 강아지 한 마리가 있어요");
-
-var SC_TALL = svgWrap(
+  + '<rect x="10" y="114" width="150" height="42" rx="8" fill="#ffd7e0" stroke="#ef9bb0" stroke-width="2.4"/>'
+  + '<rect x="10" y="114" width="150" height="12" rx="6" fill="#ffeaf0"/>'
+  + snCandle(24, 92) + snCandle(42, 92) + snCandle(60, 92) + snCandle(78, 92)
+  + snCandle(96, 92) + snCandle(114, 92) + snCandle(132, 92)
+  + '<text x="85" y="172" text-anchor="middle" font-size="13" font-weight="900" fill="#b8517f" font-family="system-ui,sans-serif">해율이 7살</text>'
+  + '<rect x="200" y="114" width="150" height="42" rx="8" fill="#e0eefc" stroke="#8fbdd8" stroke-width="2.4"/>'
+  + '<rect x="200" y="114" width="150" height="12" rx="6" fill="#f2f8ff"/>'
+  + snCandle(232, 92) + snCandle(258, 92) + snCandle(284, 92) + snCandle(310, 92)
+  + '<text x="275" y="172" text-anchor="middle" font-size="13" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">동생 4살</text>',
+  "생일 케이크 두 개, 초 일곱 개와 초 네 개가 꽂혀 있어요");
+var SN_COIN = svgWrap(
+    '<rect width="360" height="180" fill="#fffdf6"/>'
+  + '<circle cx="80" cy="92" r="32" fill="#dfe6ec" stroke="#9fb0bd" stroke-width="3"/>'
+  + '<text x="80" y="99" text-anchor="middle" font-size="17" font-weight="900" fill="#5b6b78" font-family="system-ui,sans-serif">500</text>'
+  + '<circle cx="152" cy="92" r="32" fill="#dfe6ec" stroke="#9fb0bd" stroke-width="3"/>'
+  + '<text x="152" y="99" text-anchor="middle" font-size="17" font-weight="900" fill="#5b6b78" font-family="system-ui,sans-serif">500</text>'
+  + '<circle cx="228" cy="98" r="22" fill="#f0c46a" stroke="#c8961f" stroke-width="3"/>'
+  + '<text x="228" y="104" text-anchor="middle" font-size="13" font-weight="900" fill="#8a6a1a" font-family="system-ui,sans-serif">100</text>'
+  + '<circle cx="282" cy="98" r="22" fill="#f0c46a" stroke="#c8961f" stroke-width="3"/>'
+  + '<text x="282" y="104" text-anchor="middle" font-size="13" font-weight="900" fill="#8a6a1a" font-family="system-ui,sans-serif">100</text>'
+  + '<circle cx="336" cy="98" r="22" fill="#f0c46a" stroke="#c8961f" stroke-width="3"/>'
+  + '<text x="336" y="104" text-anchor="middle" font-size="13" font-weight="900" fill="#8a6a1a" font-family="system-ui,sans-serif">100</text>',
+  "오백 원 동전 두 개와 백 원 동전 세 개가 있어요");
+var SN_BOOKS = svgWrap(
     '<rect width="360" height="180" fill="#f7fbff"/>'
+  + '<rect x="16" y="146" width="328" height="10" rx="4" fill="#d9c9a8"/>'
+  + '<rect x="40" y="52" width="46" height="94" rx="4" fill="#5fbf74" stroke="#3f9a70" stroke-width="2"/>'
+  + '<rect x="100" y="52" width="46" height="94" rx="4" fill="#e4574c" stroke="#b53c2f" stroke-width="2"/>'
+  + '<rect x="160" y="52" width="46" height="94" rx="4" fill="#f2b93b" stroke="#d9a521" stroke-width="2"/>'
+  + '<rect x="220" y="52" width="46" height="94" rx="4" fill="#4a7fc0" stroke="#2f6f95" stroke-width="2"/>'
+  + '<rect x="280" y="52" width="46" height="94" rx="4" fill="#8a6ad8" stroke="#6b4fbb" stroke-width="2"/>'
+  + '<path d="M124 40 v-10 m0 0 l-7 8 m7 -8 l7 8" stroke="#b5342f" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+  + '<path d="M244 40 v-10 m0 0 l-7 8 m7 -8 l7 8" stroke="#2f6f95" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+  + '<text x="118" y="24" font-size="12" font-weight="900" fill="#b5342f" font-family="system-ui,sans-serif">빨강</text>'
+  + '<text x="238" y="24" font-size="12" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">파랑</text>',
+  "책장에 초록, 빨강, 노랑, 파랑, 보라 책이 차례로 놓여 있어요");
+var SN_LIFT = svgWrap(
+    '<rect width="360" height="180" fill="#eef9ff"/>'
   + '<rect y="150" width="360" height="30" fill="#e3f1dc"/>'
-  + '<g transform="translate(90,148) scale(0.9)"><g transform="translate(0,-47)">' + thKid(0, 0, "#2f8fc4") + '</g></g>'
-  + '<g transform="translate(180,148) scale(1.12)"><g transform="translate(0,-47)">' + thKid(0, 0, "#5fbf74") + '</g></g>'
-  + '<g transform="translate(270,148) scale(0.76)"><g transform="translate(0,-47)">' + thKid(0, 0, "#f08a3c") + '</g></g>'
-  + '<text x="90" y="140" text-anchor="middle" font-size="15" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">가</text>'
-  + '<text x="180" y="140" text-anchor="middle" font-size="15" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">나</text>'
-  + '<text x="270" y="140" text-anchor="middle" font-size="15" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">다</text>',
-  "키가 다른 친구 세 명이 나란히 서 있어요");
+  + '<rect x="110" y="14" width="140" height="140" rx="8" fill="#fffaf0" stroke="#d9c9a8" stroke-width="2.4"/>'
+  + '<g fill="#eaf7ff" stroke="#8fbdd8" stroke-width="2">'
+  + '<rect x="114" y="132" width="132" height="20"/><rect x="114" y="108" width="132" height="20"/>'
+  + '<rect x="114" y="84" width="132" height="20"/><rect x="114" y="60" width="132" height="20"/>'
+  + '<rect x="114" y="36" width="132" height="20"/></g>'
+  + '<text x="102" y="147" text-anchor="end" font-size="12" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">1층</text>'
+  + '<text x="102" y="123" text-anchor="end" font-size="12" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">2층</text>'
+  + '<text x="102" y="99" text-anchor="end" font-size="12" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">3층</text>'
+  + '<text x="102" y="75" text-anchor="end" font-size="12" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">4층</text>'
+  + '<text x="102" y="51" text-anchor="end" font-size="12" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">5층</text>'
+  + '<rect x="134" y="109" width="40" height="18" rx="4" fill="#ffcf5c" stroke="#e0a927" stroke-width="2"/>'
+  + '<circle cx="154" cy="116" r="5" fill="#ffdcc0"/><path d="M149 118 q5 6 10 0" stroke="#c9776a" stroke-width="1.4" fill="none"/>'
+  + '<path d="M266 140 v-24 m0 0 l-6 8 m6 -8 l6 8" stroke="#c1553a" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+  + '<path d="M300 60 v24 m0 0 l-6 -8 m6 8 l6 -8" stroke="#2f6f95" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+  "오 층짜리 건물에 엘리베이터가 이 층에 서 있어요");
 
-function thGiraffe(x, y, s){
+function snFish(x, y, s){
   return '<g transform="translate(' + x + ',' + y + ') scale(' + s + ')">'
-    + '<rect x="-11" y="8" width="4.6" height="22" fill="#e0b43a"/>'
-    + '<rect x="-4" y="8" width="4.6" height="22" fill="#e0b43a"/>'
-    + '<rect x="3" y="8" width="4.6" height="22" fill="#e0b43a"/>'
-    + '<ellipse cx="-3" cy="0" rx="19" ry="12" fill="#f0c94a"/>'
-    + '<rect x="8" y="-44" width="10" height="48" rx="5" fill="#f0c94a"/>'
-    + '<ellipse cx="15" cy="-46" rx="12" ry="9" fill="#f5d874"/>'
-    + '<circle cx="20" cy="-48" r="1.7" fill="#3b2b23"/>'
-    + '<path d="M10 -54 v-7 M19 -54 v-7" stroke="#c8961f" stroke-width="2.4" stroke-linecap="round"/>'
-    + '<g fill="#bf8f20"><circle cx="-9" cy="-2" r="2.6"/><circle cx="1" cy="3" r="2.2"/><circle cx="-14" cy="4" r="2"/><circle cx="12" cy="-28" r="2"/></g>'
+    + '<ellipse cx="0" cy="0" rx="14" ry="9" fill="#f08a3c"/>'
+    + '<path d="M12 0 l12 -8 v16 Z" fill="#e2732a"/>'
+    + '<circle cx="-7" cy="-2" r="1.8" fill="#3b2b47"/>'
     + '</g>';
 }
-var SC_ZOO = svgWrap(
-    '<rect width="360" height="180" fill="#fbfff6"/>'
-  + '<rect y="134" width="360" height="46" fill="#e6f2dc"/>'
-  + '<g transform="translate(56,104)">'
-  +   '<ellipse cx="0" cy="0" rx="24" ry="15" fill="#eaa93f"/>'
-  +   '<rect x="-15" y="10" width="5" height="16" rx="2.5" fill="#d99a2e"/>'
-  +   '<rect x="-4" y="10" width="5" height="16" rx="2.5" fill="#d99a2e"/>'
-  +   '<rect x="8" y="10" width="5" height="16" rx="2.5" fill="#d99a2e"/>'
-  +   '<circle cx="24" cy="-12" r="15" fill="#c07f22"/>'
-  +   '<circle cx="24" cy="-12" r="10" fill="#f3c977"/>'
-  +   '<circle cx="27" cy="-14" r="1.8" fill="#3b2b23"/>'
-  +   '<circle cx="34" cy="-22" r="3" fill="#c07f22"/>'
-  + '</g>'
-  + thGiraffe(150, 104, 1)
-  + thGiraffe(250, 110, 0.82)
-  + '<g transform="translate(320,106)">'
-  +   '<ellipse cx="0" cy="0" rx="22" ry="15" fill="#b3c0cc"/>'
-  +   '<circle cx="-13" cy="-4" r="13" fill="#c3cfda"/>'
-  +   '<circle cx="-23" cy="-7" r="10" fill="#a9b6c2"/>'
-  +   '<path d="M-30 -3 q-7 14 3 21" stroke="#a9b6c2" stroke-width="7" fill="none" stroke-linecap="round"/>'
-  +   '<circle cx="-26" cy="-10" r="1.6" fill="#3b3b3b"/>'
-  +   '<rect x="-14" y="12" width="6" height="16" rx="3" fill="#a9b6c2"/>'
-  +   '<rect x="-2" y="12" width="6" height="16" rx="3" fill="#a9b6c2"/>'
-  +   '<rect x="10" y="12" width="6" height="16" rx="3" fill="#a9b6c2"/>'
-  + '</g>',
-  "동물원에 사자와 기린, 코끼리가 있어요");
+var SN_FISH = svgWrap(
+    '<rect width="360" height="180" fill="#f7fbff"/>'
+  + '<rect x="16" y="34" width="228" height="122" rx="12" fill="#dff1fb" stroke="#8fbdd8" stroke-width="2.4"/>'
+  + '<path d="M16 60 q28 -14 56 0 t56 0 t56 0 t56 0" stroke="#a9d8ef" stroke-width="2.4" fill="none"/>'
+  + snFish(70, 84, 1) + snFish(140, 76, 1) + snFish(196, 84, 1)
+  + snFish(96, 126, 1) + snFish(166, 126, 1)
+  + '<circle cx="304" cy="96" r="40" fill="#eaf7ff" stroke="#8fbdd8" stroke-width="2.4"/>'
+  + snFish(292, 84, 0.62) + snFish(316, 96, 0.62) + snFish(296, 110, 0.62)
+  + '<text x="304" y="152" text-anchor="middle" font-size="12" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">3마리</text>',
+  "어항에 금붕어 다섯 마리, 옆 그릇에 세 마리가 있어요");
+var SN_BEADS = svgWrap(
+    '<rect width="360" height="180" fill="#fffdf8"/>'
+  + '<circle cx="30" cy="90" r="18" fill="#4a7fc0"/><circle cx="64" cy="90" r="18" fill="#4a7fc0"/>'
+  + '<circle cx="98" cy="90" r="18" fill="#e4574c"/><circle cx="132" cy="90" r="18" fill="#4a7fc0"/>'
+  + '<circle cx="166" cy="90" r="18" fill="#4a7fc0"/><circle cx="200" cy="90" r="18" fill="#e4574c"/>'
+  + '<circle cx="234" cy="90" r="18" fill="#4a7fc0"/><circle cx="268" cy="90" r="18" fill="#4a7fc0"/>'
+  + '<circle cx="302" cy="90" r="18" fill="#e4574c"/>'
+  + '<circle cx="336" cy="90" r="18" fill="#ffffff" stroke="#9fb6c4" stroke-width="3" stroke-dasharray="6 5"/>'
+  + '<text x="336" y="99" text-anchor="middle" font-size="20" font-weight="900" fill="#9fb6c4" font-family="system-ui,sans-serif">?</text>',
+  "파랑, 파랑, 빨강 구슬이 되풀이되어 꿰어진 목걸이");
 
-var SC_TRI = svgWrap(
+function snCandy(x, y){
+  return '<g transform="translate(' + x + ',' + y + ')">'
+    + '<path d="M-9 0 l-9 -7 v14 Z" fill="#f08a3c"/><path d="M9 0 l9 -7 v14 Z" fill="#f08a3c"/>'
+    + '<circle r="9" fill="#ffb16b" stroke="#e2732a" stroke-width="1.6"/></g>';
+}
+var SN_SHARE = svgWrap(
+    '<rect width="360" height="180" fill="#fff9fc"/>'
+  + snCandy(46, 40) + snCandy(80, 40) + snCandy(114, 40) + snCandy(148, 40) + snCandy(182, 40) + snCandy(216, 40)
+  + snCandy(46, 70) + snCandy(80, 70) + snCandy(114, 70) + snCandy(148, 70) + snCandy(182, 70) + snCandy(216, 70)
+  + '<ellipse cx="56" cy="132" rx="34" ry="14" fill="#eaf3fa" stroke="#9fb6c4" stroke-width="2.4"/>'
+  + '<ellipse cx="136" cy="132" rx="34" ry="14" fill="#eaf3fa" stroke="#9fb6c4" stroke-width="2.4"/>'
+  + '<ellipse cx="216" cy="132" rx="34" ry="14" fill="#eaf3fa" stroke="#9fb6c4" stroke-width="2.4"/>'
+  + '<ellipse cx="296" cy="132" rx="34" ry="14" fill="#eaf3fa" stroke="#9fb6c4" stroke-width="2.4"/>',
+  "사탕 열두 개와 접시 네 개가 있어요");
+var SN_CLOCK = svgWrap(
+    '<rect width="360" height="180" fill="#f7fbff"/>'
+  + '<circle cx="180" cy="92" r="66" fill="#ffffff" stroke="#4a7fc0" stroke-width="3"/>'
+  + '<text x="180" y="46" text-anchor="middle" font-size="15" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">12</text>'
+  + '<text x="234" y="98" text-anchor="middle" font-size="15" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">3</text>'
+  + '<text x="180" y="152" text-anchor="middle" font-size="15" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">6</text>'
+  + '<text x="126" y="98" text-anchor="middle" font-size="15" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">9</text>'
+  + '<path d="M180 92 L222 92" stroke="#2f3b47" stroke-width="7" stroke-linecap="round"/>'
+  + '<path d="M180 92 L180 52" stroke="#4a7fc0" stroke-width="5" stroke-linecap="round"/>'
+  + '<circle cx="180" cy="92" r="6" fill="#2f3b47"/>'
+  + '<text x="180" y="172" text-anchor="middle" font-size="13" font-weight="900" fill="#5b6b78" font-family="system-ui,sans-serif">지금은 3시</text>',
+  "바늘 종이가 세 시를 가리키고 있어요");
+
+function snFrame(x, label, shirt, hair){
+  return '<g transform="translate(' + x + ',24)">'
+    + '<rect width="88" height="96" rx="10" fill="#fffaf0" stroke="#d9c9a8" stroke-width="2.4"/>'
+    + thKid(44, 42, shirt, hair)
+    + '<text x="44" y="112" text-anchor="middle" font-size="14" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">' + label + '</text>'
+    + '</g>';
+}
+var SN_FAMILY = svgWrap(
+    '<rect width="360" height="180" fill="#f7fbff"/>'
+  + snFrame(30, "해율이", "#f2b93b")
+  + snFrame(136, "엄마", "#e4574c")
+  + snFrame(242, "아빠", "#2f8fc4")
+  + '<circle cx="180" cy="12" r="0" fill="none"/>',
+  "해율이, 엄마, 아빠 사진이 나란히 걸려 있어요");
+var SN_ROW = svgWrap(
     '<rect width="360" height="180" fill="#eef9ff"/>'
-  + '<rect y="148" width="360" height="32" fill="#e3f1dc"/>'
-  + '<path d="M22 148 L74 56 L126 148 Z" fill="#ffb3a8" stroke="#e2604a" stroke-width="2.4"/>'
-  + '<rect x="156" y="100" width="72" height="48" fill="#cfe4f7" stroke="#4a7fc0" stroke-width="2.4"/>'
-  + '<path d="M150 100 L192 58 L234 100 Z" fill="#e4574c" stroke="#b53c2f" stroke-width="2.4"/>'
-  + '<rect x="270" y="118" width="14" height="30" fill="#a9764a"/>'
-  + '<path d="M252 118 L277 58 L302 118 Z" fill="#9fd8a0" stroke="#3f9a70" stroke-width="2.4"/>'
-  + '<circle cx="330" cy="40" r="16" fill="#ffd166" stroke="#d9a521" stroke-width="2.4"/>',
-  "세모(삼각형) 모양이 여러 개 그려진 그림");
+  + '<rect y="132" width="360" height="48" fill="#e3f1dc"/>'
+  + '<path d="M96 40 H54 m0 0 l12 -8 m-12 8 l12 8" stroke="#c1553a" stroke-width="3" fill="none" stroke-linecap="round"/>'
+  + '<text x="22" y="46" font-size="13" font-weight="900" fill="#c1553a" font-family="system-ui,sans-serif">앞</text>'
+  + thKid(84, 84, "#5fbf74") + thKid(148, 84, "#f2b93b") + thKid(212, 84, "#2f8fc4") + thKid(276, 84, "#f08a3c")
+  + '<text x="148" y="52" text-anchor="middle" font-size="12" font-weight="900" fill="#b8860b" font-family="system-ui,sans-serif">지민</text>'
+  + '<text x="212" y="52" text-anchor="middle" font-size="12" font-weight="900" fill="#2f6f95" font-family="system-ui,sans-serif">해율이</text>',
+  "아이 네 명이 한 줄로 서 있어요");
 
 var THINK = [
-  { svg:SC_BUS, q:"버스 정류장에 아이들이 한 줄로 서 있어요. 왼쪽에서 다섯 번째 아이는 무슨 색 옷을 입었을까요?",
-    o:["보라색","파란색","초록색","주황색"], a:"보라색", why:"왼쪽부터 빨강·파랑·노랑·초록·보라·주황 순서예요." },
-  { svg:SC_RACE, q:"달리기 경주에서 2등을 한 동물은 어느 동물일까요?",
-    o:["토끼","거북이","사자","개"], a:"거북이", why:"2번 자리에 들어온 동물이 거북이예요." },
-  { svg:SC_APT, q:"해율이는 3층에 살아요. 엄마는 해율이보다 2층 위에 살아요. 엄마는 몇 층에 살까요?",
-    o:["4층","5층","6층","2층"], a:"5층", why:"3층에서 한 층 위가 4층, 두 층 위가 5층이에요." },
-  { svg:SC_SCALE, q:"양팔저울이 수평이에요. 사과 1개와 귤 1개 중에서 더 무거운 것은 무엇일까요?",
-    o:["사과","귤","똑같아요","알 수 없어요"], a:"사과", why:"사과 2개와 귤 3개가 같으니 사과 하나가 더 무거워요." },
-  { svg:SC_FRUIT, q:"바구니에서 가장 많은 과일은 무엇일까요?",
-    o:["사과","배","감","모두 같아요"], a:"감", why:"감이 4개로 사과 3개, 배 2개보다 많아요." },
-  { svg:SC_MATCH, q:"성냥개비로 삼각형 두 개를 만들었어요. 성냥개비는 모두 몇 개일까요?",
-    o:["4개","5개","6개","7개"], a:"6개", why:"삼각형 하나에 3개씩, 두 개면 3+3=6개예요." },
-  { svg:SC_BLOCK, q:"쌓기나무는 모두 몇 개일까요?",
-    o:["4개","5개","6개","7개"], a:"5개", why:"아래 3개와 위 2개를 더하면 5개예요." },
-  { svg:SC_PASS, q:"버스에 8명이 타고 있었어요. 정류장에서 3명이 내렸어요. 버스에 남은 사람은 몇 명일까요?",
-    o:["3명","5명","8명","11명"], a:"5명", why:"8명에서 3명이 내리면 8-3=5명이에요." },
-  { svg:SC_PATTERN, q:"빨강·파랑·노랑 구슬이 차례로 꿰어져 있어요. 물음표에 올 구슬은 무슨 색일까요?",
-    o:["빨강","파랑","노랑","초록"], a:"파랑", why:"빨강·파랑·노랑이 세 번 되풀이되고 있어요." },
-  { svg:SC_STAIR, q:"해율이가 계단을 한 번에 3칸씩 올라요. 4번 오르면 모두 몇 칸을 올라갈까요?",
-    o:["7칸","9칸","12칸","15칸"], a:"12칸", why:"3칸씩 4번이면 3+3+3+3=12칸이에요." },
-  { svg:SC_CANDY, q:"사탕 10개를 접시 두 개에 똑같이 나누면 한 접시에 몇 개씩 놓일까요?",
-    o:["4개","5개","6개","10개"], a:"5개", why:"10개를 둘로 똑같이 나누면 5개씩이에요." },
-  { svg:SC_LINE, q:"해율이는 앞에서 3번째, 뒤에서 2번째에 서 있어요. 줄은 모두 몇 명일까요?",
-    o:["4명","5명","6명","7명"], a:"4명", why:"해율이 앞에 2명, 뒤에 1명이 있어 모두 4명이에요." },
-  { svg:SC_LEGS, q:"닭 두 마리와 강아지 한 마리의 다리는 모두 몇 개일까요?",
-    o:["4개","6개","8개","10개"], a:"8개", why:"닭 2마리의 다리는 2+2=4개, 강아지는 4개라서 모두 8개예요." },
-  { svg:SC_TALL, q:"세 친구 중에서 키가 가장 큰 친구는 누구일까요?",
-    o:["가","나","다","모두 같아요"], a:"나", why:"나가 머리부터 발끝까지 가장 길게 그려져 있어요." },
-  { svg:SC_ZOO, q:"동물원에 있는 기린은 모두 몇 마리일까요?",
-    o:["1마리","2마리","3마리","4마리"], a:"2마리", why:"목이 긴 기린이 2마리 있어요." },
-  { svg:SC_TRI, q:"그림에서 세모(삼각형) 모양은 모두 몇 개일까요?",
-    o:["2개","3개","4개","5개"], a:"3개", why:"왼쪽 큰 세모, 집 지붕, 나무 위 세모까지 3개예요." }
+  { svg:SN_PLATE, q:"접시에 사과 3개와 배 4개가 있어요. 사과를 하나 먹으면 남은 과일은 모두 몇 개일까요?",
+    o:["5개","6개","7개","8개"], a:"6개", why:"사과는 3-1=2개가 되고, 배 4개를 더하면 2+4=6개예요." },
+  { svg:SN_SEATS, q:"버스 좌석이 모두 8개예요. 그중 5개가 비어 있으면 앉아 있는 사람은 몇 명일까요?",
+    o:["2명","3명","4명","5명"], a:"3명", why:"8개에서 빈자리 5개를 빼면 8-5=3명이에요." },
+  { svg:SN_EGG, q:"달걀판은 모두 열 칸이에요. 달걀이 7개 있으면 빈 칸은 몇 칸일까요?",
+    o:["2칸","3칸","4칸","5칸"], a:"3칸", why:"10칸에서 달걀 7개를 빼면 10-7=3칸이에요." },
+  { svg:SN_UMB, q:"우산 3개 아래에 친구가 2명씩 서 있어요. 친구는 모두 몇 명일까요?",
+    o:["5명","6명","7명","8명"], a:"6명", why:"2명씩 세 묶음이라서 2+2+2=6명이에요." },
+  { svg:SN_MILK, q:"우유가 4개씩 3묶음 있어요. 우유는 모두 몇 개일까요?",
+    o:["7개","8개","10개","12개"], a:"12개", why:"4개씩 3번이면 4+4+4=12개예요." },
+  { svg:SN_BAL, q:"저울이 수평이에요. 사과 1개는 귤 몇 개와 무게가 같을까요?",
+    o:["귤 1개","귤 2개","귤 3개","귤 4개"], a:"귤 2개", why:"양쪽에서 귤을 2개씩 빼면 사과 1개와 귤 2개가 같아요." },
+  { svg:SN_CAKE, q:"해율이는 7살, 동생은 4살이에요. 3년이 지나면 두 사람의 나이 차이는 몇 살일까요?",
+    o:["1살","2살","3살","4살"], a:"3살", why:"둘 다 똑같이 3살씩 먹으니 나이 차이는 7-4=3살 그대로예요." },
+  { svg:SN_COIN, q:"500원 동전 2개와 100원 동전 3개가 있어요. 모두 얼마일까요?",
+    o:["600원","1000원","1200원","1300원"], a:"1300원", why:"500원이 2개면 1000원, 100원이 3개면 300원이라서 1300원이에요." },
+  { svg:SN_BOOKS, q:"책 다섯 권이 나란히 있어요. 빨간 책은 왼쪽에서 두 번째, 파란 책은 오른쪽에서 두 번째예요. 두 책 사이에 있는 책은 몇 권일까요?",
+    o:["1권","2권","3권","없어요"], a:"1권", why:"빨간 책 다음에 노란 책 한 권이 있고 그다음이 파란 책이에요." },
+  { svg:SN_LIFT, q:"엘리베이터가 1층에서 3층 위로 올라갔다가 다시 2층 내려왔어요. 지금 몇 층일까요?",
+    o:["1층","2층","3층","5층"], a:"2층", why:"1+3=4층에서 2층 내려오면 4-2=2층이에요." },
+  { svg:SN_FISH, q:"어항에 금붕어가 5마리 있어요. 옆 그릇에 있는 3마리를 더 넣으면 모두 몇 마리일까요?",
+    o:["6마리","7마리","8마리","9마리"], a:"8마리", why:"5마리에 3마리를 더하면 5+3=8마리예요." },
+  { svg:SN_BEADS, q:"구슬이 파랑·파랑·빨강 순서로 되풀이되고 있어요. 물음표 자리에 올 구슬은 무슨 색일까요?",
+    o:["빨강","파랑","노랑","초록"], a:"파랑", why:"파랑·파랑·빨강이 세 번 되풀이되고, 다음은 다시 파랑 차례예요." },
+  { svg:SN_SHARE, q:"사탕 12개를 접시 4개에 똑같이 나누면 한 접시에 몇 개씩 놓일까요?",
+    o:["2개","3개","4개","6개"], a:"3개", why:"12개를 4묶음으로 똑같이 나누면 3개씩이에요." },
+  { svg:SN_CLOCK, q:"지금 3시예요. 2시간 뒤에는 몇 시일까요?",
+    o:["4시","5시","6시","1시"], a:"5시", why:"3시에서 한 시간 뒤가 4시, 두 시간 뒤가 5시예요." },
+  { svg:SN_FAMILY, q:"해율이는 엄마보다 작고, 엄마는 아빠보다 작아요. 세 사람 중에서 가장 큰 사람은 누구일까요?",
+    o:["해율이","엄마","아빠","모두 같아요"], a:"아빠", why:"해율이보다 엄마가, 엄마보다 아빠가 크니까 아빠가 가장 커요." },
+  { svg:SN_ROW, q:"지민이는 앞에서 두 번째, 해율이는 지민이 바로 뒤에 서 있어요. 해율이는 앞에서 몇 번째일까요?",
+    o:["첫 번째","두 번째","세 번째","네 번째"], a:"세 번째", why:"지민이가 두 번째이니 바로 뒤에 선 해율이는 세 번째예요." }
 ];
 
-/* ---------------------------- 🔺 도형 이름 맞추기 (초1·2 교과과정) ---------------------------- */
+/* ---------------------------- 🔺 도형 이름·특징 맞추기 (초1·2 교과과정) ---------------------------- */
 var SHAPE = [
-  { svg:'<svg viewBox="0 0 200 200"><rect x="42" y="42" width="116" height="116" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","사각형","원","오각형"], a:"사각형", why:"변이 4개인 도형은 사각형이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><rect x="24" y="62" width="152" height="76" fill="#ffe08a" stroke="#c9a03c" stroke-width="3"/></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","원","사각형","육각형"], a:"사각형", why:"길쭉해도 변이 4개면 사각형이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,28 26,166 174,166" fill="#ffb3a8" stroke="#e2604a" stroke-width="3"/></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","사각형","오각형","원"], a:"삼각형", why:"변이 3개인 도형은 삼각형이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,28 24,168 176,168" fill="#ffb3a8" stroke="#e2604a" stroke-width="3"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","사각형","오각형","원"], a:"삼각형", why:"변이 3개, 꼭짓점이 3개인 도형은 삼각형이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><rect x="40" y="40" width="120" height="120" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","사각형","원","육각형"], a:"사각형", why:"네 변의 길이가 모두 같아도 사각형이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><rect x="20" y="64" width="160" height="74" fill="#ffe08a" stroke="#c9a03c" stroke-width="3"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","원","사각형","오각형"], a:"사각형", why:"가로로 길어도 변이 4개면 사각형이에요." },
   { svg:'<svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="72" fill="#ffd166" stroke="#dda427" stroke-width="3"/></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["동그라미 모양","삼각형","사각형","오각형"], a:"동그라미 모양", why:"빙글 둥근 도형은 동그라미(원) 모양이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,26 174,80 146,166 54,166 26,80" fill="#bcd8ff" stroke="#4a7fc0" stroke-width="3"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["동그라미 모양","삼각형","사각형","오각형"], a:"동그라미 모양", why:"빙글 둥글고 꼭짓점이 없는 도형은 동그라미(원) 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,24 174,80 146,168 54,168 26,80" fill="#bcd8ff" stroke="#4a7fc0" stroke-width="3"/></svg>',
     q:"이 도형의 이름은 무엇일까요?", o:["사각형","오각형","육각형","삼각형"], a:"오각형", why:"변이 5개인 도형은 오각형이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,24 166,62 166,138 100,176 34,138 34,62" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/></svg>',
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,22 166,60 166,140 100,178 34,140 34,60" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/></svg>',
     q:"이 도형의 이름은 무엇일까요?", o:["오각형","육각형","사각형","원"], a:"육각형", why:"변이 6개인 도형은 육각형이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><g stroke="#c96a48" stroke-width="2.6"><rect x="46" y="76" width="88" height="82" fill="#ffc0a8"/><path d="M46 76 L76 44 L164 44 L134 76 Z" fill="#ffdf9e"/><path d="M134 76 L164 44 L164 126 L134 158 Z" fill="#f2b48c"/></g></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["상자 모양","둥근 기둥 모양","공 모양","세모 모양"], a:"상자 모양", why:"네모난 면이 여섯 개인 상자 모양이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><ellipse cx="100" cy="46" rx="52" ry="20" fill="#cfeaf7" stroke="#2f8fc4" stroke-width="2.6"/><path d="M48 46 v106 a52 20 0 0 0 104 0 V46" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2.6"/><ellipse cx="100" cy="46" rx="52" ry="20" fill="#e8f6ff" stroke="#2f8fc4" stroke-width="2.6"/></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["상자 모양","둥근 기둥 모양","공 모양","동그라미 모양"], a:"둥근 기둥 모양", why:"위아래가 둥글고 옆이 반듯한 기둥 모양이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><defs><radialGradient id="sphA" cx="34%" cy="30%" r="78%"><stop offset="0" stop-color="#ffffff"/><stop offset="42%" stop-color="#e7b9cd"/><stop offset="100%" stop-color="#b8517f"/></radialGradient></defs><ellipse cx="104" cy="176" rx="52" ry="9" fill="#000" opacity=".08"/><circle cx="100" cy="100" r="70" fill="url(#sphA)"/></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["공 모양","상자 모양","둥근 기둥 모양","네모 모양"], a:"공 모양", why:"어느 쪽에서 봐도 둥근 공 모양이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,26 174,80 146,166 54,166 26,80" fill="#ffe08a" stroke="#c9a03c" stroke-width="3"/><text x="100" y="118" text-anchor="middle" font-size="22" font-weight="900" fill="#8a6a3a" font-family="system-ui,sans-serif">?</text></svg>',
-    q:"이 도형의 변은 모두 몇 개일까요?", o:["3개","4개","5개","6개"], a:"5개", why:"한 변씩 세어 보면 5개예요." },
-  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,24 166,62 166,138 100,176 34,138 34,62" fill="#bcd8ff" stroke="#4a7fc0" stroke-width="3"/><g fill="#2f6f95"><circle cx="100" cy="24" r="5"/><circle cx="166" cy="62" r="5"/><circle cx="166" cy="138" r="5"/><circle cx="100" cy="176" r="5"/><circle cx="34" cy="138" r="5"/><circle cx="34" cy="62" r="5"/></g></svg>',
-    q:"이 도형의 꼭짓점은 모두 몇 개일까요?", o:["4개","5개","6개","7개"], a:"6개", why:"뾰족한 점을 세어 보면 6개예요." },
-  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,30 22,168 178,168" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/></svg>',
-    q:"이 도형의 변은 모두 몇 개일까요?", o:["3개","4개","5개","6개"], a:"3개", why:"세 변으로 둘러싸여 있어요." },
-  { svg:'<svg viewBox="0 0 200 200"><rect x="70" y="70" width="112" height="112" fill="#cfe4f7" stroke="#4a7fc0" stroke-width="3" transform="rotate(45 100 100)"/></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["세모 모양","네모 모양","동그라미 모양","오각형"], a:"네모 모양", why:"돌려 놓아도 변이 4개면 네모(사각형) 모양이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><g stroke="#e2604a" stroke-width="3"><line x1="100" y1="40" x2="40" y2="160"/><line x1="40" y1="160" x2="160" y2="160"/><line x1="160" y1="160" x2="100" y2="40"/></g><g fill="#ffd166"><circle cx="100" cy="40" r="7"/><circle cx="40" cy="160" r="7"/><circle cx="160" cy="160" r="7"/></g></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["삼각형","사각형","원","육각형"], a:"삼각형", why:"세 변과 세 꼭짓점이 있는 도형이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><g stroke="#8a5a2b" stroke-width="2.6"><path d="M38 62 L92 34 L164 62 L110 90 Z" fill="#ffe9c9"/><path d="M38 62 L110 90 L110 168 L38 140 Z" fill="#f4d3a8"/><path d="M110 90 L164 62 L164 140 L110 168 Z" fill="#e8c194"/></g></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["상자 모양","둥근 기둥 모양","삼각형","원"], a:"상자 모양", why:"여섯 면이 모두 네모인 상자 모양이에요." },
-  { svg:'<svg viewBox="0 0 200 200"><defs><radialGradient id="sphB" cx="34%" cy="30%" r="78%"><stop offset="0" stop-color="#ffffff"/><stop offset="44%" stop-color="#b9ddf7"/><stop offset="100%" stop-color="#3f86bd"/></radialGradient></defs><ellipse cx="104" cy="172" rx="50" ry="9" fill="#000" opacity=".08"/><circle cx="100" cy="100" r="66" fill="url(#sphB)"/></svg>',
-    q:"이 도형의 이름은 무엇일까요?", o:["공 모양","둥근 기둥 모양","상자 모양","세모 모양"], a:"공 모양", why:"둥글게 생긴 입체 도형은 공 모양이에요." }
+  { svg:'<svg viewBox="0 0 200 200"><g stroke="#c96a48" stroke-width="2.6"><rect x="44" y="74" width="90" height="84" fill="#ffc0a8"/><path d="M44 74 L74 42 L164 42 L134 74 Z" fill="#ffdf9e"/><path d="M134 74 L164 42 L164 126 L134 158 Z" fill="#f2b48c"/></g></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["상자 모양","둥근 기둥 모양","공 모양","고깔 모양"], a:"상자 모양", why:"네모난 면이 여섯 개인 입체 도형은 상자 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><ellipse cx="100" cy="48" rx="52" ry="20" fill="#cfeaf7" stroke="#2f8fc4" stroke-width="2.6"/><path d="M48 48 v104 a52 20 0 0 0 104 0 V48" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2.6"/><ellipse cx="100" cy="48" rx="52" ry="20" fill="#e8f6ff" stroke="#2f8fc4" stroke-width="2.6"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["상자 모양","둥근 기둥 모양","공 모양","동그라미 모양"], a:"둥근 기둥 모양", why:"위아래는 둥글고 옆은 반듯한 기둥 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><defs><radialGradient id="sph1121" cx="34%" cy="30%" r="78%"><stop offset="0" stop-color="#ffffff"/><stop offset="42%" stop-color="#b9ddf7"/><stop offset="100%" stop-color="#3f86bd"/></radialGradient></defs><ellipse cx="104" cy="174" rx="50" ry="9" fill="#000" opacity=".08"/><circle cx="100" cy="100" r="68" fill="url(#sph1121)"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["공 모양","상자 모양","둥근 기둥 모양","고깔 모양"], a:"공 모양", why:"어느 쪽에서 봐도 둥근 입체 도형은 공 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><ellipse cx="100" cy="156" rx="52" ry="14" fill="#ffd166"/><path d="M100 24 L152 156 A52 14 0 0 1 48 156 Z" fill="#ffd166" stroke="#c8961f" stroke-width="2.4"/></svg>',
+    q:"이 도형의 이름은 무엇일까요?", o:["상자 모양","둥근 기둥 모양","고깔 모양","공 모양"], a:"고깔 모양", why:"꼭대기가 뾰족하고 밑이 둥근 입체 도형은 고깔 모양이에요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,32 30,168 170,168" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/></svg>',
+    q:"이 도형의 변은 모두 몇 개일까요?", o:["3개","4개","5개","6개"], a:"3개", why:"한 변씩 세어 보면 모두 3개예요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="40,164 160,164 130,48 70,48" fill="#e0c8ff" stroke="#7a5bbf" stroke-width="3"/></svg>',
+    q:"이 도형의 변은 모두 몇 개일까요?", o:["2개","3개","4개","5개"], a:"4개", why:"위·아래·양옆을 둘러싼 변이 모두 4개예요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,24 174,80 146,168 54,168 26,80" fill="#ffe08a" stroke="#c9a03c" stroke-width="3"/><g fill="#8a6a1a"><circle cx="100" cy="24" r="6"/><circle cx="174" cy="80" r="6"/><circle cx="146" cy="168" r="6"/><circle cx="54" cy="168" r="6"/><circle cx="26" cy="80" r="6"/></g></svg>',
+    q:"이 도형의 꼭짓점은 모두 몇 개일까요?", o:["4개","5개","6개","7개"], a:"5개", why:"뾰족한 점을 하나씩 세어 보면 5개예요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="100,22 166,60 166,140 100,178 34,140 34,60" fill="#bcd8ff" stroke="#4a7fc0" stroke-width="3"/></svg>',
+    q:"이 도형의 변은 모두 몇 개일까요?", o:["4개","5개","6개","7개"], a:"6개", why:"여섯 개의 곧은 선으로 둘러싸여 있어요." },
+  { svg:'<svg viewBox="0 0 200 200"><rect x="44" y="44" width="112" height="112" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><g fill="#2f6f95"><circle cx="44" cy="44" r="6"/><circle cx="156" cy="44" r="6"/><circle cx="156" cy="156" r="6"/><circle cx="44" cy="156" r="6"/></g></svg>',
+    q:"이 도형의 꼭짓점은 모두 몇 개일까요?", o:["3개","4개","5개","6개"], a:"4개", why:"네모의 네 귀퉁이를 세면 4개예요." },
+  { svg:'<svg viewBox="0 0 200 200"><polygon points="55,58 93,86 78,132 32,132 17,86" fill="#bcd8ff" stroke="#4a7fc0" stroke-width="2.6"/><polygon points="145,58 180,78 180,122 145,142 110,122 110,78" fill="#c8f0d4" stroke="#3f9a70" stroke-width="2.6"/><text x="55" y="176" text-anchor="middle" font-size="14" font-weight="900" fill="#4a7fc0" font-family="system-ui,sans-serif">왼쪽</text><text x="145" y="176" text-anchor="middle" font-size="14" font-weight="900" fill="#3f9a70" font-family="system-ui,sans-serif">오른쪽</text></svg>',
+    q:"변이 더 많은 도형은 어느 쪽일까요?", o:["왼쪽 도형","오른쪽 도형","둘이 같아요","알 수 없어요"], a:"오른쪽 도형", why:"왼쪽은 오각형(5개), 오른쪽은 육각형(6개)이라서 오른쪽이 변이 더 많아요." }
 ];
+
 var TS = { ti:0, si:0 };
 function thinkBind(panel, attr, item, key, label){
   var btns = panel.querySelectorAll("[" + attr + "]");
