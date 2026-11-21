@@ -6027,7 +6027,7 @@ body.mob .htt-cards{grid-template-columns:1fr;}
 .storyview .pbk-stage{height:100%;min-height:0;}
 body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
 
-/* ================= 🦉 단어키우기 (오답노트 · 엄마 리포트 · 단어 마을) ================= */
+/* ================= 🦉 단어키우기 (오답노트 · 엄마 리포트) ================= */
 .wgview{display:block;height:100%;min-height:0;}
 .wgview[hidden]{display:none!important;}
 .wg-wrap{display:flex;flex-direction:column;height:100%;min-height:0;gap:.7vh;padding:1vh 1.1vh 1.2vh;}
@@ -6129,31 +6129,6 @@ body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
 .wg-bar{flex:1 1 0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:.2vh;height:100%;}
 .wg-bar i{width:100%;max-width:2.6rem;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,#8ed3f5,#5cb0dd);min-height:3px;}
 .wg-bar span{font-size:clamp(8px,1.1vh,12px);font-weight:800;color:#9db4c4;}
-.wg-note-t{font-size:clamp(10px,1.35vh,14px);font-weight:800;color:#8aa6b8;line-height:1.45;}
-
-/* ---------- 단어 마을 ---------- */
-.wg-town{background:#fff;border-radius:20px;padding:1.2vh 1.1vh;box-shadow:inset 0 0 0 1px #e6eff5;}
-.wg-town-h{display:flex;align-items:baseline;gap:.6vh;flex-wrap:wrap;margin-bottom:.8vh;}
-.wg-town-h b{font-size:clamp(16px,2.2vh,24px);color:#1e5478;}
-.wg-town-h span{margin-left:auto;font-size:clamp(11px,1.5vh,16px);font-weight:900;color:#8a6410;}
-.wg-map{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:.35vh;padding:.7vh;border-radius:16px;
-  background:linear-gradient(180deg,#d9f0ff 0%,#eaf9ef 34%,#d8f2c9 100%);box-shadow:inset 0 0 0 1px #cfe6f4;}
-.wg-tile{aspect-ratio:1;min-height:clamp(26px,5.4vh,54px);border-radius:9px;background:rgba(255,255,255,.22);
-  box-shadow:inset 0 0 0 1px rgba(140,190,150,.35);display:flex;align-items:center;justify-content:center;}
-.wg-tile.has{background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px #b9dcc0,0 1px 2px rgba(60,110,70,.12);}
-.wg-it{font-size:clamp(15px,3vh,32px);line-height:1;}
-.wg-placing{margin-top:.6vh;padding:.5vh .8vh;border-radius:12px;background:#fff8e8;box-shadow:inset 0 0 0 1.4px #ffe1a8;
-  font-size:clamp(11px,1.5vh,16px);font-weight:900;color:#9a6a12;display:flex;align-items:center;gap:.5vh;flex-wrap:wrap;}
-.wg-shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(5.4rem,1fr));gap:.5vh;margin-top:.8vh;}
-.wg-buy{position:relative;display:flex;flex-direction:column;align-items:center;gap:.1vh;padding:.6vh .3vh;border-radius:14px;
-  background:#f7fbfe;box-shadow:inset 0 0 0 1.4px #e0edf6;}
-.wg-buy.off{opacity:.5;}
-.wg-bem{font-size:clamp(17px,2.6vh,28px);line-height:1.05;}
-.wg-buy b{font-size:clamp(9px,1.2vh,13px);color:#25506d;font-weight:900;text-align:center;line-height:1.2;}
-.wg-buy i{font-style:normal;font-size:clamp(9px,1.2vh,13px);font-weight:900;color:#a07a12;}
-.wg-bagn{position:absolute;top:.25vh;right:.35vh;font-style:normal;font-size:clamp(8px,1vh,11px);font-weight:900;
-  color:#fff;background:#5cb98a;border-radius:999px;padding:0 .35em;}
-
 @media (max-width:520px){
   .wg-wrap{height:auto;padding:.8vh .8vh 2vh;}
   .wg-body{overflow:visible;}
@@ -6163,7 +6138,6 @@ body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
   .wg-modes::-webkit-scrollbar{display:none;}
   .wg-md{flex:0 0 auto;height:2.9vh;min-height:1.9rem;font-size:11px;padding:0 .7vh;}
   .wg-title span{display:none;}
-  .wg-tile{min-height:0;}
   .wg-bars{height:7vh;}
 }
 @media (max-height:720px){
@@ -6508,7 +6482,7 @@ body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
       </div>
     </section>
 
-    <!-- ================= 🦉 단어키우기 (단어 퀴즈 · 오답노트 · 엄마 리포트 · 단어 마을) ================= -->
+    <!-- ================= 🦉 단어키우기 (단어 퀴즈 · 오답노트 · 엄마 리포트) ================= -->
     <section class="view wgview" id="viewWordGrow" data-view="en-wordgrow" hidden>
       <div class="wg-wrap">
         <div class="wg-head">
@@ -21764,7 +21738,7 @@ function mergeRb(lr, cr){
 }
 
 /* 🦉 단어키우기 오답노트 — 기기마다 푼 만큼 합친다
-   · 낱말별 틀린 횟수·연속 정답은 큰 쪽, 마을·주제·모드는 마지막에 손댄(at 최신) 쪽 */
+   · 낱말별 틀린 횟수·연속 정답은 큰 쪽, 주제·모드는 마지막에 손댄(at 최신) 쪽 */
 function mergeWg(l, c){
   l = (l && typeof l === "object" && !Array.isArray(l)) ? l : null;
   c = (c && typeof c === "object" && !Array.isArray(c)) ? c : null;
@@ -21775,8 +21749,6 @@ function mergeWg(l, c){
   var out = { v:1, q:Math.max(num(l.q), num(c.q)), ok:Math.max(num(l.ok), num(c.ok)),
               seq:Math.max(num(l.seq), num(c.seq)), stars:Math.max(num(l.stars), num(c.stars)),
               days:{}, wrong:{}, master:{}, seen:{},
-              town:(pick.town && typeof pick.town === "object") ? pick.town : {},
-              bag:(pick.bag && typeof pick.bag === "object") ? pick.bag : {},
               theme:pick.theme || "all", mode:(pick.mode === "spell" ? "spell" : "choice"),
               at:Math.max(num(l.at), num(c.at), 1) };
   var k, a, b;
@@ -21845,7 +21817,7 @@ function applyDoc(doc){
   if (doc.mathset && typeof doc.mathset === "object" && JSON.stringify(doc.mathset) !== JSON.stringify(s.mathset || {})){
     write(K.mathset, doc.mathset); changed = true; mathChanged = true;
   }
-  /* 🦉 단어키우기 오답노트·마을 */
+  /* 🦉 단어키우기 오답노트 */
   if (doc.wg && typeof doc.wg === "object"){
     var wgcur = read("haeyuli.wordgrow.v1", null);
     var wgnew = mergeWg(wgcur, doc.wg);
@@ -30924,11 +30896,10 @@ SB.hanjaText = { data:DATA, state:H };
 </script>
 <script>
 /* =====================================================================
-   🦉 단어키우기 — 초등 필수 영단어 800+ · 오답노트 자동 복습 · 엄마 리포트 · 단어 마을
+   🦉 단어키우기 — 초등 필수 영단어 800+ · 오답노트 자동 복습 · 엄마 리포트
    · 뜻 고르기(4지선다) / 철자 쓰기 두 가지 퀴즈, 정답마다 ⭐ +2
    · 틀린 낱말은 오답노트에 자동 저장(localStorage + 가족 코드 동기화)
      → 🔁 오답 복습에서 먼저 나오고, 두 번 연속 맞히면 졸업
-   · 모은 별로 마을에 나무·집·공룡·놀이기구를 사서 배치
    ===================================================================== */
 (function(){
 "use strict";
@@ -30962,35 +30933,12 @@ for (var ti = 0; ti < T.length; ti++){
   th.w.forEach(function(w){ th.map[w[0]] = w; ALL.push(w); BYEN[w[0]] = w; });
 }
 
-/* ------------------------------ 마을 아이템 ------------------------------ */
-var ITEMS = [
-  { id:"bush",     em:"🌿", nm:"덤불",     cost:6  },
-  { id:"tree",     em:"🌳", nm:"나무",     cost:10 },
-  { id:"flower",   em:"🌷", nm:"꽃",       cost:10 },
-  { id:"cloud",    em:"☁️", nm:"구름",     cost:12 },
-  { id:"bench",    em:"🪑", nm:"나무 의자", cost:14 },
-  { id:"dog",      em:"🐶", nm:"강아지",   cost:16 },
-  { id:"cat",      em:"🐱", nm:"고양이",   cost:16 },
-  { id:"duck",     em:"🦆", nm:"오리",     cost:18 },
-  { id:"cherry",   em:"🌸", nm:"벚꽃 나무", cost:22 },
-  { id:"tama",     em:"🐣", nm:"다마고치 친구", cost:26 },
-  { id:"house",    em:"🏠", nm:"빨간 지붕 집", cost:32 },
-  { id:"slide",    em:"🛝", nm:"미끄럼틀", cost:34 },
-  { id:"dino",     em:"🦕", nm:"공룡",     cost:40 },
-  { id:"fountain", em:"⛲", nm:"분수대",   cost:50 },
-  { id:"rainbow",  em:"🌈", nm:"무지개",   cost:60 },
-  { id:"wheel",    em:"🎡", nm:"놀이기구", cost:70 }
-];
-var ITEMBY = {};
-ITEMS.forEach(function(it){ ITEMBY[it.id] = it; });
-var TOWN_COLS = 8, TOWN_ROWS = 5, TOWN_CELLS = TOWN_COLS * TOWN_ROWS;
-
 /* ------------------------------ 저장 ------------------------------ */
 var KEY = "haeyuli.wordgrow.v1";
 var ST = null;
 function blank(){
   return { v:1, q:0, ok:0, seq:0, stars:0, days:{}, wrong:{}, master:{}, seen:{},
-           town:{}, bag:{}, theme:"all", mode:"choice", at:0 };
+           theme:"all", mode:"choice", at:0 };
 }
 function load(){
   var o = null;
@@ -30998,7 +30946,7 @@ function load(){
   var d = blank();
   if (o && typeof o === "object" && !Array.isArray(o)){
     for (var k in d) if (o[k] !== undefined && o[k] !== null) d[k] = o[k];
-    ["days","wrong","master","seen","town","bag"].forEach(function(kk){
+    ["days","wrong","master","seen"].forEach(function(kk){
       if (!d[kk] || typeof d[kk] !== "object" || Array.isArray(d[kk])) d[kk] = {};
     });
     if (typeof d.q !== "number" || !isFinite(d.q)) d.q = 0;
@@ -31049,7 +30997,7 @@ function poolOf(k){
 
 /* ------------------------------ 화면 상태 ------------------------------ */
 var UI = { grp:"learn", round:[], qi:0, cur:null, answered:false, right:0, gained:0,
-           done:false, placing:"", picked:"", rule:0 };
+           done:false, picked:"", rule:0 };
 
 function speak(t){
   if (!t) return;
@@ -31296,85 +31244,9 @@ function renderReport(){
     bars += '<div class="wg-bar"><i style="height:' + Math.max(4, h) + '%"></i><span>' + (d.getMonth() + 1) + "/" + d.getDate() + "</span></div>";
   }
   s += '<div class="wg-rep-sec"><div class="wg-rep-t"><b>🗓 최근 7일</b><span class="wg-legend">막대 = 푼 문제 수</span></div><div class="wg-bars">' + bars + "</div></div>";
-  s += '<div class="wg-rep-sec"><div class="wg-rep-t"><b>🏘️ 단어 마을</b></div><p class="wg-note-t">지금까지 ' + Object.keys(ST.town).length + "칸을 꾸몄어요. 모은 별 ⭐" + ST.stars + "개.</p></div>";
   box.innerHTML = '<div class="wg-rep">' + s + "</div>";
 }
 function stat(v, l){ return '<div class="wg-stat"><b>' + esc(v) + "</b><span>" + esc(l) + "</span></div>"; }
-
-/* ------------------------------ 마을 ------------------------------ */
-function renderTown(){
-  var box = $("wgBody");
-  if (!box) return;
-  var stars = (SB.starsNow && SB.starsNow()) || 0;
-  var s = "";
-  s += '<div class="wg-town-h"><b>🏘️ 단어 마을</b><span>⭐ <b data-stars>' + stars + "</b>개로 꾸며요</span></div>";
-  s += '<div class="wg-map" id="wgMap">';
-  for (var r = 0; r < TOWN_ROWS; r++){
-    for (var c = 0; c < TOWN_COLS; c++){
-      var key = r + "-" + c, it = ST.town[key] ? ITEMBY[ST.town[key]] : null;
-      s += '<button class="wg-tile' + (it ? " has" : "") + '" type="button" data-cell="' + key + '" aria-label="' + (it ? it.nm + " 자리" : "빈 자리") + '">'
-        + (it ? '<span class="wg-it">' + it.em + "</span>" : "") + "</button>";
-    }
-  }
-  s += "</div>";
-  if (UI.placing){
-    var p = ITEMBY[UI.placing];
-    s += '<div class="wg-placing">' + (p ? p.em + " " + esc(p.nm) : "") + " — 놓을 자리를 눌러 주세요 "
-       + '<button class="wg-mini" type="button" data-cancel="1">그만</button></div>';
-  }
-  s += '<div class="wg-shop" id="wgShop">' + ITEMS.map(function(it){
-    var n = ST.bag[it.id] || 0;
-    var can = stars >= it.cost;
-    return '<button class="wg-buy' + (can ? "" : " off") + '" type="button" data-buy="' + it.id + '">'
-      + '<span class="wg-bem">' + it.em + "</span><b>" + esc(it.nm) + "</b><i>⭐" + it.cost + "</i>"
-      + (n ? '<em class="wg-bagn">' + n + "</em>" : "") + "</button>";
-  }).join("") + "</div>";
-  s += '<p class="wg-note-t">가게 물건을 누르면 별을 쓰고 사요. 놓인 물건을 누르면 다시 옮길 수 있어요.</p>';
-  box.innerHTML = '<div class="wg-town">' + s + "</div>";
-}
-
-function buy(id){
-  var it = ITEMBY[id];
-  if (!it) return;
-  var stars = (SB.starsNow && SB.starsNow()) || 0;
-  if (stars < it.cost){
-    SB.toast("별이 " + (it.cost - stars) + "개 더 필요해요. 낱말 퀴즈로 별을 모아요! ⭐");
-    return;
-  }
-  if (!SB.spend || !SB.spend(it.cost)){ SB.toast("별을 쓰지 못했어요. 잠시 뒤 다시 해 봐요."); return; }
-  ST.bag[id] = (ST.bag[id] || 0) + 1;
-  UI.placing = id;
-  save();
-  SB.toast(it.em + " " + it.nm + "를 샀어요! 놓을 자리를 눌러 주세요");
-  renderTown();
-}
-
-function place(key){
-  if (!UI.placing) return;
-  if (ST.town[key]){ SB.toast("이미 물건이 있어요. 다른 자리를 눌러 주세요."); return; }
-  var id = UI.placing;
-  if (!ST.bag[id]){ UI.placing = ""; renderTown(); return; }
-  ST.bag[id]--;
-  if (!ST.bag[id]) delete ST.bag[id];
-  ST.town[key] = id;
-  UI.placing = ST.bag[id] ? id : "";
-  save();
-  var it = ITEMBY[id];
-  SB.toast((it ? it.em + " " + it.nm : "물건") + "를 놓았어요!");
-  renderTown();
-}
-
-function lift(key){
-  var id = ST.town[key];
-  if (!id) return;
-  delete ST.town[key];
-  ST.bag[id] = (ST.bag[id] || 0) + 1;
-  UI.placing = id;
-  save();
-  var it = ITEMBY[id];
-  SB.toast((it ? it.em + " " + it.nm : "물건") + "를 들었어요. 놓을 자리를 눌러 주세요");
-  renderTown();
-}
 
 /* ------------------------------ 전체 그리기 ------------------------------ */
 function renderHead(){
@@ -31397,17 +31269,14 @@ function renderHead(){
     modes.innerHTML = '<button class="wg-md' + (UI.grp !== "review" && m === "choice" ? " on" : "") + '" type="button" data-mode="choice">🃏 뜻 고르기</button>'
       + '<button class="wg-md' + (UI.grp !== "review" && m === "spell" ? " on" : "") + '" type="button" data-mode="spell">⌨️ 철자 쓰기</button>'
       + '<button class="wg-md rev' + (UI.grp === "review" ? " on" : "") + '" type="button" data-grp="review">🔁 오답노트 <i>' + wrongN() + "</i></button>"
-      + '<button class="wg-md' + (UI.grp === "report" ? " on" : "") + '" type="button" data-grp="report">📊 엄마 리포트</button>'
-      + '<button class="wg-md' + (UI.grp === "town" ? " on" : "") + '" type="button" data-grp="town">🏘️ 단어 마을</button>';
+      + '<button class="wg-md' + (UI.grp === "report" ? " on" : "") + '" type="button" data-grp="report">📊 엄마 리포트</button>';
   }
 }
 
 function go(grp){
   UI.grp = grp || "learn";
-  UI.placing = "";
   renderHead();
   if (UI.grp === "report") return renderReport();
-  if (UI.grp === "town") return renderTown();
   buildRound();
 }
 
@@ -31415,7 +31284,6 @@ SB.wgRefresh = function(){
   load();
   renderHead();
   if (UI.grp === "report") return renderReport();
-  if (UI.grp === "town") return renderTown();
   if (!UI.round.length || UI.done) return buildRound();
   showQ();
 };
@@ -31459,13 +31327,6 @@ root.addEventListener("click", function(e){
   if ((b = near("[data-go]"))){ checkSpell(); return; }
   if ((b = near("[data-next]"))){ next(); return; }
   if ((b = near("[data-again]"))){ UI.grp = "learn"; renderHead(); buildRound(); return; }
-  if ((b = near("[data-buy]"))){ buy(b.getAttribute("data-buy")); return; }
-  if ((b = near("[data-cancel]"))){ UI.placing = ""; renderTown(); return; }
-  if ((b = near("[data-cell]"))){
-    var key = b.getAttribute("data-cell");
-    if (UI.placing) place(key); else if (ST.town[key]) lift(key);
-    return;
-  }
 });
 
 root.addEventListener("input", function(e){
