@@ -1560,6 +1560,22 @@ body.mob .gd-foot{padding-bottom:.4rem;}
 }
 
 /* ===== 국어 글자 키보드 (자음 + 모음 조합) ===== */
+/* 두벌식 자판 배치 */
+.kk-kbrow{display:grid;gap:.34vh .36vh;padding:.22vh .5vh;width:100%;justify-items:stretch;}
+.kk-r1{grid-template-columns:repeat(10,minmax(0,1fr));}
+.kk-r2{grid-template-columns:repeat(9,minmax(0,1fr));padding-left:calc(.5vh + 4%);padding-right:4%;}
+.kk-r3{grid-template-columns:repeat(7,minmax(0,1fr));padding-left:calc(.5vh + 10%);padding-right:10%;}
+.kk-key{position:relative;width:100%;min-width:0;height:clamp(2.3rem,5.4vh,3.3rem);border-radius:.9vh;
+  background:#fff;color:#0f4c66;font-size:clamp(1rem,2.4vh,1.35rem);font-weight:900;
+  box-shadow:inset 0 0 0 1.8px #d8e8f4, 0 .18vh .3vh rgba(24,80,120,.08);}
+.kk-key:active{transform:translateY(.1vh) scale(.98);}
+.kk-key .kk-ks{display:none;position:absolute;top:.1vh;right:.25vh;font-size:.62em;color:#9ec6dd;font-weight:800;}
+.kk-key.hassh .kk-ks{display:block;}
+.kk-key.shifted{background:#e8f4ff;box-shadow:inset 0 0 0 2px #74bde6;}
+.kk-key.shifted .kk-ks{display:none;}
+.kk-key.on{background:#dcefff;box-shadow:inset 0 0 0 2.4px #4c9fd6;color:#0a4f78;}
+.kk-act.kk-shift{min-width:2.6rem;background:#f4f9ff;color:#1d6d99;font-size:clamp(.95rem,2.2vh,1.2rem);}
+.kk-act.kk-shift.on{background:#1d6d99;color:#fff;}
 .kokview{display:flex;flex-direction:column;gap:.7vh;min-height:0;height:100%;}
 .kk-wrap{display:flex;flex-direction:column;gap:.7vh;width:100%;max-width:60rem;margin:0 auto;min-height:0;height:100%;}
 .kk-qpanel{flex:1 1 auto;padding-bottom:.55vh;}
@@ -1694,6 +1710,14 @@ body.mob .kw-acts{padding:.6rem .7rem .8rem;gap:.4rem;}
 body.mob .kw-btn{min-height:2.7rem;font-size:.9rem;border-radius:.8rem;}
 
 /* ===== 🌱 국어 어휘·개념 (어휘싹 · 개념싹 · 알맹이 읽기) ===== */
+
+.vc-pic{display:block;width:100%;max-width:26rem;margin:.2vh auto .5vh;border-radius:1.1vh;
+  background:#fff;box-shadow:0 .3vh .8vh rgba(20,70,110,.14);}
+.vc-card:has(.vc-pic){align-items:center;justify-content:center;}
+.vc-card:has(.vc-pic)>*:first-child{margin-top:.2rem;}
+.vc-card:has(.vc-pic)>*:last-child{margin-bottom:.2rem;}
+body.mob .vc-pic{max-width:100%;border-radius:.9rem;}
+
 .vcview{display:flex;flex-direction:column;position:absolute;inset:0;min-height:0;padding:0;}
 .vc-wrap{display:flex;flex-direction:column;gap:.5vh;height:100%;min-height:0;width:100%;max-width:74rem;margin:0 auto;}
 .vc-steps{flex:0 0 auto;display:flex;gap:.4vh;overflow-x:auto;padding:0 .2vh;scrollbar-width:none;}
@@ -1779,6 +1803,15 @@ body.mob .vc-word{font-size:2.5rem;}
 body.mob .vc-opt{min-height:3rem;font-size:1rem;}
 body.mob .vc-line{font-size:1.05rem;padding:.55rem .7rem;}
 
+/* 📞 전화 영어 — 다시 듣기 · 녹음 · 안내 */
+.cl-hear{flex:0 0 auto;align-self:flex-start;margin:.1rem 0 0 .35rem;width:2rem;height:2rem;border-radius:999px;
+  background:#fff;box-shadow:inset 0 0 0 1.4px #d6e6f2;font-size:.92rem;line-height:1;}
+.cl-hear:active{transform:scale(.94);}
+.ct-mic.rec{background:#e8503a;color:#fff;box-shadow:0 0 0 .28rem rgba(232,80,58,.18);}
+.ct-mic.listening{background:#ff8a5c;color:#fff;}
+.ct-iosnote{margin:.35rem .2rem 0;font-size:.72rem;line-height:1.45;color:#63798a;font-weight:700;word-break:keep-all;}
+.ct-iosnote b{color:#155f8c;}
+
 /* ===== 🏰 영어 월팸 (디즈니 월드 오브 잉글리시) ===== */
 .wpview{display:flex;flex-direction:column;position:absolute;inset:0;min-height:0;}
 .wp-wrap{display:flex;flex-direction:column;gap:.5vh;height:100%;min-height:0;width:100%;max-width:64rem;margin:0 auto;}
@@ -1808,6 +1841,14 @@ body.mob .wp-w{font-size:.88rem;padding:.4rem .6rem;border-radius:.7rem;}
   padding:1.1vh 1.4vh;border-radius:1.6vh;background:linear-gradient(160deg,#f7fbff,#eef6fd);
   box-shadow:inset 0 0 0 .18vh #dceaf6;}
 .wp-em{font-size:clamp(2.6rem,7.2vh,4.4rem);line-height:1;}
+.wp-pic{display:block;width:100%;max-width:26rem;aspect-ratio:480/263;object-fit:cover;
+  border-radius:1.1vh;box-shadow:0 .35vh 1vh rgba(27,91,138,.2);background:#eaf3fb;}
+.wp-card[data-wp="tap"]{cursor:pointer;}
+.wp-card .wp-en{margin-top:.1vh;}
+.wp-quiz .wp-pic{max-width:19rem;}
+.wp-allbtn img{display:none;}
+body.mob .wp-pic{max-width:100%;border-radius:.9rem;}
+
 .wp-en{font-size:clamp(1.7rem,4.6vh,2.9rem);font-weight:900;color:#1b5b8a;letter-spacing:-.02em;line-height:1.1;text-align:center;word-break:break-word;}
 .wp-ko{font-size:clamp(1rem,2.4vh,1.5rem);font-weight:900;color:#5d7f96;}
 .wp-say{display:flex;gap:.5vh;flex-wrap:wrap;justify-content:center;}
@@ -6322,6 +6363,38 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
 #smQBody{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 1vh .6vh;}
 #smQBody .qz-pad{grid-template-columns:repeat(3,1fr);}
 
+/* ---------- 2️⃣ 2학년 수학 · 하루 1문제 그림 설명 ---------- */
+.gd-figure{display:flex;align-items:center;justify-content:center;margin:.3vh 0 .45vh;min-height:10rem;padding:.6vh .4vh;
+  border-radius:1.2vh;background:linear-gradient(160deg,#f7fcff,#eef7fd);box-shadow:inset 0 0 0 1.6px #dbeaf6;}
+.gd-svg{width:100%;max-width:24rem;height:auto;}
+.gd-clock svg{width:min(58%,13rem);height:auto;display:block;margin:0 auto;}
+.gd-h{margin:.1vh 0 0;font-size:clamp(.78rem,1.6vh,.92rem);font-weight:900;color:#4c9fd6;letter-spacing:-.01em;}
+.gd-steps{margin:.15vh 0 .4vh;padding-left:1.1rem;font-size:clamp(.86rem,1.85vh,1.05rem);line-height:1.5;color:#21526d;font-weight:700;}
+.gd-steps li{margin:.12rem 0;word-break:keep-all;}
+.gd-steps li::marker{color:#4c9fd6;font-weight:900;}
+.mq-quiz #g2QBody{display:flex;flex-direction:column;justify-content:center;height:100%;}
+.gd-q{margin:.35rem 0 .3rem;text-align:center;font-size:clamp(1rem,2.1vh,1.25rem);font-weight:900;color:#0f4c66;word-break:keep-all;}
+.gd-opts{display:grid;grid-template-columns:1fr;gap:.35rem;}
+.gd-opt{min-height:2.6rem;border-radius:.9rem;background:#fff;color:#21526d;font-weight:900;font-size:clamp(.95rem,2vh,1.1rem);
+  box-shadow:inset 0 0 0 1.8px #d8eaf7;}
+.gd-opt:active{transform:scale(.985);}
+.gd-in{display:flex;align-items:baseline;justify-content:center;gap:.4rem;margin:.2rem 0 .35rem;}
+.gd-in b{font-size:clamp(1.8rem,4.6vh,2.6rem);font-weight:900;color:#1b5b8a;letter-spacing:.02em;}
+.gd-unitlbl{font-size:.85rem;font-weight:800;color:#8aa6b8;}
+.gd-pad{display:grid;grid-template-columns:repeat(5,1fr);gap:.35rem;}
+.gd-key{height:2.5rem;border-radius:.8rem;background:#fff;color:#0f4c66;font-size:clamp(1rem,2.2vh,1.2rem);font-weight:900;
+  box-shadow:inset 0 0 0 1.6px #d8eaf7;}
+.gd-key:active{transform:scale(.97);}
+.gd-key.back{background:#fff5f2;color:#a4553f;box-shadow:inset 0 0 0 1.6px #ffd9cd;}
+.gd-key.go{background:linear-gradient(135deg,#5fd0a4,#2f9e78);color:#fff;box-shadow:0 .25vh .6vh rgba(47,158,120,.35);}
+.gd-fb{margin:.45rem 0 .1rem;padding:.55rem .7rem;border-radius:.9rem;font-weight:800;font-size:clamp(.82rem,1.7vh,1rem);
+  background:#eefaf3;color:#0d5a3f;box-shadow:inset 0 0 0 1.8px #bfe8d4;line-height:1.45;}
+.gd-fb.no{background:#fff5f2;color:#96382b;box-shadow:inset 0 0 0 1.8px #ffcabd;}
+.gd-bar{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.45rem;}
+.gd-btn{flex:1 1 8rem;min-height:2.3rem;border-radius:.85rem;background:#f2f8fd;color:#1d6d99;font-weight:900;font-size:.88rem;
+  box-shadow:inset 0 0 0 1.6px #cfe4f3;}
+.gd-btn:active{transform:scale(.99);}
+body.mob .gd-svg{max-width:100%;}
 /* ---------- 📘 기초수학 1 · 2️⃣ 2학년 수학 ---------- */
 .mqview{display:flex;flex-direction:column;gap:.6vh;height:100%;min-height:0;}
 .mq-wrap{display:flex;flex-direction:column;gap:.5vh;height:100%;min-height:0;width:100%;max-width:74rem;margin:0 auto;}
@@ -6357,6 +6430,45 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
 .mq-free{margin:.7rem 1vh 0;padding:.6rem .7rem;border-radius:.8rem;background:#fbfdfe;box-shadow:inset 0 0 0 1.4px #e6f0f7;
   font-size:clamp(.72rem,1.5vh,.86rem);font-weight:800;color:#7d8b98;line-height:1.45;}
 
+/* 🏫 교과서 핵심한자 — 오늘의 두 낱말 */
+.ht-today{margin:.2vh 0 .6vh;}
+.htt-head{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin-bottom:.5vh;}
+.htt-head b{font-size:clamp(1rem,2.1vh,1.25rem);font-weight:900;color:#1e5478;}
+.htt-head span{font-size:clamp(.72rem,1.5vh,.9rem);font-weight:800;color:#8aa6b8;}
+.htt-cards{display:grid;grid-template-columns:1fr 1fr;gap:.8vh;}
+.htt-card{background:#fff;border-radius:1.2vh;padding:.8vh .9vh;box-shadow:inset 0 0 0 1.8px #dbeaf6;}
+.htt-topic{font-size:clamp(.66rem,1.35vh,.8rem);font-weight:900;color:#9ab3c4;}
+.htt-parts{display:flex;align-items:center;justify-content:center;gap:.45rem;margin:.45vh 0 .2vh;}
+.htt-part{display:flex;flex-direction:column;align-items:center;gap:.1vh;background:#f4fbff;border-radius:1vh;padding:.5vh .8vh;
+  box-shadow:inset 0 0 0 1.4px #d6e9f6;min-width:4.6rem;}
+.htt-pic{font-size:clamp(1.5rem,3.4vh,2.1rem);line-height:1;}
+.htt-part b{font-family:"Noto Serif KR","Nanum Myeongjo",serif;font-size:clamp(1.5rem,3.6vh,2.2rem);color:#12587f;line-height:1.05;}
+.htt-part em{font-style:normal;font-size:clamp(.62rem,1.3vh,.78rem);font-weight:800;color:#6d8fa6;}
+.htt-plus{font-size:clamp(1rem,2.2vh,1.3rem);font-weight:900;color:#b9cfdd;}
+.htt-join{text-align:center;font-size:clamp(.66rem,1.35vh,.8rem);font-weight:900;color:#9ab3c4;margin:.25vh 0;}
+.htt-word{display:grid;grid-template-columns:auto 1fr;gap:.1vh .6rem;align-items:center;
+  background:linear-gradient(160deg,#fff8e8,#fff2d6);border-radius:1.1vh;padding:.55vh .8vh;box-shadow:inset 0 0 0 1.6px #f0d9a8;}
+.htt-wpic{grid-row:1 / span 2;font-size:clamp(1.8rem,4vh,2.6rem);line-height:1;}
+.htt-word b{grid-column:2;font-family:"Noto Serif KR","Nanum Myeongjo",serif;font-size:clamp(1.3rem,3vh,1.9rem);color:#8a5a12;line-height:1.1;}
+.htt-word b span{font-family:inherit;font-size:.78em;color:#a97a2c;}
+.htt-word em{grid-column:2;font-style:normal;font-size:clamp(.72rem,1.5vh,.9rem);font-weight:800;color:#8a6a3a;word-break:keep-all;}
+.htt-quiz{margin-top:.5vh;}
+.htt-q{margin:.2rem 0 .35rem;font-size:clamp(.8rem,1.7vh,.98rem);font-weight:900;color:#21526d;text-align:center;word-break:keep-all;}
+.htt-opt{display:block;width:100%;margin:.25rem 0;padding:.45rem .55rem;border-radius:.8rem;background:#fff;color:#21526d;
+  font-weight:800;font-size:clamp(.76rem,1.6vh,.92rem);text-align:left;box-shadow:inset 0 0 0 1.6px #dbeaf6;word-break:keep-all;}
+.htt-opt.ok{background:#e6fbef;color:#0b6b47;box-shadow:inset 0 0 0 2px #63d19f;}
+.htt-opt.no{background:#fff0ee;color:#a33a2c;box-shadow:inset 0 0 0 2px #ffab9b;}
+.htt-fb{margin-top:.35rem;font-size:clamp(.72rem,1.5vh,.88rem);font-weight:800;line-height:1.4;word-break:keep-all;}
+.htt-fb.ok{color:#0b6b47;}
+.htt-fb.no{color:#a33a2c;}
+.htt-acts{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.6vh;}
+.htt-done{flex:1 1 10rem;min-height:2.4rem;border-radius:.9rem;background:linear-gradient(135deg,#ffd166,#f0a92c);color:#6b4407;
+  font-weight:900;font-size:clamp(.82rem,1.75vh,1rem);box-shadow:0 .25vh .6vh rgba(240,169,44,.35);}
+.htt-btn{flex:0 1 auto;min-height:2.4rem;padding:0 .9rem;border-radius:.9rem;background:#f2f8fd;color:#1d6d99;font-weight:900;font-size:.84rem;
+  box-shadow:inset 0 0 0 1.6px #cfe4f3;}
+.ht-rest{margin-top:.6vh;}
+@media (max-width:760px){ .htt-cards{grid-template-columns:1fr;} }
+body.mob .htt-cards{grid-template-columns:1fr;}
 /* ---------- 🏫 교과서 핵심한자 ---------- */
 .hj-textwrap{display:flex;flex-direction:column;gap:.5vh;min-height:0;height:100%;}
 .ht-sets{display:flex;gap:.35rem;overflow-x:auto;padding:.1rem .1rem .2rem;scrollbar-width:none;}
@@ -6992,6 +7104,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
                  placeholder="영어로 답해 봐요! (한글도 괜찮아요)" aria-label="전화 영어 답하기">
           <button class="ct-send" id="callSend" type="button">보내기</button>
         </div>
+        <p class="ct-iosnote" id="callIosNote">📱 <b>아이패드·아이폰</b>은 옆면 <b>무음 스위치</b>를 끄고 볼륨을 올려 주세요. 소리가 안 나면 말풍선의 <b>🔊</b>를 누르면 다시 들려요. 🎙️<b>말하기</b>는 한 번 누르고 말한 뒤 <b>⏹ 다 말했어요</b>를 누르면 글로 바뀌어요.</p>
         <div class="ct-foot">
           <button class="pickle-call" id="pickleCall" type="button">📲 피클과 직접 전화 영어 하기</button>
           <span class="pickle-note">피클 앱을 열어 진짜 AI 선생님과<br>전화로 이어서 말해요</span>
@@ -7134,7 +7247,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
       <div class="mq-wrap">
         <div class="mq-top">
           <b>2️⃣ 2학년 수학</b>
-          <span>「아이좋아 기초수학」 2학년 · 1학기 + 2학기 단원</span>
+          <span>교육과정 2학년 · 2-1 6단원 + 2-2 6단원 · 하루 1문제씩 그림과 함께</span>
         </div>
         <div class="mq-steps" id="g2Steps" role="group" aria-label="2학년 수학 단원 고르기"></div>
         <div class="mq-body">
@@ -7223,13 +7336,13 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
           <div class="kk-fb" id="kkFb" aria-live="polite" hidden></div>
         </div>
         <div class="panel kk-kbpanel">
-          <div class="kk-kbrow kk-cons" id="kkCons" role="group" aria-label="자음"></div>
-          <div class="kk-kbrow kk-vow" id="kkVow" role="group" aria-label="모음"></div>
-          <div class="kk-kbrow kk-vow2" id="kkVow2" role="group" aria-label="겹모음"></div>
+          <div class="kk-kbrow kk-r1" id="kkRow1" role="group" aria-label="첫째 줄 ㅂㅈㄷㄱㅅ ㅛㅕㅑㅐㅔ"></div>
+          <div class="kk-kbrow kk-r2" id="kkRow2" role="group" aria-label="둘째 줄 ㅁㄴㅇㄹㅎ ㅗㅓㅏㅣ"></div>
+          <div class="kk-kbrow kk-r3" id="kkRow3" role="group" aria-label="셋째 줄 ㅋㅌㅊㅍ ㅠㅜㅡ"></div>
           <div class="kk-acts">
+            <button class="kk-act kk-shift" type="button" id="kkShift" data-kk="shift" aria-pressed="false" aria-label="쌍자음·겹모음">⇧</button>
             <button class="kk-act" type="button" id="kkBack" data-kk="back">⌫ 지우기</button>
-            <button class="kk-act" type="button" id="kkReset" data-kk="reset">🔄 다시</button>
-            <button class="kk-act kk-go" type="button" id="kkCheck" data-kk="check">✓ 정답 확인</button>
+            <button class="kk-act kk-go" type="button" id="kkCheck" data-kk="check">✓ 확인</button>
           </div>
         </div>
       </div>
@@ -7286,13 +7399,12 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
       </div>
     </section>
 
-    <!-- ================= 🌱 국어 · 어휘·개념 (어휘싹 · 개념싹 · 알맹이 읽기) ================= -->
+    <!-- ================= 🌱 국어 · 어휘·개념 (어휘싹 · 개념싹 — 책 속 그림 그대로) ================= -->
     <section class="view vcview" id="viewKoVocab" data-view="ko-vocab" hidden>
       <div class="vc-wrap">
         <div class="vc-steps" id="vcSteps" role="group" aria-label="어휘·개념 단계">
           <button class="vc-step on" type="button" data-vstep="1">① 어휘싹 1학년</button>
           <button class="vc-step" type="button" data-vstep="2">② 개념싹 3학년</button>
-          <button class="vc-step" type="button" data-vstep="3">③ 알맹이 읽기</button>
         </div>
         <div class="vc-body">
           <div class="vc-pane" id="vcPane1">
@@ -7321,20 +7433,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
               </div>
             </div>
           </div>
-          <div class="vc-pane" id="vcPane3" hidden>
-            <div class="vc-panel">
-              <div class="vc-ph"><b>📖 알맹이 읽기</b><a class="vc-src" href="https://www.ice.go.kr/ice/na/ntt/selectNttInfo.do?mi=11633&nttSn=3300632" target="_blank" rel="noopener">인천교육청 자료실 ↗</a><span class="vc-timer" id="vcTimer">00.0초</span><span id="vc3Prog">1 / 5</span></div>
-              <div class="vc-sets" id="vc3Sets"></div>
-              <div class="vc-card" id="vc3Card"></div>
-              <div class="vc-acts">
-                <button class="vc-btn" type="button" data-v3="prev">◀ 이전</button>
-                <button class="vc-btn" type="button" data-v3="timer">⏱️ 읽기 시작</button>
-                <button class="vc-btn" type="button" data-v3="next">다음 ▶</button>
-                <button class="vc-btn done" type="button" data-v3="done">✓ 다 읽었어요 (⭐ +2)</button>
-              </div>
-            </div>
-          </div>
-        </div>
+                  </div>
       </div>
     </section>
 
@@ -7344,7 +7443,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
         <div class="wp-panel">
           <div class="wp-ph"><b>🏰 월팸 단어카드</b><span class="wp-score" id="wpScore"></span><span class="wp-no" id="wpProg">1 / 24</span><button class="wp-hbtn" type="button" id="wpQuizBtn" data-wp="quiz">📝 퀴즈</button></div>
           <div class="wp-themes" id="wpThemes" role="group" aria-label="월팸 주제"></div>
-          <p class="wp-note">🎬 디즈니 「월드 오브 잉글리시」 영상에서 나온 낱말·문장</p>
+          <p class="wp-note">🎬 디즈니 「월드 오브 잉글리시」 영상 장면 + 원음 그대로 — 카드를 누르면 그 장면의 소리가 나요</p>
           <div class="wp-stage" id="wpStage"></div>
           <div class="wp-acts">
             <button class="wp-btn" type="button" data-wp="prev">◀ 이전</button>
@@ -7606,7 +7705,9 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
           <div class="hj-title"><b>🏫 교과서 핵심한자</b><span id="htTopic">3학년 1학기 사회 · 우리가 사는 곳</span></div>
           <div class="hj-tools"><span class="hj-num" id="htNum">1 / 12</span></div>
         </div>
-        <p class="hj-tip">충남교육청 「교과서 핵심한자 뜻이랑 소리랑」 3학년 사회·과학 — 한자를 이어서 낱말의 뜻을 알아봐요.</p>
+        <p class="hj-tip">충남교육청 「교과서 핵심한자 뜻이랑 소리랑」 3학년 사회·과학 — 글자 그림 두 개가 만나 낱말이 돼요. 하루 두 낱말씩!</p>
+        <div class="ht-today" id="htToday"></div>
+        <div class="ht-rest" id="htRest" hidden>
         <div class="ht-sets" id="htSets" role="group" aria-label="교과서 핵심한자 단원 고르기"></div>
         <div class="ht-chars" id="htChars"></div>
         <div class="ht-words" id="htWords"></div>
@@ -7614,6 +7715,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
         <div class="ht-tools">
           <button type="button" id="htSpeak">🔊 한자 읽어 주기</button>
           <span id="htProg">1 / 5</span>
+        </div>
         </div>
       </div>
 
@@ -9412,43 +9514,99 @@ var TONE = {
   ko: { pitch: 1.08, rate: 0.92, slow: 0.6 }
 };
 var voices = [], enVoice = null, koVoice = null;
+function isIOSDevice(){
+  try {
+    var ua = navigator.userAgent || "";
+    if (/iPad|iPhone|iPod/.test(ua)) return true;
+    return navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+  } catch(e){ return false; }
+}
 function pickVoices(){
   try { voices = (window.speechSynthesis && speechSynthesis.getVoices()) || []; } catch(e){ voices = []; }
-  enVoice = voices.filter(function(v){ return /^en[-_]/i.test(v.lang); })
-      .sort(function(a,b){
-        var score = function(v){ return (/en[-_]US/i.test(v.lang) ? 2 : 0) + (/samantha|google|zira|aria|jenny|natural/i.test(v.name) ? 1 : 0); };
-        return score(b) - score(a);
-      })[0] || null;
-  koVoice = voices.filter(function(v){ return /^ko[-_]/i.test(v.lang); })[0] || null;
+  function score(v){
+    var s = 0;
+    if (/^en[-_]US/i.test(v.lang)) s += 4; else if (/^en[-_]/i.test(v.lang)) s += 1;
+    if (v.localService) s += 3;      /* 기기 안 목소리 — 아이패드에서 실제로 소리가 나는 쪽 */
+    if (/samantha|google|zira|aria|jenny|natural|karen|moira|daniel/i.test(v.name)) s += 1;
+    return s;
+  }
+  var ens = voices.filter(function(v){ return /^en[-_]/i.test(v.lang); });
+  ens.sort(function(a,b){ return score(b) - score(a); });
+  enVoice = ens[0] || null;
+  if (isIOSDevice()){                 /* iOS는 클라우드 목소리가 조용히 실패하는 일이 많다 */
+    var loc = ens.filter(function(v){ return v.localService; });
+    if (loc.length) enVoice = loc[0];
+  }
+  var kos = voices.filter(function(v){ return /^ko[-_]/i.test(v.lang); });
+  koVoice = kos.filter(function(v){ return v.localService; })[0] || kos[0] || null;
 }
+var audioCtx = null, speechUnlocked = false;
+/* 사용자가 누른 그 순간에 불러야 한다 (아이패드 사파리는 그 뒤로는 소리를 막는다) */
+function unlockSpeech(){
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (AC && !audioCtx) audioCtx = new AC();
+    if (audioCtx && audioCtx.state === "suspended"){ try { audioCtx.resume(); } catch(e){} }
+  } catch(e){}
+  if (speechUnlocked || !window.speechSynthesis) return;
+  speechUnlocked = true;
+  try {
+    var u = new SpeechSynthesisUtterance(" ");
+    u.volume = 0; u.rate = 1.2; u.pitch = 1; u.lang = "en-US";
+    if (enVoice) u.voice = enVoice;
+    speechSynthesis.speak(u);
+  } catch(e){}
+}
+function stopSpeech(){
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){}
+}
+
 if (window.speechSynthesis) {
   pickVoices();
   try { speechSynthesis.onvoiceschanged = pickVoices; } catch(e){}
+  /* 아이패드 사파리: 첫 손가락 터치에서 목소리를 미리 열어 둔다 */
+  try {
+    document.addEventListener("touchend", function once(){ try { unlockSpeech(); } catch(e){} document.removeEventListener("touchend", once); }, { passive:true });
+    document.addEventListener("click", function once2(){ try { unlockSpeech(); } catch(e){} document.removeEventListener("click", once2); }, { passive:true });
+  } catch(e){}
 }
 var talkTimer = null;
 function speak(text, slow, lang){
-  var raw = String(text || "").replace(/[“”"]/g, "").replace(/^Let's say it in English:\s*/i, "").trim();
+  var raw = String(text || "").replace(/[“”\"]/g, "").replace(/^Let's say it in English:\s*/i, "").trim();
   if (!raw) return;
   if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined") {
     toast("이 브라우저는 읽어주기를 지원하지 않아요. 소리 없이도 공부할 수 있어요!");
     return;
   }
   try {
-    speechSynthesis.cancel();
+    var busy = false;
+    try { busy = !!(speechSynthesis.speaking || speechSynthesis.pending); } catch(e){}
+    /* iOS는 cancel() 직후 speak()를 부르면 조용히 먹어 버린다 — 정말 말하는 중일 때만 끊고 잠깐 쉰다 */
+    if (busy) speechSynthesis.cancel();
+    try { if (speechSynthesis.paused) speechSynthesis.resume(); } catch(e){}
     var u = new SpeechSynthesisUtterance(raw);
     u.lang = lang || "en-US";
     var isKo = /^ko/i.test(u.lang);
     var v = isKo ? koVoice : enVoice;
+    if (!v){ try { pickVoices(); v = isKo ? koVoice : enVoice; } catch(e){} }
     if (v) u.voice = v;
     var tone = isKo ? TONE.ko : TONE.en;
-    /* slow 에 숫자를 넘기면 그 값을 재생 속도로 쓴다(사이트워드 속도 조절 등) */
     var numRate = (typeof slow === "number" && isFinite(slow) && slow > 0) ? slow : 0;
     u.rate = numRate ? numRate : (slow ? tone.slow : tone.rate);
     u.pitch = tone.pitch;
+    u.volume = 1;
     u.onstart = function(){ document.body.classList.add("talking"); };
     u.onend = function(){ document.body.classList.remove("talking"); };
     u.onerror = function(){ document.body.classList.remove("talking"); };
-    speechSynthesis.speak(u);
+    var fire = function(){
+      try {
+        if (speechSynthesis.paused) speechSynthesis.resume();
+        speechSynthesis.speak(u);
+      } catch(e){}
+    };
+    if (busy) setTimeout(fire, 45); else fire();
+    /* iOS에서 화면이 꺼지거나 다른 앱을 다녀오면 말이 멈춰 있다 — 잠깐 뒤 한 번 더 resume */
+    setTimeout(function(){ try { if (window.speechSynthesis && speechSynthesis.speaking && speechSynthesis.paused) speechSynthesis.resume(); } catch(e){} }, 260);
     clearTimeout(talkTimer);
     talkTimer = setTimeout(function(){ document.body.classList.remove("talking"); }, 9000);
   } catch(e){ document.body.classList.remove("talking"); }
@@ -13605,7 +13763,7 @@ function parts(word){
   return out;
 }
 
-var K = { q:null, i:0, round:[], live:false, solved:0, tries:0, word:[], ch:null, v:null, done:false };
+var K = { q:null, i:0, round:[], live:false, solved:0, tries:0, word:[], ch:null, v:null, done:false, shift:false };
 var N = 8;
 
 function chipHtml(t, k){ return '<span class="kk-chip ' + k + '">' + esc(t) + '</span>'; }
@@ -13644,22 +13802,43 @@ function render(){
 }
 function hideFb(){ var fb = $("kkFb"); if (fb) { fb.hidden = true; fb.className = "kk-fb"; fb.innerHTML = ""; } }
 
-function buildKeys(){
-  var c = $("kkCons"), v = $("kkVow"), d = $("kkVow2");
-  if (c && c.getAttribute("data-built") !== "1"){
-    c.setAttribute("data-built", "1");
-    c.innerHTML = CONS.map(function(x){ return '<button class="kk-key" type="button" data-c="' + x + '" aria-label="자음 ' + x + '">' + x + '</button>'; }).join("");
-  }
-  if (v && v.getAttribute("data-built") !== "1"){
-    v.setAttribute("data-built", "1");
-    v.innerHTML = VOWS.map(function(x){ return '<button class="kk-key" type="button" data-v="' + x + '" aria-label="모음 ' + x + '">' + x + '</button>'; }).join("");
-  }
-  if (d && d.getAttribute("data-built") !== "1"){
-    d.setAttribute("data-built", "1");
-    d.innerHTML = DVOW.map(function(x){ return '<button class="kk-key" type="button" data-v="' + x + '" aria-label="겹모음 ' + x + '">' + x + '</button>'; }).join("");
-  }
+/* 표준 두벌식 컴퓨터 자판 배열 — 줄마다 자판 그대로 */
+var KROW1 = [["ㅂ","ㅃ"],["ㅈ","ㅉ"],["ㄷ","ㄸ"],["ㄱ","ㄲ"],["ㅅ","ㅆ"],["ㅛ",null],["ㅕ",null],["ㅑ",null],["ㅐ","ㅒ"],["ㅔ","ㅖ"]];
+var KROW2 = [["ㅁ",null],["ㄴ",null],["ㅇ",null],["ㄹ",null],["ㅎ",null],["ㅗ",null],["ㅓ",null],["ㅏ",null],["ㅣ",null]];
+var KROW3 = [["ㅋ",null],["ㅌ",null],["ㅊ",null],["ㅍ",null],["ㅠ",null],["ㅜ",null],["ㅡ",null]];
+var KCONS = "ㅂㅈㄷㄱㅅㅁㄴㅇㄹㅎㅋㅌㅊㅍ";
+function kkKeyHtml(base, shift){
+  var isC = KCONS.indexOf(base) >= 0;
+  return '<button class="kk-key' + (shift ? " hassh" : "") + '" type="button" data-' + (isC ? "c" : "v") + '="' + base + '"'
+    + (shift ? ' data-sh="' + shift + '"' : "")
+    + ' aria-label="' + (isC ? "자음 " : "모음 ") + base + '">'
+    + '<span class="kk-kl">' + base + "</span>" + (shift ? '<span class="kk-ks">' + shift + "</span>" : "") + "</button>";
 }
-
+function buildKeys(){
+  var spec = [[$("kkRow1"), KROW1], [$("kkRow2"), KROW2], [$("kkRow3"), KROW3]];
+  for (var r = 0; r < spec.length; r++){
+    var el = spec[r][0];
+    if (!el || el.getAttribute("data-built") === "1") continue;
+    el.setAttribute("data-built", "1");
+    var h = "";
+    for (var i = 0; i < spec[r][1].length; i++) h += kkKeyHtml(spec[r][1][i][0], spec[r][1][i][1]);
+    el.innerHTML = h;
+  }
+  paintShift();
+}
+function paintShift(){
+  var keys = document.querySelectorAll("#viewKoKey .kk-key");
+  for (var i = 0; i < keys.length; i++){
+    var k = keys[i], sh = k.getAttribute("data-sh");
+    var lab = k.querySelector(".kk-kl");
+    if (!lab) continue;
+    var base = k.getAttribute("data-c") || k.getAttribute("data-v");
+    lab.textContent = (sh && K.shift) ? sh : base;
+    k.classList.toggle("shifted", !!(sh && K.shift));
+  }
+  var sb = $("kkShift");
+  if (sb){ sb.classList.toggle("on", !!K.shift); sb.setAttribute("aria-pressed", K.shift ? "true" : "false"); }
+}
 function commit(){
   if (!(K.ch && K.v)) return false;
   K.word.push(syl(K.ch, K.v));
@@ -13799,14 +13978,16 @@ function bind(){
     var t = e.target;
     var key = t && t.closest ? t.closest(".kk-key") : null;
     if (key){
-      if (key.getAttribute("data-c")) tapC(key.getAttribute("data-c"));
-      else tapV(key.getAttribute("data-v"));
+      var kb = key.getAttribute("data-c"), kv = key.getAttribute("data-v"), ks = key.getAttribute("data-sh");
+      if (kb) tapC((ks && K.shift) ? ks : kb);
+      else tapV((ks && K.shift) ? ks : kv);
       return;
     }
     var act = t && t.closest ? t.closest("[data-kk]") : null;
     if (!act) return;
     var a = act.getAttribute("data-kk");
     if (a === "back") back();
+    else if (a === "shift"){ K.shift = !K.shift; paintShift(); }
     else if (a === "reset") reset();
     else if (a === "check") check();
     else if (a === "hear"){ if (K.q) SB.speak(K.q.q, false, "ko-KR"); }
@@ -14361,6 +14542,73 @@ var VOC = [
     e:"어른께 공손하게 인사했어요." }
 ];
 var VOCSET = [[0,10],[10,20],[20,30]];
+/* ── 어휘싹·개념싹 책 속 실제 그림 (PDF에서 잘라 냄) ── */
+var VOCIMG = {
+"공손하다":"vs_01.webp",
+"날개":"vs_02.webp",
+"낱말":"vs_03.webp",
+"누리다":"vs_04.webp",
+"눈여겨보다":"vs_05.webp",
+"다듬다":"vs_06.webp",
+"닮다":"vs_07.webp",
+"닿다":"vs_08.webp",
+"되풀이되다":"vs_09.webp",
+"둘러보다":"vs_10.webp",
+"드러나다":"vs_11.webp",
+"머쓱하다":"vs_12.webp",
+"문학":"vs_13.webp",
+"미끼":"vs_14.webp",
+"방치하다":"vs_15.webp",
+"배출":"vs_16.webp",
+"분리배출":"vs_17.webp",
+"서두르다":"vs_18.webp",
+"실리다":"vs_19.webp",
+"쓰임":"vs_20.webp",
+"역사":"vs_21.webp",
+"이삭":"vs_22.webp",
+"입김":"vs_23.webp",
+"적용":"vs_24.webp",
+"차례":"vs_25.webp",
+"체험":"vs_26.webp",
+"침착하다":"vs_27.webp",
+"탐스럽다":"vs_28.webp",
+"파악하다":"vs_29.webp",
+"활용하다":"vs_30.webp"
+};
+var CONIMG = {
+"고장":"cn_01.webp",
+"공기":"cn_26.webp",
+"관찰":"cn_27.webp",
+"교통수단":"cn_07.webp",
+"꼭짓점":"cn_14.webp",
+"몫":"cn_16.webp",
+"문화유산":"cn_06.webp",
+"물체":"cn_20.webp",
+"반사":"cn_28.webp",
+"받아내림":"cn_13.webp",
+"받아올림":"cn_12.webp",
+"배":"cn_17.webp",
+"번식":"cn_22.webp",
+"변":"cn_15.webp",
+"성질":"cn_21.webp",
+"세시 풍속":"cn_09.webp",
+"시각":"cn_18.webp",
+"시간":"cn_19.webp",
+"어림(하다)":"cn_10.webp",
+"유래":"cn_05.webp",
+"자리 수":"cn_11.webp",
+"자석":"cn_24.webp",
+"장소감":"cn_02.webp",
+"지도":"cn_03.webp",
+"지명":"cn_04.webp",
+"통신수단":"cn_08.webp",
+"표면":"cn_25.webp",
+"한살이":"cn_23.webp"
+};
+function vcPic(en, map){
+  var f = map[en];
+  return f ? '<img class="vc-pic" src="vocab-img/' + f + '" alt="' + esc(en) + ' 그림" loading="lazy">' : "";
+}
 
 /* ---------------- ② 개념싹 3학년 — 사회 · 수학 · 과학 교과 어휘 ---------------- */
 var CON = [
@@ -14557,7 +14805,8 @@ function renderVoc(){
   vocSets();
   if (S.vq === null){
     var q = VOC[S.vi];
-    card.innerHTML = '<button class="vc-word" type="button" data-v1="say" aria-label="' + esc(q.w) + ' 듣기">'
+    card.innerHTML = vcPic(q.w, VOCIMG)
+      + '<button class="vc-word" type="button" data-v1="say" aria-label="' + esc(q.w) + ' 듣기">'
       + '<span class="vc-em" aria-hidden="true">' + q.em + "</span><span>" + esc(q.w) + '</span>'
       + '<span class="vc-spk" aria-hidden="true">🔊</span></button>'
       + '<p class="vc-mean">' + esc(q.m) + "</p>"
@@ -14584,6 +14833,7 @@ function renderCon(){
   if (S.cq === null){
     card.innerHTML = '<p class="vc-tip">' + esc(q.k) + " 교과 어휘</p>"
       + '<div class="vc-word">' + esc(q.w) + "</div>"
+      + vcPic(q.w, CONIMG)
       + (q.h ? '<p class="vc-hanja">' + esc(q.h) + "</p>" : "")
       + '<p class="vc-mean">' + esc(q.m) + "</p>"
       + '<p class="vc-ex">' + esc(q.d) + "</p>";
@@ -14662,10 +14912,9 @@ function showStep(n){
   S.step = n;
   var i, steps = document.querySelectorAll("[data-vstep]");
   for (i = 0; i < steps.length; i++) steps[i].classList.toggle("on", Number(steps[i].getAttribute("data-vstep")) === n);
-  for (i = 1; i <= 3; i++){ var p = $("vcPane" + i); if (p) p.hidden = (i !== n); }
+  for (i = 1; i <= 2; i++){ var p = $("vcPane" + i); if (p) p.hidden = (i !== n); }
   if (n === 1) renderVoc();
   if (n === 2) renderCon();
-  if (n === 3) renderRead();
 }
 function vocGo(d){
   var r = VOCSET[S.vset];
@@ -14781,7 +15030,7 @@ function onClick(e){
 
 function start(){
   if (!S.drawn.v){ S.drawn.v = 1; showStep(S.step); }
-  else { if (S.step === 1) renderVoc(); else if (S.step === 2) renderCon(); else renderRead(); }
+  else { if (S.step === 1) renderVoc(); else renderCon(); }
   var box = document.getElementById("subs2");
   if (box){
     var on = box.querySelector(".subtab.on");
@@ -14805,9 +15054,11 @@ SB.onShow.ko = (function(prev){
   };
 })(SB.onShow.ko);
 bind();
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); if (!S.drawn.v){ renderVoc(); renderCon(); renderRead(); S.drawn.v = 1; } });
-else { if (!S.drawn.v){ renderVoc(); renderCon(); renderRead(); S.drawn.v = 1; } }
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); if (!S.drawn.v){ renderVoc(); renderCon(); S.drawn.v = 1; } });
+else { if (!S.drawn.v){ renderVoc(); renderCon(); S.drawn.v = 1; } }
 })();
+
+
 
 /* =====================================================================
    🏰 영어 · 월팸 — 디즈니 「월드 오브 잉글리시」 영상에서 나온 낱말·문장 카드
@@ -14904,6 +15155,186 @@ var THEMES = [
 var ALLW = ["book point", "no", "yes", "name", "mouse", "listen", "sing", "in", "on", "basket", "hat", "cat", "house", "chair", "bear", "bed", "flower", "tower", "picture", "this", "that", "whistle", "clap", "duck", "dog", "boy", "girl", "wand", "table", "letters", "look", "wave", "bow", "bat", "music", "like", "blow", "balloon", "yellow", "green", "red", "blue", "elephant", "big", "small", "long", "short", "shoes", "sleep", "eat", "wear", "color", "sit", "stand", "hold", "at", "next to", "here", "there", "pin", "pins", "under", "behind", "stairs", "line", "break", "fall", "walk", "around", "fast", "slow", "up", "down", "jump", "window", "go in", "come out", "tree", "hands", "turn", "bend down", "ground", "floor", "touch", "toes", "cake", "ice", "cream", "candle", "gift", "play", "chicken", "chickens", "cow", "cows", "horse", "horses", "roses", "ribbon", "face", "faces", "lick", "happy", "sad", "count", "little", "black", "white", "draw", "living room", "sofa", "television", "dining room", "sandwich", "bedroom", "lie", "bathroom", "take a bath", "kitchen", "help", "stove", "refrigerator", "bowl", "cup", "glass", "spoon", "fork", "knife", "knives", "pan", "pans", "on top of", "oven", "bottles", "milk", "butter", "egg", "bag", "box", "boxes", "a little", "a lot", "cut", "finger", "fingers", "poor", "full", "empty", "drink", "give", "give back", "circles", "clocks", "paper", "tie", "untie", "butterfly", "rope", "bicycle", "ride", "pencil", "wheel", "bread", "put on", "take off", "off", "mirror", "inside", "outside", "knock", "door", "open", "close", "show", "shirt", "pants", "blouse", "skirt", "pink", "purple", "jacket", "sweater", "orange", "brown", "dress", "dresses", "purse", "purses", "hair", "string", "leaf", "leaves", "clothes", "carry", "plate", "in front of", "hide", "ears", "foot", "feet", "between", "tails", "surprised", "smile", "eyes", "mouth", "cover", "monsters", "light", "burn", "kiss", "bone", "fireplace", "ball", "balls", "star", "baby", "sun", "clouds", "day", "night", "bird", "pick", "grass", "picnic", "hot dog", "salad", "read", "fish", "swim", "build", "fire", "bus", "buses", "cars", "money", "old", "young", "new", "numbers", "busy", "pack", "apple", "oranges", "cherry", "cherries", "banana", "lemon", "lemons", "blanket", "bucket", "towel", "boat", "gloves", "axe", "axes", "match", "matches", "drive", "get into", "get out of", "city", "country", "building", "arms", "tall", "road", "tunnel", "hill", "pond", "river", "bridge", "bridges", "farm", "farmer", "forest", "fields", "police officer", "rooster", "bee", "frog", "gold", "push", "pig", "swing", "hammock", "barn", "animals", "sheep", "work", "tomato", "chop", "wood", "well", "wake up", "find", "signs", "side", "front", "back", "shovel", "dig", "holes", "plant", "grow", "worm", "deep", "deeper", "twig", "branch", "log", "rain", "nest", "umbrella", "hook", "hang up", "bathing suits", "splash", "dive", "knees", "chin", "wash", "dry", "socks", "climb", "not", "monkey", "fly", "pull", "think", "tired", "daisy", "skip", "chain", "neck", "scissors", "wet", "laugh", "look for", "drop", "pick up", "pile up", "light the fire", "put it out", "cook", "cold", "hot", "dark", "food", "sticks", "tummy", "dirty", "clean", "soap", "wash the dishes", "fold", "throw away", "throw", "catch", "sleepy", "yawn", "asleep", "awake", "snore", "dream", "love", "team", "strong", "stronger", "hold on", "let go", "hit", "miss", "right", "turtles", "legs", "gray", "wind", "drops", "broken", "lock", "afraid", "heart", "rabbit", "rainbow", "smell", "paint", "brushes", "fat", "thin", "hungry", "lion", "rush", "ladder", "circus", "tiger", "clowns", "tooth", "teeth", "hippopotamus", "train", "track", "people", "stripes", "tiny", "lunch", "funny", "dinner", "pajamas", "breakfast", "mother", "father", "grandmother", "grandfather", "trumpet", "drums", "band", "bells", "ring", "shiny", "cheer", "soft", "loud", "tickets", "sister", "brother", "man", "woman", "candy", "glasses", "dance", "forwards", "backwards", "lift", "cage", "toys", "disappear", "giggle", "cry", "frown", "tear", "fruit", "juggle", "bite", "piano", "tennis", "wall", "fit", "pointed", "crack", "teapot", "soup", "potatoes", "spaghetti", "thirsty", "a few", "bath", "tub", "bubbles", "cheese", "feather", "jewels", "stretch", "get up", "roll", "school", "get dressed", "telephone", "classroom", "teacher", "desk", "blackboard", "proud", "nurse", "gardener", "fisherman", "cowboy", "boots", "airplane", "pilot", "doctor", "sick", "garden", "firefighter", "zoo", "kangaroos", "zebra", "tickle", "king", "crown", "dentist", "scratch", "moon", "sunset", "giraffe", "giraffes", "kittens", "shed", "key", "pocket", "sweep", "thief", "detective", "pillow", "nails", "hammer", "shells", "footprints", "snow", "broom", "float", "ashamed"];
 THEMES.push({ k:"all", nm:"📜 전체 낱말", all:true, c:[] });
 
+/* ── 실제 영상 장면 + 원음 클립 (dwe_wolpaem.mp4에서 잘라 냄) ── */
+var WPMEDIA = {
+"Chip and Dale took the peanuts.":"w_001_chip_and_dale_took_the",
+"He put on the sorcerer's hat.":"w_002_he_put_on_the_sorcerer",
+"Is the cat sitting on the chair?":"w_003_is_the_cat_sitting_on_",
+"Mickey swept the floor with a broom.":"w_004_mickey_swept_the_floor",
+"The octopus might have taken the peanuts.":"w_005_the_octopus_might_have",
+"What is Goofy going to do?":"w_006_what_is_goofy_going_to",
+"What is blue in this picture?":"w_007_what_is_blue_in_this_p",
+"What would you buy at the circus?":"w_008_what_would_you_buy_at_",
+"Which monkey has more bananas?":"w_009_which_monkey_has_more_",
+"afraid":"w_010_afraid",
+"apple":"w_011_apple",
+"arms":"w_012_arms",
+"banana":"w_013_banana",
+"bathroom":"w_014_bathroom",
+"bear":"w_015_bear",
+"bed":"w_016_bed",
+"bedroom":"w_017_bedroom",
+"bee":"w_018_bee",
+"big":"w_019_big",
+"boots":"w_020_boots",
+"bowl":"w_021_bowl",
+"bread":"w_022_bread",
+"bridge":"w_023_bridge",
+"busy":"w_024_busy",
+"butter":"w_025_butter",
+"cake":"w_026_cake",
+"cat":"w_027_cat",
+"chair":"w_028_chair",
+"cheese":"w_029_cheese",
+"cherry":"w_030_cherry",
+"city":"w_031_city",
+"clean":"w_032_clean",
+"cloud":"w_033_cloud",
+"cold":"w_034_cold",
+"country":"w_035_country",
+"cow":"w_036_cow",
+"cup":"w_037_cup",
+"dining room":"w_038_dining_room",
+"dirty":"w_039_dirty",
+"dog":"w_040_dog",
+"door":"w_041_door",
+"dress":"w_042_dress",
+"duck":"w_043_duck",
+"ears":"w_044_ears",
+"egg":"w_045_egg",
+"elephant":"w_046_elephant",
+"empty":"w_047_empty",
+"eyes":"w_048_eyes",
+"face":"w_049_face",
+"farm":"w_050_farm",
+"fast":"w_051_fast",
+"fat":"w_052_fat",
+"feet":"w_053_feet",
+"field":"w_054_field",
+"fingers":"w_055_fingers",
+"flower":"w_056_flower",
+"forest":"w_057_forest",
+"fork":"w_058_fork",
+"frog":"w_059_frog",
+"full":"w_060_full",
+"funny":"w_061_funny",
+"garden":"w_062_garden",
+"get dressed":"w_063_get_dressed",
+"get into":"w_064_get_into",
+"get out of":"w_065_get_out_of",
+"giraffe":"w_066_giraffe",
+"glass":"w_067_glass",
+"gloves":"w_068_gloves",
+"grass":"w_069_grass",
+"hair":"w_070_hair",
+"hands":"w_071_hands",
+"happy":"w_072_happy",
+"hat":"w_073_hat",
+"hill":"w_074_hill",
+"hold on":"w_075_hold_on",
+"horse":"w_076_horse",
+"hot":"w_077_hot",
+"hot dog":"w_078_hot_dog",
+"house":"w_079_house",
+"hungry":"w_080_hungry",
+"ice cream":"w_081_ice_cream",
+"jacket":"w_082_jacket",
+"kangaroo":"w_083_kangaroo",
+"kitchen":"w_084_kitchen",
+"knife":"w_085_knife",
+"legs":"w_086_legs",
+"lemon":"w_087_lemon",
+"let go":"w_088_let_go",
+"lion":"w_089_lion",
+"living room":"w_090_living_room",
+"long":"w_091_long",
+"look for":"w_092_look_for",
+"milk":"w_093_milk",
+"mirror":"w_094_mirror",
+"monkey":"w_095_monkey",
+"moon":"w_096_moon",
+"mouth":"w_097_mouth",
+"nest":"w_098_nest",
+"orange":"w_099_orange",
+"oven":"w_100_oven",
+"pants":"w_101_pants",
+"pick up":"w_102_pick_up",
+"pig":"w_103_pig",
+"plate":"w_104_plate",
+"pond":"w_105_pond",
+"potato":"w_106_potato",
+"proud":"w_107_proud",
+"purse":"w_108_purse",
+"put it out":"w_109_put_it_out",
+"put on":"w_110_put_on",
+"rabbit":"w_111_rabbit",
+"rain":"w_112_rain",
+"rainbow":"w_113_rainbow",
+"refrigerator":"w_114_refrigerator",
+"river":"w_115_river",
+"road":"w_116_road",
+"rooster":"w_117_rooster",
+"sad":"w_118_sad",
+"salad":"w_119_salad",
+"sandwich":"w_120_sandwich",
+"sheep":"w_121_sheep",
+"shirt":"w_122_shirt",
+"shoes":"w_123_shoes",
+"short":"w_124_short",
+"sit down":"w_125_sit_down",
+"skirt":"w_126_skirt",
+"sleepy":"w_127_sleepy",
+"slow":"w_128_slow",
+"small":"w_129_small",
+"snow":"w_130_snow",
+"socks":"w_131_socks",
+"sofa":"w_132_sofa",
+"soup":"w_133_soup",
+"spaghetti":"w_134_spaghetti",
+"spoon":"w_135_spoon",
+"stairs":"w_136_stairs",
+"stand up":"w_137_stand_up",
+"star":"w_138_star",
+"stove":"w_139_stove",
+"sun":"w_140_sun",
+"sweater":"w_141_sweater",
+"table":"w_142_table",
+"take off":"w_143_take_off",
+"tall":"w_144_tall",
+"television":"w_145_television",
+"thin":"w_146_thin",
+"thirsty":"w_147_thirsty",
+"tiger":"w_148_tiger",
+"tomato":"w_149_tomato",
+"tree":"w_150_tree",
+"tummy":"w_151_tummy",
+"tunnel":"w_152_tunnel",
+"turtle":"w_153_turtle",
+"wake up":"w_154_wake_up",
+"wash the dishes":"w_155_wash_the_dishes",
+"wind":"w_156_wind",
+"window":"w_157_window",
+"zebra":"w_158_zebra"
+};
+var wpAudio = null, wpLast = "";
+function wpHas(en){ return !!(WPMEDIA[en]); }
+function wpImg(en, cls){
+  if (!WPMEDIA[en]) return "";
+  return '<img class="wp-pic ' + (cls || "") + '" src="wolpaem-media/' + WPMEDIA[en] + '.webp" alt="' + esc(en) + ' 영상 장면" loading="lazy">';
+}
+function wpPlay(en){
+  if (!WPMEDIA[en]) return false;
+  try{
+    if (wpAudio){ try { wpAudio.pause(); } catch(e){} }
+    wpAudio = new Audio("wolpaem-media/" + WPMEDIA[en] + ".mp3");
+    wpAudio.preload = "auto";
+    var p = wpAudio.play();
+    if (p && p.catch) p.catch(function(){});
+    wpLast = en;
+    return true;
+  }catch(e){ return false; }
+}
+
 var W = { t:0, i:0, quiz:null, opts:null, ans:0, score:0, drawn:false, correct:0 };
 
 function theme(){ return THEMES[W.t]; }
@@ -14944,17 +15375,19 @@ function renderStage(){
   st.classList.remove("allmode");
   var c = card();
   if (!W.quiz){
-    st.innerHTML = '<div class="wp-card">'
-      + '<span class="wp-em" aria-hidden="true">' + c[2] + "</span>"
+    var pic = wpImg(c[0]);
+    st.innerHTML = '<div class="wp-card" data-wp="tap">'
+      + (pic || '<span class="wp-em" aria-hidden="true">' + c[2] + "</span>")
       + '<b class="wp-en">' + esc(c[0]) + "</b>"
       + '<span class="wp-ko">' + esc(c[1]) + "</span>"
-      + '<button class="wp-btn pri" type="button" data-wp="say">🔊 소리 듣기</button>'
+      + '<button class="wp-btn pri" type="button" data-wp="say">' + (pic ? "🔊 원음 듣기" : "🔊 소리 듣기") + "</button>"
       + "</div>";
   } else {
     if (!W.opts) makeQuiz();
-    st.innerHTML = '<div class="wp-card"><span class="wp-em" aria-hidden="true">' + c[2] + "</span>"
+    st.innerHTML = '<div class="wp-card">'
+      + (wpImg(c[0]) || '<span class="wp-em" aria-hidden="true">' + c[2] + "</span>")
       + '<b class="wp-en">' + esc(c[0]) + "</b>"
-      + '<button class="wp-btn" type="button" data-wp="say">🔊 다시 듣기</button></div>'
+      + '<button class="wp-btn" type="button" data-wp="say">' + (wpHas(c[0]) ? "🔊 원음 다시 듣기" : "🔊 다시 듣기") + "</button></div>"
       + '<div class="wp-quiz"><p class="wp-q">뜻은 무엇일까요?</p><div class="wp-opts">'
       + W.opts.map(function(o, i){
           return '<button class="wp-opt" type="button" data-wopt="' + i + '">' + esc(o.t) + "</button>";
@@ -15003,9 +15436,10 @@ function nextQuiz(){
 }
 function chant(){
   var c = card();
-  say(c[0], 0.75);
-  setTimeout(function(){ say(c[0], 0.62); }, 1100);
-  setTimeout(function(){ say(c[0], false); }, 2400);
+  /* 원음 → 천천히 → 또박또박 (영상 속 목소리를 먼저 들려준다) */
+  if (!wpPlay(c[0])) say(c[0], 0.75);
+  setTimeout(function(){ say(c[0], 0.62); }, 1500);
+  setTimeout(function(){ say(c[0], false); }, 2800);
 }
 function onClick(e){
   var t = e.target;
@@ -15016,11 +15450,11 @@ function onClick(e){
     renderStage(); return;
   }
   if ((el = t.closest("[data-wopt]"))){ pick(Number(el.getAttribute("data-wopt"))); return; }
-  if ((el = t.closest("[data-wall]"))){ say(el.getAttribute("data-wall"), false); return; }
+  if ((el = t.closest("[data-wall]"))){ var aw = el.getAttribute("data-wall"); if (!wpPlay(aw)) say(aw, false); return; }
   var b = t.closest("[data-wp]");
   if (!b) return;
   var a = b.getAttribute("data-wp");
-  if (a === "say"){ if (!theme().all) say(card()[0], false); }
+  if (a === "say" || a === "tap"){ if (!theme().all){ if (!wpPlay(card()[0])) say(card()[0], false); } }
   else if (a === "chant"){ if (!theme().all) chant(); }
   else if (a === "prev") go(-1);
   else if (a === "next") go(1);
@@ -16498,7 +16932,8 @@ function addLine(who, en, ko, opts){
   row.className = "cl-row " + who + (opts.typing ? " cl-typing" : "");
   row.innerHTML = '<span class="cl-ava" aria-hidden="true">' + (who === "t" ? "👩‍🏫" : "🧒") + '</span>'
     + '<div class="cl-bub"><div class="cl-en">' + esc(en) + '</div>'
-    + (ko ? '<div class="cl-ko">' + esc(ko) + '</div>' : '') + '</div>';
+    + (ko ? '<div class="cl-ko">' + esc(ko) + '</div>' : '') + '</div>'
+    + (who === "t" && !opts.typing ? '<button class="cl-hear" type="button" data-hear="' + esc(en) + '" aria-label="이 말 다시 듣기">🔊</button>' : '');
   b.appendChild(row);
   C.lines.push({ who:who, en:en, ko:ko || "" });
   while (C.lines.length > 40) C.lines.shift();
@@ -16564,6 +16999,8 @@ function tick(){ C.sec++; var t = $("callTimer"); if (t) t.textContent = fmt(C.s
 
 function startCall(){
   if (C.phase === "live" || C.phase === "ringing") return;
+  try { unlockSpeech(); } catch(e){}
+  try { if (window.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)) speechSynthesis.cancel(); } catch(e){}
   C.step = 0; C.turns = 0; C.sec = 0; C.last = null; C.lastChild = "";
   rebuildScript();          /* 오늘 날짜 기준으로 인사 → 오늘의 주제 순서로 */
   paintTopic();
@@ -16592,6 +17029,7 @@ function ask(i){
 
 function answer(text, src){
   text = String(text || "").trim();
+  try { unlockSpeech(); } catch(e){}
   if (C.phase !== "live") { SB.toast("먼저 📞 통화 시작을 눌러 주세요!"); return; }
   if (!text) return;
   addLine("c", text, "");
@@ -16712,32 +17150,152 @@ function aiReply(text, step, next){
    6. 말하기(음성 인식)
    --------------------------------------------------------------------- */
 var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-function mic(){
-  if (C.phase !== "live") { SB.toast("먼저 📞 통화 시작을 눌러 주세요!"); return; }
-  if (!SR) { SB.toast("이 브라우저는 음성 인식을 지원하지 않아요. 입력창에 적어 주세요 ✏️"); var i = $("callInput"); if (i) i.focus(); return; }
-  var btn = $("callMic");
-  try {
-    var r = new SR();
-    r.lang = "en-US"; r.interimResults = false; r.maxAlternatives = 1; r.continuous = false;
-    if (btn) btn.classList.add("listening");
-    r.onresult = function(ev){
-      var t = "";
-      try { t = ev.results[0][0].transcript || ""; } catch(e){}
-      if (t) answer(t, "voice"); else SB.toast("잘 안 들렸어요. 한 번 더 말해 봐요 🎙️");
-    };
-    r.onerror = function(ev){
-      if (btn) btn.classList.remove("listening");
-      var code = ev && ev.error;
-      if (code === "not-allowed" || code === "service-not-allowed") SB.toast("마이크를 허용해 주세요! 설정에서 마이크를 켤 수 있어요.");
-      else if (code === "no-speech") SB.toast("잘 안 들렸어요. 한 번 더 말하거나 입력창에 적어 주세요 ✏️");
-      else SB.toast("음성 인식이 잠깐 안 됐어요. 입력창에 적어도 괜찮아요 ✏️");
-    };
-    r.onend = function(){ if (btn) btn.classList.remove("listening"); };
-    r.start();
-  } catch(e){
-    if (btn) btn.classList.remove("listening");
-    SB.toast("마이크를 켤 수 없어요. 입력창에 적어 주세요 ✏️");
+/* ── 마이크: ① 음성 인식(크롬) ② 막히면 녹음 → AI 받아쓰기(아이패드 사파리) ── */
+var MIC = { rec:null, chunks:[], stream:null, on:false };
+function micLabel(txt){ var b = $("callMic"); if (b) b.textContent = txt; }
+function micStatus(txt){ var s = $("callStatus"); if (s && C.phase === "live") s.textContent = txt; }
+function micCleanup(){
+  try { if (MIC.stream) MIC.stream.getTracks().forEach(function(t){ t.stop(); }); } catch(e){}
+  MIC.stream = null; MIC.rec = null; MIC.chunks = []; MIC.on = false;
+  var b = $("callMic"); if (b) b.classList.remove("listening", "rec");
+  micLabel("🎙️ 말하기");
+}
+function micFail(msg){
+  micCleanup();
+  try { SB.toast(msg); } catch(e){}
+  var i = $("callInput"); if (i){ try { i.focus(); } catch(e){} }
+}
+function aiSetting(){ try { return (window.ENG && window.ENG.state && window.ENG.state.ai) || null; } catch(e){ return null; } }
+function blobToB64(blob){
+  return new Promise(function(res){
+    try {
+      var fr = new FileReader();
+      fr.onload = function(){ var s = String(fr.result || ""); res(s.slice(s.indexOf(",") + 1)); };
+      fr.onerror = function(){ res(""); };
+      fr.readAsDataURL(blob);
+    } catch(e){ res(""); }
+  });
+}
+function transcribeAudio(blob){
+  var cfg = aiSetting();
+  if (!cfg || !cfg.provider || cfg.provider === "none" || !cfg.key) return Promise.resolve("");
+  var mime = blob.type || "audio/mp4";
+  if (cfg.provider === "openai"){
+    var fd = new FormData();
+    fd.append("file", blob, "voice." + (/mp4|m4a|aac/.test(mime) ? "m4a" : "webm"));
+    fd.append("model", "whisper-1");
+    fd.append("language", "en");
+    return fetch("https://api.openai.com/v1/audio/transcriptions", {
+      method:"POST", headers:{ "Authorization":"Bearer " + cfg.key }, body:fd
+    }).then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){ return (j && j.text ? String(j.text).trim() : ""); })
+      .catch(function(){ return ""; });
   }
+  return blobToB64(blob).then(function(b64){
+    if (!b64) return "";
+    var models = [cfg.model, "gemini-3.8-flash", "gemini-2.5-flash"].filter(Boolean);
+    var body = JSON.stringify({
+      contents: [{ role:"user", parts: [
+        { text: "Transcribe this English child's speech exactly. Reply with ONLY the English sentence, no quotes, no translation." },
+        { inlineData: { mimeType: mime, data: b64 } }
+      ]}],
+      generationConfig: { temperature: 0 }
+    });
+    var tryAt = function(i){
+      if (i >= models.length) return Promise.resolve("");
+      return fetch("https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(models[i]) + ":generateContent", {
+        method:"POST", headers:{ "Content-Type":"application/json", "x-goog-api-key": cfg.key }, body:body
+      }).then(function(r){ return r.ok ? r.json() : tryAt(i + 1); })
+        .then(function(j){
+          if (!j || typeof j !== "object") return tryAt(i + 1);
+          var cand = j.candidates && j.candidates[0];
+          var parts = (cand && cand.content && cand.parts) || [];
+          var t = parts.map(function(x){ return x.text || ""; }).join(" ").trim();
+          return t || tryAt(i + 1);
+        });
+    };
+    return tryAt(0).catch(function(){ return ""; });
+  });
+}
+function recStart(){
+  if (MIC.on) return;
+  if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder))
+    return micFail("이 브라우저는 녹음을 못 해요. 입력창에 적어 주세요 ✏️");
+  navigator.mediaDevices.getUserMedia({ audio:true }).then(function(stream){
+    MIC.stream = stream;
+    var mime = "";
+    ["audio/mp4", "audio/aac", "audio/webm;codecs=opus", "audio/webm"].forEach(function(m){
+      try { if (!mime && window.MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) mime = m; } catch(e){}
+    });
+    try { MIC.rec = mime ? new MediaRecorder(stream, { mimeType:mime }) : new MediaRecorder(stream); }
+    catch(e){ try { MIC.rec = new MediaRecorder(stream); } catch(e2){ return micFail("녹음을 시작할 수 없어요. 입력창에 적어 주세요 ✏️"); } }
+    MIC.chunks = []; MIC.on = true;
+    MIC.rec.ondataavailable = function(e){ if (e.data && e.data.size) MIC.chunks.push(e.data); };
+    MIC.rec.onstop = function(){
+      var type = (MIC.rec && MIC.rec.mimeType) || "audio/mp4";
+      var blob = new Blob(MIC.chunks, { type:type });
+      micCleanup();
+      micStatus("받아 적는 중… ✍️");
+      transcribeAudio(blob).then(function(txt){
+        txt = String(txt || "").replace(/^["'“”]+|["'“”]+$/g, "").replace(/\s+/g, " ").trim();
+        if (txt){ micStatus("통화 중 · 영어로 말해 봐요"); answer(txt, "voice"); }
+        else {
+          micStatus("통화 중 · 영어로 말해 봐요");
+          try { SB.toast("말을 못 알아들었어요. 한 번 더 말하거나 입력창에 적어 주세요 ✏️"); } catch(e){}
+          var i = $("callInput"); if (i){ try { i.focus(); } catch(e){} }
+        }
+      });
+    };
+    MIC.rec.start();
+    var b = $("callMic"); if (b) b.classList.add("rec");
+    micLabel("⏹ 다 말했어요");
+    micStatus("듣고 있어요… 말이 끝나면 ⏹ 를 눌러요");
+  }).catch(function(){
+    micFail("마이크를 켤 수 없어요! 설정 → Safari → 마이크를 켜 주세요.");
+  });
+}
+function mic(){
+  if (C.phase !== "live"){ SB.toast("먼저 📞 통화 시작을 눌러 주세요!"); return; }
+  try { unlockSpeech(); } catch(e){}
+  /* 말하기 전에 선생님 목소리를 끊어야 마이크와 부딪히지 않아요 */
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){}
+  if (MIC.on){ try { MIC.rec.stop(); } catch(e){ micCleanup(); } return; }
+  var btn = $("callMic");
+  var srOK = !!SR && !isIOSDevice();
+  if (srOK){
+    try {
+      var r = new SR();
+      r.lang = "en-US"; r.interimResults = false; r.maxAlternatives = 1; r.continuous = false;
+      if (btn){ btn.classList.add("listening"); btn.textContent = "🎙️ 듣는 중…"; }
+      var got = false;
+      r.onresult = function(ev){
+        got = true;
+        var t = ""; try { t = ev.results[0][0].transcript || ""; } catch(e){}
+        micCleanup();
+        micStatus("통화 중 · 영어로 말해 봐요");
+        if (t) answer(t, "voice"); else recStart();   /* 빈 결과면 녹음 방식으로 */
+      };
+      r.onerror = function(ev){
+        var code = ev && ev.error;
+        micCleanup();
+        if (code === "not-allowed" || code === "service-not-allowed"){
+          try { SB.toast("마이크를 허용해 주세요! 설정에서 마이크를 켤 수 있어요."); } catch(e){}
+          var i = $("callInput"); if (i){ try { i.focus(); } catch(e){} }
+          return;
+        }
+        if (code === "no-speech"){ try { SB.toast("잘 안 들렸어요. 한 번 더 말해 봐요 🎙️"); } catch(e){} return; }
+        recStart();   /* 그 밖의 오류는 녹음 → 받아쓰기로 */
+      };
+      r.onend = function(){
+        if (btn) btn.classList.remove("listening");
+        if (!got && !MIC.on) micLabel("🎙️ 말하기");
+      };
+      r.start();
+      micStatus("듣고 있어요… 영어로 말해 봐요");
+      return;
+    } catch(e){ /* 아래 녹음 방식으로 */ }
+  }
+  recStart();
 }
 
 /* ---------------------------------------------------------------------
@@ -17005,6 +17563,14 @@ function bind(){
     if (e.key === "Enter" || e.keyCode === 13) { e.preventDefault(); answer(inp.value, "type"); }
   });
   var micb = $("callMic"); if (micb) micb.addEventListener("click", mic);
+  var lg = $("callLog");
+  if (lg) lg.addEventListener("click", function(e){
+    var b = e.target && e.target.closest ? e.target.closest(".cl-hear") : null;
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    try { unlockSpeech(); } catch(err){}
+    SB.speak(b.getAttribute("data-hear"), C.slow);
+  });
   var qb = $("callQuick");
   if (qb) qb.addEventListener("click", function(e){
     var b = e.target.closest(".qb"); if (!b) return;
@@ -29765,7 +30331,199 @@ function smBind(){
    ②③ 기초수학 1 / 2학년 수학 — 단원별 개념 + 6문제
    ================================================================== */
 var B1 = [{"nm":"① 10 만들기·가르기","tip":"10이 되는 두 수를 알면 셈이 아주 빨라져요.","qs":[{"q":"7 + □ = 10","num":3,"hint":"7에 3을 더하면 10이 돼요."},{"q":"6 + 4 = ?","num":10,"hint":"6과 4를 모으면 10이에요."},{"q":"10을 4와 □로 가르면?","num":6,"hint":"10에서 4를 빼면 6이에요."},{"q":"3과 7을 모으면 얼마일까요?","o":["9","10","11"],"a":1,"hint":"3 + 7 = 10"},{"q":"8 + 2 = ?","num":10,"hint":"8에 2를 더하면 10이에요."},{"q":"10을 7과 □로 가르면?","num":3,"hint":"10 - 7 = 3"}],"points":["10이 되는 두 수 찾기 (7+3, 6+4)","10을 두 수로 가르기"],"ex":"7 + 3 = 10 · 10 - 6 = 4"},{"nm":"② 10에서 빼기","tip":"10에서 빼면 남는 수를 바로 알 수 있어요.","qs":[{"q":"10 - 3 = ?","num":7,"hint":"10을 3과 7로 가르면 7이 남아요."},{"q":"10 - 8 = ?","num":2,"hint":"10을 8과 2로 가르면 2가 남아요."},{"q":"10 - 5 = ?","num":5,"hint":"10을 반으로 가르면 5와 5예요."},{"q":"사과 10개 중 4개를 먹었어요. 남은 사과는 몇 개?","num":6,"hint":"10 - 4 = 6"},{"q":"10 - 7 = ?","num":3,"hint":"7에 3을 더하면 10이에요."},{"q":"10 - 9 = ?","num":1,"hint":"9에 1을 더하면 10이에요."}],"points":["10에서 몇을 빼면 얼마 남는지","그림을 보고 빼기"],"ex":"10 - 3 = 7"},{"nm":"③ 한 자리 덧셈·뺄셈","tip":"10을 넘으면 10을 먼저 만들어요.","qs":[{"q":"5 + 8 = ?","num":13,"hint":"5 + 5 = 10, 남은 3을 더하면 13이에요."},{"q":"9 + 6 = ?","num":15,"hint":"9 + 1 = 10, 남은 5를 더하면 15예요."},{"q":"12 - 7 = ?","num":5,"hint":"12를 10과 2로 나누어 10 - 7 = 3, 3 + 2 = 5"},{"q":"14 - 6 = ?","num":8,"hint":"10 - 6 = 4, 4 + 4 = 8"},{"q":"8 + 7 = ?","num":15,"hint":"8 + 2 = 10, 남은 5를 더하면 15예요."},{"q":"13 - 5 = ?","num":8,"hint":"10 - 5 = 5, 5 + 3 = 8"}],"points":["10을 넘는 한 자리 덧셈","십몇에서 한 자리 빼기"],"ex":"8 + 7 = 15"},{"nm":"④ 두 자리 수와 자리값","tip":"십의 자리와 일의 자리를 하나씩 살펴봐요.","qs":[{"q":"46은 십 몇 개와 일 몇 개일까요?","o":["십 4개, 일 6개","십 6개, 일 4개","십 4개, 일 4개"],"a":0,"hint":"46에서 4는 십의 자리, 6은 일의 자리예요."},{"q":"73에서 십의 자리 숫자는?","o":["7","3","0"],"a":0,"hint":"73에서 앞에 있는 7이 십의 자리 숫자예요."},{"q":"52에서 일의 자리 숫자는?","num":2,"hint":"52에서 뒤에 있는 2가 일의 자리 숫자예요."},{"q":"10이 3개, 1이 5개인 수는?","num":35,"hint":"십 3개는 30, 일 5개는 5 — 모두 35예요."},{"q":"80 + 7 = ?","num":87,"hint":"80에 7을 더하면 87이에요."},{"q":"90은 십 몇 개일까요?","num":9,"hint":"90은 십이 9개 모인 수예요."}],"points":["십의 자리 숫자·일의 자리 숫자","10이 몇 개, 1이 몇 개인지"],"ex":"46 = 십 4개 + 일 6개"},{"nm":"⑤ 두 수 크기 비교","tip":"큰 수를 먼저 보고 >, < 를 골라요.","qs":[{"q":"74 ○ 77 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"74는 77보다 작아요."},{"q":"56 ○ 65 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"십의 자리 5와 6을 먼저 비교해요."},{"q":"90 ○ 89 에 들어갈 말은?","o":["<",">","="],"a":1,"hint":"90은 89보다 커요."},{"q":"48 ○ 48 에 들어갈 말은?","o":["<",">","="],"a":2,"hint":"두 수가 똑같아요."},{"q":"가장 큰 수는 어느 것일까요?","o":["67","76","70"],"a":1,"hint":"십의 자리가 7인 수 중에서 6이 큰 수예요."},{"q":"가장 작은 수는 어느 것일까요?","o":["58","85","80"],"a":0,"hint":"십의 자리가 5인 수가 가장 작아요."}],"points":["두 수의 크기를 >, < 로 비교","가장 큰 수·가장 작은 수"],"ex":"74 < 77"},{"nm":"⑥ 시계 보기","tip":"짧은바늘은 시, 긴바늘은 분을 가리켜요.","qs":[{"q":"시계가 가리키는 시각은?","clk":"5,0","o":["5시","6시","12시"],"a":0,"hint":"짧은바늘이 5, 긴바늘이 12를 가리켜요."},{"q":"시계가 가리키는 시각은?","clk":"11,0","o":["1시","11시","10시"],"a":1,"hint":"짧은바늘이 11에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"3,0","o":["3시","12시","9시"],"a":0,"hint":"짧은바늘이 3, 긴바늘이 12예요."},{"q":"시계가 가리키는 시각은?","clk":"8,0","o":["7시","8시","9시"],"a":1,"hint":"짧은바늘이 8에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"2,30","o":["2시 30분","3시 30분","2시 6분"],"a":0,"hint":"긴바늘이 6이면 30분이에요."},{"q":"시계가 가리키는 시각은?","clk":"9,30","o":["9시","9시 30분","8시 30분"],"a":1,"hint":"긴바늘이 6을 가리키면 30분이에요."}],"points":["몇 시·몇 시 30분 읽기","짧은바늘은 시, 긴바늘은 분"],"ex":"짧은바늘 5, 긴바늘 12 → 5시"}];
-var G2 = [{"nm":"① 세 자리 수·네 자리 수","tip":"100이 10개면 1000 — 자리마다 이름이 달라요.","qs":[{"q":"100이 10개이면 얼마일까요?","num":1000,"hint":"100이 10개 모이면 1000이에요."},{"q":"342에서 백의 자리 숫자는?","num":3,"hint":"342에서 3이 백의 자리 숫자예요."},{"q":"1000은 무엇이라고 읽을까요?","o":["천","백","만"],"a":0,"hint":"1000은 '천'이라고 읽어요."},{"q":"996보다 1 큰 수는?","num":997,"hint":"996 다음 수는 997이에요."},{"q":"324 ○ 342 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"백의 자리는 같고, 십의 자리 2와 4를 비교해요."},{"q":"100이 5개, 10이 3개, 1이 2개인 수는?","num":532,"hint":"500 + 30 + 2 = 532"}],"points":["100이 10개면 1000","각 자리 숫자가 나타내는 값","수의 계열과 크기 비교"],"ex":"100이 10개 = 1000"},{"nm":"② 여러 가지 도형","tip":"곧은 선은 변, 만나는 점은 꼭짓점이에요.","qs":[{"q":"삼각형의 곧은 선을 무엇이라고 할까요?","o":["변","꼭짓점","각"],"a":0,"hint":"도형을 이루는 곧은 선을 변이라고 해요."},{"q":"삼각형의 꼭짓점은 몇 개일까요?","num":3,"hint":"삼각형은 꼭짓점이 3개, 변이 3개예요."},{"q":"사각형의 변은 몇 개일까요?","num":4,"hint":"사각형은 변이 4개예요."},{"q":"동그란 모양이고 뾰족한 점이 없는 도형은?","o":["원","삼각형","사각형"],"a":0,"hint":"원은 꼭짓점도 변도 없어요."},{"q":"오각형의 꼭짓점은 몇 개일까요?","num":5,"hint":"오각형은 꼭짓점이 5개예요."},{"q":"육각형의 변은 몇 개일까요?","num":6,"hint":"육각형은 변이 6개예요."}],"points":["변과 꼭짓점","삼각형·사각형·원·오각형·육각형"],"ex":"삼각형 — 변 3개, 꼭짓점 3개"},{"nm":"③ 두 자리 덧셈·뺄셈","tip":"십의 자리부터 차례로 계산해요.","qs":[{"q":"39 + 16 = ?","num":55,"hint":"39 + 10 = 49, 49 + 6 = 55"},{"q":"74 + 12 = ?","num":86,"hint":"70 + 10 = 80, 4 + 2 = 6 — 86"},{"q":"45 + 27 = ?","num":72,"hint":"40 + 20 = 60, 5 + 7 = 12 — 60 + 12 = 72"},{"q":"52 - 18 = ?","num":34,"hint":"52 - 10 = 42, 42 - 8 = 34"},{"q":"60 - 34 = ?","num":26,"hint":"60 - 30 = 30, 30 - 4 = 26"},{"q":"23 + 45 = ?","num":68,"hint":"20 + 40 = 60, 3 + 5 = 8 — 68"}],"points":["받아올림이 있는 덧셈","받아내림이 있는 뺄셈","여러 가지 방법으로 계산"],"ex":"39 + 16 = 39 + 10 + 6 = 55"},{"nm":"④ 길이 재기·시각과 시간","tip":"1 m = 100 cm, 1일 = 24시간이에요.","qs":[{"q":"1 m는 몇 cm일까요?","num":100,"hint":"1 m = 100 cm"},{"q":"2 m는 몇 cm일까요?","num":200,"hint":"100 cm가 2번이면 200 cm"},{"q":"1 m 40 cm는 몇 cm일까요?","num":140,"hint":"100 + 40 = 140"},{"q":"1일은 몇 시간일까요?","num":24,"hint":"하루는 24시간이에요."},{"q":"1주일은 며칠일까요?","num":7,"hint":"일주일은 7일이에요."},{"q":"저녁 7시 30분은 오전일까요, 오후일까요?","o":["오전","오후"],"a":1,"hint":"저녁은 오후예요."}],"points":["1 m = 100 cm","1일 24시간·1주일 7일·1년 12개월","오전과 오후"],"ex":"1 m 40 cm = 140 cm"},{"nm":"⑤ 곱셈·곱셈구구","tip":"같은 수를 여러 번 더할 때 곱셈을 써요.","qs":[{"q":"5씩 3묶음은 모두 몇 개일까요?","num":15,"hint":"5 × 3 = 15"},{"q":"4 × 6 = ?","num":24,"hint":"4를 6번 더하면 24예요."},{"q":"5 × 7 = ?","num":35,"hint":"5, 10, 15, 20, 25, 30, 35"},{"q":"3 × 8 = ?","num":24,"hint":"3, 6, 9, 12, 15, 18, 21, 24"},{"q":"사탕 2개씩 5묶음은 모두 몇 개일까요?","num":10,"hint":"2 × 5 = 10"},{"q":"7 × 8 = ?","num":56,"hint":"7, 14, 21, 28, 35, 42, 49, 56"}],"points":["같은 수씩 묶어 세기","몇 배","곱셈구구"],"ex":"5 × 3 = 15 (5씩 3묶음)"},{"nm":"⑥ 표와 그래프·규칙 찾기","tip":"수를 세어 표로 만들고, 늘어나는 규칙을 찾아요.","qs":[{"q":"사과 6명, 수박 5명, 바나나 8명이 좋아해요. 모두 몇 명일까요?","num":19,"hint":"6 + 5 + 8 = 19"},{"q":"가장 좋아하는 학생이 많은 과일은?","o":["사과","수박","바나나"],"a":2,"hint":"8명으로 가장 많아요."},{"q":"2, 4, 6, 8, □ — 규칙에 맞는 수는?","num":10,"hint":"2씩 커지는 규칙이에요."},{"q":"3, 6, 9, 12, □ — 규칙에 맞는 수는?","num":15,"hint":"3씩 커지는 규칙이에요."},{"q":"1, 2, 4, 7, 11, □ — 1, 2, 3, 4씩 커져요.","num":16,"hint":"11에서 5를 더하면 16이에요."},{"q":"3×4=12, 4×4=16일 때 5×4는?","num":20,"hint":"4씩 커지는 규칙이에요. 16 + 4 = 20"}],"points":["자료를 세어 표로 나타내기","표에서 전체 수 구하기","늘어나는 규칙 찾기"],"ex":"2, 4, 6, 8, 10 — 2씩 커져요"}];
+/* ===== 2️⃣ 2학년 수학 — 교육과정 순서대로, 하루 1문제 + 큰 그림 설명 ===== */
+var G2 = [
+ { nm:"① 세 자리 수", sem:"2-1", art:"p3", tip:"백·십·일 자리를 하나씩 보면 큰 수도 쉽게 읽어요.",
+   qs:[
+    { q:"100이 10개이면 얼마일까요?", num:1000, art:"p3", show:1000,
+      st:["100이 1개면 100이에요.","100이 10개 모이면 1000!","1000은 '천'이라고 읽어요."] },
+    { q:"342에서 백의 자리 숫자는 무엇일까요?", num:3, art:"p3", show:342,
+      st:["342를 자리별로 나눠 봐요.","백의 자리는 3, 십의 자리는 4, 일의 자리는 2예요.","그래서 백의 자리 숫자는 3!"] },
+    { q:"100이 3개, 10이 4개, 1이 2개인 수는 얼마일까요?", num:342, art:"p3", show:342,
+      st:["100이 3개 → 300","10이 4개 → 40","1이 2개 → 2","300 + 40 + 2 = 342"] },
+    { q:"996보다 1 큰 수는 얼마일까요?", num:997, art:"p3", show:997,
+      st:["996 다음에 오는 수를 세어 봐요.","996 → 997","1 큰 수는 바로 다음 수예요."] },
+    { q:"508을 읽으면 어떻게 될까요?", o:["오백팔","오십팔","오백영팔"], a:0, art:"p3", show:508,
+      st:["백의 자리 5 → 오백","십의 자리 0 → (읽지 않아요)","일의 자리 8 → 팔","그래서 '오백팔'"] },
+    { q:"324 ○ 342 에 들어갈 말은 무엇일까요?", o:["<",">","="], a:0, art:"p3", show:324,
+      st:["백의 자리는 둘 다 3이라 같아요.","십의 자리를 비교해요: 2 < 4","그래서 324 < 342"] }
+   ]},
+ { nm:"② 여러 가지 도형", sem:"2-1", art:"shape", tip:"곧은 선은 변, 선이 만나는 점은 꼭짓점이에요.",
+   qs:[
+    { q:"삼각형의 변은 몇 개일까요?", num:3, art:"shape", shape:"tri",
+      st:["도형을 둘러싼 곧은 선을 '변'이라고 해요.","삼각형은 곧은 선이 3개예요.","그래서 변은 3개!"] },
+    { q:"사각형의 꼭짓점은 몇 개일까요?", num:4, art:"shape", shape:"quad",
+      st:["두 변이 만나는 점이 '꼭짓점'이에요.","사각형은 꼭짓점이 4개, 변도 4개예요."] },
+    { q:"원에는 변이 몇 개 있을까요?", num:0, art:"shape", shape:"circle",
+      st:["원은 빙글 둥글어서 곧은 선이 없어요.","그래서 변도 꼭짓점도 0개예요."] },
+    { q:"오각형의 꼭짓점은 몇 개일까요?", num:5, art:"shape", shape:"penta",
+      st:["'오'는 다섯을 뜻해요.","오각형은 변 5개, 꼭짓점 5개예요."] },
+    { q:"육각형의 변은 몇 개일까요?", num:6, art:"shape", shape:"hexa",
+      st:["'육'은 여섯을 뜻해요.","육각형은 변이 6개, 꼭짓점이 6개예요."] },
+    { q:"곧은 선 3개로 둘러싸인 도형은 무엇일까요?", o:["삼각형","사각형","원"], a:0, art:"shape", shape:"tri",
+      st:["곧은 선이 3개 → 변이 3개","변이 3개인 도형은 삼각형이에요."] }
+   ]},
+ { nm:"③ 덧셈과 뺄셈", sem:"2-1", art:"add", tip:"일의 자리부터 계산하고, 10이 넘으면 윗자리로 올려요.",
+   qs:[
+    { q:"39 + 16 = ?", num:55, art:"add", a1:39, a2:16, op:"+",
+      st:["일의 자리: 9 + 6 = 15 → 5를 쓰고 10은 십의 자리로 올려요.","십의 자리: 3 + 1 + 1(올림) = 5","그래서 39 + 16 = 55"] },
+    { q:"74 + 12 = ?", num:86, art:"add", a1:74, a2:12, op:"+",
+      st:["일의 자리: 4 + 2 = 6","십의 자리: 7 + 1 = 8","그래서 74 + 12 = 86"] },
+    { q:"45 + 27 = ?", num:72, art:"add", a1:45, a2:27, op:"+",
+      st:["일의 자리: 5 + 7 = 12 → 2를 쓰고 1을 올려요.","십의 자리: 4 + 2 + 1 = 7","그래서 45 + 27 = 72"] },
+    { q:"52 - 18 = ?", num:34, art:"add", a1:52, a2:18, op:"-",
+      st:["일의 자리 2에서 8을 뺄 수 없어요.","십의 자리에서 10을 내려 받아요: 12 - 8 = 4","십의 자리: 4 - 1 = 3","그래서 52 - 18 = 34"] },
+    { q:"60 - 34 = ?", num:26, art:"add", a1:60, a2:34, op:"-",
+      st:["일의 자리: 10 - 4 = 6 (십에서 하나 내려 받아요)","십의 자리: 5 - 3 = 2","그래서 60 - 34 = 26"] },
+    { q:"어머니가 사과 28개를, 딸이 15개를 땄어요. 모두 몇 개일까요?", num:43, art:"add", a1:28, a2:15, op:"+",
+      st:["28 + 15를 계산해요.","일의 자리: 8 + 5 = 13 → 3을 쓰고 1을 올려요.","십의 자리: 2 + 1 + 1 = 4","그래서 모두 43개"] }
+   ]},
+ { nm:"④ 길이 재기(cm)", sem:"2-1", art:"ruler", tip:"자는 0에 맞추고 반대쪽 끝의 눈금을 읽어요.",
+   qs:[
+    { q:"연필의 끝이 자의 7에 맞았어요. 연필은 몇 cm일까요?", num:7, art:"ruler", cm:7,
+      st:["자는 0부터 시작해요.","연필 끝이 7에 있으면 7cm예요."] },
+    { q:"3cm + 5cm = ?", num:8, art:"ruler", cm:8,
+      st:["같은 단위(cm)끼리는 그냥 더해요.","3 + 5 = 8 → 8cm"] },
+    { q:"12cm - 4cm = ?", num:8, art:"ruler", cm:8,
+      st:["12에서 4를 빼요.","12 - 4 = 8 → 8cm"] },
+    { q:"6cm인 끈보다 4cm 더 긴 끈은 몇 cm일까요?", num:10, art:"ruler", cm:10,
+      st:["'더 긴'은 더하기예요.","6 + 4 = 10 → 10cm"] },
+    { q:"15cm와 9cm 중 더 긴 것은 몇 cm일까요?", num:15, art:"ruler", cm:15,
+      st:["두 수를 비교해요.","15 > 9","더 긴 것은 15cm"] },
+    { q:"20cm 테이프를 5cm씩 자르면 몇 도막이 될까요?", num:4, art:"ruler", cm:20,
+      st:["20 안에 5가 몇 번 들어가는지 세요.","5, 10, 15, 20 → 4번","그래서 4도막"] }
+   ]},
+ { nm:"⑤ 분류하기", sem:"2-1", art:"classify", tip:"같은 점끼리 모아 세면 빠르고 정확해요.",
+   qs:[
+    { q:"사과 6명, 수박 5명, 바나나 8명이 좋아해요. 가장 좋아하는 사람이 많은 과일은?", o:["사과","수박","바나나"], a:2, art:"classify", g:[[6,"🍎"],[5,"🍉"],[8,"🍌"]],
+      st:["6, 5, 8을 비교해요.","가장 큰 수는 8","그래서 바나나!"] },
+    { q:"사과 6명, 수박 5명, 바나나 8명이 좋아해요. 모두 몇 명일까요?", num:19, art:"classify", g:[[6,"🍎"],[5,"🍉"],[8,"🍌"]],
+      st:["6 + 5 = 11","11 + 8 = 19","그래서 모두 19명"] },
+    { q:"빨간 사탕 4개, 파란 사탕 7개예요. 모두 몇 개일까요?", num:11, art:"classify", g:[[4,"🔴"],[7,"🔵"]],
+      st:["색깔별로 모아 세요.","4 + 7 = 11","그래서 11개"] },
+    { q:"사탕을 색깔별로 나눠 담으려면 무엇을 기준으로 할까요?", o:["색깔","무게","이름"], a:0, art:"classify", g:[[4,"🔴"],[7,"🔵"]],
+      st:["분류는 '같은 점'을 기준으로 해요.","사탕마다 다른 것은 색깔이에요.","그래서 기준은 색깔"] },
+    { q:"12개를 3가지로 똑같이 나누면 한 가지에 몇 개일까요?", num:4, art:"classify", g:[[4,"⭐"],[4,"⭐"],[4,"⭐"]],
+      st:["12를 3묶음으로 나눠요.","4, 4, 4 → 한 가지에 4개"] },
+    { q:"사과 6명, 수박 5명, 바나나 8명 중에서 가장 적은 것은?", o:["사과","수박","바나나"], a:1, art:"classify", g:[[6,"🍎"],[5,"🍉"],[8,"🍌"]],
+      st:["6, 5, 8을 비교해요.","가장 작은 수는 5","그래서 수박"] }
+   ]},
+ { nm:"⑥ 곱셈", sem:"2-1", art:"times", tip:"같은 수씩 묶여 있으면 곱셈으로 나타내요.",
+   qs:[
+    { q:"3개씩 4묶음은 모두 몇 개일까요?", num:12, art:"times", per:3, groups:4,
+      st:["3개씩 4묶음이에요.","3 + 3 + 3 + 3 = 12","곱셈으로는 3 × 4 = 12"] },
+    { q:"2 × 5 = ?", num:10, art:"times", per:2, groups:5,
+      st:["2씩 5묶음이라는 뜻이에요.","2, 4, 6, 8, 10","그래서 10"] },
+    { q:"5 × 3 = ?", num:15, art:"times", per:5, groups:3,
+      st:["5씩 3묶음","5 + 5 + 5 = 15","그래서 15"] },
+    { q:"4 × 6 = ?", num:24, art:"times", per:4, groups:6,
+      st:["4씩 6묶음","4 + 4 + 4 + 4 + 4 + 4 = 24","그래서 24"] },
+    { q:"3 + 3 + 3 을 곱셈식으로 나타내면?", o:["3 × 3","3 × 2","3 + 3"], a:0, art:"times", per:3, groups:3,
+      st:["3이 3번 더해져요.","같은 수를 여러 번 더한 것은 곱셈으로 써요.","그래서 3 × 3"] },
+    { q:"사탕 2개씩 5봉지에 들어 있어요. 모두 몇 개일까요?", num:10, art:"times", per:2, groups:5,
+      st:["2개씩 5묶음이에요.","2 × 5 = 10","그래서 10개"] }
+   ]},
+ { nm:"① 네 자리 수", sem:"2-2", art:"p4", tip:"천·백·십·일, 네 자리까지 읽어 봐요.",
+   qs:[
+    { q:"1000이 10개이면 얼마일까요?", num:10000, art:"p4", show:10000,
+      st:["1000이 1개면 1000","1000이 10개 모이면 10000","10000은 '만'이라고 읽어요."] },
+    { q:"2536에서 천의 자리 숫자는 무엇일까요?", num:2, art:"p4", show:2536,
+      st:["2536을 자리별로 나눠요.","천의 자리 2, 백의 자리 5, 십의 자리 3, 일의 자리 6","그래서 2"] },
+    { q:"1000이 4개, 100이 3개, 10이 2개, 1이 5개인 수는?", num:4325, art:"p4", show:4325,
+      st:["1000이 4개 → 4000","100이 3개 → 300","10이 2개 → 20","1이 5개 → 5","모두 4325"] },
+    { q:"999보다 1 큰 수는 얼마일까요?", num:1000, art:"p4", show:1000,
+      st:["999는 가장 큰 세 자리 수예요.","여기에 1을 더하면 자리가 하나 늘어요.","그래서 1000"] },
+    { q:"3000 + 400 + 20 + 6 = ?", num:3426, art:"p4", show:3426,
+      st:["자리별로 모아요.","3000 + 400 = 3400","3400 + 20 + 6 = 3426"] },
+    { q:"5821 ○ 5812 에 들어갈 말은?", o:["<",">","="], a:1, art:"p4", show:5821,
+      st:["천·백의 자리는 같아요.","십의 자리를 비교해요: 2 > 1","그래서 5821 > 5812"] }
+   ]},
+ { nm:"② 곱셈구구 (손에 잡히는 곱셈구구)", sem:"2-2", art:"gugu", tip:"뛰어 세기 → 묶어 세기 → 곱셈식 순서로 익혀요.",
+   qs:[
+    { q:"2씩 뛰어 세어요. 2, 4, 6, 8, □ 에 들어갈 수는?", num:10, art:"gugu", per:2, groups:5,
+      st:["2씩 뛰어 세면 2, 4, 6, 8 다음이에요.","8 + 2 = 10","그래서 10"] },
+    { q:"5씩 뛰어 세어요. 5, 10, 15, □ 에 들어갈 수는?", num:20, art:"gugu", per:5, groups:4,
+      st:["5씩 커지는 규칙이에요.","15 + 5 = 20"] },
+    { q:"3개씩 4묶음이면 모두 몇 개일까요?", num:12, art:"gugu", per:3, groups:4,
+      st:["3개씩 4묶음 → 3 + 3 + 3 + 3","3 × 4 = 12"] },
+    { q:"4 + 4 = 8 을 곱셈식으로 쓰면 4 × 2 = 8 이에요. 그럼 4 + 4 + 4 는?", num:12, art:"gugu", per:4, groups:3,
+      st:["4가 3번 더해져요.","4 × 3 = 12"] },
+    { q:"2 × 7 = ?", num:14, art:"gugu", per:2, groups:7,
+      st:["2씩 7묶음","2, 4, 6, 8, 10, 12, 14","그래서 14"] },
+    { q:"5 × 6 = ?", num:30, art:"gugu", per:5, groups:6,
+      st:["5씩 6묶음","5, 10, 15, 20, 25, 30","그래서 30"] },
+    { q:"3 × 8 = ?", num:24, art:"gugu", per:3, groups:8,
+      st:["3씩 8묶음","3, 6, 9, 12, 15, 18, 21, 24","그래서 24"] },
+    { q:"6 × 4 = ?", num:24, art:"gugu", per:6, groups:4,
+      st:["6씩 4묶음","6, 12, 18, 24","그래서 24"] },
+    { q:"8 × 7 = ?", num:56, art:"gugu", per:8, groups:7,
+      st:["8씩 7묶음","8, 16, 24, 32, 40, 48, 56","그래서 56"] },
+    { q:"9 × 3 = ?", num:27, art:"gugu", per:9, groups:3,
+      st:["9씩 3묶음","9, 18, 27","그래서 27"] },
+    { q:"7 × 7 = ?", num:49, art:"gugu", per:7, groups:7,
+      st:["7씩 7묶음","7, 14, 21, 28, 35, 42, 49","그래서 49"] },
+    { q:"0 × 7 = ?", num:0, art:"gugu", per:0, groups:7,
+      st:["0이 7번 더해져도 0이에요.","어떤 수에 0을 곱하면 모두 0!"] }
+   ]},
+ { nm:"③ 길이 재기 (m·cm)", sem:"2-2", art:"meter", tip:"1m는 100cm예요. 큰 길이는 m로 재요.",
+   qs:[
+    { q:"1m는 몇 cm일까요?", num:100, art:"meter", mv:1,
+      st:["1m는 100cm예요.","자를 100칸 모으면 1m!"] },
+    { q:"2m는 몇 cm일까요?", num:200, art:"meter", mv:2,
+      st:["1m = 100cm","2m = 100 + 100 = 200cm"] },
+    { q:"1m 40cm는 몇 cm일까요?", num:140, art:"meter", mv:1.4,
+      st:["1m = 100cm","100 + 40 = 140cm"] },
+    { q:"150cm는 몇 m 몇 cm일까요? (몇 m인지만 답해요)", num:1, art:"meter", mv:1.5,
+      st:["100cm가 1m예요.","150cm에는 100cm가 1번 들어가요.","그래서 1m 50cm"] },
+    { q:"3m - 1m는 몇 cm일까요?", num:200, art:"meter", mv:2,
+      st:["3m - 1m = 2m","2m = 200cm"] },
+    { q:"80cm + 120cm는 몇 m일까요?", num:2, art:"meter", mv:2,
+      st:["80 + 120 = 200cm","200cm = 2m"] }
+   ]},
+ { nm:"④ 시각과 시간", sem:"2-2", art:"clock", tip:"짧은바늘은 '시', 긴바늘은 '분'을 가리켜요.",
+   qs:[
+    { q:"짧은바늘이 5, 긴바늘이 12를 가리켜요. 몇 시일까요?", o:["5시","6시","12시"], a:0, art:"clock", h:5, m:0,
+      st:["짧은바늘 = 시 → 5","긴바늘이 12에 있으면 0분","그래서 5시"] },
+    { q:"짧은바늘이 2와 3 사이, 긴바늘이 6을 가리켜요. 몇 시 몇 분일까요?", o:["2시 30분","3시 30분","2시 6분"], a:0, art:"clock", h:2, m:30,
+      st:["긴바늘이 6이면 30분이에요.","짧은바늘은 2를 지나 조금 갔어요.","그래서 2시 30분"] },
+    { q:"1시간은 몇 분일까요?", num:60, art:"clock", h:1, m:0,
+      st:["긴바늘이 한 바퀴 도는 시간이 1시간이에요.","그래서 60분!"] },
+    { q:"1일은 몇 시간일까요?", num:24, art:"clock", h:12, m:0,
+      st:["낮 12시간 + 밤 12시간","그래서 1일은 24시간"] },
+    { q:"8시에서 30분이 지나면 몇 시 몇 분일까요? (몇 시 30분에서 '몇 시'만 답해요)", num:8, art:"clock", h:8, m:30,
+      st:["8시에 30분을 더해요.","8시 30분","그래서 8시"] },
+    { q:"9시 50분에서 20분이 지나면 몇 시일까요?", num:10, art:"clock", h:9, m:50,
+      st:["50분 + 20분 = 70분 → 1시간 10분","9시 + 1시간 = 10시, 남은 10분","그래서 10시 10분"] },
+    { q:"1주일은 며칠일까요?", num:7, art:"clock", h:12, m:0,
+      st:["월·화·수·목·금·토·일","그래서 7일"] }
+   ]},
+ { nm:"⑤ 표와 그래프", sem:"2-2", art:"graph", tip:"표로 세면 빠뜨리지 않고, 그래프로 보면 한눈에 보여요.",
+   qs:[
+    { q:"사과 6명, 수박 5명, 바나나 8명이에요. 모두 몇 명일까요?", num:19, art:"graph", g:[[6,"사과"],[5,"수박"],[8,"바나나"]],
+      st:["표의 수를 모두 더해요.","6 + 5 = 11","11 + 8 = 19"] },
+    { q:"가장 많은 학생이 좋아하는 과일은?", o:["사과","수박","바나나"], a:2, art:"graph", g:[[6,"사과"],[5,"수박"],[8,"바나나"]],
+      st:["막대가 가장 긴 것을 찾아요.","8명인 바나나!"] },
+    { q:"가장 많은 것과 가장 적은 것의 차는 몇 명일까요?", num:3, art:"graph", g:[[6,"사과"],[5,"수박"],[8,"바나나"]],
+      st:["가장 많은 것 8명, 가장 적은 것 5명","8 - 5 = 3"] },
+    { q:"막대그래프에서 1칸이 1명일 때, 3칸은 몇 명일까요?", num:3, art:"graph", g:[[3,"축구"],[5,"야구"]],
+      st:["1칸 = 1명이면 3칸 = 3명"] },
+    { q:"축구 6명, 야구 5명일 때 모두 몇 명일까요?", num:11, art:"graph", g:[[6,"축구"],[5,"야구"]],
+      st:["6 + 5 = 11"] }
+   ]},
+ { nm:"⑥ 규칙 찾기", sem:"2-2", art:"pattern", tip:"얼마씩 커지는지, 줄어드는지 찾으면 규칙이 보여요.",
+   qs:[
+    { q:"2, 4, 6, 8, □ 에 들어갈 수는?", num:10, art:"pattern", start:2, step:2, n:5,
+      st:["2씩 커지는 규칙이에요.","8 + 2 = 10"] },
+    { q:"3, 6, 9, □ 에 들어갈 수는?", num:12, art:"pattern", start:3, step:3, n:4,
+      st:["3씩 커져요.","9 + 3 = 12"] },
+    { q:"1, 2, 4, 7, 11, □ 에 들어갈 수는?", num:16, art:"pattern", start:1, step:1, n:6,
+      st:["1→2는 +1, 2→4는 +2, 4→7은 +3…","더하는 수가 1씩 커져요.","11 + 5 = 16"] },
+    { q:"100, 90, 80, □ 에 들어갈 수는?", num:70, art:"pattern", start:100, step:-10, n:4,
+      st:["10씩 작아지는 규칙이에요.","80 - 10 = 70"] },
+    { q:"5, 10, 15, 20, □ 에 들어갈 수는?", num:25, art:"pattern", start:5, step:5, n:5,
+      st:["5씩 커져요.","20 + 5 = 25"] }
+   ]}
+];
 
 function unitStart(cfg){
   var st = cfg.state;
@@ -29819,7 +30577,276 @@ var G2CFG = { data:G2, state:{ unit:0, quiz:null }, box:"g2QBody", prog:"g2Prog"
               source:"같은 책 2학년 — 1학기 6단원 + 2학기 6단원에서 뽑았어요" };
 
 function b1Start(){ unitBind(B1CFG); unitStart(B1CFG); }
-function g2Start(){ unitBind(G2CFG); unitStart(G2CFG); }
+function g2Start(){ g2Start_guided(); }
+
+/* ==================================================================
+   2️⃣ 2학년 수학 — 하루 1문제 · 큰 그림 개념 설명 (2022 개정 교육과정 순서)
+   ================================================================== */
+var GD = { unit:0, idx:0, done:false, typed:"", tries:0, drawn:false };
+function g2Day(){ try { return parseInt(String(SB.today() || "").replace(/\D/g, ""), 10) || 0; } catch(e){ return 0; } }
+function g2Auto(u){
+  var n = G2[u].qs.length;
+  return ((g2Day() + u * 3) % n + n) % n;
+}
+function gdSvg(inner, vb, cls){
+  return '<svg class="' + (cls || "gd-svg") + '" viewBox="' + (vb || "0 0 320 220") + '" role="img" aria-hidden="true">' + inner + "</svg>";
+}
+function gdPlace(n, count){
+  var s = String(Math.abs(n || 0));
+  while (s.length < count) s = "0" + s;
+  var names = count === 4 ? ["천", "백", "십", "일"] : ["백", "십", "일"];
+  var vals  = count === 4 ? [1000, 100, 10, 1] : [100, 10, 1];
+  var w = count === 4 ? 74 : 88, gap = count === 4 ? 9 : 16, x0 = 20;
+  var out = "";
+  for (var i = 0; i < count; i++){
+    var x = x0 + i * (w + gap);
+    var d = s.charAt(i);
+    out += '<text x="' + (x + w / 2) + '" y="30" text-anchor="middle" font-size="19" font-weight="900" fill="#5b89a6">' + names[i] + "</text>"
+      + '<rect x="' + x + '" y="42" width="' + w + '" height="' + w + '" rx="14" fill="#eaf6ff" stroke="#8fc6e8" stroke-width="3"/>'
+      + '<text x="' + (x + w / 2) + '" y="' + (42 + w * 0.72) + '" text-anchor="middle" font-size="' + (w * 0.56) + '" font-weight="900" fill="#12587f">' + d + "</text>"
+      + '<text x="' + (x + w / 2) + '" y="' + (42 + w + 26) + '" text-anchor="middle" font-size="16" font-weight="800" fill="#8aa6b8">' + (Number(d) * vals[i]) + "</text>";
+  }
+  return gdSvg(out, "0 0 340 215");
+}
+function gdAdd(q){
+  var a = String(q.a1 == null ? "" : q.a1), b = String(q.a2 == null ? "" : q.a2), r = String(q.num == null ? "" : q.num);
+  var w = Math.max(a.length, b.length, r.length);
+  var colW = 46, xR = 190;
+  function numRow(str, y, color){
+    var out = "";
+    for (var i = 0; i < str.length; i++){
+      var ch = str.charAt(str.length - 1 - i);
+      out += '<text x="' + (xR - i * colW) + '" y="' + y + '" text-anchor="middle" font-size="44" font-weight="900" fill="' + color + '">' + ch + "</text>";
+    }
+    return out;
+  }
+  var s = numRow(a, 70, "#1b5b8a") + numRow(b, 128, "#1b5b8a")
+    + '<text x="' + (xR - w * colW - 6) + '" y="128" text-anchor="middle" font-size="40" font-weight="900" fill="#d97a68">' + (q.op || "+") + "</text>"
+    + '<line x1="' + (xR - w * colW - 30) + '" y1="146" x2="' + (xR + 22) + '" y2="146" stroke="#9db9cb" stroke-width="4" stroke-linecap="round"/>'
+    + '<text x="' + (xR - w * colW - 6) + '" y="196" text-anchor="middle" font-size="40" font-weight="900" fill="#d97a68">=</text>'
+    + numRow(r, 196, "#0d6b47")
+    + '<text x="18" y="40" font-size="17" font-weight="900" fill="#6f90a6">일의 자리부터!</text>'
+    + '<text x="18" y="196" font-size="15" font-weight="800" fill="#9db9cb">10이 넘으면 윗자리로 올려요</text>';
+  return gdSvg(s, "0 0 340 220");
+}
+function gdShape(kind){
+  var n = kind === "tri" ? 3 : kind === "quad" ? 4 : kind === "penta" ? 5 : kind === "hexa" ? 6 : 0;
+  if (!n){
+    return gdSvg('<circle cx="160" cy="110" r="76" fill="#e8f6ff" stroke="#4c9fd6" stroke-width="5"/>'
+      + '<text x="160" y="122" text-anchor="middle" font-size="60">⭕</text>'
+      + '<text x="160" y="210" text-anchor="middle" font-size="19" font-weight="900" fill="#2b5d7d">원 · 곧은 선(변)이 없어요</text>', "0 0 320 220");
+  }
+  var cx = 160, cy = 108, R = 78, pts = [];
+  for (var i = 0; i < n; i++){
+    var a = (-90 + i * 360 / n) * Math.PI / 180;
+    pts.push([cx + Math.cos(a) * R, cy + Math.sin(a) * R]);
+  }
+  var poly = pts.map(function(p){ return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
+  var dots = pts.map(function(p){ return '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="6" fill="#d97a68"/>'; }).join("");
+  var name = ["", "", "", "삼각형", "사각형", "", "오각형", "육각형"][n] || "";
+  return gdSvg('<polygon points="' + poly + '" fill="#e8f6ff" stroke="#4c9fd6" stroke-width="5" stroke-linejoin="round"/>' + dots
+    + '<text x="160" y="212" text-anchor="middle" font-size="20" font-weight="900" fill="#2b5d7d">' + name + " · 변 " + n + "개 · 꼭짓점 " + n + "개</text>", "0 0 320 228");
+}
+function gdRuler(cm){
+  var len = Math.max(10, Math.min(20, Math.ceil((cm || 10) / 5) * 5));
+  var x0 = 30, w = 260, unit = w / len;
+  var ticks = "";
+  for (var i = 0; i <= len; i++){
+    var x = x0 + i * unit;
+    var big = i % 5 === 0;
+    ticks += '<line x1="' + x.toFixed(1) + '" y1="120" x2="' + x.toFixed(1) + '" y2="' + (big ? 96 : 108) + '" stroke="#5b7f96" stroke-width="' + (big ? 3 : 1.6) + '"/>';
+    if (big) ticks += '<text x="' + x.toFixed(1) + '" y="140" text-anchor="middle" font-size="14" font-weight="900" fill="#5b7f96">' + i + "</text>";
+  }
+  var markTo = Math.min(len, cm || 0);
+  return gdSvg('<rect x="' + x0 + '" y="118" width="' + w + '" height="34" rx="6" fill="#fdf3d8" stroke="#d9b263" stroke-width="3"/>' + ticks
+    + '<rect x="' + x0 + '" y="66" width="' + (markTo * unit).toFixed(1) + '" height="26" rx="8" fill="#ffd166" stroke="#e0a92c" stroke-width="2"/>'
+    + '<text x="' + (x0 + w / 2) + '" y="40" text-anchor="middle" font-size="20" font-weight="900" fill="#2b5d7d">' + (cm || 0) + " cm</text>"
+    + '<text x="' + (x0 + w / 2) + '" y="190" text-anchor="middle" font-size="15" font-weight="800" fill="#9db9cb">자는 0에 맞추고 끝의 눈금을 읽어요</text>', "0 0 320 210");
+}
+function gdBars(g){
+  g = g || [[6, "🍎"], [5, "🍉"], [8, "🍌"]];
+  var max = 1;
+  g.forEach(function(r){ max = Math.max(max, r[0]); });
+  var bw = 56, gap = 28, x0 = 40, base = 170, hMax = 110, out = "";
+  for (var i = 0; i < g.length; i++){
+    var v = g[i][0], h = v / max * hMax;
+    var x = x0 + i * (bw + gap);
+    out += '<rect x="' + x + '" y="' + (base - h) + '" width="' + bw + '" height="' + h + '" rx="8" fill="#7cc3e8"/>'
+      + '<text x="' + (x + bw / 2) + '" y="' + (base - h - 10) + '" text-anchor="middle" font-size="20" font-weight="900" fill="#1b5b8a">' + v + "</text>"
+      + '<text x="' + (x + bw / 2) + '" y="' + (base + 26) + '" text-anchor="middle" font-size="20">' + (String(g[i][1]).length <= 2 ? g[i][1] : "") + "</text>"
+      + (String(g[i][1]).length > 2 ? '<text x="' + (x + bw / 2) + '" y="' + (base + 48) + '" text-anchor="middle" font-size="14" font-weight="800" fill="#5b7f96">' + g[i][1] + "</text>" : "");
+  }
+  return gdSvg(out + '<line x1="24" y1="' + base + '" x2="300" y2="' + base + '" stroke="#9db9cb" stroke-width="3"/>', "0 0 320 235");
+}
+function gdGroups(per, groups){
+  per = Math.max(0, Math.min(10, per || 0)); groups = Math.max(1, Math.min(9, groups || 1));
+  var out = "", x0 = 18, y0 = 34, bw = 96, bh = 46, gapx = 10, gapy = 10;
+  for (var gi = 0; gi < groups; gi++){
+    var gx = x0 + (gi % 3) * (bw + gapx), gy = y0 + Math.floor(gi / 3) * (bh + gapy);
+    out += '<rect x="' + gx + '" y="' + gy + '" width="' + bw + '" height="' + bh + '" rx="12" fill="#f2fbff" stroke="#b6dcf1" stroke-width="2"/>';
+    for (var k = 0; k < per; k++)
+      out += '<circle cx="' + (gx + 12 + (k % 5) * 17) + '" cy="' + (gy + 15 + Math.floor(k / 5) * 17) + '" r="6.5" fill="#ffb347"/>';
+  }
+  var rows = Math.ceil(groups / 3);
+  return gdSvg(out + '<text x="160" y="' + (y0 + rows * (bh + gapy) + 22) + '" text-anchor="middle" font-size="20" font-weight="900" fill="#2b5d7d">' + per + "개씩 " + groups + "묶음 = " + (per * groups) + "</text>", "0 0 320 230");
+}
+function gdMeter(m){
+  m = m || 1;
+  var cm = Math.round(m * 100);
+  return gdSvg('<rect x="24" y="80" width="272" height="34" rx="8" fill="#fdf3d8" stroke="#d9b263" stroke-width="3"/>'
+    + '<rect x="24" y="80" width="' + Math.min(272, cm / 100 * 272).toFixed(1) + '" height="34" rx="8" fill="#9fe0c0" stroke="#54b98a" stroke-width="2"/>'
+    + '<line x1="24" y1="114" x2="24" y2="132" stroke="#5b7f96" stroke-width="3"/>'
+    + '<line x1="160" y1="70" x2="160" y2="132" stroke="#5b7f96" stroke-width="2" stroke-dasharray="5 4"/>'
+    + '<line x1="296" y1="70" x2="296" y2="132" stroke="#5b7f96" stroke-width="2" stroke-dasharray="5 4"/>'
+    + '<text x="24" y="152" text-anchor="middle" font-size="14" font-weight="900" fill="#5b7f96">0</text>'
+    + '<text x="160" y="60" text-anchor="middle" font-size="16" font-weight="900" fill="#5b7f96">1m = 100cm</text>'
+    + '<text x="296" y="152" text-anchor="middle" font-size="14" font-weight="900" fill="#5b7f96">' + (m * 100).toFixed(0) + "cm</text>"
+    + '<text x="160" y="196" text-anchor="middle" font-size="20" font-weight="900" fill="#2b5d7d">' + m + "m = " + cm + "cm</text>", "0 0 320 215");
+}
+function gdPattern(q){
+  var start = q.start || 2, step = q.step || 2, n = q.n || 5;
+  var out = "", x0 = 24, y0 = 108, gapx = 54;
+  for (var i = 0; i < n; i++){
+    var v = start + step * i, x = x0 + i * gapx;
+    out += '<circle cx="' + x + '" cy="' + y0 + '" r="20" fill="' + (i === n - 1 ? "#ffe6a3" : "#eaf6ff") + '" stroke="' + (i === n - 1 ? "#e0a92c" : "#8fc6e8") + '" stroke-width="3"/>'
+      + '<text x="' + x + '" y="' + (y0 + 7) + '" text-anchor="middle" font-size="17" font-weight="900" fill="#12587f">' + (i === n - 1 ? "?" : v) + "</text>";
+    if (i < n - 1) out += '<text x="' + (x + gapx / 2) + '" y="' + (y0 - 28) + '" text-anchor="middle" font-size="14" font-weight="900" fill="#8aa6b8">' + (step > 0 ? "+" + step : step) + "</text>";
+  }
+  return gdSvg(out + '<text x="160" y="180" text-anchor="middle" font-size="17" font-weight="900" fill="#2b5d7d">' + (step > 0 ? step + "씩 커져요" : Math.abs(step) + "씩 작아져요") + "</text>", "0 0 320 210");
+}
+function gdArt(q){
+  var a = q.art || "p3";
+  if (a === "p3") return gdPlace(q.show || 342, 3);
+  if (a === "p4") return gdPlace(q.show || 2536, String(q.show || 2536).length > 3 ? 4 : 4);
+  if (a === "add") return gdAdd(q);
+  if (a === "shape") return gdShape(q.shape || "tri");
+  if (a === "ruler") return gdRuler(q.cm || 7);
+  if (a === "classify") return gdGroups(1, 1).replace(/<svg[\s\S]*<\/svg>/, gdBars(q.g));
+  if (a === "times" || a === "gugu") return gdGroups(q.per == null ? 3 : q.per, q.groups || 4);
+  if (a === "meter") return gdMeter(q.mv || 1);
+  if (a === "clock") return '<div class="gd-clock">' + clockSVG((q.h || 5) + "," + (q.m || 0)) + "</div>";
+  if (a === "graph") return gdBars(q.g || [[6, "사과"], [5, "수박"], [8, "바나나"]]);
+  if (a === "pattern") return gdPattern(q);
+  return gdPlace(q.show || 342, 3);
+}
+function gdUnitCard(){
+  var card = $("g2Card"); if (!card) return;
+  var u = G2[GD.unit], q = u.qs[GD.idx];
+  card.innerHTML = '<div class="mq-ch"><b>' + esc(u.nm) + "</b><span>" + esc(u.sem) + " · " + (GD.unit + 1) + " / " + G2.length + " 단원</span></div>"
+    + '<p class="mq-tip">' + esc(u.tip) + "</p>"
+    + '<div class="mq-bar"><i style="width:' + Math.round((GD.unit + 1) / G2.length * 100) + '%"></i></div>'
+    + '<div class="gd-figure">' + gdArt(q) + "</div>"
+    + '<p class="gd-h">이렇게 생각해요</p>'
+    + '<ol class="gd-steps">' + (q.st || []).map(function(s){ return "<li>" + esc(s) + "</li>"; }).join("") + "</ol>"
+    + '<p class="mq-note">교육과정 2학년 · 하루 1문제씩 그림과 함께 천천히</p>';
+}
+function gdQuestion(){
+  var box = $("g2QBody"); if (!box) return;
+  var u = G2[GD.unit], q = u.qs[GD.idx];
+  var h = '<p class="gd-q">' + esc(q.q) + "</p>";
+  if (q.o && q.o.length){
+    h += '<div class="gd-opts">' + q.o.map(function(t, i){
+      return '<button class="gd-opt" type="button" data-gd="o" data-v="' + i + '">' + esc(t) + "</button>";
+    }).join("") + "</div>";
+  } else {
+    h += '<div class="gd-in"><b id="gdTyped">' + (GD.typed || "?") + '</b><span class="gd-unitlbl">' + (q.unit || "") + "</span></div>"
+      + '<div class="gd-pad">'
+      + [1,2,3,4,5,6,7,8,9].map(function(k){ return '<button class="gd-key" type="button" data-gd="k" data-v="' + k + '">' + k + "</button>"; }).join("")
+      + '<button class="gd-key back" type="button" data-gd="back" aria-label="지우기">⌫</button>'
+      + '<button class="gd-key" type="button" data-gd="k" data-v="0">0</button>'
+      + '<button class="gd-key go" type="button" data-gd="ok" aria-label="정답 확인">✓</button>'
+      + "</div>";
+  }
+  h += '<div class="gd-fb" id="gdFb" aria-live="polite" hidden></div>'
+    + '<div class="gd-bar"><button class="gd-btn" type="button" data-gd="more">🔁 다른 문제 하나 더</button>'
+    + '<button class="gd-btn" type="button" data-gd="nextunit">➡️ 다음 단원</button></div>';
+  box.innerHTML = h;
+  var qt = $("g2QTitle"); if (qt) qt.textContent = u.nm + " · 오늘의 1문제";
+  var pr = $("g2Prog"); if (pr) pr.textContent = "1 / 1 · " + u.qs.length + "문제 중";
+}
+function gdFeedback(ok){
+  var fb = $("gdFb"); if (!fb) return;
+  var u = G2[GD.unit], q = u.qs[GD.idx];
+  fb.hidden = false;
+  fb.className = "gd-fb " + (ok ? "ok" : "no");
+  if (ok){
+    var got = 0;
+    try { got = SB.earn(SB.today() + "|math|grade2|" + GD.unit, 2) || 0; } catch(e){ got = 0; }
+    try { SB.markAttendance("math"); } catch(e){}
+    fb.innerHTML = "<b>🎉 정답이에요!</b> " + esc(q.st ? q.st[q.st.length - 1] : "")
+      + (got ? " · ⭐ +" + got : " · 오늘 별은 이미 받았어요");
+    if (got){ try { SB.confetti(); } catch(e){} try { SB.toast("2학년 수학 ⭐ +" + got); } catch(e){} }
+  } else {
+    fb.innerHTML = "<b>🙂 한 번 더 생각해 볼까요?</b> 위의 그림과 설명을 다시 읽고 풀어 봐요.";
+  }
+}
+function gdCheck(){
+  var u = G2[GD.unit], q = u.qs[GD.idx];
+  if (GD.done) return;
+  var ok = false;
+  if (q.o && q.o.length){ return; }
+  var v = String(GD.typed || "").trim();
+  if (!v){ try { SB.toast("답을 눌러 주세요!"); } catch(e){} return; }
+  ok = (Number(v) === Number(q.num));
+  if (ok){ GD.done = true; gdFeedback(true); }
+  else { GD.tries++; gdFeedback(false); GD.typed = ""; var t = $("gdTyped"); if (t) t.textContent = "?"; }
+}
+function gdPickOption(i){
+  var u = G2[GD.unit], q = u.qs[GD.idx];
+  if (GD.done) return;
+  if (i === q.a){ GD.done = true; gdFeedback(true); }
+  else gdFeedback(false);
+}
+function gdShow(u, i){
+  GD.unit = Math.max(0, Math.min(G2.length - 1, u));
+  GD.idx = (i == null) ? g2Auto(GD.unit) : (i % G2[GD.unit].qs.length);
+  GD.done = false; GD.typed = ""; GD.tries = 0;
+  gdUnitCard(); gdQuestion();
+  var steps = $("g2Steps");
+  if (steps){
+    var bs = steps.querySelectorAll("[data-gqu]");
+    for (var k = 0; k < bs.length; k++) bs[k].classList.toggle("on", +bs[k].getAttribute("data-gqu") === GD.unit);
+  }
+}
+function gdBuildSteps(){
+  var box = $("g2Steps"); if (!box || box.getAttribute("data-gb") === "1") return;
+  box.setAttribute("data-gb", "1");
+  box.innerHTML = G2.map(function(u, i){
+    return '<button class="mq-step" type="button" data-gqu="' + i + '">' + esc(u.nm) + "</button>";
+  }).join("");
+}
+function gdBind(){
+  var root = $("viewMathG2"); if (!root || root.getAttribute("data-gd") === "1") return;
+  root.setAttribute("data-gd", "1");
+  root.addEventListener("click", function(e){
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var st = t.closest("[data-gqu]");
+    if (st){ gdShow(+st.getAttribute("data-gqu")); return; }
+    var b = t.closest("[data-gd]");
+    if (!b) return;
+    var a = b.getAttribute("data-gd"), v = b.getAttribute("data-v");
+    if (a === "k"){ if (String(GD.typed).length < 5){ GD.typed += v; var el = $("gdTyped"); if (el) el.textContent = GD.typed; } }
+    else if (a === "back"){ GD.typed = String(GD.typed).slice(0, -1); var el2 = $("gdTyped"); if (el2) el2.textContent = GD.typed || "?"; }
+    else if (a === "ok"){ gdCheck(); }
+    else if (a === "o"){ gdPickOption(+v); }
+    else if (a === "more"){ gdShow(GD.unit, GD.idx + 1); }
+    else if (a === "nextunit"){ gdShow(GD.unit + 1); }
+  });
+}
+function g2Start_guided(){
+  gdBuildSteps(); gdBind();
+  if (!GD.drawn){ GD.drawn = true; gdShow(0); }
+  else gdShow(GD.unit);
+  var box = document.getElementById("subs2");
+  if (box){
+    var on = box.querySelector(".subtab.on");
+    if (on){
+      var l = on.offsetLeft, w = on.offsetWidth, sl = box.scrollLeft, cw = box.clientWidth;
+      if (l < sl || l + w > sl + cw){ try { box.scrollTo({ left:Math.max(0, l - 6), behavior:"smooth" }); } catch(e){ box.scrollLeft = Math.max(0, l - 6); } }
+    }
+  }
+}
 
 /* 단원 칩 만들기 */
 function buildSteps(id, data, tag){
@@ -29833,7 +30860,7 @@ function buildSteps(id, data, tag){
 function init(){
   buildSteps("b1Steps", B1);
   buildSteps("g2Steps", G2);
-  smBind(); unitBind(B1CFG); unitBind(G2CFG);
+  smBind(); unitBind(B1CFG); gdBuildSteps(); gdBind();
   smBoard(); smBindBoard();
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
@@ -29871,6 +30898,135 @@ function esc(s){
 function todayKey(){ try { return SB.today(); } catch(e){ return ""; } }
 
 var DATA = [{"no":"01","sem":"3학년 1학기","sub":"사회","topic":"우리가 사는 곳","chars":[["生","태어나다","생"],["場","마당","장"],["學","배우다","학"],["店","가게","점"],["安","편안하다","안"]],"words":[{"w":"생활","h":"生活","m":"일정한 환경에서 활동하며 살아감","f":"生(태어나다 생) + 活(살다 활)"},{"w":"안전","h":"安全","m":"위험이 생기거나 사고가 날 염려가 없음","f":"安(편안하다 안) + 全(온전하다 전)"},{"w":"학교","h":"學校","m":"학생에게 교육을 실시하는 기관","f":"學(배우다 학) + 校(학교 교)"},{"w":"서점","h":"書店","m":"책을 갖추어 놓고 팔거나 사는 가게","f":"書(글 서) + 店(가게 점)"},{"w":"장소","h":"場所","m":"어떤 일이 이루어지거나 일어나는 곳","f":"場(마당 장) + 所(바, 곳 소)"}]},{"no":"02","sem":"3학년 1학기","sub":"사회","topic":"일상에서 만나는 과거","chars":[["日","날","일"],["年","해","년(연)"],["間","사이","간"],["記","기록하다","기"],["來","오다","래(내)"]],"words":[{"w":"일상","h":"日常","m":"날마다 반복되는 생활","f":"日(날 일) + 常(항상 상)"},{"w":"미래","h":"未來","m":"앞으로 올 때","f":"未(아니다 미) + 來(오다 래)"},{"w":"시간","h":"時間","m":"시각과 시각의 사이, 시간의 어느 한 시점","f":"時(때 시) + 間(사이 간)"},{"w":"일기","h":"日記","m":"날마다 겪은 일이나 생각, 느낌을 적는 개인의 기록","f":"日(날 일) + 記(기록하다 기)"},{"w":"연표","h":"年表","m":"역사상 발생한 사건을 연대순으로 배열하여 적은 표","f":"年(해 년) + 表(겉, 표 표)"}]},{"no":"01","sem":"3학년 2학기","sub":"사회","topic":"사회 변화와 다양한 문화","chars":[["人","사람","인"],["高","높다","고"],["文","글","문"],["家","집","가"],["知","알다","지"]],"words":[{"w":"가구","h":"家口","m":"한 집에서 생계를 함께하는 식구","f":"家(집 가) + 口(입 구)"},{"w":"문화","h":"文化","m":"사람들이 지혜를 모아 만들어 온 모든 생활 모습","f":"文(글 문) + 化(되다 화)"},{"w":"노인","h":"老人","m":"나이가 들어 늙은 사람","f":"老(늙다 로) + 人(사람 인)"},{"w":"지능","h":"知能","m":"생각하고 배우며 문제를 해결하는 능력","f":"知(알다 지) + 能(능하다 능)"},{"w":"고령화","h":"高齡化","m":"노인의 인구 비율이 높은 상태로 나타나는 일","f":"高(높다 고) + 齡(나이 령) + 化(되다 화)"}]},{"no":"02","sem":"3학년 2학기","sub":"사회","topic":"옛날과 오늘날의 생활 모습","chars":[["風","바람","풍"],["時","때","시"],["通","통하다","통"],["車","수레","차/거"],["交","사귀다","교"]],"words":[{"w":"풍습","h":"風習","m":"옛날부터 전해 내려와 사람들이 당연하게 지키는 생활 습관","f":"風(바람 풍) + 習(익히다 습)"},{"w":"교통","h":"交通","m":"차나 비행기 등을 타고 사람이 오고 가거나 물건을 옮기는 일","f":"交(사귀다 교) + 通(통하다 통)"},{"w":"통신","h":"通信","m":"편지나 전신, 전화 따위로 정보나 의사를 전달함","f":"通(통하다 통) + 信(믿다 신)"},{"w":"자동차","h":"自動車","m":"엔진의 힘으로 땅 위를 스스로 움직이는 차","f":"自(스스로 자) + 動(움직이다 동) + 車(수레 차)"},{"w":"세시","h":"歲時","m":"한 해의 절기나 달, 계절에 따른 때","f":"歲(해 세) + 時(때 시)"}]},{"no":"01","sem":"3학년 1학기","sub":"과학","topic":"힘과 우리 생활","chars":[["物","만물","물"],["平","평평하다","평"],["面","낯","면"],["龍","용","룡(용)"]],"words":[{"w":"빗면","h":"빗面","m":"비스듬히 기운 면","f":"빗(순우리말) + 面(낯 면)"},{"w":"수평","h":"水平","m":"물처럼 기울지 않고 평평한 상태","f":"水(물 수) + 平(평평하다 평)"},{"w":"물체","h":"物體","m":"구체적인 형태를 가지고 있는 것","f":"物(만물 물) + 體(몸 체)"},{"w":"용수철","h":"龍鬚鐵","m":"용의 수염처럼 늘어나고 줄어드는 탄력이 있는 나선형 쇠줄","f":"龍(용 룡) + 鬚(턱수염 수) + 鐵(쇠 철)"}]},{"no":"02","sem":"3학년 1학기","sub":"과학","topic":"동물의 생활","chars":[["動","움직이다","동"],["分","나누다","분"],["用","쓰다","용"],["水","물","수"]],"words":[{"w":"사용","h":"使用","m":"일정한 목적이나 기능에 맞게 씀","f":"使(부리다 사) + 用(쓰다 용)"},{"w":"동물","h":"動物","m":"스스로 움직이고 감각을 느끼며 다른 생물을 먹어 영양분을 얻는 생명체","f":"動(움직이다 동) + 物(만물 물)"},{"w":"분류","h":"分類","m":"종류에 따라서 나눔","f":"分(나누다 분) + 類(무리 류)"},{"w":"호수","h":"湖水","m":"땅이 우묵하게 들어가 물이 괴어 있는 곳","f":"湖(호수 호) + 水(물 수)"}]},{"no":"03","sem":"3학년 1학기","sub":"과학","topic":"식물의 생활","chars":[["山","산","산"],["沙","모래","사"],["品","물건","품"],["玉","구슬","옥"]],"words":[{"w":"용품","h":"用品","m":"어떤 일이나 목적과 관련하여 쓰이는 물품","f":"用(쓰다 용) + 品(물건 품)"},{"w":"사막","h":"沙漠","m":"강수량이 적어 식물이 보이지 않거나 적고, 인간의 활동도 제약되는 지역","f":"沙(모래 사) + 漠(사막 막)"},{"w":"한라산","h":"漢拏山","m":"제주특별자치도 중앙에 있는 산","f":"漢(은하수 한) + 拏(붙잡다 나) + 山(산 산)"},{"w":"부레옥잠","h":"부레玉簪","m":"물옥잠과의 여러해살이풀","f":"부레(순우리말) + 玉(구슬 옥) + 簪(비녀 잠)"}]},{"no":"04","sem":"3학년 1학기","sub":"과학","topic":"생물의 한살이","chars":[["育","기르다","육"],["溫","따뜻하다","온"],["蟲","벌레","충"],["必","반드시","필"]],"words":[{"w":"사육","h":"飼育","m":"어린 가축이나 짐승이 자라도록 먹이어 기름","f":"飼(먹이다 사) + 育(기르다 육)"},{"w":"필요","h":"必要","m":"반드시 요구되는 바가 있음","f":"必(반드시 필) + 要(요긴하다 요)"},{"w":"온도","h":"溫度","m":"따뜻함과 차가움의 정도","f":"溫(따뜻하다 온) + 度(법도 도)"},{"w":"곤충","h":"昆蟲","m":"곤충강에 속한 동물을 통틀어 이르는 말","f":"昆(벌레 곤) + 蟲(벌레 충)"}]},{"no":"01","sem":"3학년 2학기","sub":"과학","topic":"물체와 물질","chars":[["性","성품","성"],["體","몸","체"],["氣","기운","기"],["液","진","액"]],"words":[{"w":"고체","h":"固體","m":"일정한 모양과 부피가 있으며 쉽게 변형되지 않는 물질의 상태","f":"固(굳다 고) + 體(몸 체)"},{"w":"액체","h":"液體","m":"일정한 부피는 가졌으나 일정한 형태를 가지지 못한 물질","f":"液(진 액) + 體(몸 체)"},{"w":"성질","h":"性質","m":"사물이나 현상이 가지고 있는 고유의 특성","f":"性(성품 성) + 質(바탕 질)"},{"w":"기체","h":"氣體","m":"공기나 김처럼 일정한 모양 없이 자유롭게 퍼지는 상태의 물질","f":"氣(기운 기) + 體(몸 체)"}]},{"no":"02","sem":"3학년 2학기","sub":"과학","topic":"지구와 바다","chars":[["大","크다","대"],["地","땅","지"],["形","모양","형"],["表","겉","표"]],"words":[{"w":"지형","h":"地形","m":"땅의 생긴 모양","f":"地(땅 지) + 形(모양 형)"},{"w":"지구","h":"地球","m":"태양에서 셋째로 가까운 행성","f":"地(땅 지) + 球(공 구)"},{"w":"대기","h":"大氣","m":"지구의 표면을 둘러싸고 있는 기체","f":"大(크다 대) + 氣(기운 기)"},{"w":"표면","h":"表面","m":"사물의 가장 바깥쪽, 또는 가장 윗부분","f":"表(겉 표) + 面(낯 면)"}]},{"no":"03","sem":"3학년 2학기","sub":"과학","topic":"소리의 성질","chars":[["樂","노래","악"],["傳","전하다","전"],["空","비다","공"],["音","소리","음"]],"words":[{"w":"소음","h":"騷音","m":"불규칙하게 뒤섞여 불쾌하고 시끄러운 소리","f":"騷(떠들다 소) + 音(소리 음)"},{"w":"전달","h":"傳達","m":"지시, 명령, 물품 따위를 사람이나 기관에 전하여 이르게 함","f":"傳(전하다 전) + 達(통달하다 달)"},{"w":"악기","h":"樂器","m":"음악을 연주하는 데 쓰는 기구를 통틀어 이르는 말","f":"樂(노래 악) + 器(그릇 기)"},{"w":"공기","h":"空氣","m":"지구를 둘러싼 대기를 구성하는 투명한 기체","f":"空(비다 공) + 氣(기운 기)"}]},{"no":"04","sem":"3학년 2학기","sub":"과학","topic":"감염병과 건강한 생활","chars":[["飛","날다","비"],["習","익히다","습"],["防","막다","방"],["守","지키다","수"]],"words":[{"w":"예방","h":"豫防","m":"질병이나 재해 따위가 일어나기 전에 미리 대처하여 막는 일","f":"豫(미리 예) + 防(막다 방)"},{"w":"습관","h":"習慣","m":"오랫동안 되풀이하는 과정에서 저절로 익혀진 행동 방식","f":"習(익히다 습) + 慣(버릇 관)"},{"w":"비말","h":"飛沫","m":"날아 흩어지거나 튀어 오르는 물방울","f":"飛(날다 비) + 沫(거품 말)"},{"w":"수칙","h":"守則","m":"행동이나 절차에 관하여 지켜야 할 사항을 정한 규칙","f":"守(지키다 수) + 則(법칙 칙)"}]}];
+/* ---------- 🌟 오늘의 두 낱말 — 글자 그림 → 낱말 그림 ---------- */
+var CHPIC = {"生":"🌱","場":"🏞","學":"🏫","店":"🏪","安":"🛡","日":"☀️","年":"📅","間":"↔️","記":"📝","來":"👋",
+ "人":"👤","高":"⬆️","文":"📖","家":"🏠","知":"💡","風":"🌬","時":"🕐","通":"🔄","車":"🚗","交":"🤝",
+ "物":"🧸","平":"➖","面":"🟦","龍":"🐉","動":"🏃","分":"➗","用":"🔧","水":"💧","山":"⛰","沙":"🏖",
+ "品":"🎁","玉":"💎","育":"🌿","溫":"🌡","蟲":"🐛","必":"❗","性":"🧬","體":"🧍","氣":"💨","液":"🧪",
+ "大":"🐘","地":"🌍","形":"🔷","表":"🪧","樂":"🎵","傳":"📣","空":"☁️","音":"🔊","飛":"🕊","習":"🔁","防":"🛡","守":"🔒"};
+var WEM = {"생활":"🏡","안전":"🦺","학교":"🏫","서점":"📚","장소":"📍","일상":"📆","미래":"🔭","시간":"⏰","일기":"📔","연표":"📜",
+ "가구":"🛋","문화":"🎭","노인":"👴","지능":"🧠","고령화":"👵","풍습":"🎎","교통":"🚌","통신":"📱","자동차":"🚗","세시":"🎉",
+ "빗면":"🛝","수평":"📏","물체":"🧊","용수철":"🌀","사용":"🖐","동물":"🐾","분류":"🗂","호수":"🏞",
+ "용품":"🎒","사막":"🏜","한라산":"🗻","부레옥잠":"🌿","사육":"🐣","필요":"❗","온도":"🌡","곤충":"🐜",
+ "고체":"🧱","액체":"🥤","성질":"🔍","기체":"💨","지형":"🗺","지구":"🌍","대기":"☁️","표면":"🪞",
+ "소음":"📢","전달":"📣","악기":"🎻","공기":"🌬","예방":"🧼","습관":"🪥","비말":"💦","수칙":"📋"};
+var HTS = { pick:[], done:[false,false], solved:0 };
+function htAllWords(){
+  var out = [];
+  for (var i = 0; i < DATA.length; i++){
+    var st = DATA[i];
+    for (var k = 0; k < st.words.length; k++){
+      out.push({ w:st.words[k].w, h:st.words[k].h, m:st.words[k].m, f:st.words[k].f, topic:st.topic, sem:st.sem });
+    }
+  }
+  return out;
+}
+function htTodayPick(){
+  var all = htAllWords();
+  var day = parseInt(String(todayKey()).replace(/\D/g, ""), 10) || 0;
+  var i = day % all.length;
+  var j = (i + 1 + (day % 7)) % all.length;
+  if (j === i) j = (i + 2) % all.length;
+  return [all[i], all[j]];
+}
+function htSplitChars(w){
+  var h = w.h || "", chars = [];
+  for (var i = 0; i < h.length; i++){
+    var c = h.charAt(i);
+    if (/[\u3400-\u9FFF]/.test(c)){
+      var mean = "";
+      var mm = String(w.f || "").match(new RegExp(c + "\\s*\\(([^)]+)\\)"));
+      if (mm) mean = mm[1];
+      chars.push({ c:c, mean:mean, pic:CHPIC[c] || "🀄" });
+    }
+  }
+  return chars;
+}
+function htMeanOptions(w, all){
+  var pool = all.filter(function(x){ return x.w !== w.w; }).map(function(x){ return x.m; });
+  var out = [w.m];
+  while (out.length < 3 && pool.length){
+    var k = Math.floor(Math.random() * pool.length);
+    var v = pool.splice(k, 1)[0];
+    if (out.indexOf(v) < 0) out.push(v);
+  }
+  for (var i = out.length - 1; i > 0; i--){ var r = Math.floor(Math.random() * (i + 1)), t = out[i]; out[i] = out[r]; out[r] = t; }
+  return out;
+}
+function htRenderToday(){
+  var box = $("htToday"); if (!box) return;
+  var all = htAllWords();
+  if (!HTS.pick.length){ HTS.pick = htTodayPick(); HTS.done = [false, false]; HTS.solved = 0; }
+  var h = '<div class="htt-head"><b>🌟 오늘의 두 낱말</b><span>글자 그림이 만나 낱말 그림이 돼요 · 하루에 두 낱말이면 충분해요</span></div><div class="htt-cards">';
+  for (var i = 0; i < HTS.pick.length; i++){
+    var w = HTS.pick[i], chars = htSplitChars(w), opts = htMeanOptions(w, all);
+    h += '<div class="htt-card" data-hcard="' + i + '">'
+      + '<div class="htt-topic">' + esc(w.sem.replace("3학년 ", "")) + " · " + esc(w.topic) + "</div>"
+      + '<div class="htt-parts">';
+    for (var c = 0; c < chars.length; c++){
+      if (c) h += '<div class="htt-plus">+</div>';
+      h += '<div class="htt-part"><span class="htt-pic">' + chars[c].pic + "</span>"
+        + "<b>" + esc(chars[c].c) + "</b><em>" + esc(chars[c].mean || "") + "</em></div>";
+    }
+    h += "</div>"
+      + '<div class="htt-join">두 글자가 만나면 ↓</div>'
+      + '<div class="htt-word"><span class="htt-wpic">' + (WEM[w.w] || "🀄") + "</span>"
+      + "<b>" + esc(w.h) + " <span>" + esc(w.w) + "</span></b>"
+      + "<em>" + esc(w.m) + "</em></div>"
+      + '<div class="htt-quiz" data-hq="' + i + '">'
+      + '<p class="htt-q">‘' + esc(w.w) + "’의 뜻은 무엇일까요?</p>"
+      + opts.map(function(t){
+          return '<button class="htt-opt" type="button" data-hopt="' + i + '" data-ok="' + (t === w.m ? 1 : 0) + '">' + esc(t) + "</button>";
+        }).join("")
+      + "</div>"
+      + '<div class="htt-fb" id="httFb' + i + '" hidden></div>'
+      + "</div>";
+  }
+  h += "</div>"
+    + '<div class="htt-acts"><button class="htt-done" type="button" id="httDone">✓ 두 낱말 다 봤어요 (⭐ +2)</button>'
+    + '<button class="htt-btn" type="button" data-htall="1">📚 단원 전체 보기</button></div>';
+  box.innerHTML = h;
+  var rest = $("htRest"); if (rest) rest.hidden = true;
+}
+function htAnswer(cardI, ok, el){
+  if (HTS.done[cardI]) return;
+  var card = document.querySelector('.htt-card[data-hcard="' + cardI + '"]');
+  var opts = card ? card.querySelectorAll(".htt-opt") : [];
+  if (ok){
+    HTS.done[cardI] = true; HTS.solved++;
+    el.classList.add("ok");
+    var fb = $("httFb" + cardI);
+    if (fb){ fb.hidden = false; fb.className = "htt-fb ok"; fb.textContent = "🎉 맞았어요! " + HTS.pick[cardI].w + " = " + HTS.pick[cardI].m; }
+    try { SB.speak(HTS.pick[cardI].w, false, "ko-KR"); } catch(e){}
+  } else {
+    el.classList.add("no");
+    var fb2 = $("httFb" + cardI);
+    if (fb2){ fb2.hidden = false; fb2.className = "htt-fb no"; fb2.textContent = "🙂 다시 골라 볼까요? 글자 그림을 떠올려 봐요."; }
+  }
+}
+function htDone(){
+  var got = 0;
+  try { got = SB.earn(todayKey() + "|hanja|daily2", 2) || 0; } catch(e){ got = 0; }
+  try { SB.markAttendance("hanja"); } catch(e){}
+  try {
+    if (got){ SB.confetti(); SB.toast("🌟 오늘의 두 낱말 완료! ⭐ +" + got); }
+    else SB.toast("🌟 오늘의 두 낱말 완료! (오늘 별은 이미 받았어요)");
+  } catch(e){}
+}
+function htBindToday(){
+  var box = $("htToday"); if (!box || box.getAttribute("data-htb") === "1") return;
+  box.setAttribute("data-htb", "1");
+  box.addEventListener("click", function(e){
+    var t = e.target; if (!t || !t.closest) return;
+    var o = t.closest(".htt-opt");
+    if (o){ htAnswer(+o.getAttribute("data-hopt"), o.getAttribute("data-ok") === "1", o); return; }
+    var d = t.closest("#httDone");
+    if (d){ htDone(); return; }
+    var a = t.closest("[data-htall]");
+    if (a){ var rest = $("htRest"); if (rest) rest.hidden = !rest.hidden; a.textContent = rest && !rest.hidden ? "🙈 단원 전체 접기" : "📚 단원 전체 보기"; return; }
+  });
+}
+
 var H = { set:0, qi:0, tries:0, answered:false, done:{} };
 var ORDER = [];   /* 이 세트의 문제 순서 */
 
@@ -29998,14 +31154,14 @@ function bind(){
     });
   }
 }
-function init(){ bind(); startSet(); }
+function init(){ bind(); startSet(); htRenderToday(); htBindToday(); }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
 else init();
 
 SB.onShow.hanja = (function(prev){
   return function(sec){
     if (prev){ try { prev.apply(this, arguments); } catch(e){} }
-    if (sec === "text"){ try { startSet(); } catch(e){ try { console.warn(e); } catch(e2){} } }
+    if (sec === "text"){ try { htRenderToday(); htBindToday(); startSet(); } catch(e){ try { console.warn(e); } catch(e2){} } }
   };
 })(SB.onShow.hanja);
 
