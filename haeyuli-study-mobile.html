@@ -11937,6 +11937,15 @@ function finish(){
   render();
 }
 
+function showMyChip(){
+  var box = $("subs2"); if (!box) return;
+  var on = box.querySelector(".subtab.on"); if (!on) return;
+  var l = on.offsetLeft, w = on.offsetWidth, sl = box.scrollLeft, cw = box.clientWidth;
+  if (l < sl || l + w > sl + cw){
+    var want = Math.max(0, l - 6);
+    try { box.scrollTo({ left:want, behavior:"smooth" }); } catch(e){ box.scrollLeft = want; }
+  }
+}
 function bind(){
   var root = $("viewKoKey");
   if (!root || root.getAttribute("data-kk") === "1") return;
@@ -11966,6 +11975,7 @@ SB.onShow.ko = (function(prev){
     if (sub === "key"){
       buildKeys(); bind();
       if (!K.live) begin(); else render();
+      setTimeout(showMyChip, 60);
     }
   };
 })(SB.onShow.ko);
