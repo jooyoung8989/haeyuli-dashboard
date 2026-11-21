@@ -744,6 +744,9 @@ body.talking .tsvg .head-g{animation-duration:1.6s;}
 .snd-card b{font-size:2.6vh;font-weight:900;color:#8a5c00;line-height:1;}
 .snd-card span{font-size:1vh;font-weight:900;color:#b08331;}
 .snd-card:active{transform:scale(.96);}
+.snd-card{position:relative;}
+.snd-live{position:absolute;top:.2vh;right:.4vh;font-style:normal;font-size:.95vh;line-height:1;opacity:.75;}
+.ptile.on{background:#fff6dc;box-shadow:inset 0 0 0 .24vh #f0c04a,0 .4vh 1vh rgba(230,170,40,.28);}
 .ph-tip{font-size:1.05vh;font-weight:800;color:#7f97a9;line-height:1.4;margin:0;}
 .ph-blend{flex:0 0 auto;display:flex;align-items:center;gap:.6vh;}
 .ph-tiles{display:flex;align-items:center;gap:.35vh;}
@@ -5954,6 +5957,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
           <div class="ph-tools">
             <button class="phbtn" id="phSaySound" type="button">🔊 소리 듣기</button>
             <button class="phbtn" id="phBlendAll" type="button">🔊 합쳐서 듣기</button>
+            <button class="phbtn" id="phChant" type="button">🎵 음가+단어 챈트</button>
             <button class="phbtn star" id="phDone" type="button">✅ 이 레슨 완료</button>
           </div>
         </div>
@@ -5962,7 +5966,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
             <div class="ph-bh"><b>1</b> 소리 익히기</div>
             <div class="ph-sounds" id="phSounds"></div>
             <p class="ph-tip" id="phTip"></p>
-            <p class="ph-sentnote">글자를 콕 누르면 소리를 들려줘요.</p>
+            <p class="ph-sentnote">글자를 콕 누르면 원어민 목소리로 들려줘요. 🎧</p>
           </div>
           <div class="ph-block">
             <div class="ph-bh"><b>2</b> 글자를 합쳐 단어 만들기</div>
@@ -9703,6 +9707,118 @@ function phSay(t){
 }
 /* 마법의 e — 가운데 모음은 알파벳 이름(장모음)으로, 끝 e는 묵음 */
 var PH_LONG = { a:"A", i:"eye", o:"oh", u:"you" };
+/* ==== 파닉스 실제 발음 오디오 (phonics-audio/ · 원어민 목소리 음가·단어·문장) ==== */
+/* 문장 단어 타이밍 [시작ms, 길이ms] — 음성에 맞춰 단어를 짚어 준다 */
+var PH_SENT_TIMING = {"L1-0":[[0,133],[59,346],[418,253],[684,106],[804,53],[871,505]],"L1-1":[[0,306],[232,173],[418,66],[498,239],[751,505]],"L1-2":[[0,146],[63,306],[382,173],[568,319],[901,120],[1034,492]],"L2-0":[[0,146],[83,239],[335,332],[681,173],[867,93],[974,80],[1067,532]],"L2-1":[[0,266],[212,319],[545,173],[731,146],[891,93],[997,479]],"L2-2":[[0,146],[83,146],[242,106],[362,213],[588,133],[734,492]],"L3-0":[[0,133],[69,239],[322,293],[628,133],[774,106],[894,80],[987,452]],"L3-1":[[0,412],[339,266],[618,173],[804,120],[937,53],[1004,505]],"L3-2":[[0,146],[83,146],[242,173],[428,93],[535,505]],"L4-0":[[0,133],[69,399],[482,120],[615,106],[734,80],[827,638]],"L4-1":[[0,146],[63,279],[355,133],[502,505]],"L4-2":[[0,186],[123,279],[415,146],[575,439]],"L5-0":[[0,160],[66,266],[345,146],[505,359]],"L5-1":[[0,146],[73,293],[379,120],[512,93],[618,133],[764,492]],"L5-2":[[0,146],[73,239],[325,93],[432,106],[552,558]],"L6-0":[[0,133],[59,346],[418,133],[565,66],[645,293],[950,426]],"L6-1":[[0,160],[76,239],[329,279],[621,160],[794,479]],"L6-2":[[0,146],[73,226],[312,133],[458,66],[538,519]],"L7-0":[[0,160],[76,226],[315,66],[395,226],[635,505]],"L7-1":[[0,160],[76,306],[395,120],[528,106],[648,80],[741,585]],"L7-2":[[0,173],[89,293],[395,106],[515,558]],"L8-0":[[0,146],[73,226],[312,120],[445,66],[525,545]],"L8-1":[[0,173],[89,146],[249,53],[315,293],[621,160],[794,572]],"L8-2":[[0,120],[56,253],[322,133],[468,133],[615,146],[774,492]],"L9-0":[[0,266],[172,120],[305,133],[452,519]],"L9-1":[[0,279],[186,266],[465,146],[625,452]],"L9-2":[[0,146],[63,253],[329,66],[408,319],[741,146],[901,612]],"L10-0":[[0,146],[73,293],[379,199],[591,532]],"L10-1":[[0,160],[76,279],[369,199],[581,66],[661,452]],"L10-2":[[0,160],[86,253],[352,53],[418,558]],"L11-0":[[0,146],[73,226],[312,66],[392,585]],"L11-1":[[0,372],[299,133],[445,266],[724,386]],"L11-2":[[0,133],[69,253],[335,133],[482,106],[601,93],[708,479]],"L12-0":[[0,146],[73,173],[259,80],[352,545]],"L12-1":[[0,213],[139,319],[472,120],[605,106],[724,93],[831,492]],"L12-2":[[0,346],[212,346],[571,239],[824,452]],"L13-0":[[0,173],[99,160],[272,492]],"L13-1":[[0,133],[79,293],[385,133],[532,80],[625,146],[784,452]],"L13-2":[[0,213],[139,293],[445,173],[631,53],[698,226],[937,479]],"L14-0":[[0,146],[73,279],[365,93],[472,80],[565,306],[884,213],[1110,93],[1216,93],[1323,519]],"L14-1":[[0,146],[73,186],[272,173],[458,66],[538,226],[778,279],[1070,106],[1190,53],[1256,572]],"L14-2":[[0,186],[113,319],[445,173],[631,66],[711,266],[990,93],[1097,465]]};
+var PH_AUDIO = (function(){
+  var BASE = "phonics-audio/";
+  var DIRS = { snd: BASE + "snd/", word: BASE + "word/", sent: BASE + "sent/" };
+  var el = null, pre = {}, gen = 0, timers = [];
+  /* th는 this·that·mother처럼 목소리가 나는(th) 낱말에서만 ð 소리로 */
+  var VOICED_TH = { this:1, that:1, mother:1, the:1, they:1, them:1, there:1, brother:1, father:1 };
+  function path(kind, name){ return DIRS[kind] + name + ".mp3"; }
+  function player(){
+    if (!el) { try { el = new Audio(); el.preload = "auto"; } catch(e){ el = null; } }
+    return el;
+  }
+  function prefetch(src){
+    if (!src || pre[src]) return;
+    try { var a = new Audio(); a.preload = "auto"; a.src = src; pre[src] = a; } catch(e){}
+  }
+  function clearTimers(){ for (var i = 0; i < timers.length; i++) clearTimeout(timers[i]); timers = []; }
+  function stop(){
+    gen++; clearTimers();
+    var a = el;
+    if (a) { try { a.onended = null; a.onerror = null; a.pause(); } catch(e){} }
+  }
+  function keyFor(g){ return String(g == null ? "" : g).toLowerCase(); }
+  function keyForPart(p, w){
+    var k = keyFor(p);
+    if (k === "th" && VOICED_TH[keyFor(w)]) return "thv";
+    return k;
+  }
+  function preloadLesson(L){
+    if (!L) return;
+    (L.letters || []).forEach(function(g){ prefetch(path("snd", keyFor(g))); });
+    (L.words || []).forEach(function(w){ prefetch(path("word", w[0])); });
+    prefetch(path("sent", L.id + "-0"));
+  }
+  /* 목록을 차례로 재생. 실패하면 fallback(브라우저 음성)으로 넘어간다 */
+  function playList(list, onStep, onDone, rate){
+    stop();
+    var my = gen, i = 0;
+    function finish(){ if (my === gen && onDone) { try { onDone(); } catch(e){} } }
+    function next(){
+      if (my !== gen) return;
+      if (i >= list.length) { finish(); return; }
+      var it = list[i], n = i; i++;
+      if (onStep) { try { onStep(n, it); } catch(e){} }
+      var a = player();
+      if (!a) { if (it.fallback) { try { it.fallback(); } catch(e){} } finish(); return; }
+      a.onended = function(){ if (my !== gen) return; setTimeout(function(){ if (my === gen) next(); }, it.gap == null ? 130 : it.gap); };
+      a.onerror = function(){ if (my !== gen) return; if (it.fallback) { try { it.fallback(); } catch(e){} } setTimeout(function(){ if (my === gen) next(); }, 80); };
+      try { a.src = it.src; a.playbackRate = rate || 1; } catch(e){}
+      var p = null;
+      try { p = a.play(); } catch(e){ p = null; }
+      if (p && p.catch) p.catch(function(){
+        if (my !== gen) return;
+        if (it.fallback) { try { it.fallback(); } catch(e){} }
+        setTimeout(function(){ if (my === gen) next(); }, 80);
+      });
+    }
+    next();
+  }
+  return {
+    stop: stop, keyFor: keyFor, keyForPart: keyForPart, preloadLesson: preloadLesson,
+    snd: function(g, fb){
+      playList([{ src: path("snd", keyFor(g)), fallback: fb }]);
+    },
+    seq: function(keys, onStep, onDone, gap){
+      var list = (keys || []).map(function(k){ return { src: path("snd", keyFor(k)), gap: gap == null ? 240 : gap }; });
+      playList(list, onStep, onDone, 1);
+    },
+    word: function(w, fb){
+      playList([{ src: path("word", String(w || "").toLowerCase()), fallback: fb }]);
+    },
+    /* 음가 → 음가 → 단어 (파닉스 몬스터식 사운드 챈트) */
+    chant: function(g, w, onStep, onDone, fb){
+      var k = keyFor(g), wd = String(w || "").toLowerCase();
+      playList([
+        { src: path("snd", k), gap: 240, fallback: fb },
+        { src: path("snd", k), gap: 300 },
+        { src: path("word", wd), gap: 0 }
+      ], onStep, onDone, 1);
+    },
+    /* 음가를 하나씩 → 마지막에 단어 */
+    blend: function(keys, w, onStep, onDone, fbEach){
+      var list = (keys || []).map(function(k){
+        return { src: path("snd", keyFor(k)), gap: 170, fallback: (fbEach ? function(){ fbEach(k); } : null) };
+      });
+      list.push({ src: path("word", String(w || "").toLowerCase()), gap: 0, fallback: (fbEach ? function(){ fbEach(null); } : null) });
+      playList(list, onStep, onDone, 1);
+    },
+    /* 문장 재생 + 단어 하이라이트. 실패하면 failed=true 로 알린다 */
+    sent: function(lid, i, onWord, onDone, slow){
+      stop();
+      var my = gen, a = player();
+      var key = lid + "-" + i, rate = slow ? 0.82 : 1;
+      var t = PH_SENT_TIMING[key] || null;
+      if (!a) { if (onDone) onDone(true); return; }
+      a.onerror = function(){ if (my !== gen) return; clearTimers(); if (onDone) onDone(true); };
+      a.onended = function(){ if (my !== gen) return; clearTimers(); if (onWord) onWord(-1); if (onDone) onDone(false); };
+      try { a.src = path("sent", key); a.playbackRate = rate; } catch(e){ if (onDone) onDone(true); return; }
+      var p = null;
+      try { p = a.play(); } catch(e){ p = null; }
+      if (p && p.catch) p.catch(function(){ if (my !== gen) return; clearTimers(); if (onDone) onDone(true); });
+      if (t && onWord) {
+        for (var j = 0; j < t.length; j++) {
+          (function(idx){ timers.push(setTimeout(function(){ if (my === gen) onWord(idx); }, (t[idx][0] + 30) / rate)); })(j);
+        }
+      }
+    }
+  };
+})();
+
 function phWordTiles(spec){
   var parts = String(spec == null ? "" : spec).split("|").filter(function(p){ return p !== ""; });
   var out = parts.map(function(p){ return { part:p, say:phSay(p), long:false, silent:false }; });
@@ -9776,7 +9892,7 @@ function phSpeakSeq(list, onEach, onDone){
   step();
 }
 function phState(){ var s = readJSON(PH_KEY, {}); if (!s.done || typeof s.done !== "object") s.done = {}; if (!s.sent || typeof s.sent !== "object") s.sent = {}; if (!s.sel) s.sel = "L1"; return s; }
-SB.phonics = { data:PH, state:phState, sound:PH_SAY, say:phSay, tiles:phWordTiles, blendPlan:phBlendPlan };
+SB.phonics = { data:PH, state:phState, sound:PH_SAY, say:phSay, tiles:phWordTiles, blendPlan:phBlendPlan, audio:PH_AUDIO, timing:PH_SENT_TIMING };
 
 function phLesson(){ var st = phState(); for (var i = 0; i < PH.length; i++) if (PH[i].id === st.sel) return PH[i]; return PH[0]; }
 
@@ -9799,7 +9915,7 @@ function renderPhonics(){
   var tp = $("phTip"); if (tp) tp.textContent = L.tip + " 예: " + L.words[0][0] + " " + L.words[0][2];
   var snds = $("phSounds");
   if (snds) snds.innerHTML = L.letters.map(function(g){
-    return '<button class="snd-card" type="button" data-say="' + esc(g) + '"><b>' + esc(g) + "</b><span>" + esc(SOUND[g] || g) + "</span></button>";
+    return '<button class="snd-card" type="button" data-say="' + esc(g) + '" data-snd="' + esc(PH_AUDIO.keyFor(g)) + '"><b>' + esc(g) + "</b><span>" + esc(SOUND[g] || g) + "</span><i class=\"snd-live\">🎧</i></button>";
   }).join("");
   var wname = $("phWordName"), wko = $("phWordKo"), tiles = $("phTiles");
   var wi = (st.word && st.word[L.id]) || 0; if (wi >= L.words.length) wi = 0;
@@ -9811,7 +9927,7 @@ function renderPhonics(){
     var inner = t.silent ? '<span class="pt-x">' + esc(t.part) + '</span><i class="pt-mute">🤫</i>' : esc(t.part);
     var tip = t.silent ? "끝의 e는 소리가 없어요" : (t.long ? "장모음 — 알파벳 이름으로 읽어요" : "");
     return (i ? '<span class="ptile plus">+</span>' : "")
-      + '<button class="' + cls + '" type="button" data-part="' + esc(t.part) + '" data-sound="' + esc(t.say) + '"'
+      + '<button class="' + cls + '" type="button" data-part="' + esc(t.part) + '" data-sound="' + esc(t.say) + '" data-snd="' + esc(PH_AUDIO.keyForPart(t.part, wd[0])) + '"'
       + (tip ? ' title="' + esc(tip) + '"' : "") + ">" + inner + "</button>";
   }).join("");
   if (wname) wname.textContent = wd[0];
@@ -9842,26 +9958,35 @@ function renderPhonics(){
     dn.textContent = isDone ? "✅ 완료한 레슨" : "✅ 이 레슨 완료";
     dn.classList.toggle("done", isDone);
   }
+  try { PH_AUDIO.preloadLesson(L); } catch(e){}
   if (SB.rec && SB.rec.refresh) SB.rec.refresh();
 }
 SB.renderPhonics = renderPhonics;
 
 function phPlaySentence(box, slow){
+  var L = phLesson(), idx = parseInt(box.getAttribute("data-ps"), 10);
   var line = box.querySelector(".ps-en"), text = line ? line.textContent : "";
   var spans = line ? line.querySelectorAll(".sw") : [];
-  var words = text.split(/\s+/).length;
-  SB.speak(text, slow);
-  for (var i = 0; i < spans.length; i++) spans[i].classList.remove("hl");
-  var k = 0, step = slow ? 700 : 470;
-  if (spans.length) spans[0].classList.add("hl");
-  clearInterval(box._t);
-  box._t = setInterval(function(){
-    if (spans[k]) spans[k].classList.remove("hl");
-    k++;
-    if (k >= spans.length) { clearInterval(box._t); return; }
-    spans[k].classList.add("hl");
-  }, step);
-  setTimeout(function(){ clearInterval(box._t); for (var i = 0; i < spans.length; i++) spans[i].classList.remove("hl"); }, step * (words + 2));
+  function clearHl(){ for (var i = 0; i < spans.length; i++) spans[i].classList.remove("hl"); }
+  function speechFallback(){
+    var words = text.split(/\s+/).length, k = 0, step = slow ? 700 : 470;
+    SB.speak(text, slow);
+    clearHl();
+    if (spans.length) spans[0].classList.add("hl");
+    clearInterval(box._t);
+    box._t = setInterval(function(){
+      if (spans[k]) spans[k].classList.remove("hl");
+      k++;
+      if (k >= spans.length) { clearInterval(box._t); return; }
+      spans[k].classList.add("hl");
+    }, step);
+    setTimeout(function(){ clearInterval(box._t); clearHl(); }, step * (words + 2));
+  }
+  clearHl();
+  PH_AUDIO.sent(L.id, idx, function(k){
+    clearHl();
+    if (k >= 0 && spans[k]) spans[k].classList.add("hl");
+  }, function(failed){ if (failed) speechFallback(); }, slow);
 }
 function phBind(){
   var list = $("phLessons");
@@ -9872,7 +9997,8 @@ function phBind(){
   var snds = $("phSounds");
   if (snds) snds.addEventListener("click", function(e){
     var b = e.target.closest(".snd-card"); if (!b) return;
-    SB.speak(phSay(b.getAttribute("data-say")), true);
+    var say = b.getAttribute("data-say");
+    PH_AUDIO.snd(b.getAttribute("data-snd") || say, function(){ SB.speak(phSay(say), true); });
   });
   var tiles = $("phTiles");
   if (tiles) tiles.addEventListener("click", function(e){
@@ -9882,32 +10008,57 @@ function phBind(){
       return;
     }
     var snd = b.getAttribute("data-sound");
-    SB.speak(snd == null || snd === "" ? phSay(b.getAttribute("data-part")) : snd, true);
+    PH_AUDIO.snd(b.getAttribute("data-snd") || b.getAttribute("data-part"), function(){
+      SB.speak(snd == null || snd === "" ? phSay(b.getAttribute("data-part")) : snd, true);
+    });
   });
   var wl = $("phWords");
   if (wl) wl.addEventListener("click", function(e){
     var b = e.target.closest(".pword"); if (!b) return;
     var i = parseInt(b.getAttribute("data-pw"), 10);
     var st = phState(); if (!st.word) st.word = {}; st.word[phLesson().id] = i; writeJSON(PH_KEY, st);
-    SB.speak(phLesson().words[i][0], false); renderPhonics();
+    var _w = phLesson().words[i][0];
+    PH_AUDIO.word(_w, function(){ SB.speak(_w, false); });
+    renderPhonics();
   });
   var sndAll = $("phSaySound");
   if (sndAll) sndAll.addEventListener("click", function(){
     var L = phLesson();
-    phSpeakSeq(L.letters.map(function(g){ return phSay(g); }));
+    var keys = L.letters.map(function(g){ return PH_AUDIO.keyFor(g); });
+    if (keys.length === 1) {
+      PH_AUDIO.snd(keys[0], function(){ phSpeakSeq(L.letters.map(function(g){ return phSay(g); })); });
+      return;
+    }
+    PH_AUDIO.seq(keys, null, null, 320);
   });
   var blend = $("phBlendAll");
   if (blend) blend.addEventListener("click", function(){
     var L = phLesson(), st = phState(); var wi = (st.word && st.word[L.id]) || 0;
     var wd = L.words[wi] || L.words[0]; if (!wd) return;
-    var plan = phBlendPlan(wd);
     var nodes = ($("phTiles") || { querySelectorAll: function(){ return []; } }).querySelectorAll(".ptile:not(.plus)");
+    var keys = [], map = [];
+    for (var k = 0; k < nodes.length; k++) {
+      if (nodes[k].classList.contains("silent")) continue;
+      keys.push(nodes[k].getAttribute("data-snd") || nodes[k].getAttribute("data-part"));
+      map.push(k);
+    }
     function clearOn(){ for (var k = 0; k < nodes.length; k++) nodes[k].classList.remove("on"); }
-    phSpeakSeq(plan.say, function(i){
+    function fbEach(part){ if (part) SB.speak(phSay(part), true); else SB.speak(wd[0], false); }
+    clearOn();
+    PH_AUDIO.blend(keys, wd[0], function(n){
       clearOn();
-      var ti = plan.map[i];
-      if (ti >= 0 && nodes[ti]) nodes[ti].classList.add("on");
-    }, clearOn);
+      if (n >= 0 && map[n] != null && nodes[map[n]]) nodes[map[n]].classList.add("on");
+    }, clearOn, fbEach);
+    SB.markAttendance("phonics");
+  });
+  var chant = $("phChant");
+  if (chant) chant.addEventListener("click", function(){
+    var L = phLesson(), st = phState(); var wi = (st.word && st.word[L.id]) || 0;
+    var wd = L.words[wi] || L.words[0]; if (!wd) return;
+    var g = L.letters[0], parts = String(wd[3] || "").split("|");
+    for (var k = 0; k < parts.length; k++) { if (L.letters.indexOf(parts[k]) >= 0) { g = parts[k]; break; } }
+    SB.toast("🎵 " + L.snd + " " + L.snd + " " + wd[0] + "! — " + (SOUND[g] || g) + " 소리로 시작해요");
+    PH_AUDIO.chant(g, wd[0], null, null, function(){ phSpeakSeq([phSay(g), phSay(g), wd[0]]); });
     SB.markAttendance("phonics");
   });
   var ss = $("phSents");
