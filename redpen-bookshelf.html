@@ -288,9 +288,159 @@ img{display:block;max-width:100%;}
 @media (prefers-reduced-motion:reduce){
   *{transition:none !important;}
 }
+
+/* ---------- 🔒 공유용 20명 접속 게이트 (배포용) ---------- */
+html.rp-gate-pending .wrap,
+html.rp-gate-pending .bg,
+html.rp-gate-pending .sheet,
+html.rp-gate-pending .modal{visibility:hidden !important;}
+#rpGate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+  padding:calc(18px + env(safe-area-inset-top)) clamp(16px,4vw,32px) calc(18px + env(safe-area-inset-bottom));
+  background:linear-gradient(168deg,#eaf7ff 0%,#f1fcf6 52%,#fffbef 100%);
+  overflow:auto;-webkit-overflow-scrolling:touch;}
+#rpGate .gcard{width:100%;max-width:520px;background:#fff;border:1px solid var(--line);border-radius:22px;
+  box-shadow:0 18px 44px rgba(58,104,140,.16);padding:clamp(22px,4.6vw,36px);text-align:center;color:var(--ink);}
+#rpGate .gico{font-size:50px;line-height:1;display:block;margin:0 0 12px;}
+#rpGate h2{margin:0 0 12px;font-size:clamp(17px,4.2vw,20px);font-weight:900;letter-spacing:-.02em;line-height:1.4;color:#263845;word-break:keep-all;}
+#rpGate h2.warn{color:#c2412c;}
+#rpGate p{margin:0 0 10px;font-size:13.5px;font-weight:600;line-height:1.72;color:var(--ink-soft);word-break:keep-all;}
+#rpGate p b{font-weight:900;color:var(--ink);}
+#rpGate .grow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0 2px;}
+#rpGate .gchip{display:inline-block;padding:5px 11px;border-radius:999px;background:#f3f9fe;color:var(--blue-deep);
+  font-size:11px;font-weight:900;border:1px solid var(--line);letter-spacing:-.01em;}
+#rpGate .gsmall{margin:16px 0 0;font-size:11px;font-weight:800;color:var(--muted);letter-spacing:-.01em;}
+#rpGate .gbtn{margin-top:16px;min-height:46px;padding:0 22px;border-radius:14px;background:var(--blue-deep);
+  color:#fff;font-size:13.5px;font-weight:900;letter-spacing:-.01em;}
+#rpGate .gspin{width:34px;height:34px;margin:0 auto 16px;border-radius:50%;
+  border:4px solid #dcebf7;border-top-color:var(--blue);animation:rpgspin .9s linear infinite;}
+@keyframes rpgspin{to{transform:rotate(360deg);}}
+@media (max-width:380px){
+  #rpGate{padding-left:12px;padding-right:12px;}
+  #rpGate .gcard{padding:20px 16px;border-radius:18px;}
+  #rpGate p{font-size:12.5px;}
+}
 </style>
 </head>
 <body>
+
+<script>
+/* =========================================================
+   🔒 공유용 20명 접속 게이트 · 배포용 단독 페이지
+   - 카운터: abacus.jasoncameron.dev (무가입·CORS 허용)
+     /hit : 신규 접속 1명 입장(1씩 증가) · /get : 읽기 전용
+   - 이미 통과한 기기(localStorage 패스)는 카운터를 쓰지 않고 그대로 이용
+   - 정원(20명)을 넘은 신규 접속은 본문을 막고 차단 화면만 표시
+   ========================================================= */
+(function(){
+"use strict";
+var NS = "redpen-pjb-20261121-7d4a";
+var KEY = "share-slots20v1";
+var LIMIT = 20;
+var HIT_API = "https://abacus.jasoncameron.dev/hit/" + NS + "/" + KEY;
+var GET_API = "https://abacus.jasoncameron.dev/get/" + NS + "/" + KEY;
+var SLOT_KEY = "redpen.share.slot.v1";
+var CNT_KEY  = "redpen.share.count.v1";
+var root = document.documentElement;
+
+root.className = root.className ? root.className + " rp-gate-pending" : "rp-gate-pending";
+window.RP_GATE = { ns: NS, key: KEY, limit: LIMIT, state: "checking", count: null };
+
+function get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+
+var gate = null;
+function overlay(html){
+  if (!gate){
+    gate = document.createElement("div");
+    gate.id = "rpGate";
+    gate.setAttribute("role", "alert");
+    document.body.appendChild(gate);
+  }
+  gate.innerHTML = '<div class="gcard">' + html + '</div>';
+  return gate;
+}
+function openGate(){
+  window.RP_GATE.state = "open";
+  if (gate && gate.parentNode) gate.parentNode.removeChild(gate);
+  gate = null;
+  root.className = root.className.replace(/\brp-gate-pending\b/g, "").replace(/\s+/g, " ").trim();
+}
+function waiting(){
+  overlay('<div class="gspin" aria-hidden="true"></div>' +
+          '<h2>접속 인원 확인 중…</h2>' +
+          '<p>잠시만 기다려 주세요.</p>');
+}
+function blocked(){
+  window.RP_GATE.state = "blocked";
+  overlay('<span class="gico" aria-hidden="true">⚠️</span>' +
+    '<h2 class="warn">무단배포 감지 · 사이트 접속 차단합니다</h2>' +
+    '<p>이 책장은 만든 사람이 <b>20명</b>까지 나눠 쓰기로 한 공유용 페이지예요. 허용된 인원을 넘어 접속이 확인되어 이 기기에서는 열리지 않습니다.</p>' +
+    '<p>이미 들어와 계신 분들은 그대로 쓰실 수 있어요. 링크를 다시 열어도 차단은 풀리지 않으니 필요하면 만든 사람에게 문의해 주세요.</p>' +
+    '<div class="grow"><span class="gchip">공유 정원 20명</span><span class="gchip">무단배포 금지</span></div>' +
+    '<p class="gsmall">© dynamicjy · 무단배포 금지</p>');
+}
+function unknown(){
+  window.RP_GATE.state = "unknown";
+  overlay('<span class="gico" aria-hidden="true">📡</span>' +
+    '<h2>접속 인원을 확인할 수 없어요</h2>' +
+    '<p>잠시 후 다시 열어 주세요. 확인되지 않은 접속은 허용되지 않습니다.</p>');
+  var btn = document.createElement("button");
+  btn.type = "button"; btn.className = "gbtn"; btn.textContent = "다시 시도";
+  btn.addEventListener("click", function(){ location.reload(); });
+  gate.querySelector(".gcard").appendChild(btn);
+}
+
+function call(url, tries){
+  tries = tries || 0;
+  var ac = window.AbortController ? new AbortController() : null;
+  var to = ac ? setTimeout(function(){ ac.abort(); }, 7000) : 0;
+  function done(){ if (to) clearTimeout(to); }
+  return fetch(url, {cache: "no-store", mode: "cors", credentials: "omit",
+                     signal: ac ? ac.signal : undefined})
+    .then(function(r){ done(); if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(j){
+      var v = Number(j && j.value);
+      if (!isFinite(v) || v < 0) throw new Error("bad payload");
+      return v;
+    })
+    .catch(function(err){
+      done();
+      if (tries < 1) return new Promise(function(res){ setTimeout(res, 1200); })
+        .then(function(){ return call(url, tries + 1); });
+      throw err;
+    });
+}
+function hit(){ return call(HIT_API); }   /* 신규 접속: 1 증가 */
+function peek(){ return call(GET_API); }  /* 읽기 전용: 값만 확인 */
+
+function run(){
+  waiting();
+  var slot = get(SLOT_KEY);
+  if (slot === "granted"){                       /* 이미 통과한 기기: 카운터 소모 없이 그대로 */
+    window.RP_GATE.count = Number(get(CNT_KEY) || 0);
+    openGate();
+    return;
+  }
+  if (slot === "blocked"){                       /* 차단된 기기: 정원이 늘었는지만 재확인 */
+    peek().then(function(n){
+      window.RP_GATE.count = n;
+      if (n <= LIMIT){ set(SLOT_KEY, "granted"); set(CNT_KEY, String(n)); openGate(); }
+      else { blocked(); }
+    }).catch(unknown);
+    return;
+  }
+  hit().then(function(n){
+    window.RP_GATE.count = n;
+    set(CNT_KEY, String(n));
+    if (n <= LIMIT){ set(SLOT_KEY, "granted"); openGate(); }   /* 1~20번째 */
+    else { set(SLOT_KEY, "blocked"); blocked(); }              /* 21번째부터 */
+  }).catch(unknown);                                           /* 확인 불가 → 본문 비표시 */
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run);
+else run();
+})();
+</script>
 <div class="bg" aria-hidden="true"></div>
 
 <div class="wrap">
