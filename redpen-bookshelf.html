@@ -309,6 +309,8 @@ html.rp-gate-pending .modal{visibility:hidden !important;}
 #rpGate .gchip{display:inline-block;padding:5px 11px;border-radius:999px;background:#f3f9fe;color:var(--blue-deep);
   font-size:11px;font-weight:900;border:1px solid var(--line);letter-spacing:-.01em;}
 #rpGate .gsmall{margin:16px 0 0;font-size:11px;font-weight:800;color:var(--muted);letter-spacing:-.01em;}
+#rpGate .gtip{margin:12px 0 0;padding:9px 12px;border-radius:12px;background:#fff8e8;border:1px solid #f1dcaa;
+  color:#8a5a12;font-size:12px;font-weight:800;line-height:1.62;letter-spacing:-.01em;word-break:keep-all;}
 #rpGate .gbtn{margin-top:16px;min-height:46px;padding:0 22px;border-radius:14px;background:var(--blue-deep);
   color:#fff;font-size:13.5px;font-weight:900;letter-spacing:-.01em;}
 #rpGate .gspin{width:34px;height:34px;margin:0 auto 16px;border-radius:50%;
@@ -379,25 +381,46 @@ function blocked(){
     '<div class="grow"><span class="gchip">공유 정원 20명</span><span class="gchip">무단배포 금지</span></div>' +
     '<p class="gsmall">© dynamicjy · 무단배포 금지</p>');
 }
+var INAPP = /Instagram|KAKAOTALK|NAVER|FBAN|FBAV/i;   /* 인스타·카톡 등 인앱 브라우저 */
+function inAppBrowser(){
+  try{ return INAPP.test(navigator.userAgent || ""); }catch(e){ return false; }
+}
 function unknown(){
   window.RP_GATE.state = "unknown";
   overlay('<span class="gico" aria-hidden="true">📡</span>' +
     '<h2>접속 인원을 확인할 수 없어요</h2>' +
     '<p>잠시 후 다시 열어 주세요. 확인되지 않은 접속은 허용되지 않습니다.</p>');
+  var card = gate.querySelector(".gcard");
+  if (inAppBrowser()){                              /* 앱 안 브라우저면 한 줄 안내 */
+    var tip = document.createElement("p");
+    tip.className = "gtip";
+    tip.textContent = "인스타그램/카톡 앱 안에서는 막힐 수 있어요. 오른쪽 위 ··· → 사파리/크롬으로 열어 보세요!";
+    card.appendChild(tip);
+  }
   var btn = document.createElement("button");
   btn.type = "button"; btn.className = "gbtn"; btn.textContent = "다시 시도";
   btn.addEventListener("click", function(){ location.reload(); });
-  gate.querySelector(".gcard").appendChild(btn);
+  card.appendChild(btn);
 }
 
-function call(url, tries){
+/* 재시도: 최초 1회 + 재시도 2회 = 최대 3회, 450ms → 900ms 백오프
+   - HTTP 5xx(와 408·429)·네트워크 끊김·응답 지연은 잠깐 흔들린 것으로 보고 다시 시도
+   - 한 번은 4초까지만 기다리고, 전체 재시도는 10초 안에서 끝냄(그 뒤에야 unknown) */
+var MAX_TRY = 3, RETRY_GAP = 450, TRY_TIMEOUT = 4000, TRY_BUDGET = 10000;
+
+function call(url, tries, firstAt){
   tries = tries || 0;
+  firstAt = firstAt || Date.now();
   var ac = window.AbortController ? new AbortController() : null;
-  var to = ac ? setTimeout(function(){ ac.abort(); }, 7000) : 0;
+  var to = ac ? setTimeout(function(){ ac.abort(); }, TRY_TIMEOUT) : 0;
   function done(){ if (to) clearTimeout(to); }
   return fetch(url, {cache: "no-store", mode: "cors", credentials: "omit",
                      signal: ac ? ac.signal : undefined})
-    .then(function(r){ done(); if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(r){
+      done();
+      if (!r.ok){ var e = new Error("HTTP " + r.status); e.status = r.status; throw e; }
+      return r.json();
+    })
     .then(function(j){
       var v = Number(j && j.value);
       if (!isFinite(v) || v < 0) throw new Error("bad payload");
@@ -405,9 +428,12 @@ function call(url, tries){
     })
     .catch(function(err){
       done();
-      if (tries < 1) return new Promise(function(res){ setTimeout(res, 1200); })
-        .then(function(){ return call(url, tries + 1); });
-      throw err;
+      var retryable = !err || !err.status || err.status >= 500 ||
+                      err.status === 408 || err.status === 429;
+      if (!retryable || tries + 1 >= MAX_TRY || Date.now() - firstAt > TRY_BUDGET) throw err;
+      var gap = RETRY_GAP * Math.pow(2, tries);      /* 450ms → 900ms */
+      return new Promise(function(res){ setTimeout(res, gap); })
+        .then(function(){ return call(url, tries + 1, firstAt); });
     });
 }
 function hit(){ return call(HIT_API); }   /* 신규 접속: 1 증가 */
