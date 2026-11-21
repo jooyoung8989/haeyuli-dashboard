@@ -17241,7 +17241,12 @@ function recStart(){
         if (txt){ micStatus("통화 중 · 영어로 말해 봐요"); answer(txt, "voice"); }
         else {
           micStatus("통화 중 · 영어로 말해 봐요");
-          try { SB.toast("말을 못 알아들었어요. 한 번 더 말하거나 입력창에 적어 주세요 ✏️"); } catch(e){}
+          var cfg0 = aiSetting();
+          try {
+            SB.toast(cfg0 && cfg0.key
+              ? "말을 못 알아들었어요. 한 번 더 말하거나 입력창에 적어 주세요 ✏️"
+              : "설정에서 AI 키를 넣으면 말한 영어가 글로 바뀌어요. 지금은 입력창에 적어 주세요 ✏️");
+          } catch(e){}
           var i = $("callInput"); if (i){ try { i.focus(); } catch(e){} }
         }
       });
