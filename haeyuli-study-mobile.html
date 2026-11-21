@@ -1556,6 +1556,77 @@ body.mob .gd-foot{padding-bottom:.4rem;}
   .wg-opt{height:3.4rem;font-size:1.05rem;}
 }
 
+/* ===== 국어 글자 키보드 (자음 + 모음 조합) ===== */
+.kokview{display:flex;flex-direction:column;gap:.7vh;min-height:0;height:100%;}
+.kk-wrap{display:flex;flex-direction:column;gap:.7vh;width:100%;max-width:60rem;margin:0 auto;min-height:0;height:100%;}
+.kk-qpanel{flex:1 1 auto;padding-bottom:.55vh;}
+.kk-qrow{display:flex;align-items:center;gap:.9vh;padding:.45vh 1.1vh 0;}
+.kk-qemoji{flex:0 0 auto;font-size:clamp(1.7rem,4.8vh,2.9rem);line-height:1;}
+.kk-ask{margin:0;flex:1 1 auto;min-width:0;font-size:clamp(1.02rem,2.35vh,1.45rem);font-weight:900;color:#134d6b;
+  letter-spacing:-.03em;line-height:1.3;word-break:keep-all;}
+.kk-mini{flex:0 0 auto;height:clamp(1.95rem,4.1vh,2.5rem);padding:0 .8rem;border-radius:999px;background:#f1f8ff;color:#1d6d99;
+  font-size:clamp(.72rem,1.5vh,.92rem);font-weight:900;box-shadow:inset 0 0 0 1px #cfe6f7;white-space:nowrap;}
+.kk-say{flex:1 1 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.3rem;min-height:clamp(3.4rem,8.2vh,4.8rem);
+  margin:.5vh 1.1vh 0;padding:.35vh .6vh;border-radius:1.2vh;background:#f7fbff;box-shadow:inset 0 0 0 2px #d8ecfa;}
+.kk-syl{font-family:"Apple SD Gothic Neo","Noto Sans CJK KR",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;
+  font-size:clamp(1.9rem,6.2vh,3.1rem);font-weight:900;color:#0f4c66;line-height:1.15;letter-spacing:.02em;}
+.kk-syl.pend{color:#1f86b8;opacity:.72;border-bottom:3px dashed #9fd2ee;padding:0 .08em;}
+.kk-say-ph{font-size:clamp(.78rem,1.7vh,.98rem);font-weight:800;color:#8aa8bb;}
+.kk-pend{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.3rem;min-height:clamp(1.6rem,3.4vh,2.1rem);
+  padding:0 1.1vh;font-weight:900;}
+.kk-hint{font-size:clamp(.72rem,1.5vh,.9rem);font-weight:800;color:#9ab3c4;}
+.kk-chip{font-family:"Apple SD Gothic Neo","Noto Sans CJK KR",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;
+  display:inline-flex;align-items:center;justify-content:center;min-width:clamp(1.7rem,2.9vh,2.2rem);
+  padding:.15vh .5vh;border-radius:.7vh;font-size:clamp(.92rem,1.95vh,1.2rem);font-weight:900;
+  background:#fff;color:#2b5d7d;box-shadow:inset 0 0 0 2px #dbeaf6;}
+.kk-chip.on{background:#e6f4ff;color:#0d6f9e;box-shadow:inset 0 0 0 2px #7cc3e8;}
+.kk-chip.ghost{background:#f4f9fd;color:#a9c1d1;box-shadow:inset 0 0 0 2px #e6f0f8;font-size:clamp(.76rem,1.6vh,.95rem);}
+.kk-chip.res{background:#e9faf1;color:#0b6b47;box-shadow:inset 0 0 0 2px #8fd9b4;}
+.kk-op{font-size:clamp(.8rem,1.7vh,1rem);font-weight:900;color:#a8c3d4;}
+.kk-fb{margin:.55vh 1.1vh .1vh;padding:.7vh .9vh;border-radius:1.1vh;background:#eefaf3;box-shadow:inset 0 0 0 2px #bfe8d4;
+  color:#0d5a3f;font-weight:800;line-height:1.42;font-size:clamp(.82rem,1.75vh,1.02rem);}
+.kk-fb.no{background:#fff5f2;box-shadow:inset 0 0 0 2px #ffcabd;color:#96382b;}
+.kk-fbt{display:block;font-size:clamp(.98rem,2.1vh,1.25rem);font-weight:900;margin-bottom:.25vh;}
+.kk-fbp{margin:0;word-break:keep-all;}
+.kk-fbp em{font-style:normal;font-weight:900;color:#0b6b47;background:#fff;border-radius:.4vh;padding:0 .25em;box-shadow:inset 0 0 0 1.5px #bfe8d4;}
+.kk-fb.no .kk-fbp em{color:#96382b;box-shadow:inset 0 0 0 1.5px #ffcabd;}
+.kk-syls{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.35rem;margin-top:.45vh;}
+.kk-sbox{display:inline-flex;flex-direction:column;align-items:center;background:#fff;border-radius:.8vh;padding:.15vh .55vh;
+  box-shadow:inset 0 0 0 1.6px #cbe9db;}
+.kk-sbox b{font-size:clamp(1.1rem,2.6vh,1.6rem);color:#0f4c66;line-height:1.1;}
+.kk-sbox em{font-style:normal;font-size:clamp(.66rem,1.4vh,.82rem);color:#5c8a76;font-weight:900;}
+.kk-plus{color:#a8cbbd;font-weight:900;}
+.kk-fbbtns{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.55vh;}
+.kk-kbpanel{gap:.45vh;padding:.7vh .8vh .8vh;}
+.kk-kbrow{display:grid;gap:.4vh;width:100%;}
+.kk-cons{grid-template-columns:repeat(10,minmax(0,1fr));}
+.kk-vow{grid-template-columns:repeat(6,minmax(0,1fr));}
+.kk-vow2{grid-template-columns:repeat(7,minmax(0,1fr));}
+.kk-key{font-family:"Apple SD Gothic Neo","Noto Sans CJK KR",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;
+  min-height:clamp(2.05rem,4.5vh,2.9rem);border-radius:.8vh;background:#fff;font-size:clamp(.95rem,2.05vh,1.25rem);
+  font-weight:900;color:#21526d;box-shadow:inset 0 0 0 1.8px #dbeaf6;transition:transform .1s,background .12s,color .12s;}
+.kk-key:active{transform:scale(.95);}
+.kk-key.on{background:#e6f4ff;color:#0d6f9e;box-shadow:inset 0 0 0 2.4px #7cc3e8;}
+.kk-acts{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:.45vh;margin-top:.3vh;}
+.kk-act{min-height:clamp(2.3rem,4.8vh,3rem);padding:0 1rem;border-radius:.9vh;background:#f3f9fd;white-space:nowrap;
+  font-size:clamp(.85rem,1.9vh,1.1rem);font-weight:900;color:#2b5d7d;box-shadow:inset 0 0 0 1.8px #d6e8f5;}
+.kk-act.kk-go{background:linear-gradient(135deg,#3fb3e8,#1f86b8);color:#fff;box-shadow:0 .3vh .8vh rgba(31,134,184,.28);}
+@media (min-width:1000px){
+  .kk-cons{grid-template-columns:repeat(19,minmax(0,1fr));}
+  .kk-vow{grid-template-columns:repeat(12,minmax(0,1fr));}
+}
+@media (max-width:560px){
+  .kk-cons{grid-template-columns:repeat(7,minmax(0,1fr));}
+  .kk-acts{grid-template-columns:1fr 1fr;grid-template-areas:"a b" "g g";}
+  .kk-acts .kk-act:nth-child(1){grid-area:a;}
+  .kk-acts .kk-act:nth-child(2){grid-area:b;}
+  .kk-acts .kk-act.kk-go{grid-area:g;}
+}
+@media (max-width:820px), (max-width:960px) and (orientation:portrait){
+  .kokview{height:auto;}
+  .kk-wrap{height:auto;}
+}
+
 /* ================= 다듬기 ================= */
 /* 파닉스 */
 .snd-card{min-height:9.4vh;}
@@ -6330,6 +6401,33 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
       </aside>
     </section>
 
+    <!-- ================= ⌨️ 국어 · 글자 키보드 ================= -->
+    <section class="view kokview" id="viewKoKey" data-view="ko-key" hidden>
+      <div class="kk-wrap">
+        <div class="panel kk-qpanel">
+          <div class="panel-h"><b>⌨️ 글자 키보드</b><span class="ph-no2" id="kkProg">1 / 8</span></div>
+          <div class="kk-qrow">
+            <div class="kk-qemoji" id="kkEmoji" aria-hidden="true">⌨️</div>
+            <p class="kk-ask" id="kkAsk">문제를 불러오는 중…</p>
+            <button class="kk-mini" type="button" id="kkHear" data-kk="hear">🔊 문제 듣기</button>
+          </div>
+          <div class="kk-say" id="kkSay" aria-live="polite"><span class="kk-say-ph">자음 → 모음 순서로 눌러서 글자를 만들어요</span></div>
+          <div class="kk-pend" id="kkPend" aria-live="polite"></div>
+          <div class="kk-fb" id="kkFb" aria-live="polite" hidden></div>
+        </div>
+        <div class="panel kk-kbpanel">
+          <div class="kk-kbrow kk-cons" id="kkCons" role="group" aria-label="자음"></div>
+          <div class="kk-kbrow kk-vow" id="kkVow" role="group" aria-label="모음"></div>
+          <div class="kk-kbrow kk-vow2" id="kkVow2" role="group" aria-label="겹모음"></div>
+          <div class="kk-acts">
+            <button class="kk-act" type="button" id="kkBack" data-kk="back">⌫ 지우기</button>
+            <button class="kk-act" type="button" id="kkReset" data-kk="reset">🔄 다시</button>
+            <button class="kk-act kk-go" type="button" id="kkCheck" data-kk="check">✓ 정답 확인</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= 💰 용돈 · 저금통 ================= -->
     <section class="view piggyview" id="viewPiggy" data-view="piggy" hidden>
       <div class="pg-main">
@@ -9525,12 +9623,12 @@ var SUBJECTS = [
   { k:"math",    em:"🔢", nm:"수학", desc:"오늘의 연산 · 사고력 · 도형", sec:"concept" },
   { k:"en",      em:"🔤", nm:"영어", desc:"그림 동화책 · 사이트워드 · 퀴즈", sec:"sight" },
   { k:"hanja",   em:"漢", nm:"한자", desc:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", sec:"trace" },
-  { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄", sec:"quote" },
+  { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄 · 글자 키보드", sec:"quote" },
   { k:"history", em:"🏛️", nm:"역사", desc:"연도표 · 왕 계보 · 사진 퀴즈 · 영상 · 세계사", sec:"timeline" }
 ];
 var SECS = {
   en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"], ["video", "🎬 영어 영상"]],
-  ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"]],
+  ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"], ["key", "⌨️ 글자 키보드"]],
   math:    [["concept", "🔢 수세기"], ["calc", "➕ 기탄 연산"], ["think", "🧠 그림 사고력"], ["shape", "🔺 도형 이름"], ["clock", "⏰ 시계 읽기"], ["gugu", "✖️ 구구단 원리"], ["video", "🎬 수학 영상"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말·뜻 쓰기"]],
   history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["war", "⚔️ 전쟁사"], ["video", "🎬 역사 영상"],
@@ -9539,7 +9637,7 @@ var SECS = {
 var VIEWID = {
   "home:main":"viewHome", "study:hub":"viewStudyHub",
   "study:en:video":"viewEnVideo", "study:en:book":"viewEnBook", "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:test":"viewEnTest", "study:en:call":"viewEnCall",
-  "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord",
+  "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord", "study:ko:key":"viewKoKey",
   "study:math:concept":"viewMath", "study:math:calc":"viewMath", "study:math:think":"viewMath",
   "study:math:shape":"viewMath", "study:math:clock":"viewMath", "study:math:gugu":"viewMath",
   "study:math:video":"viewMathVideo",
@@ -11597,6 +11695,285 @@ function init(){ render(); }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
 else init();
 })();
+
+/* =====================================================================
+   ⌨️ 국어 · 글자 키보드 — 자음과 모음을 눌러 글자를 만들고,
+   정답이면 어떤 자음·모음으로 만들었는지 하나하나 알려 준다.
+   정답 낱말은 모두 받침(종성)이 없는 1학년 낱말만 쓴다.
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB;
+function $(id){ return document.getElementById(id); }
+function esc(s){ return SB.esc(s); }
+
+var CHO  = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ".split("");           /* 19 */
+var JUNG = ["ㅏ","ㅐ","ㅑ","ㅒ","ㅓ","ㅔ","ㅕ","ㅖ","ㅗ","ㅘ","ㅙ","ㅚ","ㅛ","ㅜ","ㅝ","ㅞ","ㅟ","ㅠ","ㅡ","ㅢ","ㅣ"]; /* 21 */
+var CONS = CHO;
+var VOWS = ["ㅏ","ㅑ","ㅓ","ㅕ","ㅗ","ㅛ","ㅜ","ㅠ","ㅡ","ㅣ","ㅐ","ㅔ"];   /* 홑모음 */
+var DVOW = ["ㅘ","ㅝ","ㅚ","ㅟ","ㅙ","ㅞ","ㅢ"];                          /* 겹모음 바로 누르기 */
+var COMB = { "ㅗㅏ":"ㅘ", "ㅗㅐ":"ㅙ", "ㅗㅣ":"ㅚ", "ㅜㅓ":"ㅝ", "ㅜㅔ":"ㅞ", "ㅜㅣ":"ㅟ", "ㅡㅣ":"ㅢ" };
+
+/* 받침 없는 1학년 낱말 27개 — (ord(ch)-0xAC00)%28===0 을 코드에서도 확인한다 */
+var POOL = [
+  { q:"빨갛고 동글동글해요. 나무에서 열리고 아삭아삭해요.", a:"사과", e:"🍎" },
+  { q:"길고 노랗고 달콤해요. 원숭이가 좋아해요.", a:"바나나", e:"🍌" },
+  { q:"보랏빛 알갱이가 알알이 모여 있어요.", a:"포도", e:"🍇" },
+  { q:"갈색 껍질 속이 초록색이고 새콤달콤해요.", a:"키위", e:"🥝" },
+  { q:"소가 주는 하얀 물이에요. 마시면 키가 쑥쑥 자라요.", a:"우유", e:"🥛" },
+  { q:"비가 그친 뒤 하늘에 일곱 빛깔로 떠요.", a:"무지개", e:"🌈" },
+  { q:"코가 아주 길고 몸집이 큰 동물이에요.", a:"코끼리", e:"🐘" },
+  { q:"봄에 날아오고 처마 밑에 집을 지어요.", a:"제비", e:"🐦" },
+  { q:"귀가 길고 깡충깡충 뛰어다녀요.", a:"토끼", e:"🐰" },
+  { q:"날개가 알록달록하고 꽃에서 꿀을 모아요.", a:"나비", e:"🦋" },
+  { q:"아주 작지만 줄을 서서 부지런히 걸어요.", a:"개미", e:"🐜" },
+  { q:"다리가 여덟 개이고 거미줄을 쳐요.", a:"거미", e:"🕷️" },
+  { q:"물에서 헤엄치고 ‘꽥꽥’ 하고 울어요.", a:"오리", e:"🦆" },
+  { q:"연못에 살고 ‘개굴개굴’ 하고 울어요.", a:"개구리", e:"🐸" },
+  { q:"바다에서 가장 큰 동물이에요. 물을 뿜어 올려요.", a:"고래", e:"🐋" },
+  { q:"꼬리가 크고 머리가 아주 좋은 동물이에요.", a:"여우", e:"🦊" },
+  { q:"갈기가 멋있고 ‘어흥’ 하고 울어요. 동물의 왕이에요.", a:"사자", e:"🦁" },
+  { q:"입이 아주 크고 물속에 사는 회색 동물이에요.", a:"하마", e:"🦛" },
+  { q:"철길 위를 칙칙폭폭 달려요.", a:"기차", e:"🚂" },
+  { q:"머리에 쓰고 햇빛을 가려요.", a:"모자", e:"🧢" },
+  { q:"종이를 자를 때 쓰는 도구예요.", a:"가위", e:"✂️" },
+  { q:"건반을 눌러 소리를 내는 악기예요.", a:"피아노", e:"🎹" },
+  { q:"키가 크고 잎이 많아요. 산에 가면 많이 있어요.", a:"나무", e:"🌳" },
+  { q:"연필로 쓴 글자를 지울 때 써요.", a:"지우개", e:"🧽" },
+  { q:"생각을 하고 우리 몸에서 가장 위에 있어요.", a:"머리", e:"🧠" },
+  { q:"걷고 뛸 때 쓰는 몸의 부분이에요.", a:"다리", e:"🦵" },
+  { q:"앉을 때 쓰는 네 다리 가구예요.", a:"의자", e:"🪑" }
+];
+
+function syl(c, v){
+  var ci = CHO.indexOf(c), ji = JUNG.indexOf(v);
+  if (ci < 0 || ji < 0) return "";
+  return String.fromCharCode(0xAC00 + (ci * 21 + ji) * 28);   /* 받침(종성) 0 */
+}
+function parts(word){
+  var out = [];
+  for (var i = 0; i < word.length; i++){
+    var code = word.charCodeAt(i) - 0xAC00;
+    if (code < 0 || code > 11171){ out.push({ ch:word.charAt(i), c:"", v:"" }); continue; }
+    out.push({ ch:word.charAt(i), c:CHO[Math.floor(code / 588)], v:JUNG[Math.floor(code / 28) % 21] });
+  }
+  return out;
+}
+
+var K = { q:null, i:0, round:[], live:false, solved:0, tries:0, word:[], ch:null, v:null, done:false };
+var N = 8;
+
+function chipHtml(t, k){ return '<span class="kk-chip ' + k + '">' + esc(t) + '</span>'; }
+function opHtml(t){ return '<span class="kk-op">' + t + '</span>'; }
+
+function sayHtml(){
+  var out = "", i;
+  for (i = 0; i < K.word.length; i++) out += '<span class="kk-syl">' + esc(K.word[i]) + '</span>';
+  if (K.ch){
+    var s = K.v ? syl(K.ch, K.v) : "";
+    out += '<span class="kk-syl pend">' + esc(s || K.ch) + '</span>';
+  }
+  return out || '<span class="kk-say-ph">자음 → 모음 순서로 눌러서 글자를 만들어요</span>';
+}
+function pendHtml(){
+  if (K.done) return '<span class="kk-hint">정답! 아래 설명을 읽어 보세요</span>';
+  if (!K.ch && !K.v) return '<span class="kk-hint">자음부터 눌러요 · ㄱ ㄲ ㄴ ㄷ …</span>';
+  if (K.ch && !K.v) return chipHtml(K.ch, "on") + opHtml("+") + '<span class="kk-chip ghost">모음</span>';
+  return chipHtml(K.ch, "on") + opHtml("+") + chipHtml(K.v, "on") + opHtml("=") + chipHtml(syl(K.ch, K.v), "res");
+}
+function paint(){
+  var w = $("kkSay"); if (w) w.innerHTML = sayHtml();
+  var p = $("kkPend"); if (p) p.innerHTML = pendHtml();
+  var keys = document.querySelectorAll("#viewKoKey .kk-key");
+  for (var i = 0; i < keys.length; i++){
+    var k = keys[i], c = k.getAttribute("data-c"), v = k.getAttribute("data-v");
+    k.classList.toggle("on", !!(c && c === K.ch) || !!(v && v === K.v));
+  }
+}
+function render(){
+  var prog = $("kkProg"), em = $("kkEmoji"), ask = $("kkAsk");
+  if (prog) prog.textContent = Math.min(K.i + 1, K.round.length || N) + " / " + (K.round.length || N);
+  if (em) em.textContent = K.q ? K.q.e : "⌨️";
+  if (ask) ask.textContent = K.q ? K.q.q : "문제를 불러오는 중…";
+  paint();
+}
+function hideFb(){ var fb = $("kkFb"); if (fb) { fb.hidden = true; fb.className = "kk-fb"; fb.innerHTML = ""; } }
+
+function buildKeys(){
+  var c = $("kkCons"), v = $("kkVow"), d = $("kkVow2");
+  if (c && c.getAttribute("data-built") !== "1"){
+    c.setAttribute("data-built", "1");
+    c.innerHTML = CONS.map(function(x){ return '<button class="kk-key" type="button" data-c="' + x + '" aria-label="자음 ' + x + '">' + x + '</button>'; }).join("");
+  }
+  if (v && v.getAttribute("data-built") !== "1"){
+    v.setAttribute("data-built", "1");
+    v.innerHTML = VOWS.map(function(x){ return '<button class="kk-key" type="button" data-v="' + x + '" aria-label="모음 ' + x + '">' + x + '</button>'; }).join("");
+  }
+  if (d && d.getAttribute("data-built") !== "1"){
+    d.setAttribute("data-built", "1");
+    d.innerHTML = DVOW.map(function(x){ return '<button class="kk-key" type="button" data-v="' + x + '" aria-label="겹모음 ' + x + '">' + x + '</button>'; }).join("");
+  }
+}
+
+function commit(){
+  if (!(K.ch && K.v)) return false;
+  K.word.push(syl(K.ch, K.v));
+  K.ch = null; K.v = null;
+  return true;
+}
+function tapC(x){
+  if (!K.live || K.done) return;
+  if (K.ch && K.v) commit();
+  K.ch = x; K.v = null;
+  hideFb(); paint();
+}
+function tapV(x){
+  if (!K.live || K.done) return;
+  if (!K.ch){ SB.toast("자음을 먼저 눌러요!"); return; }
+  if (!K.v || !COMB[K.v + x]) K.v = x;
+  else K.v = COMB[K.v + x];
+  hideFb(); paint();
+}
+function back(){
+  if (!K.live || K.done) return;
+  if (K.v) K.v = null;
+  else if (K.ch) K.ch = null;
+  else if (K.word.length) K.word.pop();
+  hideFb(); paint();
+}
+function reset(){
+  if (!K.live || K.done) return;
+  K.word = []; K.ch = null; K.v = null;
+  hideFb(); paint();
+}
+function check(){
+  if (!K.live || K.done) return;
+  if (K.ch && !K.v){ SB.toast("모음을 눌러 글자를 완성해요!"); return; }
+  if (K.ch && K.v) commit();
+  var got = K.word.join("");
+  if (!got){ SB.toast("키보드로 글자를 만들어 보아요!"); return; }
+  if (got === K.q.a) correct();
+  else { K.tries++; wrong(got); }
+}
+
+function correct(){
+  K.done = true; K.solved++;
+  var ds = parts(K.q.a), cs = [], vs = [], i;
+  for (i = 0; i < ds.length; i++){
+    if (ds[i].c && cs.indexOf(ds[i].c) < 0) cs.push(ds[i].c);
+    if (ds[i].v && vs.indexOf(ds[i].v) < 0) vs.push(ds[i].v);
+  }
+  var boxes = ds.map(function(d){
+    return '<span class="kk-sbox"><b>' + esc(d.ch) + '</b><em>' + esc(d.c) + '+' + esc(d.v) + '</em></span>';
+  }).join('<span class="kk-plus">·</span>');
+  var fb = $("kkFb");
+  if (fb){
+    fb.hidden = false; fb.className = "kk-fb ok";
+    fb.innerHTML = '<b class="kk-fbt">🎉 정답이에요!</b>'
+      + '<p class="kk-fbp"><b>‘' + esc(K.q.a) + '’</b>는 자음 <em>[' + cs.join(", ") + ']</em>과 모음 <em>[' + vs.join(", ") + ']</em>를 써서 만들었어요!</p>'
+      + '<div class="kk-syls">' + boxes + '</div>'
+      + '<div class="kk-fbbtns">'
+      +   '<button class="kk-act" type="button" id="kkHearWord">🔊 들어보기</button>'
+      +   '<button class="kk-act kk-go" type="button" id="kkNext">' + (K.i + 1 >= K.round.length ? "🏁 마무리" : "다음 문제 ▶") + '</button>'
+      + '</div>';
+    var h = $("kkHearWord"); if (h) h.addEventListener("click", function(){ SB.speak(K.q.a, false, "ko-KR"); });
+    var n = $("kkNext"); if (n) n.addEventListener("click", next);
+  }
+  SB.speak(K.q.a, false, "ko-KR");
+  render();
+  revealFb();
+}
+function revealFb(){
+  var fb = $("kkFb");
+  if (!fb || !fb.scrollIntoView) return;
+  try { fb.scrollIntoView({ block:"nearest", behavior:"smooth" }); } catch(e){ try { fb.scrollIntoView(false); } catch(e2){} }
+}
+
+function wrong(got){
+  var d0 = parts(K.q.a)[0];
+  var msg = (K.tries <= 1)
+    ? '지금 만든 글자는 <b>‘' + esc(got) + '’</b>예요. 자음과 모음을 다시 눌러 볼까요?'
+    : '정답은 <b>' + K.q.a.length + '글자</b>예요. 첫 글자는 ' + esc(d0.c) + ' + ' + esc(d0.v) + ' = <b>' + esc(d0.ch) + '</b> 예요!';
+  var fb = $("kkFb");
+  if (fb){
+    fb.hidden = false; fb.className = "kk-fb no";
+    fb.innerHTML = '<b class="kk-fbt">🙂 다시 해 볼까요?</b><p class="kk-fbp">' + msg + '</p>'
+      + '<div class="kk-fbbtns"><button class="kk-act" type="button" id="kkClear">🔄 처음부터</button></div>';
+    var c = $("kkClear"); if (c) c.addEventListener("click", reset);
+  }
+  render();
+  revealFb();
+}
+
+function next(){
+  if (K.i + 1 >= K.round.length){ finish(); return; }
+  K.i++; K.q = K.round[K.i];
+  K.word = []; K.ch = null; K.v = null; K.tries = 0; K.done = false;
+  hideFb(); render();
+}
+function begin(){
+  K.round = SB.shuffle(POOL.slice(0)).slice(0, N);
+  K.i = 0; K.solved = 0; K.tries = 0; K.live = true; K.done = false;
+  K.word = []; K.ch = null; K.v = null; K.q = K.round[0];
+  hideFb(); render();
+}
+function finish(){
+  K.live = false; K.done = true;
+  var n = K.round.length || N, sc = K.solved;
+  var want = sc >= n ? 3 : (sc >= n - 2 ? 2 : (sc >= n - 4 ? 1 : 0));
+  var got = want ? SB.earn(SB.today() + "|ko|key", want) : 0;
+  SB.markAttendance("ko");
+  var fb = $("kkFb");
+  if (fb){
+    fb.hidden = false; fb.className = "kk-fb ok";
+    fb.innerHTML = '<b class="kk-fbt">' + (sc >= n ? "🏆" : "🌱") + ' ' + sc + ' / ' + n + ' 문제를 맞혔어요!</b>'
+      + '<p class="kk-fbp">' + (got ? "별 " + got + "개를 받았어요. 자음과 모음으로 글자를 잘 만들었어요!"
+                                    : (want ? "오늘은 이미 이만큼 받았어요. 내일 또 도전해요!" : "4문제만 더 맞히면 별을 받을 수 있어요!")) + '</p>'
+      + '<div class="kk-fbbtns"><button class="kk-act kk-go" type="button" id="kkAgain">🔁 다시 하기</button></div>';
+    var b = $("kkAgain"); if (b) b.addEventListener("click", begin);
+  }
+  if (got){ SB.confetti(); SB.toast("⌨️ 글자 키보드 " + sc + "/" + n + " · ⭐ +" + got); }
+  else if (sc > 0) SB.toast("⌨️ 글자 키보드 " + sc + "/" + n + "!");
+  render();
+}
+
+function bind(){
+  var root = $("viewKoKey");
+  if (!root || root.getAttribute("data-kk") === "1") return;
+  root.setAttribute("data-kk", "1");
+  root.addEventListener("click", function(e){
+    var t = e.target;
+    var key = t && t.closest ? t.closest(".kk-key") : null;
+    if (key){
+      if (key.getAttribute("data-c")) tapC(key.getAttribute("data-c"));
+      else tapV(key.getAttribute("data-v"));
+      return;
+    }
+    var act = t && t.closest ? t.closest("[data-kk]") : null;
+    if (!act) return;
+    var a = act.getAttribute("data-kk");
+    if (a === "back") back();
+    else if (a === "reset") reset();
+    else if (a === "check") check();
+    else if (a === "hear"){ if (K.q) SB.speak(K.q.q, false, "ko-KR"); }
+  });
+}
+
+SB.keyBoard = { pool:POOL, state:K, syl:syl, parts:parts, begin:begin, check:check };
+SB.onShow.ko = (function(prev){
+  return function(sub){
+    if (prev) prev(sub);
+    if (sub === "key"){
+      buildKeys(); bind();
+      if (!K.live) begin(); else render();
+    }
+  };
+})(SB.onShow.ko);
+function init(){ buildKeys(); bind(); }
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+else init();
+})();
+
 
 /* =====================================================================
    🔢 수학 — 수 개념 놀이 · 초1 연산 · 사고력/도형
