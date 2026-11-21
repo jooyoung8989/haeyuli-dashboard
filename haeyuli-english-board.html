@@ -5784,6 +5784,8 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
 .sm-tensbox{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;min-height:6.2rem;}
 .sm-onesbox{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;min-height:6.2rem;align-content:center;}
 .sm-slot{display:block;width:clamp(.5rem,1.2vh,.72rem);height:6.2rem;border-radius:3px;background:#f4f8fb;box-shadow:inset 0 0 0 1px #e6f0f7;}
+.sm-add{cursor:pointer;}
+.sm-add:active{background:#e8f4fc;box-shadow:inset 0 0 0 1.5px #b9d9ec;}
 .sm-slot1{height:clamp(1.5rem,3.4vh,2rem);width:clamp(1.5rem,3.4vh,2rem);}
 .sm-rod{display:block;width:clamp(.5rem,1.2vh,.72rem);height:6.2rem;border-radius:3px;
   background:repeating-linear-gradient(180deg,#bfe3f8 0 9%,#8ecdf0 9% 10%);box-shadow:inset 0 0 0 1.4px #4d9dca;}
@@ -29020,13 +29022,13 @@ function smBoard(){
     for (i = 0; i < 9; i++)
       h += i < SM.tens
         ? '<button class="sm-rod" type="button" data-smr="ten" aria-label="십 막대 하나 빼기"></button>'
-        : '<span class="sm-slot"></span>';
+        : '<button class="sm-slot sm-add" type="button" data-sma="ten" aria-label="십 막대 하나 놓기"></button>';
     h += "</div></div>";
     h += '<div class="sm-col"><span class="sm-lbl">일</span><div class="sm-onesbox">';
     for (i = 0; i < 10; i++)
       h += i < SM.ones
         ? '<button class="sm-cube" type="button" data-smr="one" aria-label="일 모형 하나 빼기"></button>'
-        : '<span class="sm-slot sm-slot1"></span>';
+        : '<button class="sm-slot sm-slot1 sm-add" type="button" data-sma="one" aria-label="일 모형 하나 놓기"></button>';
     h += "</div></div></div>";
   } else {
     h += '<div class="sm-rek">';
@@ -29056,6 +29058,14 @@ function smBindBoard(){
       smBoard(); smBindBoard();
     });
   })(rs[i]);
+  var as = box.querySelectorAll("[data-sma]");
+  for (var a = 0; a < as.length; a++) (function(b){
+    b.addEventListener("click", function(){
+      if (b.getAttribute("data-sma") === "ten") SM.tens = Math.min(9, SM.tens + 1);
+      else SM.ones = Math.min(10, SM.ones + 1);
+      smBoard(); smBindBoard();
+    });
+  })(as[a]);
   var bs = box.querySelectorAll("[data-smbead]");
   for (var j = 0; j < bs.length; j++) (function(b){
     b.addEventListener("click", function(){
@@ -29075,7 +29085,7 @@ function smNewTask(){
   SM.tens = 0; SM.ones = 0; SM.ra = 0; SM.rb = 0;
   SM.taskOn = true;
   var ask = $("smAsk");
-  if (ask) ask.textContent = "수모형판에 " + SM.target + "을 만들어 보세요";
+  if (ask) ask.textContent = SM.mode === "rek" ? "구슬을 눌러 10 칸을 채워 보세요" : "빈 칸을 눌러도 십 막대·일 모형이 놓여요";
   smBoard(); smBindBoard();
   var fb = $("smFb"); if (fb){ fb.textContent = ""; fb.className = "sm-fb"; }
 }
