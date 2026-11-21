@@ -5297,7 +5297,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
   width:110%;height:22%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,214,120,.55),rgba(255,214,120,0));
   animation:glowPulse 2.4s ease-in-out infinite;z-index:-1;}
 @keyframes glowPulse{0%,100%{opacity:.5;transform:translateX(-50%) scale(.9)}50%{opacity:1;transform:translateX(-50%) scale(1.1)}}
-.ts-badge{position:absolute;right:-12%;top:-6%;font-size:1.6vh;filter:drop-shadow(0 .2vh .3vh rgba(90,70,50,.3));}
+.ts-badge{position:absolute;right:-16%;bottom:-2%;font-size:2vh;z-index:3;filter:drop-shadow(0 .2vh .3vh rgba(90,70,50,.35));}
 .ts-ft{display:flex;align-items:center;gap:.6vh;}
 .ts-ft span{font-size:1.05vh;font-weight:900;color:#7a6a8c;line-height:1.3;}
 .ts-go{margin-left:auto;flex:0 0 auto;height:3.8vh;padding:0 1.1vh;border-radius:999px;
@@ -5367,7 +5367,7 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
   .ts-scene{border-radius:1rem;}
   .ts-nm{font-size:.53rem;padding:.05rem .3rem;bottom:-.85rem;}
   .ts-bub{font-size:.6rem;padding:.2rem .38rem;border-radius:.6rem;}
-  .ts-badge{font-size:.9rem;}
+  .ts-badge{font-size:1.15rem;right:-14%;}
   .ts-ft span{font-size:.66rem;}
   .ts-go{height:2.4rem;font-size:.76rem;padding:0 .8rem;}
   .tt-wrap{width:100%;max-width:26rem;}
@@ -10761,7 +10761,8 @@ function dayFriends(){
   for (var i = 0; i < key.length; i++) seed = (seed * 31 + key.charCodeAt(i)) % 9973;
   var p = pet(), list = [], used = {};
   if (p.no) used[p.no] = 1;
-  for (var n = 0; n < 6; n++) {
+  var want = (window.innerWidth < 560) ? 4 : 6;      /* 좁은 화면은 친구 4마리 */
+  for (var n = 0; n < want; n++) {
     var idx = (seed + n * 7) % FRIENDS.length, guard = 0;
     while ((used[FRIENDS[idx].no] || !FRIENDS[idx].no) && guard++ < 40) idx = (idx + 1) % FRIENDS.length;
     used[FRIENDS[idx].no] = 1;
