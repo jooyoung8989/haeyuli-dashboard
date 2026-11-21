@@ -1626,6 +1626,69 @@ body.mob .gd-foot{padding-bottom:.4rem;}
   .kk-wrap{height:auto;}
 }
 
+/* ===== 국어 문장 쓰기 · 띄어쓰기 (원고지 따라쓰기) ===== */
+.kwview{display:flex;flex-direction:column;gap:.7vh;min-height:0;height:100%;}
+.kw-wrap{display:flex;flex-direction:column;gap:.5vh;width:100%;max-width:64rem;margin:0 auto;min-height:0;height:100%;}
+.kw-panel{flex:1 1 auto;min-height:0;padding-bottom:.6vh;}
+.kw-head{display:flex;align-items:center;gap:.7vh;padding:0 1.1vh;}
+.kw-em{flex:0 0 auto;font-size:clamp(1.2rem,3.1vh,1.75rem);line-height:1;}
+.kw-tip{margin:0;flex:1 1 auto;min-width:0;font-size:clamp(.92rem,2.05vh,1.28rem);font-weight:900;color:#134d6b;
+  letter-spacing:-.03em;line-height:1.25;word-break:keep-all;}
+.kw-hear{flex:0 0 auto;width:clamp(2.1rem,4.6vh,2.75rem);height:clamp(2.1rem,4.6vh,2.75rem);border-radius:50%;
+  display:grid;place-items:center;background:#eaf6ff;color:#1a7ab0;font-size:clamp(.95rem,2.1vh,1.25rem);
+  box-shadow:inset 0 0 0 2px #bfe0f5;transition:transform .1s;}
+.kw-hear:active{transform:scale(.94);}
+.kw-chunks{display:flex;flex-wrap:wrap;align-items:center;gap:.28rem;padding:.6vh 1.1vh 0;}
+.kw-chunk{display:inline-flex;align-items:center;height:clamp(1.85rem,3.9vh,2.35rem);padding:0 .62rem;border-radius:.7vh;
+  background:#fff;color:#1d5679;font-size:clamp(.92rem,2.05vh,1.22rem);font-weight:900;letter-spacing:-.01em;
+  box-shadow:inset 0 0 0 1.8px #d8ebf8;transition:transform .1s,box-shadow .15s;}
+.kw-chunk:active{transform:scale(.96);}
+.kw-gap{display:inline-grid;place-items:center;min-width:.9rem;font-size:.95rem;font-weight:900;color:#c2d3df;line-height:1;}
+.kw-boardwrap{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;
+  padding:.8vh 1.1vh .1vh;overflow:hidden;}
+.kw-board{position:relative;flex:0 0 auto;margin:0 auto;touch-action:none;-webkit-user-select:none;user-select:none;
+  border-radius:.9vh;background:#fff;box-shadow:0 .35vh 1.1vh rgba(58,104,140,.10),inset 0 0 0 1.4px #e0ebf3;}
+.kw-grid{display:grid;gap:0;border-radius:.9vh;overflow:hidden;}
+.kw-cell{position:relative;display:grid;place-items:center;box-sizing:border-box;
+  background:#fff;box-shadow:inset 0 0 0 .6px #dbe7f0;}
+.kw-cell .g{font-family:"Apple SD Gothic Neo","Noto Sans CJK KR",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;
+  font-size:var(--kwf,1.4rem);font-weight:800;color:#c5d4df;line-height:1;pointer-events:none;
+  transform:translateY(.02em);}
+.kw-cell.sp{background:#e9eef3;box-shadow:inset 0 0 0 .6px #d7e1ea;}
+.kw-cell.sp .g{display:none;}
+.kw-cell.fill{background:#fbfdfe;box-shadow:inset 0 0 0 .6px #e8f1f7;}
+.kw-ink{position:absolute;left:0;top:0;width:100%;height:100%;border-radius:.9vh;touch-action:none;
+  cursor:crosshair;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+.kw-note{margin:.55vh 1.2vh 0;padding-left:.1rem;font-size:clamp(.74rem,1.55vh,.94rem);font-weight:800;color:#8ba4b7;
+  line-height:1.3;word-break:keep-all;}
+.kw-acts{display:grid;grid-template-columns:auto auto auto minmax(0,1fr);gap:.45vh;padding:.8vh 1.1vh .9vh;}
+.kw-btn{min-height:clamp(2.4rem,5.1vh,3.1rem);padding:0 1rem;border-radius:1vh;background:#f3f9fd;white-space:nowrap;
+  font-size:clamp(.85rem,1.85vh,1.08rem);font-weight:900;color:#2b5d7d;box-shadow:inset 0 0 0 1.8px #d6e8f5;
+  transition:transform .1s;}
+.kw-btn:active{transform:scale(.97);}
+.kw-btn.done{background:linear-gradient(135deg,#3fb3e8,#1f86b8);color:#fff;box-shadow:0 .3vh .8vh rgba(31,134,184,.28);}
+@media (max-width:560px){
+  .kw-acts{grid-template-columns:1fr 1fr;grid-template-areas:"a b" "c c" "d d";}
+  .kw-acts .kw-btn:nth-child(1){grid-area:a;}
+  .kw-acts .kw-btn:nth-child(2){grid-area:b;}
+  .kw-acts .kw-btn:nth-child(3){grid-area:c;}
+  .kw-acts .kw-btn.done{grid-area:d;}
+  .kw-btn{padding:0 .7rem;}
+}
+@media (max-width:820px), (max-width:960px) and (orientation:portrait){
+  .kw-boardwrap{padding:1vh 1.1vh .2vh;}
+}
+body.mob .kwview{height:auto;}
+body.mob .kw-wrap{height:auto;}
+body.mob .kw-head{gap:.5rem;}
+body.mob .kw-tip{font-size:1rem;}
+body.mob .kw-chunks{padding:.5rem .7rem 0;gap:.24rem;}
+body.mob .kw-chunk{height:2.2rem;padding:0 .55rem;font-size:.92rem;border-radius:.55rem;}
+body.mob .kw-boardwrap{padding:.7rem .55rem .2rem;}
+body.mob .kw-note{padding:0 .7rem;}
+body.mob .kw-acts{padding:.6rem .7rem .8rem;gap:.4rem;}
+body.mob .kw-btn{min-height:2.7rem;font-size:.9rem;border-radius:.8rem;}
+
 /* ================= 다듬기 ================= */
 /* 파닉스 */
 .snd-card{min-height:9.4vh;}
@@ -6131,6 +6194,34 @@ body.mob .mv-noemb{padding:1.2rem .8rem;}
       </div>
     </section>
 
+    <!-- ================= ✍️ 국어 · 문장 쓰기 · 띄어쓰기 ================= -->
+    <section class="view kwview" id="viewKoWrite" data-view="ko-write" hidden>
+      <div class="kw-wrap">
+        <div class="panel kw-panel">
+          <div class="panel-h"><b>✍️ 문장 쓰기 · 띄어쓰기</b><span class="ph-no2" id="kwProg">1 / 18</span></div>
+          <div class="kw-head">
+            <span class="kw-em" id="kwEm" aria-hidden="true">🌤️</span>
+            <p class="kw-tip">교과서 문장을 잘 듣고 따라 써보세요</p>
+            <button class="kw-hear" type="button" id="kwSlow" data-kw="slow" aria-label="문장 천천히 듣기">🔊</button>
+          </div>
+          <div class="kw-chunks" id="kwChunks" role="group" aria-label="낱말마다 듣기"></div>
+          <div class="kw-boardwrap">
+            <div class="kw-board" id="kwBoard">
+              <div class="kw-grid" id="kwGrid" aria-hidden="true"></div>
+              <canvas class="kw-ink" id="kwInk" aria-label="손가락으로 따라 쓰는 칸"></canvas>
+            </div>
+          </div>
+          <p class="kw-note" id="kwNote">회색 칸은 띄어쓰기 칸이에요. 낱말 사이를 한 칸씩 비워요.</p>
+          <div class="kw-acts">
+            <button class="kw-btn" type="button" id="kwSay" data-kw="say">🔊 문장 듣기</button>
+            <button class="kw-btn" type="button" id="kwErase" data-kw="erase">🧽 지우기</button>
+            <button class="kw-btn" type="button" id="kwNext" data-kw="next">다음 문장 ▶</button>
+            <button class="kw-btn done" type="button" id="kwDone" data-kw="done">✓ 다 썼어요! (⭐ +2)</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= 💰 용돈 · 저금통 ================= -->
     <section class="view piggyview" id="viewPiggy" data-view="piggy" hidden>
       <div class="pg-main">
@@ -9332,12 +9423,12 @@ var SUBJECTS = [
   { k:"math",    em:"🔢", nm:"수학", desc:"오늘의 연산 · 사고력 · 도형", sec:"concept" },
   { k:"en",      em:"🔤", nm:"영어", desc:"그림 동화책 · 사이트워드 · 퀴즈", sec:"sight" },
   { k:"hanja",   em:"漢", nm:"한자", desc:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", sec:"trace" },
-  { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄 · 글자 키보드", sec:"quote" },
+  { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄 · 글자 키보드 · 문장 쓰기", sec:"quote" },
   { k:"history", em:"🏛️", nm:"역사", desc:"연도표 · 왕 계보 · 사진 퀴즈 · 영상 · 세계사", sec:"timeline" }
 ];
 var SECS = {
   en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"], ["video", "🎬 영어 영상"]],
-  ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"], ["key", "⌨️ 글자 키보드"]],
+  ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"], ["key", "⌨️ 글자 키보드"], ["write", "✍️ 문장·띄어쓰기"]],
   math:    [["concept", "🔢 수세기"], ["calc", "➕ 기탄 연산"], ["think", "🧠 그림 사고력"], ["shape", "🔺 도형 이름"], ["clock", "⏰ 시계 읽기"], ["gugu", "✖️ 구구단 원리"], ["video", "🎬 수학 영상"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말·뜻 쓰기"]],
   history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["war", "⚔️ 전쟁사"], ["video", "🎬 역사 영상"],
@@ -9346,7 +9437,7 @@ var SECS = {
 var VIEWID = {
   "home:main":"viewHome", "study:hub":"viewStudyHub",
   "study:en:video":"viewEnVideo", "study:en:book":"viewEnBook", "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:test":"viewEnTest", "study:en:call":"viewEnCall",
-  "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord", "study:ko:key":"viewKoKey",
+  "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord", "study:ko:key":"viewKoKey", "study:ko:write":"viewKoWrite",
   "study:math:concept":"viewMath", "study:math:calc":"viewMath", "study:math:think":"viewMath",
   "study:math:shape":"viewMath", "study:math:clock":"viewMath", "study:math:gugu":"viewMath",
   "study:math:video":"viewMathVideo",
@@ -12198,6 +12289,333 @@ if (document.readyState === "loading") document.addEventListener("DOMContentLoad
 else init();
 })();
 
+
+/* =====================================================================
+   ✍️ 국어 · 문장 쓰기 · 띄어쓰기 — 원고지 칸(회색 = 띄어쓰기 칸)에
+   교과서 문장을 손가락·펜으로 따라 쓰며 낱말 사이를 띄우는 법을 익힌다.
+   글자는 칸 안에 아주 연하게 깔아 두어 그대로 덮어 쓸 수 있게 한다.
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB;
+function $(id){ return document.getElementById(id); }
+function esc(s){ return SB.esc(s); }
+
+/* 1학년 국어 교과서 문장 — 짧고 자연스럽게, 띄어쓰기가 또렷한 문장만 */
+var SENTS = [
+  { id:"w01", em:"🌤️", text:"오늘 날씨가 참 좋습니다.",
+    note:"‘오늘’과 ‘날씨가’ 사이를 한 칸 비워요." },
+  { id:"w02", em:"🐶", text:"저는 강아지를 기르고 있습니다.",
+    note:"‘저는’ · ‘강아지를’ · ‘기르고’ · ‘있습니다’ 네 낱말이에요." },
+  { id:"w03", em:"⏰", text:"아침에 일찍 일어났어요.",
+    note:"‘아침에’와 ‘일찍’ 사이를 한 칸 비워요." },
+  { id:"w04", em:"🤝", text:"친구와 사이좋게 지내요.",
+    note:"‘사이좋게’는 한 낱말이에요. 붙여 써요." },
+  { id:"w05", em:"❤️", text:"엄마 아빠 사랑합니다.",
+    note:"‘엄마’와 ‘아빠’는 다른 낱말이라 한 칸 비워요." },
+  { id:"w06", em:"🎒", text:"학교에 가방을 메고 갑니다.",
+    note:"‘가방을’과 ‘메고’ 사이를 한 칸 비워요." },
+  { id:"w07", em:"🍚", text:"밥을 골고루 먹어요.",
+    note:"‘밥을’과 ‘골고루’ 사이를 한 칸 비워요." },
+  { id:"w08", em:"🧼", text:"손을 깨끗하게 씻어요.",
+    note:"‘손을’과 ‘깨끗하게’ 사이를 한 칸 비워요." },
+  { id:"w09", em:"📚", text:"책을 소리 내어 읽어요.",
+    note:"‘소리’와 ‘내어’는 따로 쓰는 낱말이에요." },
+  { id:"w10", em:"🌸", text:"봄이 오면 꽃이 피어요.",
+    note:"짧은 낱말이 네 개예요. 사이마다 한 칸씩 비워요." },
+  { id:"w11", em:"☂️", text:"비가 와서 우산을 썼어요.",
+    note:"‘비가’ · ‘와서’ · ‘우산을’ · ‘썼어요’ 네 낱말이에요." },
+  { id:"w12", em:"🏡", text:"할머니 집에 놀러 갔습니다.",
+    note:"‘할머니’와 ‘집에’ 사이를 한 칸 비워요." },
+  { id:"w13", em:"🐕", text:"강아지가 꼬리를 흔들어요.",
+    note:"‘강아지가’는 붙여 쓰고, ‘꼬리를’ 앞에서 비워요." },
+  { id:"w14", em:"📔", text:"나는 매일 일기를 씁니다.",
+    note:"‘매일’과 ‘일기를’ 사이를 한 칸 비워요." },
+  { id:"w15", em:"🍲", text:"저녁에 가족과 밥을 먹어요.",
+    note:"낱말이 다섯 개예요. 사이마다 한 칸씩 비워요." },
+  { id:"w16", em:"🧺", text:"내일은 소풍을 갑니다.",
+    note:"‘내일은’과 ‘소풍을’ 사이를 한 칸 비워요." },
+  { id:"w17", em:"🧹", text:"방을 깨끗하게 정리했어요.",
+    note:"‘방을’과 ‘깨끗하게’ 사이를 한 칸 비워요." },
+  { id:"w18", em:"🚌", text:"버스를 타고 학교에 가요.",
+    note:"‘타고’와 ‘학교에’ 사이를 한 칸 비워요." }
+];
+
+var W = { i:0, cells:[], strokes:[], cur:null, cell:52, cols:8, rows:2, drawn:false, done:{} };
+
+/* ---------- 문장 → 원고지 칸 (낱말 사이에 회색 띄어쓰기 칸) ---------- */
+function words(text){ return String(text).split(/\s+/).filter(function(w){ return w; }); }
+function buildCells(text){
+  var ws = words(text), out = [];
+  for (var i = 0; i < ws.length; i++){
+    if (i) out.push({ sp:true });
+    var cs = ws[i].split("");
+    for (var j = 0; j < cs.length; j++) out.push({ ch:cs[j] });
+  }
+  return out;
+}
+
+/* ---------- 그리기 ---------- */
+function draw(){
+  var cv = $("kwInk"); if (!cv) return;
+  var ctx = null;
+  try { ctx = cv.getContext("2d"); } catch(e){ return; }
+  if (!ctx) return;
+  var w = cv.clientWidth || 0, h = cv.clientHeight || 0;
+  if (!w || !h) return;
+  ctx.clearRect(0, 0, w, h);
+  if (!W.strokes.length) return;
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+  ctx.strokeStyle = "#20496e"; ctx.fillStyle = "#20496e";
+  ctx.lineWidth = Math.max(2.4, W.cell * 0.072);
+  for (var i = 0; i < W.strokes.length; i++){
+    var s = W.strokes[i];
+    if (!s || !s.length) continue;
+    if (s.length === 1){
+      ctx.beginPath();
+      ctx.arc(s[0].x * w, s[0].y * h, ctx.lineWidth / 2, 0, Math.PI * 2);
+      ctx.fill();
+      continue;
+    }
+    ctx.beginPath();
+    ctx.moveTo(s[0].x * w, s[0].y * h);
+    for (var j = 1; j < s.length; j++) ctx.lineTo(s[j].x * w, s[j].y * h);
+    ctx.stroke();
+  }
+}
+
+function metrics(){
+  var board = $("kwBoard");
+  if (!board) return null;
+  var host = board.parentNode;
+  if (!host) return null;
+  var cs = null;
+  try { cs = window.getComputedStyle(host); } catch(e){ cs = null; }
+  var padX = cs ? (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0) : 0;
+  var padY = cs ? (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0) : 0;
+  var availW = Math.max(140, host.clientWidth - padX);
+  var availH = Math.max(0, host.clientHeight - padY);
+  var n = W.cells.length || 1;
+  var MIN = window.innerWidth < 480 ? 58 : (window.innerWidth < 620 ? 46 : 50);  /* 칸이 이보다 작아지지 않게 */
+  var maxCols = Math.max(3, Math.min(9, Math.floor(availW / (MIN + 1))));
+  var rows = Math.max(1, Math.ceil(n / maxCols));
+  var cols = Math.max(1, Math.min(maxCols, Math.ceil(n / rows)));
+  var cell = Math.floor(availW / cols) - 1;
+  if (cell > 104) cell = 104;                           /* 칸이 너무 커지지 않게 */
+  /* 아주 작은 화면에서만 세로 높이를 참고한다(측정값이 아니라 화면 크기 기준 — 흔들림 방지) */
+  var byH = Math.floor((window.innerHeight || 800) * 0.46 / rows) - 2;
+  if (byH > 26 && byH < cell) cell = byH;
+  if (cell < 26) cell = 26;
+  return { cell:cell, cols:cols, rows:rows, w:cols * cell, h:rows * cell, total:cols * rows };
+}
+
+var lastSig = "";
+function layout(){
+  var board = $("kwBoard"), grid = $("kwGrid"), cv = $("kwInk");
+  if (!board || !grid || !cv) return;
+  if (!board.offsetParent) return;                       /* 숨은 화면에서는 재지 않는다 */
+  var m = metrics(); if (!m) return;
+  var sig = m.cell + "/" + m.cols + "/" + m.rows + "/" + m.w + "/" + m.h;
+  if (sig === lastSig) return;
+  lastSig = sig;
+  W.cell = m.cell; W.cols = m.cols; W.rows = m.rows;
+  board.style.width = m.w + "px";
+  board.style.height = m.h + "px";
+  grid.style.gridTemplateColumns = "repeat(" + m.cols + ", " + m.cell + "px)";
+  grid.style.gridAutoRows = m.cell + "px";
+  board.style.setProperty("--kwf", Math.round(m.cell * 0.56) + "px");
+  var dpr = Math.min(2.5, window.devicePixelRatio || 1);
+  cv.style.width = m.w + "px"; cv.style.height = m.h + "px";
+  cv.width = Math.max(1, Math.round(m.w * dpr));
+  cv.height = Math.max(1, Math.round(m.h * dpr));
+  try { var ctx = cv.getContext("2d"); if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0); } catch(e){}
+  draw();
+}
+function fitSoon(){
+  try { window.requestAnimationFrame(function(){ layout(); }); } catch(e){ layout(); }
+  setTimeout(layout, 90);
+  setTimeout(layout, 320);
+}
+
+/* ---------- 화면 채우기 ---------- */
+function renderChips(){
+  var box = $("kwChunks"); if (!box) return;
+  var ws = words(SENTS[W.i].text);
+  box.innerHTML = ws.map(function(w, k){
+    return (k ? '<span class="kw-gap" aria-hidden="true">·</span>' : "")
+      + '<button class="kw-chunk" type="button" data-word="' + k + '" aria-label="' + esc(w) + ' 듣기">' + esc(w) + '</button>';
+  }).join("");
+}
+function renderGrid(){
+  var grid = $("kwGrid"); if (!grid) return;
+  W.cells = buildCells(SENTS[W.i].text);
+  var n = W.cells.length;
+  var html = W.cells.map(function(c){
+    return c.sp ? '<div class="kw-cell sp"></div>'
+                : '<div class="kw-cell"><span class="g">' + esc(c.ch) + '</span></div>';
+  }).join("");
+  /* 마지막 줄 빈 칸도 원고지처럼 채워 준다 */
+  var m = metrics();
+  if (m && m.total > n){
+    for (var i = n; i < m.total; i++) html += '<div class="kw-cell fill"></div>';
+  }
+  grid.innerHTML = html;
+}
+function render(){
+  var q = SENTS[W.i];
+  var prog = $("kwProg"); if (prog) prog.textContent = (W.i + 1) + " / " + SENTS.length;
+  var em = $("kwEm"); if (em) em.textContent = q.em || "✍️";
+  var note = $("kwNote"); if (note) note.textContent = q.note || "회색 칸은 띄어쓰기 칸이에요.";
+  W.strokes = []; W.cur = null;
+  renderChips(); renderGrid(); layout(); draw();
+}
+
+/* ---------- 소리 ---------- */
+function say(i, slow){
+  var q = SENTS[typeof i === "number" ? i : W.i];
+  if (!q || !SB.speak) return;
+  try { SB.speak(q.text, slow ? 0.62 : false, "ko-KR"); } catch(e){}
+}
+
+/* ---------- 동작 ---------- */
+function go(i, speak){
+  var n = SENTS.length;
+  W.i = ((i % n) + n) % n;
+  lastSig = "";
+  render();
+  fitSoon();
+  if (speak) say(W.i, false);
+}
+function erase(){
+  W.strokes = []; W.cur = null;
+  draw();
+}
+function complete(){
+  var q = SENTS[W.i], pts = 0, i;
+  for (i = 0; i < W.strokes.length; i++) pts += W.strokes[i].length;
+  if (pts < 15){
+    if (SB.toast) SB.toast("회색 글자를 손가락으로 따라 써 보아요 ✏️");
+    return;
+  }
+  var got = 0;
+  try { got = SB.earn(SB.today() + "|ko|write|" + q.id, 2) || 0; } catch(e){ got = 0; }
+  try { SB.markAttendance("ko"); } catch(e){}
+  W.done[q.id] = 1;
+  if (got){
+    try { SB.confetti(); } catch(e){}
+    if (SB.toast) SB.toast("✍️ 참 잘 썼어요! ⭐ +" + got);
+  } else if (SB.toast){
+    SB.toast("✍️ 참 잘 썼어요! 이 문장 별은 오늘 이미 받았어요.");
+  }
+  setTimeout(function(){ go(W.i + 1, true); }, 1200);
+}
+
+/* ---------- 붓(캔버스) — 손가락·펜·마우스 ---------- */
+function bindInk(cv){
+  var active = null;
+  function at(e){
+    var r = cv.getBoundingClientRect();
+    var w = Math.max(1, r.width), h = Math.max(1, r.height);
+    return { x:(e.clientX - r.left) / w, y:(e.clientY - r.top) / h };
+  }
+  cv.addEventListener("pointerdown", function(e){
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (e.isPrimary === false) return;
+    try { e.preventDefault(); } catch(err){}
+    active = e.pointerId;
+    try { cv.setPointerCapture(active); } catch(err){}
+    W.cur = [at(e)];
+    W.strokes.push(W.cur);
+    draw();
+  }, { passive:false });
+  cv.addEventListener("pointermove", function(e){
+    if (!W.cur || active === null || e.pointerId !== active) return;
+    try { e.preventDefault(); } catch(err){}
+    var evs = null;
+    try { evs = e.getCoalescedEvents ? e.getCoalescedEvents() : null; } catch(err){ evs = null; }
+    if (!evs || !evs.length) evs = [e];
+    for (var i = 0; i < evs.length; i++) W.cur.push(at(evs[i]));
+    draw();
+  }, { passive:false });
+  function stop(e){
+    if (e && active !== null && e.pointerId !== undefined && e.pointerId !== active) return;
+    active = null; W.cur = null;
+  }
+  cv.addEventListener("pointerup", stop);
+  cv.addEventListener("pointercancel", stop);
+  cv.addEventListener("lostpointercapture", stop);
+}
+
+function onClick(e){
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var wbtn = t.closest("[data-word]");
+  if (wbtn){
+    var ws = words(SENTS[W.i].text);
+    var w0 = ws[parseInt(wbtn.getAttribute("data-word"), 10)];
+    if (w0 && SB.speak){ try { SB.speak(w0, 0.6, "ko-KR"); } catch(err){} }
+    return;
+  }
+  var act = t.closest("[data-kw]");
+  if (!act) return;
+  var a = act.getAttribute("data-kw");
+  if (a === "say") say(W.i, false);
+  else if (a === "slow") say(W.i, true);
+  else if (a === "erase") erase();
+  else if (a === "next") go(W.i + 1, true);
+  else if (a === "done") complete();
+}
+
+function showMyChip(){
+  var box = $("subs2"); if (!box) return;
+  var on = box.querySelector(".subtab.on"); if (!on) return;
+  var l = on.offsetLeft, w = on.offsetWidth, sl = box.scrollLeft, cw = box.clientWidth;
+  if (l < sl || l + w > sl + cw){
+    var want = Math.max(0, l - 6);
+    try { box.scrollTo({ left:want, behavior:"smooth" }); } catch(e){ box.scrollLeft = want; }
+  }
+}
+
+var resizeT = 0;
+function bind(){
+  var root = $("viewKoWrite");
+  if (!root || root.getAttribute("data-kwb") === "1") return;
+  root.setAttribute("data-kwb", "1");
+  root.addEventListener("click", onClick);
+  var cv = $("kwInk");
+  if (cv) bindInk(cv);
+  window.addEventListener("resize", function(){
+    clearTimeout(resizeT);
+    resizeT = setTimeout(function(){ layout(); }, 140);
+  });
+  window.addEventListener("orientationchange", function(){ fitSoon(); });
+  if (window.ResizeObserver){
+    try {
+      var host = $("kwBoard") ? $("kwBoard").parentNode : null;
+      if (host) new ResizeObserver(function(){ layout(); }).observe(host);
+    } catch(e){}
+  }
+}
+
+function start(){
+  if (!W.drawn){ W.drawn = true; render(); }
+  else { lastSig = ""; renderGrid(); layout(); draw(); }
+  fitSoon();
+  setTimeout(showMyChip, 60);
+}
+
+SB.writeBoard = { pool:SENTS, state:W, buildCells:buildCells, go:go, complete:complete, erase:erase };
+SB.onShow.ko = (function(prev){
+  return function(sub){
+    if (prev) { try { prev.apply(this, arguments); } catch(e){} }
+    if (sub === "write"){ try { start(); } catch(e){ try { console.warn(e); } catch(e2){} } }
+  };
+})(SB.onShow.ko);
+
+function init(){ bind(); if (!W.drawn){ render(); W.drawn = true; } }
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+else init();
+})();
 
 /* =====================================================================
    🔢 수학 — 수 개념 놀이 · 초1 연산 · 사고력/도형
@@ -15107,7 +15525,7 @@ var HUB = [
   { k:"hanja", nm:"한자", badge:["漢",""], color:"#8a5a2b", bg:"#f9f4ec",
     d:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", hero:hanjaHero },
   { k:"ko", nm:"국어", badge:["가","나"], color:"#2f8b6b", bg:"#eef7f2",
-    d:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄 · 글자 키보드", hero:koHero },
+    d:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄 · 글자 키보드 · 문장 쓰기", hero:koHero },
   { k:"history", nm:"역사", badge:["史",""], color:"#6a5aa8", bg:"#f2f0fa",
     d:"연도표 · 왕 계보 · 사진 퀴즈 · 영상 · 세계사", hero:histHero }
 ];
