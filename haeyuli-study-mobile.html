@@ -4344,10 +4344,10 @@ body .wk-sub i{font-size:.95rem;}
   font-size:clamp(10px,1.15vh,13px);font-weight:800;box-shadow:inset 0 0 0 1px #e9eef2;white-space:nowrap;}
 .pbk-rate button.on{background:#eef7ff;color:#175a80;box-shadow:inset 0 0 0 1.6px #7fb8dd;}
 
-.pbk-page{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:.9vh;
+.pbk-page{flex:1 1 auto;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) auto;align-items:stretch;gap:.9vh;overflow:hidden;
   padding:.7vh .8vh .8vh;border-radius:18px;background:linear-gradient(175deg,#fffefb,#fdf8ee);
   box-shadow:inset 0 0 0 1px #efe4cd;}
-.pbk-art{position:relative;flex:0 0 auto;width:100%;aspect-ratio:2.4/1;min-height:140px;
+.pbk-art{position:relative;width:100%;height:100%;aspect-ratio:2.4/1;min-height:140px;
   display:flex;align-items:center;justify-content:center;
   border-radius:14px;overflow:hidden;background:#eaf5ff;box-shadow:inset 0 0 0 1px #e3ebf2;}
 .pbk-art svg{position:absolute;top:0;left:0;width:100%;height:100%;display:block;}
@@ -26179,7 +26179,7 @@ function windowBox(x, y, s, night){
 function sceneWrap(key, fn, u){
   var body = "";
   try { body = fn(u); } catch(e){ body = sky(u, "#bfe3ff", "#eef9ff"); }
-  return '<svg class="pbk-svg" viewBox="0 0 800 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">' + body + "</svg>";
+  return '<svg class="pbk-svg" viewBox="0 0 800 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">' + body + "</svg>";
 }
 
 /* ---- 장면 배경 ---- */
