@@ -5007,6 +5007,83 @@ body.mob .rb-tree-body{display:flex;flex-direction:column;gap:.7rem;height:auto;
 .rb-art-thumb span{font-size:1.2vh;font-weight:900;color:#8b9aa8;}
 .rb-done{display:flex;align-items:center;gap:.8vh;font-size:1.3vh;font-weight:900;color:#1f7a4d;}
 .rb-empty{padding:2vh;text-align:center;color:#93a3b1;font-size:1.4vh;font-weight:900;}
+/* ⚔️ 삼국지 책 탭 (프뢰벨 리딩토탈 딥스터디 46권) — 표지 이미지가 없어 제목 카드로 만든다 */
+.sg-wrap{gap:.75vh;}
+.sg-head{display:flex;align-items:center;gap:1.3vh;flex:0 0 auto;padding:1.1vh 1.6vh;border-radius:1.7vh;
+  background:linear-gradient(120deg,#fff3ec,#ffeef3 55%,#f1f2ff);box-shadow:inset 0 0 0 .2vh #f6d6c9;}
+.sg-head .sg-em{font-size:3.2vh;line-height:1;flex:0 0 auto;}
+.sg-head .sg-hi{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.1vh;}
+.sg-head .sg-hi b{font-size:2vh;font-weight:900;color:#3a2a24;line-height:1.2;}
+.sg-head .sg-hi span{font-size:1.25vh;font-weight:900;color:#a08175;}
+.sg-chips{display:flex;gap:.5vh;flex-wrap:wrap;flex:0 0 auto;}
+.sg-chip{display:flex;align-items:center;gap:.4vh;padding:.7vh 1.2vh;border-radius:999px;background:#fff;
+  box-shadow:inset 0 0 0 .16vh #e8e1e5;color:#5c4b52;font-size:1.3vh;font-weight:900;white-space:nowrap;}
+.sg-chip b{font-size:1.12vh;color:#a89aa0;font-weight:900;}
+.sg-chip.on{background:#fff1ec;color:#b8452f;box-shadow:inset 0 0 0 .24vh #f3a894;}
+.sg-chip.s2.on{background:#fff7e8;color:#a2610c;box-shadow:inset 0 0 0 .24vh #f0c67e;}
+.sg-chip.s3.on{background:#eefaf3;color:#1d7a52;box-shadow:inset 0 0 0 .24vh #86d3ac;}
+.sg-chip.s4.on{background:#eef6ff;color:#1f6aa3;box-shadow:inset 0 0 0 .24vh #8dc0e8;}
+.sg-chip.s5.on{background:#f4f0ff;color:#5a41a6;box-shadow:inset 0 0 0 .24vh #bda9ee;}
+.sg-chip.un.on{background:#eef1f6;color:#48566a;box-shadow:inset 0 0 0 .24vh #a9b8cc;}
+.sg-prog{display:flex;align-items:center;gap:1vh;flex:0 0 auto;}
+.sg-prog b{font-size:1.45vh;color:#4a3a34;font-weight:900;white-space:nowrap;}
+.sg-bar{flex:1 1 auto;min-width:6vh;height:1.2vh;border-radius:999px;background:#ede4e1;overflow:hidden;
+  box-shadow:inset 0 0 0 .12vh #e0d4d0;}
+.sg-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#f0a25c,#e2584d);}
+.sg-prog span{font-size:1.35vh;font-weight:900;color:#a8552f;white-space:nowrap;}
+.sg-stage{display:flex;flex-direction:column;gap:.6vh;flex:0 0 auto;}
+.sg-shd{display:flex;align-items:center;gap:.6vh;flex-wrap:wrap;padding:.1vh 0 .2vh;}
+.sg-shd b{font-size:1.6vh;font-weight:900;color:#3a2a24;}
+.sg-shd .sg-sn{margin-left:auto;font-size:1.25vh;font-weight:900;color:#a89a94;}
+.sg-pill{display:inline-flex;align-items:center;padding:.18vh .7vh;border-radius:999px;
+  font-size:1.12vh;font-weight:900;font-style:normal;white-space:nowrap;flex:0 0 auto;}
+.sg-pill.s1{background:#ffece8;color:#c1442f;}
+.sg-pill.s2{background:#fff3dd;color:#a2610c;}
+.sg-pill.s3{background:#e9f9f0;color:#1d7a52;}
+.sg-pill.s4{background:#e8f3ff;color:#1f6aa3;}
+.sg-pill.s5{background:#f1ecff;color:#5a41a6;}
+.sg-rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(54vh,1fr));gap:.7vh;align-content:start;}
+.sg-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.9vh;
+  padding:.75vh 1vh;border-radius:1.2vh;background:#fff;cursor:pointer;
+  box-shadow:inset 0 0 0 .16vh #edf1f5,0 .25vh .7vh rgba(90,120,150,.10);}
+.sg-row.read{background:#f5fdf8;box-shadow:inset 0 0 0 .2vh #bfe9cf,0 .25vh .7vh rgba(60,140,100,.12);}
+.sg-no{display:flex;align-items:center;justify-content:center;width:4.2vh;height:4.2vh;border-radius:50%;
+  background:linear-gradient(135deg,#fbe3d8,#f6c9b6);color:#a8442b;font-size:1.32vh;font-weight:900;flex:0 0 auto;}
+.sg-row.read .sg-no{background:linear-gradient(135deg,#d7f3e1,#b2e7c6);color:#1f7a4d;}
+.sg-tx{min-width:0;display:flex;flex-direction:column;gap:.2vh;}
+.sg-tx .sg-bt{font-size:1.38vh;font-weight:900;color:#2f3d4d;line-height:1.22;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sg-row.read .sg-tx .sg-bt{color:#1f6b47;}
+.sg-tx .sg-h{display:flex;align-items:center;gap:.5vh;min-width:0;
+  font-size:1.12vh;font-weight:800;color:#95a3b1;line-height:1.2;}
+.sg-tx .sg-h i{font-style:normal;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sg-ck{flex:0 0 auto;border-radius:999px;padding:.82vh 1.5vh;font-size:1.3vh;font-weight:900;white-space:nowrap;
+  background:#eff4fa;color:#7d92a4;box-shadow:inset 0 0 0 .18vh #dce7f1;}
+.sg-ck.on{background:linear-gradient(135deg,#39b978,#2aa267);color:#fff;box-shadow:0 .25vh .6vh rgba(40,150,100,.3);}
+.sg-row:active{transform:scale(.995);}
+@media (max-width:700px){.sg-rows{grid-template-columns:1fr;}}
+body.mob .sg-head{padding:2.2vw 2.8vw;border-radius:2.8vw;gap:2.2vw;}
+body.mob .sg-head .sg-em{font-size:6.4vw;}
+body.mob .sg-head .sg-hi b{font-size:4vw;}
+body.mob .sg-head .sg-hi span{font-size:2.7vw;}
+body.mob .sg-chip{font-size:2.6vw;padding:1.3vw 2.2vw;}
+body.mob .sg-chip b{font-size:2.2vw;}
+body.mob .sg-prog b{font-size:3vw;}
+body.mob .sg-prog span{font-size:2.8vw;}
+body.mob .sg-bar{height:2.4vw;min-width:12vw;}
+body.mob .sg-rows{grid-template-columns:1fr;}
+body.mob .sg-shd b{font-size:3.5vw;}
+body.mob .sg-shd .sg-sn{font-size:2.7vw;}
+body.mob .sg-pill{font-size:2.2vw;padding:.5vw 1.4vw;}
+body.mob .sg-row{padding:1.5vw 2vw;gap:2vw;border-radius:2.6vw;
+  box-shadow:inset 0 0 0 .35vw #edf1f5,0 .5vw 1.4vw rgba(90,120,150,.10);}
+body.mob .sg-row.read{box-shadow:inset 0 0 0 .45vw #bfe9cf,0 .5vw 1.4vw rgba(60,140,100,.12);}
+body.mob .sg-no{width:8.6vw;height:8.6vw;font-size:2.8vw;}
+body.mob .sg-tx .sg-bt{font-size:3.3vw;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;line-height:1.2;}
+body.mob .sg-tx .sg-h{font-size:2.7vw;gap:1.2vw;}
+body.mob .sg-ck{font-size:2.9vw;padding:1.9vw 3vw;}
+
 
 /* 휴대폰 */
 body.mob .rb-shelf{grid-template-columns:repeat(auto-fill,minmax(26vw,1fr));gap:1.5vw;}
@@ -16713,6 +16790,7 @@ function setLesson(n, quiet){
   var s = curriStore(), before = s.day;
   s.day = normDay(n);
   writeJSON(CURRI_KEY, s);
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
   if (C.phase !== "live" && C.phase !== "ringing") { try { rebuildScript(); } catch(e){} }
   paintCurri();
   if (s.day !== before && !quiet) { try { SB.toast("📚 Day " + s.day + " · " + lesson().nm + (C.phase === "live" ? " (다음 통화부터)" : "")); } catch(e){} }
@@ -16727,6 +16805,7 @@ function curriDone(turns){
   s.day = normDay(d + 1);
   s.calls = (s.calls || 0) + 1;
   writeJSON(CURRI_KEY, s);
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
   return true;
 }
 function paintCurri(){
@@ -21981,7 +22060,9 @@ var K = {
   coupons: "haeyuli.coupons.v1",
   rbRead: "haeyuli.redpen.read.v1", rbToday: "haeyuli.redpen.today.v1",
   rbUn: "haeyuli.redpen.unread.v1", rbLog: "study.readlog.v1",
-  mathset: "haeyuli.mathset.v1"
+  mathset: "haeyuli.mathset.v1",
+  sg: "haeyuli.samgukji.read.v1", sgu: "haeyuli.samgukji.unread.v1",
+  curri: "haeyuli.call.curri.v1"
 };
 /* 🔔 ntfy 알림 설정도 같은 가족 코드 문서로 오간다 */
 var NTK = { topic: "study.ntfy.topic.v1", on: "study.ntfy.enabled.v1", at: "study.ntfy.at.v1" };
@@ -22048,13 +22129,16 @@ function snap(){
       today: (rbT && rbT.d && rbT.k) ? rbT : null,
       un: read(K.rbUn, {}),
       log: { days: (rbL && rbL.days && typeof rbL.days === "object") ? rbL.days : {} }
-    }
+    },
+    sg: read(K.sg, {}),
+    sgu: read(K.sgu, {}),
+    curri: read(K.curri, null)
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, curri:d.curri });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.curri]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -22065,6 +22149,42 @@ function mergeMathset(l, c){
   var out = { calc: String(pick.calc || l.calc || c.calc || "D1"), count: (String(pick.count) === "2" ? 2 : 1), at: Math.max(la, ca, 1) };
   if (!out.calc) out.calc = "D1";
   return out;
+}
+
+/* ⚔️ 삼국지 읽은 책 — 읽음(타임스탬프)은 합치고, '읽었어요 풀기' 표시(un)가 더 최근이면 다시 안 읽은 책으로 */
+function canonObj(o){
+  var out = {}, ks = Object.keys(o || {}).sort();
+  for (var i = 0; i < ks.length; i++) out[ks[i]] = o[ks[i]];
+  return out;
+}
+function mergeSg(lr, cr, lu, cu){
+  lr = (lr && typeof lr === "object" && !Array.isArray(lr)) ? lr : {};
+  cr = (cr && typeof cr === "object" && !Array.isArray(cr)) ? cr : {};
+  lu = (lu && typeof lu === "object" && !Array.isArray(lu)) ? lu : {};
+  cu = (cu && typeof cu === "object" && !Array.isArray(cu)) ? cu : {};
+  var read = {}, un = {}, k, v;
+  for (k in cr){ v = num(cr[k]); if (v > 0) read[k] = v; }
+  for (k in lr){ v = num(lr[k]); if (v > 0 && (!read[k] || v > read[k])) read[k] = v; }
+  for (k in cu){ v = num(cu[k]); if (v > 0 && (!un[k] || v > un[k])) un[k] = v; }
+  for (k in lu){ v = num(lu[k]); if (v > 0 && (!un[k] || v > un[k])) un[k] = v; }
+  for (k in un) if (read[k] && un[k] >= read[k]) delete read[k];
+  for (k in read) if (un[k] && read[k] > un[k]) delete un[k];
+  return { read: canonObj(read), un: canonObj(un) };
+}
+/* 📞 엠마쌤 전화영어 진도 — 통화를 많이 한 쪽의 Day를 쓰고(진도가 뒤로 가지 않게), 완료 날짜는 합친다 */
+function mergeCurri(l, c){
+  var l2 = (l && typeof l === "object" && !Array.isArray(l)) ? l : null;
+  var c2 = (c && typeof c === "object" && !Array.isArray(c)) ? c : null;
+  if (!l2 && !c2) return null;
+  var dl = (l2 && l2.done && typeof l2.done === "object" && !Array.isArray(l2.done)) ? l2.done : {};
+  var dc = (c2 && c2.done && typeof c2.done === "object" && !Array.isArray(c2.done)) ? c2.done : {};
+  var done = {}, k;
+  for (k in dc) if (num(dc[k]) > 0) done[k] = num(dc[k]);
+  for (k in dl) if (num(dl[k]) > (done[k] || 0)) done[k] = num(dl[k]);
+  var lc = num(l2 && l2.calls), cc = num(c2 && c2.calls);
+  var ld = Math.max(1, num(l2 && l2.day) || 1), cd = Math.max(1, num(c2 && c2.day) || 1);
+  var day = (lc > cc) ? ld : (cc > lc) ? cd : Math.max(ld, cd);
+  return { day: day, done: canonObj(done), calls: Math.max(lc, cc) };
 }
 
 /* ---------------- 클라우드 ---------------- */
@@ -22363,6 +22483,7 @@ function mergeWg(l, c){
 
 function buildDoc(local, cloud, base, code){
   var c = cloud || {};
+  var sgM = mergeSg(local.sg, c.sg, local.sgu, c.sgu);
   return {
     v: 1,
     code: code,
@@ -22376,13 +22497,15 @@ function buildDoc(local, cloud, base, code){
     mathset: mergeMathset(local.mathset, c.mathset),
     wg: mergeWg(local.wg, c.wg),
     ntfy: mergeNtfy(local.ntfy, c.ntfy),
+    sg: sgM.read, sgu: sgM.un,
+    curri: mergeCurri(local.curri, c.curri),
     at: Date.now()
   };
 }
 
 /* ---------------- 적용 ---------------- */
 function applyDoc(doc){
-  var s = snap(), changed = false, rbChanged = false, mathChanged = false;
+  var s = snap(), changed = false, rbChanged = false, mathChanged = false, sgChanged = false, curriChanged = false;
   if (JSON.stringify(doc.plan) !== JSON.stringify(s.plan)) { write(K.plan, doc.plan); changed = true; }
   if (JSON.stringify(doc.hw) !== JSON.stringify(s.hw)) { write(K.hw, doc.hw); changed = true; }
   if (JSON.stringify(doc.money) !== JSON.stringify(s.money)) { write(K.money, doc.money); changed = true; }
@@ -22413,6 +22536,17 @@ function applyDoc(doc){
     if (dl && JSON.stringify(dl) !== JSON.stringify((cur.log && cur.log.days) || {})) { write(K.rbLog, { v:1, days:dl }); rbChanged = true; }
     if (rbChanged) changed = true;
   }
+  /* ⚔️ 삼국지 읽은 책 — 다른 기기에서 체크한 책을 이 기기에도 (푼 책은 다시 안 읽은 책으로) */
+  var sgM2 = mergeSg(s.sg, doc.sg, s.sgu, doc.sgu);
+  if (JSON.stringify(sgM2.read) !== JSON.stringify(s.sg || {}) || JSON.stringify(sgM2.un) !== JSON.stringify(s.sgu || {})){
+    write(K.sg, sgM2.read); write(K.sgu, sgM2.un);
+    changed = true; sgChanged = true;
+  }
+  /* 📞 엠마쌤 전화영어 진도(Day) — 다른 기기에서 한 통화만큼 같이 넘어간다 */
+  var ccur = s.curri, cnew = mergeCurri(ccur, doc.curri);
+  if (cnew && JSON.stringify(cnew) !== JSON.stringify(ccur)){
+    write(K.curri, cnew); changed = true; curriChanged = true;
+  }
   /* 🔔 ntfy 알림 설정 — 다른 기기에서 만든 토픽·켜짐 상태를 이 기기에도 반영 */
   if (doc.ntfy && typeof doc.ntfy === "object"){
     var ncur = ntRead(), nnew = mergeNtfy(ncur, doc.ntfy);
@@ -22423,6 +22557,8 @@ function applyDoc(doc){
       if (nnew.topic && nnew.topic !== ncur.topic) toast("🔔 가족 코드로 알림 토픽을 맞췄어요");
     }
   }
+  if (sgChanged) { try { if (window.SB && SB.sg && SB.sg.reload) SB.sg.reload(); } catch(e){} }
+  if (curriChanged) { try { if (window.SB && SB.call && SB.call.paintCurri) SB.call.paintCurri(); } catch(e){} }
   if (changed) rerender(rbChanged);
   if (mathChanged) { try { if (SB.mathSetChanged) SB.mathSetChanged(); } catch(e){} }
   return changed;
@@ -22520,7 +22656,7 @@ function createCode(){
   saveFam({ code:code, base:num(s.money.piggy), lastSync:0, sig:"", lastError:"", at:Date.now() });
   paint();
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
-  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, at:Date.now() })
+  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, curri:s.curri, at:Date.now() })
     .then(function(){
       var g = fam();
       g.base = num(s.money.piggy); g.lastSync = Date.now(); g.sig = sigOf(s); g.lastError = "";
@@ -27092,7 +27228,8 @@ function buildTabs(){
     '<button class="rb-tab on" type="button" data-rbtab="tree" role="tab" aria-pressed="true">🌳 북트리</button>' +
     '<button class="rb-tab" type="button" data-rbtab="shelf" role="tab" aria-pressed="false">📚 우리 집 빨간펜 책장<span class="rb-tab-n" id="rbTabN"></span></button>' +
     '<button class="rb-tab" type="button" data-rbtab="engbook" role="tab" aria-pressed="false">📖 영어책 읽어주기</button>' +
-    '<button class="rb-tab" type="button" data-rbtab="korbook" role="tab" aria-pressed="false">📕 한글책 읽어주기</button>';
+    '<button class="rb-tab" type="button" data-rbtab="korbook" role="tab" aria-pressed="false">📕 한글책 읽어주기</button>' +
+    '<button class="rb-tab" type="button" data-rbtab="samguk" role="tab" aria-pressed="false">⚔️ 삼국지<span class="rb-tab-n" id="sgTabN"></span></button>';
   return box;
 }
 
@@ -27240,6 +27377,11 @@ function buildBookView(){
       '</div>' +
     '</div>';
   view.appendChild(ewrap);
+  /* ⚔️ 삼국지 — 46권 읽은 책 체크 */
+  var gw = document.createElement("div");
+  gw.className = "rb-act rb-hide sg-wrap"; gw.id = "rbSgWrap";
+  gw.setAttribute("aria-label", "⚔️ 삼국지 — 프뢰벨 리딩토탈 딥스터디 46권");
+  view.appendChild(gw);
   paintShelves();
   applyMode();
 }
@@ -27345,6 +27487,8 @@ function applyMode(){
   if (kw) kw.classList.toggle("rb-hide", MODE !== "korbook");
   var ew = $("rbEngWrap");
   if (ew) ew.classList.toggle("rb-hide", MODE !== "engbook");
+  var gw = $("rbSgWrap");
+  if (gw) gw.classList.toggle("rb-hide", MODE !== "samguk");
   var tabs = document.querySelectorAll("#rbTabs .rb-tab");
   for (var j = 0; j < tabs.length; j++){
     var on = tabs[j].getAttribute("data-rbtab") === (MODE === "act" ? "shelf" : MODE);
@@ -27366,6 +27510,7 @@ RB.reload = function(){
     quiz = rd(K.quiz, {}) || {};
     paintAll();
     refreshCounters();
+    try { sgReload(); } catch(e){}
   } catch(e){}
 };
 
@@ -27508,6 +27653,182 @@ function saveCanvas(){
   RB.sync();
 }
 
+
+/* ---------- 6.5 ⚔️ 삼국지 — 프뢰벨 리딩토탈 딥스터디 46권 (책 탭 하위 탭) ---------- */
+/* 표지 이미지가 없어서 권 번호·단계·제목·한 줄 힌트로 카드를 만든다.
+   체크는 haeyuli.samgukji.read.v1 에 저장하고, 새로 체크한 책만 ⭐ +2 (SB.earn 이 중복 적립을 막는다). */
+var SGKEY = "haeyuli.samgukji.read.v1";
+var SGUNK = "haeyuli.samgukji.unread.v1";
+var SGST = [
+  { k:1, nm:"영웅들의 만남과 시작" },
+  { k:2, nm:"제갈량 등장과 적벽대전" },
+  { k:3, nm:"서촉 입성과 세 나라 대결" },
+  { k:4, nm:"제갈량의 남만 정벌과 북벌" },
+  { k:5, nm:"마지막과 통일" }
+];
+var SGBK = [
+  [1,1,"함께 뜻을 모은 영웅들","도원결의 · 유비·관우·장비가 의형제가 돼요"],
+  [2,1,"군사들과 힘을 모은 조조","조조가 군사들과 마음을 모아요"],
+  [3,1,"장비를 용서한 유비","잘못한 장비를 너그럽게 감싸요"],
+  [4,1,"태사자를 굳게 믿은 손책","손책이 태사자를 끝까지 믿어요"],
+  [5,1,"용서하는 유비, 믿어 주는 손책 1","한 번 더 기회를 주는 마음"],
+  [6,1,"용서하는 유비, 믿어 주는 손책 2","두 번째에도 믿음은 그대로"],
+  [7,1,"목표를 위해 노력하는 유비, 협력하는 조조 1","같은 목표, 다른 방법"],
+  [8,1,"목표를 위해 노력하는 유비, 협력하는 조조 2","노력과 협력이 만나요"],
+  [9,1,"조심스럽게 행동한 유비","서두르지 않고 살펴요"],
+  [10,1,"의리를 지킨 관우","관우가 끝까지 의리를 지켜요"],
+  [11,2,"서로 믿고 아낀 유비와 서서","서서를 아끼고 믿은 유비"],
+  [12,2,"세 번 찾아간 유비","삼고초려 · 세 번 찾아가 마음을 얻어요"],
+  [13,2,"겸손하고 배려하는 유비, 체계적인 제갈량 1","겸손과 배려의 힘"],
+  [14,2,"겸손하고 배려하는 유비, 체계적인 제갈량 2","계획을 세우는 제갈량"],
+  [15,2,"작전을 잘 세운 제갈량","지혜로 이기는 싸움"],
+  [16,2,"백성들을 아낀 유비","사람을 먼저 생각해요"],
+  [17,2,"유비의 가족을 구한 조운","장판파 · 조운이 가족을 구해요"],
+  [18,2,"큰 승리를 거둔 장비","용감하게 이겨 낸 장비"],
+  [19,2,"신중한 유비, 신의 있는 관우 1","신중함과 신의"],
+  [20,2,"신중한 유비, 신의 있는 관우 2","두 번째 약속도 지켜요"],
+  [21,2,"스스로 나서 매를 맞은 황개","적벽대전 · 황개의 꾀와 용기"],
+  [22,2,"자신의 실력을 믿은 방통","자기 힘을 믿어요"],
+  [23,3,"은혜를 갚은 황충","받은 은혜는 꼭 갚아요"],
+  [24,3,"은혜 갚은 황충, 통찰력 있는 제갈량 1","은혜와 통찰력"],
+  [25,3,"은혜 갚은 황충, 통찰력 있는 제갈량 2","한 수 앞을 읽어요"],
+  [26,3,"엄안을 존중한 장비","적이라도 존중해요"],
+  [27,3,"마음을 헤아린 제갈량","마음을 읽는 지혜"],
+  [28,3,"목숨을 건 결단을 내린 관우","큰 결단을 내려요"],
+  [29,3,"끝까지 맞서 싸운 방덕","굽히지 않는 마음"],
+  [30,3,"의지 단단한 방덕, 설득하는 등지 1","단단한 의지"],
+  [31,3,"의지 단단한 방덕, 설득하는 등지 2","등지의 설득"],
+  [32,3,"이기는 방법을 경청한 여몽","귀를 기울이면 이겨요"],
+  [33,3,"육손에게 군사들을 맡긴 손권","이릉대전 · 믿고 맡기는 힘"],
+  [34,4,"손권을 설득한 등지","설득의 힘"],
+  [35,4,"맹획을 일곱 번 놓아준 제갈량","칠종칠금 · 일곱 번 놓아줘요"],
+  [36,4,"눈물로 마속을 벌한 제갈량","읍참마속 · 규칙은 지켜야 해요"],
+  [37,4,"나무로 소와 말을 만든 제갈량","목우유마 · 나무 소와 말"],
+  [38,4,"혼자 십만 대군을 막아낸 제갈량","공성계 · 빈 성으로 막아요"],
+  [39,4,"창의적인 제갈량, 적극적인 호거 1","기발한 생각"],
+  [40,4,"창의적인 제갈량, 적극적인 호거 2","먼저 나서는 용기"],
+  [41,4,"조조·장비·황충 편 1","장비, 열정적인 황충"],
+  [42,4,"조조·장비·황충 편 2","열정과 용기"],
+  [43,5,"배신하는 위연, 도전하는 강유 1","새로운 도전"],
+  [44,5,"배신하는 위연, 도전하는 강유 2","두 번째 도전"],
+  [45,5,"끊임없이 위나라에 맞선 강유","끝까지 포기하지 않아요"],
+  [46,5,"오나라를 무너뜨린 두예","삼국 통일"]
+];
+var sgRead = rd(SGKEY, {}) || {};
+var sgUn = rd(SGUNK, {}) || {};
+var sgF = "", sgUnOnly = false;
+(function(){                                  /* 다른 기기에서 푼 책은 다시 읽지 않은 책으로 */
+  for (var k in sgUn){
+    if (!sgUn[k]) continue;
+    if (!sgRead[k] || Number(sgUn[k]) >= Number(sgRead[k])) delete sgRead[k];
+  }
+})();
+function sgIsRead(n){ return !!sgRead[String(n)]; }
+function sgStageAll(k){ var n = 0; for (var i = 0; i < SGBK.length; i++) if (SGBK[i][1] === k) n++; return n; }
+function sgStageDone(k){ var n = 0; for (var i = 0; i < SGBK.length; i++) if (SGBK[i][1] === k && sgIsRead(SGBK[i][0])) n++; return n; }
+function sgDoneAll(){ var n = 0; for (var i = 0; i < SGBK.length; i++) if (sgIsRead(SGBK[i][0])) n++; return n; }
+function sgRowHTML(b){
+  var n = b[0], st = b[1], on = sgIsRead(n);
+  return '<div class="sg-row' + (on ? " read" : "") + '" data-sgrow="' + n + '">' +
+    '<span class="sg-no">' + pad2(n) + '</span>' +
+    '<span class="sg-tx"><b class="sg-bt">' + esc(b[2]) + '</b>' +
+      '<span class="sg-h"><i>' + esc(b[3]) + '</i>' +
+      '<em class="sg-pill s' + st + '">' + st + '단계</em></span></span>' +
+    '<button class="sg-ck' + (on ? " on" : "") + '" type="button" data-sgtoggle="' + n + '"' +
+      ' aria-pressed="' + (on ? "true" : "false") + '">' + (on ? "✅ 완독" : "읽었어요") + '</button>' +
+  '</div>';
+}
+function sgHTML(){
+  var total = SGBK.length, done = sgDoneAll(), i;
+  var chips = '<button class="sg-chip' + (sgF === "" && !sgUnOnly ? " on" : "") + '" type="button" data-sgchip="all">전체 <b>' + done + "/" + total + '</b></button>';
+  for (i = 0; i < SGST.length; i++){
+    var s = SGST[i];
+    chips += '<button class="sg-chip s' + s.k + (sgF === String(s.k) ? " on" : "") + '" type="button" data-sgchip="' + s.k + '">' +
+      s.k + '단계 <b>' + sgStageDone(s.k) + "/" + sgStageAll(s.k) + '</b></button>';
+  }
+  chips += '<button class="sg-chip un' + (sgUnOnly ? " on" : "") + '" type="button" data-sgchip="un">안 읽은 책만</button>';
+  var prog = '<div class="sg-prog"><b>읽은 책</b><div class="sg-bar"><i style="width:' +
+    Math.round(done / total * 100) + '%"></i></div><span>' + done + ' / ' + total + '권</span></div>';
+  var out = "";
+  for (i = 0; i < SGST.length; i++){
+    var st = SGST[i];
+    if (sgF !== "" && String(st.k) !== sgF) continue;
+    var rows = "";
+    for (var j = 0; j < SGBK.length; j++){
+      var b = SGBK[j];
+      if (b[1] !== st.k) continue;
+      if (sgUnOnly && sgIsRead(b[0])) continue;
+      rows += sgRowHTML(b);
+    }
+    if (!rows && sgF === "") continue;
+    out += '<section class="sg-stage"><div class="sg-shd"><em class="sg-pill s' + st.k + '">' + st.k + '단계</em>' +
+      '<b>' + esc(st.nm) + '</b><span class="sg-sn">' + sgStageDone(st.k) + ' / ' + sgStageAll(st.k) + '권</span></div>' +
+      '<div class="sg-rows">' + (rows || '<div class="rb-empty">이 단계 책은 모두 읽었어요 🎉</div>') + '</div></section>';
+  }
+  if (!out) out = '<div class="rb-empty">' + (sgDoneAll() === total ? "46권을 모두 읽었어요! 정말 대단해 🎉" : "읽을 책이 남아 있지 않아요") + '</div>';
+  return '<div class="sg-head"><span class="sg-em" aria-hidden="true">⚔️</span>' +
+      '<span class="sg-hi"><b>프뢰벨 삼국지</b><span>리딩토탈 딥스터디 · 전 46권 · 읽은 책을 체크해요</span></span></div>' +
+    '<div class="sg-chips">' + chips + '</div>' + prog + out;
+}
+function sgPaint(force){
+  var w = $("rbSgWrap"); if (!w) return;
+  if (!force && w.getAttribute("data-built") === "1"){ sgTabN(); return; }
+  w.innerHTML = sgHTML();
+  w.setAttribute("data-built", "1");
+  sgTabN();
+}
+function sgTabN(){
+  var el = $("sgTabN");
+  if (el) el.textContent = sgDoneAll() + "/" + SGBK.length;
+}
+function sgReload(){
+  sgRead = rd(SGKEY, {}) || {};
+  sgUn = rd(SGUNK, {}) || {};
+  for (var k in sgUn){
+    if (!sgUn[k]) continue;
+    if (!sgRead[k] || Number(sgUn[k]) >= Number(sgRead[k])) delete sgRead[k];
+  }
+  sgPaint(true);
+}
+function sgToggle(n){
+  var key = String(n), b = null, i;
+  for (i = 0; i < SGBK.length; i++) if (String(SGBK[i][0]) === key) b = SGBK[i];
+  if (!b) return;
+  if (sgRead[key]){
+    delete sgRead[key];
+    sgUn[key] = Date.now();
+    wr(SGUNK, sgUn);
+    if (SB.toast) SB.toast("⚔️ " + b[2] + " — 읽었어요 표시를 풀었어요");
+  } else {
+    sgRead[key] = Date.now();
+    if (sgUn[key]) { delete sgUn[key]; wr(SGUNK, sgUn); }
+    var got = 0;
+    try { got = (SB.earn) ? SB.earn("sg|read|" + key, 2) : 0; } catch(e){ got = 0; }
+    if (got && SB.starFX) SB.starFX(got, "⚔️ " + b[2] + " 완독!");
+    else if (SB.toast) SB.toast("⚔️ " + b[2] + " — ✅ 완독으로 표시했어요");
+  }
+  wr(SGKEY, sgRead);
+  touchFam();                                  /* 가족 코드로 다른 기기에도 바로 */
+  sgPaint(true);
+}
+SB.sg = { render: sgPaint, reload: sgReload, toggle: sgToggle, count: sgDoneAll, books: SGBK };
+document.addEventListener("click", function(e){
+  var el = e.target; if (!el || !el.closest) return;
+  var ck = el.closest("[data-sgtoggle]");
+  if (ck){ sgToggle(ck.getAttribute("data-sgtoggle")); return; }
+  var ch = el.closest("[data-sgchip]");
+  if (ch){
+    var v = ch.getAttribute("data-sgchip");
+    if (v === "all"){ sgF = ""; sgUnOnly = false; }
+    else if (v === "un"){ sgUnOnly = !sgUnOnly; }
+    else { sgF = (sgF === String(v)) ? "" : String(v); }
+    sgPaint(true);
+    return;
+  }
+  var rw = el.closest("[data-sgrow]");
+  if (rw){ sgToggle(rw.getAttribute("data-sgrow")); return; }
+});
+
 /* ---------- 7. 이벤트 ---------- */
 document.addEventListener("click", function(e){
   var el = e.target; if (!el || !el.closest) return;
@@ -27515,11 +27836,12 @@ document.addEventListener("click", function(e){
   var tab = el.closest("[data-rbtab]");
   if (tab){
     var m = tab.getAttribute("data-rbtab");
-    MODE = (m === "shelf" || m === "korbook" || m === "engbook") ? m : "tree";
+    MODE = (m === "shelf" || m === "korbook" || m === "engbook" || m === "samguk") ? m : "tree";
     applyMode();
     if (MODE === "shelf") paintShelves();
     if (MODE === "korbook" && SB.videoHub && SB.videoHub.renderKB) SB.videoHub.renderKB();
     if (MODE === "engbook" && SB.videoHub && SB.videoHub.renderEB) SB.videoHub.renderEB();
+    if (MODE === "samguk" && SB.sg && SB.sg.render) SB.sg.render(true);
     return;
   }
   var chip = el.closest("[data-rbchip]");
