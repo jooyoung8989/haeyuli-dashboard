@@ -36436,8 +36436,7 @@ function paintCats(){
   if (ST.mode !== "cards"){ box.hidden = true; box.innerHTML = ""; return; }
   box.hidden = false;
   box.innerHTML = CATS.map(function(c, i){
-    return '<button class="cn-cat' + (i === ST.cat ? " on" : "") + '" type="button" data-cncat="' + i + '">' +
-      c.em + " " + esc(c.nm) + '</button>';
+    return '<button class="cn-cat' + (i === ST.cat ? " on" : "") + '" type="button" data-cncat="' + i + '">' + esc(c.nm) + '</button>';
   }).join("");
 }
 function paintCards(){
@@ -38088,8 +38087,7 @@ function paintCats(){
   if (ST.mode !== "cards"){ box.hidden = true; box.innerHTML = ""; return; }
   box.hidden = false;
   box.innerHTML = CATS.map(function(c, i){
-    return '<button class="cn-cat' + (i === ST.cat ? " on" : "") + '" type="button" data-jpcat="' + i + '">' +
-      c.em + " " + esc(c.nm) + '</button>';
+    return '<button class="cn-cat' + (i === ST.cat ? " on" : "") + '" type="button" data-jpcat="' + i + '">' + esc(c.nm) + '</button>';
   }).join("");
 }
 function paintCards(){
