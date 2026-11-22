@@ -16990,22 +16990,27 @@ function todayRec(){
    3-a. 🔊 한국말 → 영어로 이어 말하기 (선생님이 설명하고, 그다음 영어 문장)
      · 아이패드 사파리에서도 끊기지 않게: 한국어가 끝날 때까지 기다렸다가 영어를 말한다
    --------------------------------------------------------------------- */
-var pairTimer = null, pairDeadline = 0;
+var pairTimer = null;
 function speakPair(koSay, en){
   var ko = String(koSay || "").trim(), eng = String(en || "").trim();
   if (!ko){ try { SB.speak(eng, C.slow); } catch(e){} return; }
   try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){}
   try { SB.speak(ko, null, "ko-KR"); } catch(e){}
   if (!eng) return;
-  pairDeadline = Date.now() + 9000;
+  var t0 = Date.now(), sawBusy = false;
   clearTimeout(pairTimer);
-  pairTimer = setTimeout(function(){ finishPair(eng); }, Math.min(9000, 650 + ko.length * 112));
-}
-function finishPair(en){
-  var busy = false;
-  try { busy = !!(window.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)); } catch(e){}
-  if (busy && Date.now() < pairDeadline){ clearTimeout(pairTimer); pairTimer = setTimeout(function(){ finishPair(en); }, 320); return; }
-  try { SB.speak(en, C.slow); } catch(e){}
+  /* 한국어가 끝나기를 기다렸다가 영어를 말한다 — 한국어를 중간에 끊지 않는다 */
+  pairTimer = setTimeout(function poll(){
+    var busy = false;
+    try { busy = !!(window.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)); } catch(e){}
+    var el = Date.now() - t0;
+    if (busy){
+      sawBusy = true;
+      if (el < 25000){ pairTimer = setTimeout(poll, 220); return; }
+    }
+    if (!sawBusy && el < 1300){ pairTimer = setTimeout(poll, 200); return; }   /* 목소리가 곧 시작될 수 있어요 */
+    try { SB.speak(eng, C.slow); } catch(e){}
+  }, 240);
 }
 
 /* ---------------------------------------------------------------------
