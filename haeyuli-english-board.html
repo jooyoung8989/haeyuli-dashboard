@@ -7030,11 +7030,21 @@ body.mob .rb-campill{width:6.4vw;height:6.4vw;font-size:3.1vw;}
           <div class="hub2-prog" id="hubProg">오늘 완료 0 / 5과목</div>
         </div>
         <div class="hub2-grid" id="hubGrid"></div>
+        <div class="cn-entries">
         <div class="cn-entry" id="cnEntry">
           <span class="em" aria-hidden="true">🐼</span>
-          <div class="tx"><b>중국어 (도요새 중국어)</b><span>단어 카드 · 하루 일상대화 따라 말하기 · 녹음하면 ⭐ +1</span></div>
+          <div class="tx"><b>중국어 (도요새 중국어)</b><span>단어 카드 · 일상대화 · 메이쌤 음성퀴즈 · 녹음하면 ⭐ +1</span></div>
           <button class="go" type="button" data-cnopen="cards">단어 카드</button>
           <button class="go" type="button" data-cnopen="talk">일상대화</button>
+          <button class="go" type="button" data-cnopen="quiz">📞 음성퀴즈</button>
+        </div>
+        <div class="cn-entry" id="jpEntry">
+          <span class="em" aria-hidden="true">🗾</span>
+          <div class="tx"><b>일본어 (해율이 일본어)</b><span>단어 카드 · 일상대화 · 유미쌤 음성퀴즈 · 녹음하면 ⭐ +1</span></div>
+          <button class="go" type="button" data-jpopen="cards">단어 카드</button>
+          <button class="go" type="button" data-jpopen="talk">일상대화</button>
+          <button class="go" type="button" data-jpopen="quiz">📞 음성퀴즈</button>
+        </div>
         </div>
         <p class="hub2-note">한 과목에 3개씩! 다 하면 200원!!!! 열심히 모아 봐요!</p>
         <!-- ===== 🔬 재미있는 과학 영상관 (5과목 카드 아래) ===== -->
@@ -7072,10 +7082,28 @@ body.mob .rb-campill{width:6.4vw;height:6.4vw;font-size:3.1vw;}
           <div class="cn-modes" id="cnModes" role="tablist" aria-label="중국어 학습 모드">
             <button class="cn-mode on" type="button" data-cnmode="cards" role="tab" aria-pressed="true">🗂️ 단어 카드</button>
             <button class="cn-mode" type="button" data-cnmode="talk" role="tab" aria-pressed="false">💬 일상대화</button>
+            <button class="cn-mode" type="button" data-cnmode="quiz" role="tab" aria-pressed="false">📞 메이쌤 음성퀴즈</button>
           </div>
         </div>
         <div class="cn-cats" id="cnCats" role="group" aria-label="중국어 낱말 갈래"></div>
         <div class="cn-body" id="cnBody"></div>
+      </div>
+    </section>
+
+    <!-- ================= 🗾 일본어 (해율이 일본어) ================= -->
+    <section class="view cnview" id="viewJp" data-view="jp" hidden>
+      <div class="cn-wrap">
+        <div class="cn-hd">
+          <b>🗾 일본어 — 해율이 일본어</b>
+          <span>단어 카드 · 듣고 따라 말하기</span>
+          <div class="cn-modes" id="jpModes" role="tablist" aria-label="일본어 학습 모드">
+            <button class="cn-mode on" type="button" data-jpmode="cards" role="tab" aria-pressed="true">🗂️ 단어 카드</button>
+            <button class="cn-mode" type="button" data-jpmode="talk" role="tab" aria-pressed="false">💬 일상대화</button>
+            <button class="cn-mode" type="button" data-jpmode="quiz" role="tab" aria-pressed="false">📞 유미쌤 음성퀴즈</button>
+          </div>
+        </div>
+        <div class="cn-cats" id="jpCats" role="group" aria-label="일본어 낱말 갈래"></div>
+        <div class="cn-body" id="jpBody"></div>
       </div>
     </section>
 
@@ -9267,6 +9295,7 @@ function writeDash(st, led){
   try {
     localStorage.setItem(DASH_STARS, JSON.stringify(st));
     localStorage.setItem(DASH_LEDGER, JSON.stringify(led));
+    try { if ((Number(st.total) || 0) > 0) localStorage.setItem("yuli.stars.bak.v1", JSON.stringify({ total:Number(st.total) || 0, at:Date.now() })); } catch(e){}
     return true;
   } catch(e){ return false; }
 }
@@ -10676,8 +10705,12 @@ function readDash(){
   return { st:st, led:led };
 }
 function writeDash(st, led){
-  try { localStorage.setItem(DS, JSON.stringify(st)); localStorage.setItem(DL, JSON.stringify(led)); return true; }
-  catch(e){ return false; }
+  try {
+    localStorage.setItem(DS, JSON.stringify(st)); localStorage.setItem(DL, JSON.stringify(led));
+    /* ⭐ 마지막으로 0보다 컸던 별 개수를 따로 남겨 둔다 (새로고침·동기화로 0이 되면 여기서 되살린다) */
+    try { if ((Number(st.total) || 0) > 0) localStorage.setItem("yuli.stars.bak.v1", JSON.stringify({ total:Number(st.total) || 0, at:Date.now() })); } catch(e){}
+    return true;
+  } catch(e){ return false; }
 }
 SB.readDash = readDash;
 SB.starsNow = function(){ return readDash().st.total; };
@@ -11055,7 +11088,8 @@ var SECS = {
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말·뜻 쓰기"], ["text", "🏫 교과서 핵심한자"]],
   history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["war", "⚔️ 전쟁사"], ["video", "🎬 역사 영상"],
             ["world", "🌍 세계사 연표"], ["compare", "⚖️ 한국 vs 세계"]],
-  cn:      [["cards", "🗂️ 단어 카드"], ["talk", "💬 일상대화 연습"]]
+  cn:      [["cards", "🗂️ 단어 카드"], ["talk", "💬 일상대화 연습"], ["quiz", "📞 메이쌤 음성퀴즈"]],
+  jp:      [["cards", "🗂️ 단어 카드"], ["talk", "💬 일상대화 연습"], ["quiz", "📞 유미쌤 음성퀴즈"]]
 };
 /* 수학 하위 탭 10개 → 5개 큰 탭. 큰 탭을 누르면 그 안의 알약 전환기(secs)가 열린다 */
 var GROUPS = {
@@ -11084,7 +11118,8 @@ function grpTarget(subject, g){
 }
 var VIEWID = {
   "home:main":"viewHome", "study:hub":"viewStudyHub",
-  "study:cn:cards":"viewCn", "study:cn:talk":"viewCn",
+  "study:cn:cards":"viewCn", "study:cn:talk":"viewCn", "study:cn:quiz":"viewCn",
+  "study:jp:cards":"viewJp", "study:jp:talk":"viewJp", "study:jp:quiz":"viewJp",
   "study:en:video":"viewEnVideo", "study:en:book":"viewEnBook", "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:test":"viewEnTest", "study:en:call":"viewEnCall",
   "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord", "study:ko:key":"viewKoKey", "study:ko:write":"viewKoWrite", "study:ko:vocab":"viewKoVocab",
   "study:en:wolpaem":"viewEnWolpaem", "study:en:wordgrow":"viewWordGrow",
@@ -23008,13 +23043,15 @@ function snap(){
     fg: read(K.fg, {}),
     fgu: read(K.fgu, {}),
     curri: read(K.curri, null),
-    wb: read("haeyuli.workbooks.v1", null)
+    wb: read("haeyuli.workbooks.v1", null),
+    stars: read("yuli.stars.v2", null),
+    sled: read("yuli.starledger.v2", null)
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, curri:d.curri, wb:d.wb });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.curri, s.wb]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.curri, s.wb, s.stars, s.sled]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -23357,8 +23394,23 @@ function mergeWg(l, c){
   return out;
 }
 
+/* ⭐ 별 — 원장(ledger)은 키 합집합(이미 받은 별은 절대 잃지 않는다), 총합은 0으로 덮어쓰지 않는다 */
+function mergeStars(ls, ll, cs, cl){
+  var led = {}, k;
+  ll = (ll && typeof ll === "object") ? ll : {};
+  cl = (cl && typeof cl === "object") ? cl : {};
+  for (k in ll) if (Object.prototype.hasOwnProperty.call(ll, k)) led[k] = num(ll[k]);
+  for (k in cl){
+    if (!Object.prototype.hasOwnProperty.call(cl, k)) continue;
+    var v = num(cl[k]);
+    if (!(k in led) || v > led[k]) led[k] = v;
+  }
+  var lt = num((ls && ls.total) || 0), ct = num((cs && cs.total) || 0);
+  return { total: Math.max(lt, ct), led: led };
+}
 function buildDoc(local, cloud, base, code){
   var c = cloud || {};
+  var stM = mergeStars(local.stars, local.sled, c.stars, c.sled);
   var sgM = mergeSg(local.sg, c.sg, local.sgu, c.sgu);
   var frM = mergeSg(local.fg, c.fg, local.fgu, c.fgu);
   return {
@@ -23378,6 +23430,8 @@ function buildDoc(local, cloud, base, code){
     fg: frM.read, fgu: frM.un,
     curri: mergeCurri(local.curri, c.curri),
     wb: mergeWb(local.wb, c.wb),
+    stars: { total: stM.total },
+    sled: stM.led,
     at: Date.now()
   };
 }
@@ -23391,6 +23445,19 @@ function applyDoc(doc){
   if (JSON.stringify(doc.done) !== JSON.stringify(s.done)) { write(K.done, doc.done); changed = true; }
   if (JSON.stringify(doc.study) !== JSON.stringify(s.study)) { write(K.study, doc.study); changed = true; }
   if (doc.coupons && JSON.stringify(doc.coupons) !== JSON.stringify(s.coupons)) { write(K.coupons, doc.coupons); changed = true; }
+  /* ⭐ 별 — 원장은 합집합으로, 총합은 큰 쪽(0으로 덮어쓰지 않는다) */
+  if (doc.stars !== undefined || doc.sled !== undefined){
+    var stM = mergeStars(s.stars, s.sled, doc.stars, doc.sled);
+    var curT = num((s.stars && s.stars.total) || 0);
+    var curL = (s.sled && typeof s.sled === "object") ? s.sled : {};
+    if (stM.total !== curT || JSON.stringify(stM.led) !== JSON.stringify(curL)){
+      write("yuli.stars.v2", { total: stM.total });
+      write("yuli.starledger.v2", stM.led);
+      try { if (SB.starGuard) SB.starGuard(); } catch(e){}
+      try { if (SB.refresh) SB.refresh(); } catch(e){}
+      changed = true;
+    }
+  }
   /* 📐 수학 진도 설정 — 다른 기기에서 엄마가 바꾼 단계를 이 기기에도 반영 */
   if (doc.mathset && typeof doc.mathset === "object" && JSON.stringify(doc.mathset) !== JSON.stringify(s.mathset || {})){
     write(K.mathset, doc.mathset); changed = true; mathChanged = true;
@@ -26385,7 +26452,7 @@ function ckBind(p){
 
 /* =============================== ✖️ 구구단 원리 =============================== */
 var GKEY = "haeyuli.gugu.v1";
-var GG = { dan:2, mul:1, quiz:false, q:null, opts:[], msg:"", done:false, right:0, mode:"basket", wrap:"none" };
+var GG = { dan:2, mul:1, quiz:true, q:null, opts:[], msg:"", done:false, right:0, mode:"basket", wrap:"none" };
 var GMKEY = "haeyuli.gugu.mode.v1";
 try { var _gm = localStorage.getItem(GMKEY); if (_gm === "array" || _gm === "basket") GG.mode = _gm; } catch(e){}
 
@@ -26547,10 +26614,14 @@ function guguPickQ(){
   GG.done = false; GG.msg = "";
   var dan = GG.dan, mul = 1 + Math.floor(Math.random() * 9);
   GG.q = { dan:dan, mul:mul };
-  var right = dan * mul, list = [right], guard = 0;
-  while (list.length < 3 && guard++ < 60){
-    var cand = dan * (1 + Math.floor(Math.random() * 9));
-    if (cand !== right && list.indexOf(cand) < 0) list.push(cand);
+  var right = dan * mul, list = [right];
+  /* 가까운 오답 후보 — 같은 단의 이웃 묶음 · ±1 · ±2 · ±10 */
+  var pool = [right - dan, right + dan, right - 1, right + 1, right - 2, right + 2, right - 10, right + 10,
+              dan * (1 + Math.floor(Math.random() * 9)), dan * (1 + Math.floor(Math.random() * 9))];
+  pool = shuffle(pool);
+  for (var pi = 0; pi < pool.length && list.length < 3; pi++){
+    var cand = pool[pi];
+    if (cand > 0 && cand !== right && list.indexOf(cand) < 0) list.push(cand);
   }
   GG.opts = shuffle(list);
 }
@@ -26611,11 +26682,11 @@ function guguAnswer(v, btn){
     try { got = SB.earn(SB.today() + "|math|gugu|" + GG.q.dan, 1); } catch(e){}
     try { SB.markAttendance("math"); } catch(e){}
     try { if (got) SB.starFX(got, "✖️ " + GG.q.dan + " × " + GG.q.mul + " = " + right + " 정답!"); else if (SB.confetti) SB.confetti(); } catch(e){}
-    if (msg) msg.textContent = "정답이야! " + GG.q.dan + "씩 " + GG.q.mul + "묶음 = " + right + " 👍";
+    if (msg) msg.textContent = "정답이야! " + GG.q.dan + "씩 " + GG.q.mul + "묶음 = " + GG.q.dan + " × " + GG.q.mul + " = " + right + " 👍";
     setTimeout(function(){ GG.q = null; renderGugu(); }, 1500);
   } else {
     if (btn) { btn.classList.add("no"); btn.disabled = true; }
-    if (msg) msg.textContent = "괜찮아! 그림은 " + GG.q.dan + "개씩 " + GG.q.mul + "묶음이에요. 하나씩 세어 보자!";
+    if (msg) msg.textContent = "다시 세어 볼까요? 힌트: 묶음 그림을 세어 보세요!";
   }
 }
 function guguBind(p){
@@ -27906,6 +27977,290 @@ function todayKey(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d
 
 /* ---------- 1. 책 목록 (공식 확인본) ---------- */
 var RB = window.RB = window.RB || {};
+/* =====================================================================
+   📚 2026-11-22 · 교원 공식(kyowonedu.com) 전집 도서 목록 보강
+   · 자료: 교원 빨간펜 공식 상품 페이지 '전체 도서 보기'(RM_E_PRDT_ILND_INFO_01)
+     — 실제 권 번호·권 제목·표지 파일을 그대로 받아 book-img/ 에 168×208 webp 로 저장
+   · 솔루토이 한자 33권(본책 30 + 술술 한자 쓰기 워크북 3)
+   · 솔루토이 정치경제 30권 · 솔루토이 탐구 28권
+   · 교과서가 보이는 자연의 신비 70권 · 생각이 반짝이는 지식별 45권
+   · 비밀요원 레너드 → 라인프렌즈 어휘 당당(30권)으로 바로잡음
+   · 공식 목록이 없는 전집(솔루토이 예술·아이캔두 코딩·도요새 3종)은 권 번호를 그대로 두고
+     표지는 📷 표지 찍기로 남긴다. (단종·학습상품이라 공식 권 목록이 없다)
+   ===================================================================== */
+(function(){
+"use strict";
+var D = window.__RB_DATA;
+if (!D || !D.length) return;
+var BOOKS = {
+  "hja": [
+      [1, "거인의 정원", "book-img/hja_01.webp"],
+      [2, "돌돌이의 소원", "book-img/hja_02.webp"],
+      [3, "빨강 모자, 학교에 가다", "book-img/hja_03.webp"],
+      [4, "달걀이의 얼굴", "book-img/hja_04.webp"],
+      [5, "양치기 소년이 된 피노키오", "book-img/hja_05.webp"],
+      [6, "우리 집에 공룡 천 마리 있다!", "book-img/hja_06.webp"],
+      [7, "꼬마 사냥꾼", "book-img/hja_07.webp"],
+      [8, "솔찬이네 집에는 누가 살까?", "book-img/hja_08.webp"],
+      [9, "수수의 신랑감 찾기", "book-img/hja_09.webp"],
+      [10, "누가 케이크를 먹었지?", "book-img/hja_10.webp"],
+      [11, "외계 소년 뚜띠의 표정 연습", "book-img/hja_11.webp"],
+      [12, "농부네 포도밭", "book-img/hja_12.webp"],
+      [13, "원숭이네 빵집", "book-img/hja_13.webp"],
+      [14, "코끼리 아딴", "book-img/hja_14.webp"],
+      [15, "왼쪽 여왕과 오른쪽 대왕", "book-img/hja_15.webp"],
+      [16, "색을 찾아 떠난 백발백중", "book-img/hja_16.webp"],
+      [17, "달팽이 도서관에 가자!", "book-img/hja_17.webp"],
+      [18, "루나의 꽃집으로 오세요", "book-img/hja_18.webp"],
+      [19, "그 말은 이제 그만!", "book-img/hja_19.webp"],
+      [20, "학교에 간 진둥이", "book-img/hja_20.webp"],
+      [21, "미래로 간 서당 아이들", "book-img/hja_21.webp"],
+      [22, "말을 하지 않는 공주", "book-img/hja_22.webp"],
+      [23, "동물들의 나들이 소동", "book-img/hja_23.webp"],
+      [24, "로봇이 되고 싶어!", "book-img/hja_24.webp"],
+      [25, "어떤 선물을 줄까?", "book-img/hja_25.webp"],
+      [26, "농촌 쥐와 공장 쥐", "book-img/hja_26.webp"],
+      [27, "물 도깨비 나라 숲 도깨비 나라", "book-img/hja_27.webp"],
+      [28, "투투네 대장간", "book-img/hja_28.webp"],
+      [29, "길 안내를 시작합니다!", "book-img/hja_29.webp"],
+      [30, "쓰레기 꽃이 피었습니다!", "book-img/hja_30.webp"],
+      [31, "술술 한자 쓰기 워크북1", "book-img/hja_31.webp"],
+      [32, "술술 한자 쓰기 워크북2", "book-img/hja_32.webp"],
+      [33, "술술 한자 쓰기 워크북3", "book-img/hja_33.webp"]
+    ],
+  "pol": [
+      [1, "출동! 카오스 특공대", "book-img/pol_01.webp"],
+      [2, "곰 아저씨의 겨울나기", "book-img/pol_02.webp"],
+      [3, "거울아, 거울아!", "book-img/pol_03.webp"],
+      [4, "키미루 마이루 이야기", "book-img/pol_04.webp"],
+      [5, "레드 머니 탈출 작전", "book-img/pol_05.webp"],
+      [6, "동화는 연구 중", "book-img/pol_06.webp"],
+      [7, "이누크와 엄마 사랑 스웨터", "book-img/pol_07.webp"],
+      [8, "큰 바위 골 아이들", "book-img/pol_08.webp"],
+      [9, "도둑을 찾아라!", "book-img/pol_09.webp"],
+      [10, "푸른 별 나라로!", "book-img/pol_10.webp"],
+      [11, "나나와 꼬마 요정들", "book-img/pol_11.webp"],
+      [12, "검은 사과의 비밀", "book-img/pol_12.webp"],
+      [13, "어떤 것 찾기 소동", "book-img/pol_13.webp"],
+      [14, "이상한 여행", "book-img/pol_14.webp"],
+      [15, "흰 코끼리를 지켜라!", "book-img/pol_15.webp"],
+      [16, "거꾸로 가는 시계", "book-img/pol_16.webp"],
+      [17, "목련 꽃 할머니", "book-img/pol_17.webp"],
+      [18, "내 친구 찡", "book-img/pol_18.webp"],
+      [19, "해결사 토토의 모험", "book-img/pol_19.webp"],
+      [20, "바닷가 나라의 아야진", "book-img/pol_20.webp"],
+      [21, "테르 마을에서 생긴 일", "book-img/pol_21.webp"],
+      [22, "도깨비 삼 형제의 나라 망치기 대소동", "book-img/pol_22.webp"],
+      [23, "고라니 마을의 대장 선거", "book-img/pol_23.webp"],
+      [24, "장난감 나라의 법", "book-img/pol_24.webp"],
+      [25, "떡갈나무 숲의 무법자", "book-img/pol_25.webp"],
+      [26, "아이들이 만든 도서관", "book-img/pol_26.webp"],
+      [27, "말괄량이 신디 공주의 여행", "book-img/pol_27.webp"],
+      [28, "도토리, 세계를 지켜 줘!", "book-img/pol_28.webp"],
+      [29, "델라 왕자가 만든 놀이터", "book-img/pol_29.webp"],
+      [30, "할머니의 무명천", "book-img/pol_30.webp"]
+    ],
+  "tam": [
+      [1, "깜박쟁이 나무꾼과 엉터리 산신령", "book-img/tam_01.webp"],
+      [2, "부르왕의 구름 침대", "book-img/tam_02.webp"],
+      [3, "우락부락 자석 씨", "book-img/tam_03.webp"],
+      [4, "지구로 휴가 온 덜덜덜 외계인", "book-img/tam_04.webp"],
+      [5, "비를 찾아 떠난 농부", "book-img/tam_05.webp"],
+      [6, "콩떡 아기에게 무엇이 필요할까?", "book-img/tam_06.webp"],
+      [7, "마법의 보드게임", "book-img/tam_07.webp"],
+      [8, "장수풍뎅이의 비밀을 밝혀라!", "book-img/tam_08.webp"],
+      [9, "안녕, 꼬마 도꼬마리!", "book-img/tam_09.webp"],
+      [10, "할아버지, 돌이 왜 소중해요?", "book-img/tam_10.webp"],
+      [11, "또치, 계절을 돌려놔!", "book-img/tam_11.webp"],
+      [12, "루비와 달 이야기", "book-img/tam_12.webp"],
+      [13, "아기 고양이의 장난감", "book-img/tam_13.webp"],
+      [14, "누가 코끼리를 들어 올리지?", "book-img/tam_14.webp"],
+      [15, "오토와 리토", "book-img/tam_15.webp"],
+      [16, "과수원에서 생긴 일", "book-img/tam_16.webp"],
+      [17, "몽자 씨네 꽃집", "book-img/tam_17.webp"],
+      [18, "심술 마녀의 빗자루 만들기", "book-img/tam_18.webp"],
+      [19, "곰은 좋은 것만 가져가", "book-img/tam_19.webp"],
+      [20, "두지와 시계 도둑 루루팡", "book-img/tam_20.webp"],
+      [21, "어떤 모양이 좋아?", "book-img/tam_21.webp"],
+      [22, "번개, 택배 상자를 전달하라!", "book-img/tam_22.webp"],
+      [23, "예쁜 가방이 갖고 싶어!", "book-img/tam_23.webp"],
+      [24, "괴물 집에 갈 수 있을까?", "book-img/tam_24.webp"],
+      [25, "시끌벅적 동물원 대소동", "book-img/tam_25.webp"],
+      [26, "왕비는 왜 사과를 골랐을까?", "book-img/tam_26.webp"],
+      [27, "뚝딱 과학 탐구 만들기", "book-img/tam_27.webp"],
+      [28, "뚝딱 수학 탐구 만들기", "book-img/tam_28.webp"]
+    ],
+  "nat": [
+      [1, "사자·호랑이", "book-img/nat_01.webp"],
+      [2, "기린·코끼리", "book-img/nat_02.webp"],
+      [3, "개·고양이", "book-img/nat_03.webp"],
+      [4, "펭귄·닭", "book-img/nat_04.webp"],
+      [5, "소·돼지", "book-img/nat_05.webp"],
+      [6, "토끼·다람쥐", "book-img/nat_06.webp"],
+      [7, "곰·판다", "book-img/nat_07.webp"],
+      [8, "말·낙타", "book-img/nat_08.webp"],
+      [9, "원숭이·침팬지", "book-img/nat_09.webp"],
+      [10, "늑대·여우", "book-img/nat_10.webp"],
+      [11, "코알라·캥거루", "book-img/nat_11.webp"],
+      [12, "뱀·도마뱀", "book-img/nat_12.webp"],
+      [13, "거미·전갈", "book-img/nat_13.webp"],
+      [14, "두더지·지렁이", "book-img/nat_14.webp"],
+      [15, "땅에 사는 다양한 동물들", "book-img/nat_15.webp"],
+      [16, "고래·돌고래", "book-img/nat_16.webp"],
+      [17, "상어·가오리", "book-img/nat_17.webp"],
+      [18, "물개·바다표범", "book-img/nat_18.webp"],
+      [19, "개구리·도롱뇽", "book-img/nat_19.webp"],
+      [20, "오징어·문어", "book-img/nat_20.webp"],
+      [21, "연어·잉어", "book-img/nat_21.webp"],
+      [22, "게·조개", "book-img/nat_22.webp"],
+      [23, "거북, 악어", "book-img/nat_23.webp"],
+      [24, "성게, 불가사리", "book-img/nat_24.webp"],
+      [25, "물에 사는 다양한 동물들", "book-img/nat_25.webp"],
+      [26, "수리, 매", "book-img/nat_26.webp"],
+      [27, "백로, 두루미", "book-img/nat_27.webp"],
+      [28, "참새, 비둘기", "book-img/nat_28.webp"],
+      [29, "까치, 제비", "book-img/nat_29.webp"],
+      [30, "홍학·공작", "book-img/nat_30.webp"],
+      [31, "올빼미·박쥐", "book-img/nat_31.webp"],
+      [32, "물총새, 딱따구리", "book-img/nat_32.webp"],
+      [33, "뻐꾸기, 꿩", "book-img/nat_33.webp"],
+      [34, "오리, 갈매기", "book-img/nat_34.webp"],
+      [35, "하늘을 나는 다양한 동물들", "book-img/nat_35.webp"],
+      [36, "잠자리·매미", "book-img/nat_36.webp"],
+      [37, "메뚜기·사마귀", "book-img/nat_37.webp"],
+      [38, "개미·무당벌레", "book-img/nat_38.webp"],
+      [39, "나비·벌", "book-img/nat_39.webp"],
+      [40, "사슴벌레·쇠똥구리", "book-img/nat_40.webp"],
+      [41, "반딧불이·귀뚜라미", "book-img/nat_41.webp"],
+      [42, "소금쟁이·물방개", "book-img/nat_42.webp"],
+      [43, "여러 곳에 사는 다양한 곤충들", "book-img/nat_43.webp"],
+      [44, "대나무, 소나무", "book-img/nat_44.webp"],
+      [45, "은행나무, 단풍나무", "book-img/nat_45.webp"],
+      [46, "무궁화, 민들레", "book-img/nat_46.webp"],
+      [47, "장미, 튤립", "book-img/nat_47.webp"],
+      [48, "개나리, 진달래", "book-img/nat_48.webp"],
+      [49, "나팔꽃, 봉숭아", "book-img/nat_49.webp"],
+      [50, "버섯, 이끼", "book-img/nat_50.webp"],
+      [51, "산과 들에 사는 다양한 식물들", "book-img/nat_51.webp"],
+      [52, "연꽃, 부레옥잠", "book-img/nat_52.webp"],
+      [53, "갈대, 부들", "book-img/nat_53.webp"],
+      [54, "물에 사는 다양한 식물들", "book-img/nat_54.webp"],
+      [55, "벼, 보리", "book-img/nat_55.webp"],
+      [56, "감자, 고구마", "book-img/nat_56.webp"],
+      [57, "수박, 참외", "book-img/nat_57.webp"],
+      [58, "사과, 배", "book-img/nat_58.webp"],
+      [59, "콩·옥수수", "book-img/nat_59.webp"],
+      [60, "논과 밭에 사는 다양한 식물들", "book-img/nat_60.webp"],
+      [61, "식물의 구조_꽃은 왜 필까요", "book-img/nat_61.webp"],
+      [62, "동식물의 분류_나는 어디에 속할까요", "book-img/nat_62.webp"],
+      [63, "천적과 의태_누가 숨어 있을까요", "book-img/nat_63.webp"],
+      [64, "세균과 곰팡이_현미경으로 무엇이 보일까요", "book-img/nat_64.webp"],
+      [65, "공격과 방어_내 몸은 내가 지켜요", "book-img/nat_65.webp"],
+      [66, "벌레잡이 식물_꿀꺽! 벌레는 맛있어요", "book-img/nat_66.webp"],
+      [67, "천연기념물_우리가 지켜 줄게요", "book-img/nat_67.webp"],
+      [68, "중생대의 공룡_이제는 볼 수 없는 공룡1", "book-img/nat_68.webp"],
+      [69, "중생대의 공룡_이제는 볼 수 없는 공룡2", "book-img/nat_69.webp"],
+      [70, "한눈에 보는 자연의 신비", "book-img/nat_70.webp"]
+    ],
+  "jis": [
+      [1, "글자로 지은 집", "book-img/jis_01.webp"],
+      [2, "글자를 돌려줘!", "book-img/jis_02.webp"],
+      [3, "꼬부랑꼬부랑 말놀이해 볼까나?", "book-img/jis_03.webp"],
+      [4, "꿈속의 알렉산드리아 도서관", "book-img/jis_04.webp"],
+      [5, "몽이의 옛날 시장 구경", "book-img/jis_05.webp"],
+      [6, "세계의 문화가 달라", "book-img/jis_06.webp"],
+      [7, "말썽꾸러기 폴짝깨비", "book-img/jis_07.webp"],
+      [8, "타고 가자 세계 여행", "book-img/jis_08.webp"],
+      [9, "옛 도성을 찾아 역사 여행", "book-img/jis_09.webp"],
+      [10, "동혁이의 경제 배우기", "book-img/jis_10.webp"],
+      [11, "특명! 직업을 알아내라", "book-img/jis_11.webp"],
+      [12, "쥐돌이의 장소 탐험", "book-img/jis_12.webp"],
+      [13, "동물들도 마음이나 생각을 주고받을까?", "book-img/jis_13.webp"],
+      [14, "화석이 들려주는 공룡 이야기", "book-img/jis_14.webp"],
+      [15, "식물들의 재미난 이름 이야기", "book-img/jis_15.webp"],
+      [16, "꿈틀꿈틀 몸속에선 무엇이 움직이고 있을까?", "book-img/jis_16.webp"],
+      [17, "음식 속에 숨은 비밀", "book-img/jis_17.webp"],
+      [18, "깨끗한 곳에서 살고 싶어!", "book-img/jis_18.webp"],
+      [19, "천하무적 갑옷 만들기", "book-img/jis_19.webp"],
+      [20, "이렇게 시작된 발명", "book-img/jis_20.webp"],
+      [21, "로보티와 파비", "book-img/jis_21.webp"],
+      [22, "무엇을 타고 갈까?", "book-img/jis_22.webp"],
+      [23, "야호! 캠핑을 떠나자", "book-img/jis_23.webp"],
+      [24, "우주 올림픽", "book-img/jis_24.webp"],
+      [25, "외계인 삐리의 수 깨치기", "book-img/jis_25.webp"],
+      [26, "내가 도형 중 으뜸이라고!", "book-img/jis_26.webp"],
+      [27, "신기한 추론 여행", "book-img/jis_27.webp"],
+      [28, "지식 항아리의 문제를 해결하라!", "book-img/jis_28.webp"],
+      [29, "재고 또 재서 공주님의 신랑감 찾기", "book-img/jis_29.webp"],
+      [30, "달로아유섬에서 배운 표와 그래프", "book-img/jis_30.webp"],
+      [31, "음악은 내 친구", "book-img/jis_31.webp"],
+      [32, "미술관의 도마뱀", "book-img/jis_32.webp"],
+      [33, "동동 왕국의 올림픽 나들이", "book-img/jis_33.webp"],
+      [34, "숲속 동물들의 시끌벅적 연극 만들기", "book-img/jis_34.webp"],
+      [35, "탈을 쓰고 놀아 보자!", "book-img/jis_35.webp"],
+      [36, "건축 속에 숨은 이야기", "book-img/jis_36.webp"],
+      [37, "특별한 봄 소풍", "book-img/jis_37.webp"],
+      [38, "여름이의 생일잔치에 누가 올까?", "book-img/jis_38.webp"],
+      [39, "반짝반짝 빛나는 가을 선물", "book-img/jis_39.webp"],
+      [40, "둥둥이는 겨울이 궁금해!", "book-img/jis_40.webp"],
+      [41, "가족 요리 대회에 나갈 거야!", "book-img/jis_41.webp"],
+      [42, "세종과 이순신의 서울 체험기", "book-img/jis_42.webp"],
+      [43, "생각 챔피언은 누구?", "book-img/jis_43.webp"],
+      [44, "움직이는 가게", "book-img/jis_44.webp"],
+      [45, "호기심 지식 여행", "book-img/jis_45.webp"]
+    ],
+  "len": [
+      [1, "사라진 대왕바나나", "book-img/eohwi_01.webp"],
+      [2, "새로운 마을 대표는 누구?", "book-img/eohwi_02.webp"],
+      [3, "동글동글 구슬에서 무엇이?", "book-img/eohwi_03.webp"],
+      [4, "선물 없는 크리스마스?", "book-img/eohwi_04.webp"],
+      [5, "공주의 입맛을 찾아라!", "book-img/eohwi_05.webp"],
+      [6, "무지개 요정아, 돌아와!", "book-img/eohwi_06.webp"],
+      [7, "교실 꾸미기 대작전", "book-img/eohwi_07.webp"],
+      [8, "달콤 바삭 쿠키 파티", "book-img/eohwi_08.webp"],
+      [9, "우당탕탕 요리 대소동", "book-img/eohwi_09.webp"],
+      [10, "코리 정을 만나다", "book-img/eohwi_10.webp"],
+      [11, "시끌벅적 즐거운 운동회", "book-img/eohwi_11.webp"],
+      [12, "야단법석 한옥 마을", "book-img/eohwi_12.webp"],
+      [13, "놀이동산이 깨어났어요!", "book-img/eohwi_13.webp"],
+      [14, "탈출! 놀이동산", "book-img/eohwi_14.webp"],
+      [15, "꼬미가 사라졌다!", "book-img/eohwi_15.webp"],
+      [16, "방송국에 가 볼까?", "book-img/eohwi_16.webp"],
+      [17, "아름다운 섬마을", "book-img/eohwi_17.webp"],
+      [18, "호랑이 마을로 출발!", "book-img/eohwi_18.webp"],
+      [19, "정다운 시골 마을", "book-img/eohwi_19.webp"],
+      [20, "오손도손 전통 체험", "book-img/eohwi_20.webp"],
+      [21, "흰솜 마을 인형 축제", "book-img/eohwi_21.webp"],
+      [22, "어쩌면 가까운 곳에", "book-img/eohwi_22.webp"],
+      [23, "호기심 택시의 첫 여행", "book-img/eohwi_23.webp"],
+      [24, "놀자놀자 테마파크", "book-img/eohwi_24.webp"],
+      [25, "다성공 박사와의 만남", "book-img/eohwi_25.webp"],
+      [26, "물이 없는 하루", "book-img/eohwi_26.webp"],
+      [27, "초코의 패션 수첩", "book-img/eohwi_27.webp"],
+      [28, "산골 할머니를 만나다!", "book-img/eohwi_28.webp"],
+      [29, "우주에 남겨 둔 비밀", "book-img/eohwi_29.webp"],
+      [30, "호기심 택시의 마지막 여행", "book-img/eohwi_30.webp"]
+    ]
+};
+var META = {
+  "len": { nm:"라인프렌즈 어휘 당당", em:"🐻", sub:"본책 30권 + 버디북 30권 · 문해력 어휘", tag:"어휘당당" }
+};
+function apply(key){
+  var m = META[key] || {};
+  for (var i = 0; i < D.length; i++){
+    if (D[i][0] !== key) continue;
+    if (m.nm) D[i][1] = m.nm;
+    if (m.em) D[i][2] = m.em;
+    if (m.sub) D[i][3] = m.sub;
+    D[i][4] = BOOKS[key];
+    if (m.tag) D[i][5] = m.tag;
+    return true;
+  }
+  return false;
+}
+for (var k in BOOKS) if (Object.prototype.hasOwnProperty.call(BOOKS, k)) apply(k);
+})();
+
 var SRC = window.__RB_DATA || [];
 var SERIES = [], BOOKS = [], BYKEY = {};
 SRC.forEach(function(s){
@@ -34606,7 +34961,7 @@ var KW = {
   hoy:"옛날이야기 전래동화 한국", how:"세계 옛이야기 전래동화 나라",
   m3d:"세계명작 동화 명작", sgsg:"삼국유사 삼국사기 삼국 역사 신라 백제 고구려",
   hja:"한자 한자어 8급", pol:"정치 경제 사회 민주주의", artx:"예술 미술 음악 그림", tam:"탐구 과학 수학 실험",
-  nat:"자연 과학 동물 식물 곤충 생태", jis:"지식 상식 백과 교과", code:"코딩 컴퓨터 프로그래밍", len:"레너드 미스터리 추리"
+  nat:"자연 과학 동물 식물 곤충 생태", jis:"지식 상식 백과 교과", code:"코딩 컴퓨터 프로그래밍", len:"어휘당당 어휘 문해력 라인프렌즈"
 };
 var SHELF_KW = {
   wjknow:"지식 그림책 교과 상식", wjq:"호기심 백과 상식", econ:"경제 돈 시장 소비 은행",
@@ -35173,6 +35528,7 @@ function startRec(id){
       MR.rec = null; MR.st = null; MR.id = null;
       render();
       awardRec(id);
+      if (ST.mode === "quiz") setTimeout(quizNext, 620);
     };
     try { mr.start(); }
     catch(e){
@@ -35197,6 +35553,169 @@ function playRec(id){
   if (!u){ toast("먼저 녹음해 보세요 🎙️"); return; }
   CN_AUDIO.stop();
   try { var a = new Audio(u); a.play(); } catch(e){}
+}
+
+/* ---------------- 📞 메이쌤 중국어 음성퀴즈 ---------------- */
+/* [한국어 낱말, 한국어 발음, 중국어, 병음, 원어민 MP3] */
+var QZ = [
+  ["안녕","니하오","你好","nǐ hǎo","cn-audio/w_0.mp3"],
+  ["잘 가","짜이찌엔","再见","zài jiàn","cn-audio/w_1.mp3"],
+  ["고마워","시에시에","谢谢","xiè xie","cn-audio/w_2.mp3"],
+  ["미안해","뚜이부치","对不起","duì bu qǐ","cn-audio/w_3.mp3"],
+  ["부탁해요","칭","请","qǐng","cn-audio/w_4.mp3"],
+  ["좋은 아침","짜오상하오","早上好","zǎo shang hǎo","cn-audio/w_5.mp3"],
+  ["엄마","마마","妈妈","mā ma","cn-audio/w_6.mp3"],
+  ["아빠","빠바","爸爸","bà ba","cn-audio/w_7.mp3"],
+  ["형·오빠","꺼거","哥哥","gē ge","cn-audio/w_8.mp3"],
+  ["누나·언니","지에지에","姐姐","jiě jie","cn-audio/w_9.mp3"],
+  ["남동생","띠띠","弟弟","dì di","cn-audio/w_10.mp3"],
+  ["여동생","메이메이","妹妹","mèi mei","cn-audio/w_11.mp3"],
+  ["숫자 1","이","一","yī","cn-audio/w_12.mp3"],
+  ["숫자 2","얼","二","èr","cn-audio/w_13.mp3"],
+  ["숫자 3","싼","三","sān","cn-audio/w_14.mp3"],
+  ["숫자 4","쓰","四","sì","cn-audio/w_15.mp3"],
+  ["숫자 5","우","五","wǔ","cn-audio/w_16.mp3"],
+  ["숫자 6","리우","六","liù","cn-audio/w_17.mp3"],
+  ["숫자 7","치","七","qī","cn-audio/w_18.mp3"],
+  ["숫자 8","빠","八","bā","cn-audio/w_19.mp3"],
+  ["숫자 9","지우","九","jiǔ","cn-audio/w_20.mp3"],
+  ["숫자 10","스","十","shí","cn-audio/w_21.mp3"],
+  ["밥","미판","米饭","mǐ fàn","cn-audio/w_22.mp3"],
+  ["국수","미엔티아오","面条","miàn tiáo","cn-audio/w_23.mp3"],
+  ["사과","핑궈","苹果","píng guǒ","cn-audio/w_24.mp3"],
+  ["달걀","지단","鸡蛋","jī dàn","cn-audio/w_25.mp3"],
+  ["우유","니우나이","牛奶","niú nǎi","cn-audio/w_26.mp3"],
+  ["물","슈이","水","shuǐ","cn-audio/w_27.mp3"],
+  ["판다","시옹마오","熊猫","xióng māo","cn-audio/w_28.mp3"],
+  ["고양이","마오","猫","māo","cn-audio/w_29.mp3"],
+  ["강아지","꺼우","狗","gǒu","cn-audio/w_30.mp3"],
+  ["토끼","투쯔","兔子","tù zi","cn-audio/w_31.mp3"],
+  ["새","니아오","鸟","niǎo","cn-audio/w_32.mp3"],
+  ["물고기","위","鱼","yú","cn-audio/w_33.mp3"],
+  ["학교","쉬에샤오","学校","xué xiào","cn-audio/w_34.mp3"],
+  ["선생님","라오스","老师","lǎo shī","cn-audio/w_35.mp3"],
+  ["친구","통쉬에","同学","tóng xué","cn-audio/w_36.mp3"],
+  ["책","슈","书","shū","cn-audio/w_37.mp3"],
+  ["연필","치엔비","铅笔","qiān bǐ","cn-audio/w_38.mp3"],
+  ["책상","줘쯔","桌子","zhuō zi","cn-audio/w_39.mp3"],
+  ["머리","토우","头","tóu","cn-audio/w_40.mp3"],
+  ["눈","옌징","眼睛","yǎn jing","cn-audio/w_41.mp3"],
+  ["코","비쯔","鼻子","bí zi","cn-audio/w_42.mp3"],
+  ["입","쭈이","嘴","zuǐ","cn-audio/w_43.mp3"],
+  ["손","셔우","手","shǒu","cn-audio/w_44.mp3"],
+  ["발","지아오","脚","jiǎo","cn-audio/w_45.mp3"],
+  ["자동차","치처","汽车","qì chē","cn-audio/w_46.mp3"],
+  ["버스","꿍지아오처","公交车","gōng jiāo chē","cn-audio/w_47.mp3"],
+  ["자전거","쯔싱처","自行车","zì xíng chē","cn-audio/w_48.mp3"],
+  ["비행기","페이지","飞机","fēi jī","cn-audio/w_49.mp3"],
+  ["기차","훠처","火车","huǒ chē","cn-audio/w_50.mp3"],
+  ["지하철","띠티에","地铁","dì tiě","cn-audio/w_51.mp3"],
+  ["안녕!","니하오","你好！","nǐ hǎo!","cn-audio/s_0.mp3"],
+  ["내 이름은 해율이야","워지아오 하이뤼","我叫海律。","wǒ jiào Hǎilǜ.","cn-audio/s_1.mp3"],
+  ["몇 살이야?","니 지 쒜이 러","你几岁了？","nǐ jǐ suì le?","cn-audio/s_2.mp3"],
+  ["나는 일곱 살이야","워 치 쒜이","我七岁。","wǒ qī suì.","cn-audio/s_3.mp3"],
+  ["선생님 고마워요!","시에시에 라오스","谢谢老师！","xiè xie lǎo shī!","cn-audio/s_4.mp3"],
+  ["물 마실래요","워 야오 허 슈이","我要喝水。","wǒ yào hē shuǐ.","cn-audio/s_5.mp3"],
+  ["이거 얼마예요?","쩌거 뚜오샤오 치엔","这个多少钱？","zhè ge duō shao qián?","cn-audio/s_6.mp3"],
+  ["나는 판다를 좋아해","워 시환 시옹마오","我喜欢熊猫。","wǒ xǐ huan xióng māo.","cn-audio/s_7.mp3"],
+  ["우리 같이 가요!","워먼 이치 취 바","我们一起去吧！","wǒ men yì qǐ qù ba!","cn-audio/s_8.mp3"],
+  ["잘 가! 내일 봐!","짜이찌엔 밍티엔찌엔","再见！明天见！","zài jiàn! míng tiān jiàn!","cn-audio/s_9.mp3"]
+];
+var QS = { i:0, order:null, reveal:false };
+function josa(word, a, b){
+  var w = String(word || "").replace(/[!?.,。！？~\s]+$/g, "");
+  if (!w) return b;
+  var c = w.charCodeAt(w.length - 1);
+  if (c < 0xac00 || c > 0xd7a3) return b;
+  return ((c - 0xac00) % 28) ? a : b;
+}
+function qOrder(){
+  if (QS.order && QS.order.length === QZ.length) return QS.order;
+  var a = [];
+  for (var i = 0; i < QZ.length; i++) a.push(i);
+  for (var j = a.length - 1; j > 0; j--){
+    var k = Math.floor(Math.random() * (j + 1)), t = a[j]; a[j] = a[k]; a[k] = t;
+  }
+  QS.order = a; QS.i = 0;
+  return a;
+}
+function curQ(){
+  var o = qOrder();
+  var it = QZ[o[QS.i % o.length]] || QZ[0];
+  return { it:it, no:(QS.i % o.length) + 1, total:o.length, id:"q" + (QS.i % o.length) };
+}
+function promptOf(q){
+  return "해율아! 중국어로 ‘" + q[0] + "’" + josa(q[0], "은", "는") + " 뭐라고 하지?";
+}
+function teachOf(q){
+  return "괜찮아요, 해율아! 중국어로 ‘" + q[0] + "’" + josa(q[0], "은", "는") + " ‘" + q[1] + "(" + q[2] + ")’라고 해요. 자, 메이쌤 따라서 한 번 말해 볼까요?";
+}
+/* 메이쌤 한국어 목소리 — 다 말하면 이어서 원어민 MP3 */
+function sayKo(text, cb){
+  var done = false;
+  function fin(){ if (done) return; done = true; if (cb) cb(); }
+  try {
+    if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined"){ setTimeout(fin, 700); return; }
+    var u = new SpeechSynthesisUtterance(String(text || ""));
+    u.lang = "ko-KR";
+    try {
+      var vs = speechSynthesis.getVoices() || [], v = null;
+      for (var i = 0; i < vs.length; i++) if (/^ko/i.test(vs[i].lang)){ v = vs[i]; break; }
+      if (v) u.voice = v;
+    } catch(e){}
+    u.rate = 0.98; u.pitch = 1.05; u.volume = 1;
+    u.onend = fin; u.onerror = fin;
+    try { speechSynthesis.cancel(); } catch(e){}
+    setTimeout(function(){ try { speechSynthesis.speak(u); } catch(e){ fin(); } }, 40);
+    setTimeout(fin, Math.max(2800, String(text || "").length * 215 + 1200));
+  } catch(e){ setTimeout(fin, 700); }
+}
+function quizAsk(){
+  var cq = curQ();
+  sayKo(promptOf(cq.it));
+}
+function quizReveal(){
+  QS.reveal = true;
+  render();
+  var cq = curQ();
+  sayKo(teachOf(cq.it), function(){ CN_AUDIO.play(cq.it[4], cq.it[2], false); });
+}
+function quizNext(){
+  QS.i = (QS.i + 1) % qOrder().length;
+  QS.reveal = false;
+  render();
+  quizAsk();
+}
+function paintQuiz(){
+  var body = $("cnBody"); if (!body) return;
+  var cq = curQ(), q = cq.it;
+  var id = cq.id, rec = !!MR.urls[id], on = !!(MR.rec && MR.id === id);
+  body.innerHTML =
+    '<div class="cn-tip">📞 메이쌤 음성퀴즈 · 오늘 모은 중국어 별 <b>' + starsToday() + ' / 5</b> · 대답을 녹음하면 ⭐ +1</div>' +
+    '<div class="cn-card nq-card">' +
+      '<div class="nq-say"><span class="nq-face" aria-hidden="true">👩‍🏫</span><b>메이쌤</b></div>' +
+      '<div class="nq-ask">' + esc(promptOf(q)) + '</div>' +
+      (QS.reveal
+        ? '<div class="nq-ans"><span class="nq-hz">' + esc(q[2]) + '</span>' +
+            '<span class="nq-read">' + esc(q[1]) + '</span>' +
+            '<span class="nq-ko">' + esc(q[0]) + '</span></div>' +
+          '<div class="nq-teach">' + esc(teachOf(q)) + '</div>'
+        : '<div class="nq-wait">입으로 먼저 말해 보고, 녹음해 봐요!</div>') +
+      '<div class="cn-cardrow">' +
+        '<button class="cn-btn rec' + (on ? " on" : "") + '" type="button" data-cnqrec="' + id + '">' +
+          (on ? "⏹️ 녹음 끝" : "🎙️ 대답 녹음하기") + '</button>' +
+        (QS.reveal ? '<button class="cn-btn mint" type="button" data-cnqplay="1">🔊 다시 듣기</button>'
+                   : '<button class="cn-btn" type="button" data-cnqidk="1">😅 잘 모르겠어요</button>') +
+        (rec ? '<button class="cn-btn play" type="button" data-cnqmy="' + id + '">▶️ 내 목소리</button>' : '') +
+      '</div>' +
+      '<div class="cn-cardrow">' +
+        '<button class="cn-btn play" type="button" data-cnqsay="1">🔊 문제 다시 듣기</button>' +
+        '<button class="cn-btn sun" type="button" data-cnqnext="1">➡️ 다음 문제</button>' +
+      '</div>' +
+      (on ? '<span class="cn-recnote">녹음 중… 다 말했으면 ⏹️ 를 눌러요</span>' : '') +
+    '</div>' +
+    '<div class="cn-nav"><span>문제 ' + cq.no + ' / ' + cq.total + '</span></div>';
+  CN_AUDIO.prefetch(q[4]);
 }
 
 /* ---------------- 그리기 ---------------- */
@@ -35267,10 +35786,11 @@ function paintTalk(){
 function render(){
   var body = $("cnBody"); if (!body) return;
   paintCats();
-  if (ST.mode === "talk") paintTalk(); else paintCards();
+  if (ST.mode === "quiz") paintQuiz();
+  else if (ST.mode === "talk") paintTalk(); else paintCards();
 }
 function setMode(m){
-  ST.mode = (m === "talk") ? "talk" : "cards";
+  ST.mode = (m === "talk" || m === "quiz") ? m : "cards";
   var box = $("cnModes");
   if (box){
     var bs = box.querySelectorAll("[data-cnmode]");
@@ -35281,6 +35801,7 @@ function setMode(m){
     }
   }
   render();
+  if (ST.mode === "quiz"){ QS.reveal = false; quizAsk(); }
 }
 
 /* ---------------- 이벤트 ---------------- */
@@ -35331,6 +35852,19 @@ function bind(){
       }
       var pl = e.target.closest("[data-cnplay]");
       if (pl){ playRec(pl.getAttribute("data-cnplay")); return; }
+      /* 📞 메이쌤 음성퀴즈 */
+      var qrec = e.target.closest("[data-cnqrec]");
+      if (qrec){
+        var qid = qrec.getAttribute("data-cnqrec");
+        if (MR.rec && MR.id === qid) stopRec(); else startRec(qid);
+        return;
+      }
+      if (e.target.closest("[data-cnqidk]")){ quizReveal(); return; }
+      if (e.target.closest("[data-cnqplay]")){ var cqp = curQ(); CN_AUDIO.play(cqp.it[4], cqp.it[2], false); return; }
+      if (e.target.closest("[data-cnqsay]")){ quizAsk(); return; }
+      if (e.target.closest("[data-cnqnext]")){ quizNext(); return; }
+      var qmy = e.target.closest("[data-cnqmy]");
+      if (qmy){ playRec(qmy.getAttribute("data-cnqmy")); return; }
     });
   }
   var entry = $("cnEntry");
@@ -35344,12 +35878,13 @@ function bind(){
   }
 }
 
-var CN = { render:render, setMode:setMode, cats:CATS, dlg:DLG, words:WFLAT, audio:CN_AUDIO };
+var CN = { render:render, setMode:setMode, cats:CATS, dlg:DLG, words:WFLAT, audio:CN_AUDIO,
+            quiz:function(){ return curQ(); }, reveal:quizReveal, next:quizNext };
 window.CN = CN;
 
 try {
   SB.onShow = SB.onShow || {};
-  SB.onShow.cn = function(sec){ setMode(sec === "talk" ? "talk" : "cards"); };
+  SB.onShow.cn = function(sec){ setMode(sec === "talk" ? "talk" : (sec === "quiz" ? "quiz" : "cards")); };
 } catch(e){}
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); });
@@ -36111,11 +36646,13 @@ function toggle(id){
   save(s);
   render();
   st = status();
+  var jkwBase = 0;
   if (st.all){
-    bonusCheck(st);
+    if (bonusCheck(st)) jkwBase = 500;
     alertCheck(st);
   }
   try { if (SB.streak && SB.streak.note && SB.week && SB.week.todayStatus) SB.streak.note(SB.week.todayStatus()); } catch(e){}
+  try { if (st.all && SB.onAllHw) SB.onAllHw(st, jkwBase); } catch(e){}
   touchFam();
 }
 SB.hw5 = { status:status, toggle:toggle, sched:SCHED, ladder:LADDER };
@@ -36504,5 +37041,957 @@ else setTimeout(boot, 0);
   white-space:pre-wrap;word-break:break-word;}
 .dy-viewtext[hidden]{display:none;}
 </style>
+<style id="jpQuiz1122">
+/* ===== 2026-11-22 · 🗾 일본어 · 📞 음성퀴즈 ===== */
+.cn-entries{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:.55rem;margin:.8vh 0 .2vh;}
+.cn-entries .cn-entry{margin:0;}
+.cn-modes{flex-wrap:wrap;justify-content:flex-end;}
+.nq-card{background:linear-gradient(160deg,#fffaf2 0%,#fff 60%);border-color:#f3dcc6;}
+.nq-say{display:inline-flex;align-items:center;gap:.35rem;font-size:.76rem;font-weight:900;color:#b4573a;
+  background:#fff1e8;border-radius:999px;padding:.18rem .65rem;}
+.nq-face{font-size:1.02rem;}
+.nq-ask{font-size:1.02rem;font-weight:900;color:#22303d;line-height:1.42;word-break:keep-all;padding:.1rem .15rem;}
+.nq-ans{display:flex;flex-direction:column;align-items:center;gap:.12rem;background:#f2fbf6;
+  border:.16vh solid #c8ecdb;border-radius:.9rem;padding:.5rem .85rem;}
+.nq-hz{font-size:2.25rem;font-weight:900;color:#173a2a;line-height:1.1;}
+.nq-read{font-size:.9rem;font-weight:800;color:#256e9c;}
+.nq-ko{font-size:.76rem;font-weight:800;color:#5c7890;}
+.nq-teach{font-size:.78rem;font-weight:800;color:#8a5a08;background:#fff8e3;border-radius:.7rem;
+  padding:.45rem .6rem;line-height:1.42;word-break:keep-all;text-align:left;}
+.nq-wait{font-size:.76rem;font-weight:800;color:#7b93a8;}
+@media (max-width:460px){
+  .cn-mode{font-size:.7rem;padding:.32rem .52rem;}
+  .nq-ask{font-size:.94rem;}
+  .nq-hz{font-size:1.95rem;}
+}
+</style>
+<script id="final1122jp">
+/* =====================================================================
+   🗾 2026-11-22 · 일본어 (해율이 일본어)
+   · 단어 카드: 히라가나·가타카나 + 한국어 발음 + 뜻 + 원어민 MP3(jp-audio/)
+   · 일상대화 10문장 · 듣기 → 따라 말하기(녹음) → 내 목소리 듣기
+   · 📞 유미쌤 일본어 음성퀴즈 — 한국어로 묻고, 잘 모르겠으면 가르쳐 주고 MP3 자동 재생
+   · 녹음하면 ⭐ +1 (하루 5개까지)
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c]; });
+}
+function today(){
+  try { if (SB.today) return SB.today(); } catch(e){}
+  var d = new Date(), p = function(n){ return n < 10 ? "0" + n : "" + n; };
+  return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+}
+function toast(m){ try { if (SB.toast) SB.toast(m); } catch(e){} }
+
+var CATS = [
+  { k:"hi", em:"👋", nm:"인사", w:[
+    ["こんにちは","콘니치와","안녕하세요"], ["おはよう","오하요오","좋은 아침"], ["ありがとう","아리가토오","고마워"],
+    ["さようなら","사요오나라","안녕히 가세요"], ["ごめんなさい","고멘나사이","미안해"], ["はい","하이","응"] ] },
+  { k:"fam", em:"👨‍👩‍👧", nm:"가족", w:[
+    ["おかあさん","오카아상","엄마"], ["おとうさん","오토오상","아빠"], ["おにいさん","오니이상","형·오빠"],
+    ["おねえさん","오네에상","누나·언니"], ["いもうと","이모오토","여동생"], ["おじいさん","오지이상","할아버지"] ] },
+  { k:"num", em:"🔢", nm:"숫자", w:[
+    ["いち","이치","1"], ["に","니","2"], ["さん","산","3"],
+    ["よん","욘","4"], ["ご","고","5"], ["じゅう","주우","10"] ] },
+  { k:"food", em:"🍚", nm:"음식", w:[
+    ["ごはん","고한","밥"], ["みず","미즈","물"], ["りんご","링고","사과"],
+    ["ぎゅうにゅう","규우뉴우","우유"], ["たまご","타마고","달걀"], ["ラーメン","라아멘","라면"] ] },
+  { k:"ani", em:"🐼", nm:"동물", w:[
+    ["ねこ","네코","고양이"], ["いぬ","이누","강아지"], ["パンダ","판다","판다"],
+    ["うさぎ","우사기","토끼"], ["とり","토리","새"], ["さかな","사카나","물고기"] ] },
+  { k:"sch", em:"🏫", nm:"학교", w:[
+    ["がっこう","갓코오","학교"], ["せんせい","센세에","선생님"], ["ともだち","토모다치","친구"],
+    ["ほん","혼","책"], ["えんぴつ","엔피츠","연필"], ["つくえ","츠쿠에","책상"] ] },
+  { k:"body", em:"🙋", nm:"신체", w:[
+    ["あたま","아타마","머리"], ["め","메","눈"], ["はな","하나","코"],
+    ["くち","쿠치","입"], ["て","테","손"], ["あし","아시","발"] ] },
+  { k:"traffic", em:"🚌", nm:"교통", w:[
+    ["くるま","쿠루마","자동차"], ["バス","바스","버스"], ["でんしゃ","덴샤","전철"],
+    ["じてんしゃ","지텐샤","자전거"], ["ひこうき","히코오키","비행기"], ["ちかてつ","치카테츠","지하철"] ] }
+];
+
+var DLG = [
+  ["おはようございます。","오하요오 고자이마스.","좋은 아침이에요."],
+  ["ありがとうございます。","아리가토오 고자이마스.","고마워요."],
+  ["ごめんなさい。","고멘나사이.","미안해요."],
+  ["いただきます。","이타다키마스.","잘 먹겠습니다."],
+  ["ごちそうさまでした。","고치소오사마데시타.","잘 먹었습니다."],
+  ["いってきます。","잇테키마스.","다녀올게요."],
+  ["いってらっしゃい。","잇테랏샤이.","다녀오세요."],
+  ["おやすみなさい。","오야스미나사이.","잘 자요."],
+  ["わたしはヘユリです。","와타시와 헤유리데스.","나는 해율이예요."],
+  ["いっしょにあそぼう！","잇쇼니 아소보오!","같이 놀자!"]
+];
+
+var WFLAT = [], CATOFF = [];
+CATS.forEach(function(c){
+  CATOFF.push(WFLAT.length);
+  c.w.forEach(function(w){
+    WFLAT.push({ n:w[0], p:w[1], k:w[2], em:c.em, nm:c.nm, src:"jp-audio/w_" + WFLAT.length + ".mp3" });
+  });
+});
+var SFLAT = DLG.map(function(d, i){
+  return { n:d[0], p:d[1], k:d[2], src:"jp-audio/s_" + i + ".mp3" };
+});
+
+var ST = { mode:"cards", cat:0, wi:0 };
+var QS = { i:0, order:null, reveal:false };
+var MR = { rec:null, chunks:[], id:null, st:null, urls:{}, mime:"", timer:null };
+
+function speak(t, slow){
+  try { if (SB.speak) SB.speak(t, !!slow, "ja-JP"); } catch(e){}
+}
+
+/* ---------------- 원어민 MP3 재생 (아이패드 · 아이폰 · 갤럭시 공통) ---------------- */
+var JP_AUDIO = (function(){
+  var el = null, pre = {}, gen = 0, primed = false;
+  var SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
+  function player(){
+    if (!el){ try { el = new Audio(); el.preload = "auto"; } catch(e){ el = null; } }
+    return el;
+  }
+  function prefetch(src){
+    if (!src || pre[src]) return;
+    try { var a = new Audio(); a.preload = "auto"; a.src = src; pre[src] = a; } catch(e){}
+  }
+  function stop(){
+    gen++;
+    var a = el;
+    if (a){ try { a.onended = null; a.onerror = null; a.pause(); } catch(e){} }
+    try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){}
+  }
+  function prime(){
+    if (primed) return; primed = true;
+    var a = player(); if (!a) return;
+    try {
+      var g = gen;
+      a.src = SILENT;
+      var p = a.play();
+      if (p && p.then) p.then(function(){ if (g === gen){ try { a.pause(); } catch(e){} } })["catch"](function(){});
+    } catch(e){}
+  }
+  function play(src, text, slow){
+    stop();
+    var my = gen;
+    var a = player();
+    if (!a){ speak(text, slow); return; }
+    var fb = false;
+    var fallback = function(){ if (fb || my !== gen) return; fb = true; speak(text, slow); };
+    a.onerror = function(){ fallback(); };
+    try {
+      a.src = src;
+      try { a.preservesPitch = true; a.mozPreservesPitch = true; a.webkitPreservesPitch = true; } catch(e){}
+      a.playbackRate = slow ? 0.72 : 1;
+    } catch(e){}
+    var p = null;
+    try { p = a.play(); } catch(e){ p = null; }
+    if (p && p["catch"]) p["catch"](function(){ fallback(); });
+  }
+  return { play:play, prefetch:prefetch, prime:prime, stop:stop };
+})();
+
+/* ---------------- 오늘 일본어로 받은 별 (하루 5개까지) ---------------- */
+function starsToday(){
+  try {
+    var d = SB.readDash ? SB.readDash() : null;
+    var led = (d && d.led) ? d.led : {};
+    var pre = "auto2|jp|rec|" + today() + "|", n = 0;
+    for (var k in led) if (k.indexOf(pre) === 0) n += Number(led[k]) || 0;
+    return n;
+  } catch(e){ return 0; }
+}
+function awardRec(id){
+  var got = 0;
+  try {
+    if (starsToday() >= 5){ toast("오늘 일본어 별 5개를 다 모았어요! 녹음은 계속 연습해요 🗾"); return 0; }
+    got = SB.earn("auto2|jp|rec|" + today() + "|" + id + "|" + Date.now(), 1);
+  } catch(e){ got = 0; }
+  if (got){ try { SB.confetti(); } catch(e){} toast("따라 말했어요! ⭐ +" + got); }
+  else toast("잘 말했어요! 이 문장은 오늘 별을 이미 받았어요 🗾");
+  return got;
+}
+
+/* ---------------- 녹음 ---------------- */
+function pickMime(){
+  var m = "";
+  try {
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported){
+      if (MediaRecorder.isTypeSupported("audio/mp4")) m = "audio/mp4";
+      else if (MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) m = "audio/webm;codecs=opus";
+      else if (MediaRecorder.isTypeSupported("audio/webm")) m = "audio/webm";
+    }
+  } catch(e){}
+  return m;
+}
+function startRec(id){
+  if (MR.rec){ try { MR.rec.stop(); } catch(e){} return; }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder){
+    toast("이 기기에서는 녹음이 안 돼요. 사파리나 크롬으로 열어 주세요 🎙️");
+    return;
+  }
+  JP_AUDIO.stop();
+  navigator.mediaDevices.getUserMedia({ audio:true }).then(function(st){
+    var chunks = [], mime = pickMime(), mr = null;
+    try { mr = mime ? new MediaRecorder(st, { mimeType:mime }) : new MediaRecorder(st); }
+    catch(e){ try { mr = new MediaRecorder(st); } catch(e2){ mr = null; } }
+    if (!mr){
+      try { st.getTracks().forEach(function(t){ t.stop(); }); } catch(e){}
+      toast("이 브라우저는 녹음을 지원하지 않아요 😢");
+      return;
+    }
+    MR.st = st; MR.rec = mr; MR.id = id; MR.chunks = chunks; MR.mime = mime;
+    mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
+    mr.onerror = function(){
+      if (MR.timer){ clearTimeout(MR.timer); MR.timer = null; }
+      try { st.getTracks().forEach(function(t){ t.stop(); }); } catch(e){}
+      MR.rec = null; MR.st = null; MR.id = null;
+      render();
+      toast("녹음이 중간에 멈췄어요. 다시 해 볼까요? 🎙️");
+    };
+    mr.onstop = function(){
+      if (MR.timer){ clearTimeout(MR.timer); MR.timer = null; }
+      try { st.getTracks().forEach(function(t){ t.stop(); }); } catch(e){}
+      var type = (mr && mr.mimeType) || mime || (chunks[0] && chunks[0].type) || "audio/mp4";
+      var blob = new Blob(chunks, { type:type });
+      try { if (MR.urls[id]) URL.revokeObjectURL(MR.urls[id]); } catch(e){}
+      MR.urls[id] = URL.createObjectURL(blob);
+      MR.rec = null; MR.st = null; MR.id = null;
+      render();
+      awardRec(id);
+      if (ST.mode === "quiz") setTimeout(quizNext, 620);
+    };
+    try { mr.start(); }
+    catch(e){
+      try { st.getTracks().forEach(function(t){ t.stop(); }); } catch(e2){}
+      MR.rec = null; MR.st = null; MR.id = null;
+      render();
+      toast("녹음을 시작하지 못했어요. 잠시 뒤 다시 눌러 주세요 🎙️");
+      return;
+    }
+    MR.timer = setTimeout(function(){ if (MR.rec){ try { MR.rec.stop(); } catch(e){} } }, 15000);
+    render();
+  }, function(){
+    toast("마이크 권한을 허용해 주세요! (설정 → 마이크)");
+  });
+}
+function stopRec(){
+  if (MR.timer){ clearTimeout(MR.timer); MR.timer = null; }
+  if (MR.rec){ try { MR.rec.stop(); } catch(e){} }
+}
+function playRec(id){
+  var u = MR.urls[id];
+  if (!u){ toast("먼저 녹음해 보세요 🎙️"); return; }
+  JP_AUDIO.stop();
+  try { var a = new Audio(u); a.play(); } catch(e){}
+}
+
+/* ---------------- 유미쌤 한국어 음성 (끝나면 이어서 MP3) ---------------- */
+function sayKo(text, cb){
+  var done = false;
+  function fin(){ if (done) return; done = true; if (cb) cb(); }
+  try {
+    if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined"){ setTimeout(fin, 700); return; }
+    var u = new SpeechSynthesisUtterance(String(text || ""));
+    u.lang = "ko-KR";
+    try {
+      var vs = speechSynthesis.getVoices() || [], v = null;
+      for (var i = 0; i < vs.length; i++) if (/^ko/i.test(vs[i].lang)){ v = vs[i]; break; }
+      if (v) u.voice = v;
+    } catch(e){}
+    u.rate = 0.98; u.pitch = 1.05; u.volume = 1;
+    u.onend = fin; u.onerror = fin;
+    try { speechSynthesis.cancel(); } catch(e){}
+    setTimeout(function(){ try { speechSynthesis.speak(u); } catch(e){ fin(); } }, 40);
+    setTimeout(fin, Math.max(2800, String(text || "").length * 215 + 1200));
+  } catch(e){ setTimeout(fin, 700); }
+}
+
+/* ---------------- 그리기 ---------------- */
+function curCard(){
+  var c = CATS[ST.cat] || CATS[0];
+  var wi = ST.wi % c.w.length;
+  var gi = (CATOFF[ST.cat] || 0) + wi;
+  return { c:c, gi:gi, w:WFLAT[gi] || { n:"", p:"", k:"", src:"" } };
+}
+function paintCats(){
+  var box = $("jpCats"); if (!box) return;
+  if (ST.mode !== "cards"){ box.hidden = true; box.innerHTML = ""; return; }
+  box.hidden = false;
+  box.innerHTML = CATS.map(function(c, i){
+    return '<button class="cn-cat' + (i === ST.cat ? " on" : "") + '" type="button" data-jpcat="' + i + '">' +
+      c.em + " " + esc(c.nm) + '</button>';
+  }).join("");
+}
+function paintCards(){
+  var body = $("jpBody"); if (!body) return;
+  var cc = curCard(), c = cc.c, w = cc.w;
+  var id = "w" + cc.gi, rec = !!MR.urls[id], on = !!(MR.rec && MR.id === id);
+  body.innerHTML =
+    '<div class="cn-card">' +
+      '<span class="cn-hz">' + esc(w.n) + '</span>' +
+      '<span class="cn-pin">' + esc(w.p) + '</span>' +
+      '<span class="cn-ko">' + esc(w.k) + '</span>' +
+      '<div class="cn-cardrow">' +
+        '<button class="cn-btn mint" type="button" data-jpsay="1">🔊 발음 듣기</button>' +
+        '<button class="cn-btn sun" type="button" data-jpslow="1">🐢 천천히</button>' +
+      '</div>' +
+      '<div class="cn-cardrow">' +
+        '<button class="cn-btn rec' + (on ? " on" : "") + '" type="button" data-jprec="' + id + '">' +
+          (on ? "⏹️ 녹음 끝" : "🎙️ 따라 말하기 녹음") + '</button>' +
+        (rec ? '<button class="cn-btn play" type="button" data-jpplay="' + id + '">▶️ 내 목소리 듣기</button>' : '') +
+      '</div>' +
+      (on ? '<span class="cn-recnote">녹음 중… 다 말했으면 ⏹️ 를 눌러요</span>' :
+        (rec ? '<span class="cn-recnote">일본어 발음과 내 목소리를 번갈아 들어 보세요 👂</span>' : '')) +
+    '</div>' +
+    '<div class="cn-nav"><button class="cn-btn" type="button" data-jpprev="1">‹ 이전</button>' +
+      '<span>' + c.em + " " + esc(c.nm) + " · " + (ST.wi + 1) + " / " + c.w.length + '낱말</span>' +
+      '<button class="cn-btn" type="button" data-jpnext="1">다음 ›</button></div>' +
+    '<div class="cn-tip">🔊 를 누르면 일본어 원어민 발음이 바로 나와요. 귀로 먼저 듣고 🎙️ 로 따라 말해 보세요!</div>';
+  JP_AUDIO.prefetch(w.src);
+  var nx = WFLAT[(cc.gi + 1) % WFLAT.length]; if (nx) JP_AUDIO.prefetch(nx.src);
+}
+function paintTalk(){
+  var body = $("jpBody"); if (!body) return;
+  var st = starsToday();
+  body.innerHTML =
+    '<div class="cn-tip">오늘 모은 일본어 별 <b>' + st + ' / 5</b> · 녹음하면 ⭐ +1 (하루 5개까지)</div>' +
+    '<div class="cn-dlg">' + SFLAT.map(function(d, i){
+      var id = "s" + i, rec = !!MR.urls[id], on = !!(MR.rec && MR.id === id);
+      return '<div class="cn-line' + (rec ? " recd" : "") + '" data-jpline="' + id + '">' +
+        '<span class="cn-av" aria-hidden="true">🗾</span>' +
+        '<div class="tx"><b>' + esc(d.n) + '</b><i>' + esc(d.p) + '</i><span>' + esc(d.k) + '</span>' +
+          '<div class="cn-acts">' +
+            '<button class="cn-mini" type="button" data-jpdsay="' + i + '">🔊 듣기</button>' +
+            '<button class="cn-mini" type="button" data-jpdslow="' + i + '">🐢 천천히</button>' +
+            '<button class="cn-mini rec' + (on ? " on" : "") + '" type="button" data-jprec="' + id + '">' +
+              (on ? "⏹️ 녹음 끝" : "🎙️ 따라 말하기") + '</button>' +
+            (rec ? '<button class="cn-mini play" type="button" data-jpplay="' + id + '">▶️ 내 목소리</button>' : '') +
+          '</div>' +
+        '</div></div>';
+    }).join("") + '</div>';
+  SFLAT.forEach(function(d){ JP_AUDIO.prefetch(d.src); });
+}
+
+/* ---------------- 📞 유미쌤 일본어 음성퀴즈 ---------------- */
+var QZ = [];
+WFLAT.forEach(function(w){ QZ.push({ label:w.k, read:w.p, n:w.n, src:w.src }); });
+SFLAT.forEach(function(d){
+  QZ.push({ label:String(d.k).replace(/[!?.,。！？~]+$/g, ""), read:String(d.p).replace(/[.。]+$/g, ""), n:d.n, src:d.src });
+});
+function josa(word, a, b){
+  var w = String(word || "").replace(/[!?.,。！？~\s]+$/g, "");
+  if (!w) return b;
+  var c = w.charCodeAt(w.length - 1);
+  if (c < 0xac00 || c > 0xd7a3) return b;
+  return ((c - 0xac00) % 28) ? a : b;
+}
+function qOrder(){
+  if (QS.order && QS.order.length === QZ.length) return QS.order;
+  var a = [];
+  for (var i = 0; i < QZ.length; i++) a.push(i);
+  for (var j = a.length - 1; j > 0; j--){
+    var k = Math.floor(Math.random() * (j + 1)), t = a[j]; a[j] = a[k]; a[k] = t;
+  }
+  QS.order = a; QS.i = 0;
+  return a;
+}
+function curQ(){
+  var o = qOrder();
+  var it = QZ[o[QS.i % o.length]] || QZ[0];
+  return { it:it, no:(QS.i % o.length) + 1, total:o.length, id:"q" + (QS.i % o.length) };
+}
+function promptOf(q){
+  return "해율아! 일본어로 ‘" + q.label + "’" + josa(q.label, "은", "는") + " 뭐라고 하지?";
+}
+function teachOf(q){
+  return "괜찮아요, 해율아! 일본어로 ‘" + q.label + "’" + josa(q.label, "은", "는") + " ‘" + q.read + "(" + q.n + ")’라고 해요. 자, 유미쌤 따라서 한 번 말해 볼까요?";
+}
+function quizAsk(){
+  var cq = curQ();
+  sayKo(promptOf(cq.it));
+}
+function quizReveal(){
+  QS.reveal = true;
+  render();
+  var cq = curQ();
+  sayKo(teachOf(cq.it), function(){ JP_AUDIO.play(cq.it.src, cq.it.n, false); });
+}
+function quizNext(){
+  QS.i = (QS.i + 1) % qOrder().length;
+  QS.reveal = false;
+  render();
+  quizAsk();
+}
+function paintQuiz(){
+  var body = $("jpBody"); if (!body) return;
+  var cq = curQ(), q = cq.it;
+  var id = cq.id, rec = !!MR.urls[id], on = !!(MR.rec && MR.id === id);
+  body.innerHTML =
+    '<div class="cn-tip">📞 유미쌤 일본어 음성퀴즈 · 오늘 모은 일본어 별 <b>' + starsToday() + ' / 5</b> · 대답을 녹음하면 ⭐ +1</div>' +
+    '<div class="cn-card nq-card">' +
+      '<div class="nq-say"><span class="nq-face" aria-hidden="true">👩‍🏫</span><b>유미쌤</b></div>' +
+      '<div class="nq-ask">' + esc(promptOf(q)) + '</div>' +
+      (QS.reveal
+        ? '<div class="nq-ans"><span class="nq-hz">' + esc(q.n) + '</span>' +
+            '<span class="nq-read">' + esc(q.read) + '</span>' +
+            '<span class="nq-ko">' + esc(q.label) + '</span></div>' +
+          '<div class="nq-teach">' + esc(teachOf(q)) + '</div>'
+        : '<div class="nq-wait">입으로 먼저 말해 보고, 녹음해 봐요!</div>') +
+      '<div class="cn-cardrow">' +
+        '<button class="cn-btn rec' + (on ? " on" : "") + '" type="button" data-jpqrec="' + id + '">' +
+          (on ? "⏹️ 녹음 끝" : "🎙️ 대답 녹음하기") + '</button>' +
+        (QS.reveal ? '<button class="cn-btn mint" type="button" data-jpqplay="1">🔊 다시 듣기</button>'
+                   : '<button class="cn-btn" type="button" data-jpqidk="1">😅 잘 모르겠어요</button>') +
+        (rec ? '<button class="cn-btn play" type="button" data-jpqmy="' + id + '">▶️ 내 목소리</button>' : '') +
+      '</div>' +
+      '<div class="cn-cardrow">' +
+        '<button class="cn-btn play" type="button" data-jpqsay="1">🔊 문제 다시 듣기</button>' +
+        '<button class="cn-btn sun" type="button" data-jpqnext="1">➡️ 다음 문제</button>' +
+      '</div>' +
+      (on ? '<span class="cn-recnote">녹음 중… 다 말했으면 ⏹️ 를 눌러요</span>' : '') +
+    '</div>' +
+    '<div class="cn-nav"><span>문제 ' + cq.no + ' / ' + cq.total + '</span></div>';
+  JP_AUDIO.prefetch(q.src);
+}
+
+function render(){
+  var body = $("jpBody"); if (!body) return;
+  paintCats();
+  if (ST.mode === "quiz") paintQuiz();
+  else if (ST.mode === "talk") paintTalk(); else paintCards();
+}
+function setMode(m){
+  ST.mode = (m === "talk" || m === "quiz") ? m : "cards";
+  var box = $("jpModes");
+  if (box){
+    var bs = box.querySelectorAll("[data-jpmode]");
+    for (var i = 0; i < bs.length; i++){
+      var on = bs[i].getAttribute("data-jpmode") === ST.mode;
+      bs[i].classList.toggle("on", on);
+      bs[i].setAttribute("aria-pressed", on ? "true" : "false");
+    }
+  }
+  render();
+  if (ST.mode === "quiz"){ QS.reveal = false; quizAsk(); }
+}
+
+/* ---------------- 이벤트 ---------------- */
+function bind(){
+  var modes = $("jpModes");
+  if (modes && !modes.__b){
+    modes.__b = 1;
+    modes.addEventListener("click", function(e){
+      var b = e.target.closest("[data-jpmode]"); if (!b) return;
+      setMode(b.getAttribute("data-jpmode"));
+    });
+  }
+  var cats = $("jpCats");
+  if (cats && !cats.__b){
+    cats.__b = 1;
+    cats.addEventListener("click", function(e){
+      var b = e.target.closest("[data-jpcat]"); if (!b) return;
+      ST.cat = Number(b.getAttribute("data-jpcat")) || 0;
+      ST.wi = 0; render();
+    });
+  }
+  var body = $("jpBody");
+  if (body && !body.__b){
+    body.__b = 1;
+    body.addEventListener("click", function(e){
+      JP_AUDIO.prime();
+      if (e.target.closest("[data-jpsay]")){ var cc = curCard(); JP_AUDIO.play(cc.w.src, cc.w.n, false); return; }
+      if (e.target.closest("[data-jpslow]")){ var cs = curCard(); JP_AUDIO.play(cs.w.src, cs.w.n, true); return; }
+      if (e.target.closest("[data-jpprev]")){
+        var c = CATS[ST.cat]; ST.wi = (ST.wi - 1 + c.w.length) % c.w.length; render(); return;
+      }
+      if (e.target.closest("[data-jpnext]")){
+        var c2 = CATS[ST.cat]; ST.wi = (ST.wi + 1) % c2.w.length; render(); return;
+      }
+      var say = e.target.closest("[data-jpdsay]");
+      if (say){ var si = Number(say.getAttribute("data-jpdsay")); var sd = SFLAT[si]; JP_AUDIO.play(sd.src, sd.n, false); return; }
+      var slow = e.target.closest("[data-jpdslow]");
+      if (slow){ var sj = Number(slow.getAttribute("data-jpdslow")); var sd2 = SFLAT[sj]; JP_AUDIO.play(sd2.src, sd2.n, true); return; }
+      var rc = e.target.closest("[data-jprec]");
+      if (rc){
+        var id = rc.getAttribute("data-jprec");
+        if (MR.rec && MR.id === id) stopRec(); else startRec(id);
+        return;
+      }
+      var pl = e.target.closest("[data-jpplay]");
+      if (pl){ playRec(pl.getAttribute("data-jpplay")); return; }
+      /* 유미쌤 퀴즈 */
+      var qrec = e.target.closest("[data-jpqrec]");
+      if (qrec){
+        var qid = qrec.getAttribute("data-jpqrec");
+        if (MR.rec && MR.id === qid) stopRec(); else startRec(qid);
+        return;
+      }
+      if (e.target.closest("[data-jpqidk]")){ quizReveal(); return; }
+      if (e.target.closest("[data-jpqplay]")){ var cqp = curQ(); JP_AUDIO.play(cqp.it.src, cqp.it.n, false); return; }
+      if (e.target.closest("[data-jpqsay]")){ quizAsk(); return; }
+      if (e.target.closest("[data-jpqnext]")){ quizNext(); return; }
+      var qmy = e.target.closest("[data-jpqmy]");
+      if (qmy){ playRec(qmy.getAttribute("data-jpqmy")); return; }
+    });
+  }
+  var entry = $("jpEntry");
+  if (entry && !entry.__b){
+    entry.__b = 1;
+    entry.addEventListener("click", function(e){
+      var b = e.target.closest("[data-jpopen]"); if (!b) return;
+      var m = b.getAttribute("data-jpopen");
+      try { SB.go("study", "jp", m === "talk" ? "talk" : (m === "quiz" ? "quiz" : "cards")); } catch(err){}
+    });
+  }
+}
+
+try {
+  SB.onShow = SB.onShow || {};
+  SB.onShow.jp = function(sec){ setMode(sec === "talk" ? "talk" : (sec === "quiz" ? "quiz" : "cards")); };
+} catch(e){}
+
+window.JP = { render:render, setMode:setMode, cats:CATS, dlg:DLG, words:WFLAT, audio:JP_AUDIO,
+              quiz:function(){ return curQ(); }, reveal:quizReveal, next:quizNext };
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); });
+else bind();
+setTimeout(function(){ try { bind(); } catch(e){} }, 900);
+})();
+</script>
+<script id="hwjackpot1122">
+/* =====================================================================
+   🎉 2026-11-22 · 오늘 숙제 끝! 잭팟! 팝업
+   · 홈 '📅 오늘의 숙제'를 전부 체크한 순간 — 금가루·금화·별이 쏟아지고
+     빵빠레(Web Audio)가 울리며, 그날 받은 보상(+500원 · 연속 잭팟 +1,000원/+10,000원)을
+     정확히 보여 준다. 큰 [확인! 🥳] 버튼으로 닫는다.
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+function $(id){ return document.getElementById(id); }
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function today(){ var d = new Date(); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+function money(v){ return Number(v || 0).toLocaleString("ko-KR"); }
+
+var CSS = ''
++ '.jkw-wrap{position:fixed;inset:0;z-index:9900;display:flex;align-items:center;justify-content:center;padding:.8rem;}'
++ '.jkw-veil{position:absolute;inset:0;background:radial-gradient(120% 120% at 50% 0%,rgba(70,25,100,.62),rgba(8,8,26,.8));animation:jkwFade .25s ease both;}'
++ '@keyframes jkwFade{from{opacity:0}to{opacity:1}}'
++ '.jkw-cv{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}'
++ '.jkw-card{position:relative;width:min(94vw,34rem);max-height:92vh;overflow:auto;border-radius:1.5rem;'
++ '  padding:1.15rem 1.25rem 1.1rem;text-align:center;background:linear-gradient(165deg,#fff9e8 0%,#ffeab8 46%,#ffd66a 100%);'
++ '  border:.36vh solid #e9a300;box-shadow:0 2.2vh 5.5vh rgba(80,35,0,.5),inset 0 0 0 .42vh #fff8d0;'
++ '  animation:jkwIn .42s cubic-bezier(.2,1.5,.4,1) both;}'
++ '@keyframes jkwIn{from{transform:scale(.74) translateY(1.4rem);opacity:0}to{transform:none;opacity:1}}'
++ '.jkw-em{font-size:2.9rem;line-height:1;animation:jkwBob 1.05s ease-in-out infinite;}'
++ '@keyframes jkwBob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-.45rem) rotate(5deg)}}'
++ '.jkw-kick{font-size:.88rem;font-weight:900;color:#9a5200;letter-spacing:.06em;margin-top:.15rem;}'
++ '.jkw-title{font-size:1.9rem;font-weight:900;color:#c1440e;margin:.1rem 0 .45rem;text-shadow:0 .22vh 0 #fff5c8,0 0 .6rem #ffcf4d;}'
++ '.jkw-amt{display:inline-block;font-size:1.75rem;font-weight:900;color:#0d7550;background:#fff;border:.22vh solid #b6e6cf;'
++ '  border-radius:.9rem;padding:.35rem .8rem;box-shadow:inset 0 -.4vh 0 #e6f7ee;}'
++ '.jkw-lines{display:flex;flex-direction:column;gap:.3rem;margin:.7rem 0 .1rem;}'
++ '.jkw-line{display:flex;align-items:center;justify-content:space-between;gap:.6rem;font-size:.86rem;font-weight:900;'
++ '  color:#5c4520;background:#fffdf6;border:.15vh solid #f0dfb2;border-radius:.65rem;padding:.42rem .7rem;}'
++ '.jkw-line b{color:#c1440e;font-size:.92rem;white-space:nowrap;}'
++ '.jkw-bal{font-size:.82rem;font-weight:900;color:#7a5a12;margin-top:.45rem;}'
++ '.jkw-bal b{color:#0d7550;}'
++ '.jkw-ok{margin-top:.85rem;width:100%;font-size:1.28rem;font-weight:900;color:#fff;border-radius:.95rem;'
++ '  padding:.8rem 1rem;background:linear-gradient(140deg,#3fca95,#15805a);box-shadow:0 .5vh 0 #0b5c40;}'
++ '.jkw-ok:active{transform:translateY(.22vh);box-shadow:0 .28vh 0 #0b5c40;}'
++ '.jkw-sub{font-size:.75rem;font-weight:800;color:#8a6a2a;margin-top:.45rem;}';
+
+function initCss(){
+  if ($("jkwCss")) return;
+  var st = document.createElement("style");
+  st.id = "jkwCss"; st.textContent = CSS;
+  document.head.appendChild(st);
+}
+
+/* ---------------- 빵빠레 (Web Audio) ---------------- */
+function fanfare(){
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    var ac = new AC();
+    var master = ac.createGain();
+    master.gain.value = 0.22;
+    master.connect(ac.destination);
+    var t0 = ac.currentTime + 0.02;
+    /* 도-미-솔-도 도약 아르페지오 */
+    var notes = [[523.25,0],[659.25,0.14],[783.99,0.28],[1046.5,0.44],[1318.5,0.62]];
+    notes.forEach(function(n){
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = "triangle"; o.frequency.value = n[0];
+      g.gain.setValueAtTime(0, t0 + n[1]);
+      g.gain.linearRampToValueAtTime(0.55, t0 + n[1] + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + n[1] + 0.42);
+      o.connect(g); g.connect(master);
+      o.start(t0 + n[1]); o.stop(t0 + n[1] + 0.46);
+    });
+    /* 반짝이 (높은 사인) */
+    [1568, 2093, 2637].forEach(function(f, i){
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = "sine"; o.frequency.value = f;
+      var at = t0 + 0.7 + i * 0.11;
+      g.gain.setValueAtTime(0, at);
+      g.gain.linearRampToValueAtTime(0.18, at + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, at + 0.3);
+      o.connect(g); g.connect(master);
+      o.start(at); o.stop(at + 0.32);
+    });
+    /* 짜잔 — 심벌 느낌의 노이즈 */
+    try {
+      var len = Math.floor(ac.sampleRate * 0.9);
+      var buf = ac.createBuffer(1, len, ac.sampleRate), ch = buf.getChannelData(0);
+      for (var i = 0; i < len; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.4);
+      var src = ac.createBufferSource(); src.buffer = buf;
+      var hp = ac.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 4200;
+      var ng = ac.createGain(); ng.gain.value = 0.12;
+      src.connect(hp); hp.connect(ng); ng.connect(master);
+      src.start(t0 + 1.0);
+    } catch(e){}
+    setTimeout(function(){ try { if (ac.close) ac.close(); } catch(e){} }, 3600);
+  } catch(e){}
+}
+
+/* ---------------- 금가루 · 금화 · 별 ---------------- */
+function runFX(cv, ms){
+  if (!cv || !cv.getContext) return;
+  var ctx = cv.getContext("2d");
+  var W = 1, H = 1, dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+  function size(){
+    W = Math.max(1, cv.clientWidth || window.innerWidth);
+    H = Math.max(1, cv.clientHeight || window.innerHeight);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  size();
+  window.addEventListener("resize", size);
+
+  var COL = ["#fff3b0","#ffe066","#ffd23f","#ffb300","#ff8f00","#a8ffd8","#7fd8ff","#ffb3d9"];
+  var parts = [], t0 = performance.now(), last = t0, acc = 0;
+
+  function star(cx, cy, r){
+    ctx.beginPath();
+    for (var i = 0; i < 10; i++){
+      var ang = -Math.PI / 2 + i * Math.PI / 5;
+      var rr = i % 2 ? r * 0.45 : r;
+      var x = cx + Math.cos(ang) * rr, y = cy + Math.sin(ang) * rr;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath(); ctx.fill();
+  }
+  function coin(cx, cy, r){
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+    ctx.save();
+    ctx.fillStyle = "rgba(120,70,0,.55)";
+    ctx.font = "900 " + Math.round(r * 1.25) + "px system-ui,-apple-system,sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("₩", cx, cy + r * 0.06);
+    ctx.restore();
+  }
+  function spawn(n, burst){
+    for (var i = 0; i < n; i++){
+      var kind = Math.random();
+      parts.push({
+        x: Math.random() * W,
+        y: burst ? (Math.random() * H * 0.35 - 40) : (-40 - Math.random() * H * 0.5),
+        vx: (Math.random() - 0.5) * (burst ? 90 : 42),
+        vy: 90 + Math.random() * 190,
+        w: 6 + Math.random() * 9,
+        h: 8 + Math.random() * 12,
+        rot: Math.random() * Math.PI * 2,
+        vr: (Math.random() - 0.5) * 7,
+        c: COL[(Math.random() * COL.length) | 0],
+        k: kind < 0.2 ? "coin" : (kind < 0.45 ? "star" : "conf"),
+        a: 1
+      });
+    }
+  }
+  spawn(Math.min(140, Math.round((W * H) / 14000)), true);
+
+  function frame(now){
+    var dt = Math.min(0.05, (now - last) / 1000); last = now;
+    ctx.clearRect(0, 0, W, H);
+    acc += dt;
+    if (now - t0 < ms - 1400 && acc > 0.14){ acc = 0; spawn(10, false); }
+    for (var i = parts.length - 1; i >= 0; i--){
+      var p = parts[i];
+      p.vy += 240 * dt;
+      p.x += p.vx * dt + Math.sin((now / 380) + p.rot) * 0.6;
+      p.y += p.vy * dt;
+      p.rot += p.vr * dt;
+      if (p.y - 60 > H){ parts.splice(i, 1); continue; }
+      ctx.save();
+      ctx.globalAlpha = now - t0 > ms - 900 ? Math.max(0, (ms - (now - t0)) / 900) : 1;
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.c;
+      if (p.k === "conf"){
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * 0.7);
+      } else if (p.k === "coin"){
+        coin(0, 0, p.w * 0.62);
+      } else {
+        star(0, 0, p.w * 0.66);
+      }
+      ctx.restore();
+    }
+    if (now - t0 < ms) requestAnimationFrame(frame);
+    else { ctx.clearRect(0, 0, W, H); }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---------------- 팝업 ---------------- */
+function show(o){
+  initCss();
+  var oldW = $("jkwWrap");
+  if (oldW && oldW.parentNode) oldW.parentNode.removeChild(oldW);
+  /* 연속 잭팟 팝업이 먼저 떠 있으면 겹치지 않게 정리 */
+  var oldJp = $("jpWrap");
+  if (oldJp && oldJp.parentNode) oldJp.parentNode.removeChild(oldJp);
+
+  o = o || {};
+  var lines = o.lines || [];
+  var wrap = document.createElement("div");
+  wrap.id = "jkwWrap";
+  wrap.className = "jkw-wrap";
+  wrap.innerHTML =
+      '<div class="jkw-veil"></div>'
+    + '<canvas class="jkw-cv" aria-hidden="true"></canvas>'
+    + '<div class="jkw-card" role="dialog" aria-modal="true" aria-labelledby="jkwTitle">'
+    +   '<div class="jkw-em" aria-hidden="true">🎰</div>'
+    +   '<div class="jkw-kick">🎉 오늘 숙제 끝!</div>'
+    +   '<h2 class="jkw-title" id="jkwTitle">잭팟! 🎰</h2>'
+    +   '<div class="jkw-amt">' + (o.total > 0 ? "+" + money(o.total) + "원" : "보상 확인 완료!") + '</div>'
+    +   '<div class="jkw-lines">' + lines.map(function(l){
+          return '<div class="jkw-line"><span>' + l[0] + '</span><b>' + l[1] + '</b></div>';
+        }).join("") + '</div>'
+    +   (o.bal > 0 ? '<div class="jkw-bal">지금 저금통 <b>' + money(o.bal) + '원</b></div>' : '')
+    +   '<button class="jkw-ok" type="button">확인! 🥳</button>'
+    +   '<div class="jkw-sub">오늘 숙제를 모두 끝냈어요. 정말 대단해요!</div>'
+    + '</div>';
+  document.body.appendChild(wrap);
+
+  var closed = false;
+  function close(){
+    if (closed) return;
+    closed = true;
+    wrap.classList.add("out");
+    document.removeEventListener("keydown", onKey, true);
+    if (wrap.style) wrap.style.transition = "opacity .25s ease";
+    wrap.style.opacity = "0";
+    setTimeout(function(){ if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 260);
+  }
+  function onKey(e){
+    if (e.key === "Escape" || e.key === "Enter"){ e.preventDefault(); close(); }
+  }
+  var ok = wrap.querySelector(".jkw-ok");
+  if (ok){ ok.addEventListener("click", close); try { ok.focus({ preventScroll:true }); } catch(e){ try { ok.focus(); } catch(e2){} } }
+  document.addEventListener("keydown", onKey, true);
+
+  try { runFX(wrap.querySelector(".jkw-cv"), 6500); } catch(e){}
+  try { fanfare(); } catch(e){}
+  return wrap;
+}
+
+/* ---------------- 오늘 숙제 전부 완료 훅 ---------------- */
+function amounts(base){
+  var jack = 0, days = 0, lines = [];
+  var si = null;
+  try { si = (SB.streak && SB.streak.info) ? SB.streak.info() : null; } catch(e){ si = null; }
+  if (si && si.round && si.amt){
+    days = Number(si.days) || 0;
+    if (si.paid) jack = Number(si.amt) || 0;
+    lines.push(["🔥 연속 " + si.round + "일 잭팟", si.paid ? "+" + money(si.amt) + "원" : "받음 ✓"]);
+  }
+  lines.unshift(["📅 오늘 숙제 전부 완료", base > 0 ? "+" + money(base) + "원" : "받음 ✓"]);
+  var bal = 0;
+  try {
+    var d = (SB.money && SB.money.data) ? SB.money.data() : null;
+    if (d) bal = Number(d.piggy) || 0;
+  } catch(e){ bal = 0; }
+  return { total: (Number(base) || 0) + jack, lines: lines, bal: bal, days: days };
+}
+
+SB.onAllHw = function(st, base){
+  try {
+    var a = amounts(base);
+    show(a);
+  } catch(e){ try { console.warn(e); } catch(e2){} }
+};
+SB.jackpot = { show: show, amounts: amounts, fanfare: fanfare };
+
+initCss();
+})();
+</script>
+<script id="starfix1122">
+/* =====================================================================
+   ⭐ 2026-11-22 · 별 잃어버리지 않기 + ⚙️ 설정에서 별 복구/직접 조정
+   · yuli.stars.v2 / yuli.starledger.v2 를 가족 코드 동기화에 함께 싣고,
+     원장(ledger)은 합집합으로 합친다. 총합은 0으로 절대 덮어쓰지 않는다.
+   · 별이 0이 되면 yuli.stars.bak.v1(마지막으로 0보다 컸던 값)에서 되살린다.
+   · ⚙️ 설정 › 일반 설정 맨 위에 [⭐ 별 개수] 줄: +1 / +5 / +10 / 직접 입력 저장
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var DS = "yuli.stars.v2", DL = "yuli.starledger.v2", BAK = "yuli.stars.bak.v1", RSET = "yuli.stars.reset.v1";
+function read(k, fb){
+  try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; }
+}
+function write(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+function num(n){ n = Number(n); return isFinite(n) ? n : 0; }
+
+/* ---------------- 백업 & 되살리기 ---------------- */
+function backup(){
+  try {
+    var st = read(DS, null) || {}, t = num(st.total);
+    if (t > 0 && !window.__starNoBak) write(BAK, { total:t, at:Date.now() });
+  } catch(e){}
+}
+function guard(){
+  try {
+    var st = read(DS, null) || {}, t = num(st.total);
+    if (t > 0) return 0;
+    var bak = read(BAK, null);
+    if (!bak || !(num(bak.total) > 0)) return 0;
+    var rs = num(read(RSET, 0));
+    if (rs && rs >= num(bak.at)) return 0;         /* 엄마가 일부러 0으로 만든 뒤면 되살리지 않는다 */
+    st.total = num(bak.total);
+    write(DS, st);
+    return st.total;
+  } catch(e){ return 0; }
+}
+
+/* ---------------- 별 더하기 / 맞추기 ---------------- */
+function now(){ return SB.starsNow ? num(SB.starsNow()) : num((read(DS, {}) || {}).total); }
+function setStars(n){
+  n = Math.max(0, Math.round(num(n)));
+  var cur = now();
+  if (n === cur) return false;
+  try {
+    if (n > cur){
+      var key = "manual|" + Date.now() + "|" + Math.random().toString(36).slice(2, 6);
+      if (SB.earn) SB.earn(key, n - cur);
+      else { var st = read(DS, { total:0 }) || { total:0 }; st.total = n; write(DS, st); }
+    } else {
+      if (SB.spend) SB.spend(cur - n);
+      else { var st2 = read(DS, { total:0 }) || { total:0 }; st2.total = n; write(DS, st2); }
+      if (n === 0) write(RSET, Date.now());
+    }
+  } catch(e){ return false; }
+  backup();
+  try { if (SB.refresh) SB.refresh(); } catch(e){}
+  try { if (SB.money && SB.money.render) SB.money.render(); } catch(e){}
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
+  paint();
+  return true;
+}
+function addStars(n){
+  var before = now();
+  setStars(before + Math.round(num(n)));
+  try {
+    if (SB.toast) SB.toast("⭐ 별 " + Math.round(num(n)) + "개를 더했어요 · 지금 " + now() + "개");
+  } catch(e){}
+}
+
+/* ---------------- ⚙️ 설정 줄 ---------------- */
+var CSS = ''
++ '.starbox{margin:0 0 .7rem;padding:.7rem .8rem;border-radius:.9rem;background:linear-gradient(140deg,#fff8e2,#fffdf7);'
++ '  box-shadow:inset 0 0 0 1.6px #f0e0b4;display:flex;flex-direction:column;gap:.5rem;}'
++ '.starbox-h{display:flex;align-items:center;gap:.5rem;font-size:.95rem;font-weight:900;color:#7a4c00;}'
++ '.starbox-h b{font-weight:900;}'
++ '.starbox-h span{margin-left:auto;font-size:1.35rem;font-weight:900;color:#c1553a;}'
++ '.starbox-h span i{font-style:normal;font-size:.8rem;color:#a06a12;margin-left:.15rem;}'
++ '.starbox-acts{display:flex;gap:.4rem;flex-wrap:wrap;}'
++ '.starbox-acts .btn{min-width:3.4rem;}'
++ '.starbox-set{display:flex;gap:.4rem;align-items:center;}'
++ '.starbox-set input{flex:1 1 auto;min-width:0;height:2.4rem;border-radius:.6rem;border:.16vh solid #e3d3a8;'
++ '  background:#fff;padding:0 .6rem;font-size:.9rem;font-weight:800;color:#33414d;}'
++ '.starbox-note{font-size:.72rem;font-weight:800;color:#8a6a2a;line-height:1.35;margin:0;}';
+function css(){
+  if (document.getElementById("starboxCss")) return;
+  var st = document.createElement("style");
+  st.id = "starboxCss"; st.textContent = CSS;
+  document.head.appendChild(st);
+}
+function boxHTML(){
+  var n = now();
+  return '<div class="starbox-h"><b>⭐ 별 개수</b><span id="starNow">' + n + '<i>개</i></span></div>'
+    + '<div class="starbox-acts">'
+    +   '<button class="btn ghost" type="button" data-staradd="1">+1</button>'
+    +   '<button class="btn ghost" type="button" data-staradd="5">+5</button>'
+    +   '<button class="btn ghost" type="button" data-staradd="10">+10</button>'
+    + '</div>'
+    + '<div class="starbox-set">'
+    +   '<input id="starSetIn" type="number" min="0" step="1" inputmode="numeric" placeholder="별 개수 직접 입력" aria-label="별 개수 직접 입력">'
+    +   '<button class="btn ok" id="starSetBtn" type="button">저장</button>'
+    + '</div>'
+    + '<p class="starbox-note">별이 사라졌을 때 여기서 바로 되돌려 줄 수 있어요. 가족 코드를 연결하면 다른 기기에도 함께 맞춰져요.</p>';
+}
+function paint(){
+  var box = document.getElementById("starBox");
+  if (!box) return;
+  var inp = document.getElementById("starSetIn");
+  var keep = inp ? inp.value : "";
+  box.innerHTML = boxHTML();
+  var i2 = document.getElementById("starSetIn");
+  if (i2 && keep) i2.value = keep;
+}
+function mount(){
+  var pane = document.querySelector('#settingsModal [data-setpane="general"]');
+  if (!pane) return false;
+  if (document.getElementById("starBox")) { paint(); return true; }
+  css();
+  var box = document.createElement("div");
+  box.className = "starbox"; box.id = "starBox";
+  box.innerHTML = boxHTML();
+  pane.insertBefore(box, pane.firstChild);
+  return true;
+}
+
+/* 설정 모달을 열 때마다 지금 별 개수로 맞춘다 */
+document.addEventListener("click", function(e){
+  var t = e.target;
+  if (!t || !t.closest) return;
+  if (t.closest("#btnSettings") || t.closest("[data-close='settingsModal']")){
+    setTimeout(function(){ mount(); paint(); }, 60);
+  }
+  var add = t.closest("[data-staradd]");
+  if (add){ addStars(num(add.getAttribute("data-staradd"))); return; }
+  if (t.closest("#starSetBtn")){
+    var inp = document.getElementById("starSetIn");
+    var v = inp ? Number(String(inp.value).replace(/[^0-9-]/g, "")) : NaN;
+    if (!isFinite(v) || v < 0){ if (SB.toast) SB.toast("0보다 큰 숫자를 넣어 주세요 ⭐"); return; }
+    setStars(v);
+    try { if (SB.toast) SB.toast("⭐ 별 " + Math.round(v) + "개로 맞췄어요"); } catch(e){}
+    return;
+  }
+}, true);
+
+/* ---------------- 처음 열 때 한 번 ---------------- */
+function boot(){
+  var had = guard();
+  backup();
+  try { if (SB.refresh) SB.refresh(); } catch(e){}
+  if (had) { try { if (SB.toast) SB.toast("⭐ 별 " + had + "개를 되살렸어요"); } catch(e){} }
+  try { mount(); } catch(e){}
+  setTimeout(function(){ try { mount(); } catch(e){} }, 700);
+}
+SB.starGuard = guard;
+SB.starSet = setStars;
+SB.starAdd = addStars;
+SB.starPaint = paint;
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+else boot();
+setTimeout(function(){ try { boot(); } catch(e){} }, 1200);
+})();
+</script>
 </body>
 </html>
