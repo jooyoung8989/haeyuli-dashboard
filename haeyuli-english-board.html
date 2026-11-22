@@ -6463,6 +6463,268 @@ body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
   .wg-en{font-size:clamp(24px,4.4vh,46px);}
 }
 </style>
+
+<style id="egread1123css">
+/* =====================================================================
+   2026-11-23 · 📖 단계별 읽기 (0~5단계) · ✍️ 문장 워크북 · 📒 사이트워드 워크북
+   — 같은 날 올린 세 가지 영어 학습을 한 벌의 스타일로 묶는다
+   ===================================================================== */
+
+/* ---------------- 📖 단계별 읽기 ---------------- */
+.egview{height:100%;min-height:0;}
+.eg-wrap{display:flex;flex-direction:column;height:100%;min-height:0;gap:.55vh;padding:.9vh 1.1vh 1.1vh;}
+.eg-head{flex:0 0 auto;display:flex;align-items:center;gap:.7vh;min-width:0;}
+.eg-tt{display:flex;flex-direction:column;min-width:0;}
+.eg-tt b{font-size:clamp(16px,2.3vh,26px);font-weight:900;color:#1e5478;letter-spacing:-.03em;white-space:nowrap;}
+.eg-tt span{font-size:clamp(10px,1.3vh,13px);font-weight:800;color:#8aa6b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.eg-prog{margin-left:auto;flex:0 0 auto;font-size:clamp(11px,1.45vh,15px);font-weight:900;color:#0d6f9e;
+  background:#eaf7ff;border-radius:999px;padding:.34vh .95vh;box-shadow:inset 0 0 0 .18vh #c4e6f8;white-space:nowrap;}
+.eg-levels,.eg-chips{flex:0 0 auto;display:flex;gap:.4vh;overflow-x:auto;overflow-y:hidden;padding-bottom:.25vh;scrollbar-width:none;}
+.eg-levels::-webkit-scrollbar,.eg-chips::-webkit-scrollbar{display:none;}
+.eg-lv{flex:0 0 auto;height:3.2vh;min-height:2rem;padding:0 1vh;border-radius:999px;background:#fff;color:#5f7f93;
+  font-size:clamp(10px,1.35vh,14px);font-weight:900;box-shadow:inset 0 0 0 .16vh #e6eef4;white-space:nowrap;}
+.eg-lv.on{background:#eaf7ff;color:#0d6f9e;box-shadow:inset 0 0 0 .22vh #9fd3ee;}
+.eg-lv.done{background:#f2fdf8;color:#1f8a5c;box-shadow:inset 0 0 0 .18vh #bfe9d4;}
+.eg-lv.done.on{box-shadow:inset 0 0 0 .22vh #7fd0ab;}
+.eg-lv .n{font-style:normal;margin-left:.3em;font-size:.9em;color:#a9bfcd;font-weight:900;}
+.eg-lv.on .n{color:#4d9dc4;}
+.eg-chip{flex:0 0 auto;height:3vh;min-height:1.9rem;min-width:3.1rem;padding:0 .7vh;border-radius:.85rem;background:#f7fbff;
+  color:#5b7f96;font-size:clamp(10px,1.3vh,13px);font-weight:900;box-shadow:inset 0 0 0 .14vh #e2eef7;white-space:nowrap;
+  display:inline-flex;align-items:center;justify-content:center;gap:.2em;}
+.eg-chip.on{background:#fff;color:#0d6f9e;box-shadow:inset 0 0 0 .2vh #7cc9ef;}
+.eg-chip.done{color:#1f8a5c;background:#f2fdf8;box-shadow:inset 0 0 0 .14vh #bfe9d4;}
+.eg-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:.4vh;}
+
+.eg-card{background:#fff;border-radius:1.6vh;padding:1vh;box-shadow:0 0 0 .12vh #e6eff5,0 .35vh 1vh rgba(40,90,130,.07);
+  display:flex;flex-direction:column;gap:.8vh;}
+.eg-art{position:relative;border-radius:1.2vh;overflow:hidden;background:#eaf4fb;line-height:0;aspect-ratio:400/240;max-height:27vh;}
+.eg-art svg{width:100%;height:100%;display:block;}
+.eg-titlerow{display:flex;align-items:center;gap:.5vh;flex-wrap:wrap;min-width:0;}
+.eg-titlerow b{font-size:clamp(15px,2.1vh,24px);font-weight:900;color:#1b4c6b;letter-spacing:-.02em;}
+.eg-badge{font-size:clamp(9px,1.25vh,13px);font-weight:900;color:#a06312;background:#fff2dc;border-radius:999px;padding:.18em .6em;}
+.eg-badge.bl{color:#0d6f9e;background:#eaf7ff;}
+.eg-sents{display:flex;flex-direction:column;}
+.eg-sent{display:flex;align-items:flex-start;gap:.55vh;padding:.45vh .2vh;}
+.eg-sent+.eg-sent{border-top:.14vh dashed #eef4f9;}
+.eg-sent p{flex:1 1 auto;min-width:0;margin:0;font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;
+  font-size:clamp(17px,2.5vh,27px);font-weight:800;color:#173f59;line-height:1.45;letter-spacing:-.01em;}
+.eg-say{flex:0 0 auto;width:3.4vh;height:3.4vh;min-width:1.9rem;min-height:1.9rem;border-radius:999px;background:#eef8fe;color:#2f7ea6;
+  font-size:clamp(12px,1.6vh,17px);box-shadow:inset 0 0 0 .15vh #cfe6f4;display:inline-flex;align-items:center;justify-content:center;}
+.eg-say:active{transform:scale(.94);}
+.eg-ko{margin:.2vh 0 0;padding:.55vh .7vh;border-radius:.9vh;background:#fbfdff;box-shadow:inset 0 0 0 .14vh #eaf2f8;
+  font-size:clamp(12px,1.65vh,18px);font-weight:800;color:#5b7f96;line-height:1.5;}
+.eg-ko p{margin:0;}
+.eg-tools{display:flex;flex-wrap:wrap;gap:.45vh;align-items:center;padding-top:.2vh;}
+.eg-btn{height:3.6vh;min-height:2.1rem;padding:0 1.05vh;border-radius:999px;background:#eef8fe;color:#1c7099;
+  font-size:clamp(11px,1.4vh,15px);font-weight:900;box-shadow:inset 0 0 0 .16vh #cfe8f7;white-space:nowrap;}
+.eg-btn:active{transform:scale(.97);}
+.eg-btn.pri{background:#3f93bd;color:#fff;box-shadow:0 .25vh .7vh rgba(40,110,150,.22);}
+.eg-btn.on{background:#fff;color:#0d6f9e;box-shadow:inset 0 0 0 .22vh #7cc9ef;}
+.eg-rate{display:inline-flex;gap:.25vh;padding:.24vh;border-radius:999px;background:#f4f9fd;box-shadow:inset 0 0 0 .14vh #e0edf6;}
+.eg-rate button{height:3.1vh;min-height:1.85rem;padding:0 .8vh;border-radius:999px;color:#7e96aa;font-size:clamp(10px,1.3vh,14px);font-weight:900;}
+.eg-rate button.on{background:#fff;color:#0d6f9e;box-shadow:0 .2vh .5vh rgba(50,110,150,.16);}
+.eg-rec{display:flex;flex-wrap:wrap;align-items:center;gap:.4vh;}
+.eg-rec .eg-rl{font-size:clamp(9px,1.2vh,13px);font-weight:900;color:#8ba4b7;letter-spacing:-.01em;}
+.eg-rec .rec{height:3.6vh;min-height:2.1rem;padding:0 1vh;border-radius:999px;background:#fff;color:#3f7f9f;
+  font-size:clamp(10px,1.35vh,14px);font-weight:900;box-shadow:inset 0 0 0 .16vh #dbe9f2;white-space:nowrap;}
+.eg-rec .rec.on{background:#fff1f1;color:#c05252;box-shadow:inset 0 0 0 .2vh #ffb3b3;}
+.eg-rec .recplay{height:3.6vh;min-height:2.1rem;padding:0 1vh;border-radius:999px;background:#f7fbff;color:#5b7f96;
+  font-size:clamp(10px,1.35vh,14px);font-weight:900;box-shadow:inset 0 0 0 .16vh #e4eef6;white-space:nowrap;}
+.eg-rec .recplay[disabled]{opacity:.45;}
+
+/* 이해 퀴즈 */
+.eg-quiz{display:flex;flex-direction:column;gap:.6vh;padding-top:.3vh;}
+.eg-qh{display:flex;align-items:center;gap:.5vh;flex-wrap:wrap;}
+.eg-qh b{font-size:clamp(13px,1.8vh,19px);font-weight:900;color:#1e5478;}
+.eg-qh span{font-size:clamp(10px,1.3vh,13px);font-weight:800;color:#9db4c4;}
+.eg-q{background:#f7fbff;border-radius:1.1vh;padding:.7vh .8vh;box-shadow:inset 0 0 0 .14vh #e6f1f9;}
+.eg-q .q{font-size:clamp(14px,1.95vh,20px);font-weight:900;color:#25506d;line-height:1.4;}
+.eg-q .q i{font-style:normal;color:#a06a12;}
+.eg-opts{display:flex;flex-wrap:wrap;gap:.5vh;margin-top:.55vh;}
+.eg-opt{min-height:4.4vh;min-width:5.2rem;padding:.5vh 1.5vh;border-radius:999px;background:#fff;color:#25506d;
+  font-size:clamp(15px,2.05vh,23px);font-weight:900;box-shadow:inset 0 0 0 .16vh #dbe9f2,0 .2vh .5vh rgba(40,90,130,.05);}
+.eg-opt:active{transform:scale(.985);}
+.eg-opt.right{background:#eefbf4;color:#1f7a52;box-shadow:inset 0 0 0 .25vh #63c79a;}
+.eg-opt.wrong{background:#fff4f4;color:#c05252;box-shadow:inset 0 0 0 .2vh #ffb3b3;animation:egshake .42s;}
+@keyframes egshake{0%,100%{transform:translateX(0);}20%{transform:translateX(-4px);}40%{transform:translateX(4px);}60%{transform:translateX(-3px);}80%{transform:translateX(2px);}}
+.eg-q .fb{margin-top:.45vh;font-size:clamp(11px,1.5vh,16px);font-weight:900;color:#1f8a5c;}
+.eg-q .fb.no{color:#b85555;}
+
+/* 완료 줄 */
+.eg-done{display:flex;align-items:center;gap:.6vh;flex-wrap:wrap;padding:.7vh .9vh;border-radius:1.1vh;background:#eefbf4;
+  box-shadow:inset 0 0 0 .16vh #bfe9d4;}
+.eg-done b{font-size:clamp(13px,1.8vh,19px);font-weight:900;color:#1f7a52;}
+.eg-done span{font-size:clamp(10px,1.35vh,14px);font-weight:800;color:#5f9a7c;}
+.eg-done .eg-btn{margin-left:auto;}
+
+/* 0단계 · 한 문장 퀴즈 */
+.eg-l0{display:flex;flex-direction:column;gap:.7vh;}
+.eg-l0 .lead{font-size:clamp(10px,1.35vh,14px);font-weight:800;color:#9db4c4;text-align:center;}
+.eg-line{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:center;gap:.1em .16em;padding:.4vh .2vh 1.1vh;}
+.eg-word{position:relative;font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(21px,3.5vh,38px);
+  font-weight:800;color:#173f59;letter-spacing:-.01em;padding:.04em .08em;border-radius:.16em;line-height:1.16;}
+.eg-word::after{content:"•";display:block;text-align:center;font-size:.62em;line-height:1;color:#a9becd;margin-top:-.04em;}
+.eg-word.hl{background:linear-gradient(180deg,rgba(255,230,128,0) 12%,#ffe680 12%,#ffe680 88%,rgba(255,230,128,0) 88%);}
+.eg-word:active{background:#eaf7ff;}
+.eg-l0q{padding:.2vh .3vh;}
+.eg-l0q .q{font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(15px,2.05vh,22px);font-weight:800;
+  color:#25506d;line-height:1.35;}
+.eg-ans{display:grid;grid-template-columns:1fr 1fr;gap:.7vh;margin-top:.6vh;}
+.eg-ac{display:flex;align-items:center;gap:.5vh;padding:.6vh .7vh;border-radius:1.2vh;background:#fff;text-align:left;
+  box-shadow:inset 0 0 0 .16vh #dbe9f2,0 .2vh .6vh rgba(40,90,130,.05);min-width:0;}
+.eg-ac .mk{flex:0 0 auto;width:2.1em;height:2.1em;border-radius:50%;background:#f4f9fd;box-shadow:inset 0 0 0 .14vh #e0edf6;
+  display:inline-flex;align-items:center;justify-content:center;font-size:clamp(11px,1.45vh,15px);font-weight:900;color:#8aa6b8;}
+.eg-ac .pic{flex:0 0 auto;width:min(11vh,4.6rem);max-width:34%;}
+.eg-ac .pic svg{width:100%;height:auto;}
+.eg-ac .tx{display:flex;flex-direction:column;min-width:0;}
+.eg-ac .tx b{font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(14px,1.95vh,20px);font-weight:800;color:#25506d;line-height:1.2;}
+.eg-ac .tx i{font-style:normal;font-size:clamp(9px,1.2vh,13px);font-weight:800;color:#9db4c4;}
+.eg-ac.right{background:#eefbf4;box-shadow:inset 0 0 0 .25vh #63c79a;}
+.eg-ac.right .mk{background:#d9f6e8;color:#1f7a52;}
+.eg-ac.wrong{background:#fff4f4;box-shadow:inset 0 0 0 .2vh #ffb3b3;animation:egshake .42s;}
+
+/* ---------------- ✍️ 문장 워크북 ---------------- */
+.wbview{height:100%;min-height:0;}
+.wb-wrap{display:flex;flex-direction:column;height:100%;min-height:0;gap:.55vh;padding:.9vh 1.1vh 1.1vh;}
+.wb-head{flex:0 0 auto;display:flex;align-items:center;gap:.7vh;min-width:0;}
+.wb-tt{display:flex;flex-direction:column;min-width:0;}
+.wb-tt b{font-size:clamp(16px,2.3vh,26px);font-weight:900;color:#1e5478;letter-spacing:-.03em;white-space:nowrap;}
+.wb-tt span{font-size:clamp(10px,1.3vh,13px);font-weight:800;color:#8aa6b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wb-prog{margin-left:auto;flex:0 0 auto;font-size:clamp(11px,1.45vh,15px);font-weight:900;color:#0d6f9e;background:#eaf7ff;
+  border-radius:999px;padding:.34vh .95vh;box-shadow:inset 0 0 0 .18vh #c4e6f8;white-space:nowrap;}
+.wb-fams{flex:0 0 auto;display:flex;gap:.4vh;overflow-x:auto;overflow-y:hidden;padding-bottom:.25vh;scrollbar-width:none;}
+.wb-fams::-webkit-scrollbar{display:none;}
+.wb-fam{flex:0 0 auto;height:3.2vh;min-height:2rem;padding:0 .9vh;border-radius:999px;background:#fff;color:#5f7f93;
+  font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(10px,1.35vh,14px);font-weight:800;
+  box-shadow:inset 0 0 0 .16vh #e6eef4;white-space:nowrap;}
+.wb-fam.on{background:#eaf7ff;color:#0d6f9e;box-shadow:inset 0 0 0 .22vh #9fd3ee;}
+.wb-fam.done{color:#1f8a5c;box-shadow:inset 0 0 0 .16vh #bfe9d4;background:#f2fdf8;}
+.wb-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:.5vh;}
+.wb-sheet{background:#fff;border-radius:1.6vh;padding:1vh;box-shadow:0 0 0 .12vh #e6eff5,0 .35vh 1vh rgba(40,90,130,.07);}
+.wb-sheet-h{display:flex;align-items:flex-end;gap:.6vh;flex-wrap:wrap;padding-bottom:.6vh;border-bottom:.16vh solid #dfeaf2;}
+.wb-sheet-h .nm{display:flex;flex-direction:column;min-width:0;}
+.wb-sheet-h .nm b{font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(14px,2vh,21px);font-weight:800;color:#1b4c6b;}
+.wb-sheet-h .nm i{font-style:normal;font-size:clamp(9px,1.25vh,13px);font-weight:800;color:#9db4c4;}
+.wb-sheet-h .fam{margin-left:auto;font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(11px,1.5vh,16px);
+  font-weight:800;color:#a06312;background:#fff2dc;border-radius:.7vh;padding:.3vh .7vh;box-shadow:inset 0 0 0 .14vh #ffe0b0;}
+.wb-bank{display:grid;grid-template-columns:repeat(auto-fit,minmax(4.2rem,1fr));gap:.45vh;padding:.7vh 0 .3vh;}
+.wb-w{position:relative;display:flex;flex-direction:column;align-items:center;gap:.1vh;padding:.45vh .2vh;border-radius:.9vh;
+  background:#f8fcff;box-shadow:inset 0 0 0 .14vh #e4f0f8;}
+.wb-w svg{width:min(5.6vh,2.9rem);height:auto;}
+.wb-w span{font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(11px,1.5vh,16px);font-weight:800;color:#1b4c6b;}
+.wb-w.used{background:#eefbf4;box-shadow:inset 0 0 0 .18vh #bfe9d4;}
+.wb-w.used::after{content:"✓";position:absolute;top:.1vh;right:.35vh;font-size:clamp(9px,1.2vh,13px);font-weight:900;color:#1f8a5c;}
+.wb-w:active{transform:scale(.96);}
+.wb-note{font-size:clamp(9px,1.25vh,13px);font-weight:800;color:#9db4c4;padding:.1vh 0 .2vh;}
+.wb-rows{display:flex;flex-direction:column;margin-top:.3vh;}
+.wb-row{display:flex;align-items:center;gap:.5vh;padding:.5vh .1vh;border-top:.14vh dashed #eef4f9;min-width:0;}
+.wb-row:first-child{border-top:0;}
+.wb-row .n{flex:0 0 auto;width:1.5em;font-family:"Helvetica Neue",Arial,sans-serif;font-size:clamp(11px,1.5vh,16px);font-weight:800;color:#a9becd;}
+.wb-line{flex:1 1 auto;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:.16em;
+  font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(15px,2.15vh,23px);font-weight:800;color:#173f59;line-height:1.5;}
+.wb-box{width:1.15em;height:1.5em;border:0;border-radius:.22em;background:#fff;text-align:center;padding:0;
+  font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:1em;font-weight:800;color:#173f59;line-height:1;
+  box-shadow:inset 0 0 0 .15vh #cfe0ec;}
+.wb-box:focus{outline:none;box-shadow:inset 0 0 0 .22vh #7fc4e8;}
+.wb-box.ok{background:#f4fdf9;box-shadow:inset 0 0 0 .15vh #9fdcbf;color:#1f7a52;}
+.wb-row.ok .wb-line{color:#1f7a52;}
+.wb-row.bad .wb-box{background:#fff6f6;box-shadow:inset 0 0 0 .15vh #ffb3b3;animation:egshake .42s;}
+.wb-hint{flex:0 0 auto;width:min(6vh,3.1rem);}
+.wb-hint svg{width:100%;height:auto;}
+.wb-say{flex:0 0 auto;width:3.2vh;height:3.2vh;min-width:1.8rem;min-height:1.8rem;border-radius:999px;background:#eef8fe;color:#2f7ea6;
+  font-size:clamp(11px,1.5vh,15px);box-shadow:inset 0 0 0 .15vh #cfe6f4;display:inline-flex;align-items:center;justify-content:center;}
+.wb-say:active{transform:scale(.94);}
+.wb-fin{display:flex;align-items:center;gap:.6vh;flex-wrap:wrap;margin-top:.8vh;padding:.8vh .9vh;border-radius:1.1vh;
+  background:#eefbf4;box-shadow:inset 0 0 0 .16vh #bfe9d4;}
+.wb-fin b{font-size:clamp(13px,1.85vh,20px);font-weight:900;color:#1f7a52;}
+.wb-fin span{font-size:clamp(10px,1.35vh,14px);font-weight:800;color:#5f9a7c;}
+.wb-fin .eg-btn{margin-left:auto;}
+.wb-side{display:flex;flex-wrap:wrap;gap:.4vh;margin-top:.5vh;}
+
+/* ---------------- 📒 사이트워드 워크북 (사이트워드 안 모드) ---------------- */
+.sw-mode{display:inline-flex;gap:.25vh;padding:.24vh;border-radius:999px;background:#f4f9fd;box-shadow:inset 0 0 0 .14vh #e0edf6;}
+.sw-mode button{height:3.1vh;min-height:1.85rem;padding:0 .85vh;border-radius:999px;color:#7e96aa;
+  font-size:clamp(10px,1.3vh,14px);font-weight:900;white-space:nowrap;}
+.sw-mode button.on{background:#fff;color:#0d6f9e;box-shadow:0 .2vh .5vh rgba(50,110,150,.16);}
+.sww-stage{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.55vh;padding:.9vh .2vh 1.1vh;}
+.sww-stage[hidden]{display:none!important;}
+.sww-head{flex:0 0 auto;display:flex;align-items:center;gap:.7vh;flex-wrap:wrap;min-width:0;}
+.sww-tt{display:flex;flex-direction:column;min-width:0;}
+.sww-tt b{font-size:clamp(16px,2.3vh,26px);font-weight:900;color:#1e5478;letter-spacing:-.03em;white-space:nowrap;}
+.sww-tt span{font-size:clamp(10px,1.3vh,13px);font-weight:800;color:#8aa6b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sww-prog{margin-left:auto;flex:0 0 auto;font-size:clamp(11px,1.45vh,15px);font-weight:900;color:#0d6f9e;background:#eaf7ff;
+  border-radius:999px;padding:.34vh .95vh;box-shadow:inset 0 0 0 .18vh #c4e6f8;white-space:nowrap;}
+.sww-words{flex:0 0 auto;display:flex;gap:.4vh;overflow-x:auto;overflow-y:hidden;padding-bottom:.25vh;scrollbar-width:none;}
+.sww-words::-webkit-scrollbar{display:none;}
+.sww-wd{flex:0 0 auto;height:3.2vh;min-height:2rem;min-width:3.4rem;padding:0 .9vh;border-radius:999px;background:#fff;color:#5f7f93;
+  font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(11px,1.45vh,15px);font-weight:800;
+  box-shadow:inset 0 0 0 .16vh #e6eef4;white-space:nowrap;}
+.sww-wd.on{background:#eaf7ff;color:#0d6f9e;box-shadow:inset 0 0 0 .22vh #9fd3ee;}
+.sww-wd.done{color:#1f8a5c;background:#f2fdf8;box-shadow:inset 0 0 0 .16vh #bfe9d4;}
+.sww-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:.5vh;}
+.sww-sheet{background:#fff;border-radius:1.6vh;padding:1vh;box-shadow:0 0 0 .12vh #e6eff5,0 .35vh 1vh rgba(40,90,130,.07);}
+.sww-h{display:flex;align-items:center;gap:.6vh;padding-bottom:.5vh;border-bottom:.16vh solid #dfeaf2;}
+.sww-h b{font-size:clamp(13px,1.8vh,19px);font-weight:900;color:#1b4c6b;}
+.sww-h .chip{font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(11px,1.5vh,16px);font-weight:800;
+  background:#eaf7ff;color:#0d6f9e;border-radius:999px;padding:.2em .7em;}
+.sww-h .sw-word{margin-left:auto;font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(15px,2.1vh,22px);
+  font-weight:800;color:#a06312;}
+.sww-sec{margin-top:.7vh;}
+.sww-sh{display:flex;align-items:center;gap:.5vh;flex-wrap:wrap;margin-bottom:.4vh;}
+.sww-sh b{font-size:clamp(11px,1.5vh,16px);font-weight:900;color:#25506d;}
+.sww-sh span{font-size:clamp(9px,1.2vh,13px);font-weight:800;color:#9db4c4;}
+.sww-cvbox{position:relative;border-radius:1.1vh;background:#fbfdff;box-shadow:inset 0 0 0 .15vh #dbe9f2;overflow:hidden;aspect-ratio:2.55/1;max-height:18vh;}
+.sww-guide{position:absolute;inset:0;display:block;}
+.sww-guide svg{width:100%;height:100%;display:block;}
+.sww-guide text{font-family:"Helvetica Neue",Arial,"Liberation Sans","Apple SD Gothic Neo",sans-serif;font-weight:800;}
+.sww-cv{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:none;cursor:crosshair;}
+.sww-pens{display:flex;align-items:center;gap:.4vh;flex-wrap:wrap;margin-top:.45vh;}
+.sww-pen{width:2.4vh;height:2.4vh;min-width:1.5rem;min-height:1.5rem;border-radius:50%;box-shadow:inset 0 0 0 .2vh #fff,0 0 0 .14vh #dbe9f2;}
+.sww-pen.on{box-shadow:inset 0 0 0 .2vh #fff,0 0 0 .24vh #7cc9ef;}
+.sww-pen.er{width:auto;min-width:3.4rem;padding:0 .7vh;border-radius:999px;background:#f2f6f9;color:#6b8398;
+  display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;
+  font-size:clamp(10px,1.3vh,14px);font-weight:900;box-shadow:inset 0 0 0 .14vh #dbe9f2;}
+.sww-find{display:flex;flex-wrap:wrap;gap:.55vh;justify-content:center;padding:.2vh 0;}
+.sww-f{min-width:4.6rem;height:5vh;min-height:2.6rem;padding:0 1vh;border-radius:999px;background:#fff;color:#25506d;
+  font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(14px,1.95vh,20px);font-weight:800;
+  box-shadow:inset 0 0 0 .16vh #cfdde9;}
+.sww-f:active{transform:scale(.96);}
+.sww-f.found{color:#fff;box-shadow:none;}
+.sww-f.miss{animation:egshake .4s;}
+.sww-sent{display:flex;align-items:center;gap:.4vh;padding:.35vh 0;flex-wrap:wrap;}
+.sww-line{flex:1 1 auto;display:flex;flex-wrap:wrap;gap:.1em .18em;min-width:0;
+  font-family:"Helvetica Neue",Arial,"Liberation Sans",system-ui,sans-serif;font-size:clamp(15px,2.1vh,23px);font-weight:800;color:#173f59;line-height:1.45;}
+.sww-word{font-size:1em;font-weight:inherit;font-family:inherit;color:inherit;}
+.sww-word{padding:0 .1em;border-radius:999px;box-shadow:inset 0 0 0 0 transparent;}
+.sww-word.on{box-shadow:inset 0 0 0 .2vh #ef7b6f;background:#fff3f1;}
+.sww-fin{display:flex;align-items:center;gap:.6vh;flex-wrap:wrap;margin-top:.8vh;padding:.7vh .9vh;border-radius:1.1vh;
+  background:#eefbf4;box-shadow:inset 0 0 0 .16vh #bfe9d4;}
+.sww-fin b{font-size:clamp(13px,1.8vh,19px);font-weight:900;color:#1f7a52;}
+.sww-fin .eg-btn{margin-left:auto;}
+.sww-steps{display:flex;gap:.4vh;flex-wrap:wrap;}
+.sww-step{font-size:clamp(9px,1.2vh,13px);font-weight:900;color:#9db4c4;background:#f6fbfe;border-radius:999px;padding:.2em .6em;
+  box-shadow:inset 0 0 0 .14vh #e5f0f7;}
+.sww-step.done{color:#1f8a5c;background:#f2fdf8;box-shadow:inset 0 0 0 .14vh #bfe9d4;}
+
+@media (min-width:900px){
+  /* 넓은 화면에서는 그림이 가로로 늘어나 잘리지 않게 가운데에 5:3 그대로 둔다 */
+  .eg-art{max-height:none;width:min(100%, calc(34vh * 5 / 3));margin:0 auto;}
+}
+@media (max-width:520px){
+  .eg-wrap,.wb-wrap,.sww-stage{padding:.7vh .7vh 1.4vh;}
+  .eg-tt span,.wb-tt span,.sww-tt span{display:none;}
+  .eg-sent p{font-size:clamp(16px,2.4vh,22px);}
+  .eg-ac .pic{width:min(9vh,3.4rem);}
+  .wb-bank{grid-template-columns:repeat(auto-fit,minmax(3.6rem,1fr));}
+  .sww-cv{height:13vh;}
+  .sww-f{min-width:3.9rem;height:4.4vh;font-size:clamp(13px,1.8vh,18px);padding:0 .8vh;}
+}
+@media (max-height:700px){
+  .eg-art{max-height:24vh;}
+  .sww-cv{height:12vh;}
+}
+
+</style>
 <style id="final1122css">
 /* ================= 2026-11-22 마무리 배치 — 통합검색 · 집 책 권수 · 홈 영어책 · 중국어 · 숙제 스케줄 ================= */
 
@@ -7440,6 +7702,10 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
       <div class="sw-stage">
         <div class="sw-head">
           <div class="sw-title"><b>👀 사이트워드</b><span id="swDate"></span></div>
+          <div class="sw-mode" id="swMode" role="group" aria-label="사이트워드 화면 고르기">
+            <button type="button" data-swmode="today" class="on" aria-pressed="true">👀 오늘의 단어</button>
+            <button type="button" data-swmode="wb" aria-pressed="false">📒 워크북</button>
+          </div>
           <div class="sw-steps" id="swSteps" role="tablist" aria-label="사이트워드 단계">
             <button type="button" data-step="1" class="on" role="tab" aria-pressed="true">1 · 단어</button>
             <button type="button" data-step="2" role="tab" aria-pressed="false">2 · 그림 문장</button>
@@ -7458,6 +7724,16 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
           <button class="sw-nav" id="swNext" type="button" aria-label="다음 단어">▶</button>
         </div>
         <div class="sw-body" id="swBody"></div>
+      </div>
+      <div class="sww-stage" id="swWbStage" hidden>
+        <div class="sww-head">
+          <div class="sww-tt"><b>📒 사이트워드 워크북</b><span>따라 쓰고 · 찾고 · 동그라미 · 한 낱말에 ⭐ +1</span></div>
+          <div class="sww-steps" id="swwSteps"></div>
+          <div class="sww-prog" id="swwProg">완료 0 / 20</div>
+          <button class="eg-btn" type="button" data-swmode="today">← 오늘의 단어</button>
+        </div>
+        <div class="sww-words" id="swwWords" role="group" aria-label="사이트워드 고르기"></div>
+        <div class="sww-body" id="swwBody"></div>
       </div>
     </section>
 
@@ -7923,6 +8199,32 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
             <button class="wp-btn" type="button" data-wp="next">다음 ▶</button>
           </div>
         </div>
+      </div>
+    </section>
+
+
+    <!-- ================= 📖 단계별 읽기 (0~5단계) ================= -->
+    <section class="view egview" id="viewEnRead" data-view="en-read" hidden>
+      <div class="eg-wrap">
+        <div class="eg-head">
+          <div class="eg-tt"><b>📖 단계별 읽기</b><span>0단계 한 문장부터 5단계 짧은 이야기까지 · 한 편마다 ⭐ +1</span></div>
+          <div class="eg-prog" id="egProg">완료 0 / 45</div>
+        </div>
+        <div class="eg-levels" id="egLevels" role="group" aria-label="단계 고르기"></div>
+        <div class="eg-chips" id="egChips" role="group" aria-label="편 고르기"></div>
+        <div class="eg-body" id="egBody"></div>
+      </div>
+    </section>
+
+    <!-- ================= ✍️ 문장 워크북 (워드 패밀리 10장) ================= -->
+    <section class="view wbview" id="viewEnWb" data-view="en-wb" hidden>
+      <div class="wb-wrap">
+        <div class="wb-head">
+          <div class="wb-tt"><b>✍️ 문장 워크북</b><span>워드 패밀리 10장 · 빈칸에 알맞은 낱말을 써요</span></div>
+          <div class="wb-prog" id="wbProg">완료 0 / 10장</div>
+        </div>
+        <div class="wb-fams" id="wbFams" role="group" aria-label="워드 패밀리 고르기"></div>
+        <div class="wb-body" id="wbBody"></div>
       </div>
     </section>
 
@@ -11247,7 +11549,7 @@ SB.ntfySubject = function(sub){
    과목 안에서 하위 학습 메뉴를 하나씩 크게 본다. */
 var SUBJECTS = [
   { k:"math",    em:"🔢", nm:"수학", desc:"연산 · 도형·시계 · 사고력 · 1·2학년", sec:"concept" },
-  { k:"en",      em:"🔤", nm:"영어", desc:"나우 아임 리딩 · ORT · 사이트워드 · 파닉스 · 월팸", sec:"sight" },
+  { k:"en",      em:"🔤", nm:"영어", desc:"나우 아임 리딩 · ORT · 사이트워드 · 파닉스 · 단계별 읽기 · 문장 워크북 · 월팸", sec:"sight" },
   { k:"hanja",   em:"漢", nm:"한자", desc:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", sec:"trace" },
   { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄 · 글자 키보드 · 문장 쓰기 · 어휘·개념", sec:"quote" },
   { k:"history", em:"🏛️", nm:"역사", desc:"연도표 · 왕 계보 · 사진 퀴즈 · 영상 · 세계사", sec:"timeline" }
@@ -11268,7 +11570,7 @@ function chipLabel(s){
   return s;
 }
 var SECS = {
-  en:      [["nir", "📘 나우 아임 리딩"], ["ort", "🌳 ORT"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["call", "📞 전화 영어"], ["wordgrow", "🦉 단어키우기"], ["video", "🎬 영어 영상"], ["wolpaem", "🏰 월팸"]],
+  en:      [["nir", "📘 나우 아임 리딩"], ["ort", "🌳 ORT"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["read", "📖 단계별 읽기"], ["wb", "✍️ 문장 워크북"], ["call", "📞 전화 영어"], ["wordgrow", "🦉 단어키우기"], ["video", "🎬 영어 영상"], ["wolpaem", "🏰 월팸"]],
   ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"], ["key", "⌨️ 글자 키보드"], ["write", "✍️ 받아쓰기"], ["vocab", "🌱 어휘·개념"]],
   /* 수학은 큰 탭 5개(GROUPS)로 묶고, 그 안에서 알약 전환기로 10가지를 그대로 쓴다 */
   math:    [["calc", "➕ 기탄 연산"], ["saem", "🧮 하루 셈하기"], ["concept", "🔢 수세기"], ["gugu", "✖️ 구구단 원리"],
@@ -11315,6 +11617,7 @@ var VIEWID = {
   "study:en:nir":"viewEnShelf", "study:en:ort":"viewEnShelf",
   "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord", "study:ko:key":"viewKoKey", "study:ko:write":"viewKoWrite", "study:ko:vocab":"viewKoVocab",
   "study:en:wolpaem":"viewEnWolpaem", "study:en:wordgrow":"viewWordGrow",
+  "study:en:read":"viewEnRead", "study:en:wb":"viewEnWb",
   "study:math:concept":"viewMath", "study:math:calc":"viewMath", "study:math:think":"viewMath",
   "study:math:shape":"viewMath", "study:math:clock":"viewMath", "study:math:gugu":"viewMath",
   "study:math:saem":"viewMathSaem", "study:math:base1":"viewMathBase1",
@@ -23425,6 +23728,9 @@ function snap(){
     coupons: read(K.coupons, { items:[], issued:{} }),
     mathset: read(K.mathset, {}),
     wg: read("haeyuli.wordgrow.v1", null),
+    engread: read("haeyuli.engread.v1", null),
+    engwb: read("haeyuli.engwb.v1", null),
+    swwb: read("haeyuli.sw_wb.v1", null),
     ntfy: ntRead(),
     rb: {
       read: read(K.rbRead, {}),
@@ -23458,9 +23764,9 @@ function snap(){
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry, engread:d.engread, engwb:d.engwb, swwb:d.swwb });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry, s.engread, s.engwb, s.swwb]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -23974,6 +24280,21 @@ function mergeRp(l, c){
   return { v:1, at: Math.max(num(l.at), num(c.at), 1), items: items.slice(0, 300), del: del };
 }
 
+/* 📖 영어 새 학습 3종(단계별 읽기 · 문장 워크북 · 사이트워드 워크북) — 끝낸 표시는 합집합(최근 시각) */
+function mergeEngDone(l, c){
+  function norm(o){
+    o = (o && typeof o === "object" && !Array.isArray(o)) ? o : {};
+    var d = (o.done && typeof o.done === "object" && !Array.isArray(o.done)) ? o.done : {};
+    var out = {}, k, v;
+    for (k in d){ v = num(d[k]); if (v > 0) out[k] = v; }
+    return out;
+  }
+  var a = norm(l), b = norm(c), done = {}, k;
+  for (k in b) done[k] = b[k];
+  for (k in a) if (!done[k] || a[k] > done[k]) done[k] = a[k];
+  return { v:1, done: canonObj(done) };
+}
+
 function buildDoc(local, cloud, base, code){
   var c = cloud || {};
   var stM = mergeStars(local.stars, local.sled, c.stars, c.sled);
@@ -24014,6 +24335,9 @@ function buildDoc(local, cloud, base, code){
     annual: mergeAnnual(local.annual, c.annual),
     shelves: mergeShelves(local.shelves, c.shelves),
     momnote: mergeMom(local.momnote, c.momnote),
+    engread: mergeEngDone(local.engread, c.engread),
+    engwb: mergeEngDone(local.engwb, c.engwb),
+    swwb: mergeEngDone(local.swwb, c.swwb),
     carry: mergeCarry(local.carry, c.carry),
     hwday: local.hwday || c.hwday || null,
     at: Date.now()
@@ -24055,6 +24379,22 @@ function applyDoc(doc){
       changed = true;
       try { if (SB.wgRefresh) SB.wgRefresh(); } catch(e){}
     }
+  }
+  /* 📖 단계별 읽기 · ✍️ 문장 워크북 · 📒 사이트워드 워크북 — 끝낸 표시를 두 기기에서 합친다 */
+  var erNow = mergeEngDone(read("haeyuli.engread.v1", null), doc.engread);
+  if (JSON.stringify(erNow) !== JSON.stringify(read("haeyuli.engread.v1", null))){
+    write("haeyuli.engread.v1", erNow); changed = true;
+    try { if (SB.egRefresh) SB.egRefresh(); } catch(e){}
+  }
+  var ewNow = mergeEngDone(read("haeyuli.engwb.v1", null), doc.engwb);
+  if (JSON.stringify(ewNow) !== JSON.stringify(read("haeyuli.engwb.v1", null))){
+    write("haeyuli.engwb.v1", ewNow); changed = true;
+    try { if (SB.wbRefresh) SB.wbRefresh(); } catch(e){}
+  }
+  var swNow = mergeEngDone(read("haeyuli.sw_wb.v1", null), doc.swwb);
+  if (JSON.stringify(swNow) !== JSON.stringify(read("haeyuli.sw_wb.v1", null))){
+    write("haeyuli.sw_wb.v1", swNow); changed = true;
+    try { if (SB.swwbRefresh) SB.swwbRefresh(); } catch(e){}
   }
   /* 📖 빨간펜 책 — 오늘 읽을 책·읽은 책·독서 기록 */
   if (doc.rb && typeof doc.rb === "object"){
@@ -40231,6 +40571,1977 @@ function boot(){
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
 else setTimeout(boot, 0);
 })();
+</script>
+
+<script id="egart1123">
+/* =====================================================================
+   🎨 EGART — 영어 탭 새 학습 3종이 함께 쓰는 컬러 인라인 SVG 그림
+   · 모든 그림은 100×100 좌표(장면은 400×240)로 그리고, 글자·이모지 없이 도형만 씀
+   · EGART.pic("cat")        → 낱말 카드·힌트용 작은 그림
+   · EGART.pic("hat:blue")   → 색만 바꾼 같은 그림
+   · EGART.scene("room", [["cat",150,140,1],["yarn",250,150,1]]) → 이야기 삽화
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+
+var P = {
+  ink:"#3a5a70", ink2:"#5b7c92", line:"#dbe9f2",
+  skin:"#f7cfae", skin2:"#e8b48c",
+  hair:"#4a3b34", hair2:"#8a5a3b", hair3:"#c9d6df",
+  red:"#ef7b6f", red2:"#d95f52", red3:"#ffd7d1",
+  blue:"#6cb2e2", blue2:"#4d94c8", blue3:"#dff1fb",
+  green:"#7ecb9b", green2:"#57b07a", green3:"#bfe6a9",
+  yellow:"#ffd166", yellow2:"#f0b93f", yellow3:"#fff2dc",
+  orange:"#f2a65a", orange2:"#dd8a3c",
+  pink:"#f6a6c1", pink2:"#e785a6", pink3:"#fbbccf",
+  purple:"#b39ddb", purple2:"#cdbdf0",
+  brown:"#b98a5e", brown2:"#986b45", brown3:"#e8b47c",
+  gray:"#c9d6df", gray2:"#a9bac7", gray3:"#e7eef4",
+  white:"#ffffff", cream:"#fff8ea", water:"#8fd3f4", sand:"#f6e3b4"
+};
+
+/* ---------------- 사람 (색·머리 모양만 바꿔 쓴다) ---------------- */
+function person(o){
+  o = o || {};
+  var skin = o.skin || P.skin, hair = o.hair || P.hair, shirt = o.shirt || P.blue, pants = o.pants || P.ink2;
+  var s = "";
+  s += '<circle cx="50" cy="34" r="14" fill="' + skin + '"/>';
+  if (o.long) s += '<path d="M34 34 q0 -22 16 -22 q16 0 16 22 q0 16 -4 18 l-3 -16 h-18 l-3 16 q-4 -2 -4 -18" fill="' + hair + '"/>';
+  else s += '<path d="M35 31 q0 -17 15 -17 q15 0 15 17 q-6 -7 -15 -7 q-9 0 -15 7" fill="' + hair + '"/>';
+  if (o.bun) s += '<circle cx="50" cy="13" r="6" fill="' + hair + '"/>';
+  if (o.glasses) s += '<circle cx="44" cy="34" r="4.6" fill="none" stroke="' + P.ink + '" stroke-width="1.6"/><circle cx="56" cy="34" r="4.6" fill="none" stroke="' + P.ink + '" stroke-width="1.6"/><path d="M48.6 34 h2.8" stroke="' + P.ink + '" stroke-width="1.4"/>';
+  else s += '<circle cx="45" cy="34" r="1.9" fill="' + P.ink + '"/><circle cx="55" cy="34" r="1.9" fill="' + P.ink + '"/>';
+  s += '<path d="M46 40 q4 3 8 0" stroke="' + P.ink + '" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
+  s += '<path d="M38 50 q12 -6 24 0 l4 26 q-16 6 -32 0 z" fill="' + shirt + '"/>';
+  s += '<path d="M38 51 l-6 22 M62 51 l6 22" stroke="' + skin + '" stroke-width="6.4" stroke-linecap="round"/>';
+  s += '<rect x="41" y="76" width="6" height="16" rx="3" fill="' + pants + '"/><rect x="53" y="76" width="6" height="16" rx="3" fill="' + pants + '"/>';
+  return s;
+}
+function torso(shirt){ return '<path d="M38 50 q12 -6 24 0 l4 26 q-16 6 -32 0 z" fill="' + (shirt || P.green) + '"/>'; }
+function legs(pants){ pants = pants || P.ink2; return '<rect x="41" y="76" width="6" height="16" rx="3" fill="' + pants + '"/><rect x="53" y="76" width="6" height="16" rx="3" fill="' + pants + '"/>'; }
+function head(o){ o = o || {}; return '<circle cx="50" cy="34" r="14" fill="' + (o.skin || P.skin) + '"/>'; }
+
+var IC = {};
+
+/* ---------------- 동물 ---------------- */
+IC.cat =
+  '<ellipse cx="52" cy="66" rx="27" ry="19" fill="' + P.orange + '"/>' +
+  '<path d="M78 60 q14 -4 12 -18" stroke="' + P.orange2 + '" stroke-width="5.4" fill="none" stroke-linecap="round"/>' +
+  '<circle cx="38" cy="38" r="17" fill="' + P.yellow + '" opacity=".92"/>' +
+  '<path d="M26 28 L23 12 L38 21 Z" fill="' + P.orange + '"/><path d="M51 27 L54 11 L39 20 Z" fill="' + P.orange + '"/>' +
+  '<circle cx="33" cy="37" r="2.5" fill="' + P.ink + '"/><circle cx="44" cy="37" r="2.5" fill="' + P.ink + '"/>' +
+  '<path d="M35 44 q4 3 8 0" stroke="' + P.ink + '" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
+  '<path d="M21 40 L11 38 M21 45 L11 47" stroke="' + P.gray2 + '" stroke-width="1.6" stroke-linecap="round"/>';
+
+IC.dog =
+  '<ellipse cx="50" cy="68" rx="26" ry="16" fill="' + P.brown + '"/>' +
+  '<path d="M75 62 q11 -10 6 -22" stroke="' + P.brown2 + '" stroke-width="5.4" fill="none" stroke-linecap="round"/>' +
+  '<circle cx="37" cy="40" r="16" fill="' + P.brown3 + '"/>' +
+  '<ellipse cx="23" cy="41" rx="6" ry="10" fill="' + P.brown2 + '"/><ellipse cx="51" cy="41" rx="6" ry="10" fill="' + P.brown2 + '"/>' +
+  '<circle cx="32" cy="38" r="2.4" fill="' + P.ink + '"/><circle cx="42" cy="38" r="2.4" fill="' + P.ink + '"/>' +
+  '<ellipse cx="37" cy="47" rx="4" ry="3" fill="' + P.ink + '"/><path d="M37 50 v4" stroke="' + P.ink + '" stroke-width="1.6" stroke-linecap="round"/>';
+
+IC.rat =
+  '<ellipse cx="46" cy="64" rx="24" ry="15" fill="' + P.gray + '"/>' +
+  '<circle cx="70" cy="56" r="12" fill="' + P.gray3 + '"/>' +
+  '<circle cx="70" cy="44" r="6.5" fill="' + P.gray2 + '"/>' +
+  '<circle cx="73" cy="54" r="2" fill="' + P.ink + '"/>' +
+  '<circle cx="81" cy="60" r="2.8" fill="' + P.pink + '"/>' +
+  '<path d="M22 62 q-14 8 -6 20" stroke="' + P.gray2 + '" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
+
+IC.bat =
+  '<ellipse cx="50" cy="58" rx="13" ry="15" fill="#6b7c88"/>' +
+  '<path d="M38 50 q-16 -12 -26 2 q10 2 12 10 q4 -8 14 -6 z" fill="#8a9aa6"/>' +
+  '<path d="M62 50 q16 -12 26 2 q-10 2 -12 10 q-4 -8 -14 -6 z" fill="#8a9aa6"/>' +
+  '<path d="M42 44 l-4 -10 l10 4 z" fill="#6b7c88"/><path d="M58 44 l4 -10 l-10 4 z" fill="#6b7c88"/>' +
+  '<circle cx="45" cy="54" r="2" fill="#ffffff"/><circle cx="55" cy="54" r="2" fill="#ffffff"/>' +
+  '<path d="M46 64 q4 3 8 0" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
+IC.pet =
+  '<ellipse cx="50" cy="70" rx="24" ry="15" fill="' + P.brown + '"/>' +
+  '<circle cx="38" cy="46" r="15" fill="' + P.brown3 + '"/>' +
+  '<ellipse cx="25" cy="47" rx="5.4" ry="9" fill="' + P.brown2 + '"/><ellipse cx="51" cy="47" rx="5.4" ry="9" fill="' + P.brown2 + '"/>' +
+  '<circle cx="33" cy="44" r="2.2" fill="' + P.ink + '"/><circle cx="43" cy="44" r="2.2" fill="' + P.ink + '"/>' +
+  '<ellipse cx="38" cy="52" rx="3.6" ry="2.8" fill="' + P.ink + '"/>' +
+  '<path d="M68 22 q6 -12 12 0 q-6 10 -12 0" fill="' + P.red + '"/>';
+IC.fog =
+  '<path d="M32 46 q-14 0 -14 -12 q0 -12 14 -12 q2 -14 16 -14 q14 0 16 14 q16 -2 16 12 q0 12 -14 12 z" fill="' + P.gray3 + '"/>' +
+  '<path d="M18 62 h64 M26 72 h52 M34 82 h38" stroke="' + P.gray + '" stroke-width="6" stroke-linecap="round"/>';
+IC.fox =
+  '<ellipse cx="48" cy="68" rx="24" ry="14" fill="' + P.orange + '"/>' +
+  '<path d="M70 66 q18 0 16 -14 q-10 6 -18 6" fill="' + P.orange2 + '"/>' +
+  '<circle cx="37" cy="40" r="15" fill="' + P.orange + '"/>' +
+  '<path d="M26 29 L22 13 L37 22 Z" fill="' + P.orange2 + '"/><path d="M48 29 L52 13 L37 22 Z" fill="' + P.orange2 + '"/>' +
+  '<path d="M28 45 q9 8 18 0 q-9 6 -18 0" fill="' + P.white + '"/>' +
+  '<circle cx="32" cy="38" r="2.2" fill="' + P.ink + '"/><circle cx="42" cy="38" r="2.2" fill="' + P.ink + '"/>' +
+  '<ellipse cx="37" cy="45" rx="2.6" ry="2" fill="' + P.ink + '"/>';
+
+IC.pig =
+  '<ellipse cx="52" cy="66" rx="26" ry="17" fill="' + P.pink + '"/>' +
+  '<circle cx="36" cy="40" r="16" fill="' + P.pink3 + '"/>' +
+  '<path d="M26 31 L22 16 L36 25 Z" fill="' + P.pink2 + '"/><path d="M46 31 L50 16 L36 25 Z" fill="' + P.pink2 + '"/>' +
+  '<circle cx="30" cy="38" r="2.2" fill="' + P.ink + '"/><circle cx="41" cy="38" r="2.2" fill="' + P.ink + '"/>' +
+  '<ellipse cx="35" cy="47" rx="7" ry="5" fill="' + P.pink2 + '"/>' +
+  '<circle cx="33" cy="47" r="1.4" fill="#a85a78"/><circle cx="37" cy="47" r="1.4" fill="#a85a78"/>' +
+  '<path d="M76 60 q10 -2 8 -12" stroke="' + P.pink2 + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>';
+
+IC.hog =
+  '<ellipse cx="52" cy="66" rx="27" ry="18" fill="#a97b50"/>' +
+  '<circle cx="36" cy="40" r="16" fill="#c49a6c"/>' +
+  '<path d="M26 31 L22 16 L36 25 Z" fill="#8a6b52"/><path d="M46 31 L50 16 L36 25 Z" fill="#8a6b52"/>' +
+  '<circle cx="30" cy="38" r="2.2" fill="' + P.ink + '"/><circle cx="41" cy="38" r="2.2" fill="' + P.ink + '"/>' +
+  '<ellipse cx="34" cy="47" rx="7" ry="5" fill="#8a6b52"/>' +
+  '<circle cx="32" cy="47" r="1.4" fill="#5b4436"/><circle cx="36" cy="47" r="1.4" fill="#5b4436"/>' +
+  '<path d="M26 52 q-6 6 0 10 M44 52 q6 6 0 10" stroke="' + P.cream + '" stroke-width="3.4" fill="none" stroke-linecap="round"/>' +
+  '<path d="M78 60 q10 -2 8 -12" stroke="#8a6b52" stroke-width="4.4" fill="none" stroke-linecap="round"/>';
+
+IC.mole =
+  '<ellipse cx="50" cy="62" rx="25" ry="19" fill="#8a6e59"/>' +
+  '<circle cx="50" cy="40" r="14" fill="#a3856c"/>' +
+  '<circle cx="45" cy="38" r="2" fill="#2b3b46"/><circle cx="55" cy="38" r="2" fill="#2b3b46"/>' +
+  '<ellipse cx="50" cy="46" rx="5" ry="4" fill="' + P.pink + '"/>' +
+  '<ellipse cx="28" cy="72" rx="8" ry="5.4" fill="#6b5343"/><ellipse cx="72" cy="72" rx="8" ry="5.4" fill="#6b5343"/>';
+
+IC.sheep =
+  '<circle cx="42" cy="52" r="16" fill="' + P.white + '"/><circle cx="60" cy="50" r="15" fill="' + P.white + '"/>' +
+  '<circle cx="52" cy="64" r="15" fill="' + P.white + '"/>' +
+  '<circle cx="26" cy="44" r="10" fill="#c9b49a"/>' +
+  '<circle cx="23" cy="42" r="1.9" fill="' + P.ink + '"/>' +
+  '<ellipse cx="18" cy="47" rx="2.6" ry="2" fill="#a98f74"/>' +
+  '<rect x="40" y="74" width="4.4" height="12" rx="2.2" fill="#b98a5e"/><rect x="56" y="74" width="4.4" height="12" rx="2.2" fill="#b98a5e"/>';
+
+IC.duck =
+  '<ellipse cx="54" cy="66" rx="25" ry="16" fill="' + P.yellow + '"/>' +
+  '<circle cx="34" cy="46" r="12" fill="#ffe08a"/>' +
+  '<path d="M24 44 l-12 5 l12 5 z" fill="' + P.orange2 + '"/>' +
+  '<circle cx="30" cy="43" r="2" fill="' + P.ink + '"/>' +
+  '<path d="M58 62 q10 -5 15 4 q-9 5 -15 -4" fill="' + P.orange2 + '"/>';
+
+IC.bird =
+  '<ellipse cx="52" cy="60" rx="22" ry="16" fill="' + P.blue + '"/>' +
+  '<circle cx="33" cy="42" r="11" fill="#8ec7ec"/>' +
+  '<path d="M23 41 l-9 4 l9 4 z" fill="' + P.orange + '"/>' +
+  '<circle cx="31" cy="39" r="1.9" fill="' + P.ink + '"/>' +
+  '<path d="M56 56 q10 -7 15 5 q-10 3 -15 -5" fill="' + P.blue2 + '"/>' +
+  '<path d="M72 62 l12 6 l-14 3 z" fill="' + P.blue2 + '"/>';
+
+IC.fish =
+  '<ellipse cx="48" cy="52" rx="25" ry="16" fill="' + P.blue + '"/>' +
+  '<path d="M71 52 l16 -13 v26 z" fill="' + P.blue2 + '"/>' +
+  '<path d="M40 37 q7 -11 13 0" fill="' + P.blue2 + '"/>' +
+  '<circle cx="33" cy="48" r="2.6" fill="#2b3b46"/>' +
+  '<path d="M44 60 q6 4 10 0" stroke="#cfe8f7" stroke-width="2" fill="none" stroke-linecap="round"/>' +
+  '<circle cx="20" cy="34" r="3.4" fill="#cfe8f7"/>';
+
+IC.bug =
+  '<ellipse cx="50" cy="58" rx="18" ry="21" fill="' + P.green + '"/>' +
+  '<path d="M50 38 v40" stroke="' + P.green2 + '" stroke-width="3"/>' +
+  '<path d="M32 50 l-11 -6 M32 60 l-11 2 M32 68 l-11 10" stroke="' + P.ink + '" stroke-width="2.4" stroke-linecap="round"/>' +
+  '<path d="M68 50 l11 -6 M68 60 l11 2 M68 68 l11 10" stroke="' + P.ink + '" stroke-width="2.4" stroke-linecap="round"/>' +
+  '<circle cx="50" cy="32" r="9" fill="' + P.green2 + '"/>' +
+  '<circle cx="46" cy="30" r="1.8" fill="#2b3b46"/><circle cx="54" cy="30" r="1.8" fill="#2b3b46"/>' +
+  '<path d="M46 23 l-6 -8 M54 23 l6 -8" stroke="' + P.ink + '" stroke-width="2" stroke-linecap="round"/>' +
+  '<circle cx="43" cy="56" r="2.6" fill="' + P.green2 + '"/><circle cx="57" cy="64" r="2.6" fill="' + P.green2 + '"/>';
+
+IC.hen =
+  '<ellipse cx="54" cy="62" rx="24" ry="18" fill="' + P.gray3 + '"/>' +
+  '<circle cx="31" cy="42" r="12" fill="' + P.white + '"/>' +
+  '<path d="M25 30 q3 -9 6 -2 q3 -8 6 -1 q3 -7 5 2" fill="' + P.red + '"/>' +
+  '<path d="M20 42 l-10 4 l10 4 z" fill="' + P.orange2 + '"/>' +
+  '<circle cx="28" cy="40" r="1.9" fill="' + P.ink + '"/>' +
+  '<path d="M31 47 q-3 7 1 9" stroke="' + P.red + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+  '<path d="M58 58 q13 -3 17 9 q-13 4 -17 -9" fill="#e1e9ef"/>' +
+  '<path d="M46 78 v10 M60 78 v10" stroke="' + P.orange2 + '" stroke-width="3.4" stroke-linecap="round"/>' +
+  '<path d="M74 64 q10 -5 11 -14" stroke="#e1e9ef" stroke-width="4.4" fill="none" stroke-linecap="round"/>';
+
+IC.elephant =
+  '<ellipse cx="54" cy="60" rx="28" ry="22" fill="' + P.gray + '"/>' +
+  '<circle cx="33" cy="40" r="16" fill="' + P.gray3 + '"/>' +
+  '<path d="M22 44 q-9 7 -3 22 q3 8 9 8" stroke="' + P.gray3 + '" stroke-width="9" fill="none" stroke-linecap="round"/>' +
+  '<ellipse cx="41" cy="40" rx="11" ry="13" fill="#d7e2ea"/>' +
+  '<circle cx="27" cy="36" r="2.2" fill="' + P.ink + '"/>' +
+  '<rect x="42" y="76" width="7" height="15" rx="3.4" fill="' + P.gray2 + '"/><rect x="62" y="76" width="7" height="15" rx="3.4" fill="' + P.gray2 + '"/>' +
+  '<path d="M80 52 q10 -4 8 -15" stroke="' + P.gray + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>';
+
+/* ---------------- 사람 ---------------- */
+IC.man = person({ shirt:P.blue });
+IC.mom = person({ shirt:P.pink, long:true });
+IC.dad = person({ shirt:P.green, pants:"#5b7c92" });
+IC.boy = person({ shirt:P.green, pants:P.blue });
+IC.girl = person({ shirt:P.pink, long:true, pants:"#c98fae" });
+IC.grandma = person({ shirt:P.purple, hair:P.hair3, bun:true, glasses:true });
+IC.baby =
+  '<circle cx="50" cy="44" r="17" fill="' + P.skin + '"/>' +
+  '<circle cx="44" cy="42" r="2.2" fill="' + P.ink + '"/><circle cx="56" cy="42" r="2.2" fill="' + P.ink + '"/>' +
+  '<path d="M45 50 q5 4 10 0" stroke="' + P.ink + '" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
+  '<path d="M34 66 q16 -10 32 0 q2 14 -16 16 q-18 -2 -16 -16" fill="' + P.yellow + '"/>';
+IC.men = '<g transform="translate(-8 8) scale(.72)">' + person({ shirt:P.blue }) + '</g><g transform="translate(30 8) scale(.72)">' + person({ shirt:P.green, hair:P.hair2 }) + '</g>';
+IC.vet =
+  '<circle cx="50" cy="34" r="14" fill="' + P.skin + '"/>' +
+  '<path d="M35 31 q0 -17 15 -17 q15 0 15 17 q-6 -7 -15 -7 q-9 0 -15 7" fill="' + P.hair2 + '"/>' +
+  '<circle cx="45" cy="34" r="1.9" fill="' + P.ink + '"/><circle cx="55" cy="34" r="1.9" fill="' + P.ink + '"/>' +
+  '<path d="M46 40 q4 3 8 0" stroke="' + P.ink + '" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
+  '<path d="M38 50 q12 -6 24 0 l4 26 q-16 6 -32 0 z" fill="' + P.white + '"/>' +
+  '<path d="M50 50 v26" stroke="' + P.line + '" stroke-width="2"/>' +
+  '<path d="M40 52 q-7 16 6 20 q10 2 12 -8" stroke="' + P.ink2 + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+  '<circle cx="58" cy="64" r="3.4" fill="' + P.ink2 + '"/>' +
+  '<rect x="41" y="76" width="6" height="16" rx="3" fill="' + P.ink2 + '"/><rect x="53" y="76" width="6" height="16" rx="3" fill="' + P.ink2 + '"/>';
+IC.hug =
+  '<g transform="translate(-6 2) scale(.86) rotate(6 50 60)">' + person({ shirt:P.pink, long:true }) + '</g>' +
+  '<g transform="translate(10 2) scale(.86) rotate(-6 50 60)">' + person({ shirt:P.blue }) + '</g>' +
+  '<path d="M40 62 q10 8 20 0" stroke="' + P.skin + '" stroke-width="6" fill="none" stroke-linecap="round"/>';
+IC.run =
+  '<circle cx="52" cy="24" r="12" fill="' + P.skin + '"/>' +
+  '<path d="M40 22 q0 -14 12 -14 q12 0 12 14 q-4 -6 -12 -6 q-8 0 -12 6" fill="' + P.hair + '"/>' +
+  '<path d="M40 38 q12 -6 24 0 l2 20 q-14 6 -28 0 z" fill="' + P.green + '" transform="rotate(-8 52 48)"/>' +
+  '<path d="M42 56 l-12 16 M60 56 l6 18" stroke="' + P.ink2 + '" stroke-width="6.4" stroke-linecap="round"/>' +
+  '<path d="M40 42 l-14 6 M64 42 l14 -8" stroke="' + P.skin + '" stroke-width="6" stroke-linecap="round"/>' +
+  '<path d="M14 50 h10 M10 60 h8" stroke="' + P.gray2 + '" stroke-width="3" stroke-linecap="round"/>';
+IC.jog = IC.run;
+IC.jump =
+  '<circle cx="50" cy="26" r="12" fill="' + P.skin + '"/>' +
+  '<path d="M38 24 q0 -14 12 -14 q12 0 12 14 q-4 -6 -12 -6 q-8 0 -12 6" fill="' + P.hair + '"/>' +
+  '<path d="M38 40 q12 -6 24 0 l2 18 q-14 6 -28 0 z" fill="' + P.blue + '"/>' +
+  '<path d="M38 42 l-12 -16 M62 42 l12 -16" stroke="' + P.skin + '" stroke-width="6" stroke-linecap="round"/>' +
+  '<path d="M44 60 l-10 20 M56 60 l10 20" stroke="' + P.ink2 + '" stroke-width="6.4" stroke-linecap="round"/>';
+
+/* ---------------- 물건 · -at/-an/-en … 낱말 그림 ---------------- */
+function hatColor(c, c2){
+  return '<path d="M28 52 q0 -30 24 -30 q24 0 24 30 z" fill="' + c + '"/>' +
+    '<rect x="15" y="49" width="62" height="12" rx="6" fill="' + c2 + '"/>' +
+    '<circle cx="50" cy="28" r="3.4" fill="#ffffff" opacity=".65"/>';
+}
+IC.hat = hatColor(P.red, P.red2);
+IC["hat:red"] = IC.hat;
+IC["hat:blue"] = hatColor(P.blue, P.blue2);
+IC["hat:green"] = hatColor(P.green, P.green2);
+IC.mat =
+  '<rect x="13" y="34" width="74" height="36" rx="8" fill="' + P.water + '"/>' +
+  '<rect x="13" y="44" width="74" height="5" fill="#ffffff" opacity=".65"/>' +
+  '<rect x="13" y="57" width="74" height="5" fill="#ffffff" opacity=".45"/>' +
+  '<rect x="13" y="34" width="74" height="36" rx="8" fill="none" stroke="' + P.blue2 + '" stroke-width="2.4"/>';
+IC.rug =
+  '<ellipse cx="50" cy="54" rx="38" ry="24" fill="' + P.purple + '"/>' +
+  '<ellipse cx="50" cy="54" rx="28" ry="17" fill="' + P.purple2 + '"/>' +
+  '<ellipse cx="50" cy="54" rx="16" ry="9.6" fill="' + P.purple + '"/>';
+IC.box =
+  '<rect x="18" y="36" width="64" height="44" rx="5" fill="#e9c79a"/>' +
+  '<rect x="18" y="36" width="64" height="12" rx="5" fill="#d9b47f"/>' +
+  '<path d="M18 48 h64" stroke="#c39a63" stroke-width="2"/>' +
+  '<rect x="44" y="36" width="12" height="44" fill="#f2d9b6"/>';
+IC.log =
+  '<rect x="14" y="46" width="70" height="26" rx="13" fill="' + P.brown + '"/>' +
+  '<ellipse cx="84" cy="59" rx="8" ry="13" fill="#d9b47f"/>' +
+  '<ellipse cx="84" cy="59" rx="4" ry="6.5" fill="' + P.brown + '"/>';
+IC.mud =
+  '<ellipse cx="50" cy="64" rx="34" ry="16" fill="#8a6a4a"/>' +
+  '<ellipse cx="39" cy="60" rx="9" ry="4" fill="#7a5b3e"/>' +
+  '<ellipse cx="62" cy="67" rx="11" ry="4" fill="#7a5b3e"/>' +
+  '<ellipse cx="58" cy="57" rx="4" ry="2.4" fill="#a07f5c"/>';
+IC.wet =
+  '<ellipse cx="50" cy="70" rx="32" ry="13" fill="' + P.water + '"/>' +
+  '<path d="M35 40 q5 -12 10 0 q-5 7 -10 0" fill="' + P.blue + '"/>' +
+  '<path d="M56 30 q5 -12 10 0 q-5 7 -10 0" fill="#a8dcf5"/>' +
+  '<path d="M22 56 q-8 4 -10 -2 M78 56 q8 4 10 -2" stroke="' + P.blue + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+IC.net =
+  '<circle cx="43" cy="38" r="21" fill="#eaf7ff" fill-opacity=".75"/>' +
+  '<path d="M28 28 h30 M24 38 h38 M28 48 h30 M34 18 v40 M43 17 v42 M52 20 v36" stroke="' + P.blue + '" stroke-width="1.5" opacity=".8"/>' +
+  '<circle cx="43" cy="38" r="21" fill="none" stroke="' + P.blue2 + '" stroke-width="3.4"/>' +
+  '<path d="M56 53 l22 28" stroke="' + P.brown + '" stroke-width="5.4" stroke-linecap="round"/>';
+IC.jet =
+  '<ellipse cx="46" cy="54" rx="30" ry="9" fill="#8ec7ec"/>' +
+  '<path d="M40 54 l10 -26 h9 l-3 26 z" fill="' + P.blue2 + '"/>' +
+  '<path d="M40 54 l-2 22 h9 l6 -22 z" fill="' + P.blue2 + '"/>' +
+  '<path d="M70 50 l16 -12 l2 7 l-12 8 z" fill="' + P.blue + '"/>' +
+  '<circle cx="24" cy="52" r="3.4" fill="#ffffff"/>' +
+  '<path d="M8 44 h12 M4 54 h10" stroke="' + P.gray2 + '" stroke-width="2.4" stroke-linecap="round"/>';
+IC.swim =
+  '<path d="M12 68 q11 -9 22 0 q11 9 22 0 q11 -9 22 0 q11 9 22 0" stroke="' + P.blue + '" stroke-width="5.4" fill="none" stroke-linecap="round"/>' +
+  '<circle cx="46" cy="40" r="9.4" fill="' + P.skin + '"/>' +
+  '<path d="M34 50 q12 -7 24 0" stroke="' + P.green + '" stroke-width="8" fill="none" stroke-linecap="round"/>' +
+  '<path d="M58 44 l13 -9" stroke="' + P.skin + '" stroke-width="6" stroke-linecap="round"/>';
+IC.dig =
+  '<ellipse cx="50" cy="74" rx="31" ry="14" fill="' + P.brown + '"/>' +
+  '<path d="M50 8 v34" stroke="#c39a63" stroke-width="6.4" stroke-linecap="round"/>' +
+  '<rect x="37" y="8" width="26" height="8.4" rx="4.2" fill="#8a6b52"/>' +
+  '<path d="M40 42 h20 l-4 22 q-2 8 -6 8 q-4 0 -6 -8 z" fill="' + P.gray2 + '"/>';
+IC.pan =
+  '<circle cx="42" cy="54" r="26" fill="#4a5a66"/>' +
+  '<circle cx="42" cy="54" r="18" fill="#6b7c88"/>' +
+  '<rect x="64" y="46" width="30" height="9" rx="4.5" fill="#8a6b52" transform="rotate(-14 64 46)"/>';
+IC.pot =
+  '<path d="M27 40 h46 v26 q0 12 -12 12 h-22 q-12 0 -12 -12 z" fill="#6b7c88"/>' +
+  '<rect x="21" y="33" width="58" height="8" rx="4" fill="#8a9aa6"/>' +
+  '<circle cx="50" cy="28" r="5" fill="' + P.gray + '"/>' +
+  '<path d="M20 52 h-8 M80 52 h8" stroke="#8a9aa6" stroke-width="5" stroke-linecap="round"/>' +
+  '<rect x="40" y="48" width="20" height="6" rx="3" fill="#a9bac7"/>';
+IC.hot =
+  '<path d="M50 10 q16 22 16 36 q0 22 -16 22 q-16 0 -16 -22 q0 -14 8 -24 q2 12 8 14 q-2 -14 0 -26" fill="' + P.orange + '"/>' +
+  '<path d="M50 40 q10 10 4 23 q-4 6 -8 0 q-6 -11 4 -23" fill="' + P.yellow + '"/>';
+IC.dot =
+  '<circle cx="50" cy="52" r="22" fill="' + P.red + '"/>' +
+  '<circle cx="43" cy="44" r="6" fill="' + P.red3 + '" opacity=".7"/>';
+IC.cot =
+  '<rect x="11" y="44" width="78" height="10" rx="4" fill="' + P.gray + '"/>' +
+  '<rect x="15" y="33" width="26" height="12" rx="5" fill="' + P.gray3 + '"/>' +
+  '<rect x="43" y="38" width="42" height="8" rx="4" fill="' + P.water + '"/>' +
+  '<rect x="14" y="54" width="5" height="20" rx="2.5" fill="#8a9aa6"/><rect x="81" y="54" width="5" height="20" rx="2.5" fill="#8a9aa6"/>';
+IC.knot =
+  '<path d="M16 72 q16 -28 30 -8 q12 18 26 -4" stroke="' + P.brown + '" stroke-width="8" fill="none" stroke-linecap="round"/>' +
+  '<circle cx="50" cy="46" r="12" fill="none" stroke="#8a6b52" stroke-width="7"/>' +
+  '<path d="M44 34 q-9 -11 3 -13 q11 2 6 13" stroke="#8a6b52" stroke-width="5" fill="none" stroke-linecap="round"/>';
+IC.mug =
+  '<rect x="24" y="34" width="42" height="44" rx="9" fill="' + P.pink + '"/>' +
+  '<path d="M66 44 q14 2 14 12 q0 10 -14 12" fill="none" stroke="' + P.pink2 + '" stroke-width="6"/>' +
+  '<path d="M38 24 q5 -9 0 -14 M52 24 q5 -9 0 -14" stroke="' + P.gray + '" stroke-width="3" fill="none" stroke-linecap="round"/>';
+IC.jug =
+  '<path d="M36 26 h18 l6 12 q10 12 10 24 q0 16 -20 16 h-10 q-20 0 -20 -16 q0 -12 10 -24 z" fill="' + P.water + '"/>' +
+  '<path d="M62 44 q14 4 14 16" fill="none" stroke="' + P.blue + '" stroke-width="6"/>' +
+  '<path d="M44 26 v-9 h10" stroke="' + P.blue + '" stroke-width="5" fill="none" stroke-linecap="round"/>';
+IC.bun =
+  '<ellipse cx="50" cy="56" rx="26" ry="20" fill="' + P.brown3 + '"/>' +
+  '<ellipse cx="50" cy="48" rx="22" ry="14" fill="#f2c795"/>' +
+  '<circle cx="42" cy="44" r="1.9" fill="#c99a6a"/><circle cx="52" cy="40" r="1.9" fill="#c99a6a"/><circle cx="60" cy="46" r="1.9" fill="#c99a6a"/>';
+IC.fun =
+  '<ellipse cx="50" cy="38" rx="19" ry="23" fill="' + P.red + '"/>' +
+  '<path d="M50 61 l4 6 l-8 0 z" fill="' + P.red2 + '"/>' +
+  '<path d="M50 67 q7 11 -2 21" stroke="' + P.gray2 + '" stroke-width="2.4" fill="none"/>' +
+  '<circle cx="24" cy="70" r="3.4" fill="' + P.yellow + '"/>' +
+  '<circle cx="76" cy="28" r="3.4" fill="' + P.green + '"/>' +
+  '<rect x="68" y="64" width="7" height="7" rx="2" fill="' + P.blue + '" transform="rotate(24 71 67)"/>';
+IC.nut =
+  '<path d="M31 44 h38 q5 0 5 7 q0 27 -24 35 q-24 -8 -24 -35 q0 -7 5 -7" fill="' + P.brown + '"/>' +
+  '<path d="M29 44 q21 -19 42 0 q-21 9 -42 0" fill="#8a6b52"/>' +
+  '<path d="M50 30 v-8" stroke="#8a6b52" stroke-width="4" stroke-linecap="round"/>';
+IC.egg =
+  '<path d="M50 14 q23 0 23 36 q0 28 -23 28 q-23 0 -23 -28 q0 -36 23 -36" fill="' + P.cream + '" stroke="#e7d9bd" stroke-width="2.4"/>' +
+  '<ellipse cx="41" cy="42" rx="5" ry="7.4" fill="#ffffff" opacity=".9"/>';
+IC.cake =
+  '<rect x="20" y="52" width="60" height="26" rx="7" fill="' + P.pink + '"/>' +
+  '<rect x="20" y="43" width="60" height="11" rx="5.5" fill="' + P.cream + '"/>' +
+  '<path d="M20 43 q10 9 20 0 q10 9 20 0 q10 9 20 0" fill="' + P.cream + '"/>' +
+  '<rect x="46" y="24" width="8" height="16" rx="3" fill="' + P.water + '"/>' +
+  '<path d="M50 12 q5 7 0 12 q-5 -5 0 -12" fill="' + P.yellow + '"/>';
+IC.plate =
+  '<ellipse cx="50" cy="56" rx="35" ry="19" fill="#ffffff"/>' +
+  '<ellipse cx="50" cy="56" rx="25" ry="12.5" fill="#f4f9fd" stroke="#e0edf6" stroke-width="2.4"/>';
+IC.boat =
+  '<path d="M16 60 h68 l-11 18 q-2 4 -6 4 h-34 q-4 0 -6 -4 z" fill="' + P.brown + '"/>' +
+  '<path d="M50 12 v48" stroke="#8a6b52" stroke-width="4"/>' +
+  '<path d="M53 18 l24 42 h-24 z" fill="' + P.cream + '"/>' +
+  '<path d="M47 26 l-18 34 h18 z" fill="' + P.red + '"/>';
+IC.bike =
+  '<circle cx="29" cy="64" r="15" fill="none" stroke="' + P.ink + '" stroke-width="4"/>' +
+  '<circle cx="71" cy="64" r="15" fill="none" stroke="' + P.ink + '" stroke-width="4"/>' +
+  '<path d="M29 64 l15 -24 h16 l11 24 M44 40 h16 M44 40 l-7 -9 h-8" stroke="' + P.blue + '" stroke-width="4" fill="none" stroke-linecap="round"/>';
+IC.car =
+  '<path d="M12 60 q0 -11 9 -13 l10 -12 q3 -4 8 -4 h24 q5 0 8 4 l8 12 q9 2 9 13 v6 h-76 z" fill="' + P.blue + '"/>' +
+  '<path d="M34 36 h13 v12 h-19 z" fill="' + P.blue3 + '"/>' +
+  '<path d="M53 36 h11 l8 12 h-19 z" fill="' + P.blue3 + '"/>' +
+  '<circle cx="29" cy="72" r="9" fill="' + P.ink + '"/><circle cx="71" cy="72" r="9" fill="' + P.ink + '"/>' +
+  '<circle cx="29" cy="72" r="3.6" fill="' + P.gray + '"/><circle cx="71" cy="72" r="3.6" fill="' + P.gray + '"/>';
+IC.van =
+  '<rect x="9" y="38" width="82" height="36" rx="9" fill="' + P.blue + '"/>' +
+  '<rect x="15" y="45" width="26" height="15" rx="4.4" fill="' + P.blue3 + '"/>' +
+  '<rect x="45" y="45" width="22" height="15" rx="4.4" fill="' + P.blue3 + '"/>' +
+  '<rect x="9" y="62" width="82" height="6" fill="' + P.blue2 + '"/>' +
+  '<circle cx="30" cy="76" r="8.4" fill="' + P.ink + '"/><circle cx="30" cy="76" r="3.4" fill="' + P.gray + '"/>' +
+  '<circle cx="70" cy="76" r="8.4" fill="' + P.ink + '"/><circle cx="70" cy="76" r="3.4" fill="' + P.gray + '"/>';
+IC.ball =
+  '<circle cx="50" cy="52" r="26" fill="' + P.yellow + '"/>' +
+  '<path d="M27 40 q23 15 46 0 M27 66 q23 -15 46 0" stroke="' + P.red + '" stroke-width="5" fill="none"/>' +
+  '<circle cx="50" cy="52" r="26" fill="none" stroke="' + P.yellow2 + '" stroke-width="2"/>';
+IC.crayon =
+  '<rect x="40" y="26" width="20" height="46" rx="4" fill="' + P.red + '"/>' +
+  '<path d="M40 72 h20 l-10 15 z" fill="' + P.red + '"/>' +
+  '<rect x="40" y="34" width="20" height="9" fill="#ffffff" opacity=".55"/>' +
+  '<path d="M46 30 h8" stroke="' + P.red2 + '" stroke-width="3"/>';
+IC.pencil =
+  '<rect x="40" y="20" width="20" height="50" rx="3" fill="' + P.yellow + '"/>' +
+  '<path d="M40 70 h20 l-10 15 z" fill="' + P.brown3 + '"/>' +
+  '<path d="M46 77 h8 l-4 8 z" fill="' + P.ink + '"/>' +
+  '<rect x="40" y="20" width="20" height="9" rx="3" fill="' + P.pink + '"/>';
+IC.pen =
+  '<path d="M38 84 l-4 -14 l30 -50 q4 -6 10 -2 q5 4 2 10 l-28 50 z" fill="' + P.blue + '"/>' +
+  '<path d="M34 70 l-4 -14 l12 6 z" fill="' + P.ink + '"/>' +
+  '<path d="M64 26 q4 -6 10 -2" stroke="' + P.blue2 + '" stroke-width="4" fill="none" stroke-linecap="round"/>';
+IC.pin =
+  '<circle cx="50" cy="32" r="15" fill="' + P.red + '"/>' +
+  '<circle cx="50" cy="32" r="6" fill="' + P.red3 + '"/>' +
+  '<path d="M50 47 v32" stroke="' + P.gray2 + '" stroke-width="4.4" stroke-linecap="round"/>' +
+  '<path d="M44 79 l6 9 l6 -9 z" fill="' + P.gray2 + '"/>';
+IC.fin =
+  '<ellipse cx="44" cy="54" rx="22" ry="15" fill="#8ec7ec"/>' +
+  '<path d="M38 40 q3 -22 19 -13 q-5 13 -19 13" fill="' + P.blue2 + '"/>' +
+  '<path d="M64 54 l18 -11 v22 z" fill="' + P.blue + '"/>' +
+  '<circle cx="31" cy="50" r="2.5" fill="#2b3b46"/>';
+IC.win =
+  '<path d="M32 24 h36 v17 q0 17 -18 17 q-18 0 -18 -17 z" fill="' + P.yellow + '"/>' +
+  '<path d="M32 29 q-15 0 -15 11 q0 11 15 11" fill="none" stroke="' + P.yellow2 + '" stroke-width="4.4"/>' +
+  '<path d="M68 29 q15 0 15 11 q0 11 -15 11" fill="none" stroke="' + P.yellow2 + '" stroke-width="4.4"/>' +
+  '<rect x="46" y="57" width="8" height="13" fill="' + P.yellow2 + '"/>' +
+  '<rect x="35" y="70" width="30" height="8" rx="4" fill="#e0a83c"/>' +
+  '<path d="M50 33 l3 7 l7 1 l-5 5 l1 8 l-6 -4 l-6 4 l1 -8 l-5 -5 l7 -1 z" fill="' + P.cream + '"/>';
+IC.wig =
+  '<path d="M24 70 q-7 -44 26 -44 q33 0 26 44 q-9 -7 -13 -2 q-7 -9 -13 -2 q-6 -7 -13 2 q-4 -5 -13 2 z" fill="' + P.hair2 + '"/>' +
+  '<path d="M34 64 q4 -26 16 -26 q12 0 16 26" fill="none" stroke="#a9764e" stroke-width="3"/>';
+IC.fig =
+  '<path d="M50 34 q23 0 23 23 q0 25 -23 31 q-23 -6 -23 -31 q0 -23 23 -23" fill="' + P.purple + '"/>' +
+  '<path d="M50 34 q-7 -13 4 -19 q5 11 -4 19" fill="' + P.green2 + '"/>' +
+  '<path d="M52 28 q11 -3 15 6" fill="' + P.green + '"/>' +
+  '<ellipse cx="43" cy="52" rx="4" ry="5.4" fill="' + P.purple2 + '"/>';
+IC.can =
+  '<rect x="28" y="32" width="44" height="52" rx="7" fill="' + P.gray + '"/>' +
+  '<rect x="28" y="44" width="44" height="26" fill="' + P.red + '"/>' +
+  '<ellipse cx="50" cy="32" rx="22" ry="6" fill="' + P.gray3 + '"/>' +
+  '<path d="M36 52 h28" stroke="#ffffff" stroke-width="3"/>';
+IC.tin =
+  '<rect x="30" y="34" width="40" height="50" rx="6" fill="' + P.gray2 + '"/>' +
+  '<ellipse cx="50" cy="34" rx="20" ry="6" fill="' + P.gray3 + '"/>' +
+  '<ellipse cx="50" cy="34" rx="12" ry="3.6" fill="' + P.gray + '"/>' +
+  '<path d="M38 28 q6 -13 15 -3" stroke="#8a9aa6" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+IC.bin =
+  '<path d="M27 34 h46 l-5 48 q-1 6 -7 6 h-22 q-6 0 -7 -6 z" fill="' + P.green + '"/>' +
+  '<rect x="22" y="27" width="56" height="9" rx="4.5" fill="' + P.green2 + '"/>' +
+  '<path d="M43 46 v30 M57 46 v30" stroke="' + P.green2 + '" stroke-width="3"/>';
+IC.sun =
+  '<circle cx="50" cy="50" r="22" fill="' + P.yellow + '"/>' +
+  '<g stroke="' + P.yellow2 + '" stroke-width="4.4" stroke-linecap="round">' +
+  '<path d="M50 12 v8 M50 80 v8 M12 50 h8 M80 50 h8 M23 23 l6 6 M71 71 l6 6 M77 23 l-6 6 M29 71 l-6 6"/></g>';
+IC.moon =
+  '<path d="M62 14 q-26 8 -26 36 q0 28 26 36 q-32 8 -45 -20 q-11 -27 9 -45 q15 -13 36 -7" fill="' + P.yellow + '"/>';
+IC.star =
+  '<path d="M50 12 l11 25 l27 3 l-20 19 l6 27 l-24 -14 l-24 14 l6 -27 l-20 -19 l27 -3 z" fill="' + P.yellow + '"/>';
+IC.cloud =
+  '<path d="M30 66 q-15 0 -15 -13 q0 -13 15 -13 q2 -15 17 -15 q15 0 17 15 q17 -2 17 13 q0 13 -15 13 z" fill="#ffffff" stroke="' + P.line + '" stroke-width="2.4"/>';
+IC.rain =
+  '<path d="M30 54 q-15 0 -15 -13 q0 -13 15 -13 q2 -15 17 -15 q15 0 17 15 q17 -2 17 13 q0 13 -15 13 z" fill="#dfe9f0"/>' +
+  '<path d="M31 62 l-5 13 M50 62 l-5 13 M69 62 l-5 13" stroke="' + P.blue + '" stroke-width="4" stroke-linecap="round"/>';
+IC.snow =
+  '<path d="M50 14 v72 M24 32 l52 36 M76 32 l-52 36" stroke="#8fd3f4" stroke-width="5" stroke-linecap="round"/>' +
+  '<path d="M50 20 l-7 8 M50 20 l7 8 M50 80 l-7 -8 M50 80 l7 -8" stroke="#bde6fb" stroke-width="4" stroke-linecap="round"/>';
+IC.wave =
+  '<path d="M8 56 q14 -22 28 -2 q6 10 14 2 q12 -14 24 2 q8 8 16 0 v30 h-82 z" fill="' + P.water + '"/>' +
+  '<path d="M14 52 q14 -20 26 -2" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round"/>';
+IC.castle =
+  '<rect x="24" y="50" width="52" height="32" fill="#f2d9a8"/>' +
+  '<rect x="28" y="32" width="14" height="20" fill="#f2d9a8"/><rect x="58" y="32" width="14" height="20" fill="#f2d9a8"/>' +
+  '<path d="M28 32 h14 l-7 -9 z" fill="#e0c68c"/><path d="M58 32 h14 l-7 -9 z" fill="#e0c68c"/>' +
+  '<path d="M50 32 v-16 l15 6 l-15 7" fill="' + P.red + '"/>' +
+  '<path d="M44 82 v-14 q0 -7 6 -7 q6 0 6 7 v14 z" fill="#e0c68c"/>';
+IC.shell =
+  '<path d="M50 80 q-35 -10 -35 -35 q0 -19 15 -23 q6 15 20 15 q14 0 20 -15 q15 4 15 23 q0 25 -35 35" fill="' + P.pink3 + '"/>' +
+  '<path d="M50 80 v-43 M38 75 l4 -35 M26 64 l9 -28 M62 75 l-4 -35 M74 64 l-9 -28" stroke="' + P.pink2 + '" stroke-width="1.9"/>';
+IC.tomato =
+  '<circle cx="50" cy="56" r="26" fill="' + P.red + '"/>' +
+  '<path d="M50 32 q-9 -9 0 -15 q9 6 0 15" fill="' + P.green2 + '"/>' +
+  '<path d="M50 32 l-9 -6 M50 32 l9 -6" stroke="' + P.green2 + '" stroke-width="3"/>' +
+  '<ellipse cx="39" cy="44" rx="5" ry="4" fill="' + P.red3 + '" opacity=".7"/>';
+IC.soup =
+  '<path d="M20 46 h60 q0 27 -30 27 q-30 0 -30 -27" fill="' + P.cream + '" stroke="#e0cfae" stroke-width="2.4"/>' +
+  '<path d="M16 46 h68" stroke="#e0cfae" stroke-width="4.4" stroke-linecap="round"/>' +
+  '<path d="M36 34 q5 -9 0 -14 M50 34 q5 -9 0 -14 M64 34 q5 -9 0 -14" stroke="' + P.gray + '" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+  '<ellipse cx="50" cy="80" rx="27" ry="5" fill="' + P.gray3 + '"/>';
+IC.oven =
+  '<rect x="17" y="22" width="66" height="62" rx="9" fill="' + P.gray + '"/>' +
+  '<rect x="17" y="22" width="66" height="14" rx="9" fill="' + P.gray2 + '"/>' +
+  '<circle cx="29" cy="30" r="3.2" fill="' + P.ink2 + '"/><circle cx="41" cy="30" r="3.2" fill="' + P.ink2 + '"/>' +
+  '<rect x="25" y="45" width="50" height="31" rx="5" fill="#8a9aa6"/>' +
+  '<rect x="31" y="51" width="38" height="19" rx="3" fill="' + P.ink + '"/>';
+IC.carrot =
+  '<path d="M50 26 q13 5 11 23 q-2 27 -11 35 q-9 -8 -11 -35 q-2 -18 11 -23" fill="' + P.orange + '"/>' +
+  '<path d="M50 26 q-11 -15 0 -17 q11 2 0 17" fill="' + P.green2 + '"/>' +
+  '<path d="M38 44 l24 6 M36 57 l28 6" stroke="' + P.orange2 + '" stroke-width="2"/>';
+IC.bread =
+  '<path d="M19 50 q0 -23 31 -23 q31 0 31 23 v27 q0 4 -4 4 h-54 q-4 0 -4 -4 z" fill="' + P.brown3 + '"/>' +
+  '<path d="M19 50 q0 -23 31 -23 q31 0 31 23 q-31 -11 -62 0" fill="#f2c795"/>' +
+  '<path d="M32 58 v18 M44 56 v20 M56 56 v20 M68 58 v18" stroke="#d9a06a" stroke-width="2"/>';
+IC.milk =
+  '<path d="M34 34 h32 v46 q0 4 -4 4 h-24 q-4 0 -4 -4 z" fill="#f2f6f9" stroke="' + P.gray + '" stroke-width="2.4"/>' +
+  '<path d="M34 34 l8 -13 h24 l-8 13 z" fill="' + P.blue3 + '"/>' +
+  '<rect x="34" y="52" width="32" height="14" fill="' + P.water + '"/>';
+IC.chair =
+  '<rect x="28" y="14" width="10" height="42" rx="4" fill="' + P.brown + '"/>' +
+  '<rect x="28" y="48" width="46" height="8" rx="4" fill="#c99a6a"/>' +
+  '<rect x="68" y="28" width="8" height="30" rx="4" fill="' + P.brown + '"/>' +
+  '<rect x="33" y="56" width="6" height="24" rx="3" fill="#a97b50"/><rect x="63" y="56" width="6" height="24" rx="3" fill="#a97b50"/>';
+IC.bed =
+  '<rect x="10" y="40" width="12" height="36" rx="4" fill="' + P.brown + '"/>' +
+  '<rect x="78" y="40" width="12" height="36" rx="4" fill="' + P.brown + '"/>' +
+  '<rect x="17" y="48" width="66" height="12" rx="5" fill="' + P.water + '"/>' +
+  '<rect x="23" y="36" width="26" height="12" rx="5" fill="' + P.cream + '"/>' +
+  '<rect x="52" y="42" width="31" height="10" rx="4" fill="' + P.pink + '"/>';
+IC.yarn =
+  '<circle cx="50" cy="52" r="26" fill="' + P.red + '"/>' +
+  '<path d="M28 40 q22 6 44 2 M26 52 q24 10 48 0 M30 64 q20 6 40 -2 M36 30 q10 24 2 44 M58 28 q-6 24 2 46" stroke="' + P.red2 + '" stroke-width="2.2" fill="none"/>' +
+  '<path d="M74 62 q14 6 8 20" stroke="' + P.red2 + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+IC.flower =
+  '<circle cx="50" cy="34" r="10" fill="' + P.pink + '"/><circle cx="64" cy="44" r="10" fill="' + P.pink3 + '"/>' +
+  '<circle cx="58" cy="58" r="10" fill="' + P.pink + '"/><circle cx="40" cy="56" r="10" fill="' + P.pink3 + '"/>' +
+  '<circle cx="36" cy="42" r="10" fill="' + P.pink + '"/>' +
+  '<circle cx="50" cy="45" r="9" fill="' + P.yellow + '"/>' +
+  '<path d="M50 66 v20" stroke="' + P.green2 + '" stroke-width="4" stroke-linecap="round"/>' +
+  '<path d="M50 76 q13 -6 15 5 q-11 4 -15 -5" fill="' + P.green + '"/>';
+IC.den =
+  '<path d="M12 82 q0 -48 38 -48 q38 0 38 48 z" fill="#8a6b52"/>' +
+  '<path d="M31 82 q0 -31 19 -31 q19 0 19 31 z" fill="#4a3830"/>' +
+  '<path d="M16 82 h68" stroke="#6b5343" stroke-width="4"/>';
+IC.tree =
+  '<rect x="44" y="54" width="12" height="36" rx="5" fill="' + P.brown + '"/>' +
+  '<circle cx="50" cy="38" r="23" fill="' + P.green + '"/>' +
+  '<circle cx="32" cy="48" r="14" fill="#8ed7a9"/><circle cx="68" cy="48" r="14" fill="#8ed7a9"/>';
+IC.house =
+  '<path d="M15 50 l35 -29 l35 29 v34 h-70 z" fill="' + P.cream + '"/>' +
+  '<path d="M10 50 l40 -33 l40 33 q-40 -11 -80 0" fill="' + P.red + '"/>' +
+  '<rect x="42" y="58" width="16" height="26" rx="3" fill="' + P.brown + '"/>' +
+  '<rect x="23" y="58" width="13" height="13" rx="2" fill="' + P.water + '"/>';
+IC.kite =
+  '<path d="M50 10 l27 32 l-27 27 l-27 -27 z" fill="' + P.red + '"/>' +
+  '<path d="M50 10 v59 M23 42 h54" stroke="' + P.red2 + '" stroke-width="2"/>' +
+  '<path d="M50 69 q8 13 -2 23 q11 -2 13 7" stroke="' + P.ink2 + '" stroke-width="2" fill="none" stroke-linecap="round"/>';
+IC.nest =
+  '<path d="M19 54 q31 20 62 0 q4 23 -31 25 q-35 -2 -31 -25" fill="' + P.brown + '"/>' +
+  '<circle cx="40" cy="50" r="8.4" fill="' + P.cream + '"/><circle cx="60" cy="48" r="8.4" fill="#f2f6f9"/>' +
+  '<path d="M23 60 q27 15 54 0" stroke="#8a6b52" stroke-width="3" fill="none"/>';
+IC.book =
+  '<path d="M11 30 q20 -6 39 2 q19 -8 39 -2 v44 q-20 -6 -39 2 q-19 -8 -39 -2 z" fill="' + P.cream + '" stroke="#e0cfae" stroke-width="2.4"/>' +
+  '<path d="M50 32 v44" stroke="#e0cfae" stroke-width="2.4"/>' +
+  '<path d="M19 42 h22 M19 50 h22 M58 42 h22 M58 50 h22" stroke="' + P.gray + '" stroke-width="2.4" stroke-linecap="round"/>';
+IC.bag =
+  '<path d="M27 38 h46 q6 0 6 6 v37 q0 6 -6 6 h-46 q-6 0 -6 -6 v-37 q0 -6 6 -6" fill="' + P.blue + '"/>' +
+  '<path d="M38 38 q0 -15 12 -15 q12 0 12 15" fill="none" stroke="' + P.blue2 + '" stroke-width="5"/>' +
+  '<rect x="57" y="56" width="21" height="12" rx="3" fill="' + P.blue3 + '"/>';
+IC.apple =
+  '<path d="M50 30 q11 -8 21 0 q11 9 6 27 q-4 23 -17 27 q-6 2 -10 -2 q-4 4 -10 2 q-13 -4 -17 -27 q-5 -18 6 -27 q10 -8 21 0" fill="' + P.red + '"/>' +
+  '<path d="M50 30 v-9" stroke="#8a6b52" stroke-width="4" stroke-linecap="round"/>' +
+  '<path d="M53 21 q10 -9 15 0 q-9 6 -15 0" fill="' + P.green + '"/>';
+IC.cup =
+  '<path d="M26 40 h40 v14 q0 18 -20 18 q-20 0 -20 -18 z" fill="' + P.cream + '" stroke="#e0cfae" stroke-width="2.4"/>' +
+  '<path d="M66 44 q13 0 13 9 q0 9 -13 9" fill="none" stroke="#e0cfae" stroke-width="4"/>' +
+  '<ellipse cx="46" cy="80" rx="25" ry="6" fill="' + P.gray3 + '"/>';
+IC["num:10"] = '<text x="50" y="76" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="62" font-weight="800" fill="' + P.yellow + '" stroke="' + P.yellow2 + '" stroke-width="2">10</text>';
+IC["num:6"] = '<text x="50" y="76" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="70" font-weight="800" fill="' + P.yellow + '" stroke="' + P.yellow2 + '" stroke-width="2">6</text>';
+IC["num:3"] = '<text x="50" y="76" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="70" font-weight="800" fill="' + P.yellow + '" stroke="' + P.yellow2 + '" stroke-width="2">3</text>';
+IC.ten = IC["num:10"];
+
+/* ---------------- 장면 배경 ---------------- */
+var BG = {};
+BG.room =
+  '<rect width="400" height="240" fill="#f9f3e8"/>' +
+  '<rect y="168" width="400" height="72" fill="#e8d7c3"/>' +
+  '<rect x="34" y="28" width="126" height="92" rx="8" fill="' + P.blue3 + '" stroke="' + P.gray + '" stroke-width="4"/>' +
+  '<path d="M97 28 v92 M34 74 h126" stroke="' + P.gray + '" stroke-width="4"/>' +
+  '<rect x="212" y="40" width="58" height="42" rx="4" fill="#ffffff" stroke="#e0cfae" stroke-width="3"/>' +
+  '<path d="M216 78 q14 -22 26 0 z" fill="' + P.green3 + '"/><circle cx="254" cy="54" r="6" fill="' + P.yellow + '"/>' +
+  '<rect x="332" y="126" width="36" height="42" rx="5" fill="#d9b47f"/>' +
+  '<circle cx="350" cy="112" r="16" fill="' + P.green + '"/><circle cx="336" cy="118" r="11" fill="#8ed7a9"/><circle cx="364" cy="118" r="11" fill="#8ed7a9"/>' +
+  '<ellipse cx="230" cy="196" rx="130" ry="26" fill="#dfcab2" opacity=".65"/>';
+BG.kitchen =
+  '<rect width="400" height="240" fill="#eef7fb"/>' +
+  '<g stroke="#dbe9f2" stroke-width="2"><path d="M0 40 h400 M0 80 h400 M0 120 h400 M50 0 v120 M150 0 v120 M250 0 v120 M350 0 v120"/></g>' +
+  '<g fill="#f7fbfe" stroke="#dbe9f2" stroke-width="2">' +
+  '<rect x="14" y="16" width="82" height="52" rx="5"/><rect x="106" y="16" width="82" height="52" rx="5"/></g>' +
+  '<path d="M55 16 v52 M147 16 v52" stroke="#cfe0ec" stroke-width="2"/>' +
+  '<rect y="150" width="400" height="90" fill="#e2d6c3"/>' +
+  '<rect y="132" width="400" height="20" fill="#c9b49a"/>' +
+  '<path d="M0 132 h400" stroke="#b8a284" stroke-width="2"/>';
+BG.park =
+  '<rect width="400" height="240" fill="#dff1fb"/>' +
+  '<circle cx="336" cy="44" r="26" fill="#ffe08a"/>' +
+  '<path d="M0 158 q100 -26 200 0 q100 26 200 0 v82 H0 z" fill="' + P.green3 + '"/>' +
+  '<circle cx="60" cy="140" r="30" fill="' + P.green + '" opacity=".6"/>';
+BG.farm =
+  '<rect width="400" height="240" fill="#e8f6ff"/>' +
+  '<path d="M0 150 q100 -30 200 0 q100 30 200 0 v90 H0 z" fill="' + P.green3 + '"/>' +
+  '<g stroke="#c9b49a" stroke-width="5" opacity=".85"><path d="M0 176 h400 M20 160 v34 M80 160 v34 M140 160 v34 M200 160 v34 M260 160 v34 M320 160 v34 M380 160 v34"/></g>';
+BG.forest =
+  '<rect width="400" height="240" fill="#eaf6ee"/>' +
+  '<rect y="164" width="400" height="76" fill="#b7dba2"/>' +
+  '<g fill="' + P.green + '" opacity=".55"><circle cx="40" cy="120" r="42"/><circle cx="360" cy="112" r="48"/></g>';
+BG.sea =
+  '<rect width="400" height="240" fill="#e6f6ff"/>' +
+  '<circle cx="332" cy="42" r="24" fill="#ffe08a"/>' +
+  '<rect y="118" width="400" height="58" fill="#a8dcf5"/>' +
+  '<rect y="176" width="400" height="64" fill="' + P.sand + '"/>' +
+  '<path d="M0 132 q40 -8 80 0 q40 8 80 0 q40 -8 80 0 q40 8 80 0 q40 -8 80 0" stroke="#ffffff" stroke-width="4" fill="none" opacity=".8"/>';
+BG.pond =
+  '<rect width="400" height="240" fill="#eaf7ee"/>' +
+  '<rect y="170" width="400" height="70" fill="' + P.green3 + '"/>' +
+  '<ellipse cx="200" cy="172" rx="168" ry="44" fill="#a8dcf5"/>' +
+  '<ellipse cx="200" cy="168" rx="168" ry="40" fill="' + P.green3 + '" opacity=".25"/>';
+BG.snow =
+  '<rect width="400" height="240" fill="#eaf4fb"/>' +
+  '<path d="M0 158 q100 -20 200 0 q100 20 200 0 v82 H0 z" fill="#ffffff"/>' +
+  '<g fill="#ffffff" opacity=".9"><circle cx="60" cy="60" r="5"/><circle cx="140" cy="40" r="4"/><circle cx="240" cy="66" r="5"/><circle cx="320" cy="36" r="4"/><circle cx="380" cy="80" r="5"/></g>';
+BG.hill =
+  '<rect width="400" height="240" fill="#dff1fb"/>' +
+  '<circle cx="60" cy="40" r="20" fill="#ffe08a"/>' +
+  '<path d="M0 190 q120 -86 240 -24 q80 42 160 4 v70 H0 z" fill="' + P.green3 + '"/>';
+BG.garden =
+  '<rect width="400" height="240" fill="#eaf7ee"/>' +
+  '<rect y="168" width="400" height="72" fill="#c9a678"/>' +
+  '<path d="M0 168 q60 -16 120 0 q60 16 120 0 q60 -16 160 0 v20 H0 z" fill="' + P.green3 + '"/>';
+BG.night =
+  '<rect width="400" height="240" fill="#26365c"/>' +
+  '<circle cx="330" cy="48" r="24" fill="#ffe08a"/>' +
+  '<g fill="#ffe08a"><circle cx="60" cy="40" r="3.4"/><circle cx="110" cy="70" r="2.6"/><circle cx="160" cy="34" r="3"/><circle cx="230" cy="58" r="2.6"/><circle cx="280" cy="30" r="3"/><circle cx="380" cy="96" r="2.6"/></g>' +
+  '<rect y="196" width="400" height="44" fill="#1c2947"/>';
+
+function svgWrap(inner, vb, extra){
+  return '<svg viewBox="' + vb + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"' + (extra || "") + '>' + inner + '</svg>';
+}
+function pic(spec, cls){
+  var s = String(spec == null ? "" : spec), inner = IC[s];
+  if (!inner && s.indexOf(":") > 0) inner = IC[s.split(":")[0]];
+  if (!inner) inner = IC.box;
+  return svgWrap(inner, "0 0 100 100", cls ? ' class="' + cls + '"' : "");
+}
+function scene(bg, items){
+  var out = BG[bg] || BG.room;
+  (items || []).forEach(function(it){
+    var name = it[0], x = it[1], y = it[2], s = (it[3] == null ? 1 : it[3]), flip = it[4];
+    var inner = IC[name] || IC[String(name).split(":")[0]] || IC.box;
+    out += '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')' + (flip ? ' translate(100 0) scale(-1 1)' : '') + '">' + inner + '</g>';
+  });
+  return svgWrap(out, "0 0 400 240", ' preserveAspectRatio="xMidYMid slice"');
+}
+
+window.EGART = { pic: pic, scene: scene, has: function(n){ return !!IC[n]; }, P: P, BG: BG };
+})();
+
+</script>
+<script id="egread1123">
+/* =====================================================================
+   📖 단계별 읽기 — 0단계 한 문장 퀴즈(단서 찾기) + 1~5단계 짧은 이야기 25편
+   · 저장: haeyuli.engread.v1  { v:1, done:{ "0a1":시각, "s01":시각 } }
+   · 한 편(또는 0단계 한 세트)을 끝내면 ⭐ +1 · 가족 코드로 기기끼리 합친다
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var ART = window.EGART;
+var KEY = "haeyuli.engread.v1";
+
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c]; });
+}
+function toast(m){ try { if (SB.toast) SB.toast(m); } catch(e){} }
+function confetti(){ try { if (SB.confetti) SB.confetti(); } catch(e){} }
+
+/* ---------------- 저장 ---------------- */
+function data(){
+  var v = null;
+  try { v = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e){ v = null; }
+  if (!v || typeof v !== "object" || Array.isArray(v)) v = {};
+  if (!v.done || typeof v.done !== "object" || Array.isArray(v.done)) v.done = {};
+  v.v = 1;
+  return v;
+}
+function save(d){ try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} }
+function touch(){ try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){} }
+function isDone(id){ return !!(data().done[id] > 0); }
+
+/* ---------------- 0단계 · 한 문장 퀴즈 20문항 ---------------- */
+var L0 = [
+  { s:"The hen has an egg.", q:"What does the hen have?",
+    o:[["cake","a cake"],["egg","an egg"]], a:1 },
+  { s:"Mia has a big boat.", q:"What does Mia have?",
+    o:[["boat","a boat"],["bike","a bike"]], a:0 },
+  { s:"I have a yellow pencil.", q:"What do I have?",
+    o:[["crayon","a crayon"],["pencil","a pencil"]], a:1 },
+  { s:"The duck can swim.", q:"What can the duck do?",
+    o:[["swim","swim"],["dig","dig"]], a:0 },
+  { s:"Sam has a blue car.", q:"What does Sam have?",
+    o:[["ball","a ball"],["car","a car"]], a:1 },
+
+  { s:"The cat is on the mat.", q:"Where is the cat?",
+    o:[["mat","on the mat"],["bed","on the bed"]], a:0 },
+  { s:"Dad has a red hat.", q:"What color is the hat?",
+    o:[["hat:red","red"],["hat:blue","blue"]], a:0 },
+  { s:"I like to eat apples.", q:"What do I like to eat?",
+    o:[["apple","apples"],["egg","eggs"]], a:0 },
+  { s:"The dog can run.", q:"What can the dog do?",
+    o:[["run","run"],["jump","jump"]], a:0 },
+  { s:"Mom has a black bag.", q:"What does Mom have?",
+    o:[["bag","a bag"],["book","a book"]], a:0 },
+
+  { s:"The pig is in the mud.", q:"Where is the pig?",
+    o:[["mud","in the mud"],["box","in the box"]], a:0 },
+  { s:"I see a big sun.", q:"What do I see?",
+    o:[["sun","a sun"],["star","a star"]], a:0 },
+  { s:"The fish is in the water.", q:"Where is the fish?",
+    o:[["swim","in the water"],["tree","in a tree"]], a:0 },
+  { s:"Ben has six pens.", q:"How many pens does Ben have?",
+    o:[["num:6","six"],["num:3","three"]], a:0 },
+  { s:"The bird is in the nest.", q:"Where is the bird?",
+    o:[["nest","in the nest"],["box","in the box"]], a:0 },
+
+  { s:"We play in the park.", q:"Where do we play?",
+    o:[["tree","in the park"],["house","in the house"]], a:0 },
+  { s:"The cake is on the plate.", q:"Where is the cake?",
+    o:[["plate","on the plate"],["mat","on the mat"]], a:0 },
+  { s:"I have a red kite.", q:"What do I have?",
+    o:[["kite","a kite"],["boat","a boat"]], a:0 },
+  { s:"The boy can jump.", q:"What can the boy do?",
+    o:[["jump","jump"],["swim","swim"]], a:0 },
+  { s:"Grandma has a warm hat.", q:"What does Grandma have?",
+    o:[["hat:red","a hat"],["cup","a cup"]], a:0 }
+];
+var L0SETS = [["A",0,5],["B",5,10],["C",10,15],["D",15,20]];
+function l0id(i){ return "0" + L0SETS[Math.floor(i / 5)][0].toLowerCase() + ((i % 5) + 1); }
+function l0setKey(i){ return "0" + L0SETS[Math.floor(i / 5)][0].toLowerCase(); }
+
+/* ---------------- 1~5단계 이야기 25편 ---------------- */
+var LEVELS = [
+  { n:0, nm:"0단계 · 문장 퀴즈", tip:"단서 찾기" },
+  { n:1, nm:"1단계 · CVC", tip:"a·e·i·o·u 짧은 소리" },
+  { n:2, nm:"2단계 · 장모음", tip:"a_e·i_e·o_e·sh·ch·th" },
+  { n:3, nm:"3단계 · 사이트워드", tip:"the·is·in·on·see·like·play" },
+  { n:4, nm:"4단계 · 생활·동물", tip:"3~4문장" },
+  { n:5, nm:"5단계 · 술술 읽기", tip:"4~5문장" }
+];
+var ST = [
+  { id:"s01", lv:1, t:"Peg the Cat", f:"단모음 a", bg:"room",
+    it:[["cat",120,70,1.05],["yarn",252,116,0.66]],
+    s:[["Peg is a big cat.","Peg는 커다란 고양이예요."],
+       ["She plays with a red ball of yarn.","그녀는 빨간 털실 뭉치를 가지고 놀아요."],
+       ["Peg is happy all day.","Peg는 하루 종일 행복해요."]],
+    q:[["Peg is a big ___.",["cat","dog"],0],["She plays with a red ball of ___.",["yarn","milk"],0]] },
+  { id:"s02", lv:1, t:"Ten Hens", f:"단모음 e", bg:"farm",
+    it:[["hen",40,80,0.72],["hen",150,72,0.8],["hen",262,84,0.7],["net",300,120,0.56]],
+    s:[["Ten hens sit in a red pen.","열 마리 암탉이 빨간 우리에 앉아 있어요."],
+       ["The hens are wet.","암탉들이 젖었어요."],
+       ["Ben brings a big net.","Ben이 큰 그물을 가져와요."]],
+    q:[["Ten ___ sit in a red pen.",["hens","cats"],0],["Ben brings a big ___.",["net","mug"],0]] },
+  { id:"s03", lv:1, t:"Pip the Pig", f:"단모음 i", bg:"farm",
+    it:[["pig",110,66,1.0],["mud",250,140,1.0],["dig",40,120,0.5]],
+    s:[["Pip is a little pig.","Pip은 작은 돼지예요."],
+       ["Pip digs in the mud.","Pip은 진흙을 파요."],
+       ["Pip is happy in the mud.","Pip은 진흙 속에서 행복해요."]],
+    q:[["Pip is a little ___.",["pig","hen"],0],["Pip digs in the ___.",["mud","box"],0]] },
+  { id:"s04", lv:1, t:"Fox in a Box", f:"단모음 o", bg:"forest",
+    it:[["log",20,150,1.2],["box",170,92,0.94],["fox",214,66,0.74]],
+    s:[["A fox sits in a box.","여우가 상자 안에 앉아 있어요."],
+       ["The box is on a log.","상자는 통나무 위에 있어요."],
+       ["The fox has a hot dog.","여우는 따뜻한 핫도그를 먹어요."]],
+    q:[["A fox sits in a ___.",["box","bag"],0],["The box is on a ___.",["log","bed"],0]] },
+  { id:"s05", lv:1, t:"The Bug and the Mug", f:"단모음 u", bg:"room",
+    it:[["rug",90,124,1.2],["mug",232,104,0.72],["bug",300,60,0.5]],
+    s:[["A bug is on a mug.","벌레 한 마리가 머그잔 위에 있어요."],
+       ["The mug is on the rug.","머그잔은 양탄자 위에 있어요."],
+       ["The bug can run and run.","벌레는 계속계속 달려요."]],
+    q:[["A bug is on a ___.",["mug","plate"],0],["The mug is on the ___.",["rug","bed"],0]] },
+
+  { id:"s06", lv:2, t:"Kate and the Cake", f:"a_e", bg:"kitchen",
+    it:[["girl",40,66,0.95],["plate",120,140,0.9],["cake",188,100,0.86]],
+    s:[["Kate has a big cake.","Kate는 큰 케이크를 갖고 있어요."],
+       ["The cake is on a plate.","케이크는 접시 위에 있어요."],
+       ["Kate eats the cake with a smile.","Kate는 웃으면서 케이크를 먹어요."]],
+    q:[["Kate has a big ___.",["cake","egg"],0],["The cake is on a ___.",["plate","mat"],0]] },
+  { id:"s07", lv:2, t:"Mike and the Bike", f:"i_e", bg:"park",
+    it:[["boy",50,66,0.95],["bike",170,96,1.05],["tree",300,40,0.9]],
+    s:[["Mike has a new bike.","Mike는 새 자전거가 있어요."],
+       ["Mike rides his bike to the lake.","Mike는 자전거를 타고 호수에 가요."],
+       ["Mike likes his bike.","Mike는 자기 자전거가 좋아요."]],
+    q:[["Mike has a new ___.",["bike","boat"],0],["Mike rides to the ___.",["lake","house"],0]] },
+  { id:"s08", lv:2, t:"The Mole and the Stone", f:"o_e", bg:"forest",
+    it:[["den",60,80,1.1],["mole",200,110,0.86],["dig",290,120,0.6]],
+    s:[["A little mole lives in a hole.","작은 두더지가 굴 속에 살아요."],
+       ["A big stone is at the hole.","굴 앞에 큰 돌이 있어요."],
+       ["The mole rolls the stone away.","두더지가 그 돌을 굴려서 치워요."]],
+    q:[["The mole lives in a ___.",["hole","box"],0],["The mole rolls the ___ away.",["stone","cake"],0]] },
+  { id:"s09", lv:2, t:"Sheep and Shells", f:"sh · ch", bg:"sea",
+    it:[["sheep",80,84,0.9],["shell",240,152,0.6],["shell",292,158,0.5]],
+    s:[["Sheep walk on the shore.","양들이 해안을 걸어요."],
+       ["The sheep see shells.","양들이 조개껍데기를 봐요."],
+       ["She sells ten shells at the shop.","그녀는 가게에서 조개껍데기 열 개를 팔아요."]],
+    q:[["The sheep walk on the ___.",["shore","hill"],0],["She sells ten ___ at the shop.",["shells","eggs"],0]] },
+  { id:"s10", lv:2, t:"This and That", f:"th", bg:"room",
+    it:[["book",120,104,1.15],["book",242,120,0.86]],
+    s:[["This is a thick book.","이것은 두꺼운 책이에요."],
+       ["That is a thin book.","저것은 얇은 책이에요."],
+       ["Mom thinks they are both good books.","엄마는 둘 다 좋은 책이라고 생각해요."]],
+    q:[["This is a ___ book.",["thick","thin"],0],["Mom thinks they are ___ books.",["good","bad"],0]] },
+
+  { id:"s11", lv:3, t:"I See a Red Hat", f:"I see · the", bg:"room",
+    it:[["cat",110,74,1.0],["hat:red",228,104,0.78]],
+    s:[["I see a red hat.","나는 빨간 모자가 보여요."],
+       ["The hat is on a cat.","그 모자는 고양이 위에 있어요."],
+       ["I like the cat in the hat.","나는 모자를 쓴 고양이가 좋아요."]],
+    q:[["I see a red ___.",["hat","bag"],0],["The hat is on a ___.",["cat","hen"],0]] },
+  { id:"s12", lv:3, t:"We Play in the Park", f:"we · play", bg:"park",
+    it:[["boy",60,78,0.92],["girl",180,80,0.92],["ball",290,150,0.44]],
+    s:[["We play in the park.","우리는 공원에서 놀아요."],
+       ["We run and we jump.","우리는 달리고 뛰어요."],
+       ["I like to play with my friends.","나는 친구들과 노는 게 좋아요."]],
+    q:[["We play in the ___.",["park","room"],0],["We run and we ___.",["jump","sleep"],0]] },
+  { id:"s13", lv:3, t:"This Is My Dog", f:"this · my", bg:"house",
+    it:[["dog",130,84,1.0],["house",240,50,0.9]],
+    s:[["This is my dog.","이건 내 강아지예요."],
+       ["My dog is in the yard.","내 강아지는 마당에 있어요."],
+       ["My dog likes to play with me.","내 강아지는 나와 노는 걸 좋아해요."]],
+    q:[["This is my ___.",["dog","cat"],0],["My dog is in the ___.",["yard","box"],0]] },
+  { id:"s14", lv:3, t:"Look at My Family", f:"look · my", bg:"room",
+    it:[["mom",70,70,0.95],["dad",170,66,1.0],["girl",270,84,0.86]],
+    s:[["Look at my mom.","우리 엄마를 봐요."],
+       ["Look at my dad.","우리 아빠를 봐요."],
+       ["I love my mom and dad.","나는 엄마와 아빠를 사랑해요."]],
+    q:[["Look at my ___.",["mom","teacher"],0],["I love my mom and ___.",["dad","dog"],0]] },
+  { id:"s15", lv:3, t:"Where Is My Toy?", f:"where · is · in", bg:"room",
+    it:[["chair",70,90,1.0],["ball",180,152,0.44],["bed",250,96,0.9]],
+    s:[["Where is my toy?","내 장난감이 어디 있지?"],
+       ["It is not on the bed.","침대 위에 없어요."],
+       ["It is under the chair! I see it now.","의자 아래에 있어요! 이제 보여요."]],
+    q:[["It is not on the ___.",["bed","chair"],0],["It is under the ___.",["chair","bed"],0]] },
+
+  { id:"s16", lv:4, t:"Mia's Morning", f:"생활 이야기", bg:"house",
+    it:[["girl",90,74,0.96],["bag",200,110,0.66],["bread",280,132,0.56]],
+    s:[["Mia gets up at seven.","Mia는 일곱 시에 일어나요."],
+       ["She eats bread and milk.","그녀는 빵과 우유를 먹어요."],
+       ["Then she runs to school with her bag.","그리고 가방을 메고 학교로 달려가요."]],
+    q:[["Mia gets up at ___.",["seven","ten"],0],["She eats bread and ___.",["milk","soup"],0]] },
+  { id:"s17", lv:4, t:"The Duck in the Rain", f:"동물 이야기", bg:"pond",
+    it:[["duck",150,104,1.0],["rain",288,24,0.72]],
+    s:[["Rain falls on the pond.","연못에 비가 내려요."],
+       ["A duck swims in the water.","오리가 물에서 헤엄쳐요."],
+       ["The duck is happy in the rain.","오리는 비 오는 날에도 행복해요."]],
+    q:[["Rain falls on the ___.",["pond","park"],0],["The duck swims in the ___.",["water","sand"],0]] },
+  { id:"s18", lv:4, t:"Tom's Little Garden", f:"생활 이야기", bg:"garden",
+    it:[["can",70,110,0.66],["tomato",160,110,0.8],["flower",262,116,0.7]],
+    s:[["Tom has a little garden.","Tom은 작은 텃밭이 있어요."],
+       ["He waters the plants every day.","그는 매일 식물에 물을 줘요."],
+       ["A big tomato grows and Tom smiles.","큰 토마토가 자라고 Tom이 웃어요."]],
+    q:[["Tom has a little ___.",["garden","kitchen"],0],["A big ___ grows.",["tomato","nut"],0]] },
+  { id:"s19", lv:4, t:"A Bird in the Tree", f:"동물 이야기", bg:"park",
+    it:[["tree",130,40,1.5],["bird",180,58,0.66],["flower",40,130,0.6]],
+    s:[["A bird lives in the tall tree.","한 마리 새가 높은 나무에 살아요."],
+       ["The bird sings a happy song.","그 새는 행복한 노래를 불러요."],
+       ["All the children hear the song.","모든 아이들이 그 노래를 들어요."]],
+    q:[["A bird lives in the tall ___.",["tree","box"],0],["The bird sings a happy ___.",["song","book"],0]] },
+  { id:"s20", lv:4, t:"The Lost Ball", f:"생활 이야기", bg:"snow",
+    it:[["boy",90,80,0.92],["tree",240,40,1.0],["ball",300,150,0.42]],
+    s:[["Sam loses his red ball in the snow.","Sam은 눈 속에서 빨간 공을 잃어버려요."],
+       ["His friend finds it by the tree.","친구가 나무 옆에서 그 공을 찾아요."],
+       ["Sam says thank you with a big smile.","Sam은 활짝 웃으며 고맙다고 말해요."]],
+    q:[["Sam loses his ___ ball.",["red","blue"],0],["His friend finds it by the ___.",["tree","house"],0]] },
+
+  { id:"s21", lv:5, t:"The Big Cake Mix", f:"술술 읽기", bg:"kitchen",
+    it:[["oven",190,74,1.0],["cake",90,120,0.62],["egg",296,140,0.44]],
+    s:[["Dad and I make a cake.","아빠와 나는 케이크를 만들어요."],
+       ["I mix the flour and eggs.","나는 밀가루와 달걀을 섞어요."],
+       ["Dad puts the cake in the oven.","아빠가 케이크를 오븐에 넣어요."],
+       ["Our kitchen smells sweet.","우리 부엌에서 달콤한 냄새가 나요."]],
+    q:[["I mix the flour and ___.",["eggs","milk"],0],["Dad puts the cake in the ___.",["oven","box"],0]] },
+  { id:"s22", lv:5, t:"A Trip to the Sea", f:"술술 읽기", bg:"sea",
+    it:[["castle",150,116,0.9],["wave",40,140,0.9],["sun",300,20,0.5]],
+    s:[["We go to the sea on a sunny day.","우리는 맑은 날 바다에 가요."],
+       ["I build a big sand castle.","나는 큰 모래성을 만들어요."],
+       ["A wave comes and takes it away.","파도가 와서 그것을 가져가 버려요."],
+       ["I laugh and build again.","나는 웃으면서 다시 만들어요."]],
+    q:[["We go to the ___ on a sunny day.",["sea","park"],0],["A ___ takes the castle away.",["wave","bird"],0]] },
+  { id:"s23", lv:5, t:"The Night Sky", f:"술술 읽기", bg:"night",
+    it:[["star",90,50,0.52],["star",220,90,0.4],["moon",40,30,0.4]],
+    s:[["The sun goes down and the sky turns dark.","해가 지고 하늘이 어두워져요."],
+       ["Stars shine like little lamps.","별들이 작은 등불처럼 빛나요."],
+       ["We look up and find the moon.","우리는 올려다보며 달을 찾아요."],
+       ["Then we go home to sleep.","그리고 집에 가서 잠을 자요."]],
+    q:[["The sky turns ___.",["dark","blue"],0],["Stars shine like little ___.",["lamps","balls"],0]] },
+  { id:"s24", lv:5, t:"Ben's Red Kite", f:"술술 읽기", bg:"hill",
+    it:[["kite",180,24,0.9],["boy",90,96,0.9],["cloud",290,26,0.6]],
+    s:[["Ben has a red kite.","Ben은 빨간 연을 갖고 있어요."],
+       ["He runs up the hill with the string.","그는 실을 잡고 언덕을 올라가요."],
+       ["The wind lifts the kite high.","바람이 연을 높이 띄워요."],
+       ["Ben watches it dance in the sky.","Ben은 연이 하늘에서 춤추는 걸 바라봐요."]],
+    q:[["Ben has a ___ kite.",["red","green"],0],["The ___ lifts the kite high.",["wind","rain"],0]] },
+  { id:"s25", lv:5, t:"Grandma's Soup", f:"술술 읽기", bg:"kitchen",
+    it:[["grandma",60,66,0.96],["soup",170,110,0.8],["bread",278,128,0.54]],
+    s:[["Grandma makes soup on a cold day.","할머니는 추운 날 국을 끓여요."],
+       ["She adds beans, carrots, and eggs.","할머니는 콩과 당근, 달걀을 넣어요."],
+       ["The soup is warm and sweet.","그 국은 따뜻하고 달콤해요."],
+       ["We eat it together at the table.","우리는 식탁에서 함께 먹어요."]],
+    q:[["Grandma makes ___ on a cold day.",["soup","cake"],0],["She adds beans, carrots, and ___.",["eggs","nuts"],0]] }
+];
+
+/* ---------------- 상태 ---------------- */
+var LV = 0, IX = 0, RATE = 1, KO = false;
+var HL = {};            /* 0단계 낱말 하이라이트: "0a1" -> {단어번호:1} */
+var QS = {};            /* 이야기 퀴즈 정답: "s01" -> {0:1} */
+var SEQ = 0;            /* 전체 듣기 예약 번호 */
+
+function totalUnits(){ return L0.length + ST.length; }
+function doneCount(){
+  var d = data().done, n = 0, i;
+  for (i = 0; i < L0.length; i++) if (d[l0id(i)] > 0) n++;
+  for (i = 0; i < ST.length; i++) if (d[ST[i].id] > 0) n++;
+  return n;
+}
+function levelItems(lv){
+  if (lv === 0) return L0.map(function(x, i){ return { i:i, id:l0id(i), done:isDone(l0id(i)) }; });
+  var out = [], n = 0;
+  ST.forEach(function(s){ if (s.lv === lv){ n++; out.push({ i:n, id:s.id, done:isDone(s.id), st:s }); } });
+  return out;
+}
+function levelDone(lv){
+  var it = levelItems(lv), n = 0;
+  it.forEach(function(x){ if (x.done) n++; });
+  return n;
+}
+
+/* ---------------- 그리기 ---------------- */
+function speak(t, rate){ try { SB.speak(String(t || ""), rate || RATE, "en-US"); } catch(e){} }
+function stopSeq(){ SEQ++; }
+function speakAll(list){
+  stopSeq();
+  var me = SEQ;
+  (function step(i){
+    if (i >= list.length || me !== SEQ) return;
+    speak(list[i]);
+    var w = String(list[i]).split(/\s+/).length;
+    var wait = (520 + w * 350) * (RATE < 1 ? 1.3 : 1);
+    setTimeout(function(){ if (me === SEQ) step(i + 1); }, wait);
+  })(0);
+}
+function sure(v){        /* 정답 비교 — 대소문자·공백 무시 */
+  return String(v == null ? "" : v).toLowerCase().replace(/[^a-z0-9']/g, "");
+}
+
+function renderHead(){
+  var prog = $("egProg"); if (prog) prog.textContent = "완료 " + doneCount() + " / " + totalUnits();
+  var lvBox = $("egLevels");
+  if (lvBox){
+    lvBox.innerHTML = LEVELS.map(function(L){
+      var d = levelDone(L.n), cnt = levelItems(L.n).length;
+      return '<button class="eg-lv' + (LV === L.n ? " on" : "") + (d === cnt ? " done" : "") + '" type="button" data-evl="' + L.n + '" aria-pressed="' + (LV === L.n) + '">'
+        + (d === cnt && cnt ? "✅ " : "") + L.nm + '<i class="n">' + d + "/" + cnt + '</i></button>';
+    }).join("");
+  }
+  var chipBox = $("egChips");
+  if (chipBox){
+    var list = levelItems(LV);
+    chipBox.innerHTML = list.map(function(x){
+      var lab = LV === 0 ? String(x.i) : String(x.i) + "편";
+      var on = (LV === 0 ? IX === x.i - 1 : IX === x.i - 1);
+      return '<button class="eg-chip' + (on ? " on" : "") + (x.done ? " done" : "") + '" type="button" data-eix="' + (x.i - 1) + '" aria-pressed="' + on + '">'
+        + (x.done ? "✅ " : "") + lab + '</button>';
+    }).join("");
+  }
+}
+
+function rateBar(){
+  return '<div class="eg-rate" role="group" aria-label="읽어주기 속도">'
+    + '<button type="button" data-er="0.8" aria-pressed="' + (RATE === 0.8) + '" class="' + (RATE === 0.8 ? "on" : "") + '">0.8x</button>'
+    + '<button type="button" data-er="1" aria-pressed="' + (RATE === 1) + '" class="' + (RATE === 1 ? "on" : "") + '">1.0x</button></div>';
+}
+
+function renderL0(){
+  var it = L0[IX], box = $("egBody"); if (!box) return;
+  var setN = Math.floor(IX / 5), setL = L0SETS[setN][0];
+  var id = l0id(IX);
+  var hl = HL[id] || {};
+  var words = String(it.s).split(/\s+/).map(function(w, i){
+    return '<button class="eg-word' + (hl[i] ? " hl" : "") + '" type="button" data-ew="' + i + '" data-ei="' + IX + '" aria-pressed="' + !!hl[i] + '">' + esc(w) + '</button>';
+  }).join("");
+  var opts = it.o.map(function(o, k){
+    return '<button class="eg-ac" type="button" data-eo="' + k + '">'
+      + '<span class="mk">' + (k === 0 ? "ⓐ" : "ⓑ") + '</span>'
+      + '<span class="pic">' + ART.pic(o[0]) + '</span>'
+      + '<span class="tx"><b>' + esc(o[1]) + '</b></span></button>';
+  }).join("");
+  var done = isDone(id);
+  box.innerHTML =
+    '<div class="eg-card"><div class="eg-titlerow"><b>0단계 · 한 문장 퀴즈</b>'
+    + '<span class="eg-badge bl">단서 찾기</span><span class="eg-badge">Set ' + setL + ' · ' + ((IX % 5) + 1) + '/5</span>'
+    + (done ? '<span class="eg-badge" style="color:#1f7a52;background:#eefbf4">✅ 완료</span>' : '')
+    + '</div>'
+    + '<div class="eg-l0">'
+    +   '<div class="lead">낱말을 누르면 소리가 나요 · 노랗게 칠해 단서를 짚어 봐요</div>'
+    +   '<div class="eg-line">' + words + '</div>'
+    +   '<div class="eg-tools"><button class="eg-btn pri" type="button" data-egsay="' + esc(it.s) + '">🔊 문장 듣기</button>'
+    +     '<button class="eg-btn" type="button" data-egall="1">🔊 전체 듣기</button>' + rateBar() + '</div>'
+    +   '<div class="eg-l0q"><div class="q">' + esc(it.q) + '</div>'
+    +     '<div class="eg-ans">' + opts + '</div>'
+    +     '<div class="fb" id="egFb" aria-live="polite"></div>'
+    +   '</div>'
+    + '</div></div>';
+}
+
+function renderStory(){
+  var list = levelItems(LV), cur = list[IX]; if (!cur) return;
+  var s = cur.st, box = $("egBody"); if (!box) return;
+  var qs = QS[s.id] || {};
+  var allRight = s.q.every(function(_, qi){ return qs[qi]; });
+  var done = isDone(s.id);
+
+  var sents = s.s.map(function(p){
+    return '<div class="eg-sent"><p>' + esc(p[0]) + '</p>'
+      + '<button class="eg-say" type="button" data-egsay="' + esc(p[0]) + '" aria-label="이 문장 듣기">🔊</button></div>';
+  }).join("");
+  var kos = s.s.map(function(p){ return '<p>' + esc(p[1]) + '</p>'; }).join("");
+  var quiz = s.q.map(function(q, qi){
+    var picked = qs[qi] ? q[2] : -1;
+    var opts = q[1].map(function(o, oi){
+      var cls = "eg-opt" + (picked === oi ? " right" : "");
+      return '<button class="' + cls + '" type="button" data-eq="' + qi + '" data-eopt="' + oi + '"' + (picked === oi ? ' disabled' : '') + '>' + esc(o) + '</button>';
+    }).join("");
+    var head = String(q[0]).split("___");
+    var qtext = head.length > 1 ? esc(head[0]) + '<i>___</i>' + esc(head.slice(1).join("___")) : esc(q[0]);
+    return '<div class="eg-q" data-qbox="' + qi + '"><div class="q">' + (qi + 1) + '. ' + qtext + '</div>'
+      + '<div class="eg-opts">' + opts + '</div>'
+      + '<div class="fb" data-qfb="' + qi + '">' + (picked >= 0 ? "✅ 맞았어요!" : "") + '</div></div>';
+  }).join("");
+
+  box.innerHTML =
+    '<div class="eg-card">'
+    + '<div class="eg-art">' + ART.scene(s.bg, s.it) + '</div>'
+    + '<div class="eg-titlerow"><b>' + esc(s.t) + '</b>'
+    +   '<span class="eg-badge">' + LV + '단계 · ' + (IX + 1) + '편</span>'
+    +   '<span class="eg-badge bl">' + esc(s.f) + '</span>'
+    +   (done ? '<span class="eg-badge" style="color:#1f7a52;background:#eefbf4">✅ 읽었어요</span>' : '')
+    + '</div>'
+    + '<div class="eg-sents">' + sents + '</div>'
+    + '<div class="eg-tools">'
+    +   '<button class="eg-btn pri" type="button" data-egall="1">🔊 전체 듣기</button>'
+    +   rateBar()
+    +   '<button class="eg-btn' + (KO ? " on" : "") + '" type="button" data-eko="1" aria-pressed="' + KO + '">한글 뜻 보기</button>'
+    + '</div>'
+    + '<div class="eg-ko"' + (KO ? '' : ' hidden') + '>' + kos + '</div>'
+    + '<div class="eg-rec"><span class="eg-rl">🎙️ 따라 읽기</span>'
+    +   (SB.recBtn ? SB.recBtn("egread:" + s.id, "eg-rbtn") : "") + '</div>'
+    + '<div class="eg-quiz"><div class="eg-qh"><b>Comprehension Questions</b><span>이해 퀴즈 · 다 맞히면 ⭐ +1</span></div>' + quiz + '</div>'
+    + (done ? '<div class="eg-done"><b>✅ 읽기 완료!</b><span>이 편을 다 읽고 문제도 맞혔어요</span>'
+        + (list[IX + 1] ? '<button class="eg-btn" type="button" data-enext="1">다음 편 ▶</button>' : '') + '</div>' : '')
+    + '</div>';
+}
+
+function render(){
+  renderHead();
+  if (LV === 0) renderL0(); else renderStory();
+}
+function selectLevel(n){
+  stopSeq();
+  LV = n; IX = 0;
+  render();
+  var b = $("egBody"); if (b) b.scrollTop = 0;
+}
+function selectItem(i){
+  stopSeq();
+  IX = i; render();
+  var b = $("egBody"); if (b) b.scrollTop = 0;
+}
+
+/* ---------------- 완료 처리 ---------------- */
+function markDone(id, msg){
+  var d = data();
+  if (d.done[id] > 0) return false;
+  d.done[id] = Date.now();
+  save(d);
+  touch();
+  var got = 0;
+  try { got = SB.earn ? SB.earn("engread|" + id, 1, { skipStudyBonus: true }) : 0; } catch(e){ got = 0; }
+  try { if (SB.markDaily) SB.markDaily("en"); } catch(e){}
+  if (got > 0){ confetti(); toast(msg || ("✅ 완료! ⭐ +" + got)); }
+  else toast(msg || "✅ 완료!");
+  return true;
+}
+
+/* ---------------- 0단계 정답 ---------------- */
+function pickOption(btn, optIndex){
+  var it = L0[IX], id = l0id(IX);
+  var fb = $("egFb");
+  if (optIndex === it.a){
+    var cards = document.querySelectorAll("#egBody .eg-ac");
+    for (var i = 0; i < cards.length; i++) cards[i].classList.remove("wrong");
+    btn.classList.add("right");
+    if (fb){ fb.className = "fb"; fb.textContent = "✅ 맞았어요!"; }
+    speak(it.s);
+    var first = markDone(id);
+    /* 한 세트(5문항)를 모두 맞히면 세트 보너스 ⭐ +1 */
+    var setN = Math.floor(IX / 5), all = true;
+    for (var k = setN * 5; k < setN * 5 + 5; k++) if (!isDone(l0id(k))) all = false;
+    if (first && all){
+      var sk = l0setKey(IX) + "|set";
+      var got = 0;
+      try { got = SB.earn ? SB.earn("engread|" + sk, 1, { skipStudyBonus: true }) : 0; } catch(e){ got = 0; }
+      if (got > 0){ confetti(); toast("🎉 Set " + L0SETS[setN][0] + " 완성! ⭐ +" + got); }
+    }
+    renderHead();
+    /* 다음 문항으로 (마지막이면 그대로) */
+    if (IX < L0.length - 1){
+      var nx = IX + 1;
+      setTimeout(function(){
+        if (LV !== 0) return;
+        IX = nx; render(); renderHead();
+        var b = $("egBody"); if (b) b.scrollTop = 0;
+      }, 900);
+    }
+  } else {
+    btn.classList.remove("wrong");
+    void btn.offsetWidth;
+    btn.classList.add("wrong");
+    if (fb){ fb.className = "fb no"; fb.textContent = "다시 한 번 골라 봐요 🙂"; }
+  }
+}
+
+/* ---------------- 이야기 퀴즈 ---------------- */
+function pickQuiz(qi, oi, btn){
+  var list = levelItems(LV), cur = list[IX]; if (!cur) return;
+  var s = cur.st, q = s.q[qi]; if (!q) return;
+  if (!QS[s.id]) QS[s.id] = {};
+  var fb = document.querySelector('#egBody [data-qfb="' + qi + '"]');
+  if (oi === q[2]){
+    QS[s.id][qi] = 1;
+    btn.classList.add("right");
+    try { btn.disabled = true; } catch(e){}
+    if (fb) fb.textContent = "✅ 맞았어요!";
+    var allRight = s.q.every(function(_, k){ return QS[s.id][k]; });
+    if (allRight){
+      var first = markDone(s.id, "✅ 읽기 완료! ⭐ +1");
+      if (first) setTimeout(render, 520);
+      else renderHead();
+    }
+  } else {
+    btn.classList.remove("wrong");
+    void btn.offsetWidth;
+    btn.classList.add("wrong");
+    if (fb) fb.textContent = "다시 골라 봐요 🙂";
+  }
+}
+
+/* ---------------- 화면 연결 ---------------- */
+function bind(){
+  var view = $("viewEnRead"); if (!view || view.__egBind) return;
+  view.__egBind = 1;
+  view.addEventListener("click", function(e){
+    var t = e.target; if (!t || !t.closest) return;
+    var el;
+    if ((el = t.closest("[data-evl]"))){
+      selectLevel(parseInt(el.getAttribute("data-evl"), 10) || 0); return;
+    }
+    if ((el = t.closest("[data-eix]"))){
+      selectItem(parseInt(el.getAttribute("data-eix"), 10) || 0); return;
+    }
+    if ((el = t.closest("[data-er]"))){
+      RATE = el.getAttribute("data-er") === "0.8" ? 0.8 : 1;
+      render(); return;
+    }
+    if ((el = t.closest("[data-eko]"))){
+      KO = !KO; render(); return;
+    }
+    if ((el = t.closest("[data-enext]"))){
+      selectItem(IX + 1); return;
+    }
+    if ((el = t.closest("[data-egsay]"))){
+      stopSeq(); speak(el.getAttribute("data-egsay")); return;
+    }
+    if ((el = t.closest("[data-egall]"))){
+      if (LV === 0) speakAll([L0[IX].s]);
+      else {
+        var list = levelItems(LV), cur = list[IX];
+        if (cur && cur.st) speakAll(cur.st.s.map(function(p){ return p[0]; }));
+      }
+      return;
+    }
+    if ((el = t.closest("[data-ew]"))){
+      var wi = parseInt(el.getAttribute("data-ew"), 10) || 0;
+      var id = l0id(IX), hl = HL[id] || (HL[id] = perHl(id));
+      hl[wi] = hl[wi] ? 0 : 1;
+      el.classList.toggle("hl", !!hl[wi]);
+      el.setAttribute("aria-pressed", hl[wi] ? "true" : "false");
+      if (hl[wi]) speak(el.textContent);
+      return;
+    }
+    if ((el = t.closest("[data-eo]"))){
+      pickOption(el, parseInt(el.getAttribute("data-eo"), 10) || 0); return;
+    }
+    if ((el = t.closest("[data-eq]"))){
+      pickQuiz(parseInt(el.getAttribute("data-eq"), 10) || 0, parseInt(el.getAttribute("data-eopt"), 10) || 0, el);
+      return;
+    }
+  });
+}
+function perHl(id){ return HL[id] || {}; }
+
+/* 다른 기기에서 온 기록 반영 · 가족 동기화가 부르는 새로고침 */
+SB.egRefresh = function(){
+  if (LV === 0) renderL0(); else renderStory();
+  renderHead();
+};
+
+/* ---------------- 사이트워드 워크북이 쓰는 공용 도구 ---------------- */
+SB.egSay = function(t){ speak(t); };
+SB.egSpeak = speak;
+SB.egEsc = esc;
+SB.egData = { key:KEY, read:data };
+SB.egTouch = touch;
+
+/* ---------------- 시작 ---------------- */
+var prevEn = SB.onShow && SB.onShow.en;
+SB.onShow.en = function(sub){
+  if (prevEn){ try { prevEn.apply(this, arguments); } catch(e){} }
+  if (sub === "read"){
+    try { bind(); render(); } catch(e){ try { console.warn(e); } catch(e2){} }
+  } else {
+    try { stopSeq(); } catch(e){}
+  }
+};
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+else bind();
+})();
+
+</script>
+<script id="egwb1123">
+/* =====================================================================
+   ✍️ 문장 워크북 — 워드 패밀리 10장 · 낱말 뱅크에서 골라 빈칸 채우기
+   · 한 장(5문장)을 다 맞히면 ⭐ +1 · 저장: haeyuli.engwb.v1
+   · 빈칸은 글자 수만큼 네모 박스 — 낱말을 톡 눌러 채우거나 키보드로 직접 쓴다
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var ART = window.EGART;
+var KEY = "haeyuli.engwb.v1";
+
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c]; });
+}
+function toast(m){ try { if (SB.toast) SB.toast(m); } catch(e){} }
+function confetti(){ try { if (SB.confetti) SB.confetti(); } catch(e){} }
+function speak(t){ try { SB.speak(String(t || ""), 0.92, "en-US"); } catch(e){} }
+
+/* ---------------- 저장 ---------------- */
+function data(){
+  var v = null;
+  try { v = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e){ v = null; }
+  if (!v || typeof v !== "object" || Array.isArray(v)) v = {};
+  if (!v.done || typeof v.done !== "object" || Array.isArray(v.done)) v.done = {};
+  v.v = 1;
+  return v;
+}
+function save(d){ try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} }
+function touch(){ try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){} }
+function isDone(k){ return !!(data().done[k] > 0); }
+
+/* ---------------- 워드 패밀리 10장 ---------------- */
+var SETS = [
+  { k:"at", fam:"-at family", w:[["cat","고양이"],["hat","모자"],["bat","박쥐"],["mat","매트"],["rat","쥐"]],
+    s:[["I see a big ","cat","."],["The red ","hat"," is on the bed."],["A ","bat"," can fly at night."],
+       ["The cat sits on the ","mat","."],["A ","rat"," is in the box."]] },
+  { k:"an", fam:"-an family", w:[["van","밴"],["fan","선풍기"],["pan","냄비"],["man","남자"],["can","깡통"]],
+    s:[["Dad has a blue ","van","."],["The ","fan"," is on the desk."],["Mom cooks in a ","pan","."],
+       ["The ","man"," is my grandpa."],["I have a red ","can","."]] },
+  { k:"en", fam:"-en family", w:[["hen","암탉"],["pen","펜"],["ten","열"],["den","굴"],["men","남자들"]],
+    s:[["The ","hen"," has an egg."],["I write with a ","pen","."],["I can count to ","ten","."],
+       ["The fox is in the ","den","."],["Two ","men"," are on the bus."]] },
+  { k:"et", fam:"-et family", w:[["net","그물"],["jet","제트기"],["pet","반려동물"],["vet","수의사"],["wet","젖은"]],
+    s:[["The ","jet"," is in the sky."],["I have a ","pet"," dog."],["The ","vet"," helps my cat."],
+       ["My socks are ","wet","."],["I catch the fish with a ","net","."]] },
+  { k:"ig", fam:"-ig family", w:[["pig","돼지"],["wig","가발"],["fig","무화과"],["big","큰"],["dig","파다"]],
+    s:[["The ","pig"," is in the mud."],["She has a pink ","wig","."],["I like to eat a ","fig","."],
+       ["The box is very ","big","."],["I ","dig"," in the sand."]] },
+  { k:"in", fam:"-in family", w:[["pin","핀"],["fin","지느러미"],["bin","쓰레기통"],["win","이기다"],["tin","깡통"]],
+    s:[["The ","pin"," is on the map."],["A fish has a ","fin","."],["The trash is in the ","bin","."],
+       ["I want to ","win"," the race."],["The ","tin"," has three fish."]] },
+  { k:"og", fam:"-og family", w:[["dog","강아지"],["log","통나무"],["fog","안개"],["jog","달리기"],["hog","멧돼지"]],
+    s:[["My ","dog"," can run fast."],["The frog sits on a ","log","."],["The ","fog"," is on the hill."],
+       ["I ","jog"," in the park."],["The ","hog"," is big and brown."]] },
+  { k:"ot", fam:"-ot family", w:[["pot","냄비"],["hot","뜨거운"],["dot","점"],["cot","간이침대"],["knot","매듭"]],
+    s:[["The ","pot"," is on the stove."],["The soup is ","hot","."],["I see a red ","dot","."],
+       ["The baby sleeps in a ","cot","."],["He ties a ","knot"," in the rope."]] },
+  { k:"ug", fam:"-ug family", w:[["bug","벌레"],["rug","양탄자"],["mug","머그잔"],["hug","안아주기"],["jug","주전자"]],
+    s:[["A ","bug"," is on my hand."],["The ","rug"," is soft."],["I drink milk from a ","mug","."],
+       ["I ","hug"," my mom."],["The ","jug"," is full of water."]] },
+  { k:"un", fam:"-un family", w:[["sun","해"],["run","달리다"],["bun","빵"],["fun","재미"],["nut","견과"]],
+    s:[["The ","sun"," is in the sky."],["I can ","run"," fast."],["I eat a ","bun"," for lunch."],
+       ["We have ","fun"," at the park."],["A squirrel eats a ","nut","."]] }
+];
+
+var FI = 0;                       /* 지금 보고 있는 워드 패밀리 */
+var ROWOK = {};                   /* "at|0" → 1 : 이번 화면에서 맞힌 문장 */
+
+function famOf(i){ return SETS[i] || SETS[0]; }
+function totalSents(){ var n = 0; SETS.forEach(function(s){ n += s.s.length; }); return n; }
+function doneCount(){ var d = data().done, n = 0; SETS.forEach(function(s){ if (d[s.k] > 0) n++; }); return n; }
+
+/* ---------------- 그리기 ---------------- */
+function boxes(ans, ri){
+  var out = "";
+  for (var i = 0; i < ans.length; i++){
+    out += '<input class="wb-box" type="text" inputmode="text" maxlength="1" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"'
+      + ' data-r="' + ri + '" data-c="' + i + '" aria-label="' + esc(ans) + " " + (i + 1) + '번째 글자">';
+  }
+  return out;
+}
+function renderRows(set){
+  return set.s.map(function(row, ri){
+    var pre = String(row[0]), ans = String(row[1]), post = String(row[2]);
+    var words = pre.split(/\s+/).filter(function(x){ return x !== ""; }).map(function(w){ return esc(w); }).join(" ");
+    return '<div class="wb-row" data-wrow="' + ri + '">'
+      + '<span class="n">' + (ri + 1) + '.</span>'
+      + '<div class="wb-line">' + (words ? words + " " : "") + boxes(ans, ri)
+      + (post && post !== "." ? esc(post) : ".") + '</div>'
+      + '<span class="wb-hint" title="' + esc(row[1]) + '">' + ART.pic(ans) + '</span>'
+      + '<button class="wb-say" type="button" data-wbsay="' + ri + '" aria-label="이 문장 듣기">🔊</button>'
+      + '</div>';
+  }).join("");
+}
+function renderSheet(){
+  var set = famOf(FI), box = $("wbBody"); if (!box) return;
+  var done = isDone(set.k);
+  var bank = set.w.map(function(w){
+    return '<button class="wb-w" type="button" data-ww="' + esc(w[0]) + '" aria-label="' + esc(w[0]) + ' 듣고 채우기">'
+      + ART.pic(w[0]) + '<span>' + esc(w[0]) + '</span></button>';
+  }).join("");
+  box.innerHTML =
+    '<div class="wb-sheet">'
+    + '<div class="wb-sheet-h"><div class="nm"><b>Read and Make Simple Sentences</b>'
+    +   '<i>빈칸에 알맞은 낱말을 써 보세요 · 그림을 보고 골라도 돼요</i></div>'
+    +   '<span class="fam">' + esc(set.fam) + '</span></div>'
+    + '<div class="wb-bank">' + bank + '</div>'
+    + '<div class="wb-note">낱말을 톡 누르면 🔊 소리와 함께 빈칸에 들어가요 · 키보드로 한 글자씩 써도 돼요</div>'
+    + '<div class="wb-rows">' + renderRows(set) + '</div>'
+    + '<div class="wb-side"><button class="eg-btn" type="button" data-wball="1">🔊 다섯 문장 듣기</button></div>'
+    + '<div id="wbFin">' + (done ? finHtml(set) : "") + '</div>'
+    + '</div>';
+}
+function finHtml(set){
+  var ni = FI + 1 < SETS.length ? FI + 1 : -1;
+  return '<div class="wb-fin"><b>🎉 한 장 완성! (⭐ +1)</b><span>' + esc(set.fam) + ' · 다 맞혔어요</span>'
+    + (ni >= 0 ? '<button class="eg-btn" type="button" data-wbnext="1">다음 장 ▶</button>' : '')
+    + '</div>';
+}
+function renderHead(){
+  var p = $("wbProg"); if (p) p.textContent = "완료 " + doneCount() + " / " + SETS.length + "장";
+  var fam = $("wbFams");
+  if (fam){
+    fam.innerHTML = SETS.map(function(s, i){
+      var d = isDone(s.k);
+      return '<button class="wb-fam' + (i === FI ? " on" : "") + (d ? " done" : "") + '" type="button" data-wfam="' + i + '" aria-pressed="' + (i === FI) + '">'
+        + (d ? "✅ " : "") + esc(s.fam) + '</button>';
+    }).join("");
+  }
+}
+function render(){
+  renderHead();
+  renderSheet();
+  var list = $("wbBody"); if (list) list.scrollTop = 0;
+}
+
+/* ---------------- 채점 ---------------- */
+function rowInputs(ri){
+  return Array.prototype.slice.call(document.querySelectorAll('#wbBody .wb-box[data-r="' + ri + '"]'));
+}
+function rowValue(ri){
+  return rowInputs(ri).map(function(inp){ return inp.value || ""; }).join("");
+}
+function checkRow(ri){
+  var set = famOf(FI), row = set.s[ri]; if (!row) return false;
+  var ins = rowInputs(ri), v = rowValue(ri).toLowerCase();
+  var ans = String(row[1]).toLowerCase();
+  var full = v.length === ans.length;
+  var rowEl = document.querySelector('#wbBody .wb-row[data-wrow="' + ri + '"]');
+  if (!full){ if (rowEl) rowEl.classList.remove("bad", "ok"); return false; }
+  if (v === ans){
+    if (rowEl) { rowEl.classList.add("ok"); rowEl.classList.remove("bad"); }
+    ins.forEach(function(inp){ inp.classList.add("ok"); });
+    ROWOK[set.k + "|" + ri] = 1;
+    markUsed(ans);
+    speak(String(row[0]) + ans + (row[2] && row[2] !== "." ? row[2] : "."));
+    checkSheet();
+    return true;
+  }
+  if (rowEl){
+    rowEl.classList.add("bad");
+    rowEl.classList.remove("ok");
+    setTimeout(function(){
+      ins.forEach(function(inp){ inp.value = ""; inp.classList.remove("ok"); });
+      rowEl.classList.remove("bad");
+      try { ins[0].focus(); } catch(e){}
+    }, 620);
+  }
+  return false;
+}
+function markUsed(word){
+  var tiles = document.querySelectorAll("#wbBody .wb-w");
+  var set = famOf(FI);
+  var all = {};
+  for (var i = 0; i < set.s.length; i++) all[String(set.s[i][1]).toLowerCase()] = 1;
+  set.w.forEach(function(w, i){
+    for (var j = 0; j < tiles.length; j++){
+      if (tiles[j].getAttribute("data-ww") === w[0]){
+        var solved = false;
+        for (var r in ROWOK){
+          if (r.indexOf(set.k + "|") !== 0) continue;
+          var ri = r.split("|")[1];
+          if (String(set.s[ri][1]).toLowerCase() === w[0] && ROWOK[r]) solved = true;
+        }
+        tiles[j].classList.toggle("used", solved);
+      }
+    }
+  });
+}
+function sheetSolved(){
+  var set = famOf(FI);
+  for (var i = 0; i < set.s.length; i++) if (!ROWOK[set.k + "|" + i]) return false;
+  return true;
+}
+function checkSheet(){
+  if (!sheetSolved()) return;
+  if (isDone(famOf(FI).k)) return;
+  var d = data(), set = famOf(FI);
+  d.done[set.k] = Date.now();
+  save(d); touch();
+  var got = 0;
+  try { got = SB.earn ? SB.earn("engwb|" + set.k, 1, { skipStudyBonus: true }) : 0; } catch(e){ got = 0; }
+  try { if (SB.markDaily) SB.markDaily("en"); } catch(e){}
+  var fin = $("wbFin"); if (fin) fin.innerHTML = finHtml(set);
+  renderHead();
+  confetti();
+  toast("🎉 " + set.fam + " 한 장 완성!" + (got > 0 ? " ⭐ +" + got : ""));
+  try { if (SB.family && SB.family.sync) setTimeout(function(){ SB.family.sync(); }, 200); } catch(e){}
+}
+
+/* ---------------- 낱말 뱅크로 채우기 ---------------- */
+function fillWith(word){
+  var set = famOf(FI);
+  var target = -1;
+  var act = document.activeElement;
+  if (act && act.classList && act.classList.contains("wb-box")){
+    var ri = parseInt(act.getAttribute("data-r"), 10);
+    if (set.s[ri] && String(set.s[ri][1]).toLowerCase() === word && !ROWOK[set.k + "|" + ri]) target = ri;
+  }
+  if (target < 0){
+    for (var i = 0; i < set.s.length; i++){
+      if (ROWOK[set.k + "|" + i]) continue;
+      if (String(set.s[i][1]).toLowerCase() === word){ target = i; break; }
+    }
+  }
+  if (target < 0){
+    toast("‘" + word + "’ 낱말이 들어갈 빈칸이 없어요 · 그림을 잘 살펴봐요 🙂");
+    return false;
+  }
+  var ins = rowInputs(target);
+  if (ins.length !== word.length){ toast("글자 수가 맞지 않아요 🙂"); return false; }
+  ins.forEach(function(inp, i){ inp.value = word.charAt(i); inp.classList.remove("bad"); });
+  speak(word);
+  checkRow(target);
+  try { ins[ins.length - 1].focus(); } catch(e){}
+  return true;
+}
+
+/* ---------------- 연결 ---------------- */
+function bind(){
+  var view = $("viewEnWb"); if (!view || view.__wbBind) return;
+  view.__wbBind = 1;
+
+  view.addEventListener("click", function(e){
+    var t = e.target; if (!t || !t.closest) return;
+    var el;
+    if ((el = t.closest("[data-wfam]"))){
+      FI = parseInt(el.getAttribute("data-wfam"), 10) || 0;
+      ROWOK = {};
+      render(); return;
+    }
+    if ((el = t.closest("[data-wbnext]"))){
+      if (FI + 1 < SETS.length){ FI++; ROWOK = {}; render(); }
+      return;
+    }
+    if ((el = t.closest("[data-ww]"))){
+      fillWith(String(el.getAttribute("data-ww") || "").toLowerCase());
+      return;
+    }
+    if ((el = t.closest("[data-wbsay]"))){
+      var set = famOf(FI), ri = parseInt(el.getAttribute("data-wbsay"), 10), row = set.s[ri];
+      if (row) speak(String(row[0]) + row[1] + (row[2] && row[2] !== "." ? row[2] : "."));
+      return;
+    }
+    if ((el = t.closest("[data-wball]"))){
+      var s2 = famOf(FI), i2 = 0;
+      (function step(){
+        if (i2 >= s2.s.length) return;
+        var r = s2.s[i2];
+        speak(String(r[0]) + r[1] + (r[2] && r[2] !== "." ? r[2] : "."));
+        i2++;
+        setTimeout(step, 1700);
+      })();
+      return;
+    }
+  });
+
+  view.addEventListener("input", function(e){
+    var t = e.target;
+    if (!t || !t.classList || !t.classList.contains("wb-box")) return;
+    var v = String(t.value || "").toLowerCase().replace(/[^a-z]/g, "");
+    t.value = v.slice(-1);
+    t.classList.remove("bad");
+    var ri = parseInt(t.getAttribute("data-r"), 10), ci = parseInt(t.getAttribute("data-c"), 10);
+    var ins = rowInputs(ri);
+    if (t.value && ci + 1 < ins.length) { try { ins[ci + 1].focus(); } catch(err){} }
+    checkRow(ri);
+  });
+
+  view.addEventListener("keydown", function(e){
+    var t = e.target;
+    if (!t || !t.classList || !t.classList.contains("wb-box")) return;
+    var ri = parseInt(t.getAttribute("data-r"), 10), ci = parseInt(t.getAttribute("data-c"), 10);
+    var ins = rowInputs(ri);
+    if (e.key === "Backspace" && !t.value && ci > 0){ e.preventDefault(); ins[ci - 1].focus(); }
+    else if (e.key === "ArrowLeft" && ci > 0){ e.preventDefault(); ins[ci - 1].focus(); }
+    else if (e.key === "ArrowRight" && ci + 1 < ins.length){ e.preventDefault(); ins[ci + 1].focus(); }
+  });
+}
+
+SB.wbRefresh = function(){ render(); };
+
+var prevEn = SB.onShow && SB.onShow.en;
+SB.onShow.en = function(sub){
+  if (prevEn){ try { prevEn.apply(this, arguments); } catch(e){} }
+  if (sub === "wb"){
+    try { bind(); render(); } catch(e){ try { console.warn(e); } catch(e2){} }
+  }
+};
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+else bind();
+})();
+
+</script>
+<script id="egswwb1123">
+/* =====================================================================
+   📒 사이트워드 워크북 — 사이트워드 화면 안의 모드
+   ① 🎨 색칠하고 ✏️ 따라 쓰기(캔버스)  ② 🔍 Find it!  ③ 📝 읽고 동그라미
+   · 세 가지를 마치면 ⭐ +1 · 저장: haeyuli.sw_wb.v1
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var KEY = "haeyuli.sw_wb.v1";
+
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c]; });
+}
+function toast(m){ try { if (SB.toast) SB.toast(m); } catch(e){} }
+function confetti(){ try { if (SB.confetti) SB.confetti(); } catch(e){} }
+function speak(t){ try { SB.speak(String(t || ""), 0.9, "en-US"); } catch(e){} }
+
+/* ---------------- 저장 ---------------- */
+function data(){
+  var v = null;
+  try { v = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e){ v = null; }
+  if (!v || typeof v !== "object" || Array.isArray(v)) v = {};
+  if (!v.done || typeof v.done !== "object" || Array.isArray(v.done)) v.done = {};
+  v.v = 1;
+  return v;
+}
+function save(d){ try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} }
+function touch(){ try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){} }
+function isDone(w){ return !!(data().done[w] > 0); }
+
+/* ---------------- 20 낱말 ---------------- */
+var WS = [
+  { w:"is",  c:"#e0a06a", s:["This is a hat.","This is a bat."] },
+  { w:"it",  c:"#e0c74a", s:["It is a cat.","It is my dog."] },
+  { w:"the", c:"#7fb6e8", s:["The sun is hot.","The cat is big."] },
+  { w:"a",   c:"#8fd3a8", s:["I see a bug.","I have a hat."] },
+  { w:"I",   c:"#f6a6c1", s:["I can jump.","I like my dog."] },
+  { w:"can", c:"#bba0e0", s:["I can run.","The dog can swim."] },
+  { w:"see", c:"#f2c46a", s:["I see a bird.","I can see the sun."] },
+  { w:"like",c:"#7ecbb0", s:["I like my cat.","I like to play."] },
+  { w:"my",  c:"#f0907f", s:["My dog is big.","This is my hat."] },
+  { w:"we",  c:"#7fc0d8", s:["We go to the park.","We can play."] },
+  { w:"go",  c:"#b0d06a", s:["We go to school.","I go to my room."] },
+  { w:"to",  c:"#e0a06a", s:["I go to school.","I like to run."] },
+  { w:"you", c:"#c9a0e0", s:["Can you see me?","I like you."] },
+  { w:"he",  c:"#8fb3e8", s:["He is my dad.","He can run."] },
+  { w:"she", c:"#f0a6c8", s:["She is my mom.","She can jump."] },
+  { w:"in",  c:"#8fd3a8", s:["The cat is in the box.","I play in the park."] },
+  { w:"on",  c:"#f2c46a", s:["The cup is on the mat.","The cat is on the bed."] },
+  { w:"big", c:"#e0a06a", s:["The dog is big.","I see a big sun."] },
+  { w:"red", c:"#ef7b6f", s:["I have a red hat.","The red car is big."] },
+  { w:"look",c:"#7fb6e8", s:["Look at my hat.","Look at the sun."] }
+];
+var PEN = ["#e0a06a","#7fb6e8","#7ecbb0","#f0907f"];
+var WI = 0;
+var ST = {};      /* 낱말별 진행: { trace:1, find:{셀:1}, circ:{문장:{토큰:1}} } */
+var PENI = 0;
+
+function word(){ return WS[WI] || WS[0]; }
+function state(w){
+  w = w || word().w;
+  if (!ST[w]) ST[w] = { trace:0, find:{}, circ:{} };
+  return ST[w];
+}
+
+/* ---------------- Find it! 판 ---------------- */
+function grid(i){
+  var o = WS[i], others = [], k;
+  for (k = 0; k < WS.length; k++) if (WS[k].w.toLowerCase() !== o.w.toLowerCase()) others.push(WS[k].w);
+  var seed = i * 131 + 17;
+  function rnd(n){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; }
+  var want = 2 + (i % 2), pos = {}, n = 0, guard = 0;
+  while (n < want && guard < 500){ guard++; var p = rnd(10); if (!pos[p]){ pos[p] = 1; n++; } }
+  var cells = [];
+  for (k = 0; k < 10; k++) cells.push(pos[k] ? o.w : others[rnd(others.length)]);
+  return cells;
+}
+function isTarget(tok){ return String(tok).toLowerCase().replace(/[^a-z]/g, "") === word().w.toLowerCase(); }
+
+/* ---------------- 그리기 ---------------- */
+function guide(w){
+  var fs = w.length > 3 ? 26 : (w.length > 2 ? 30 : 34);
+  return '<div class="sww-guide"><svg viewBox="0 0 100 39" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+    + '<text x="50" y="30" text-anchor="middle" font-size="' + fs + '" fill="none" stroke="#c9d6df" stroke-width="1" stroke-dasharray="1.7 1.9">' + esc(w) + '</text>'
+    + '<text x="50" y="30" text-anchor="middle" font-size="' + fs + '" fill="' + word().c + '" opacity=".10">' + esc(w) + '</text>'
+    + '<path d="M6 33.5 H94" stroke="#e4eef6" stroke-width=".7"/>'
+    + '<path d="M6 12 H94" stroke="#eef6fb" stroke-width=".6"/>'
+    + '</svg></div>';
+}
+function findHtml(){
+  var g = grid(WI), s = state(), w = word().w;
+  return g.map(function(t, k){
+    var found = s.find[k];
+    var style = found ? ' style="background:' + word().c + '"' : '';
+    return '<button class="sww-f' + (found ? " found" : "") + '" type="button" data-swf="' + k + '"' + style + '>' + esc(t) + '</button>';
+  }).join("");
+}
+function sentHtml(){
+  var s = state(), w = word();
+  return w.s.map(function(line, si){
+    var toks = String(line).split(/\s+/);
+    var body = toks.map(function(t, ti){
+      var on = s.circ[si] && s.circ[si][ti];
+      return '<button class="sww-word' + (on ? " on" : "") + '" type="button" data-swtok="' + si + ':' + ti + '" aria-pressed="' + !!on + '">' + esc(t) + '</button>';
+    }).join(" ");
+    return '<div class="sww-sent"><div class="sww-line">' + body + '</div>'
+      + '<button class="wb-say" type="button" data-swsent="' + si + '" aria-label="문장 듣기">🔊</button></div>';
+  }).join("");
+}
+function findNeed(){
+  var g = grid(WI), n = 0;
+  for (var i = 0; i < g.length; i++) if (String(g[i]).toLowerCase() === word().w.toLowerCase()) n++;
+  return n;
+}
+function findGot(){
+  var g = grid(WI), s = state(), n = 0;
+  for (var i = 0; i < g.length; i++) if (String(g[i]).toLowerCase() === word().w.toLowerCase() && s.find[i]) n++;
+  return n;
+}
+function circNeed(){
+  var n = 0;
+  word().s.forEach(function(line){
+    String(line).split(/\s+/).forEach(function(t){ if (isTarget(t)) n++; });
+  });
+  return n;
+}
+function circGot(){
+  var s = state(), n = 0;
+  word().s.forEach(function(line, si){
+    String(line).split(/\s+/).forEach(function(t, ti){ if (isTarget(t) && s.circ[si] && s.circ[si][ti]) n++; });
+  });
+  return n;
+}
+function steps(){
+  var s = state(), a = !!s.trace, b = findGot() >= findNeed(), c = circGot() >= circNeed();
+  return { trace:a, find:b, circ:c, all:(a && b && c) };
+}
+function stepsHtml(){
+  var t = steps();
+  return '<span class="sww-step' + (t.trace ? " done" : "") + '">1 따라쓰기 ' + (t.trace ? "✓" : "·") + '</span>'
+    + '<span class="sww-step' + (t.find ? " done" : "") + '">2 찾기 ' + findGot() + "/" + findNeed() + '</span>'
+    + '<span class="sww-step' + (t.circ ? " done" : "") + '">3 동그라미 ' + circGot() + "/" + circNeed() + '</span>';
+}
+function pensHtml(){
+  return '<div class="sww-pens">'
+    + PEN.map(function(c, i){
+        return '<button class="sww-pen' + (PENI === i ? " on" : "") + '" type="button" data-swpenc="' + i + '" style="background:' + c + '" aria-label="색 ' + (i + 1) + '"></button>';
+      }).join("")
+    + '<button class="sww-pen er' + (PENI === 9 ? " on" : "") + '" type="button" data-swpenc="9" aria-label="지우개">지우개</button>'
+    + '<button class="eg-btn" type="button" data-swclear="1">처음부터</button>'
+    + '</div>';
+}
+function finHtml(){
+  if (!isDone(word().w)) return "";
+  var next = WI + 1 < WS.length ? WI + 1 : -1;
+  return '<div class="sww-fin"><b>✅ 완료! (⭐ +1)</b>'
+    + (next >= 0 ? '<button class="eg-btn" type="button" data-swnext="1">다음 낱말 ▶</button>' : '')
+    + '</div>';
+}
+function renderSheet(){
+  var w = word(), box = $("swwBody"); if (!box) return;
+  box.innerHTML =
+    '<div class="sww-sheet">'
+    + '<div class="sww-h"><b>✍️ Sight Words</b><span class="chip">Color &amp; Trace</span>'
+    +   '<span class="sw-word" style="color:' + w.c + '">' + esc(w.w) + '</span></div>'
+    + '<div class="sww-sec"><div class="sww-sh"><b>1 · 🎨 색칠하고 ✏️ 따라 써요</b><span>점선을 손가락·펜슬로 따라가요</span>'
+    +   '<button class="eg-btn" type="button" data-swsay="1">🔊 ' + esc(w.w) + '</button></div>'
+    +   '<div class="sww-cvbox">' + guide(w.w) + '<canvas class="sww-cv" aria-label="따라 쓰기 판"></canvas></div>'
+    +   pensHtml()
+    + '</div>'
+    + '<div class="sww-sec"><div class="sww-sh"><b>2 · 🔍 찾아요 (Find it!)</b><span>‘' + esc(w.w) + '’를 모두 눌러요</span>'
+    +   '<span class="sww-step' + (findGot() >= findNeed() ? " done" : "") + '" style="margin-left:auto">' + findGot() + " / " + findNeed() + '</span></div>'
+    +   '<div class="sww-find">' + findHtml() + '</div>'
+    + '</div>'
+    + '<div class="sww-sec"><div class="sww-sh"><b>3 · 📝 읽고 ‘' + esc(w.w) + '’에 동그라미</b><span>문장을 듣고 낱말을 톡 눌러요</span></div>'
+    +   sentHtml()
+    + '</div>'
+    + '<div id="swwFin">' + finHtml() + '</div>'
+    + '</div>';
+  mountCanvas();
+}
+function renderHead(){
+  var p = $("swwProg");
+  if (p){
+    var d = data().done, n = 0;
+    WS.forEach(function(x){ if (d[x.w] > 0) n++; });
+    p.textContent = "완료 " + n + " / " + WS.length;
+  }
+  var st = $("swwSteps"); if (st) st.innerHTML = stepsHtml();
+  var list = $("swwWords");
+  if (list){
+    list.innerHTML = WS.map(function(x, i){
+      var d = isDone(x.w);
+      return '<button class="sww-wd' + (i === WI ? " on" : "") + (d ? " done" : "") + '" type="button" data-swwi="' + i + '" aria-pressed="' + (i === WI) + '">'
+        + (d ? "✅ " : "") + esc(x.w) + '</button>';
+    }).join("");
+  }
+}
+function render(){
+  renderHead();
+  renderSheet();
+  var b = $("swwBody"); if (b) b.scrollTop = 0;
+}
+function refreshMarks(){
+  renderHead();
+  var fin = $("swwFin"); if (fin) fin.innerHTML = finHtml();
+  var finds = document.querySelectorAll("#swwBody .sww-f");
+  if (finds.length) {
+    var box = document.querySelector("#swwBody .sww-find");
+    if (box) box.innerHTML = findHtml();
+  }
+  /* 문장 동그라미 상태만 다시 */
+  var s = state();
+  var toks = document.querySelectorAll("#swwBody .sww-word");
+  for (var i = 0; i < toks.length; i++){
+    var p = String(toks[i].getAttribute("data-swtok") || "").split(":");
+    var on = !!(s.circ[parseInt(p[0], 10)] && s.circ[parseInt(p[0], 10)][parseInt(p[1], 10)]);
+    toks[i].classList.toggle("on", on);
+    toks[i].setAttribute("aria-pressed", on ? "true" : "false");
+  }
+}
+
+/* ---------------- 캔버스 (점선 위에 그리기) ---------------- */
+var CV = { cv:null, ctx:null, dpr:1, paths:[], cur:null, key:"" };
+
+function mountCanvas(){
+  var cv = document.querySelector("#swwBody .sww-cv");
+  if (!cv) return;
+  var box = cv.parentNode;
+  var dpr = Math.min(3, window.devicePixelRatio || 1);
+  var wpx = Math.max(120, box.clientWidth || 320);
+  var hpx = Math.max(80, box.clientHeight || 150);
+  cv.width = Math.round(wpx * dpr);
+  cv.height = Math.round(hpx * dpr);
+  var ctx = cv.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  CV.cv = cv; CV.ctx = ctx; CV.dpr = dpr;
+  CV.paths = []; CV.cur = null; CV.key = word().w;
+  redraw();
+  bindCanvas();
+}
+function redraw(){
+  var ctx = CV.ctx, cv = CV.cv; if (!ctx) return;
+  ctx.clearRect(0, 0, cv.width / CV.dpr, cv.height / CV.dpr);
+  CV.paths.forEach(function(p){
+    ctx.beginPath();
+    ctx.strokeStyle = p.c;
+    ctx.lineWidth = p.w;
+    var pts = p.pts;
+    if (!pts.length) return;
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    if (pts.length === 1) ctx.lineTo(pts[0][0] + .2, pts[0][1] + .2);
+    ctx.stroke();
+  });
+}
+function pos(ev){
+  var cv = CV.cv, r = cv.getBoundingClientRect();
+  var x = (ev.clientX == null ? 0 : ev.clientX) - r.left;
+  var y = (ev.clientY == null ? 0 : ev.clientY) - r.top;
+  return [x, y];
+}
+function bindCanvas(){
+  var cv = CV.cv; if (!cv || cv.__swBind) return;
+  cv.__swBind = 1;
+  cv.addEventListener("pointerdown", function(ev){
+    try { cv.setPointerCapture(ev.pointerId); } catch(e){}
+    var s = state();
+    var er = (PENI === 9);
+    CV.cur = { c: er ? "eraser" : PEN[PENI], w: er ? 18 : 5, pts: [pos(ev)] };
+    if (!er) CV.paths.push(CV.cur);
+    else CV.paths.push({ c:"#ffffff", w:18, pts:[pos(ev)] });
+    if (!s.trace){ s.trace = 1; afterStep(); }
+    ev.preventDefault();
+    redraw();
+  });
+  cv.addEventListener("pointermove", function(ev){
+    if (!CV.cur) return;
+    var p = pos(ev);
+    var last = CV.cur.pts[CV.cur.pts.length - 1];
+    if (Math.abs(p[0] - last[0]) + Math.abs(p[1] - last[1]) < 1.2) return;
+    CV.cur.pts.push(p);
+    redraw();
+    ev.preventDefault();
+  });
+  function up(ev){
+    if (!CV.cur) return;
+    CV.cur = null;
+    try { if (ev && ev.pointerId != null) cv.releasePointerCapture(ev.pointerId); } catch(e){}
+  }
+  cv.addEventListener("pointerup", up);
+  cv.addEventListener("pointercancel", up);
+  cv.addEventListener("pointerleave", up);
+}
+
+/* ---------------- 완료 ---------------- */
+function afterStep(){
+  var t = steps();
+  var st = $("swwSteps"); if (st) st.innerHTML = stepsHtml();
+  var fmark = document.querySelector("#swwBody .sww-sh .sww-step");
+  if (fmark && !t.find) fmark.textContent = findGot() + " / " + findNeed();
+  if (!t.all) return;
+  if (isDone(word().w)) return;
+  var d = data(), w = word().w;
+  d.done[w] = Date.now();
+  save(d); touch();
+  var got = 0;
+  try { got = SB.earn ? SB.earn("swwb|" + w, 1, { skipStudyBonus: true }) : 0; } catch(e){ got = 0; }
+  try { if (SB.markDaily) SB.markDaily("en"); } catch(e){}
+  var fin = $("swwFin"); if (fin) fin.innerHTML = finHtml();
+  renderHead();
+  confetti();
+  toast("✅ ‘" + w + "’ 워크북 완료!" + (got > 0 ? " ⭐ +" + got : ""));
+  try { if (SB.family && SB.family.sync) setTimeout(function(){ SB.family.sync(); }, 200); } catch(e){}
+}
+
+/* ---------------- 모드 전환 ---------------- */
+var MODE = "today";
+function setMode(m){
+  MODE = m;
+  var stage = document.querySelector("#viewEnSight .sw-stage");
+  var wb = $("swWbStage");
+  if (stage) stage.hidden = (m === "wb");
+  if (wb) wb.hidden = (m !== "wb");
+  var btns = document.querySelectorAll("#swMode [data-swmode]");
+  for (var i = 0; i < btns.length; i++){
+    var on = btns[i].getAttribute("data-swmode") === m;
+    btns[i].classList.toggle("on", on);
+    btns[i].setAttribute("aria-pressed", on ? "true" : "false");
+  }
+  if (m === "wb"){ render(); }
+}
+
+/* ---------------- 연결 ---------------- */
+function bind(){
+  var view = $("viewEnSight"); if (!view || view.__swwBind) return;
+  view.__swwBind = 1;
+  view.addEventListener("click", function(e){
+    var t = e.target; if (!t || !t.closest) return;
+    var el;
+    if ((el = t.closest("[data-swmode]"))){
+      setMode(el.getAttribute("data-swmode") === "wb" ? "wb" : "today");
+      return;
+    }
+    if ((el = t.closest("[data-swwi]"))){
+      WI = parseInt(el.getAttribute("data-swwi"), 10) || 0;
+      render(); return;
+    }
+    if ((el = t.closest("[data-swnext]"))){
+      if (WI + 1 < WS.length){ WI++; render(); }
+      return;
+    }
+    if ((el = t.closest("[data-swsay]"))){
+      speak(word().w); return;
+    }
+    if ((el = t.closest("[data-swpenc]"))){
+      PENI = parseInt(el.getAttribute("data-swpenc"), 10) || 0;
+      var pens = document.querySelectorAll("#swwBody .sww-pen");
+      for (var i = 0; i < pens.length; i++) pens[i].classList.remove("on");
+      el.classList.add("on");
+      return;
+    }
+    if ((el = t.closest("[data-swclear]"))){
+      CV.paths = []; CV.cur = null; redraw();
+      var s0 = state(); s0.trace = 0;
+      renderHead();
+      return;
+    }
+    if ((el = t.closest("[data-swsent]"))){
+      var si = parseInt(el.getAttribute("data-swsent"), 10);
+      speak(word().s[si] || "");
+      return;
+    }
+    if ((el = t.closest("[data-swf]"))){
+      var k = parseInt(el.getAttribute("data-swf"), 10);
+      var g = grid(WI), tok = String(g[k] || "");
+      var s = state();
+      if (String(tok).toLowerCase() === word().w.toLowerCase()){
+        s.find[k] = 1;
+        el.classList.add("found");
+        el.style.background = word().c;
+        el.style.color = "#fff";
+        speak(tok);
+        afterStep();
+      } else {
+        el.classList.remove("miss");
+        void el.offsetWidth;
+        el.classList.add("miss");
+        toast("‘" + tok + "’는 ‘" + word().w + "’가 아니에요 🙂");
+      }
+      return;
+    }
+    if ((el = t.closest("[data-swtok]"))){
+      var pp = String(el.getAttribute("data-swtok") || "").split(":");
+      var si2 = parseInt(pp[0], 10), ti2 = parseInt(pp[1], 10);
+      var line = word().s[si2] || "";
+      var tok2 = String(line).split(/\s+/)[ti2] || "";
+      var st2 = state();
+      if (isTarget(tok2)){
+        if (!st2.circ[si2]) st2.circ[si2] = {};
+        st2.circ[si2][ti2] = st2.circ[si2][ti2] ? 0 : 1;
+        el.classList.toggle("on", !!st2.circ[si2][ti2]);
+        el.setAttribute("aria-pressed", st2.circ[si2][ti2] ? "true" : "false");
+        if (st2.circ[si2][ti2]) speak(tok2);
+        afterStep();
+      } else {
+        el.classList.remove("sww-miss");
+        void el.offsetWidth;
+        toast("문장 속 ‘" + word().w + "’를 찾아 눌러 봐요 🙂");
+      }
+      return;
+    }
+  });
+}
+
+SB.swwbRefresh = function(){ if (MODE === "wb") render(); };
+SB.swwbMode = setMode;
+
+var prevEn = SB.onShow && SB.onShow.en;
+SB.onShow.en = function(sub){
+  if (prevEn){ try { prevEn.apply(this, arguments); } catch(e){} }
+  if (sub === "sight"){
+    try { bind(); renderHead(); if (MODE === "wb") render(); } catch(e){ try { console.warn(e); } catch(e2){} }
+  }
+};
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+else bind();
+})();
+
 </script>
 
 </body>
