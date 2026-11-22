@@ -38730,7 +38730,17 @@ function render(){
     if (!slot) return;
     idbGet(it.id, function(blob){
       var s2 = box ? box.querySelector('[data-rfovid="' + it.id + '"]') : null;
-      if (!s2 || !blob) return;
+      if (!s2) return;
+      if (!blob){
+        /* 다른 기기에서 올린 영상 — 이 기기에는 파일이 없다 */
+        if (!s2.querySelector(".rfo-none")){
+          var nn = document.createElement("div");
+          nn.className = "rfo-none";
+          nn.innerHTML = "이 영상은 다른 기기에 있어요<br>올린 기기에서 볼 수 있어요";
+          s2.appendChild(nn);
+        }
+        return;
+      }
       try {
         var url = URL.createObjectURL(blob);
         R.urls[it.id] = url;
