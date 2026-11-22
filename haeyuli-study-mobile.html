@@ -13203,9 +13203,11 @@ function ridePos(id){
 }
 var PETW = 0;                       /* 다마고치 실제 너비(px) — 놀이기구 크기를 여기에 맞춰요 */
 function petPx(){
-  var d = dogEl(), w = d ? d.getBoundingClientRect().width : 0;
-  if (w > 20 && isFinite(w)) PETW = w;
-  if (!PETW && window.innerHeight) PETW = window.innerHeight * .155;   /* 23vh 기준 기본값 */
+  var d = dogEl();
+  if (d) {
+    var w = parseFloat(getComputedStyle(d).width);   /* 화면 배율과 상관없는 실제 CSS 너비 */
+    if (w > 20 && isFinite(w)) { PETW = w; return w; }
+  }
   return PETW || 62;
 }
 function paintRides(){
