@@ -5240,6 +5240,44 @@ body.mob .rb-canvas-box canvas{height:34vw;}
 #viewHome .wk-dh b{font-size:.98rem;}
 #viewHome .wk-dh span{font-size:.74rem;}
 #viewHome .wk-edit{width:1.6rem;height:1.6rem;font-size:.8rem;}
+
+/* ➡️ 숙제 하나를 누르면 — 완료 / 내일로 미루기 선택 팝업 */
+.hwch{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;padding:1.1rem;}
+.hwch-bg{position:absolute;inset:0;background:rgba(27,49,66,.42);}
+.hwch-s{position:relative;z-index:1;width:min(21rem,100%);background:#fff;border-radius:1.15rem;padding:1.05rem 1rem .8rem;
+  box-shadow:0 1.2rem 3rem rgba(20,50,70,.28);display:flex;flex-direction:column;gap:.55rem;text-align:center;}
+.hwch-s>b{font-size:1rem;font-weight:900;letter-spacing:-.02em;color:var(--ink);}
+.hwch-t{font-size:.84rem;font-weight:800;color:#7d8f9e;letter-spacing:-.01em;line-height:1.35;
+  background:#f5fafd;border-radius:.6rem;padding:.42rem .6rem;overflow-wrap:anywhere;}
+.hwch-b{display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.82rem .9rem;border-radius:.9rem;
+  font-size:.94rem;font-weight:900;letter-spacing:-.02em;box-shadow:inset 0 0 0 .1rem #e4eef7;background:#f8fbfe;color:#3c5567;}
+.hwch-b.done{background:linear-gradient(160deg,#7fd7b1,#2fae7f);color:#fff;box-shadow:none;}
+.hwch-b.move{background:linear-gradient(160deg,#ffe099,#ffc247);color:#7a4f00;box-shadow:none;}
+.hwch-b:active{transform:scale(.985);}
+.hwch-x{align-self:center;margin-top:.1rem;font-size:.78rem;font-weight:800;color:#9fb4c4;padding:.3rem .9rem;}
+/* ➡️ 미룬 숙제 표시 */
+.hw-item.moved{background:#fffaf0;box-shadow:inset 0 0 0 .1rem #ffe6b8;}
+.hw-item.moved .hw-tx{color:#a8905f;}
+.hw-item .hw-mv{flex:0 0 auto;font-size:.64rem;font-weight:900;color:#8a5a08;background:#fff2d4;
+  border-radius:.4rem;padding:.14rem .36rem;box-shadow:inset 0 0 0 1px #ffd587;letter-spacing:-.01em;}
+.hw-item.carry .hw-mv{background:#e9f6ff;color:#256e9c;box-shadow:inset 0 0 0 1px #bfe0f4;}
+.hw-ck.mv{background:#fff2d4;color:#8a5a08;box-shadow:inset 0 0 0 .12rem #ffd587;}
+.wp-t.wp-carry{background:#fff1d2;color:#8a5a08;box-shadow:inset 0 0 0 1px #ffd587;}
+body #weekBoard .wp-list li.moved span{color:#b09257;}
+body #weekBoard .wp-list li em.mv{color:#a8701a;}
+.hwm-day li.moved{opacity:.72;}
+.hwm-day li em.mv{font-style:normal;font-size:.62rem;font-weight:900;color:#a8701a;margin-left:.2rem;}
+
+
+/* 💬 엄마 한마디 — 부모 페이지에서 적은 요일별 말풍선 (요일 카드 머리 아래) */
+.wk-day .wk-mom{display:block;position:relative;margin:.05rem 0 .14rem;max-width:100%;
+  padding:.2rem .42rem;border-radius:.5rem;background:linear-gradient(160deg,#fff8e9,#ffedcc);
+  color:#8a5a08;font-size:.66rem;font-weight:900;letter-spacing:-.01em;line-height:1.25;
+  box-shadow:inset 0 0 0 .1rem #ffe1ad;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.wk-day .wk-mom b{font-weight:900;margin-right:.14rem;}
+.wk-day .wk-mom::before{content:"";position:absolute;left:.55rem;top:-.2rem;width:.42rem;height:.42rem;
+  background:#fff8e9;transform:rotate(45deg);border-radius:.06rem;box-shadow:inset .09rem .09rem 0 #ffe1ad;}
+
 #viewHome .wk-subs{gap:.16rem;}
 #viewHome .wk-sub{padding:.1rem .34rem;font-size:.74rem;gap:.12rem;}
 #viewHome .wk-sub i{font-size:.8rem;}
@@ -6670,6 +6708,9 @@ body.mob .rb-campill{width:6.4vw;height:6.4vw;font-size:3.1vw;}
 .wbsetbtn .wb-ico{font-size:.92rem;line-height:1;}
 .wbsetbtn .wb-lb{letter-spacing:-.01em;}
 .wbsetbtn:active{transform:scale(.95);}
+/* 📘 공부 설정 버튼은 부모용 parent.html 로 옮겼다 — 헤더에서는 숨긴다(모달·진도 로직은 그대로 살아 있음) */
+.hdr-acts .wbsetbtn{display:none !important;}
+
 .wbsheet{width:min(72rem,96vw);max-height:92vh;}
 .modal.wbmodal{z-index:80;}          /* 휴대폰 아래 탭줄(z 70)보다 위에 뜨게 */
 .wbbody{gap:.65rem;}
@@ -20146,6 +20187,7 @@ function render(){
     h += '<div class="wk-day' + (isT ? " today" : "") + '" data-day="' + i + '">'
       + '<div class="wk-dh"><b>' + DAYN[i] + '</b><span>' + (addDays(w0, i).getMonth() + 1) + "/" + addDays(w0, i).getDate() + '</span>'
       + '<button class="wk-edit" type="button" data-edit="' + i + '" aria-label="' + DAYN[i] + '요일 과목 바꾸기">' + (SB.ic ? SB.ic("ic-pencil") : "✏️") + '</button></div>'
+      + ((SB.mom && SB.mom.bubble) ? SB.mom.bubble(i) : "")
       + '<div class="wk-subs">' + (subs.length ? subs.map(function(k){
           var s = SUBJ[k] || { em:"·", nm:k };
           var dn = !!(subDone[String(i)] && subDone[String(i)][k] && subDone[String(i)][k].v);
@@ -23056,6 +23098,217 @@ var K = {
 /* 🔔 ntfy 알림 설정도 같은 가족 코드 문서로 오간다 */
 var NTK = { topic: "study.ntfy.topic.v1", on: "study.ntfy.enabled.v1", at: "study.ntfy.at.v1" };
 
+/* 📅 연간 학습 진도표 · 📚 전집 책장 · 오늘 숙제 요약 — 부모용 parent.html 과 같은 가족 코드 문서로 오간다
+   · annual.subs  : [{ id, nm, at }]                    과목
+   · annual.years : { "2026": [{ id, sub, sm, em, title, note, st, at }] }   과정(1~12월)
+   · annual.del   : { "s:<과목id>" | "i:<과정id>": 시각 }  지운 것은 그 시각보다 먼저 만든 것을 되살리지 않는다
+   · shelves      : { munhae:{read,un}, myth68:{read,un}, … }  아직 동기화에 없던 전집 책장 8종
+   · hwday        : 오늘의 숙제 목록·연속 일수·이번 달 출석·최근 7일 (보드가 계산해 부모 페이지에 보여 준다) */
+var ANNUAL_KEY = "haeyuli.annual.v1";
+var EXTRA_SHELVES = ["wjknow", "wjq", "econ", "alpha", "myth68", "munhae", "doyocn", "doyoen"];
+
+/* 💬 엄마 한마디 — 부모용 parent.html 에서 요일(월=0 … 일=6)마다 적는 말풍선
+   · 저장 키: haeyuli.momnote.v1 · 가족 코드 문서의 momnote 로 함께 오간다
+   · 같은 요일은 마지막에 고친 쪽(at 최신)이 이기고, 내용을 비우면 지운 것으로 본다 */
+var MOM_KEY = "haeyuli.momnote.v1";
+
+/* ➡️ 미룬 숙제 — haeyuli.hwcarry.v1
+   · out[날짜][숙제id] = { to:다음날, at, del? }   그날은 '내일로 미룸'
+   · in[날짜][숙제id]  = { f:원래날짜, s, t, g, at, del? }  그날 목록에 더해진다(➡️ 어제 미룬 숙제)
+   · del:1 은 되돌린 기록 — 더 최근이면 되살리지 않는다 */
+function mergeCarry(l, c){
+  var a = (l && typeof l === "object" && !Array.isArray(l)) ? l : null;
+  var b = (c && typeof c === "object" && !Array.isArray(c)) ? c : null;
+  if (!a && !b) return null;
+  var out = { v:1, out:{}, in:{}, at:Math.max(num(a && a.at), num(b && b.at), 1) };
+  ["out", "in"].forEach(function(side){
+    var la = (a && a[side] && typeof a[side] === "object" && !Array.isArray(a[side])) ? a[side] : {};
+    var cb = (b && b[side] && typeof b[side] === "object" && !Array.isArray(b[side])) ? b[side] : {};
+    var days = {};
+    [la, cb].forEach(function(m){ for (var d in m) days[d] = 1; });
+    Object.keys(days).sort().forEach(function(d){
+      var x = (la[d] && typeof la[d] === "object") ? la[d] : {};
+      var y = (cb[d] && typeof cb[d] === "object") ? cb[d] : {};
+      var ids = {}, rec = {};
+      Object.keys(x).forEach(function(k){ ids[k] = 1; });
+      Object.keys(y).forEach(function(k){ ids[k] = 1; });
+      Object.keys(ids).sort().forEach(function(k){
+        var p = x[k], q = y[k], pick = null;
+        if (p && q) pick = (num(q.at) > num(p.at)) ? q : p;
+        else pick = p || q;
+        if (pick && typeof pick === "object") rec[k] = pick;
+      });
+      if (Object.keys(rec).length) out[side][d] = rec;
+    });
+    var dk = Object.keys(out[side]).sort();
+    while (dk.length > 40) delete out[side][dk.shift()];
+  });
+  return out;
+}
+
+function escH(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+  return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c]; }); }
+function mergeMom(l, c){
+  var a = (l && typeof l === "object" && !Array.isArray(l)) ? l : null;
+  var b = (c && typeof c === "object" && !Array.isArray(c)) ? c : null;
+  if (!a && !b) return null;
+  var ln = (a && a.notes && typeof a.notes === "object" && !Array.isArray(a.notes)) ? a.notes : {};
+  var cn = (b && b.notes && typeof b.notes === "object" && !Array.isArray(b.notes)) ? b.notes : {};
+  var out = { v:1, notes:{}, at:Math.max(num(a && a.at), num(b && b.at), 1) };
+  for (var i = 0; i < 7; i++){
+    var k = String(i), x = ln[k], y = cn[k], pick = null;
+    if (x && typeof x === "object" && y && typeof y === "object") pick = (num(y.at) > num(x.at)) ? y : x;
+    else pick = (x && typeof x === "object") ? x : (y && typeof y === "object" ? y : null);
+    if (!pick) continue;
+    var t = String(pick.t == null ? "" : pick.t).trim();
+    if (!t) continue;                                  /* 비운 말풍선 — 지운 것으로 */
+    out.notes[k] = { t:t.slice(0, 40), at:num(pick.at) };
+  }
+  return out;
+}
+function momNotes(){
+  var m = read(MOM_KEY, null);
+  if (!m || typeof m !== "object" || Array.isArray(m)) m = { v:1, notes:{} };
+  if (!m.notes || typeof m.notes !== "object" || Array.isArray(m.notes)) m.notes = {};
+  return m;
+}
+try {
+  SB.mom = {
+    all: function(){ return momNotes().notes; },
+    get: function(i){
+      var n = momNotes().notes[String(i)];
+      return (n && n.t) ? String(n.t) : "";
+    },
+    bubble: function(i){
+      var t = (this.get ? this.get(i) : "");
+      if (!t) return "";
+      return '<span class="wk-mom" title="엄마 한마디 — ' + escH(t) + '"><b>💬</b>' + escH(t) + '</span>';
+    }
+  };
+} catch(e){}
+
+/* 💬 엄마 한마디 말풍선 (이번 주 시간표 요일 카드) */
+
+
+function n1(v, fb){ return (v === undefined || v === null || v === "") ? fb : num(v); }
+function mergeAnnual(l, c){
+  var a = (l && typeof l === "object" && !Array.isArray(l)) ? l : null;
+  var b = (c && typeof c === "object" && !Array.isArray(c)) ? c : null;
+  if (!a && !b) return null;
+  if (!a) return b;
+  if (!b) return a;
+  var del = {}, k;
+  [a, b].forEach(function(o){
+    var d = (o.del && typeof o.del === "object" && !Array.isArray(o.del)) ? o.del : {};
+    for (var kk in d) del[kk] = Math.max(num(del[kk]), num(d[kk]));
+  });
+  var smap = {}, sorder = [];
+  [a.subs, b.subs].forEach(function(list){
+    if (!Array.isArray(list)) return;
+    for (var i = 0; i < list.length; i++){
+      var x = list[i]; if (!x || !x.id) continue;
+      var id = String(x.id), prev = smap[id];
+      if (!prev){ smap[id] = { id:id, nm:String(x.nm || id), at:num(x.at) }; sorder.push(id); continue; }
+      if (num(x.at) > num(prev.at) && x.nm){ prev.nm = String(x.nm); prev.at = num(x.at); }
+    }
+  });
+  var subs = [];
+  sorder.forEach(function(id){
+    var x = smap[id];
+    if (num(del["s:" + id]) >= x.at && num(del["s:" + id]) > 0) return;
+    subs.push(x);
+  });
+  var years = {}, yk;
+  [a.years, b.years].forEach(function(y){
+    if (!y || typeof y !== "object" || Array.isArray(y)) return;
+    for (var kk in y) if (Array.isArray(y[kk])) years[kk] = (years[kk] || []).concat(y[kk]);
+  });
+  var outY = {};
+  for (yk in years){
+    var imap = {}, iorder = [];
+    years[yk].forEach(function(x){
+      if (!x || !x.id) return;
+      var id = String(x.id), prev = imap[id], at = num(x.at);
+      if (prev && at <= num(prev.at)) return;
+      var rec = { id:id, sub:String(x.sub || ""), sm:Math.min(12, Math.max(1, n1(x.sm, 1))),
+                  em:Math.min(12, Math.max(1, n1(x.em, 12))), title:String(x.title || ""),
+                  note:String(x.note || ""), st:String(x.st || "plan"), at:at };
+      if (rec.em < rec.sm) rec.em = rec.sm;
+      imap[id] = rec;
+      if (!prev) iorder.push(id);
+    });
+    var list = [];
+    iorder.forEach(function(id){
+      var x = imap[id];
+      if (num(del["i:" + id]) >= x.at && num(del["i:" + id]) > 0) return;
+      list.push(x);
+    });
+    if (list.length) outY[yk] = list;
+  }
+  return { v:1, subs:subs, years:outY, del:del, at:Math.max(num(a.at), num(b.at), 1) };
+}
+function mergeShelves(l, c){
+  var out = {};
+  EXTRA_SHELVES.forEach(function(k){
+    var a = (l && typeof l === "object" && l[k]) ? l[k] : null;
+    var b = (c && typeof c === "object" && c[k]) ? c[k] : null;
+    if (!a && !b) return;
+    var m = mergeSg(a && a.read, b && b.read, a && a.un, b && b.un);
+    if (Object.keys(m.read).length || Object.keys(m.un).length) out[k] = m;
+  });
+  return out;
+}
+function shelfSnap(){
+  var out = {};
+  EXTRA_SHELVES.forEach(function(k){
+    var r = read("haeyuli." + k + ".read.v1", null), u = read("haeyuli." + k + ".unread.v1", null);
+    if ((r && Object.keys(r).length) || (u && Object.keys(u).length)) out[k] = { read:r || {}, un:u || {} };
+  });
+  return out;
+}
+function dIso(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+function hwdaySnap(){
+  try {
+    if (!SB.hw5 || !SB.hw5.status) return null;
+    var st = SB.hw5.status();
+    if (!st || !Array.isArray(st.list)) return null;
+    var items = [], i;
+    for (i = 0; i < st.list.length; i++){
+      var it = st.list[i];
+      items.push({ id:String(it.id || ""), s:String(it.s || ""), t:String(it.t || ""),
+                   g:String(it.tag || "p"), ok:!!(st.done && st.done[it.id]),
+                   c:(it.carry ? 1 : 0), m:(it.moved ? 1 : 0) });
+    }
+    var streak = null;
+    try {
+      if (SB.streak && SB.streak.info){
+        var si = SB.streak.info() || {};
+        streak = { days:num(si.days), next:(si.next && si.next.days) ? { d:num(si.next.days), amt:num(si.next.amt) } : null };
+      }
+    } catch(e){ streak = null; }
+    var att = null;
+    try {
+      if (SB.attendInfo){
+        var ai = SB.attendInfo() || {};
+        att = { month:num(ai.month), total:num(ai.total), streak:num(ai.streak) };
+      }
+    } catch(e){ att = null; }
+    var recent = [];
+    for (i = 0; i < 7; i++){
+      var dt = new Date(); dt.setDate(dt.getDate() - i);
+      var ds = dIso(dt), di = (dt.getDay() + 6) % 7, list = [], done = {};
+      try { list = SB.hw5.items ? (SB.hw5.items(di, ds) || []) : []; } catch(e){ list = []; }
+      try { done = SB.hw5.dayDone ? (SB.hw5.dayDone(ds) || {}) : {}; } catch(e){ done = {}; }
+      var n = 0;
+      for (var j = 0; j < list.length; j++) if (done[list[j].id]) n++;
+      recent.push({ d:ds, t:list.length, n:n });
+    }
+    return { v:1, date:st.date, total:num(st.total), done:num(st.n), all:!!st.all,
+             items:items, streak:streak, attend:att, recent:recent };
+  } catch(e){ return null; }
+}
+
+
 /* 🌳 ORT 완독 기록 1회 초기화 (2026-11-22) — 108권 시절 기록이 232권 새 목록에 잘못 붙지 않게
    · 이 기기에서 처음 실행될 때 ORT 완독·미완독 저장소를 한 번 비우고, 그 시각을 표식에 남긴다.
    · 그 시각(가족 코드로 오가며 가장 이른 초기화 시각을 쓴다)보다 먼저 저장된 ORT 기록은
@@ -23196,13 +23449,18 @@ function snap(){
     tama: read(K.tama, null),
     room: read(K.room, null),
     rides: read(K.rides, null),
-    rp: read(K.rp, null)
+    rp: read(K.rp, null),
+    annual: read(ANNUAL_KEY, null),
+    shelves: shelfSnap(),
+    hwday: hwdaySnap(),
+    momnote: momNotes(),
+    carry: read("haeyuli.hwcarry.v1", null)
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -23753,6 +24011,11 @@ function buildDoc(local, cloud, base, code){
     room: mergeRoom(local.room, c.room),
     rides: mergeRides(local.rides, c.rides),
     rp: mergeRp(local.rp, c.rp),
+    annual: mergeAnnual(local.annual, c.annual),
+    shelves: mergeShelves(local.shelves, c.shelves),
+    momnote: mergeMom(local.momnote, c.momnote),
+    carry: mergeCarry(local.carry, c.carry),
+    hwday: local.hwday || c.hwday || null,
     at: Date.now()
   };
 }
@@ -23843,6 +24106,39 @@ function applyDoc(doc){
       try { if (SB.wbRefresh) SB.wbRefresh(); } catch(e){}
     }
   }
+  /* 📅 연간 학습 진도표 — 부모용 parent.html 에서 고친 계획을 이 기기에도 (보드는 화면에 쓰지 않지만 문서에는 남긴다) */
+  if (doc.annual && typeof doc.annual === "object"){
+    var acur = read(ANNUAL_KEY, null), anew = mergeAnnual(acur, doc.annual);
+    if (anew && JSON.stringify(anew) !== JSON.stringify(acur)) { write(ANNUAL_KEY, anew); changed = true; }
+  }
+  /* 📚 전집 책장 8종 — 다른 기기에서 체크한 읽은 책을 이 기기에도 */
+  if (doc.shelves && typeof doc.shelves === "object"){
+    var shChanged2 = false;
+    EXTRA_SHELVES.forEach(function(k){
+      var inc = doc.shelves[k];
+      if (!inc || typeof inc !== "object") return;
+      var cur = { read:read("haeyuli." + k + ".read.v1", {}), un:read("haeyuli." + k + ".unread.v1", {}) };
+      var m2 = mergeSg(cur.read, inc.read, cur.un, inc.un);
+      if (JSON.stringify(m2.read) !== JSON.stringify(cur.read)) { write("haeyuli." + k + ".read.v1", m2.read); shChanged2 = true; }
+      if (JSON.stringify(m2.un) !== JSON.stringify(cur.un)) { write("haeyuli." + k + ".unread.v1", m2.un); shChanged2 = true; }
+    });
+    if (shChanged2){ changed = true; try { if (SB.shelf && SB.shelf.reload) SB.shelf.reload(); } catch(e){} }
+  }
+  /* 💬 엄마 한마디 — 부모 페이지에서 적은 말풍선을 이 기기 주간 시간표에도 */
+  if (doc.momnote && typeof doc.momnote === "object"){
+    var mcur = read(MOM_KEY, null), mnew = mergeMom(mcur, doc.momnote);
+    if (mnew && JSON.stringify(mnew) !== JSON.stringify(mcur)){ write(MOM_KEY, mnew); changed = true; }
+  }
+  /* ➡️ 미룬 숙제 — 다른 기기에서 미룬 것을 이 기기 오늘·내일 숙제에도 */
+  if (doc.carry && typeof doc.carry === "object"){
+    var ccur = read("haeyuli.hwcarry.v1", null), cnew = mergeCarry(ccur, doc.carry);
+    if (cnew && JSON.stringify(cnew) !== JSON.stringify(ccur)){
+      write("haeyuli.hwcarry.v1", cnew);
+      changed = true;
+      try { if (SB.carryRefresh) SB.carryRefresh(); } catch(e){}
+      try { if (SB.hwplanRefresh) SB.hwplanRefresh(); } catch(e){}
+    }
+  }
   /* 🔔 ntfy 알림 설정 — 다른 기기에서 만든 토픽·켜짐 상태를 이 기기에도 반영 */
   if (doc.ntfy && typeof doc.ntfy === "object"){
     var ncur = ntRead(), nnew = mergeNtfy(ncur, doc.ntfy);
@@ -23924,13 +24220,22 @@ function pullPush(manual){
         done:local.done, study:local.study, coupons:local.coupons, rb:local.rb, mathset:local.mathset,
         ntfy:local.ntfy, sg:local.sg, sgu:local.sgu, fg:local.fg, fgu:local.fgu, nir:local.nir, niru:local.niru, ort:local.ort, ortu:local.ortu, wb:local.wb,
         hwplan:local.hwplan, hwplanUn:local.hwplanUn,
-        tama:local.tama, room:local.room, rides:local.rides, rp:local.rp, at:Date.now()
+        tama:local.tama, room:local.room, rides:local.rides, rp:local.rp,
+        annual:local.annual, shelves:local.shelves, hwday:local.hwday, momnote:local.momnote, carry:local.carry, at:Date.now()
       };
       return apiPut(f.code, doc).then(function(){ return true; });
     }
     var merged = buildDoc(local, cloud, num(f.base), f.code);
     applyDoc(merged);
-    if (body(merged) !== body(cloud)){
+    /* 📊 부모 페이지가 보는 '오늘 숙제 요약'(hwday)이 없거나 날짜가 지났으면 그것만이라도 올린다 */
+    var hwNeed = false;
+    try {
+      var hLocal = merged.hwday, hCloud = cloud.hwday;
+      if (hLocal && hLocal.date){
+        if (!hCloud || !hCloud.date || hCloud.date !== hLocal.date) hwNeed = true;
+      }
+    } catch(e){ hwNeed = false; }
+    if (body(merged) !== body(cloud) || hwNeed){
       return apiPut(f.code, merged).then(function(){ return true; });
     }
     return true;
@@ -23989,7 +24294,7 @@ function createCode(){
   saveFam({ code:code, base:num(s.money.piggy), lastSync:0, sig:"", lastError:"", at:Date.now() });
   paint();
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
-  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, fg:s.fg, fgu:s.fgu, ort:s.ort, ortu:s.ortu, curri:s.curri, hwplan:s.hwplan, hwplanUn:s.hwplanUn, tama:s.tama, room:s.room, rides:s.rides, rp:s.rp, at:Date.now() })
+  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, fg:s.fg, fgu:s.fgu, ort:s.ort, ortu:s.ortu, curri:s.curri, hwplan:s.hwplan, hwplanUn:s.hwplanUn, tama:s.tama, room:s.room, rides:s.rides, rp:s.rp, annual:s.annual, shelves:s.shelves, hwday:s.hwday, momnote:s.momnote, carry:s.carry, at:Date.now() })
     .then(function(){
       var g = fam();
       g.base = num(s.money.piggy); g.lastSync = Date.now(); g.sig = sigOf(s); g.lastError = "";
@@ -37108,6 +37413,19 @@ function iso(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getM
 function dayIdx(){ return (new Date().getDay() + 6) % 7; }         /* 월=0 … 일=6 */
 var KEY = "haeyuli.hwplan.v1";
 var UNKEY = "haeyuli.hwplan.un.v1";   /* 마지막에 숙제 체크를 '푼' 시각 — 기기끼리 합칠 때 쓴다 */
+var CARRY_KEY = "haeyuli.hwcarry.v1";   /* ➡️ 내일로 미룬 숙제 — 날짜별로 내보낸/받은 기록 */
+function carryLoad(){
+  var v = null;
+  try { v = JSON.parse(localStorage.getItem(CARRY_KEY) || "null"); } catch(e){ v = null; }
+  if (!v || typeof v !== "object" || Array.isArray(v)) v = { v:1, out:{}, in:{} };
+  if (!v.out || typeof v.out !== "object" || Array.isArray(v.out)) v.out = {};
+  if (!v.in || typeof v.in !== "object" || Array.isArray(v.in)) v.in = {};
+  return v;
+}
+function carrySave(v){
+  v.v = 1; v.at = Date.now();
+  try { localStorage.setItem(CARRY_KEY, JSON.stringify(v)); } catch(e){}
+}
 var DAYN = ["월", "화", "수", "목", "금", "토", "일"];
 var TAG = { p:"📖 지면", b:"💻 보드", k:"📚 책", t:"📱 패드", v:"🎥 영상" };
 
@@ -37242,7 +37560,8 @@ function dayDone(date){
 function wbDay(di, ds){
   try { return (SB.wb && SB.wb.itemsFor) ? SB.wb.itemsFor(di, ds) : []; } catch(e){ return []; }
 }
-function items(di, ds){
+/* 미루기를 반영하기 전의 기본 목록 */
+function itemsBase(di, ds){
   var base = SCHED[di] || [];
   var wb = wbDay(di, ds);
   if (!wb.length) return base.slice();
@@ -37259,11 +37578,48 @@ function items(di, ds){
   return out;
 }
 
+/* 그날 숙제 = 기본 목록 + 어제 미룬 숙제. 오늘 내일로 미룬 것은 moved 로 표시해 남겨 둔다(다시 누르면 되돌리기) */
+function items(di, ds){
+  /* SCHED 의 원본 객체를 건드리지 않게 한 벌씩 복사한다(미룸 표시가 남지 않도록) */
+  var base = itemsBase(di, ds), out = [];
+  for (var b = 0; b < base.length; b++){
+    var src = base[b];
+    out.push({ id:src.id, s:src.s, t:src.t, tag:src.tag, go:src.go || null });
+  }
+  var dayKey = ds || iso();
+  var cr = carryLoad();
+  var mvOut = (cr.out[dayKey] && typeof cr.out[dayKey] === "object") ? cr.out[dayKey] : {};
+  var mvIn = (cr.in[dayKey] && typeof cr.in[dayKey] === "object") ? cr.in[dayKey] : {};
+  var have = {}, i, k;
+  for (i = 0; i < out.length; i++) have[out[i].id] = 1;
+  Object.keys(mvIn).sort().forEach(function(id){
+    var r = mvIn[id];
+    if (!r || typeof r !== "object" || r.del) return;
+    if (have[id]){
+      for (var j = 0; j < out.length; j++) if (out[j].id === id){ out[j].carry = 1; out[j].from = String(r.f || ""); }
+      return;
+    }
+    out.push({ id:id, s:String(r.s || ""), t:String(r.t || ""), tag:(r.g || "b"), go:null, carry:1, from:String(r.f || "") });
+    have[id] = 1;
+  });
+  for (i = 0; i < out.length; i++){
+    var o = mvOut[out[i].id];
+    if (o && typeof o === "object" && !o.del){ out[i].moved = 1; out[i].to = String(o.to || ""); }
+  }
+  return out;
+}
+
 function status(){
   var d = iso(), di = dayIdx(), list = items(di), done = dayDone(d);
-  var n = 0;
-  for (var i = 0; i < list.length; i++) if (done[list[i].id]) n++;
-  return { date:d, day:di, list:list, done:done, n:n, total:list.length, all:(list.length > 0 && n === list.length) };
+  var n = 0, act = 0, moved = 0;
+  for (var i = 0; i < list.length; i++){
+    if (list[i].moved){ moved++; continue; }     /* 내일로 미룬 것 — 오늘 남은 숙제가 아니다 */
+    act++;
+    if (done[list[i].id]) n++;
+  }
+  /* 내일로 미룬 날은 '전부 완료'로 치지 않는다 (+500원·출석이 따라오지 않게) */
+  return { date:d, day:di, list:list, done:done, n:n, total:act, moved:moved,
+           all:(act > 0 && n === act) };
 }
 
 function touchFam(){ try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){} }
@@ -37370,12 +37726,15 @@ function groupsHTML(st){
   return '<div class="hw-groups">' + order.map(function(s){
     return '<div class="hw-grp"><div class="gh">' + esc(s) + '</div>' +
       bySub[s].map(function(it){
-        var on = !!st.done[it.id];
-        return '<div class="hw-item' + (on ? " done" : "") + '">' +
-          '<button class="hw-ck" type="button" data-hw5="' + esc(it.id) + '" aria-pressed="' + (on ? "true" : "false") +
-            '" aria-label="' + esc(it.t) + ' 완료">' + (on ? "✓" : "") + '</button>' +
+        var on = !!st.done[it.id], mv = !!it.moved, cy = !!it.carry;
+        var lbl = on ? " — 완료 (누르면 해제)" : (mv ? " — 내일로 미룸 (누르면 되돌리기)" : " — 완료 또는 내일로 미루기");
+        return '<div class="hw-item' + (on ? " done" : "") + (mv ? " moved" : "") + (cy ? " carry" : "") + '">' +
+          '<button class="hw-ck' + (mv ? " mv" : "") + '" type="button" data-hw5="' + esc(it.id) + '" aria-pressed="' + (on ? "true" : "false") +
+            '" aria-label="' + esc(it.t) + lbl + '">' + (on ? "✓" : (mv ? "➡️" : "")) + '</button>' +
           '<span class="hw-tag ' + it.tag + '">' + TAG[it.tag] + '</span>' +
           '<span class="hw-tx">' + esc(it.t) + '</span>' +
+          (mv ? '<span class="hw-mv">내일로 미룸</span>'
+              : (cy ? '<span class="hw-mv">➡️ 어제 미룬 숙제</span>' : "")) +
           (it.go ? '<button class="hw-go" type="button" data-hwgo="' + esc(it.id) + '">바로 가기 ▶</button>' : "") +
         '</div>';
       }).join("") + '</div>';
@@ -37394,9 +37753,109 @@ function cardHTML(){
     '<div class="hw-bar"><i style="width:' + pct + '%"></i></div>' +
     groupsHTML(st) +
     (st.all ? '<div class="hw-all">🎉 오늘 숙제 전부 완료! +500원 · 엄마 폰으로 알림을 보냈어요</div>'
-            : '<div class="hw-all no">숙제 ' + (st.total - st.n) + '개 남았어요 · 다 하면 +500원 🐷</div>') +
+            : (st.total === st.n && st.moved
+                ? '<div class="hw-all">➡️ 남은 숙제 ' + st.moved + '개는 내일로 미뤘어요 · 오늘은 여기까지!</div>'
+                : '<div class="hw-all no">숙제 ' + (st.total - st.n) + '개 남았어요 · 다 하면 +500원 🐷</div>')) +
     ladderHTML();
 }
+/* ➡️ 숙제 하나를 누르면 — 완료했어요 / 내일로 미룰래요 선택 팝업 */
+var CHID = "";
+function ensureChoice(){
+  var el = $("hwChoice");
+  if (el) return el;
+  el = document.createElement("div");
+  el.id = "hwChoice";
+  el.className = "hwch";
+  el.hidden = true;
+  el.innerHTML = '<div class="hwch-bg" data-hw5x="1"></div>' +
+    '<div class="hwch-s" role="dialog" aria-modal="true" aria-labelledby="hwchT">' +
+      '<b id="hwchT">어떻게 할까요?</b>' +
+      '<span class="hwch-t" id="hwchTx"></span>' +
+      '<button class="hwch-b done" type="button" data-hw5done="1">✅ 완료했어요!</button>' +
+      '<button class="hwch-b move" type="button" data-hw5move="1">➡️ 내일로 미룰래요</button>' +
+      '<button class="hwch-x" type="button" data-hw5x="1">닫기</button>' +
+    '</div>';
+  document.body.appendChild(el);
+  el.addEventListener("click", choiceClick, true);
+  return el;
+}
+function openChoice(id){
+  var st = status(), it = null;
+  for (var i = 0; i < st.list.length; i++) if (st.list[i].id === id) it = st.list[i];
+  if (!it) return;
+  if (st.done[id]){ toggle(id); return; }          /* 이미 완료 — 다시 누르면 해제 */
+  if (it.moved){ uncarry(id); return; }            /* 이미 미룸 — 다시 누르면 되돌리기 */
+  CHID = id;
+  var el = ensureChoice();
+  $("hwchTx").textContent = it.t || "숙제";
+  el.hidden = false;
+}
+function closeChoice(){
+  var el = $("hwChoice");
+  if (el) el.hidden = true;
+  CHID = "";
+}
+function choiceClick(e){
+  var t = e.target;
+  if (!t || !t.closest) return;
+  if (t.closest("[data-hw5x]")){ e.preventDefault(); e.stopPropagation(); closeChoice(); return; }
+  if (t.closest("[data-hw5done]")){
+    e.preventDefault(); e.stopPropagation();
+    var id = CHID; closeChoice(); if (id) toggle(id);
+    return;
+  }
+  if (t.closest("[data-hw5move]")){
+    e.preventDefault(); e.stopPropagation();
+    var id2 = CHID; closeChoice(); if (id2) carryOne(id2);
+    return;
+  }
+}
+function tomorrowOf(ds){
+  var p = String(ds).split("-");
+  var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  d.setDate(d.getDate() + 1);
+  return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+/* 숙제 하나만 내일로 */
+function carryOne(id){
+  var st = status(), it = null;
+  for (var i = 0; i < st.list.length; i++) if (st.list[i].id === id) it = st.list[i];
+  if (!it || st.done[id] || it.moved) return false;
+  var tomorrow = tomorrowOf(st.date), cr = carryLoad(), now = Date.now();
+  if (!cr.out[st.date] || typeof cr.out[st.date] !== "object") cr.out[st.date] = {};
+  if (!cr.in[tomorrow] || typeof cr.in[tomorrow] !== "object") cr.in[tomorrow] = {};
+  cr.out[st.date][id] = { to:tomorrow, at:now };
+  cr.in[tomorrow][id] = { f:st.date, s:it.s || "", t:it.t || "", g:it.tag || "b", at:now };
+  carrySave(cr);
+  render();
+  try { if (SB.week && SB.week.render) SB.week.render(); } catch(e){}
+  try { if (SB.toast) SB.toast("➡️ '" + (it.t || "숙제") + "' 내일로 미뤘어요"); } catch(e){}
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
+  return true;
+}
+/* 미루기를 되돌린다 */
+function uncarry(id){
+  var st = status(), it = null;
+  for (var i = 0; i < st.list.length; i++) if (st.list[i].id === id) it = st.list[i];
+  var cr = carryLoad(), rec = (cr.out[st.date] && cr.out[st.date][id]) ? cr.out[st.date][id] : null;
+  if (!rec || rec.del) { render(); return false; }
+  var to = String(rec.to || tomorrowOf(st.date)), now = Date.now();
+  cr.out[st.date][id] = { to:to, at:now, del:1 };
+  if (!cr.in[to] || typeof cr.in[to] !== "object") cr.in[to] = {};
+  cr.in[to][id] = { at:now, del:1 };
+  carrySave(cr);
+  render();
+  try { if (SB.week && SB.week.render) SB.week.render(); } catch(e){}
+  try { if (SB.toast) SB.toast("↩️ '" + ((it && it.t) || "숙제") + "' 오늘로 되돌렸어요"); } catch(e){}
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
+  return true;
+}
+/* 다른 기기에서 미룬 숙제가 오면 오늘 카드·주간 시간표를 다시 그린다 */
+SB.carryRefresh = function(){
+  try { render(); } catch(e){}
+  try { if (SB.week && SB.week.render) SB.week.render(); } catch(e){}
+};
+
 function render(){
   var box = $("hwToday");
   if (!box){
@@ -37415,7 +37874,7 @@ function render(){
 
 function onClick(e){
   var ck = e.target.closest("[data-hw5]");
-  if (ck){ toggle(ck.getAttribute("data-hw5")); return; }
+  if (ck){ openChoice(ck.getAttribute("data-hw5")); return; }
   var go = e.target.closest("[data-hwgo]");
   if (go){
     var st = status(), id = go.getAttribute("data-hwgo"), it = null;
@@ -37442,15 +37901,16 @@ function weekHTML(){
   var cells = "";
   for (var d = 0; d < 7; d++){
     var dt = new Date(monday.getTime()); dt.setDate(monday.getDate() + d);
-    var ds = iso(dt), done = dayDone(ds), list = items(d, ds), n = 0;
-    for (var i = 0; i < list.length; i++) if (done[list[i].id]) n++;
+    var ds = iso(dt), done = dayDone(ds), list = items(d, ds), n = 0, act = 0;
+    for (var i = 0; i < list.length; i++){ if (list[i].moved) continue; act++; if (done[list[i].id]) n++; }
     cells += '<div class="hwm-day' + (ds === t ? " today" : "") + '">' +
       '<div class="hwm-dh"><b>' + DAYN[d] + '</b><span>' + (dt.getMonth() + 1) + "/" + dt.getDate() + '</span>' +
-        '<em>' + n + "/" + list.length + '</em></div><ul>' +
+        '<em>' + n + "/" + act + '</em></div><ul>' +
       list.map(function(it){
         var on = !!done[it.id];
-        return '<li class="' + (on ? "on" : "") + '"><span class="hw-tag ' + it.tag + '">' + TAG[it.tag] + '</span>' +
-          '<span>' + esc(it.t) + '</span></li>';
+        return '<li class="' + (on ? "on" : "") + (it.moved ? " moved" : "") + '"><span class="hw-tag ' + it.tag + '">' + TAG[it.tag] + '</span>' +
+          '<span>' + esc(it.t) + '</span>' +
+          (it.moved ? '<em class="mv">➡️ 내일</em>' : (it.carry ? '<em class="mv">➡️ 미룬</em>' : '')) + '</li>';
       }).join("") + '</ul></div>';
   }
   return '<div class="hwm-wrap" id="hwmWrap" role="dialog" aria-modal="true" aria-labelledby="hwmTitle">' +
@@ -39580,8 +40040,8 @@ function paintWeek(){
     var list = [], done = {};
     try { list = api.items(i, ds) || []; } catch(e){ list = []; }
     try { done = api.dayDone(ds) || {}; } catch(e){ done = {}; }
-    var n = 0, j;
-    for (j = 0; j < list.length; j++) if (done[list[j].id]) n++;
+    var n = 0, j, act = 0;
+    for (j = 0; j < list.length; j++){ if (list[j].moved) continue; act++; if (done[list[j].id]) n++; }
     var box = card.querySelector(".wk-plan");
     if (!box){
       box = document.createElement("div");
@@ -39590,15 +40050,16 @@ function paintWeek(){
       if (subs && subs.parentNode === card) card.insertBefore(box, subs.nextSibling);
       else card.appendChild(box);
     }
-    var h = '<div class="wp-h"><b>할 일</b><span class="wp-p' + (list.length && n === list.length ? " ok" : "") + '">'
-      + n + "/" + list.length + '</span></div><ul class="wp-list">';
+    var h = '<div class="wp-h"><b>할 일</b><span class="wp-p' + (act && n === act ? " ok" : "") + '">'
+      + n + "/" + act + '</span></div><ul class="wp-list">';
     if (!list.length) h += '<li class="none">오늘은 계획이 없어요</li>';
     for (j = 0; j < list.length; j++){
       var it = list[j], on = !!done[it.id];
-      h += '<li class="' + (on ? "ok" : "") + '">'
+      h += '<li class="' + (on ? "ok" : "") + (it.moved ? " moved" : "") + '">'
         + '<i class="wp-t">' + esc(TAGTX[it.tag] || it.tag || "") + '</i>'
+        + (it.carry ? '<i class="wp-t wp-carry" title="' + esc(it.from ? it.from.slice(5).replace("-", "/") + "에서 미룬 숙제" : "어제 미룬 숙제") + '">➡️ 미룬</i>' : '')
         + '<span>' + esc(it.t) + '</span>'
-        + (on ? '<em aria-hidden="true">✓</em>' : '')
+        + (it.moved ? '<em class="mv" aria-hidden="true">➡️ 내일</em>' : (on ? '<em aria-hidden="true">✓</em>' : ''))
         + '</li>';
     }
     h += '</ul>';
