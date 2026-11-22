@@ -23579,6 +23579,7 @@ var K = {
   sg: "haeyuli.samgukji.read.v1", sgu: "haeyuli.samgukji.unread.v1",
   fg: "haeyuli.froebel.read.v1", fgu: "haeyuli.froebel.unread.v1",
   nir: "haeyuli.nir.read.v1", niru: "haeyuli.nir.unread.v1",
+  ort: "haeyuli.ort.read.v1", ortu: "haeyuli.ort.unread.v1",
   curri: "haeyuli.call.curri.v1",
   hwplan: "haeyuli.hwplan.v1", hwplanUn: "haeyuli.hwplan.un.v1",
   tama: "haeyuli.tama.v1", room: "haeyuli.room.v1", rides: "haeyuli.tama.rides.v1",
@@ -23677,6 +23678,8 @@ function snap(){
     fgu: read(K.fgu, {}),
     nir: read(K.nir, {}),
     niru: read(K.niru, {}),
+    ort: read(K.ort, {}),
+    ortu: read(K.ortu, {}),
     curri: read(K.curri, null),
     wb: read("haeyuli.workbooks.v1", null),
     stars: read("yuli.stars.v2", null),
@@ -23690,9 +23693,9 @@ function snap(){
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -24212,6 +24215,7 @@ function buildDoc(local, cloud, base, code){
   var sgM = mergeSg(local.sg, c.sg, local.sgu, c.sgu);
   var frM = mergeSg(local.fg, c.fg, local.fgu, c.fgu);
   var nirM = mergeSg(local.nir, c.nir, local.niru, c.niru);
+  var ortM = mergeSg(local.ort, c.ort, local.ortu, c.ortu);
   var hwM = mergeHwplan(local.hwplan, local.hwplanUn, c.hwplan, c.hwplanUn);
   return {
     v: 1,
@@ -24229,6 +24233,7 @@ function buildDoc(local, cloud, base, code){
     sg: sgM.read, sgu: sgM.un,
     fg: frM.read, fgu: frM.un,
     nir: nirM.read, niru: nirM.un,
+    ort: ortM.read, ortu: ortM.un,
     curri: mergeCurri(local.curri, c.curri),
     wb: mergeWb(local.wb, c.wb),
     stars: { total: stM.total },
@@ -24305,6 +24310,12 @@ function applyDoc(doc){
   var nirM2 = mergeSg(s.nir, doc.nir, s.niru, doc.niru);
   if (JSON.stringify(nirM2.read) !== JSON.stringify(s.nir || {}) || JSON.stringify(nirM2.un) !== JSON.stringify(s.niru || {})){
     write(K.nir, nirM2.read); write(K.niru, nirM2.un);
+    changed = true; nirChanged = true;
+  }
+  /* 🌳 ORT 읽은 책 — 다른 기기에서 체크한 책을 이 기기에도 */
+  var ortM2 = mergeSg(s.ort, doc.ort, s.ortu, doc.ortu);
+  if (JSON.stringify(ortM2.read) !== JSON.stringify(s.ort || {}) || JSON.stringify(ortM2.un) !== JSON.stringify(s.ortu || {})){
+    write(K.ort, ortM2.read); write(K.ortu, ortM2.un);
     changed = true; nirChanged = true;
   }
   /* 📞 엠마쌤 전화영어 진도(Day) — 다른 기기에서 한 통화만큼 같이 넘어간다 */
@@ -24401,7 +24412,7 @@ function pullPush(manual){
       var doc = {
         v:1, code:f.code, plan:local.plan, hw:local.hw, money:local.money,
         done:local.done, study:local.study, coupons:local.coupons, rb:local.rb, mathset:local.mathset,
-        ntfy:local.ntfy, sg:local.sg, sgu:local.sgu, fg:local.fg, fgu:local.fgu, wb:local.wb,
+        ntfy:local.ntfy, sg:local.sg, sgu:local.sgu, fg:local.fg, fgu:local.fgu, nir:local.nir, niru:local.niru, ort:local.ort, ortu:local.ortu, wb:local.wb,
         hwplan:local.hwplan, hwplanUn:local.hwplanUn,
         tama:local.tama, room:local.room, rides:local.rides, rp:local.rp, at:Date.now()
       };
@@ -24467,7 +24478,7 @@ function createCode(){
   saveFam({ code:code, base:num(s.money.piggy), lastSync:0, sig:"", lastError:"", at:Date.now() });
   paint();
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
-  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, fg:s.fg, fgu:s.fgu, curri:s.curri, hwplan:s.hwplan, hwplanUn:s.hwplanUn, tama:s.tama, room:s.room, rides:s.rides, rp:s.rp, at:Date.now() })
+  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, fg:s.fg, fgu:s.fgu, ort:s.ort, ortu:s.ortu, curri:s.curri, hwplan:s.hwplan, hwplanUn:s.hwplanUn, tama:s.tama, room:s.room, rides:s.rides, rp:s.rp, at:Date.now() })
     .then(function(){
       var g = fam();
       g.base = num(s.money.piggy); g.lastSync = Date.now(); g.sig = sigOf(s); g.lastError = "";
