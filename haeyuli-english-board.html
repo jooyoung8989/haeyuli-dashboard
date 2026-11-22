@@ -6429,6 +6429,14 @@ body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
 <style id="final1122css">
 /* ================= 2026-11-22 마무리 배치 — 통합검색 · 집 책 권수 · 홈 영어책 · 중국어 · 숙제 스케줄 ================= */
 
+/* ---------- ⑤ 📘🌳 영어 탭의 나우 아임 리딩 · ORT 책장 ---------- */
+.shelfview{display:flex;flex-direction:column;height:100%;min-height:0;}
+.enshelf-stage{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;height:100%;}
+.en-shelf-host{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;}
+.en-shelf-host>.rb-act{flex:1 1 auto;min-height:0;}
+body.mob .shelfview,body.mob .enshelf-stage,body.mob .en-shelf-host{height:auto;}
+
+
 /* ---------- ① 📚 책 통합 검색 ---------- */
 .bs-wrap{display:flex;align-items:center;gap:.5rem;margin:0 0 .7vh;padding:.5rem .7rem;
   background:#fff;border:.18vh solid #d7e9f6;border-radius:1.1rem;box-shadow:var(--shadow-sm);}
@@ -7413,6 +7421,16 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
         <div class="pbk-shelf" id="pbkShelf" aria-label="그림 동화책 책장"></div>
         <div class="pbk-read" id="pbkRead" hidden></div>
         <p class="pbk-note" id="pbkNote">마음에 드는 책을 눌러요. ◀ ▶ 로 한 장씩 넘기며 읽어요.</p>
+      </div>
+    </section>
+
+    <!-- ================= 📘 나우 아임 리딩 · 🌳 ORT (영어 읽기 책장) ================= -->
+    <section class="view shelfview" id="viewEnShelf" data-view="en-shelf" hidden>
+      <div class="enshelf-stage">
+        <div class="en-shelf-host" id="enShelfHost">
+          <div class="rb-act rb-hide sg-wrap" id="rbShWrap_nir" aria-label="나우 아임 리딩 책장"></div>
+          <div class="rb-act rb-hide sg-wrap" id="rbShWrap_ort" aria-label="ORT 책장"></div>
+        </div>
       </div>
     </section>
 
@@ -11179,13 +11197,13 @@ SB.ntfySubject = function(sub){
    과목 안에서 하위 학습 메뉴를 하나씩 크게 본다. */
 var SUBJECTS = [
   { k:"math",    em:"🔢", nm:"수학", desc:"연산 · 도형·시계 · 사고력 · 1·2학년", sec:"concept" },
-  { k:"en",      em:"🔤", nm:"영어", desc:"그림 동화책 · 사이트워드 · 퀴즈 · 월팸", sec:"sight" },
+  { k:"en",      em:"🔤", nm:"영어", desc:"나우 아임 리딩 · ORT · 사이트워드 · 파닉스 · 월팸", sec:"sight" },
   { k:"hanja",   em:"漢", nm:"한자", desc:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", sec:"trace" },
   { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄 · 글자 키보드 · 문장 쓰기 · 어휘·개념", sec:"quote" },
   { k:"history", em:"🏛️", nm:"역사", desc:"연도표 · 왕 계보 · 사진 퀴즈 · 영상 · 세계사", sec:"timeline" }
 ];
 var SECS = {
-  en:      [["book", "📖 그림 동화책"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["test", "📝 단어 테스트"], ["call", "📞 전화 영어"], ["wordgrow", "🦉 단어키우기"], ["video", "🎬 영어 영상"], ["wolpaem", "🏰 월팸"]],
+  en:      [["nir", "📘 나우 아임 리딩"], ["ort", "🌳 ORT"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["call", "📞 전화 영어"], ["wordgrow", "🦉 단어키우기"], ["video", "🎬 영어 영상"], ["wolpaem", "🏰 월팸"]],
   ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"], ["key", "⌨️ 글자 키보드"], ["write", "✍️ 받아쓰기"], ["vocab", "🌱 어휘·개념"]],
   /* 수학은 큰 탭 5개(GROUPS)로 묶고, 그 안에서 알약 전환기로 10가지를 그대로 쓴다 */
   math:    [["calc", "➕ 기탄 연산"], ["saem", "🧮 하루 셈하기"], ["concept", "🔢 수세기"], ["gugu", "✖️ 구구단 원리"],
@@ -11228,7 +11246,8 @@ var VIEWID = {
   "home:main":"viewHome", "study:hub":"viewStudyHub",
   "study:cn:cards":"viewCn", "study:cn:talk":"viewCn", "study:cn:quiz":"viewCn",
   "study:jp:cards":"viewJp", "study:jp:talk":"viewJp", "study:jp:quiz":"viewJp",
-  "study:en:video":"viewEnVideo", "study:en:book":"viewEnBook", "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:test":"viewEnTest", "study:en:call":"viewEnCall",
+  "study:en:video":"viewEnVideo", "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:call":"viewEnCall",
+  "study:en:nir":"viewEnShelf", "study:en:ort":"viewEnShelf",
   "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord", "study:ko:key":"viewKoKey", "study:ko:write":"viewKoWrite", "study:ko:vocab":"viewKoVocab",
   "study:en:wolpaem":"viewEnWolpaem", "study:en:wordgrow":"viewWordGrow",
   "study:math:concept":"viewMath", "study:math:calc":"viewMath", "study:math:think":"viewMath",
@@ -19877,7 +19896,7 @@ var HUB = [
   { k:"math", nm:"수학", badge:["1 2","3 4"], color:"#c1553a", bg:"#fdf3f0",
     d:"오늘의 연산 · 사고력 · 도형", hero:appHero },
   { k:"en", nm:"영어", badge:["a b","c d"], color:"#2f6fb0", bg:"#eff5fb",
-    d:"그림 동화책 · 사이트워드 · 퀴즈 · 월팸", hero:enHero },
+    d:"나우 아임 리딩 · ORT · 사이트워드 · 퀴즈 · 월팸", hero:enHero },
   { k:"hanja", nm:"한자", badge:["漢",""], color:"#8a5a2b", bg:"#f9f4ec",
     d:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", hero:hanjaHero },
   { k:"ko", nm:"국어", badge:["가","나"], color:"#2f8b6b", bg:"#eef7f2",
@@ -23080,6 +23099,45 @@ var K = {
 /* 🔔 ntfy 알림 설정도 같은 가족 코드 문서로 오간다 */
 var NTK = { topic: "study.ntfy.topic.v1", on: "study.ntfy.enabled.v1", at: "study.ntfy.at.v1" };
 
+/* 🌳 ORT 완독 기록 1회 초기화 (2026-11-22) — 108권 시절 기록이 232권 새 목록에 잘못 붙지 않게
+   · 이 기기에서 처음 실행될 때 ORT 완독·미완독 저장소를 한 번 비우고, 그 시각을 표식에 남긴다.
+   · 그 시각(가족 코드로 오가며 가장 이른 초기화 시각을 쓴다)보다 먼저 저장된 ORT 기록은
+     이 기기에서도, 가족 동기화 문서에서도 쓰지 않는다. 이후 새로 체크한 기록은 그대로 저장·동기화된다. */
+var ORT_RESET_KEY = "haeyuli.ort.reset232.v1";
+var ORT_RESET_AT = 0;
+(function(){
+  try {
+    var raw = localStorage.getItem(ORT_RESET_KEY), at = 0;
+    if (raw){ try { at = Number((JSON.parse(raw) || {}).at) || 0; } catch(e){ at = 0; } }
+    if (!at){                                 /* 이 기기 첫 실행 — 한 번만 비운다 */
+      localStorage.removeItem("haeyuli.ort.read.v1");
+      localStorage.removeItem("haeyuli.ort.unread.v1");
+      at = Date.now();
+      localStorage.setItem(ORT_RESET_KEY, JSON.stringify({ at: at }));
+    }
+    ORT_RESET_AT = at;
+  } catch(e){ ORT_RESET_AT = 0; }
+})();
+function ortAtMin(a, b){
+  a = Number(a) || 0; b = Number(b) || 0;
+  if (!a) return b;
+  if (!b) return a;
+  return Math.min(a, b);
+}
+function ortFresh(o, at){
+  var out = {}, k;
+  if (at === undefined) at = ORT_RESET_AT;
+  if (!o || typeof o !== "object" || Array.isArray(o)) return out;
+  for (k in o){
+    var v = Number(o[k]);
+    if (!isFinite(v) || v <= 0) continue;
+    if (at > 0 && v <= at) continue;           /* 초기화 전에 저장된 기록 */
+    out[k] = v;
+  }
+  return out;
+}
+try { SB.ortFresh = ortFresh; } catch(e){}
+
 function read(k, fb){
   try { var v = JSON.parse(localStorage.getItem(k) || "null"); return (v && typeof v === "object") ? v : fb; }
   catch(e){ return fb; }
@@ -23170,8 +23228,8 @@ function snap(){
     fgu: read(K.fgu, {}),
     nir: read(K.nir, {}),
     niru: read(K.niru, {}),
-    ort: read(K.ort, {}),
-    ortu: read(K.ortu, {}),
+    ort: ortFresh(read(K.ort, {})),
+    ortu: ortFresh(read(K.ortu, {})),
     curri: read(K.curri, null),
     wb: read("haeyuli.workbooks.v1", null),
     stars: read("yuli.stars.v2", null),
@@ -23185,7 +23243,7 @@ function snap(){
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp });
 }
 function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp]); }
 
@@ -23707,7 +23765,9 @@ function buildDoc(local, cloud, base, code){
   var sgM = mergeSg(local.sg, c.sg, local.sgu, c.sgu);
   var frM = mergeSg(local.fg, c.fg, local.fgu, c.fgu);
   var nirM = mergeSg(local.nir, c.nir, local.niru, c.niru);
-  var ortM = mergeSg(local.ort, c.ort, local.ortu, c.ortu);
+  var ortAt = ortAtMin(ORT_RESET_AT, c.ortreset);
+  if (ortAt && ortAt !== ORT_RESET_AT){ ORT_RESET_AT = ortAt; try { localStorage.setItem(ORT_RESET_KEY, JSON.stringify({ at: ortAt })); } catch(e){} }
+  var ortM = mergeSg(ortFresh(local.ort, ortAt), ortFresh(c.ort, ortAt), ortFresh(local.ortu, ortAt), ortFresh(c.ortu, ortAt));
   var hwM = mergeHwplan(local.hwplan, local.hwplanUn, c.hwplan, c.hwplanUn);
   return {
     v: 1,
@@ -23725,7 +23785,7 @@ function buildDoc(local, cloud, base, code){
     sg: sgM.read, sgu: sgM.un,
     fg: frM.read, fgu: frM.un,
     nir: nirM.read, niru: nirM.un,
-    ort: ortM.read, ortu: ortM.un,
+    ort: ortM.read, ortu: ortM.un, ortreset: ortAt,
     curri: mergeCurri(local.curri, c.curri),
     wb: mergeWb(local.wb, c.wb),
     stars: { total: stM.total },
@@ -23805,7 +23865,8 @@ function applyDoc(doc){
     changed = true; nirChanged = true;
   }
   /* 🌳 ORT 읽은 책 — 다른 기기에서 체크한 책을 이 기기에도 */
-  var ortM2 = mergeSg(s.ort, doc.ort, s.ortu, doc.ortu);
+  var ortAt2 = ortAtMin(ORT_RESET_AT, doc.ortreset);
+  var ortM2 = mergeSg(ortFresh(s.ort, ortAt2), ortFresh(doc.ort, ortAt2), ortFresh(s.ortu, ortAt2), ortFresh(doc.ortu, ortAt2));
   if (JSON.stringify(ortM2.read) !== JSON.stringify(s.ort || {}) || JSON.stringify(ortM2.un) !== JSON.stringify(s.ortu || {})){
     write(K.ort, ortM2.read); write(K.ortu, ortM2.un);
     changed = true; nirChanged = true;
@@ -23925,6 +23986,7 @@ function pullPush(manual){
     g.at = g.at || Date.now();
     saveFam(g);
     setState();
+    try { if (SB.paintEnHome) SB.paintEnHome(true); } catch(e){}     /* 다른 기기에서 읽은 책까지 반영해 다시 고른다 */
     if (manual) toast("🔄 가족 숙제·용돈을 맞췄어요");
     return ok;
   }).catch(function(e){
@@ -25423,7 +25485,7 @@ var SB = window.SB = window.SB || {};
 var clips = {};                 /* key -> { url, at, ms } */
 var cur = { key:null, rec:null, chunks:[], stream:null, t0:0, timer:null };
 var player = null;
-var MAX_MS = 15000;             /* 아이가 계속 말해도 15초에서 멈춰요 */
+var MAX_MS = 180000;            /* 아이가 줄거리를 길게 말해도 3분까지 녹음해요 */
 
 function $(id){ return document.getElementById(id); }
 function esc(s){
@@ -25535,7 +25597,7 @@ function start(key){
     cur.timer = setTimeout(function(){
       if (cur.key !== key) return;
       stop();
-      toast("⏱️ 15초 녹음 끝! ▶️ 로 내 목소리를 들어 봐요");
+      toast("⏱️ 3분 녹음 끝! ▶️ 로 내 목소리를 들어 봐요");
     }, MAX_MS);
     refresh();
   }, function(err){
@@ -29023,6 +29085,7 @@ function buildTabs(){
     if (typeof SHELF_DEFS !== "undefined" && SHELF_DEFS){
       for (var sbi = 0; sbi < SHELF_DEFS.length; sbi++){
         var sbd = SHELF_DEFS[sbi], sk = "sh:" + sbd.k;
+        if (sbd.k === "nir" || sbd.k === "ort") continue;      /* 📘 나우 아임 리딩 · 🌳 ORT — 영어 탭으로 옮겼다 */
         if (box.querySelector('[data-rbtab="' + sk + '"]')) continue;
         var sbb = document.createElement("button");
         sbb.className = "rb-tab"; sbb.type = "button";
@@ -29098,7 +29161,7 @@ function actHTML(b){
     '</div>' +
     '<div class="rb-step"><div class="rb-step-h"><b>① 책 문제</b><span>맞히면 ⭐ 별을 받아요</span></div>' +
       '<div id="rbQuiz">' + q + '</div><div id="rbQuizMsg" class="rb-done" style="margin-top:.6vh"></div></div>' +
-    '<div class="rb-step"><div class="rb-step-h"><b>② 줄거리 말하기</b><span>녹음하고 바로 들어 봐요</span></div>' +
+    '<div class="rb-step"><div class="rb-step-h"><b>② 줄거리 말하기</b><span>3분까지 녹음하고 바로 들어 봐요</span></div>' +
       '<p class="rb-q" style="font-weight:800;color:#7f8b99">“이 책에서 무슨 일이 있었는지” 해율이 목소리로 들려줄래?</p>' +
       '<div class="rb-rec" id="rbRec">' + recBtn + '</div></div>' +
     '<div class="rb-step"><div class="rb-step-h"><b>③ 기억나는 장면 그리기</b><span>손가락으로 그려요</span></div>' +
@@ -29194,6 +29257,8 @@ function buildBookView(){
   /* 📚 전집 책장 4종 — 웅진 지식그림책·호기심 큐·통큰경제·알파짱 (같은 함수로 그린다) */
   for (var si = 0; si < SHELF_DEFS.length; si++){
     var sdef = SHELF_DEFS[si];
+    /* 📘 나우 아임 리딩 · 🌳 ORT 판은 영어 탭(viewEnShelf)에 있다 */
+    if (sdef.k === "nir" || sdef.k === "ort") continue;
     var shw = document.createElement("div");
     shw.className = "rb-act rb-hide sg-wrap"; shw.id = "rbShWrap_" + sdef.k;
     shw.setAttribute("aria-label", sdef.n + " — 전 " + sdef.b.length + "권");
@@ -29347,6 +29412,35 @@ function applyMode(){
     tabs[j].setAttribute("aria-pressed", on ? "true" : "false");
   }
 }
+
+/* ---------- 📘🌳 영어 탭의 나우 아임 리딩 · ORT — 책 탭의 책장 판을 그대로 빌려 쓴다 ----------
+   책장 판(#rbShWrap_nir · #rbShWrap_ort)은 영어 탭(viewEnShelf)에 있고,
+   독후활동 판(#rbShActWrap)만 두 탭이 함께 쓰므로 영어 탭에 들어올 때 옮겨 온다. */
+var EN_SH = { k: "" };
+function enShelfDetach(){
+  var aw = $("rbShActWrap"), book = $("viewBook");
+  if (aw && book && aw.parentNode !== book) book.appendChild(aw);
+  EN_SH.k = "";
+  if (MODE === "sh:nir" || MODE === "sh:ort" || MODE === "shact") MODE = "tree";
+  try { applyMode(); } catch(e){}
+}
+function enShelfMount(sec){
+  var host = $("enShelfHost");
+  if (!host) return;
+  var k = (sec === "nir" || sec === "ort") ? sec : "";
+  if (!k){ enShelfDetach(); return; }
+  EN_SH.k = k;
+  var aw = $("rbShActWrap"); if (aw && aw.parentNode !== host) host.appendChild(aw);
+  MODE = "sh:" + k;
+  try { if (SB.shelf && SB.shelf.render) SB.shelf.render(k, true); } catch(e){}
+  try { applyMode(); } catch(e){}
+  try { host.scrollTop = 0; } catch(e){}
+  var pane = $("rbShWrap_" + k);
+  if (pane && !pane.getAttribute("data-built")) setTimeout(function(){
+    try { if (SB.shelf && SB.shelf.render) SB.shelf.render(k, true); applyMode(); } catch(e){}
+  }, 260);
+}
+
 
 /* 가족 코드로 받은 책 상태를 다시 읽어 홈 카드·책장 권수·✓ 표시를 한 번에 갱신 */
 RB.reload = function(){
@@ -30409,6 +30503,7 @@ function shSt(d){
   var o = SHST[d.k];
   if (!o){
     o = { read: rd(d.s.read, {}) || {}, un: rd(d.s.un, {}) || {}, act: rd(d.s.act, {}) || {}, art: rd(d.s.art, {}) || {} };
+    if (d.k === "ort" && SB.ortFresh){ o.read = SB.ortFresh(o.read); o.un = SB.ortFresh(o.un); }   /* 🌳 ORT 옛 기록 무시 */
     SHST[d.k] = o;
   }
   for (var k in o.un){                       /* 다른 기기에서 푼 책은 다시 읽지 않은 책으로 */
@@ -30713,6 +30808,8 @@ function shaOpen(k, id){
     w.className = "rb-act rb-hide sgact"; w.id = "rbShActWrap";
     view.appendChild(w);
   }
+  /* 영어 탭이 아닌데 영어 탭에 빌려 간 판이면 책 탭으로 돌려놓는다 */
+  else if (w.parentNode !== view && !(SB.current === "study" && SB.subject === "en" && (SB.sub.en === "nir" || SB.sub.en === "ort"))) view.appendChild(w);
   w.innerHTML = shaHTML(d, b);
   MODE = "shact";
   applyMode();
@@ -30909,7 +31006,12 @@ document.addEventListener("click", function(e){
   }
   var bk = el.closest("[data-shback]");
   if (bk){
-    if (SHAC.d){ MODE = "sh:" + SHAC.d.k; applyMode(); shPaint(SHAC.d.k, true); }
+    if (SHAC.d){
+      var bkK = SHAC.d.k;
+      /* 📘🌳 영어 책장은 영어 탭에 판이 있다 — 뒤로 가면 영어 탭 그 책장으로 */
+      if ((bkK === "nir" || bkK === "ort") && SB.go){ SB.go("study", "en", bkK); return; }
+      MODE = "sh:" + bkK; applyMode(); shPaint(bkK, true);
+    }
     return;
   }
 });
@@ -31161,7 +31263,11 @@ function boot(){
     SB.onShow = SB.onShow || {};
     var oldBook = SB.onShow.book;
     SB.onShow.book = function(){ if (oldBook) { try { oldBook.apply(this, arguments); } catch(e){} }
+      try { enShelfDetach(); } catch(e){}      /* 영어 탭에서 빌려 간 책장 판을 책 탭으로 돌려놓는다 */
       paintShelves(); if (MODE !== "act") applyMode(); };
+    var oldEnShow = SB.onShow.en;
+    SB.onShow.en = function(sec){ if (oldEnShow) { try { oldEnShow.apply(this, arguments); } catch(e){} }
+      try { enShelfMount(sec); } catch(e){} };
     var oldChips = SB.renderChips;
     SB.renderChips = function(){ if (oldChips) { try { oldChips.apply(this, arguments); } catch(e){} } addReadingN(); };
     var oldHome = SB.onShow.home;
@@ -35736,14 +35842,19 @@ function paintHouse(){
 SB.houseCounts = counts;
 
 /* ---------------- 🏠 홈 — 영어책 한 권 (ORT · 영어책 · 나우 아임 리딩) ---------------- */
+/* 🔤 영어책 후보는 가족 코드로 완독이 동기화되는 두 책장뿐 —
+   (도요새 영어책 완독은 이 기기에만 저장돼 기기마다 달라지므로 후보에서 뺐다) */
+var EN_HOME_SERIES = ["nir", "ort"];
 function enPool(){
   var out = [];
   try {
     var defs = (SB.shelf && SB.shelf.defs) ? SB.shelf.defs : [];
-    for (var i = 0; i < defs.length; i++){
-      var d = defs[i];
-      if (d.k !== "ort" && d.k !== "doyoen" && d.k !== "nir") continue;
+    for (var s = 0; s < EN_HOME_SERIES.length; s++){
+      var d = null;
+      for (var i = 0; i < defs.length; i++) if (defs[i].k === EN_HOME_SERIES[s]){ d = defs[i]; break; }
+      if (!d || !d.b) continue;
       var rd = ls(d.s.read);
+      if (d.k === "ort" && SB.ortFresh) rd = SB.ortFresh(rd);      /* 🌳 ORT 108권 시절 기록은 빼고 */
       for (var j = 0; j < d.b.length; j++){
         var b = d.b[j];
         out.push({ t:b[3], s:d.n, em:d.e, n:b[2], def:d.k, id:String(b[0]), hint:b[4] || "", on:!!rd[String(b[0])] });
@@ -35752,14 +35863,22 @@ function enPool(){
   } catch(e){}
   return out;
 }
+/* 날짜로 정해지는 고정 자리 — 후보·순서가 같으면 어느 기기에서나 같은 책이 나온다.
+   그 자리가 이미 읽은 책이면 같은 방향으로 다음 안 읽은 책을 고른다. */
+function enSeed(){
+  var ds = String(todayKey() || ""), seed = 7;
+  for (var i = 0; i < ds.length; i++) seed = (seed * 131 + ds.charCodeAt(i)) % 1000003;
+  return seed;
+}
 function pickEn(){
   var all = enPool();
   if (!all.length) return null;
-  var pool = all.filter(function(x){ return !x.on; });
-  if (!pool.length) pool = all;
-  var seed = 0, ds = todayKey();
-  for (var i = 0; i < ds.length; i++) seed = (seed * 31 + ds.charCodeAt(i)) % 100003;
-  return pool[seed % pool.length];
+  var n = all.length, start = (enSeed() + (enPickSkip || 0)) % n, b;
+  for (var i = 0; i < n; i++){
+    b = all[(start + i) % n];
+    if (!b.on) return b;
+  }
+  return all[start];
 }
 function enCardHTML(){
   var b = pickEn();
@@ -35775,8 +35894,8 @@ function enCardHTML(){
       '<button class="rb-btn ghost" type="button" data-ennext="1">다른 책</button>' +
     '</div>';
 }
-var enPickSkip = 0;
-function paintEnHome(){
+var enPickSkip = 0;                 /* 오늘 '다른 책'을 누른 횟수 — 이 기기에서만 */
+function paintEnHome(force){
   var box = $("rbEnHome");
   if (!box){
     var row = $("rbHomeRow");
@@ -35801,21 +35920,17 @@ function paintEnHome(){
       }
       if (e.target.closest("[data-ennext]")){
         enPickSkip++;
-        var b = pickEn();
-        if (b){
-          box.innerHTML = '<div class="rb-hi"><span class="rb-hk rb-en-tag">🔤 영어책 · 하루 한 권</span>' +
-            '<b class="rb-ht">《' + esc(b.t) + '》</b>' +
-            '<span class="rb-hs">' + esc(b.s) + " · " + b.n + '권</span>' +
-            '<span class="rb-hq">이 영어책은 어때?</span></div>' +
-            '<div class="rb-ha"><button class="rb-btn yes" type="button" data-enyes="' + esc(b.def + "|" + b.id) + '">읽었어요 ✓</button>' +
-            '<button class="rb-btn ghost" type="button" data-ennext="1">다른 책</button></div>';
-        }
+        box.innerHTML = enCardHTML();
         return;
       }
     });
     return;
   }
-  if (!box.innerHTML.trim() || box.querySelector("[data-enyes]")) return;
+  if (!force && (!box.innerHTML.trim() || box.querySelector("[data-enyes]"))) return;
+  if (force){                       /* 가족 동기화 뒤 — 보이는 책이 그대로면 다시 그리지 않는다 */
+    var cur = box.querySelector(".rb-ht"), nb = pickEn();
+    if (cur && nb && cur.textContent === "《" + nb.t + "》") return;
+  }
   box.innerHTML = enCardHTML();
 }
 SB.paintHouse = paintHouse;
