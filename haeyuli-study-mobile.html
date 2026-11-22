@@ -12869,6 +12869,15 @@ function room(){
   if (!r.owned || typeof r.owned !== "object") r.owned = {};
   if (!Array.isArray(r.placed)) r.placed = [];
   if (!r.wear || typeof r.wear !== "object") r.wear = {};
+  /* 예전 장난감 🛝 미끄럼틀을 갖고 있었다면 🎠 놀이기구 미끄럼틀로 옮겨 줘요 */
+  if (r.owned.slide > 0) {
+    if (!(r.owned.ride_slide > 0)) r.owned.ride_slide = 1;
+    delete r.owned.slide;
+    if (Array.isArray(r.placed)) {
+      var si = r.placed.indexOf("slide");
+      if (si >= 0) r.placed.splice(si, 1);
+    }
+  }
   return r;
 }
 function saveRoom(r){ writeJSON(RK, r); }
