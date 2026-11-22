@@ -6965,6 +6965,24 @@ body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
   box-shadow:inset 0 0 0 .14vh #e2eef7;font-size:3.2vh;line-height:1;}
 .rb-noimg span{opacity:.75;}
 
+/* 2026-11-22 · 직접 찍은 책 표지 — 빈 표지 가운데 📷 (누르면 바로 촬영), 찍은 표지에는 작은 📷 (바꾸기) */
+.rb-noimg{position:relative;}
+.rb-cvbox{display:block;position:relative;border-radius:.8vh;}
+.rb-cam{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15em;
+  width:5.8vh;height:5.8vh;padding:0;border:0;border-radius:50%;background:#fff;color:#2b6c99;
+  font-size:2.5vh;line-height:1;cursor:pointer;
+  box-shadow:0 .25vh .7vh rgba(30,70,100,.16),inset 0 0 0 .16vh #cfe4f4;}
+.rb-cam em{font-style:normal;font-size:1.02vh;font-weight:900;color:#4d7b97;letter-spacing:-.02em;}
+.rb-cam:active{transform:scale(.94);}
+.rb-campill{position:absolute;right:.45vh;bottom:.45vh;z-index:2;display:flex;align-items:center;
+  justify-content:center;width:2.6vh;height:2.6vh;padding:0;border:0;border-radius:.55vh;
+  background:rgba(255,255,255,.92);color:#2b6c99;font-size:1.3vh;line-height:1;cursor:pointer;
+  box-shadow:0 .15vh .45vh rgba(20,50,80,.22);}
+.rb-campill:active{transform:scale(.94);}
+body.mob .rb-cam{width:13vw;height:13vw;font-size:6vw;}
+body.mob .rb-cam em{font-size:2.3vw;}
+body.mob .rb-campill{width:6.4vw;height:6.4vw;font-size:3.1vw;}
+
 /* ---------- ② 🌳 북트리 — 우리 집 책 전체 권수 ---------- */
 .bk-house{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .55rem;margin:.35rem 0 0;
   padding:.4rem .55rem;background:#f4fbf7;border:.16vh solid #d5ecdf;border-radius:.75rem;}
@@ -27907,12 +27925,16 @@ var K = {
   today: "haeyuli.redpen.today.v1",
   un:    "haeyuli.redpen.unread.v1",
   art:   "haeyuli.redpen.art.v1",
-  quiz:  "haeyuli.redpen.quiz.v1"
+  quiz:  "haeyuli.redpen.quiz.v1",
+  covers:"haeyuli.redpen.covers.v1"
 };
 var read = rd(K.read, {}) || {};
 var unread = rd(K.un, {}) || {};
 var art  = rd(K.art, {}) || {};
 var quiz = rd(K.quiz, {}) || {};
+/* 2026-11-22 · 직접 찍은 책 표지 (책 key → dataURL) — 표지 사진이 없는 전집을 카메라로 채운다 */
+var covers = rd(K.covers, {}) || {};
+if (!covers || typeof covers !== "object") covers = {};
 /* 다른 기기에서 풀어 둔 책(✓ 취소)은 다시 읽지 않은 책으로 */
 (function(){
   for (var k in unread){
@@ -28134,10 +28156,119 @@ var CHIP = "";               /* 시리즈 필터 */
 var SHOWN = 120;             /* 한 번에 그리는 책 수(전체 보기 성능) */
 var SHOWN_FOR = null;
 
-function cover(b){
-  if (b.img) return '<img src="' + esc(b.img) + '" alt="' + esc(b.t) + ' 표지" loading="lazy">';
-  /* 2026-11-22 · 표지 사진이 없는 전집은 같은 비율의 빈 표지 칸 (권 번호가 제목을 가리지 않게) */
-  return '<span class="rb-noimg" aria-hidden="true"><span>' + esc(b.em || "📘") + '</span></span>';
+/* ---------- 2-2. 📷 직접 찍은 표지 (haeyuli.redpen.covers.v1) ----------
+   표지 사진이 없는 전집(솔루토이 한자·정치경제·예술·탐구, 자연의 신비, 지식별, 코딩 등)은
+   책 표지를 폰·아이패드 카메라로 찍어 그 자리에서 채운다. 사진은 260px JPEG로 줄여 저장한다. */
+var COVER_KEY = "haeyuli.redpen.covers.v1";
+var COVER_MAX = 260;
+function coverOf(key){ var d = covers[key]; return (typeof d === "string" && d.length > 64) ? d : ""; }
+function cover(b, cam){
+  var mine = coverOf(b.key), src = mine || b.img || "";
+  if (src){
+    var im = '<img src="' + esc(src) + '" alt="' + esc(b.t) + ' 표지" loading="lazy">';
+    if (!mine || !cam) return im;
+    /* 내가 찍은 표지 — 작은 📷 로 다시 찍기 */
+    return '<span class="rb-cvbox">' + im +
+      '<button class="rb-campill" type="button" data-rbcam="' + esc(b.key) +
+        '" aria-label="책 표지 사진 바꾸기" title="표지 사진 바꾸기">📷</button></span>';
+  }
+  /* 표지 사진이 없는 전집은 같은 비율의 빈 표지 칸 — 가운데 📷 을 누르면 바로 촬영 */
+  return '<span class="rb-noimg">' +
+    (cam
+      ? '<button class="rb-cam" type="button" data-rbcam="' + esc(b.key) +
+        '" aria-label="책 표지 찍기">📷<em>표지 찍기</em></button>'
+      : '<span aria-hidden="true">' + esc(b.em || "📘") + '</span>') +
+    '</span>';
+}
+function bookCardHTML(b){
+  var on = isRead(b.key);
+  return '<div class="rb-book' + (on ? " read" : "") + '" data-book="' + esc(b.key) + '">' +
+    cover(b, true) + '<span class="rb-bn">' + b.n + '</span>' +
+    '<div class="rb-bt">' + esc(b.t) + '</div>' +
+    '<div class="rb-ba">' +
+      '<button class="rb-chk' + (on ? " on" : "") + '" type="button" data-rbtoggle="' + esc(b.key) + '">' + (on ? "✓ 읽었어요" : "읽었어요") + '</button>' +
+      '<button class="rb-pen" type="button" data-rbopen="' + esc(b.key) + '" aria-label="독후활동">📝</button>' +
+    '</div></div>';
+}
+function refreshCoverCard(key){
+  var el = document.querySelector('[data-book="' + String(key).replace(/"/g, '\\"') + '"]');
+  if (el && el.classList && el.classList.contains("rb-book") && BYKEY[key]) el.outerHTML = bookCardHTML(BYKEY[key]);
+}
+function rbCamInput(){
+  var inp = document.getElementById("rbCamFile");
+  if (inp) return inp;
+  inp = document.createElement("input");
+  inp.type = "file"; inp.id = "rbCamFile"; inp.accept = "image/*";
+  inp.setAttribute("capture", "environment");
+  inp.style.cssText = "position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;";
+  inp.addEventListener("change", function(){
+    var f = null; try { f = inp.files && inp.files[0]; } catch(e){}
+    var k = inp.getAttribute("data-k") || "";
+    try { inp.value = ""; } catch(e){}
+    if (f && k) rbSaveCover(k, f);
+  });
+  document.body.appendChild(inp);
+  return inp;
+}
+function rbPickCover(key){
+  if (!BYKEY[key]) return;
+  var inp = rbCamInput();
+  inp.setAttribute("data-k", key);
+  try { inp.value = ""; } catch(e){}
+  try { inp.click(); } catch(e){ if (SB.toast) SB.toast("📷 이 기기에서는 카메라를 열 수 없어요"); }
+}
+function rbSaveCover(key, file){
+  if (!file) return;
+  if (!/^image\//.test(String(file.type || "image/"))){ if (SB.toast) SB.toast("🖼 사진 파일만 쓸 수 있어요"); return; }
+  var url = "";
+  try { url = URL.createObjectURL(file); } catch(e){}
+  var img = new Image();
+  function fail(msg){
+    try { if (url) URL.revokeObjectURL(url); } catch(e){}
+    if (SB.toast) SB.toast(msg || "😢 사진을 읽지 못했어요 — 한 번 더 찍아 주세요");
+  }
+  img.onload = function(){
+    try {
+      var w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
+      if (!w || !h){ fail(); return; }
+      /* 긴 쪽을 260px에 맞춰 줄인다 — 세로로 찍은 표지도 그대로 */
+      var s = Math.min(1, COVER_MAX / Math.max(w, h));
+      var cw = Math.max(1, Math.round(w * s)), ch = Math.max(1, Math.round(h * s));
+      var cv = document.createElement("canvas"); cv.width = cw; cv.height = ch;
+      var cx = cv.getContext("2d");
+      cx.fillStyle = "#fff"; cx.fillRect(0, 0, cw, ch);       /* 투명 PNG가 검게 나오지 않게 */
+      cx.drawImage(img, 0, 0, cw, ch);
+      var data = "";
+      try { data = cv.toDataURL("image/jpeg", 0.78); } catch(e2){}
+      if (!data || data.length < 64){ fail(); return; }
+      if (data.length > 60000){                               /* 45KB가 넘으면 한 번 더 줄인다 */
+        var cv2 = document.createElement("canvas");
+        cv2.width = Math.max(1, Math.round(cw * .7)); cv2.height = Math.max(1, Math.round(ch * .7));
+        var cx2 = cv2.getContext("2d");
+        cx2.fillStyle = "#fff"; cx2.fillRect(0, 0, cv2.width, cv2.height);
+        cx2.drawImage(cv, 0, 0, cv2.width, cv2.height);
+        try { var d2 = cv2.toDataURL("image/jpeg", .7); if (d2 && d2.length < data.length) data = d2; } catch(e3){}
+      }
+      var had = Object.prototype.hasOwnProperty.call(covers, key), prev = covers[key];
+      covers[key] = data;
+      if (!wr(COVER_KEY, covers)){
+        if (had) covers[key] = prev; else delete covers[key];
+        fail("📸 저장 공간이 꽉 찼어요 — 기기에서 사진 몇 장을 지운 뒤 다시 해 주세요");
+        return;
+      }
+      try { if (url) URL.revokeObjectURL(url); } catch(e){}
+      refreshCoverCard(key);
+      if (SB.toast) SB.toast("📸 책 표지를 저장했어요!");
+    } catch(e){ fail(); }
+  };
+  img.onerror = function(){ fail(); };
+  if (url){ img.src = url; return; }
+  try {
+    var fr = new FileReader();
+    fr.onload = function(){ img.src = String(fr.result || ""); };
+    fr.onerror = function(){ fail(); };
+    fr.readAsDataURL(file);
+  } catch(e){ fail(); }
 }
 
 function buildTabs(){
@@ -28198,16 +28329,7 @@ function shelfHTML(){
 
   var list = CHIP ? (seriesOf(CHIP) ? seriesOf(CHIP).books : []) : BOOKS;
   var shown = Math.min(SHOWN, list.length);
-  var grid = list.slice(0, shown).map(function(b){
-    var on = isRead(b.key);
-    return '<div class="rb-book' + (on ? " read" : "") + '" data-book="' + esc(b.key) + '">' +
-      cover(b) + '<span class="rb-bn">' + b.n + '</span>' +
-      '<div class="rb-bt">' + esc(b.t) + '</div>' +
-      '<div class="rb-ba">' +
-        '<button class="rb-chk' + (on ? " on" : "") + '" type="button" data-rbtoggle="' + esc(b.key) + '">' + (on ? "✓ 읽었어요" : "읽었어요") + '</button>' +
-        '<button class="rb-pen" type="button" data-rbopen="' + esc(b.key) + '" aria-label="독후활동">📝</button>' +
-      '</div></div>';
-  }).join("");
+  var grid = list.slice(0, shown).map(bookCardHTML).join("");
 
   var prog = "";
   if (CHIP && seriesOf(CHIP)) {
@@ -29932,6 +30054,14 @@ try { for (var _shi = 0; _shi < SHELF_DEFS.length; _shi++) shTabN(SHELF_DEFS[_sh
 /* ---------- 7. 이벤트 ---------- */
 document.addEventListener("click", function(e){
   var el = e.target; if (!el || !el.closest) return;
+
+  /* 📷 표지 찍기 — 책 상세·읽었어요로 넘어가지 않게 여기서 먼저 끊는다 */
+  var camBtn = el.closest("[data-rbcam]");
+  if (camBtn){
+    e.preventDefault(); e.stopPropagation();
+    rbPickCover(camBtn.getAttribute("data-rbcam"));
+    return;
+  }
 
   var tab = el.closest("[data-rbtab]");
   if (tab){
