@@ -11241,6 +11241,8 @@ SB.spend = function(n){
   if (d.st.total < n) return false;
   d.st.total -= n;
   writeDash(d.st, d.led);
+  /* 다 써서 0이 된 것은 '일부러 쓴 것' — 새로고침 때 백업으로 되살리지 않는다 */
+  try { if (d.st.total === 0) localStorage.setItem("yuli.stars.reset.v1", String(Date.now())); } catch(e){}
   SB.refresh();
   return true;
 };
