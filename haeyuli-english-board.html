@@ -6535,6 +6535,11 @@ body.mob .rb-campill{width:6.4vw;height:6.4vw;font-size:3.1vw;}
 .cn-entry .tx span{display:block;font-size:.72rem;color:var(--muted);font-weight:700;}
 .cn-entry .go{font-size:.76rem;font-weight:900;background:#ffd166;color:#7a4c00;border-radius:.7rem;padding:.42rem .7rem;}
 
+.cn-btn.on{background:#e05a3d;color:#fff;}
+.cn-btn.play{background:#e9f7ff;color:#1f6b96;border:.14vh solid #cfe9f8;}
+.cn-recnote{font-size:.68rem;font-weight:800;color:#c1553a;line-height:1.3;}
+.cn-acts{display:flex;gap:.28rem;flex-wrap:wrap;margin-top:.34rem;}
+.cn-mini.play{background:#eaf4fb;color:#1f6b96;}
 /* ---------- ⑤ ⭐ 별 5개 → 100원 ---------- */
 .pg-btn.star5{background:linear-gradient(140deg,#fff2c9,#ffe08a);color:#7a4c00;font-weight:900;}
 .pg-starline{display:flex;align-items:center;justify-content:center;gap:.35rem;font-size:.72rem;font-weight:800;color:#8a5a08;margin-top:.2rem;}
@@ -34397,8 +34402,10 @@ else setTimeout(boot, 0);
 <script id="final1122cn">
 /* =====================================================================
    🐼 2026-11-22 · 중국어 (도요새 중국어 기준)
-   · 단어 카드: 간체자 + 병음 + 한국어 뜻 + zh-CN 음성
-   · 하루 일상대화: 듣기 → 따라 말하기(녹음) → 다시 듣기 · 녹음하면 ⭐ +1
+   · 단어 카드: 간체자 + 병음 + 한국어 뜻 + 원어민 MP3(cn-audio/)
+   · 단어 카드 · 하루 일상대화 모두 듣기 → 따라 말하기(녹음) → 내 목소리 듣기
+   · 녹음하면 ⭐ +1 (하루 5개까지)
+   · MP3가 없거나 재생이 안 되면 브라우저 음성(zh-CN)으로 넘어감
    ===================================================================== */
 (function(){
 "use strict";
@@ -34456,13 +34463,76 @@ var DLG = [
   ["再见！明天见！","zài jiàn! míng tiān jiàn!","잘 가! 내일 봐!"]
 ];
 
+/* 낱말을 한 줄로 펴 놓고 cn-audio/w_번호.mp3 와 1:1 로 맞춘다 */
+var WFLAT = [], CATOFF = [];
+CATS.forEach(function(c){
+  CATOFF.push(WFLAT.length);
+  c.w.forEach(function(w){
+    WFLAT.push({ n:w[0], p:w[1], k:w[2], em:c.em, nm:c.nm, src:"cn-audio/w_" + WFLAT.length + ".mp3" });
+  });
+});
+var SFLAT = DLG.map(function(d, i){
+  return { n:d[0], p:d[1], k:d[2], src:"cn-audio/s_" + i + ".mp3" };
+});
+
 var ST = { mode:"cards", cat:0, wi:0 };
-var MR = { rec:null, chunks:[], id:null, st:null, urls:{} };
+var MR = { rec:null, chunks:[], id:null, st:null, urls:{}, mime:"", timer:null };
 
-function catOf(k){ for (var i = 0; i < CATS.length; i++) if (CATS[i].k === k) return CATS[i]; return CATS[0]; }
-function speak(t){ try { if (SB.speak) SB.speak(t, false, "zh-CN"); } catch(e){} }
+function speak(t, slow){
+  try { if (SB.speak) SB.speak(t, !!slow, "zh-CN"); } catch(e){}
+}
 
-/* 오늘 중국어로 받은 별 개수 (하루 5개까지) */
+/* ---------------- 원어민 MP3 재생 (아이패드 · 아이폰 · 갤럭시 공통) ---------------- */
+var CN_AUDIO = (function(){
+  var el = null, pre = {}, gen = 0, primed = false;
+  var SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
+  function player(){
+    if (!el){ try { el = new Audio(); el.preload = "auto"; } catch(e){ el = null; } }
+    return el;
+  }
+  function prefetch(src){
+    if (!src || pre[src]) return;
+    try { var a = new Audio(); a.preload = "auto"; a.src = src; pre[src] = a; } catch(e){}
+  }
+  function stop(){
+    gen++;
+    var a = el;
+    if (a){ try { a.onended = null; a.onerror = null; a.pause(); } catch(e){} }
+    try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){}
+  }
+  /* iOS 사파리는 '사람 손가락' 안에서 처음 소리를 내야 이후에도 재생된다 — 첫 탭에 아주 조용한 소리를 한 번 흘려 둔다 */
+  function prime(){
+    if (primed) return; primed = true;
+    var a = player(); if (!a) return;
+    try {
+      var g = gen;
+      a.src = SILENT;
+      var p = a.play();
+      if (p && p.then) p.then(function(){ if (g === gen){ try { a.pause(); } catch(e){} } })["catch"](function(){});
+    } catch(e){}
+  }
+  /* MP3 재생 → 파일이 없거나 재생 실패하면 브라우저 음성으로 */
+  function play(src, text, slow){
+    stop();
+    var my = gen;
+    var a = player();
+    if (!a){ speak(text, slow); return; }
+    var fb = false;
+    var fallback = function(){ if (fb || my !== gen) return; fb = true; speak(text, slow); };
+    a.onerror = function(){ fallback(); };
+    try {
+      a.src = src;
+      try { a.preservesPitch = true; a.mozPreservesPitch = true; a.webkitPreservesPitch = true; } catch(e){}
+      a.playbackRate = slow ? 0.72 : 1;
+    } catch(e){}
+    var p = null;
+    try { p = a.play(); } catch(e){ p = null; }
+    if (p && p["catch"]) p["catch"](function(){ fallback(); });
+  }
+  return { play:play, prefetch:prefetch, prime:prime, stop:stop };
+})();
+
+/* ---------------- 오늘 중국어로 받은 별 (하루 5개까지) ---------------- */
 function starsToday(){
   try {
     var d = SB.readDash ? SB.readDash() : null;
@@ -34483,20 +34553,47 @@ function awardRec(id){
   return got;
 }
 
-/* ---------------- 녹음 ---------------- */
+/* ---------------- 녹음 (아이패드·아이폰은 mp4, 갤럭시·크롬은 webm) ---------------- */
+function pickMime(){
+  var m = "";
+  try {
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported){
+      if (MediaRecorder.isTypeSupported("audio/mp4")) m = "audio/mp4";
+      else if (MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) m = "audio/webm;codecs=opus";
+      else if (MediaRecorder.isTypeSupported("audio/webm")) m = "audio/webm";
+    }
+  } catch(e){}
+  return m;
+}
 function startRec(id){
   if (MR.rec){ try { MR.rec.stop(); } catch(e){} return; }
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder){
-    toast("이 기기에서는 녹음이 안 돼요 (아이패드는 사파리로 열어 주세요)"); return;
+    toast("이 기기에서는 녹음이 안 돼요. 사파리나 크롬으로 열어 주세요 🎙️");
+    return;
   }
+  CN_AUDIO.stop();
   navigator.mediaDevices.getUserMedia({ audio:true }).then(function(st){
-    var chunks = [];
-    var mr = new MediaRecorder(st);
-    MR.st = st; MR.rec = mr; MR.id = id; MR.chunks = chunks;
-    mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
-    mr.onstop = function(){
+    var chunks = [], mime = pickMime(), mr = null;
+    try { mr = mime ? new MediaRecorder(st, { mimeType:mime }) : new MediaRecorder(st); }
+    catch(e){ try { mr = new MediaRecorder(st); } catch(e2){ mr = null; } }
+    if (!mr){
       try { st.getTracks().forEach(function(t){ t.stop(); }); } catch(e){}
-      var type = (chunks[0] && chunks[0].type) || "audio/webm";
+      toast("이 브라우저는 녹음을 지원하지 않아요 😢");
+      return;
+    }
+    MR.st = st; MR.rec = mr; MR.id = id; MR.chunks = chunks; MR.mime = mime;
+    mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
+    mr.onerror = function(){
+      if (MR.timer){ clearTimeout(MR.timer); MR.timer = null; }
+      try { st.getTracks().forEach(function(t){ t.stop(); }); } catch(e){}
+      MR.rec = null; MR.st = null; MR.id = null;
+      render();
+      toast("녹음이 중간에 멈췄어요. 다시 해 볼까요? 🎙️");
+    };
+    mr.onstop = function(){
+      if (MR.timer){ clearTimeout(MR.timer); MR.timer = null; }
+      try { st.getTracks().forEach(function(t){ t.stop(); }); } catch(e){}
+      var type = (mr && mr.mimeType) || mime || (chunks[0] && chunks[0].type) || "audio/mp4";
       var blob = new Blob(chunks, { type:type });
       try { if (MR.urls[id]) URL.revokeObjectURL(MR.urls[id]); } catch(e){}
       MR.urls[id] = URL.createObjectURL(blob);
@@ -34504,20 +34601,38 @@ function startRec(id){
       render();
       awardRec(id);
     };
-    mr.start();
+    try { mr.start(); }
+    catch(e){
+      try { st.getTracks().forEach(function(t){ t.stop(); }); } catch(e2){}
+      MR.rec = null; MR.st = null; MR.id = null;
+      render();
+      toast("녹음을 시작하지 못했어요. 잠시 뒤 다시 눌러 주세요 🎙️");
+      return;
+    }
+    MR.timer = setTimeout(function(){ if (MR.rec){ try { MR.rec.stop(); } catch(e){} } }, 15000);
     render();
   }, function(){
-    toast("마이크를 켜 주세요 (설정 → 마이크 허용)");
+    toast("마이크 권한을 허용해 주세요! (설정 → 마이크)");
   });
 }
-function stopRec(){ if (MR.rec){ try { MR.rec.stop(); } catch(e){} } }
+function stopRec(){
+  if (MR.timer){ clearTimeout(MR.timer); MR.timer = null; }
+  if (MR.rec){ try { MR.rec.stop(); } catch(e){} }
+}
 function playRec(id){
   var u = MR.urls[id];
   if (!u){ toast("먼저 녹음해 보세요 🎙️"); return; }
+  CN_AUDIO.stop();
   try { var a = new Audio(u); a.play(); } catch(e){}
 }
 
 /* ---------------- 그리기 ---------------- */
+function curCard(){
+  var c = CATS[ST.cat] || CATS[0];
+  var wi = ST.wi % c.w.length;
+  var gi = (CATOFF[ST.cat] || 0) + wi;
+  return { c:c, gi:gi, w:WFLAT[gi] || { n:"", p:"", k:"", src:"" } };
+}
 function paintCats(){
   var box = $("cnCats"); if (!box) return;
   if (ST.mode !== "cards"){ box.hidden = true; box.innerHTML = ""; return; }
@@ -34529,40 +34644,52 @@ function paintCats(){
 }
 function paintCards(){
   var body = $("cnBody"); if (!body) return;
-  var c = CATS[ST.cat] || CATS[0];
-  var w = c.w[ST.wi % c.w.length];
-  var n = w[0], p = w[1], k = w[2];
+  var cc = curCard(), c = cc.c, w = cc.w;
+  var id = "w" + cc.gi, rec = !!MR.urls[id], on = !!(MR.rec && MR.id === id);
   body.innerHTML =
     '<div class="cn-card">' +
-      '<span class="cn-hz">' + esc(n) + '</span>' +
-      '<span class="cn-pin">' + esc(p) + '</span>' +
-      '<span class="cn-ko">' + esc(k) + '</span>' +
+      '<span class="cn-hz">' + esc(w.n) + '</span>' +
+      '<span class="cn-pin">' + esc(w.p) + '</span>' +
+      '<span class="cn-ko">' + esc(w.k) + '</span>' +
       '<div class="cn-cardrow">' +
         '<button class="cn-btn mint" type="button" data-cnsay="1">🔊 발음 듣기</button>' +
-        '<button class="cn-btn" type="button" data-cnslow="1">🐢 천천히</button>' +
+        '<button class="cn-btn sun" type="button" data-cnslow="1">🐢 천천히</button>' +
       '</div>' +
+      '<div class="cn-cardrow">' +
+        '<button class="cn-btn rec' + (on ? " on" : "") + '" type="button" data-cnrec="' + id + '">' +
+          (on ? "⏹️ 녹음 끝" : "🎙️ 따라 말하기 녹음") + '</button>' +
+        (rec ? '<button class="cn-btn play" type="button" data-cnplay="' + id + '">▶️ 내 목소리 듣기</button>' : '') +
+      '</div>' +
+      (on ? '<span class="cn-recnote">녹음 중… 다 말했으면 ⏹️ 를 눌러요</span>' :
+        (rec ? '<span class="cn-recnote">원어민 발음과 내 목소리를 번갈아 들어 보세요 👂</span>' : '')) +
     '</div>' +
     '<div class="cn-nav"><button class="cn-btn" type="button" data-cnprev="1">‹ 이전</button>' +
       '<span>' + c.em + " " + esc(c.nm) + " · " + (ST.wi + 1) + " / " + c.w.length + '낱말</span>' +
       '<button class="cn-btn" type="button" data-cnnext="1">다음 ›</button></div>' +
-    '<div class="cn-tip">🔊 를 누르면 중국어로 읽어 줘요. 입으로 먼저 따라 해 보세요!</div>';
+    '<div class="cn-tip">🔊 를 누르면 중국어 원어민 발음이 바로 나와요. 귀로 먼저 듣고 🎙️ 로 따라 말해 보세요!</div>';
+  CN_AUDIO.prefetch(w.src);
+  var nx = WFLAT[(cc.gi + 1) % WFLAT.length]; if (nx) CN_AUDIO.prefetch(nx.src);
 }
 function paintTalk(){
   var body = $("cnBody"); if (!body) return;
   var st = starsToday();
   body.innerHTML =
     '<div class="cn-tip">오늘 모은 중국어 별 <b>' + st + ' / 5</b> · 녹음하면 ⭐ +1 (하루 5개까지)</div>' +
-    '<div class="cn-dlg">' + DLG.map(function(d, i){
-      var id = String(i), rec = !!MR.urls[id], on = MR.rec && MR.id === id;
+    '<div class="cn-dlg">' + SFLAT.map(function(d, i){
+      var id = "s" + i, rec = !!MR.urls[id], on = !!(MR.rec && MR.id === id);
       return '<div class="cn-line' + (rec ? " recd" : "") + '" data-cnline="' + id + '">' +
         '<span class="cn-av" aria-hidden="true">🐼</span>' +
-        '<div class="tx"><b>' + esc(d[0]) + '</b><i>' + esc(d[1]) + '</i><span>' + esc(d[2]) + '</span></div>' +
-        '<div class="acts">' +
-          '<button class="cn-mini" type="button" data-cndsay="' + id + '">🔊</button>' +
-          '<button class="cn-mini rec' + (on ? " on" : "") + '" type="button" data-cnrec="' + id + '">' + (on ? "■ 그만" : "🎙️ 녹음") + '</button>' +
-          (rec ? '<button class="cn-mini" type="button" data-cnplay="' + id + '">▶ 내 목소리</button>' : '') +
+        '<div class="tx"><b>' + esc(d.n) + '</b><i>' + esc(d.p) + '</i><span>' + esc(d.k) + '</span>' +
+          '<div class="cn-acts">' +
+            '<button class="cn-mini" type="button" data-cndsay="' + i + '">🔊 듣기</button>' +
+            '<button class="cn-mini" type="button" data-cndslow="' + i + '">🐢 천천히</button>' +
+            '<button class="cn-mini rec' + (on ? " on" : "") + '" type="button" data-cnrec="' + id + '">' +
+              (on ? "⏹️ 녹음 끝" : "🎙️ 따라 말하기") + '</button>' +
+            (rec ? '<button class="cn-mini play" type="button" data-cnplay="' + id + '">▶️ 내 목소리</button>' : '') +
+          '</div>' +
         '</div></div>';
     }).join("") + '</div>';
+  SFLAT.forEach(function(d){ CN_AUDIO.prefetch(d.src); });
 }
 function render(){
   var body = $("cnBody"); if (!body) return;
@@ -34606,11 +34733,12 @@ function bind(){
   if (body && !body.__b){
     body.__b = 1;
     body.addEventListener("click", function(e){
-      if (e.target.closest("[data-cnsay]")){ speak((CATS[ST.cat].w[ST.wi % CATS[ST.cat].w.length])[0]); return; }
+      CN_AUDIO.prime();
+      if (e.target.closest("[data-cnsay]")){
+        var cc = curCard(); CN_AUDIO.play(cc.w.src, cc.w.n, false); return;
+      }
       if (e.target.closest("[data-cnslow]")){
-        var w = CATS[ST.cat].w[ST.wi % CATS[ST.cat].w.length];
-        try { if (SB.speak) SB.speak(w[0], true, "zh-CN"); } catch(err){}
-        return;
+        var cs = curCard(); CN_AUDIO.play(cs.w.src, cs.w.n, true); return;
       }
       if (e.target.closest("[data-cnprev]")){
         var c = CATS[ST.cat]; ST.wi = (ST.wi - 1 + c.w.length) % c.w.length; render(); return;
@@ -34619,7 +34747,9 @@ function bind(){
         var c2 = CATS[ST.cat]; ST.wi = (ST.wi + 1) % c2.w.length; render(); return;
       }
       var say = e.target.closest("[data-cndsay]");
-      if (say){ speak(DLG[Number(say.getAttribute("data-cndsay"))][0]); return; }
+      if (say){ var si = Number(say.getAttribute("data-cndsay")); var sd = SFLAT[si]; CN_AUDIO.play(sd.src, sd.n, false); return; }
+      var slow = e.target.closest("[data-cndslow]");
+      if (slow){ var sj = Number(slow.getAttribute("data-cndslow")); var sd2 = SFLAT[sj]; CN_AUDIO.play(sd2.src, sd2.n, true); return; }
       var rc = e.target.closest("[data-cnrec]");
       if (rc){
         var id = rc.getAttribute("data-cnrec");
@@ -34641,7 +34771,7 @@ function bind(){
   }
 }
 
-var CN = { render:render, setMode:setMode, cats:CATS, dlg:DLG };
+var CN = { render:render, setMode:setMode, cats:CATS, dlg:DLG, words:WFLAT, audio:CN_AUDIO };
 window.CN = CN;
 
 try {
@@ -34653,7 +34783,6 @@ if (document.readyState === "loading") document.addEventListener("DOMContentLoad
 else bind();
 setTimeout(function(){ try { bind(); } catch(e){} }, 900);
 })();
-
 </script>
 <script id="final1122star">
 /* =====================================================================
