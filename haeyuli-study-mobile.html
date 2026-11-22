@@ -7137,6 +7137,112 @@ body.mob .rb-campill{width:6.4vw;height:6.4vw;font-size:3.1vw;}
 }
 
 </style>
+<style id="wb-css">
+/* ================= 📘 공부 설정 (문제집 진도 · 구매 요청 알림) ================= */
+.wbsetbtn{
+  display:inline-flex;align-items:center;gap:.24rem;height:2.1rem;padding:0 .58rem;border-radius:999px;
+  background:linear-gradient(135deg,#eaf9f1,#d9f0ff);color:#17697f;
+  box-shadow:inset 0 0 0 1px #c6e6f2;font-size:.76rem;font-weight:900;white-space:nowrap;line-height:1;
+}
+.wbsetbtn .wb-ico{font-size:.92rem;line-height:1;}
+.wbsetbtn .wb-lb{letter-spacing:-.01em;}
+.wbsetbtn:active{transform:scale(.95);}
+.wbsheet{width:min(72rem,96vw);max-height:92vh;}
+.modal.wbmodal{z-index:80;}          /* 휴대폰 아래 탭줄(z 70)보다 위에 뜨게 */
+.wbbody{gap:.65rem;}
+.wbfoot{justify-content:space-between;}
+.wbhint{font-size:.68rem;font-weight:800;color:#8ea4b6;line-height:1.4;}
+
+/* 🛒 구매 요청 알림 (모달 안) */
+.wbal{background:linear-gradient(135deg,#fff5e0,#ffe9c9);border-radius:1rem;padding:.7rem .85rem;box-shadow:inset 0 0 0 1px #f4d79a;}
+.wbal-h{display:flex;align-items:center;gap:.4rem;font-size:.88rem;color:#8a5a08;margin-bottom:.4rem;}
+.wbal-h span{margin-left:auto;font-size:.7rem;font-weight:900;background:#fff;border-radius:999px;padding:.12rem .5rem;color:#a86a00;}
+.wbal ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.34rem;}
+.wbal li{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;font-size:.78rem;color:#6b4a12;}
+.wbal li b{font-size:.84rem;}
+.wbal li > span{font-weight:800;color:#8f6a2c;}
+.wbal li button:first-of-type{margin-left:auto;}
+
+/* 홈 '오늘의 숙제' 안 배너 */
+.hwbn{background:linear-gradient(135deg,#fff4e2,#ffe6c4);border-radius:.9rem;padding:.6rem .75rem;margin:0 0 .55rem;
+  box-shadow:inset 0 0 0 1px #f2d59c;display:flex;flex-direction:column;gap:.3rem;}
+.hwbn-h{font-size:.88rem;font-weight:900;color:#8a5a08;}
+.hwbn-row{display:flex;align-items:baseline;gap:.35rem;flex-wrap:wrap;font-size:.76rem;color:#6b4a12;}
+.hwbn-row b{font-size:.82rem;}
+.hwbn-row > span{font-weight:800;color:#8f6a2c;}
+.hwbn-row button{margin-left:auto;}
+.hwbn-a{display:flex;gap:.35rem;margin-top:.2rem;flex-wrap:wrap;}
+.hwbn button,.wbal button,.wbnb{
+  border-radius:.55rem;background:#fff;box-shadow:inset 0 0 0 1px #edd6ab;color:#8a5a08;
+  font-size:.68rem;font-weight:900;padding:.28rem .52rem;white-space:nowrap;
+}
+.hwbn button:active,.wbal button:active{transform:scale(.96);}
+
+/* 문제집 카드 */
+.wbcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(19rem,1fr));gap:.6rem;align-items:start;}
+.wbc{background:#fbfdff;border-radius:1rem;padding:.65rem .7rem;box-shadow:inset 0 0 0 1px #e3eef8;
+  display:flex;flex-direction:column;gap:.42rem;min-width:0;}
+.wbc-h{display:flex;align-items:center;gap:.4rem;min-width:0;}
+.wbc-em{font-size:1.05rem;line-height:1;}
+.wbc-nm{display:flex;flex-direction:column;line-height:1.22;min-width:0;flex:1 1 auto;}
+.wbc-nm b{font-size:.86rem;font-weight:900;color:#22455c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wbc-nm span{font-size:.66rem;font-weight:900;color:#8aa4b8;}
+.wbc-del{flex:0 0 auto;margin-left:auto;font-size:.66rem;font-weight:900;color:#b45a6a;background:#fff;
+  border-radius:.5rem;padding:.24rem .44rem;box-shadow:inset 0 0 0 1px #f3d6dc;}
+.wbc-bar{height:.5rem;border-radius:999px;background:#edf3f8;overflow:hidden;}
+.wbc-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#8eddba,#3cbf8c);transition:width .3s;}
+.wbc-meta{display:flex;align-items:baseline;gap:.35rem;flex-wrap:wrap;font-size:.72rem;font-weight:800;color:#7b93a8;}
+.wbc-meta b{font-size:.84rem;font-weight:900;color:#1f6b94;}
+.wbc-rem{margin-left:auto;color:#2f7f63;}
+.wbc-days{display:flex;align-items:center;gap:.24rem;flex-wrap:wrap;}
+.wbc-lb{font-size:.66rem;font-weight:900;color:#93a9bb;margin-right:.1rem;}
+.wbd{height:1.5rem;min-width:1.5rem;padding:0 .28rem;border-radius:.5rem;background:#fff;
+  box-shadow:inset 0 0 0 1px #dbe9f3;font-size:.72rem;font-weight:900;color:#7b93a8;}
+.wbd.on{background:linear-gradient(135deg,#7fd8b0,#37bd8b);color:#fff;box-shadow:none;}
+.wbd.pre{font-size:.62rem;background:#f2f8fc;color:#5d7f97;padding:0 .3rem;}
+.wbc-f{display:flex;gap:.35rem;}
+.wbc-f label{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:.14rem;font-size:.62rem;font-weight:900;color:#8aa4b8;}
+.wbc-f input{height:1.9rem;width:100%;min-width:0;border-radius:.5rem;border:1px solid #dcebf6;background:#fff;
+  padding:0 .4rem;font-size:.8rem;font-weight:800;color:#22455c;outline:none;}
+.wbc-f input:focus{border-color:#7cc6ee;}
+.wbc-tog{display:flex;align-items:center;gap:.34rem;font-size:.72rem;font-weight:900;color:#3f7f63;
+  background:#f3fbf7;border-radius:.55rem;padding:.32rem .45rem;}
+.wbc-tog input{width:.95rem;height:.95rem;}
+.wbc-a{display:flex;gap:.3rem;flex-wrap:wrap;}
+.wbb{height:1.85rem;padding:0 .62rem;border-radius:.55rem;background:#f1f8fd;color:#4b7a94;
+  font-size:.72rem;font-weight:900;box-shadow:inset 0 0 0 1px #dcebf6;}
+.wbb.pri{background:linear-gradient(135deg,#5cb4e6,#3d90c9);color:#fff;box-shadow:none;}
+.wbb:active{transform:scale(.97);}
+.wbadd{background:#f7fcff;box-shadow:inset 0 0 0 1.5px #cfe4f3;}
+.frow2{display:flex;align-items:center;gap:.4rem;font-size:.7rem;font-weight:900;color:#7b93a8;}
+.frow2 > span{flex:0 0 4.6rem;}
+.frow2 input,.frow2 select{flex:1;min-width:0;height:1.95rem;border-radius:.5rem;border:1px solid #dcebf6;
+  background:#fff;padding:0 .45rem;font-size:.8rem;font-weight:800;color:#22455c;outline:none;}
+.frow2 input:focus,.frow2 select:focus{border-color:#7cc6ee;}
+.wbnone{font-size:.78rem;font-weight:800;color:#8ea4b6;margin:.2rem 0;}
+
+@media (max-width:480px){
+  .wbsetbtn{height:1.95rem;padding:0 .42rem;font-size:.68rem;gap:.2rem;}
+  .wbsetbtn .wb-ico{font-size:.86rem;}
+  .wbsheet{width:96vw;max-height:86vh;}
+  .wbcards{grid-template-columns:1fr;}
+  .wbfoot{gap:.4rem;}
+  .wbhint{font-size:.62rem;}
+}
+/* 휴대폰 폭에서는 '📘 공부 설정'까지 한 줄에 들어가게 (줄바꿈 없이) */
+@media (max-width:430px){
+  body.mob .topbar{gap:.3vh;}
+  body.mob .hdr-acts{gap:.16rem;}
+  body.mob .wbsetbtn{height:1.85rem;padding:0 .32rem;font-size:.65rem;gap:.16rem;}
+  body.mob .topbar .pill{padding:0 .8vh;}
+  body.mob .pill .lbl{display:none;}
+  body.mob .brand b{font-size:.95rem;}
+  .hwbn-row button{font-size:.64rem;padding:.24rem .44rem;}
+}
+@media (max-width:372px){
+  body.mob .wbsetbtn .wb-lb{display:none;}
+}
+</style>
 </head>
 <body class="mob">
 
@@ -7396,7 +7502,7 @@ body.mob .rb-campill{width:6.4vw;height:6.4vw;font-size:3.1vw;}
       <span>📚</span><b id="learnNum">0</b><span class="lbl">오늘 배운 문장</span>
     </button>
 
-    <span class="hdr-acts"><button class="settingsbtn" id="btnSettings" type="button" aria-label="설정" title="설정"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ic-gear"></use></svg></button>
+    <span class="hdr-acts"><button class="wbsetbtn" id="btnWbSet" type="button" aria-label="공부 설정 — 문제집 진도와 구매 요청 알림" title="공부 설정 — 문제집 진도"><span class="wb-ico">📘</span><span class="wb-lb">공부 설정</span></button><button class="settingsbtn" id="btnSettings" type="button" aria-label="설정" title="설정"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ic-gear"></use></svg></button>
     <button class="settingsbtn refreshbtn" id="btnRefresh" type="button" aria-label="새로고침" title="최신 화면 새로고침"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ic-refresh"></use></svg></button></span>
   </header>
 
@@ -22971,6 +23077,27 @@ function mergeNtfy(l, c){
   return { topic:pick.topic, on:!!pick.on, at:num(pick.at) || Math.max(la, ca, 1) };
 }
 
+/* 📘 문제집 진도 — 같은 문제집은 마지막에 손댄 쪽(at 최신)이 이긴다 */
+function mergeWb(l, c){
+  var lo = (l && Array.isArray(l.list)) ? l.list : [];
+  var co = (c && Array.isArray(c.list)) ? c.list : [];
+  var out = [], seen = {}, i, j;
+  for (i = 0; i < lo.length; i++){
+    var a = lo[i], id = String((a && a.id) || "");
+    if (!id || seen[id]) continue;
+    seen[id] = 1;
+    var b = null;
+    for (j = 0; j < co.length; j++) if (String((co[j] && co[j].id) || "") === id){ b = co[j]; break; }
+    out.push((b && num(b.at) > num(a.at)) ? b : a);
+  }
+  for (j = 0; j < co.length; j++){
+    var id2 = String((co[j] && co[j].id) || "");
+    if (!id2 || seen[id2]) continue;
+    seen[id2] = 1; out.push(co[j]);
+  }
+  return { v:1, list: out };
+}
+
 function snap(){
   var pl = read(K.plan, { days:{} });
   try { if (SB.week && SB.week.plan) pl = SB.week.plan(); } catch(e){}
@@ -22995,13 +23122,14 @@ function snap(){
     sgu: read(K.sgu, {}),
     fg: read(K.fg, {}),
     fgu: read(K.fgu, {}),
-    curri: read(K.curri, null)
+    curri: read(K.curri, null),
+    wb: read("haeyuli.workbooks.v1", null)
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, curri:d.curri });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, curri:d.curri, wb:d.wb });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.curri]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.curri, s.wb]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -23364,6 +23492,7 @@ function buildDoc(local, cloud, base, code){
     sg: sgM.read, sgu: sgM.un,
     fg: frM.read, fgu: frM.un,
     curri: mergeCurri(local.curri, c.curri),
+    wb: mergeWb(local.wb, c.wb),
     at: Date.now()
   };
 }
@@ -23418,6 +23547,16 @@ function applyDoc(doc){
   if (cnew && JSON.stringify(cnew) !== JSON.stringify(ccur)){
     write(K.curri, cnew); changed = true; curriChanged = true;
   }
+  /* 📘 문제집 진도 — 다른 기기에서 엄마가 고친 쪽수를 이 기기에도 반영 */
+  if (doc.wb && typeof doc.wb === "object"){
+    var wcur = read("haeyuli.workbooks.v1", null);
+    var wnew = mergeWb(wcur, doc.wb);
+    if (JSON.stringify(wnew) !== JSON.stringify(wcur)){
+      write("haeyuli.workbooks.v1", wnew);
+      changed = true;
+      try { if (SB.wbRefresh) SB.wbRefresh(); } catch(e){}
+    }
+  }
   /* 🔔 ntfy 알림 설정 — 다른 기기에서 만든 토픽·켜짐 상태를 이 기기에도 반영 */
   if (doc.ntfy && typeof doc.ntfy === "object"){
     var ncur = ntRead(), nnew = mergeNtfy(ncur, doc.ntfy);
@@ -23464,7 +23603,7 @@ function pullPush(manual){
       var doc = {
         v:1, code:f.code, plan:local.plan, hw:local.hw, money:local.money,
         done:local.done, study:local.study, coupons:local.coupons, rb:local.rb, mathset:local.mathset,
-        ntfy:local.ntfy, sg:local.sg, sgu:local.sgu, fg:local.fg, fgu:local.fgu, at:Date.now()
+        ntfy:local.ntfy, sg:local.sg, sgu:local.sgu, fg:local.fg, fgu:local.fgu, wb:local.wb, at:Date.now()
       };
       return apiPut(f.code, doc).then(function(){ return true; });
     }
@@ -35375,6 +35514,524 @@ setTimeout(function(){ try { bind(); } catch(e){} }, 900);
 })();
 
 </script>
+<script id="wbset1122">
+/* =====================================================================
+   📘 공부 설정 — 문제집 등록 · 전체 쪽수 · 하루 분량 · 요일 · 구매 요청 알림
+   · 저장 키: haeyuli.workbooks.v1  (가족 코드로 아이패드·휴대폰이 같은 진도를 본다)
+   · 홈 '📅 오늘의 숙제'에 📖 지면 항목으로 "이름 · p.시작~끝 (N쪽)" 이 나오고,
+     체크하면 현재 쪽수가 하루 분량만큼 올라간다 (같은 날 체크를 풀면 그대로 되돌아간다)
+   · 남은 쪽수가 하루 분량×5 이하(또는 85% 이상)면 🛒 다음 권 구매 요청 + 엄마 폰 알림 1회
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var KEY = "haeyuli.workbooks.v1";
+var DAYN = ["월", "화", "수", "목", "금", "토", "일"];
+var SUBS = ["국어", "영어", "수학", "한자", "중국어", "기타"];
+var SUBEM = { "국어":"📖", "영어":"🔤", "수학":"🔢", "한자":"漢", "중국어":"🀄", "기타":"📘" };
+var PRESET = { "5":[0,1,2,3,4], "7":[0,1,2,3,4,5,6], "2":[5,6] };
+
+/* 해율이가 지금 풀고 있는 지면 문제집 (처음 한 번만 넣는다 — 엄마가 고치거나 지울 수 있다) */
+var SEED = [
+  { id:"kor100",    nm:"100 한국인물 독해",       sub:"국어", total:120, cur:0, daily:2, days:[0,1,2,3,4] },
+  { id:"enph",      nm:"파닉스몬스터 (롱바울)",    sub:"영어", total:96,  cur:0, daily:4, days:[0,2,4] },
+  { id:"enread",    nm:"기적의 영어리딩",          sub:"영어", total:112, cur:0, daily:4, days:[5] },
+  { id:"math12",    nm:"초등수학 1-2 (교과수학)",  sub:"수학", total:140, cur:0, daily:4, days:[0,2,5] },
+  { id:"mathsoma",  nm:"소마셈 (연산)",            sub:"수학", total:120, cur:0, daily:4, days:[1,4] },
+  { id:"mathplato", nm:"플라토 도형",              sub:"수학", total:100, cur:0, daily:4, days:[3] }
+];
+
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function iso(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+function diIdx(d){ return ((d || new Date()).getDay() + 6) % 7; }           /* 월=0 … 일=6 */
+function dayFromIso(s){ return diIdx(new Date(String(s) + "T00:00:00")); }
+function num(n, fb){
+  if (n === "" || n === null || n === undefined) return (fb === undefined ? 0 : fb);
+  n = Number(n);
+  return (isFinite(n) && n >= 0) ? Math.floor(n) : (fb === undefined ? 0 : fb);
+}
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c]; });
+}
+function toast(m){ try { if (SB.toast) SB.toast(m); } catch(e){} }
+
+/* ---------------- 저장 ---------------- */
+function norm(w){
+  w = (w && typeof w === "object") ? w : {};
+  var days = Array.isArray(w.days) ? w.days.map(function(x){ return num(x, -1); }) : [];
+  days = days.filter(function(x){ return x >= 0 && x < 7; });
+  if (!days.length) days = [0,1,2,3,4];
+  days = days.filter(function(x, i){ return days.indexOf(x) === i; }).sort();
+  var o = {
+    id: String(w.id || ("c" + Date.now().toString(36))),
+    nm: String(w.nm || "새 문제집").slice(0, 40),
+    sub: (SUBS.indexOf(w.sub) >= 0) ? w.sub : "기타",
+    total: num(w.total, 0),
+    cur: num(w.cur, 0),
+    daily: num(w.daily, 0),
+    days: days,
+    hw: (w.hw === 0 || w.hw === false) ? 0 : 1,
+    at: num(w.at, 0),
+    alerted: num(w.alerted, 0),
+    dismissed: String(w.dismissed || ""),
+    adv: (w.adv && typeof w.adv === "object" && !Array.isArray(w.adv)) ? w.adv : {}
+  };
+  if (o.cur > o.total) o.cur = o.total;
+  if (!o.daily) o.daily = 1;
+  return o;
+}
+function load(){
+  var raw = null;
+  try { raw = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e){ raw = null; }
+  var list = (raw && typeof raw === "object" && Array.isArray(raw.list)) ? raw.list : [];
+  return { v:1, list: list.map(norm) };
+}
+function save(d, quiet){
+  var out = { v:1, list: (d && Array.isArray(d.list) ? d.list : []).map(norm) };
+  try { localStorage.setItem(KEY, JSON.stringify(out)); } catch(e){}
+  if (!quiet){ paintHome(); famTouch(); }
+  return out;
+}
+function find(d, id){ for (var i = 0; i < d.list.length; i++) if (d.list[i].id === id) return d.list[i]; return null; }
+function ensure(){
+  var had = null;
+  try { had = localStorage.getItem(KEY); } catch(e){ had = "x"; }
+  if (had !== null) return;
+  save({ v:1, list: SEED.map(function(s){
+    var o = norm(s); o.hw = 1; o.at = 1; return o;   /* at=1 — 다른 기기의 진짜 수정이 항상 이긴다 */
+  }) }, true);
+}
+
+/* ---------------- 계산 ---------------- */
+function remaining(w){ return Math.max(0, w.total - w.cur); }
+function daysLeft(w){ return w.daily > 0 ? Math.ceil(remaining(w) / w.daily) : 0; }
+function pct(w){ return w.total > 0 ? Math.min(100, Math.round(w.cur / w.total * 100)) : 0; }
+function almostDone(w){                       /* 남은 쪽수 ≤ 하루 분량×5 (또는 85% 이상) */
+  if (!w || !(w.total > 0)) return false;
+  return remaining(w) <= w.daily * 5 || pct(w) >= 85;
+}
+
+/* 그날 풀 쪽 — 오늘보다 뒤 날짜는 앞으로 나갈 만큼 미리 보여 준다 */
+function rangeFor(w, ds, base){
+  if (base === null || base === undefined) base = w.cur;
+  if (base >= w.total) return null;
+  var today = iso(), k = 0;
+  if (ds && ds !== today){
+    if (ds < today) return { past:true };
+    var t = new Date(today + "T00:00:00"), g = new Date(String(ds) + "T00:00:00");
+    t.setDate(t.getDate() + 1);
+    while (t < g){                       /* 오늘 다음 날부터 그 날 '전날'까지 며칠이 문제집 날인지 */
+      if (w.days.indexOf(diIdx(t)) >= 0) k++;
+      t.setDate(t.getDate() + 1);
+    }
+  }
+  var start = base + w.daily * k + 1;
+  if (start > w.total) return null;
+  var end = Math.min(start + w.daily - 1, w.total);
+  return { start:start, end:end };
+}
+
+/* 홈 '오늘의 숙제'에 넣을 문제집 항목 (📖 지면) */
+function itemsFor(di, ds){
+  var d = load(), out = [], today = iso();
+  var dayKey = ds || today;
+  var target = (di === null || di === undefined) ? (ds ? dayFromIso(ds) : diIdx()) : num(di, diIdx());
+  for (var i = 0; i < d.list.length; i++){
+    var w = d.list[i];
+    if (!w.hw) continue;
+    if (w.days.indexOf(target) < 0) continue;
+    var base = w.cur;
+    var a = (w.adv && w.adv[today]) ? w.adv[today] : null;
+    if (dayKey === today && a && typeof a.from === "number") base = a.from;   /* 오늘 체크한 뒤에도 그날 쪽을 그대로 보여 준다 */
+    var r = rangeFor(w, dayKey, base), txt;
+    if (!r) txt = w.nm + " · 다 풀었어요 🎉";
+    else if (r.past) txt = w.nm;
+    else txt = w.nm + " · p." + r.start + "~" + r.end + " (" + (r.end - r.start + 1) + "쪽)";
+    out.push({ id:"wb:" + w.id, s:w.sub, t:txt, tag:"p", go:null });
+  }
+  return out;
+}
+
+/* ---------------- 진도 올리기 / 되돌리기 ---------------- */
+function pruneAdv(w){
+  var ks = Object.keys(w.adv || {}).sort();
+  while (ks.length > 24) delete w.adv[ks.shift()];
+}
+function alertPush(w){
+  if (!w || !almostDone(w) || w.alerted) return null;
+  var rem = remaining(w), dl = daysLeft(w);
+  var head = "🛒 [" + w.nm + "] " + (rem > 0 ? "거의 다 풀었어요!" : "다 풀었어요!");
+  var body = (rem > 0
+      ? "남은 " + rem + "쪽 · 하루 " + w.daily + "쪽이면 " + dl + "일 남았어요. "
+      : "") + "다음 권을 준비해 주세요.";
+  var pr = null;
+  try { if (SB.ntfySend) pr = SB.ntfySend(head, body, "default"); } catch(e){ pr = null; }
+  if (!pr) return null;                        /* ntfy가 꺼져 있으면 표시만 하고, 켜지면 그때 한 번 보낸다 */
+  w.alerted = Date.now();
+  if (pr.then) pr.then(function(r){
+    if (r && r.ok) return;
+    var d = load(), w2 = find(d, w.id);
+    if (w2 && w2.alerted){ w2.alerted = 0; save(d, true); }   /* 못 보냈으면 다음 기회에 다시 */
+  });
+  return pr;
+}
+function advance(id, dateKey, noPaint){
+  var d = load(), w = find(d, id);
+  if (!w) return false;
+  var from = w.cur, to = Math.min(w.total, w.cur + w.daily);
+  w.cur = to; w.at = Date.now();
+  if (!w.adv) w.adv = {};
+  w.adv[dateKey] = { from:from, to:to };
+  pruneAdv(w);
+  save(d, true);
+  alertPush(w);
+  save(d, true);
+  if (!noPaint) paintHome();
+  return true;
+}
+function rollback(id, dateKey, noPaint){
+  var d = load(), w = find(d, id);
+  if (!w) return false;
+  var a = (w.adv && w.adv[dateKey]) ? w.adv[dateKey] : null;
+  w.cur = (a && typeof a.from === "number") ? Math.max(0, Math.min(w.total, a.from))
+                                            : Math.max(0, w.cur - w.daily);
+  if (w.adv) delete w.adv[dateKey];
+  w.at = Date.now();
+  save(d, true);
+  if (!noPaint) paintHome();
+  return true;
+}
+
+/* ---------------- 🛒 구매 요청 ---------------- */
+function alerts(){
+  var d = load(), out = [];
+  for (var i = 0; i < d.list.length; i++) if (almostDone(d.list[i])) out.push(d.list[i]);
+  return out;
+}
+function alertRows(){
+  var today = iso();
+  return alerts().filter(function(w){ return w.dismissed !== today; });
+}
+function dismissAll(){
+  var d = load(), today = iso(), n = 0;
+  for (var i = 0; i < d.list.length; i++){
+    if (almostDone(d.list[i])){ d.list[i].dismissed = today; n++; }
+  }
+  save(d);
+  render();
+  if (n) toast("🛒 알림은 내일 다시 보여 드릴게요");
+}
+function resetWb(id){
+  var d = load(), w = find(d, id);
+  if (!w) return;
+  w.cur = 0; w.alerted = 0; w.adv = {}; w.dismissed = ""; w.at = Date.now();
+  save(d);
+  render();
+  toast("📘 " + w.nm + " · 새 권(p.0)으로 시작해요");
+}
+function bannerHTML(){
+  var rows = alertRows();
+  if (!rows.length) return "";
+  var items = rows.map(function(w){
+    var rem = remaining(w);
+    return '<div class="hwbn-row"><b>' + esc(w.nm) + '</b><span>' +
+      (rem > 0 ? ("남은 " + rem + "쪽 · " + daysLeft(w) + "일치")
+               : "다 풀었어요 · 다음 권 준비!") + '</span>' +
+      '<button type="button" data-hwbreset="' + esc(w.id) + '">새 권(p.0)</button></div>';
+  }).join("");
+  return '<div class="hwbn" role="note" aria-label="다음 권 구매 요청 알림">' +
+      '<div class="hwbn-h">🛒 다음 권 구매 요청 알림</div>' + items +
+      '<div class="hwbn-a"><button type="button" data-hwbopen="1">📘 공부 설정에서 보기</button>' +
+      '<button type="button" data-hwbdismiss="1">확인했어요</button></div></div>';
+}
+
+/* ---------------- 화면 ---------------- */
+function paintHome(){
+  try { if (SB.hw5 && SB.hw5.render) SB.hw5.render(); } catch(e){}
+}
+function famTouch(){ try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){} }
+
+var ndays = [0,1,2,3,4];                       /* 새 문제집 등록 폼의 요일 */
+var draft = { nm:"", sub:"국어", total:"", cur:"", daily:"", hw:1 };
+
+function dayChips(id, days, attr){
+  var a = attr || "wbday";
+  return DAYN.map(function(nm, i){
+    var on = days.indexOf(i) >= 0;
+    return '<button type="button" class="wbd' + (on ? " on" : "") + '" data-' + a + '="' + id + ":" + i +
+      '" aria-pressed="' + (on ? "true" : "false") + '" aria-label="' + nm + '요일">' + nm + '</button>';
+  }).join("");
+}
+function presetChips(id){
+  return '<button type="button" class="wbd pre" data-wbpreset="' + id + ':5">평일</button>' +
+    '<button type="button" class="wbd pre" data-wbpreset="' + id + ':7">매일</button>' +
+    '<button type="button" class="wbd pre" data-wbpreset="' + id + ':2">주말</button>';
+}
+function cardHTML(w){
+  var rem = remaining(w), pc = pct(w);
+  return '<div class="wbc" data-wbc="' + esc(w.id) + '">' +
+    '<div class="wbc-h"><span class="wbc-em">' + (SUBEM[w.sub] || "📘") + '</span>' +
+      '<div class="wbc-nm"><b>' + esc(w.nm) + '</b><span>' + esc(w.sub) + ' · ' +
+        (w.days.length === 7 ? "매일" : w.days.length === 5 && w.days.indexOf(6) < 0 && w.days.indexOf(5) < 0 ? "평일" : w.days.map(function(i){ return DAYN[i]; }).join("")) +
+        ' · 하루 ' + w.daily + '쪽</span></div>' +
+      '<button type="button" class="wbc-del" data-wbdel="' + esc(w.id) + '" aria-label="' + esc(w.nm) + ' 삭제">삭제</button></div>' +
+    '<div class="wbc-bar"><i style="width:' + pc + '%"></i></div>' +
+    '<div class="wbc-meta"><b>' + w.cur + ' / ' + w.total + '쪽</b><span>' + pc + '%</span>' +
+      '<span class="wbc-rem">' + (rem > 0 ? ("남은 " + rem + "쪽 · " + daysLeft(w) + "일치") : "다 풀었어요 🎉") + '</span></div>' +
+    '<div class="wbc-days"><span class="wbc-lb">요일</span>' + dayChips(w.id, w.days) + presetChips(w.id) + '</div>' +
+    '<div class="wbc-f">' +
+      '<label>전체 쪽수<input type="number" inputmode="numeric" min="0" data-wbf="' + esc(w.id) + ':total" value="' + w.total + '"></label>' +
+      '<label>현재 쪽수<input type="number" inputmode="numeric" min="0" data-wbf="' + esc(w.id) + ':cur" value="' + w.cur + '"></label>' +
+      '<label>하루 분량<input type="number" inputmode="numeric" min="1" data-wbf="' + esc(w.id) + ':daily" value="' + w.daily + '"></label>' +
+    '</div>' +
+    '<label class="wbc-tog"><input type="checkbox" data-wbtog="' + esc(w.id) + '"' + (w.hw ? " checked" : "") + '> 홈 오늘의 숙제에 넣기</label>' +
+    '<div class="wbc-a"><button type="button" class="wbb pri" data-wbsave="' + esc(w.id) + '">저장</button>' +
+      '<button type="button" class="wbb" data-wbreset="' + esc(w.id) + '">새 권으로 초기화 (p.0)</button></div>' +
+  '</div>';
+}
+function addHTML(){
+  var opts = SUBS.map(function(s){ return '<option value="' + s + '"' + (draft.sub === s ? " selected" : "") + '>' + s + '</option>'; }).join("");
+  return '<div class="wbc wbadd">' +
+    '<div class="wbc-h"><span class="wbc-em">➕</span><div class="wbc-nm"><b>새 문제집 등록</b><span>전체 쪽수와 하루 분량을 적으면 오늘의 숙제에 바로 나와요</span></div></div>' +
+    '<label class="frow2"><span>이름</span><input id="wbAddNm" type="text" maxlength="40" placeholder="예: 기적의 계산법 1권" value="' + esc(draft.nm) + '"></label>' +
+    '<label class="frow2"><span>과목</span><select id="wbAddSub">' + opts + '</select></label>' +
+    '<label class="frow2"><span>전체 쪽수</span><input id="wbAddTotal" type="number" inputmode="numeric" min="1" placeholder="예: 120" value="' + esc(draft.total) + '"></label>' +
+    '<label class="frow2"><span>현재까지</span><input id="wbAddCur" type="number" inputmode="numeric" min="0" placeholder="0" value="' + esc(draft.cur) + '"></label>' +
+    '<label class="frow2"><span>하루 분량</span><input id="wbAddDaily" type="number" inputmode="numeric" min="1" placeholder="예: 2" value="' + esc(draft.daily) + '"></label>' +
+    '<div class="wbc-days"><span class="wbc-lb">요일</span>' + dayChips("new", ndays, "wbnday") +
+      '<button type="button" class="wbd pre" data-wbnpreset="5">평일</button>' +
+      '<button type="button" class="wbd pre" data-wbnpreset="7">매일</button>' +
+      '<button type="button" class="wbd pre" data-wbnpreset="2">주말</button></div>' +
+    '<label class="wbc-tog"><input type="checkbox" id="wbAddHw"' + (draft.hw ? " checked" : "") + '> 홈 오늘의 숙제에 넣기</label>' +
+    '<div class="wbc-a"><button type="button" class="wbb pri" id="wbAddBtn">문제집 등록</button></div>' +
+  '</div>';
+}
+function bodyHTML(){
+  var d = load(), rows = alertRows();
+  var al = rows.length ? '<div class="wbal"><div class="wbal-h"><b>🛒 곧 다 풀어요! 다음 권 구매 요청</b><span>' + rows.length + '권</span></div><ul>' +
+      rows.map(function(w){
+        var rem = remaining(w);
+        return '<li><b>' + esc(w.nm) + '</b><span>' + (rem > 0 ? ("남은 " + rem + "쪽 · " + daysLeft(w) + "일치") : "다 풀었어요") + '</span>' +
+          '<button type="button" data-wbreset="' + esc(w.id) + '">새 권으로 초기화(p.0)</button>' +
+          '<button type="button" data-wbdismiss="' + esc(w.id) + '">확인했어요</button></li>';
+      }).join("") + '</ul></div>' : "";
+  var cards = d.list.length ? d.list.map(cardHTML).join("")
+      : '<p class="wbnone">아직 등록된 문제집이 없어요 · 아래에서 추가해 주세요.</p>';
+  return al + '<div class="wbcards">' + cards + addHTML() + '</div>';
+}
+function shellHTML(){
+  return '<div class="modal wbmodal" id="wbModal" hidden><div class="sheet wbsheet" role="dialog" aria-modal="true" aria-labelledby="wbTitle">' +
+    '<div class="sheet-head"><h3 id="wbTitle">📘 공부 설정 · 문제집 진도</h3>' +
+      '<button class="close" type="button" data-wbclose="1" aria-label="닫기">✕</button></div>' +
+    '<div class="sheet-body wbbody" id="wbBody"></div>' +
+    '<div class="sheet-foot wbfoot"><span class="wbhint">문제집을 체크하면 현재 쪽수가 하루 분량만큼 올라가요 · 남은 5일치 이하면 🛒 알림</span>' +
+      '<button class="btn ghost" type="button" data-wbclose="1">닫기</button></div>' +
+  '</div></div>';
+}
+function render(){
+  var body = $("wbBody");
+  if (body) body.innerHTML = bodyHTML();
+}
+function readAdd(){
+  var nm = $("wbAddNm"), sub = $("wbAddSub"), t = $("wbAddTotal"), c = $("wbAddCur"), dd = $("wbAddDaily"), hw = $("wbAddHw");
+  if (nm) draft.nm = nm.value;
+  if (sub) draft.sub = sub.value;
+  if (t) draft.total = t.value;
+  if (c) draft.cur = c.value;
+  if (dd) draft.daily = dd.value;
+  if (hw) draft.hw = hw.checked ? 1 : 0;
+}
+/* 카드에 적힌 숫자를 먼저 저장한다 (요일 칩을 눌러 다시 그릴 때 입력이 날아가지 않게) */
+function readInputs(){
+  var d = load(), els = document.querySelectorAll("#wbBody [data-wbf]"), changed = false;
+  for (var i = 0; i < els.length; i++){
+    var m = String(els[i].getAttribute("data-wbf") || "").split(":");
+    var w = find(d, m[0]);
+    if (!w) continue;
+    var v = num(els[i].value, null);
+    if (v === null) continue;
+    if (m[1] === "total"){ w.total = v; if (w.cur > w.total) w.cur = w.total; }
+    else if (m[1] === "cur") w.cur = Math.min(v, w.total);
+    else if (m[1] === "daily") w.daily = Math.max(1, v);
+    w.at = Date.now();
+    changed = true;
+  }
+  if (changed) save(d, true);
+  return d;
+}
+function saveCard(id){
+  var d = readInputs(), w = find(d, id);
+  if (!w){ toast("문제집을 찾지 못했어요"); return; }
+  var el = document.querySelector('#wbBody [data-wbf="' + id + ':total"]');
+  var t = num(el ? el.value : w.total, 0);
+  if (t <= 0){ toast("전체 쪽수를 1쪽 이상으로 적어 주세요"); return; }
+  w.at = Date.now();
+  save(d);
+  alertPush(w);
+  save(d, true);
+  render();
+  toast("📘 " + w.nm + " · " + w.cur + "/" + w.total + "쪽 (하루 " + w.daily + "쪽)");
+}
+function addWb(){
+  readAdd();
+  var nm = String(draft.nm || "").trim();
+  var total = num(draft.total, 0), cur = num(draft.cur, 0), daily = Math.max(1, num(draft.daily, 1));
+  if (!nm){ toast("문제집 이름을 적어 주세요"); return; }
+  if (total <= 0){ toast("전체 쪽수를 적어 주세요"); return; }
+  if (cur > total) cur = total;
+  var d = load();
+  var id = "c" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36);
+  var w = norm({ id:id, nm:nm, sub:draft.sub, total:total, cur:cur, daily:daily,
+                 days:ndays.slice(), hw:draft.hw ? 1 : 0, at:Date.now() });
+  d.list.push(w);
+  save(d, true);
+  alertPush(find(d, id));
+  save(d);
+  draft = { nm:"", sub:"국어", total:"", cur:"", daily:"", hw:1 };
+  ndays = [0,1,2,3,4];
+  render();
+  toast("📘 " + nm + " 등록 · 홈 오늘의 숙제에 나와요");
+}
+
+function open(){
+  ensure();
+  var host = $("wbModal");
+  if (!host){
+    var wrap = document.createElement("div");
+    wrap.innerHTML = shellHTML();
+    host = wrap.firstChild;
+    document.body.appendChild(host);
+    host.addEventListener("click", onClick);
+    host.addEventListener("change", onChange);
+  }
+  host.hidden = false;
+  document.addEventListener("keydown", onEsc, true);
+  render();
+}
+function close(){
+  var host = $("wbModal");
+  if (host) host.hidden = true;
+  document.removeEventListener("keydown", onEsc, true);
+}
+function onEsc(e){ if (e.key === "Escape"){ e.preventDefault(); close(); } }
+
+function onChange(e){
+  var t = e.target;
+  if (!t) return;
+  if (t.getAttribute && t.getAttribute("data-wbtog")){
+    var id = t.getAttribute("data-wbtog");
+    var d = readInputs(), w = find(d, id);
+    if (!w) return;
+    w.hw = t.checked ? 1 : 0; w.at = Date.now();
+    save(d); render();
+    toast(w.hw ? "📘 " + w.nm + " · 홈 숙제에 넣었어요" : "📘 " + w.nm + " · 홈 숙제에서 뺐어요");
+    return;
+  }
+  if (t.id === "wbAddHw"){ draft.hw = t.checked ? 1 : 0; return; }
+}
+
+function onClick(e){
+  var t = e.target;
+  if (!t || !t.closest) return;
+  if (t === document.getElementById("wbModal") || t.closest("[data-wbclose]")){ close(); return; }
+
+  var day = t.closest("[data-wbday]");
+  if (day){
+    var m = String(day.getAttribute("data-wbday")).split(":");
+    var d = readInputs(), w = find(d, m[0]);
+    if (!w) return;
+    var k = num(m[1], -1), ix = w.days.indexOf(k);
+    if (ix >= 0){ if (w.days.length === 1) return; w.days.splice(ix, 1); }
+    else w.days.push(k);
+    w.days.sort(); w.at = Date.now();
+    save(d); render(); return;
+  }
+  var pre = t.closest("[data-wbpreset]");
+  if (pre){
+    var p = String(pre.getAttribute("data-wbpreset")).split(":");
+    var dd = readInputs(), w2 = find(dd, p[0]);
+    if (!w2) return;
+    w2.days = (PRESET[p[1]] || PRESET["5"]).slice();
+    w2.at = Date.now();
+    save(dd); render(); return;
+  }
+  var nd = t.closest("[data-wbnday]");
+  if (nd){
+    readAdd();
+    var kk = num(String(nd.getAttribute("data-wbnday")).split(":")[1], -1);
+    var j = ndays.indexOf(kk);
+    if (j >= 0){ if (ndays.length === 1) return; ndays.splice(j, 1); } else ndays.push(kk);
+    ndays.sort();
+    render(); return;
+  }
+  var np = t.closest("[data-wbnpreset]");
+  if (np){ readAdd(); ndays = (PRESET[np.getAttribute("data-wbnpreset")] || PRESET["5"]).slice(); render(); return; }
+
+  var sv = t.closest("[data-wbsave]");
+  if (sv){ saveCard(sv.getAttribute("data-wbsave")); return; }
+  var rs = t.closest("[data-wbreset]");
+  if (rs){ resetWb(rs.getAttribute("data-wbreset")); return; }
+  var dis = t.closest("[data-wbdismiss]");
+  if (dis){
+    var d3 = load(), w3 = find(d3, dis.getAttribute("data-wbdismiss"));
+    if (w3){ w3.dismissed = iso(); save(d3); render(); }
+    return;
+  }
+  var del = t.closest("[data-wbdel]");
+  if (del){
+    var id = del.getAttribute("data-wbdel");
+    if (del.getAttribute("data-wbarm") === "1"){
+      var d4 = load();
+      d4.list = d4.list.filter(function(x){ return x.id !== id; });
+      save(d4); render(); toast("문제집을 지웠어요");
+    } else {
+      del.setAttribute("data-wbarm", "1");
+      del.textContent = "정말 지울까요?";
+      setTimeout(function(){ try { del.removeAttribute("data-wbarm"); del.textContent = "삭제"; } catch(e){} }, 3200);
+    }
+    return;
+  }
+  if (t.closest("#wbAddBtn")){ addWb(); return; }
+}
+
+/* 다른 기기(가족 코드)에서 문제집 진도가 오면 다시 그린다 */
+SB.wbRefresh = function(){
+  paintHome();
+  var host = $("wbModal");
+  if (host && !host.hidden) render();
+};
+SB.wb = {
+  load: load,
+  list: function(){ return load().list; },
+  itemsFor: itemsFor,
+  advance: advance,
+  rollback: rollback,
+  alerts: alerts,
+  alertRows: alertRows,
+  bannerHTML: bannerHTML,
+  reset: resetWb,
+  dismissAll: dismissAll,
+  open: open,
+  close: close,
+  render: render,
+  remaining: remaining,
+  daysLeft: daysLeft,
+  pct: pct
+};
+
+function bind(){
+  var b = $("btnWbSet");
+  if (b && !b.__wbSet){ b.__wbSet = 1; b.addEventListener("click", function(){ open(); }); }
+}
+ensure();
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+else setTimeout(bind, 0);
+setTimeout(bind, 800);
+})();
+
+</script>
 <script id="final1122hw">
 /* =====================================================================
    📅 2026-11-22 · 요일별 세부 숙제 스케줄 (월~일)
@@ -35408,28 +36065,20 @@ function V(id, s, t, go){ return { id:id, s:s, t:t, tag:"v", go:go || null }; }
 var SCHED = [
   /* 월 */ [
     T("padam","패드","아이캔두 학습 (아침)"),
-    P("kor100","국어","100 한국인물 독해 1편 읽기"),
-    P("enph","영어","파닉스몬스터(롱바울) 2장"),
     B("enemma","영어","엠마쌤 전화영어", ["study","en","call"]),
-    P("math12","수학","초등수학 1-2 · 2쪽"),
     B("mathgit","수학","기탄 연산 10문제", ["study","math","calc"]),
     K("read","책","한글책 1권 + 영어책 1권", ["book","main"])
   ],
   /* 화 */ [
     T("padam","패드","아이캔두 학습 (아침)"),
-    P("kor100","국어","100 한국인물 독해 1편 읽기"),
     B("ensight","영어","사이트워드 1단계", ["study","en","sight"]),
     T("razkids","영어","라즈키즈 영어"),
-    P("mathsoma","수학","소마셈 1장"),
     B("mathshape","수학","도형·시계", ["study","math","shape"]),
     B("hanjaw","한자","낱말·뜻 쓰기", ["study","hanja","word"]),
     K("read","책","한글책 1권 + 영어책 1권", ["book","main"])
   ],
   /* 수 */ [
     T("padam","패드","아이캔두 학습 (아침)"),
-    P("kor100","국어","100 한국인물 독해 1편 읽기"),
-    P("enph","영어","파닉스몬스터(롱바울) 2장"),
-    P("math12","수학","초등수학 1-2 · 2쪽"),
     B("kowrite","국어","받아쓰기", ["study","ko","write"]),
     B("histquiz","역사","역사 퀴즈", ["study","history","quiz"]),
     B("maththink","수학","그림 사고력", ["study","math","think"]),
@@ -35437,10 +36086,8 @@ var SCHED = [
   ],
   /* 목 */ [
     T("padam","패드","아이캔두 학습 (아침)"),
-    P("kor100","국어","100 한국인물 독해 1편 읽기"),
     B("enwg","영어","단어키우기 10문제", ["study","en","wordgrow"]),
     T("razkids","영어","라즈키즈 영어"),
-    P("mathplato","수학","플라토 도형 2쪽"),
     B("mathsaem","수학","하루 셈하기", ["study","math","saem"]),
     B("kovocab","국어","어휘·개념", ["study","ko","vocab"]),
     B("cntalk","중국어","일상대화 따라 말하고 녹음", ["study","cn","talk"]),
@@ -35448,18 +36095,13 @@ var SCHED = [
   ],
   /* 금 */ [
     T("padam","패드","아이캔두 학습 (아침)"),
-    P("kor100","국어","100 한국인물 독해 1편 읽기"),
-    P("enph","영어","파닉스몬스터(롱바울) 2장"),
     B("enword","영어","단어카드·게임", ["study","en","talk"]),
-    P("mathsoma","수학","소마셈 1장"),
     B("mathbase1","수학","1학년 기초수학", ["study","math","base1"]),
     B("histworld","역사","세계사 연표", ["study","history","world"]),
     K("read","책","한글책 1권 + 영어책 1권", ["book","main"])
   ],
   /* 토 */ [
-    P("enread","영어","기적의 영어리딩 1장"),
     B("enwol","영어","월팸", ["study","en","wolpaem"]),
-    P("math12","수학","초등수학 1-2 · 2쪽"),
     B("mathg2","수학","2학년 선행", ["study","math","grade2"]),
     B("cncard","중국어","단어 카드 10개", ["study","cn","cards"]),
     T("razkids","영어","라즈키즈 영어"),
@@ -35498,7 +36140,26 @@ function dayDone(date){
   var v = load()[date];
   return (v && typeof v === "object") ? v : {};
 }
-function items(di){ return SCHED[di] || []; }
+/* 📘 공부 설정에 등록한 문제집도 그날 숙제로 함께 나온다 (p.시작~끝) */
+function wbDay(di, ds){
+  try { return (SB.wb && SB.wb.itemsFor) ? SB.wb.itemsFor(di, ds) : []; } catch(e){ return []; }
+}
+function items(di, ds){
+  var base = SCHED[di] || [];
+  var wb = wbDay(di, ds);
+  if (!wb.length) return base.slice();
+  var out = [], seen = {}, used = {}, i, j;
+  for (i = 0; i < base.length; i++){
+    var it = base[i];
+    if (!seen[it.s]){
+      seen[it.s] = 1;
+      for (j = 0; j < wb.length; j++) if (wb[j].s === it.s && !used[wb[j].id]){ used[wb[j].id] = 1; out.push(wb[j]); }
+    }
+    out.push(it);
+  }
+  for (j = 0; j < wb.length; j++) if (!used[wb[j].id]) out.push(wb[j]);
+  return out;
+}
 
 function status(){
   var d = iso(), di = dayIdx(), list = items(di), done = dayDone(d);
@@ -35537,10 +36198,13 @@ function toggle(id){
   var it = null;
   for (var i = 0; i < st.list.length; i++) if (st.list[i].id === id) it = st.list[i];
   if (!it) return;
+  var isWb = String(id).indexOf("wb:") === 0;
   if (s[d][id]) {
     delete s[d][id];
+    if (isWb){ try { if (SB.wb && SB.wb.rollback) SB.wb.rollback(id.slice(3), d, true); } catch(e){} }
   } else {
     s[d][id] = Date.now();
+    if (isWb){ try { if (SB.wb && SB.wb.advance) SB.wb.advance(id.slice(3), d, true); } catch(e){} }
     /* 전역 '공부하면 ⭐+2' 보너스는 건너뛰고 숙제 하나에 정확히 +1 (auto2| 로 시작하면 보너스를 안 준다) */
     try { if (SB.earn) SB.earn("auto2|hw5|" + d + "|" + id, 1); } catch(e){}
     try {
@@ -35563,6 +36227,7 @@ function toggle(id){
   touchFam();
 }
 SB.hw5 = { status:status, toggle:toggle, sched:SCHED, ladder:LADDER };
+SB.hw5.render = render;
 
 /* ---------------- 잭팟 사다리 ---------------- */
 function ladderInfo(){
@@ -35611,7 +36276,9 @@ function groupsHTML(st){
 function cardHTML(){
   var st = status();
   var pct = st.total ? Math.round(st.n / st.total * 100) : 0;
-  return '<div class="hw-hd"><b>📅 오늘의 숙제</b>' +
+  var bn = "";
+  try { bn = (SB.wb && SB.wb.bannerHTML) ? SB.wb.bannerHTML() : ""; } catch(e){ bn = ""; }
+  return bn + '<div class="hw-hd"><b>📅 오늘의 숙제</b>' +
       '<span class="d">' + DAYN[st.day] + '요일 · ' + (new Date().getMonth() + 1) + "/" + new Date().getDate() + '</span>' +
       '<button class="wk" type="button" data-hw5week="1">📅 주간 계획표 전체 보기 (월~일)</button></div>' +
     '<div class="hw-sum"><span>오늘 <b>' + st.n + " / " + st.total + '</b>개 완료</span>' +
@@ -35653,6 +36320,10 @@ function onClick(e){
     }
     return;
   }
+  var hbr = e.target.closest("[data-hwbreset]");
+  if (hbr){ try { SB.wb.reset(hbr.getAttribute("data-hwbreset")); } catch(err){} return; }
+  if (e.target.closest("[data-hwbdismiss]")){ try { SB.wb.dismissAll(); } catch(err){} return; }
+  if (e.target.closest("[data-hwbopen]")){ try { SB.wb.open(); } catch(err){} return; }
   if (e.target.closest("[data-hw5week]")){ openWeek(); return; }
 }
 
@@ -35663,7 +36334,7 @@ function weekHTML(){
   var cells = "";
   for (var d = 0; d < 7; d++){
     var dt = new Date(monday.getTime()); dt.setDate(monday.getDate() + d);
-    var ds = iso(dt), done = dayDone(ds), list = items(d), n = 0;
+    var ds = iso(dt), done = dayDone(ds), list = items(d, ds), n = 0;
     for (var i = 0; i < list.length; i++) if (done[list[i].id]) n++;
     cells += '<div class="hwm-day' + (ds === t ? " today" : "") + '">' +
       '<div class="hwm-dh"><b>' + DAYN[d] + '</b><span>' + (dt.getMonth() + 1) + "/" + dt.getDate() + '</span>' +
