@@ -20494,7 +20494,8 @@ function todayStatus(){
            subTotal:subs.length, subDone:subN, studied:studied, complete:complete };
 }
 function markTodayDone(){
-  var st = todayStatus(), m = doneMap(), cur = m[st.date];
+  /* 오늘 기준은 SB.week.todayStatus — 요일별 숙제(오늘의 숙제)가 합쳐진 값 (11-22: 새 숙제판 반영) */
+  var st = (SB.week && SB.week.todayStatus) ? SB.week.todayStatus() : todayStatus(), m = doneMap(), cur = m[st.date];
   if (!cur || (!!cur.d) !== st.complete){
     m[st.date] = { d:st.complete, t:Date.now() };
     writeObj(DONE_KEY, m);
@@ -23460,7 +23461,8 @@ var K = {
   sg: "haeyuli.samgukji.read.v1", sgu: "haeyuli.samgukji.unread.v1",
   fg: "haeyuli.froebel.read.v1", fgu: "haeyuli.froebel.unread.v1",
   nir: "haeyuli.nir.read.v1", niru: "haeyuli.nir.unread.v1",
-  curri: "haeyuli.call.curri.v1"
+  curri: "haeyuli.call.curri.v1",
+  hwplan: "haeyuli.hwplan.v1", hwplanUn: "haeyuli.hwplan.un.v1"
 };
 /* 🔔 ntfy 알림 설정도 같은 가족 코드 문서로 오간다 */
 var NTK = { topic: "study.ntfy.topic.v1", on: "study.ntfy.enabled.v1", at: "study.ntfy.at.v1" };
@@ -23558,13 +23560,15 @@ function snap(){
     curri: read(K.curri, null),
     wb: read("haeyuli.workbooks.v1", null),
     stars: read("yuli.stars.v2", null),
-    sled: read("yuli.starledger.v2", null)
+    sled: read("yuli.starledger.v2", null),
+    hwplan: read(K.hwplan, {}),
+    hwplanUn: read(K.hwplanUn, {})
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.curri, s.wb, s.stars, s.sled]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -23611,6 +23615,48 @@ function mergeCurri(l, c){
   var ld = Math.max(1, num(l2 && l2.day) || 1), cd = Math.max(1, num(c2 && c2.day) || 1);
   var day = (lc > cc) ? ld : (cc > lc) ? cd : Math.max(ld, cd);
   return { day: day, done: canonObj(done), calls: Math.max(lc, cc) };
+}
+
+/* 📅 오늘의 숙제(haeyuli.hwplan.v1) — 날짜별 체크를 두 기기에서 합친다
+   · lc/cc : 날짜 → { 숙제id: 체크한 시각 }   (같은 숙제는 더 최근 시각이 이긴다)
+   · lu/cu : 날짜 → { 숙제id: 푼 시각 }      (푼 시각이 체크보다 크거나 같으면 안 한 숙제)
+   · 아이패드에서 체크하고 엄마 폰에서 풀어도 마지막에 손댄 쪽이 남는다 */
+function mergeHwplan(lc, lu, cc, cu){
+  lc = (lc && typeof lc === "object" && !Array.isArray(lc)) ? lc : {};
+  cc = (cc && typeof cc === "object" && !Array.isArray(cc)) ? cc : {};
+  lu = (lu && typeof lu === "object" && !Array.isArray(lu)) ? lu : {};
+  cu = (cu && typeof cu === "object" && !Array.isArray(cu)) ? cu : {};
+  var dates = {}, out = {}, outUn = {};
+  [lc, cc, lu, cu].forEach(function(o){ Object.keys(o).forEach(function(x){ dates[x] = 1; }); });
+  Object.keys(dates).sort().forEach(function(d){
+    var a = (lc[d] && typeof lc[d] === "object") ? lc[d] : {};
+    var b = (cc[d] && typeof cc[d] === "object") ? cc[d] : {};
+    var au = (lu[d] && typeof lu[d] === "object") ? lu[d] : {};
+    var bu = (cu[d] && typeof cu[d] === "object") ? cu[d] : {};
+    var ids = {}, rec = {}, un = {};
+    Object.keys(a).forEach(function(x){ ids[x] = 1; });
+    Object.keys(b).forEach(function(x){ ids[x] = 1; });
+    Object.keys(ids).sort().forEach(function(id){
+      var t = Math.max(num(a[id]), num(b[id]));
+      if (!t) return;
+      var u = Math.max(num(au[id]), num(bu[id]));
+      if (u >= t){ un[id] = u; return; }          /* 마지막에 푼 숙제 — 체크하지 않는다 */
+      rec[id] = t;
+    });
+    /* 체크가 사라진 날(그날 다 풀었거나 예전 기록)도 푼 시각은 남긴다 */
+    [au, bu].forEach(function(m){
+      Object.keys(m).forEach(function(id){
+        var u = num(m[id]);
+        if (u && !rec[id]) un[id] = Math.max(num(un[id]), u);
+      });
+    });
+    if (Object.keys(rec).length) out[d] = rec;
+    if (Object.keys(un).length) outUn[d] = un;
+  });
+  /* 이 기기 저장과 같은 기준으로 60일만 남긴다 */
+  var dk = Object.keys(out).sort(); while (dk.length > 60) delete out[dk.shift()];
+  var uk = Object.keys(outUn).sort(); while (uk.length > 60) delete outUn[uk.shift()];
+  return { check: out, un: outUn };
 }
 
 /* ---------------- 클라우드 ---------------- */
@@ -23927,6 +23973,7 @@ function buildDoc(local, cloud, base, code){
   var sgM = mergeSg(local.sg, c.sg, local.sgu, c.sgu);
   var frM = mergeSg(local.fg, c.fg, local.fgu, c.fgu);
   var nirM = mergeSg(local.nir, c.nir, local.niru, c.niru);
+  var hwM = mergeHwplan(local.hwplan, local.hwplanUn, c.hwplan, c.hwplanUn);
   return {
     v: 1,
     code: code,
@@ -23947,6 +23994,8 @@ function buildDoc(local, cloud, base, code){
     wb: mergeWb(local.wb, c.wb),
     stars: { total: stM.total },
     sled: stM.led,
+    hwplan: hwM.check,
+    hwplanUn: hwM.un,
     at: Date.now()
   };
 }
@@ -24040,6 +24089,14 @@ function applyDoc(doc){
       if (nnew.topic && nnew.topic !== ncur.topic) toast("🔔 가족 코드로 알림 토픽을 맞췄어요");
     }
   }
+  /* 📅 오늘의 숙제 — 다른 기기에서 체크한 숙제를 이 기기 화면에도 바로 (엄마 폰 4/7) */
+  var hpM = mergeHwplan(read(K.hwplan, {}), read(K.hwplanUn, {}), doc.hwplan, doc.hwplanUn);
+  var hpL = read(K.hwplan, {}), hpuL = read(K.hwplanUn, {});
+  if (JSON.stringify(hpM.check) !== JSON.stringify(hpL) || JSON.stringify(hpM.un) !== JSON.stringify(hpuL)){
+    write(K.hwplan, hpM.check); write(K.hwplanUn, hpM.un);
+    changed = true;
+    try { if (SB.hwplanRefresh) SB.hwplanRefresh(); } catch(e){}
+  }
   if (sgChanged) { try { if (window.SB && SB.sg && SB.sg.reload) SB.sg.reload(); } catch(e){} }
   if (frChanged) { try { if (window.SB && SB.fr && SB.fr.reload) SB.fr.reload(); } catch(e){} }
   if (nirChanged) { try { if (window.SB && SB.shelf && SB.shelf.reload) SB.shelf.reload(); } catch(e){} }
@@ -24077,7 +24134,8 @@ function pullPush(manual){
       var doc = {
         v:1, code:f.code, plan:local.plan, hw:local.hw, money:local.money,
         done:local.done, study:local.study, coupons:local.coupons, rb:local.rb, mathset:local.mathset,
-        ntfy:local.ntfy, sg:local.sg, sgu:local.sgu, fg:local.fg, fgu:local.fgu, wb:local.wb, at:Date.now()
+        ntfy:local.ntfy, sg:local.sg, sgu:local.sgu, fg:local.fg, fgu:local.fgu, wb:local.wb,
+        hwplan:local.hwplan, hwplanUn:local.hwplanUn, at:Date.now()
       };
       return apiPut(f.code, doc).then(function(){ return true; });
     }
@@ -24141,7 +24199,7 @@ function createCode(){
   saveFam({ code:code, base:num(s.money.piggy), lastSync:0, sig:"", lastError:"", at:Date.now() });
   paint();
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
-  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, fg:s.fg, fgu:s.fgu, curri:s.curri, at:Date.now() })
+  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, fg:s.fg, fgu:s.fgu, curri:s.curri, hwplan:s.hwplan, hwplanUn:s.hwplanUn, at:Date.now() })
     .then(function(){
       var g = fam();
       g.base = num(s.money.piggy); g.lastSync = Date.now(); g.sig = sigOf(s); g.lastError = "";
@@ -24165,6 +24223,12 @@ function joinCode(){
     if (cloud.money) write(K.money, cloud.money);
     if (cloud.done) write(K.done, cloud.done);
     if (cloud.study) write(K.study, cloud.study);
+    /* 📅 오늘의 숙제 — 연결하는 순간 엄마 폰에 그날 체크가 그대로 뜬다 */
+    if (cloud.hwplan && typeof cloud.hwplan === "object"){
+      var hpJ = mergeHwplan(read(K.hwplan, {}), read(K.hwplanUn, {}), cloud.hwplan, cloud.hwplanUn);
+      write(K.hwplan, hpJ.check); write(K.hwplanUn, hpJ.un);
+      try { if (SB.hwplanRefresh) SB.hwplanRefresh(); } catch(e){}
+    }
     if (cloud.coupons) write(K.coupons, cloud.coupons);
     if (cloud.mathset && typeof cloud.mathset === "object"){ write(K.mathset, cloud.mathset); try { if (SB.mathSetChanged) SB.mathSetChanged(); } catch(e){} }
     /* 🔔 알림 토픽 — 가족이 이미 쓰던 토픽이 있으면 그 토픽을 이 기기에도 맞춘다 */
@@ -24291,6 +24355,7 @@ SB.family = {
   state: function(){ return fam(); },
   sync: function(){ return pullPush(true); },
   touch: touch,
+  push: touch,
   create: createCode,
   join: joinCode,
   leave: leaveCode,
@@ -37037,6 +37102,7 @@ function pad2(n){ return n < 10 ? "0" + n : "" + n; }
 function iso(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
 function dayIdx(){ return (new Date().getDay() + 6) % 7; }         /* 월=0 … 일=6 */
 var KEY = "haeyuli.hwplan.v1";
+var UNKEY = "haeyuli.hwplan.un.v1";   /* 마지막에 숙제 체크를 '푼' 시각 — 기기끼리 합칠 때 쓴다 */
 var DAYN = ["월", "화", "수", "목", "금", "토", "일"];
 var TAG = { p:"📖 지면", b:"💻 보드", k:"📚 책", t:"📱 패드", v:"🎥 영상" };
 
@@ -37121,9 +37187,38 @@ function load(){
   return {};
 }
 function save(v){ try { localStorage.setItem(KEY, JSON.stringify(v)); } catch(e){} }
+function obj(v){ return (v && typeof v === "object" && !Array.isArray(v)) ? v : {}; }
+/* 체크를 푼 시각 — 같은 숙제라도 이 시각이 체크 시각보다 크거나 같으면 '안 한 것'으로 본다 */
+function loadUn(){
+  try { return obj(JSON.parse(localStorage.getItem(UNKEY) || "null")); } catch(e){ return {}; }
+}
+function saveUn(v){ try { localStorage.setItem(UNKEY, JSON.stringify(v)); } catch(e){} }
+function markUn(date, id, ts){
+  var u = loadUn();
+  if (!u[date]) u[date] = {};
+  u[date][id] = ts;
+  var ks = Object.keys(u).sort();
+  while (ks.length > 60) delete u[ks.shift()];
+  saveUn(u);
+}
+function clearUn(date, id){
+  var u = loadUn(), d = obj(u[date]);
+  if (!d[id]) return;
+  delete d[id];
+  if (Object.keys(d).length) u[date] = d; else delete u[date];
+  saveUn(u);
+}
 function dayDone(date){
   var v = load()[date];
-  return (v && typeof v === "object") ? v : {};
+  if (!v || typeof v !== "object") return {};
+  var u = obj(loadUn()[date]), out = {}, k;
+  for (k in v){
+    var t = Number(v[k]) || 0;
+    if (!t) continue;
+    if (u[k] && Number(u[k]) >= t) continue;      /* 다른 기기에서 마지막에 푼 숙제 */
+    out[k] = t;
+  }
+  return out;
 }
 /* 📘 공부 설정에 등록한 문제집도 그날 숙제로 함께 나온다 (p.시작~끝) */
 function wbDay(di, ds){
@@ -37186,9 +37281,11 @@ function toggle(id){
   var isWb = String(id).indexOf("wb:") === 0;
   if (s[d][id]) {
     delete s[d][id];
+    markUn(d, id, Date.now());        /* 푼 것도 다른 기기로 — 합칠 때 체크보다 최근이면 안 한 것으로 */
     if (isWb){ try { if (SB.wb && SB.wb.rollback) SB.wb.rollback(id.slice(3), d, true); } catch(e){} }
   } else {
     s[d][id] = Date.now();
+    clearUn(d, id);
     if (isWb){ try { if (SB.wb && SB.wb.advance) SB.wb.advance(id.slice(3), d, true); } catch(e){} }
     /* 전역 '공부하면 ⭐+2' 보너스는 건너뛰고 숙제 하나에 정확히 +1 (auto2| 로 시작하면 보너스를 안 준다) */
     try { if (SB.earn) SB.earn("auto2|hw5|" + d + "|" + id, 1); } catch(e){}
@@ -37202,6 +37299,8 @@ function toggle(id){
   var keys = Object.keys(s).sort();
   while (keys.length > 60) delete s[keys.shift()];
   save(s);
+  /* 오늘 숙제 완료 표시 — 주간 시간표·자동차 게임 잠금(hwdone)도 같이 움직이고 가족 코드로 함께 간다 */
+  try { if (SB.week && SB.week.markTodayDone) SB.week.markTodayDone(); } catch(e){}
   render();
   st = status();
   var jkwBase = 0;
@@ -37215,6 +37314,9 @@ function toggle(id){
 }
 SB.hw5 = { status:status, toggle:toggle, sched:SCHED, ladder:LADDER };
 SB.hw5.render = render;
+/* 가족 코드로 다른 기기의 숙제 체크를 받으면 화면에 바로 그린다 (SB.family.applyDoc) */
+SB.hwplanRefresh = function(){ try { render(); } catch(e){} };
+SB.hwplan = { read:load, unread:loadUn, refresh:SB.hwplanRefresh };
 
 /* ---------------- 잭팟 사다리 ---------------- */
 function ladderInfo(){
