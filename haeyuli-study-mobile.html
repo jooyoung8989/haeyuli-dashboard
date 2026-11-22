@@ -37586,7 +37586,10 @@ else setTimeout(boot, 0);
 <style id="jpQuiz1122">
 /* ===== 2026-11-22 · 🗾 일본어 · 📞 음성퀴즈 ===== */
 .cn-entries{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:.55rem;margin:.8vh 0 .2vh;}
-.cn-entries .cn-entry{margin:0;}
+.cn-entries .cn-entry{margin:0;gap:.38rem;flex-wrap:nowrap;}
+.cn-entries .cn-entry .tx b{font-size:.86rem;}
+.cn-entries .cn-entry .tx span{font-size:.68rem;line-height:1.25;}
+.cn-entries .cn-entry .go{font-size:.68rem;padding:.34rem .45rem;white-space:nowrap;}
 .cn-modes{flex-wrap:wrap;justify-content:flex-end;}
 .nq-card{background:linear-gradient(160deg,#fffaf2 0%,#fff 60%);border-color:#f3dcc6;}
 .nq-say{display:inline-flex;align-items:center;gap:.35rem;font-size:.76rem;font-weight:900;color:#b4573a;
@@ -37601,6 +37604,11 @@ else setTimeout(boot, 0);
 .nq-teach{font-size:.78rem;font-weight:800;color:#8a5a08;background:#fff8e3;border-radius:.7rem;
   padding:.45rem .6rem;line-height:1.42;word-break:keep-all;text-align:left;}
 .nq-wait{font-size:.76rem;font-weight:800;color:#7b93a8;}
+@media (max-width:520px){
+  .cn-entries .cn-entry{flex-wrap:wrap;}
+  .cn-entries .cn-entry .tx{flex:1 1 100%;}
+  .cn-entries .cn-entry .go{flex:1 1 auto;text-align:center;justify-content:center;display:inline-flex;align-items:center;}
+}
 @media (max-width:460px){
   .cn-mode{font-size:.7rem;padding:.32rem .52rem;}
   .nq-ask{font-size:.94rem;}
