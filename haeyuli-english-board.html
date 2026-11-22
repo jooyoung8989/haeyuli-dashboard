@@ -42413,7 +42413,10 @@ function afterStep(){
   var t = steps();
   var st = $("swwSteps"); if (st) st.innerHTML = stepsHtml();
   var fmark = document.querySelector("#swwBody .sww-sh .sww-step");
-  if (fmark && !t.find) fmark.textContent = findGot() + " / " + findNeed();
+  if (fmark){
+    fmark.textContent = findGot() + " / " + findNeed();
+    fmark.classList.toggle("done", t.find);
+  }
   if (!t.all) return;
   if (isDone(word().w)) return;
   var d = data(), w = word().w;
