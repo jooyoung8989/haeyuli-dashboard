@@ -1021,10 +1021,14 @@ function renderMom(){
   }).join("");
 }
 function saveMom(){
-  var els = document.querySelectorAll("#momList [data-mom]"), map = {};
+  var els = document.querySelectorAll("#momList [data-mom]"), map = {}, cur = momData().notes || {};
   for (var i = 0; i < els.length; i++){
-    map[els[i].getAttribute("data-mom")] = String(els[i].value || "").trim().slice(0, 40);
+    var k = els[i].getAttribute("data-mom");
+    var v = String(els[i].value || "").trim().slice(0, 40);
+    var was = (cur[k] && cur[k].t) ? String(cur[k].t) : "";
+    if (v !== was) map[k] = v;              /* 바뀐 요일만 보낸다 — 다른 요일을 건드리지 않게 */
   }
+  if (!Object.keys(map).length){ toast("바뀐 내용이 없어요"); return; }
   var now = Date.now();
   commit(function(d){
     var a = (d.momnote && typeof d.momnote === "object") ? d.momnote : { v:1, notes:{} };
@@ -1552,7 +1556,7 @@ function backupRestore(){
   if (!data || typeof data !== "object"){ toast("진도표 데이터를 찾지 못했어요"); return; }
   if (!confirm("지금 연간 진도표를 붙여넣은 내용으로 바꿀까요?")) return;
   var merged = null;
-  try { merged = mergeAnnual(annualData(), data); } catch(e){ merged = null; }
+  try { merged = mergeAnnual(null, data); } catch(e){ merged = null; }
   if (!merged){ toast("복원하지 못했어요"); return; }
   merged.at = Date.now();
   commit(function(d){ d.annual = merged; }).then(function(ok){
