@@ -1470,6 +1470,33 @@ function dropWbMonth(d, wid){
   a.at = Date.now();
   d.annual = a;
 }
+/* 문제집을 고치면 'wb:<id>' 과정을 연간 진도표에 바로 있게 맞춰 둔다
+   (예전에 등록해 연간 항목이 없는 문제집도 요일·쪽수를 건드리면 즉시 나타난다) */
+function ensureWbAnnual(d, w){
+  if (!w) return;
+  var year = new Date().getFullYear(), curM = new Date().getMonth() + 1;
+  var a = (d.annual && typeof d.annual === "object") ? d.annual : { v:1, subs:[], years:{}, del:{} };
+  ensureSubs(a);
+  var list = ensureYear(a, year), id = "wb:" + w.id, found = false;
+  for (var i = 0; i < list.length; i++){
+    if (String(list[i].id) !== id) continue;
+    var it = list[i];
+    var auto = (it.note === "auto" || !it.note) ? 1 : 0;
+    var sm = Math.min(12, Math.max(1, num(it.sm, curM)));
+    var em = auto ? Math.max(sm, curM) : Math.min(12, Math.max(sm, num(it.em, curM)));
+    it.sub = subIdFor(w.sub, a.subs); it.title = String(w.nm || "");
+    it.sm = sm; it.em = em; it.note = (auto ? "auto" : "");
+    if (it.st === undefined) it.st = "plan";
+    it.at = Date.now();
+    found = true;
+  }
+  if (!found){
+    list.push({ id:id, sub:subIdFor(w.sub, a.subs), sm:curM, em:curM, title:String(w.nm || ""),
+                note:"auto", st:"plan", at:Date.now() });
+  }
+  a.at = Date.now();
+  d.annual = a;
+}
 function wbMonthSave(id){
   var smEl = document.querySelector('#wbList [data-wbm="' + id + ':sm"]');
   var emEl = document.querySelector('#wbList [data-wbm="' + id + ':em"]');
@@ -1505,8 +1532,11 @@ function renderWB(){
   var thisYear = new Date().getFullYear(), MONMAP = wbMonthMap(thisYear);
   $("wbList").innerHTML = list.map(function(w){
     var mo = wbMonths(w, thisYear, MONMAP);
-    var days = w.days.map(function(i){
-      return '<button type="button" class="chip on" data-wbday="' + esc(w.id) + ':' + i + '">' + DAYN[i] + '</button>';
+    /* 요일은 7개를 항상 다 보여 준다 — 안 고른 요일도 눌러서 켤 수 있게 */
+    var days = DAYN.map(function(nm, i){
+      var on = (w.days.indexOf(i) >= 0);
+      return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + (on ? 'true' : 'false') +
+        '" data-wbday="' + esc(w.id) + ':' + i + '">' + nm + '</button>';
     }).join("");
     return '<div class="wbcard" data-card="' + esc(w.id) + '">' +
       '<div class="wb-h"><span class="em">' + (SUBEM[w.sub] || "📘") + '</span>' +
@@ -1592,6 +1622,7 @@ function wbSaveOne(id){
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id){ list2[j] = next; found = true; }
     if (!found) list2.push(next);
     d.wb = { v:1, list:list2 };
+    ensureWbAnnual(d, next);
   }).then(function(ok){ if (ok) toast("📘 " + next.nm + " 저장 · " + next.cur + "/" + next.total + "쪽"); });
 }
 function wbToggleDay(id, idx){
@@ -1612,6 +1643,11 @@ function wbToggleDay(id, idx){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
     d.wb = { v:1, list:list2 };
+    ensureWbAnnual(d, next);
+  }).then(function(ok){
+    if (!ok) return;
+    var added = (next.days.indexOf(idx) >= 0);
+    toast("📘 " + next.nm + " · " + dayLabel(next.days) + (next.hw ? (added ? " 추가 · 오늘의 숙제·시간표·연간 진도표에 바로 반영" : " 해제 · 오늘의 숙제·시간표·연간 진도표에 바로 반영") : ""));
   });
 }
 function wbPreset(id, key){
@@ -1629,7 +1665,8 @@ function wbPreset(id, key){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
     d.wb = { v:1, list:list2 };
-  });
+    ensureWbAnnual(d, next);
+  }).then(function(ok){ if (ok) toast("📘 " + next.nm + " · " + dayLabel(next.days) + " · 학습계획에 바로 반영"); });
 }
 function wbToggleHW(id, on){
   var list = wbData().list, w = null;
@@ -1641,7 +1678,7 @@ function wbToggleHW(id, on){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
     d.wb = { v:1, list:list2 };
-  }).then(function(ok){ if (ok) toast(on ? "📘 오늘의 숙제에 넣었어요" : "📘 오늘의 숙제에서 뺐어요"); });
+  }).then(function(ok){ if (ok) toast(on ? "📘 오늘의 숙제에 넣었어요 · 시간표·연간 진도표에 바로 반영" : "📘 오늘의 숙제에서 뺐어요 (연간 진도표에는 남아요)"); });
 }
 function wbReset(id){
   var list = wbData().list, w = null;
