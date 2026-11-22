@@ -11871,7 +11871,12 @@ SB.go = function(tab, sub, sec){
     if (list) for (var li = 0; li < list.length; li++) if (list[li][0] === use) ok = true;
     var gpick = grpByKey(subject, use);
     if (gpick) { use = grpTarget(subject, gpick); ok = true; }
-    if (!ok) use = SB.sub[subject] || (list && list[0] ? list[0][0] : "main");
+    if (!ok){
+      /* 없어진 메뉴(영어 그림 동화책·단어 테스트)가 저장돼 있으면 과목 기본 메뉴로 */
+      var sbDef = subjById(subject), sbSec = (sbDef && sbDef.sec) ? sbDef.sec : "", sbHas = false;
+      for (var li3 = 0; li3 < (list ? list.length : 0); li3++) if (list[li3][0] === sbSec) sbHas = true;
+      use = (sbHas ? sbSec : (list && list[0] ? list[0][0] : "main"));
+    }
     var vid = VIEWID["study:" + subject + ":" + use];
     if (!vid) return;
     SB.current = "study"; SB.subject = subject; SB.sub[subject] = use;
@@ -12601,7 +12606,11 @@ SB.onStars = function(){};
 
 function initShell(){
   var saved = readJSON("haeyuli.study.tab.v1", null);
-  if (saved && saved.subject && SECS[saved.subject] && saved.sec) SB.sub[saved.subject] = saved.sec;
+  if (saved && saved.subject && SECS[saved.subject] && saved.sec){
+    var sSecs = SECS[saved.subject], sOk = false;
+    for (var sI = 0; sI < sSecs.length; sI++) if (sSecs[sI][0] === saved.sec) sOk = true;
+    if (sOk) SB.sub[saved.subject] = saved.sec;          /* 없어진 메뉴(그림 동화책·단어 테스트)는 무시 */
+  }
   /* #home · #study · #book · #attend · #room · #en · #ko · #math · #social · #science · #hanja 바로 열기 (없으면 홈) */
   var hash = String(location.hash || "").replace("#", "");
   if (hash && (hash === "study")) SB.go("study", "");
