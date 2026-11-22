@@ -7164,7 +7164,7 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
           <button class="go" type="button" data-jpopen="quiz">📞 음성퀴즈</button>
         </div>
         </div>
-        <p class="hub2-note">한 과목에 3개씩! 다 하면 200원!!!! 열심히 모아 봐요!</p>
+        <p class="hub2-note">한 과목에 3개씩 마치면 200원 · 중국어·일본어는 녹음하면 별 +1</p>
         <!-- ===== 🔬 재미있는 과학 영상관 (5과목 카드 아래) ===== -->
         <div class="sci-hub" id="sciHub">
           <div class="sci-hd">
@@ -11212,6 +11212,21 @@ var SUBJECTS = [
   { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄 · 글자 키보드 · 문장 쓰기 · 어휘·개념", sec:"quote" },
   { k:"history", em:"🏛️", nm:"역사", desc:"연도표 · 왕 계보 · 사진 퀴즈 · 영상 · 세계사", sec:"timeline" }
 ];
+/* 2026-11-22 · 중국어·일본어도 같은 과목 줄에서 고른다 (200원 보상 과목에는 넣지 않는다) */
+var NAVSUBJ = SUBJECTS.concat([
+  { k:"cn", em:"🐼", nm:"중국어", desc:"도요새 중국어 · 단어 카드 · 일상대화 · 메이쌤 음성퀴즈", sec:"cards" },
+  { k:"jp", em:"🗾", nm:"일본어", desc:"해율이 일본어 · 단어 카드 · 일상대화 · 유미쌤 음성퀴즈", sec:"cards" }
+]);
+/* 하위 메뉴 라벨의 앞 이모지를 따로 떼어 같은 크기로 그린다 */
+function chipLabel(s){
+  s = String(s == null ? "" : s);
+  var i = s.indexOf(" ");
+  if (i > 0){
+    var head = s.slice(0, i);
+    if (!/[0-9A-Za-z가-힣]/.test(head)) return '<span class="sj-e" aria-hidden="true">' + head + '</span>' + s.slice(i + 1);
+  }
+  return s;
+}
 var SECS = {
   en:      [["nir", "📘 나우 아임 리딩"], ["ort", "🌳 ORT"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["call", "📞 전화 영어"], ["wordgrow", "🦉 단어키우기"], ["video", "🎬 영어 영상"], ["wolpaem", "🏰 월팸"]],
   ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"], ["key", "⌨️ 글자 키보드"], ["write", "✍️ 받아쓰기"], ["vocab", "🌱 어휘·개념"]],
@@ -11298,7 +11313,7 @@ function applySec(v, sec){
   if (sec) v.setAttribute("data-sec", sec); else v.removeAttribute("data-sec");
 }
 function subjById(k){
-  for (var i = 0; i < SUBJECTS.length; i++) if (SUBJECTS[i].k === k) return SUBJECTS[i];
+  for (var i = 0; i < NAVSUBJ.length; i++) if (NAVSUBJ[i].k === k) return NAVSUBJ[i];
   return null;
 }
 function renderChips(){
@@ -11317,7 +11332,7 @@ function renderChips(){
                + '<span class="sj-e" aria-hidden="true">' + g.em + '</span>' + g.nm + '</button>';
         }).join("");
       } else {
-        box.innerHTML = back + SUBJECTS.map(function(s){
+        box.innerHTML = back + NAVSUBJ.map(function(s){
           var on = s.k === SB.subject;
           return '<button class="subtab subj' + (on ? " on" : "") + '" type="button" data-subj="' + s.k + '" aria-pressed="' + (on ? "true" : "false") + '">'
                + '<span class="sj-e" aria-hidden="true">' + s.em + '</span>' + s.nm + '</button>';
@@ -11336,7 +11351,7 @@ function renderChips(){
       box2.hidden = false;
       box2.innerHTML = list.map(function(x){
         var on = x[0] === SB.sub[SB.subject];
-        return '<button class="subtab' + (on ? " on" : "") + '" type="button" data-sub="' + x[0] + '" aria-pressed="' + (on ? "true" : "false") + '">' + x[1] + '</button>';
+        return '<button class="subtab' + (on ? " on" : "") + '" type="button" data-sub="' + x[0] + '" aria-pressed="' + (on ? "true" : "false") + '">' + chipLabel(x[1]) + '</button>';
       }).join("");
     } else { box2.hidden = true; box2.innerHTML = ""; }
   }
@@ -19977,8 +19992,8 @@ SB.renderHub = function(){
     var rw = on
       ? '<b>✓ ' + need + '/' + need + ' 완료 (+200원)</b><br>오늘 ' + esc(s.nm) + ' 공부 끝' + (at ? ' · ' + esc(at) : "")
       : (cnt > 0
-          ? '<b>진행 ' + cnt + '/' + need + '</b><br>' + left + '개 더 하면 <b>200원!</b>'
-          : '3개 하면 <b>200원!!!!</b>');
+          ? '<b>진행 ' + cnt + '/' + need + '</b><br>' + left + '개 더 하면 <b>200원</b>'
+          : '3개 하면 <b>200원</b>');
     return '<button class="s2c' + (on ? " s2c-done" : '') + '" type="button" data-subj="' + s.k + '"'
       + ' aria-label="' + esc(s.nm) + (on ? " 오늘 공부 끝, 3개 완료 200원 달성, 한 번 더 해 볼까요"
           : (cnt > 0 ? " 오늘 " + cnt + "개 했어요, " + left + "개 더 하면 200원" : " 공부 시작하기, 3개 하면 200원")) + '">'
@@ -35611,6 +35626,17 @@ function todayKey(){
   return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
 }
 function norm(s){ return String(s == null ? "" : s).toLowerCase().replace(/\s+/g, ""); }
+/* 2026-11-22 · 연계독서 키워드 — 제목에 없는 나라·시대·주제 낱말을 색인에 더한다 */
+function kwExtra(kind, key, num, text){
+  var B = window.SB_BOOKKW, out = " ";
+  if (!B) return out;
+  try { if (B.lex) out += B.lex(text) + " "; } catch(e){}
+  try {
+    if (kind === "rb" && B.rb && B.rb[key] && B.rb[key][num]) out += B.rb[key][num] + " ";
+    if (kind === "sh" && B.sh && B.sh[key] && B.sh[key][num]) out += B.sh[key][num] + " ";
+  } catch(e){}
+  return out;
+}
 
 /* 책장마다 검색에 도움을 주는 낱말 (제목에 없는 주제어) */
 var KW = {
@@ -35646,7 +35672,8 @@ function buildIndex(){
         var ser = RB.series[i];
         for (j = 0; j < ser.books.length; j++){
           b = ser.books[j];
-          out.push({ t:b.t, s:ser.n, em:ser.e, grp:"", hint:ser.c || "", kw:KW[ser.k] || "",
+          out.push({ t:b.t, s:ser.n, em:ser.e, grp:"", hint:ser.c || "",
+                     kw:(KW[ser.k] || "") + kwExtra("rb", ser.k, b.n, b.t + " " + ser.n + " " + (ser.c || "")),
                      src:"rb", key:b.key, num:b.n });
         }
       }
@@ -35662,7 +35689,8 @@ function buildIndex(){
       for (j = 0; j < d.g.length; j++) gn[d.g[j][0]] = d.g[j][1] + " " + d.g[j][2];
       for (j = 0; j < d.b.length; j++){
         b = d.b[j];
-        out.push({ t:b[3], s:d.n, em:d.e, grp:(gn[b[1]] || ""), hint:b[4] || "", kw:SHELF_KW[d.k] || "",
+        out.push({ t:b[3], s:d.n, em:d.e, grp:(gn[b[1]] || ""), hint:b[4] || "",
+                   kw:(SHELF_KW[d.k] || "") + kwExtra("sh", d.k, b[0], b[3] + " " + (b[4] || "") + " " + d.n),
                    src:"sh", def:d.k, key:String(b[0]), num:b[2] });
       }
     }
@@ -35673,7 +35701,8 @@ function buildIndex(){
     var sg = (SB.sg && SB.sg.books) ? SB.sg.books : [];
     for (i = 0; i < sg.length; i++){
       b = sg[i];
-      out.push({ t:b[2], s:"프뢰벨 삼국지", em:"⚔️", grp:(SGST[b[1]] || (b[1] + "단계")), hint:b[3] || "", kw:"삼국지 유비 관우 장비 제갈량",
+      out.push({ t:b[2], s:"프뢰벨 삼국지", em:"⚔️", grp:(SGST[b[1]] || (b[1] + "단계")), hint:b[3] || "",
+                 kw:"삼국지 유비 관우 장비 제갈량 위 오 촉 중국 후한 영웅 전쟁 " + kwExtra("sg", "", b[0], b[2] + " " + (b[3] || "")),
                  src:"sg", key:String(b[0]), num:b[0] });
     }
   } catch(e){}
@@ -35686,7 +35715,8 @@ function buildIndex(){
     for (j = 0; j < frg.length; j++) fn[frg[j][0]] = frg[j][1] + " " + frg[j][2];
     for (i = 0; i < fr.length; i++){
       b = fr[i];
-      out.push({ t:b[2], s:"프뢰벨 책장", em:"📕", grp:(fn[b[1]] || ""), hint:b[3] || "", kw:"프뢰벨 리딩토탈",
+      out.push({ t:b[2], s:"프뢰벨 책장", em:"📕", grp:(fn[b[1]] || ""), hint:b[3] || "",
+                 kw:"프뢰벨 리딩토탈 " + kwExtra("gl", "", b[0], b[2] + " " + (b[3] || "")),
                  src:"gl", key:String(b[0]), num:b[0] });
     }
   } catch(e){}
@@ -35726,10 +35756,14 @@ function openOf(e){
 function search(q){
   var all = buildIndex(), Q = norm(q), out = [];
   if (!Q) return out;
+  /* 2026-11-22 · '일본 우동'처럼 여러 낱말을 넣으면 모두 들어 있는 책을 찾는다 */
+  var toks = String(q || "").toLowerCase().split(/\s+/).map(norm).filter(function(t){ return !!t; });
   for (var i = 0; i < all.length; i++){
     var e = all[i];
     var hay = norm(e.t) + "|" + norm(e.s) + "|" + norm(e.grp) + "|" + norm(e.hint) + "|" + norm(e.kw);
-    if (hay.indexOf(Q) < 0) continue;
+    var hit = true;
+    for (var ti = 0; ti < toks.length; ti++) if (hay.indexOf(toks[ti]) < 0){ hit = false; break; }
+    if (!hit) continue;
     var sc = 0;
     if (norm(e.t).indexOf(Q) === 0) sc = 3;
     else if (norm(e.t).indexOf(Q) >= 0) sc = 2;
@@ -35763,7 +35797,7 @@ function paint(q){
   var res = $("bsRes"); if (!res) return;
   var list = search(q);
   var head = '<div class="bs-top"><b>🔎 ‘' + esc(q) + '’ — ' + list.length + '권 찾았어요</b>' +
-    '<span class="bs-chip">제목 · 시리즈 · 갈래 · 한 줄 소개까지 한 번에</span></div>';
+    '<span class="bs-chip">제목 · 시리즈 · 나라·시대·주제 키워드까지 한 번에</span></div>';
   if (!list.length){
     res.innerHTML = head + '<div class="bs-none">찾는 책이 없어요.<br>다른 낱말로 해 보세요 (예: 공룡 · 돈 · 우주 · 이순신 · 친구)</div>';
     return;
@@ -37374,7 +37408,8 @@ function toggle(id){
   try { if (st.all && SB.onAllHw) SB.onAllHw(st, jkwBase); } catch(e){}
   touchFam();
 }
-SB.hw5 = { status:status, toggle:toggle, sched:SCHED, ladder:LADDER };
+SB.hw5 = { status:status, toggle:toggle, sched:SCHED, ladder:LADDER,
+           items:items, dayDone:dayDone, iso:iso, dayIdx:dayIdx, tag:TAG, wb:wbDay };
 SB.hw5.render = render;
 /* 가족 코드로 다른 기기의 숙제 체크를 받으면 화면에 바로 그린다 (SB.family.applyDoc) */
 SB.hwplanRefresh = function(){ try { render(); } catch(e){} };
@@ -39284,5 +39319,566 @@ try {
   });
 })();
 </script>
+<style id="ui1122css">
+/* =====================================================================
+   2026-11-22 · 해율이 스터디 보드 미감 정돈
+   · 과목·하위 버튼 디자인 통일 (이모지 → 인라인 SVG 배지)
+   · 중국어·일본어 카드: 중복 전환 버튼 제거 · 전화 버튼 정렬 · 칩 통일
+   · 이번 주 시간표 ← 오늘의 숙제 연동
+   ===================================================================== */
+:root{
+  --ui-bd:#e8eef3; --ui-bd2:#eef3f7; --ui-ink:#233240; --ui-sub:#7b8d9c; --ui-accent:#1a6a92;
+  --ui-r:1rem; --ui-r-sm:.62rem;
+}
+/* ---------- 상단 ---------- */
+body .topbar{
+  height:auto; min-height:3.05rem; padding:.38rem .5rem; gap:.45rem;
+  background:#fff; border-radius:.95rem;
+  box-shadow:inset 0 0 0 1px var(--ui-bd), 0 1px 3px rgba(22,42,58,.04);
+}
+body .brand b{ font-weight:900; letter-spacing:-.025em; color:#1f2a33; }
+body .pill, body .learnpill, body .autoread, body .settingsbtn, body .refreshvar{
+  border-radius:.6rem; background:#f8fafc; box-shadow:inset 0 0 0 1px #e6ebf0;
+}
+body .tabs-main{
+  background:#fff; padding:.22rem; gap:.18rem; border-radius:.85rem;
+  box-shadow:inset 0 0 0 1px var(--ui-bd);
+}
+body .tab{
+  height:2.45rem; padding:0 .78rem; border-radius:.62rem;
+  font-size:clamp(12px,1.5vh,16px); font-weight:800; letter-spacing:-.02em; color:#647788;
+}
+body .tab.on{ background:#f1f7fb; color:var(--ui-accent); box-shadow:inset 0 0 0 1.3px #b9d6e8; }
+body .tab .te{ display:inline-flex; align-items:center; }
+body .tab .te svg{ width:1.1em; height:1.1em; }
+
+/* ---------- 과목 줄 · 하위 메뉴 줄 ---------- */
+body .subs, body .subs2{
+  display:flex; align-items:center; gap:.36rem; height:auto; min-height:2.6rem;
+  padding:.28rem .36rem; border-radius:.85rem; background:#fbfcfd;
+  box-shadow:inset 0 0 0 1px var(--ui-bd); overflow-x:auto; overflow-y:hidden;
+  scrollbar-width:none; -ms-overflow-style:none; -webkit-overflow-scrolling:touch;
+}
+body .subs::-webkit-scrollbar, body .subs2::-webkit-scrollbar{ display:none; }
+body .subs2{ background:#f7fafc; box-shadow:inset 0 0 0 1px var(--ui-bd2); }
+body .subtab{
+  flex:0 0 auto; display:inline-flex; align-items:center; gap:.4rem;
+  height:auto; min-height:2.05rem; padding:.22rem .7rem; margin:0;
+  border-radius:var(--ui-r-sm); font-size:clamp(12px,1.45vh,16px); font-weight:800; letter-spacing:-.015em;
+  color:#647788; background:transparent; box-shadow:none; white-space:nowrap;
+  transition:background .15s,color .15s,box-shadow .15s;
+}
+body .subtab:hover{ background:#eef5fa; }
+body .subtab.on{ background:#fff; color:var(--ui-accent); box-shadow:inset 0 0 0 1.4px #a8cfe5, 0 1px 2px rgba(22,42,58,.06); }
+body .subtab .sj-e{ display:contents; }
+body .subtab.sback{ color:#94a3af; font-weight:700; padding-left:.3rem; }
+body .subtab.sback:hover{ background:#eef5fa; color:#5f7385; }
+/* SVG 아이콘 배지 */
+body .si-b{
+  flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center;
+  width:1.4rem; height:1.4rem; border-radius:.42rem;
+}
+body .si-b svg{ width:.95rem; height:.95rem; display:block; }
+body .si-dot{
+  flex:0 0 auto; width:.34rem; height:.34rem; border-radius:50%;
+  background:#c3d1dc; box-shadow:0 0 0 2px #eef3f7;
+}
+body .subtab.on .si-dot{ background:#4f9dc4; box-shadow:0 0 0 2px #e4f2fa; }
+
+/* ---------- 카드 표면 ---------- */
+body .panel, body .hwcard, body .weekboard, body .sheet, body .pg-main, body .att-main, body .bk-panel{
+  background:#fff; border-radius:var(--ui-r);
+  box-shadow:inset 0 0 0 1px var(--ui-bd), 0 1px 3px rgba(22,42,58,.04);
+}
+body .panel-h{ gap:.5rem; }
+body .panel-h b{ font-size:clamp(15px,1.85vh,20px); font-weight:900; letter-spacing:-.025em; color:var(--ui-ink); }
+body .panel-h .ph-no2, body .panel-h span{ color:#93a1ae; font-weight:700; }
+body .mini, body .qb, body .btn{
+  border-radius:var(--ui-r-sm); font-weight:800;
+  background:#f8fafc; color:#46617a; box-shadow:inset 0 0 0 1px #e4ebf1;
+}
+body .mini.on, body .qb.on{ background:#fff; color:var(--ui-accent); box-shadow:inset 0 0 0 1.4px #a8cfe5; }
+
+/* ---------- 과목 카드 (7개 같은 모양) ---------- */
+body .hub2{ min-height:0; }
+body #viewStudyHub .hub2{ overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; }
+body .hub2-grid{
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:stretch;
+  gap:.72rem; min-height:0;
+}
+body .hub2-grid > .s2c{ flex:1 1 calc(25% - .72rem); max-width:calc(25% - .72rem); min-width:9rem; }
+@media (max-width:1030px) and (orientation:portrait){
+  body .hub2-grid > .s2c{ flex-basis:calc(25% - .72rem); max-width:calc(25% - .72rem); }
+}
+@media (max-width:760px){
+  body .hub2-grid > .s2c{ flex-basis:calc(33.333% - .72rem); max-width:calc(33.333% - .72rem); min-width:7.5rem; }
+}
+@media (max-width:640px){
+  body .hub2-grid > .s2c{ flex-basis:calc(50% - .72rem); max-width:calc(50% - .72rem); min-width:0; }
+}
+body .s2c{ border-radius:.95rem; }
+body .s2c-nm{ font-size:clamp(15px,1.9vh,23px); letter-spacing:-.03em; }
+body .s2c-d{ color:#8b9aa8; }
+body .s2c-badge.s2c-badge-si{
+  width:2.5rem; height:2.5rem; border-radius:.7rem;
+  box-shadow:inset 0 0 0 1px rgba(31,42,51,.05);
+}
+body .s2c-badge.s2c-badge-si svg{ width:1.45rem; height:1.45rem; display:block; }
+body .s2c-rwt b{ color:#b5761a; }
+body .s2c-go{ border-radius:.62rem; }
+
+/* ---------- 🐼 중국어 · 🗾 일본어 ---------- */
+body .cn-entries{ display:none !important; }
+body .cn-modes{ display:none !important; }
+body .cn-hd{ display:flex; align-items:center; gap:.42rem .55rem; flex-wrap:wrap; }
+body .cn-hd > b{ font-size:clamp(15px,1.9vh,20px); font-weight:900; letter-spacing:-.025em; color:var(--ui-ink); }
+body .cn-hd > span{ flex:1 1 auto; min-width:0; font-size:clamp(11px,1.35vh,14px); font-weight:700; color:#93a2ae; }
+body .pk-lang-call{
+  margin-left:auto; display:inline-flex; align-items:center; gap:.32rem; text-decoration:none;
+  height:2.2rem; padding:0 .82rem; border-radius:var(--ui-r-sm);
+  background:#fff; color:#22688f; font-size:clamp(11px,1.35vh,14px); font-weight:800; letter-spacing:-.015em;
+  box-shadow:inset 0 0 0 1.3px #bcd9ea; white-space:nowrap;
+}
+body .pk-lang-call:hover{ background:#f2f9fe; }
+body .pk-lang-call:active{ transform:scale(.985); }
+body .pk-lang-call.in-tip{ margin-left:.4rem; height:1.95rem; padding:0 .6rem; }
+@media (max-width:430px){ body .pk-lang-call{ margin-left:0; flex:0 0 auto; } }
+body .cn-cats{ display:flex; gap:.32rem; overflow:auto; padding:.05rem 0 .25rem; scrollbar-width:none; -ms-overflow-style:none; }
+body .cn-cats::-webkit-scrollbar{ display:none; }
+body .cn-cat{
+  flex:0 0 auto; white-space:nowrap; border:0;
+  font-size:clamp(11px,1.35vh,14px); font-weight:800; letter-spacing:-.015em;
+  padding:.34rem .68rem; border-radius:var(--ui-r-sm);
+  background:#f6f9fb; color:#5d7183; box-shadow:inset 0 0 0 1px #e6edf3;
+}
+body .cn-cat.on{ background:#fff; color:var(--ui-accent); box-shadow:inset 0 0 0 1.4px #a8cfe5; }
+body .cn-card{
+  background:#fff; border:0; border-radius:.95rem;
+  box-shadow:inset 0 0 0 1px var(--ui-bd), 0 1px 3px rgba(22,42,58,.04);
+}
+body .cn-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.3rem;
+  min-height:2.35rem; padding:.2rem .9rem; border-radius:var(--ui-r-sm);
+  font-size:clamp(12px,1.45vh,15px); font-weight:800; letter-spacing:-.015em;
+  background:#fff; color:#22688f; box-shadow:inset 0 0 0 1.3px #cfe0ec;
+}
+body .cn-btn.mint, body .cn-btn.play{ background:#fff; color:#22688f; box-shadow:inset 0 0 0 1.3px #cfe0ec; }
+body .cn-btn.sun{ background:#f7f9fb; color:#5d7183; box-shadow:inset 0 0 0 1.3px #e3eaf0; }
+body .cn-btn.rec{ background:#e9f4fb; color:var(--ui-accent); box-shadow:inset 0 0 0 1.3px #a8cfe5; }
+body .cn-btn.on{ background:#2b6f92; color:#fff; box-shadow:none; }
+body .cn-nav{ display:flex; align-items:center; justify-content:center; gap:.55rem; }
+body .cn-nav .cn-btn{ min-height:2.1rem; padding:.15rem .85rem; }
+body .s2c-lang{ cursor:pointer; }
+body .s2c-lang .s2c-hero{ min-height:clamp(70px,14vh,132px); }
+body .s2c-lrow{ display:flex; flex-wrap:wrap; gap:.26rem; justify-content:center; width:100%; margin-top:.1rem; }
+body .s2c-lb{
+  flex:1 1 auto; min-height:1.95rem; padding:.22rem .42rem; border-radius:.52rem;
+  font-size:clamp(11px,1.3vh,14px); font-weight:800; letter-spacing:-.015em;
+  background:#f4f7fa; color:#4a6478; box-shadow:inset 0 0 0 1px #e2eaf0; white-space:nowrap;
+}
+body .s2c-lb:hover{ background:#eaf2f8; }
+body .s2c-lb.on{ background:#fff; color:var(--ui-accent); box-shadow:inset 0 0 0 1.3px #a8cfe5; }
+body .s2c-lang .s2c-go{ display:none; }
+
+/* ---------- 📅 이번 주 시간표 · 숙제 ---------- */
+body #weekBoard .wk-hwlist, body #weekBoard .wk-hwadd{ display:none !important; }
+body #weekBoard .wk-subs .wk-chk{ display:none !important; }
+body #weekBoard .wk-plan{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:.16rem; }
+body #weekBoard .wp-h{ display:flex; align-items:center; gap:.35rem; padding-top:.18rem; border-top:1px dashed var(--ui-bd2); }
+body #weekBoard .wp-h b{ font-size:.72rem; font-weight:900; color:#7d8f9e; letter-spacing:-.01em; }
+body #weekBoard .wp-h .wp-p{ margin-left:auto; font-size:.7rem; font-weight:900; color:#a5b3c0; font-variant-numeric:tabular-nums; }
+body #weekBoard .wp-h .wp-p.ok{ color:#2f8b6b; }
+body #weekBoard .wp-list{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:minmax(0,1fr); gap:.14rem; }
+body #weekBoard .wp-list li{
+  display:flex; align-items:center; gap:.3rem; min-width:0;
+  font-size:clamp(11px,1.32vh,14px); font-weight:700; color:#3f5566; line-height:1.35;
+  padding:.1rem .08rem; letter-spacing:-.015em;
+}
+body #weekBoard .wp-list li .wp-t{
+  flex:0 0 auto; font-style:normal; font-size:.62rem; font-weight:900; color:#8fa0ae;
+  background:#f4f7fa; border-radius:.32rem; padding:.05rem .26rem; line-height:1.2;
+  box-shadow:inset 0 0 0 1px #e7eef4; white-space:nowrap;
+}
+body #weekBoard .wp-list li span{ flex:1 1 auto; min-width:0; overflow-wrap:anywhere; }
+body #weekBoard .wp-list li em{ flex:0 0 auto; font-style:normal; font-size:.66rem; font-weight:900; color:#2f9d6b; }
+body #weekBoard .wp-list li.ok span{ color:#9aabb8; text-decoration:line-through; text-decoration-thickness:1px; }
+body #weekBoard .wp-list li.none{ color:#b3c0cb; font-weight:600; }
+@media (max-width:820px), (max-width:960px) and (orientation:portrait){
+  body #weekBoard .wp-list{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:.14rem .7rem; }
+  body #weekBoard .wp-list li{ font-size:clamp(12px,1.5vh,15px); }
+}
+@media (min-width:961px){
+  body #weekBoard .wp-list{ max-height:clamp(150px,30vh,360px); overflow-y:auto; }
+}
+</style>
+
+<script id="ui1122js">
+/* =====================================================================
+   2026-11-22 · 공부탭 정돈 · 이번 주 시간표 ↔ 오늘의 숙제 · 연계독서 키워드
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c];
+  });
+}
+function pad2(n){ return n < 10 ? ("0" + n) : ("" + n); }
+function isoOf(d){ return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+function mondayOf(){
+  var t = new Date(), w = (t.getDay() + 6) % 7;
+  return new Date(t.getFullYear(), t.getMonth(), t.getDate() - w);
+}
+
+/* ---------------- 과목 아이콘 (이모지 → 인라인 SVG) ---------------- */
+var SUBJ_ICON = {
+  math:   { c:"#c1553a", bg:"#fdf1ee", p:'<path d="M8.6 7.4h6.8M12 4.2v6.4M8.6 16.4h6.8"/>' },
+  en:     { c:"#2f6fb0", bg:"#eef5fb", p:'<path d="M6.6 19 12 5l5.4 14M9.1 14.1h5.8"/>' },
+  hanja:  { c:"#8a5a2b", bg:"#f9f3ea", p:'<path d="M12 4.2v15.6M6.2 8.6h11.6M7.4 17.6c3-.8 6.2-3.3 8.6-6.8"/>' },
+  ko:     { c:"#2f8b6b", bg:"#eef7f2", p:'<path d="M4.8 6.2h14.4v9.2H12l-4.2 3.6v-3.6H4.8z"/><path d="M8.4 9.8h7.2M8.4 12.6h4.6"/>' },
+  history:{ c:"#6a5aa8", bg:"#f2f0fa", p:'<path d="M3.8 9.4 12 4.6l8.2 4.8M6.4 10v8M12 10v8M17.6 10v8M4 19.4h16"/>' },
+  cn:     { c:"#a8503f", bg:"#fdf2ef", p:'<path d="M9.4 5.6h5.2M8.2 5.6v2.6M15.8 5.6v2.6M6.8 8.9h10.4l-1.2 6.6a3.8 3.8 0 0 1-3.9 3 3.8 3.8 0 0 1-3.9-3z"/><path d="M12 18.7v2.4"/>' },
+  jp:     { c:"#4d6f8f", bg:"#f2f7fb", p:'<path d="M3.8 8.4h16.4M6.4 8.4V5.8h11.2v2.6M7.9 11.8h8.2M9 11.8v7.4M15 11.8v7.4"/>' }
+};
+function iconSVG(k, cls){
+  var I = SUBJ_ICON[k];
+  if (!I) return "";
+  return '<svg class="' + (cls || "") + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" '
+    + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + I.p + '</svg>';
+}
+function badgeHTML(k){
+  var I = SUBJ_ICON[k];
+  if (!I) return "";
+  return '<span class="si-b" style="color:' + I.c + ';background:' + I.bg + '">' + iconSVG(k) + '</span>';
+}
+function decorateChips(){
+  var boxes = [$("subs"), $("subs2")];
+  for (var b = 0; b < boxes.length; b++){
+    var box = boxes[b];
+    if (!box) continue;
+    var chips = box.querySelectorAll(".subtab");
+    for (var i = 0; i < chips.length; i++){
+      var chip = chips[i], k = chip.getAttribute("data-subj"), e = chip.querySelector(".sj-e");
+      if (!e) continue;
+      if (k && SUBJ_ICON[k]){ e.outerHTML = badgeHTML(k); continue; }
+      e.outerHTML = '<i class="si-dot" aria-hidden="true"></i>';
+    }
+  }
+}
+function decorateHub(){
+  var grid = $("hubGrid");
+  if (!grid) return;
+  var cards = grid.querySelectorAll(".s2c[data-subj]");
+  for (var i = 0; i < cards.length; i++){
+    var k = cards[i].getAttribute("data-subj"), I = SUBJ_ICON[k];
+    if (!I) continue;
+    var b = cards[i].querySelector(".s2c-badge");
+    if (!b || b.__si) continue;
+    b.innerHTML = iconSVG(k);
+    b.style.background = I.bg;
+    b.style.color = I.c;
+    b.classList.add("s2c-badge-si");
+    b.__si = 1;
+  }
+}
+
+/* ---------------- 🇨🇳 🇯🇵 카드 그림 ---------------- */
+function cnHero(){
+  return '<svg viewBox="0 0 200 120" aria-hidden="true" focusable="false">'
+    + '<ellipse cx="100" cy="108" rx="66" ry="8" fill="#f1ece9"/>'
+    + '<g fill="#6ba97c"><rect x="26" y="26" width="7" height="74" rx="3.5"/><rect x="40" y="44" width="6" height="56" rx="3"/>'
+    + '<path d="M40 46 q-10 -2 -12 -12 q10 0 12 12 Z"/><path d="M40 60 q10 -2 12 -12 q-10 0 -12 12 Z"/></g>'
+    + '<circle cx="76" cy="36" r="11" fill="#3b3b3b"/><circle cx="126" cy="36" r="11" fill="#3b3b3b"/>'
+    + '<circle cx="100" cy="64" r="38" fill="#fff" stroke="#e9e0dc" stroke-width="2"/>'
+    + '<ellipse cx="86" cy="60" rx="8" ry="9.5" fill="#3b3b3b" transform="rotate(-14 86 60)"/>'
+    + '<ellipse cx="114" cy="60" rx="8" ry="9.5" fill="#3b3b3b" transform="rotate(14 114 60)"/>'
+    + '<circle cx="88" cy="57.5" r="2.6" fill="#fff"/><circle cx="112" cy="57.5" r="2.6" fill="#fff"/>'
+    + '<ellipse cx="100" cy="76" rx="5.6" ry="4.2" fill="#4a4a4a"/>'
+    + '<path d="M100 81 q-8 9 -15 3" fill="none" stroke="#4a4a4a" stroke-width="2.4" stroke-linecap="round"/>'
+    + '<path d="M100 81 q8 9 15 3" fill="none" stroke="#4a4a4a" stroke-width="2.4" stroke-linecap="round"/>'
+    + '<circle cx="66" cy="74" r="6.5" fill="#f6c9c9" opacity=".5"/><circle cx="134" cy="74" r="6.5" fill="#f6c9c9" opacity=".5"/>'
+    + '</svg>';
+}
+function jpHero(){
+  return '<svg viewBox="0 0 200 120" aria-hidden="true" focusable="false">'
+    + '<ellipse cx="100" cy="108" rx="68" ry="8" fill="#eef1f4"/>'
+    + '<circle cx="148" cy="40" r="15" fill="#f3b6a3"/>'
+    + '<path d="M40 100 L100 38 L160 100 Z" fill="#93a9bb"/>'
+    + '<path d="M86 54 L100 38 L114 54 Q100 62 86 54 Z" fill="#f5f8fa"/>'
+    + '<g fill="#bf5340">'
+    + '<rect x="52" y="64" width="8" height="40" rx="3.4"/><rect x="140" y="64" width="8" height="40" rx="3.4"/>'
+    + '<rect x="42" y="58" width="116" height="8.5" rx="3.4"/><rect x="55" y="75" width="90" height="6" rx="3"/>'
+    + '</g></svg>';
+}
+var LANGS = [
+  { k:"cn", nm:"중국어", color:"#a8503f", bg:"#fdf2ef",
+    d:"도요새 중국어 · 단어 카드 · 일상대화", hero:cnHero,
+    modes:[["cards","단어 카드"],["talk","일상대화"],["quiz","음성퀴즈"]] },
+  { k:"jp", nm:"일본어", color:"#4d6f8f", bg:"#f3f7fb",
+    d:"해율이 일본어 · 단어 카드 · 일상대화", hero:jpHero,
+    modes:[["cards","단어 카드"],["talk","일상대화"],["quiz","음성퀴즈"]] }
+];
+function paintLangs(){
+  var grid = $("hubGrid");
+  if (!grid) return;
+  if (grid.querySelector(".s2c-lang")) return;
+  for (var i = 0; i < LANGS.length; i++){
+    var L = LANGS[i];
+    var d = document.createElement("div");
+    d.className = "s2c s2c-lang";
+    d.setAttribute("data-langk", L.k);
+    d.setAttribute("role", "group");
+    d.setAttribute("aria-label", L.nm + " — " + L.d);
+    d.innerHTML = '<span class="s2c-top">'
+      +   '<span class="s2c-badge s2c-badge-si" style="color:' + L.color + ';background:' + L.bg + '">' + iconSVG(L.k) + '</span>'
+      +   '<b class="s2c-nm">' + esc(L.nm) + '</b>'
+      + '</span>'
+      + '<span class="s2c-d">' + esc(L.d) + '</span>'
+      + '<span class="s2c-hero" aria-hidden="true">' + L.hero() + '</span>'
+      + '<span class="s2c-rw">'
+      +   '<span class="s2c-rwt">녹음하면 <b>⭐ +1</b></span>'
+      +   '<span class="s2c-lrow">' + L.modes.map(function(m, j){
+            return '<button class="s2c-lb' + (j === 0 ? " on" : "") + '" type="button" data-langsec="' + m[0] + '">' + m[1] + '</button>';
+          }).join("") + '</span>'
+      + '</span>';
+    grid.appendChild(d);
+  }
+}
+function hookHub(){
+  if (!SB.renderHub || SB.renderHub.__lang) return;
+  var orig = SB.renderHub;
+  var wrap = function(){
+    var r = orig.apply(this, arguments);
+    try { paintLangs(); decorateHub(); } catch(e){}
+    return r;
+  };
+  wrap.__lang = 1;
+  SB.renderHub = wrap;
+}
+try {
+  document.addEventListener("click", function(e){
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var card = t.closest(".s2c-lang");
+    if (!card) return;
+    var sec = t.closest("[data-langsec]");
+    var k = card.getAttribute("data-langk");
+    if (!k) return;
+    e.preventDefault();
+    if (SB.go) SB.go("study", k, sec ? sec.getAttribute("data-langsec") : "cards");
+  }, true);
+} catch(e){}
+
+/* ---------------- 📅 이번 주 시간표 · 숙제 ← 오늘의 숙제 ---------------- */
+var TAGTX = { p:"지면", b:"보드", k:"책", t:"패드", v:"영상" };
+function hwApi(){ return (SB.hw5 && SB.hw5.items) ? SB.hw5 : null; }
+function paintWeek(){
+  var board = $("weekBoard");
+  if (!board) return;
+  var api = hwApi();
+  if (!api) return;
+  var cards = board.querySelectorAll(".wk-grid .wk-day");
+  if (!cards.length) return;
+  var mon = mondayOf();
+  for (var i = 0; i < cards.length && i < 7; i++){
+    var card = cards[i];
+    var ds = isoOf(new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + i));
+    var list = [], done = {};
+    try { list = api.items(i, ds) || []; } catch(e){ list = []; }
+    try { done = api.dayDone(ds) || {}; } catch(e){ done = {}; }
+    var n = 0, j;
+    for (j = 0; j < list.length; j++) if (done[list[j].id]) n++;
+    var box = card.querySelector(".wk-plan");
+    if (!box){
+      box = document.createElement("div");
+      box.className = "wk-plan";
+      var subs = card.querySelector(".wk-subs");
+      if (subs && subs.parentNode === card) card.insertBefore(box, subs.nextSibling);
+      else card.appendChild(box);
+    }
+    var h = '<div class="wp-h"><b>할 일</b><span class="wp-p' + (list.length && n === list.length ? " ok" : "") + '">'
+      + n + "/" + list.length + '</span></div><ul class="wp-list">';
+    if (!list.length) h += '<li class="none">오늘은 계획이 없어요</li>';
+    for (j = 0; j < list.length; j++){
+      var it = list[j], on = !!done[it.id];
+      h += '<li class="' + (on ? "ok" : "") + '">'
+        + '<i class="wp-t">' + esc(TAGTX[it.tag] || it.tag || "") + '</i>'
+        + '<span>' + esc(it.t) + '</span>'
+        + (on ? '<em aria-hidden="true">✓</em>' : '')
+        + '</li>';
+    }
+    h += '</ul>';
+    if (box.__h !== h){ box.innerHTML = h; box.__h = h; }
+  }
+  paintTodayLine();
+}
+function paintTodayLine(){
+  var board = $("weekBoard"), api = hwApi();
+  if (!board || !api || !api.status) return;
+  var t = board.querySelector(".wk-today .wk-t-t b");
+  if (!t) return;
+  var st = null;
+  try { st = api.status(); } catch(e){ return; }
+  var txt = st.all ? "오늘 숙제 완료!" : (st.total ? "오늘 숙제 " + st.n + " / " + st.total : "오늘은 적힌 숙제가 없어요");
+  if (t.textContent !== txt) t.textContent = txt;
+}
+var weekMo = null;
+function hookWeek(){
+  var board = $("weekBoard");
+  if (!board) return;
+  if (!weekMo){
+    weekMo = new MutationObserver(function(){ try { paintWeek(); } catch(e){} });
+    weekMo.observe(board, { childList:true, subtree:true });
+  }
+  var hw = $("hwToday");
+  if (hw && !hw.__wp){
+    hw.__wp = 1;
+    new MutationObserver(function(){ try { paintWeek(); } catch(e){} })
+      .observe(hw, { childList:true, subtree:true, characterData:true });
+  }
+  try { paintWeek(); } catch(e){}
+}
+function hookChips(){
+  var boxes = [$("subs"), $("subs2")];
+  for (var i = 0; i < boxes.length; i++){
+    var b = boxes[i];
+    if (!b || b.__si) continue;
+    b.__si = 1;
+    new MutationObserver(function(){ try { decorateChips(); } catch(e){} })
+      .observe(b, { childList:true, subtree:true });
+  }
+  try { decorateChips(); } catch(e){}
+}
+
+/* ---------------- 🔎 연계독서 키워드 색인 ---------------- */
+var LEX = [
+  ["일본", "일본 도쿄 오사카 교토 후지산 우동 초밥 스시 라멘 기모노 사무라이 닌자 스모 벚꽃"],
+  ["중국", "중국 베이징 만리장성 황제"],
+  ["미국", "미국 워싱턴 뉴욕 자유의 여신상 달러 독립 기념일 대통령 링컨"],
+  ["영국", "영국 런던 빅벤 홍차 신사"],
+  ["프랑스", "프랑스 파리 에펠탑 베르사유 궁전 혁명 마리 앙투아네트"],
+  ["러시아", "러시아 모스크바 시베리아 크렘린"],
+  ["인도", "인도 갠지스 타지마할 간디"],
+  ["이집트", "이집트 피라미드 사막 나일강 파라오"],
+  ["그리스", "그리스 아테네 올림포스 헤라클레스 신화 민주주의"],
+  ["이탈리아", "이탈리아 로마 피렌체 르네상스 베네치아"],
+  ["스페인", "스페인 마드리드 바르셀로나"],
+  ["브라질", "브라질 아마존 삼바"],
+  ["멕시코", "멕시코 마야 벽화"],
+  ["호주", "호주 캥거루 코알라"],
+  ["독일", "독일 베를린 장벽 히틀러"],
+  ["베트남", "베트남 하노이"],
+  ["몽골", "몽골 칭기즈칸 초원"],
+  ["조선", "조선 한양 세종대왕 양반 왕조"],
+  ["고려", "고려 왕건 개성"],
+  ["삼국", "삼국시대 고구려 백제 신라 가야"],
+  ["고대", "고대 문명 메소포타미아"],
+  ["중세", "중세 기사 성 십자군"],
+  ["근대", "근대 산업혁명 증기 기관"],
+  ["독립", "독립운동 만세 유관순 애국"],
+  ["임진왜란", "임진왜란 이순신 거북선"],
+  ["이순신", "이순신 장군 거북선 한산도"],
+  ["세종", "세종대왕 훈민정음 한글"],
+  ["우주", "우주 행성 별 달 태양 로켓 은하"],
+  ["공룡", "공룡 화석 선사 시대"],
+  ["화산", "화산 지진 용암"],
+  ["바다", "바다 갯벌 해양 물고기"],
+  ["날씨", "날씨 기후 비 눈 바람 계절"],
+  ["몸", "몸속 인체 심장 폐 뼈 건강"],
+  ["곤충", "곤충 벌레 나비 벌 개미"],
+  ["식물", "식물 씨앗 꽃 잎 나무"],
+  ["전기", "전기 에너지 전자"],
+  ["지구", "지구 환경 오염 재활용"],
+  ["돈", "돈 경제 화폐 동전 지폐 저금 저축 용돈"],
+  ["은행", "은행 이자 저축"],
+  ["시장", "시장 가게 소비 물가 장보기"],
+  ["법", "법 규칙 권리 약속"],
+  ["직업", "직업 일하는 사람"],
+  ["세계", "세계 지리 문화 여러 나라 지구촌"],
+  ["가족", "가족 엄마 아빠 형제"],
+  ["친구", "친구 우정 사이좋게"],
+  ["용기", "용기 겁쟁이 도전"],
+  ["옛이야기", "옛이야기 전래 동화"],
+  ["신화", "신화 그리스 로마 제우스"],
+  ["발명", "발명 발명가 아이디어"]
+];
+function lexKw(txt){
+  var s = String(txt || ""), out = [];
+  for (var i = 0; i < LEX.length; i++) if (s.indexOf(LEX[i][0]) >= 0) out.push(LEX[i][1]);
+  return out.join(" ");
+}
+/* 전집별 · 권별 연계독서 키워드 (제목에 없는 나라·시대·주제) */
+var RB_KW = {
+  geo: {
+    1:"날씨 기후 계절 세계", 2:"마을 우리 동네", 3:"지도 위치 길찾기", 4:"한국 우리나라 여행",
+    5:"한국 우리 땅 산 강 섬", 6:"지구 세계 지도", 7:"기후 세계 날씨", 8:"세계 문화 생활",
+    9:"세계 동식물 자연", 10:"세계 문화 비교",
+    11:"일본 우동 국수 음식 시장 문화",
+    12:"용기 도전", 13:"동물 개", 14:"베트남 동남아 생일",
+    15:"인도네시아 인형 전통 문화", 16:"사막 도시 이집트", 17:"영화 인도",
+    18:"러시아 모스크바", 19:"그리스 신화 영웅", 20:"이탈리아 베네치아 축제",
+    21:"스페인 편지", 22:"미국 이민 여행", 23:"프랑스 파리 향수", 24:"가족 할머니",
+    25:"멕시코 벽화 미술", 26:"노르웨이 북유럽", 27:"여신 신화", 28:"미국 독립 기념일",
+    29:"브라질 아마존 열대 우림", 30:"아프리카 마을", 31:"사막 아프리카 어린이",
+    32:"어른 직업 꿈", 33:"아프리카 고릴라 동물", 34:"남아프리카 공화국 만델라 인권",
+    35:"호주 캥거루", 36:"한국 지리 세계 지리 지도", 37:"세계 문화 유산 만들기"
+  },
+  hist: { 33:"역사 인물 위인" },
+  world: {
+    7:"4대 문명 이집트 메소포타미아 인도 중국", 8:"페르시아 다리우스", 9:"그리스 올림픽",
+    10:"알렉산드로스 그리스", 11:"로마 카이사르", 12:"인도 아소카 불교", 13:"중국 만리장성",
+    14:"비잔티움 터키", 15:"중세 유럽 성", 16:"아라비아 이슬람", 17:"십자군 전쟁",
+    18:"중국 4대 발명", 19:"몽골 칭기즈칸", 20:"일본 무사 사무라이", 21:"이탈리아 피렌체 르네상스",
+    22:"콜럼버스 신대륙 탐험", 23:"인도 타지마할", 24:"프랑스 베르사유 궁전", 25:"미국 독립 홍차",
+    26:"프랑스 혁명 마리 앙투아네트", 27:"산업 혁명 증기 기관차", 28:"중국 청나라 궁녀",
+    29:"제1차 세계대전", 30:"러시아 붉은 광장", 31:"히틀러 제2차 세계대전", 32:"아프리카 국경",
+    33:"독일 베를린 장벽 냉전"
+  },
+  hero: {
+    10:"한용운 독립운동", 13:"윤동주 시인", 17:"세종대왕 한글", 18:"김정호 지도 대동여지도",
+    22:"유관순 독립운동", 23:"이순신 거북선", 24:"미국 링컨 노예 해방", 25:"인도 간디",
+    27:"아프리카 슈바이처", 28:"인도 테레사"
+  }
+};
+window.SB_BOOKKW = { lex:lexKw, rb:RB_KW, sh:{} };
+
+/* ---------------- 시작 ---------------- */
+function boot(){
+  try { hookHub(); } catch(e){}
+  try { if (SB.renderHub) SB.renderHub(); } catch(e){}
+  try { paintLangs(); decorateHub(); } catch(e){}
+  try { hookChips(); } catch(e){}
+  var tries = 0;
+  (function tick(){
+    tries++;
+    try { hookWeek(); } catch(e){}
+    try { hookChips(); } catch(e){}
+    var grid = $("hubGrid");
+    var ok = grid && grid.children.length > 5;
+    if (!ok && tries < 20) setTimeout(tick, 300);
+  })();
+  try {
+    if (SB.onShow){
+      var prev = SB.onShow.study;
+      SB.onShow.study = function(){
+        if (prev) { try { prev.apply(this, arguments); } catch(e){} }
+        try { paintLangs(); decorateHub(); } catch(e){}
+        try { decorateChips(); } catch(e){}
+      };
+      var prevHome = SB.onShow.home;
+      SB.onShow.home = function(){
+        if (prevHome) { try { prevHome.apply(this, arguments); } catch(e){} }
+        try { paintWeek(); } catch(e){}
+      };
+    }
+  } catch(e){}
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+else setTimeout(boot, 0);
+})();
+</script>
+
 </body>
 </html>
