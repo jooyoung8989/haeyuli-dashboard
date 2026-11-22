@@ -5592,6 +5592,26 @@ body.mob .sg-tx .sg-bt{font-size:3.3vw;white-space:normal;display:-webkit-box;-w
 body.mob .sg-tx .sg-h{font-size:2.7vw;gap:1.2vw;}
 body.mob .sg-ck{font-size:2.9vw;padding:1.9vw 3vw;}
 
+
+/* 📕 프뢰벨 책장 — 장르별 칩·pill 색 (g1~g8) */
+.sg-chip.g1.on{background:#fff3e0;color:#a05a00;box-shadow:inset 0 0 0 .24vh #f0c07a;}
+.sg-chip.g2.on{background:#fdeef0;color:#b3305a;box-shadow:inset 0 0 0 .24vh #f0a8bb;}
+.sg-chip.g3.on{background:#eef4ff;color:#2c5bb3;box-shadow:inset 0 0 0 .24vh #a6c0f0;}
+.sg-chip.g4.on{background:#f4f0ff;color:#5a41a6;box-shadow:inset 0 0 0 .24vh #c1aef2;}
+.sg-chip.g5.on{background:#eefaf3;color:#1d7a52;box-shadow:inset 0 0 0 .24vh #8ed6b0;}
+.sg-chip.g6.on{background:#e8f7fb;color:#166b86;box-shadow:inset 0 0 0 .24vh #8fd0e2;}
+.sg-chip.g7.on{background:#fff8e2;color:#956c00;box-shadow:inset 0 0 0 .24vh #e8cf87;}
+.sg-chip.g8.on{background:#fdeefb;color:#96307f;box-shadow:inset 0 0 0 .24vh #e9aee0;}
+.sg-pill.g1{background:#fff3e0;color:#a05a00;}
+.sg-pill.g2{background:#fdeef0;color:#b3305a;}
+.sg-pill.g3{background:#eef4ff;color:#2c5bb3;}
+.sg-pill.g4{background:#f4f0ff;color:#5a41a6;}
+.sg-pill.g5{background:#eefaf3;color:#1d7a52;}
+.sg-pill.g6{background:#e8f7fb;color:#166b86;}
+.sg-pill.g7{background:#fff8e2;color:#956c00;}
+.sg-pill.g8{background:#fdeefb;color:#96307f;}
+.sg-head .sg-em{font-size:3.2vh;}
+
 /* ⚔️ 삼국지 독후활동 — 작은 퀴즈(3지선다) + 기억나는 장면 그리기 (빨간펜 독후활동과 같은 결) */
 .sg-bds{display:inline-flex;align-items:center;gap:.3vh;flex:0 0 auto;}
 .sg-bd{display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:1.1vh;
@@ -22640,6 +22660,7 @@ var K = {
   rbUn: "haeyuli.redpen.unread.v1", rbLog: "study.readlog.v1",
   mathset: "haeyuli.mathset.v1",
   sg: "haeyuli.samgukji.read.v1", sgu: "haeyuli.samgukji.unread.v1",
+  fg: "haeyuli.froebel.read.v1", fgu: "haeyuli.froebel.unread.v1",
   curri: "haeyuli.call.curri.v1"
 };
 /* 🔔 ntfy 알림 설정도 같은 가족 코드 문서로 오간다 */
@@ -22710,13 +22731,15 @@ function snap(){
     },
     sg: read(K.sg, {}),
     sgu: read(K.sgu, {}),
+    fg: read(K.fg, {}),
+    fgu: read(K.fgu, {}),
     curri: read(K.curri, null)
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, curri:d.curri });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, curri:d.curri });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.curri]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.curri]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -23062,6 +23085,7 @@ function mergeWg(l, c){
 function buildDoc(local, cloud, base, code){
   var c = cloud || {};
   var sgM = mergeSg(local.sg, c.sg, local.sgu, c.sgu);
+  var frM = mergeSg(local.fg, c.fg, local.fgu, c.fgu);
   return {
     v: 1,
     code: code,
@@ -23076,6 +23100,7 @@ function buildDoc(local, cloud, base, code){
     wg: mergeWg(local.wg, c.wg),
     ntfy: mergeNtfy(local.ntfy, c.ntfy),
     sg: sgM.read, sgu: sgM.un,
+    fg: frM.read, fgu: frM.un,
     curri: mergeCurri(local.curri, c.curri),
     at: Date.now()
   };
@@ -23083,7 +23108,7 @@ function buildDoc(local, cloud, base, code){
 
 /* ---------------- 적용 ---------------- */
 function applyDoc(doc){
-  var s = snap(), changed = false, rbChanged = false, mathChanged = false, sgChanged = false, curriChanged = false;
+  var s = snap(), changed = false, rbChanged = false, mathChanged = false, sgChanged = false, frChanged = false, curriChanged = false;
   if (JSON.stringify(doc.plan) !== JSON.stringify(s.plan)) { write(K.plan, doc.plan); changed = true; }
   if (JSON.stringify(doc.hw) !== JSON.stringify(s.hw)) { write(K.hw, doc.hw); changed = true; }
   if (JSON.stringify(doc.money) !== JSON.stringify(s.money)) { write(K.money, doc.money); changed = true; }
@@ -23120,6 +23145,12 @@ function applyDoc(doc){
     write(K.sg, sgM2.read); write(K.sgu, sgM2.un);
     changed = true; sgChanged = true;
   }
+  /* 📕 프뢰벨 책장 읽은 책 — 다른 기기에서 체크한 책을 이 기기에도 */
+  var frM2 = mergeSg(s.fg, doc.fg, s.fgu, doc.fgu);
+  if (JSON.stringify(frM2.read) !== JSON.stringify(s.fg || {}) || JSON.stringify(frM2.un) !== JSON.stringify(s.fgu || {})){
+    write(K.fg, frM2.read); write(K.fgu, frM2.un);
+    changed = true; frChanged = true;
+  }
   /* 📞 엠마쌤 전화영어 진도(Day) — 다른 기기에서 한 통화만큼 같이 넘어간다 */
   var ccur = s.curri, cnew = mergeCurri(ccur, doc.curri);
   if (cnew && JSON.stringify(cnew) !== JSON.stringify(ccur)){
@@ -23136,6 +23167,7 @@ function applyDoc(doc){
     }
   }
   if (sgChanged) { try { if (window.SB && SB.sg && SB.sg.reload) SB.sg.reload(); } catch(e){} }
+  if (frChanged) { try { if (window.SB && SB.fr && SB.fr.reload) SB.fr.reload(); } catch(e){} }
   if (curriChanged) { try { if (window.SB && SB.call && SB.call.paintCurri) SB.call.paintCurri(); } catch(e){} }
   if (changed) rerender(rbChanged);
   if (mathChanged) { try { if (SB.mathSetChanged) SB.mathSetChanged(); } catch(e){} }
@@ -23170,7 +23202,7 @@ function pullPush(manual){
       var doc = {
         v:1, code:f.code, plan:local.plan, hw:local.hw, money:local.money,
         done:local.done, study:local.study, coupons:local.coupons, rb:local.rb, mathset:local.mathset,
-        ntfy:local.ntfy, at:Date.now()
+        ntfy:local.ntfy, sg:local.sg, sgu:local.sgu, fg:local.fg, fgu:local.fgu, at:Date.now()
       };
       return apiPut(f.code, doc).then(function(){ return true; });
     }
@@ -23234,7 +23266,7 @@ function createCode(){
   saveFam({ code:code, base:num(s.money.piggy), lastSync:0, sig:"", lastError:"", at:Date.now() });
   paint();
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
-  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, curri:s.curri, at:Date.now() })
+  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, fg:s.fg, fgu:s.fgu, curri:s.curri, at:Date.now() })
     .then(function(){
       var g = fam();
       g.base = num(s.money.piggy); g.lastSync = Date.now(); g.sig = sigOf(s); g.lastError = "";
@@ -27839,7 +27871,8 @@ function buildTabs(){
     '<button class="rb-tab" type="button" data-rbtab="shelf" role="tab" aria-pressed="false">📚 우리 집 빨간펜 책장<span class="rb-tab-n" id="rbTabN"></span></button>' +
     '<button class="rb-tab" type="button" data-rbtab="engbook" role="tab" aria-pressed="false">📖 영어책 읽어주기</button>' +
     '<button class="rb-tab" type="button" data-rbtab="korbook" role="tab" aria-pressed="false">📕 한글책 읽어주기</button>' +
-    '<button class="rb-tab" type="button" data-rbtab="samguk" role="tab" aria-pressed="false">⚔️ 삼국지<span class="rb-tab-n" id="sgTabN"></span></button>';
+    '<button class="rb-tab" type="button" data-rbtab="samguk" role="tab" aria-pressed="false">⚔️ 삼국지<span class="rb-tab-n" id="sgTabN"></span></button>' +
+    '<button class="rb-tab" type="button" data-rbtab="froebel" role="tab" aria-pressed="false">📕 프뢰벨 책장<span class="rb-tab-n" id="frTabN"></span></button>';
   return box;
 }
 
@@ -27997,6 +28030,16 @@ function buildBookView(){
   sgaw.className = "rb-act rb-hide sgact"; sgaw.id = "rbSgActWrap";
   sgaw.setAttribute("aria-label", "⚔️ 삼국지 독후활동 — 작은 퀴즈와 기억나는 장면 그리기");
   view.appendChild(sgaw);
+  /* 📕 프뢰벨 책장 — 장르별 책목록 */
+  var fw = document.createElement("div");
+  fw.className = "rb-act rb-hide sg-wrap"; fw.id = "rbFrWrap";
+  fw.setAttribute("aria-label", "📕 프뢰벨 책장 — 리딩토탈 딥스터디 장르별 책목록");
+  view.appendChild(fw);
+  /* 📕 프뢰벨 독후활동 — 목록 위에 겹쳐 열리는 화면 */
+  var faw = document.createElement("div");
+  faw.className = "rb-act rb-hide sgact"; faw.id = "rbFrActWrap";
+  faw.setAttribute("aria-label", "📕 프뢰벨 독후활동 — 작은 퀴즈와 기억나는 장면 그리기");
+  view.appendChild(faw);
   paintShelves();
   applyMode();
 }
@@ -28106,9 +28149,14 @@ function applyMode(){
   if (gw) gw.classList.toggle("rb-hide", MODE !== "samguk");
   var sgaw = $("rbSgActWrap");
   if (sgaw) sgaw.classList.toggle("rb-hide", MODE !== "sgact");
+  var fw2 = $("rbFrWrap");
+  if (fw2) fw2.classList.toggle("rb-hide", MODE !== "froebel");
+  var faw2 = $("rbFrActWrap");
+  if (faw2) faw2.classList.toggle("rb-hide", MODE !== "fract");
+  try { frTabN(); } catch(e){}
   var tabs = document.querySelectorAll("#rbTabs .rb-tab");
   for (var j = 0; j < tabs.length; j++){
-    var on = tabs[j].getAttribute("data-rbtab") === (MODE === "act" ? "shelf" : (MODE === "sgact" ? "samguk" : MODE));
+    var on = tabs[j].getAttribute("data-rbtab") === (MODE === "act" ? "shelf" : (MODE === "sgact" ? "samguk" : (MODE === "fract" ? "froebel" : MODE)));
     tabs[j].classList.toggle("on", on);
     tabs[j].setAttribute("aria-pressed", on ? "true" : "false");
   }
@@ -28128,6 +28176,7 @@ RB.reload = function(){
     paintAll();
     refreshCounters();
     try { sgReload(); } catch(e){}
+    try { frReload(); } catch(e){}
   } catch(e){}
 };
 
@@ -28753,6 +28802,391 @@ document.addEventListener("click", function(e){
   }
 });
 
+/* ---------- 6.7 📕 프뢰벨 책장 — 장르별 책목록 + 독후활동 (삼국지와 같은 결) ---------- */
+/* 프뢰벨 리딩토탈 딥스터디 책을 장르로 나눠 보여 준다. 표지 사진이 없어 제목 카드로 만들고,
+   읽었어요 체크는 haeyuli.froebel.read.v1, 푼 문제는 .act.v1, 그림은 .art.v1 에 저장한다. */
+var FRK = { read:"haeyuli.froebel.read.v1", un:"haeyuli.froebel.unread.v1",
+            act:"haeyuli.froebel.act.v1", art:"haeyuli.froebel.art.v1" };
+var FRG = [["korhist","🏛️","한국사"],["kormun","📖","한국문학"],["world","🌍","세계명작"],["people","🎨","인물·예술"],["myth","🧚","신화·옛이야기"],["science","🔬","과학·수학·탐험"],["econ","🪙","경제·사회"],["story","✨","창작동화"]];
+var FRBK = [[1,"korhist","우리 겨레의 첫 나라 고조선","단군 할아버지가 세운 우리의 첫 나라"],[2,"korhist","힘을 겨루는 세 나라","고구려·백제·신라가 힘을 겨루던 때"],[3,"korhist","역사를 이끈 고구려, 백제, 신라","삼국의 왕과 인물들이 나라를 이끈 이야기"],[4,"korhist","세계를 이끈 신라와 발해","통일 신라와 발해의 이야기"],[5,"korhist","마을을 지켜 낸 바보 온달","바보라 불렸지만 용감했던 온달"],[6,"korhist","신라를 위해 목숨을 바친 박제상","가족보다 나라를 먼저 생각한 충신"],[7,"korhist","화랑 정신으로 나라를 구한 김유신","화랑이 되어 삼국 통일을 이룬 장군"],[8,"korhist","정조의 꿈을 담은 수원 화성","백성을 생각한 정조 임금의 성"],[9,"kormun","춘향전","성춘향과 이몽룡의 약속 이야기"],[10,"kormun","심청전","아버지 눈을 뜨게 하려고 몸을 던진 효녀"],[11,"kormun","박씨전","지혜와 용기가 뛰어난 박씨 부인 이야기"],[12,"kormun","금오신화","김시습이 쓴 우리나라 첫 소설집"],[13,"kormun","장끼전","꿩 장끼와 까투리의 이야기"],[14,"kormun","사씨남정기","억울한 누명을 쓴 사씨 부인의 이야기"],[15,"kormun","인현왕후전","숙종 임금님과 인현왕후의 이야기"],[16,"kormun","최고운전","글재주가 뛰어난 최치원의 이야기"],[17,"kormun","운영전","궁궐에서 피어난 슬픈 사랑 이야기"],[18,"kormun","양반전","양반이 되려는 부자의 이야기"],[19,"kormun","운수 좋은 날","김 첨지가 설렁탕을 사려던 날"],[20,"kormun","메밀꽃 필 무렵","달빛 아래 메밀꽃 길을 걷는 이야기"],[21,"kormun","동백꽃","점순이와 '나'의 시골 마을 이야기"],[22,"kormun","무정","새 시대를 꿈꾼 사람들의 이야기"],[23,"world","로빈 후드의 모험","숲의 영웅 로빈 후드가 가난한 사람을 도와요"],[24,"world","돈키호테","풍차를 거인이라고 믿은 멋진 기사"],[25,"world","올리버 트위스트","가난한 소년 올리버가 런던에서 겪는 일"],[26,"world","사랑은 무엇으로 사는가","사람이 무엇으로 사는지 알려 주는 이야기"],[27,"world","삼총사","달타냥과 세 총사의 우정과 모험"],[28,"world","모비 딕","바다를 누비는 거대한 흰 고래 이야기"],[29,"world","안네의 일기","숨은 별장에서 쓴 소녀의 일기"],[30,"world","마지막 잎새","마지막 잎새 그림으로 희망을 준 이야기"],[31,"world","동물 농장","동물들이 스스로 농장을 꾸리는 이야기"],[32,"world","빨간 머리 앤","초록 지붕 집에서 자란 앤의 이야기"],[33,"world","크리스마스 선물","서로를 위해 소중한 것을 바꾼 부부"],[34,"world","베니스의 상인","법정에서 펼쳐지는 지혜로운 재판"],[35,"world","로빈슨 크루소","무인도에서 살아남은 사람 이야기"],[36,"world","학교에 간 사자","사자가 학교에 나타난 재미있는 이야기"],[37,"world","비밀의 화원","잠긴 화원을 되살린 메리의 이야기"],[38,"world","모래 요정과 다섯 아이들","밤마다 모험을 데려다주는 모래 요정"],[39,"world","위대한 유산","핍이 커다란 유산을 받으며 자라는 이야기"],[40,"world","몬테크리스토 백작","억울하게 갇힌 에드몽의 복수 이야기"],[41,"world","지킬 박사와 하이드 씨","한 사람 안의 착한 마음과 나쁜 마음"],[42,"world","햄릿","덴마크 왕자의 고민과 결심"],[43,"world","리어왕","딸들에게 나라를 나눠 준 왕의 이야기"],[44,"world","셜록 홈즈 시리즈","작은 단서로 사건을 푸는 명탐정"],[45,"world","80일간의 세계 일주","80일 만에 세계를 돌아온 약속"],[46,"world","해저 2만 리","잠수함을 타고 떠나는 바다 속 여행"],[47,"world","15소년 표류기","소년들이 무인도에서 살아남는 이야기"],[48,"world","마지막 수업","모국어를 잃을 뻔한 아이들의 마지막 수업"],[49,"world","보물섬","보물 지도를 든 소년의 모험"],[50,"world","알프스 소녀 하이디","알프스 산에서 자란 밝은 소녀"],[51,"world","키다리 아저씨","편지로 자란 소녀 주디의 이야기"],[52,"world","아서왕과 원탁의 기사들","돌에 꽂힌 검을 뽑은 소년 왕"],[53,"world","피터 팬","네버랜드로 날아간 아이들"],[54,"world","사람이 되고 싶은 나무 인형","나무 인형 피노키오가 사람이 되려는 이야기"],[55,"world","공주와 고블린","지하 동굴 고블린과 공주의 이야기"],[56,"world","나의 개 빙고 외","강아지 빙고와 함께한 날들"],[57,"world","허클베리 핀의 모험","미시시피 강을 따라 떠난 소년"],[58,"people","백남준","텔레비전과 비디오로 예술을 만든 화가"],[59,"people","김기창","귀가 들리지 않아도 그림으로 세상과 이야기한 화가"],[60,"people","김홍도","조선 사람들의 일상을 그린 화가"],[61,"people","김만덕","제주의 큰 부자였지만 굶는 사람을 먼저 생각한 사람"],[62,"people","퇴계 이황","조선의 큰 학자이자 참된 스승"],[63,"people","유관순","나라의 독립을 외친 소녀"],[64,"people","정약용","백성을 생각한 조선의 실학자"],[65,"people","정조","백성이 행복한 나라를 꿈꾼 임금"],[66,"people","장영실","세종대왕을 도와 놀라운 기계를 만든 발명가"],[67,"people","존 피츠제럴드 케네디","달에 가겠다는 꿈을 말한 미국 대통령"],[68,"people","아멜리아 이어하트","여자도 하늘을 날 수 있다고 보여 준 비행사"],[69,"people","김마리아","두 땅에서 나라의 독립을 위해 애쓴 사람"],[70,"people","생텍쥐페리","어린 왕자를 쓴 비행사"],[71,"people","레오나르도 다빈치","그림과 발명을 모두 잘한 천재"],[72,"people","피터 브뤼헐","농민들의 생활을 그림에 담은 화가"],[73,"people","구스타프 클림트","황금빛으로 반짝이는 그림을 그린 화가"],[74,"people","주세페 아르침볼도","과일과 채소로 얼굴을 만든 화가"],[75,"people","아이작 뉴턴","떨어지는 사과에서 힘을 깨달은 과학자"],[76,"people","찰스 매킨토시","아름다운 건물과 의자를 디자인한 사람"],[77,"myth","바리데기","저승까지 약을 구하러 간 공주"],[78,"myth","이아손과 아르고호의 영웅들","황금 양털을 찾아 떠난 영웅들"],[79,"myth","영원한 사랑을 얻은 에로스와 프시케","사랑과 믿음으로 시험을 이긴 프시케"],[80,"myth","열두 달","열두 달을 만난 착한 소녀의 이야기"],[81,"myth","저승사자를 골탕 먹인 면색이","꾀를 내어 저승사자를 이긴 면색이"],[82,"myth","신발 장수 아버지와 아들","신발을 만드는 아버지의 정성을 배우는 아들"],[83,"science","내 친구 브이와 원자력 이야기","원자력이 무엇이고 어떻게 쓰이는지 알려 주는 책"],[84,"science","보름이의 우주 센터 대소동","우주 센터에서 벌어진 신나는 소동"],[85,"science","명탐정 반지의 과학 수사","과학으로 사건의 비밀을 밝히는 탐정"],[86,"science","위로 갔니? 아래로 갔니?","위와 아래, 방향을 배우는 책"],[87,"science","빈집의 비밀을 밝혀라!","빈집에 남은 단서를 찾아내는 탐험"],[88,"science","하얀 행성의 아이스무지개달","얼음과 눈으로 덮인 행성의 이야기"],[89,"science","어린이를 위한 뇌과학 수업","머리 속 뇌가 하는 일을 배우는 책"],[90,"science","그래피티 두 글자의 과학 수사","벽에 남은 글씨로 범인을 찾는 과학 수사"],[91,"econ","지혜로운 사자의 선택","무엇을 고를지 지혜롭게 생각하는 사자 이야기"],[92,"econ","다섯 왕자와 반짝반짝 목걸이","물건을 사는 여러 가지 방법을 알려 주는 이야기"],[93,"econ","포코의 세계 여행","여러 나라를 여행하며 경제를 배우는 이야기"],[94,"econ","두 나라에서 쫓겨난 박쥐","짐승도 새도 아닌 박쥐의 외로운 이야기"],[95,"econ","토토와 제나호","배를 타고 먼 나라로 간 토토의 이야기"],[96,"econ","마케아 왕국의 하몬 왕","돈보다 소중한 것을 깨닫는 왕 이야기"],[97,"econ","사람과 물건이 모이는 시장","시장에서 사람과 물건이 오가는 이야기"],[98,"story","모모점으로 놀러 오세요!","모모점에 놀러 가는 신나는 하루"],[99,"story","우리는 달포천 지킴이","달포천을 깨끗하게 지키는 지킴이들"],[100,"story","꼬마 선녀들의 엿 사 먹기 대작전","엿을 먹고 싶어 꾀를 내는 꼬마 선녀들"],[101,"story","보송이네 사자 형제","사자 형제가 함께 사는 이야기"],[102,"story","이글이글 불 도깨비와 꽃님이","화가 많은 도깨비와 다정한 꽃님이"],[103,"story","드래건맨을 설득하자!","말로 차근차근 설득하는 방법을 배우는 이야기"],[104,"story","준이랑 몽실이랑","준이와 몽실이가 함께 보내는 날들"],[105,"story","초코별 상자를 모아라!","초코별 상자를 하나씩 모으는 이야기"],[106,"story","고부장갑 여사의 우주 김치 도전기","김치를 우주로 보내려는 엉뚱한 도전"],[107,"story","최고의 집을 짓자!","여럿이 힘을 모아 집을 짓는 이야기"],[108,"story","숲속 나라의 왕이 된다면","왕이 되면 무엇을 할지 생각해 보는 이야기"],[109,"story","미나와 올리","미나와 올리의 다정한 친구 이야기"],[110,"story","시장에 간 만득이","만득이가 처음 시장에 간 날"],[111,"story","먹어도 먹어도 배고픈 아이","아무리 먹어도 배가 고픈 아이의 이야기"],[112,"story","내 맘대로 나라에 간 콩콩이","마음대로만 하려던 콩콩이가 배우는 것"],[113,"story","딱따구리는 시인","나무를 콕콕 쪼으며 시를 쓰는 딱따구리"],[114,"story","시장에 가 봐요","시장 구경을 하며 세상을 배우는 책"],[115,"story","누가 형이 될까?","형이 된다는 것이 무엇인지 생각하는 이야기"],[116,"story","감기에 걸린 마녀들의 편지","감기에 걸린 마녀들이 주고받은 편지"],[117,"story","파티에 가는 방법","파티에 가려면 무엇을 준비할지 배우는 이야기"]];
+var FRA = {1:[["고조선을 세운 사람은?",["단군","왕건","이성계"],0],["고조선은 어디에 세워졌나요?",["한반도 북쪽","제주도","일본"],0]],2:[["힘을 겨룬 세 나라는?",["고구려·백제·신라","조선·고려·신라","백제·가야·신라"],0],["이 시대를 무엇이라고 하나요?",["삼국 시대","조선 시대","고려 시대"],0]],3:[["고구려를 세운 사람은?",["주몽","온조","박혁거세"],0],["백제를 세운 사람은?",["온조","주몽","김유신"],0]],4:[["신라는 어느 나라와 힘을 합쳐 삼국을 통일했나요?",["당나라","일본","몽골"],0],["발해를 세운 사람은?",["대조영","왕건","주몽"],0]],5:[["온달이 끝까지 지킨 것은?",["평강 공주와의 약속","자기 돈","예쁜 옷"],0],["온달에게 글과 무예를 가르친 사람은?",["평강 공주","왕","선생님"],0]],6:[["박제상이 목숨을 바친 나라는?",["신라","백제","고구려"],0],["박제상이 지킨 마음은?",["나라를 사랑하는 마음","돈을 모으는 마음","높은 벼슬"],0]],7:[["김유신이 속한 무리는?",["화랑","의병","수군"],0],["김유신이 이룬 것은?",["삼국 통일","고조선 건국","발해 건국"],0]],8:[["수원 화성을 쌓은 임금은?",["정조","세종","숙종"],0],["정조가 화성을 쌓은 까닭은?",["아버지 묘를 지키고 백성을 살피려고","놀이를 하려고","적을 피하려고"],0]],9:[["이몽룡이 춘향이와 맺은 약속은?",["꼭 돌아오겠다는 약속","같이 도망가자는 약속","편지를 보내겠다는 약속"],0],["춘향이 끝까지 지킨 것은?",["한 사람만 사랑하는 마음","예쁜 옷","많은 돈"],0]],10:[["심청이가 몸을 던진 바다는?",["인당수","한강","동해"],0],["심청이가 다시 눈을 뜬 곳은?",["연꽃 속","배 위","집 마당"],0]],11:[["박씨 부인이 뛰어난 것은?",["힘과 지혜","노래","달리기"],0],["박씨 부인이 물리친 적은?",["병자호란의 적군","도둑","호랑이"],0]],12:[["금오신화를 쓴 사람은?",["김시습","허균","박지원"],0],["금오신화 속 이야기가 아닌 것은?",["흥부전","만복사저포기","취유부벽정기"],0]],13:[["장끼는 어떤 새인가요?",["꿩","참새","독수리"],0],["장끼가 콩을 먹다가 어떻게 되었나요?",["목이 걸렸어요","날아가 버렸어요","노래를 했어요"],0]],14:[["사씨 부인을 괴롭힌 사람은?",["교씨","이몽룡","변사또"],0],["이야기의 끝에서 사씨 부인은?",["억울함이 풀려 다시 행복해져요","영영 잊혀져요","멀리 도망가요"],0]],15:[["인현왕후는 어느 임금님의 왕비였나요?",["숙종","세종","정조"],0],["인현왕후를 괴롭힌 사람은?",["장희빈","교씨","사씨"],0]],16:[["최고운은 누구의 다른 이름인가요?",["최치원","김시습","허균"],0],["최고운이 뛰어난 것은?",["글재주","요리","씨름"],0]],17:[["운영이 지내던 곳은?",["궁궐","바닷가","산속"],0],["이 이야기가 슬픈 까닭은?",["두 사람이 헤어져서","돈이 없어서","배가 고파서"],0]],18:[["양반전을 쓴 사람은?",["박지원","허균","김시습"],0],["부자가 양반에게서 산 것은?",["양반이라는 문서","소","밭"],0]],19:[["이 이야기의 주인공은?",["김 첨지","이몽룡","최치원"],0],["김 첨지가 번 돈으로 사려고 한 음식은?",["설렁탕","떡볶이","냉면"],0]],20:[["메밀꽃 필 무렵을 쓴 작가는?",["이효석","김동인","박지원"],0],["달밤에 길가에 핀 꽃은?",["메밀꽃","진달래","코스모스"],0]],21:[["동백꽃에 나오는 소녀 이름은?",["점순이","춘향이","콩쥐"],0],["이야기의 배경은 어디인가요?",["시골 마을","큰 도시","바닷가"],0]],22:[["무정을 쓴 작가는?",["이광수","김유정","허균"],0],["무정이 나온 때는?",["1917년","2000년","1500년"],0]],23:[["로빈 후드가 활로 맞혀 이겼던 것은?",["사과","호박","종"],0],["로빈 후드가 가난한 사람들에게 나눠 준 것은?",["부자들에게서 가져온 돈","자기 옷","말"],0]],24:[["돈키호테가 거인이라고 착각한 것은?",["풍차","큰 나무","소"],0],["돈키호테와 함께 다닌 친구 이름은?",["산초 판사","톰","로빈"],0]],25:[["올리버가 자란 곳은?",["고아원","궁전","바닷가"],0],["올리버가 밥을 더 달라고 한 말은?",["\"더 주세요\"","\"배불러요\"","\"먹기 싫어요\""],0]],26:[["이 이야기를 쓴 작가는?",["톨스토이","안데르센","그림 형제"],0],["사람은 무엇으로 산다고 했나요?",["사랑","돈","힘"],0]],27:[["삼총사에 새로 들어간 소년은?",["달타냥","로빈","톰"],0],["삼총사의 외침은?",["하나를 위하여 모두를, 모두를 위하여 하나를","나를 위하여 너를","돈을 위하여"],0]],28:[["모비 딕은 무엇일까요?",["커다란 흰 고래","하얀 배","흰 매"],0],["고래를 끝까지 쫓은 선장 이름은?",["에이해브","산초","파리아"],0]],29:[["안네가 숨어 지낸 곳은?",["비밀 별장","학교","배"],0],["안네가 일기장에 붙여 준 이름은?",["키티","루시","몰리"],0]],30:[["벽에 마지막 잎새를 그린 사람은?",["베어먼 화가","수잔","의사"],0],["그림이 존에게 준 것은?",["살고 싶은 희망","많은 돈","편지"],0]],31:[["동물들이 내건 말은?",["모든 동물은 평등하다","사람이 제일이다","고양이가 왕이다"],0],["농장을 이끈 동물은?",["돼지","말","오리"],0]],32:[["앤의 머리색은?",["빨간색","금색","검은색"],0],["앤을 데려온 남매는?",["매튜와 마릴라","톰과 수","잭과 질"],0]],33:[["델라가 판 것은?",["자기 긴 머리","시계","반지"],0],["짐이 판 것은?",["회중시계","모자","장갑"],0]],34:[["재판에서 안토니오를 도와 변호한 사람은?",["포셔","샤일록","바사니오"],0],["샤일록이 달라고 한 것은?",["살 한 근","금화","배"],0]],35:[["로빈슨이 표류한 곳은?",["무인도","큰 도시","높은 산"],0],["로빈슨이 구해 준 친구 이름은?",["프라이데이","산초","키티"],0]],36:[["학교에 나타난 동물은?",["사자","호랑이","코끼리"],0],["아이들이 사자를 어떻게 대해 주었나요?",["다정하게 대해 줬어요","모두 도망갔어요","싸웠어요"],0]],37:[["메리가 발견한 곳은?",["잠긴 비밀의 화원","바닷가","높은 성"],0],["화원을 다시 꽃밭으로 만든 방법은?",["정성껏 가꿔서","모두 뽑아 버려서","물을 안 줘서"],0]],38:[["모래 요정이 데려간 아이들은 몇 명?",["다섯","둘","열"],0],["모래 요정이 해 준 일은?",["밤마다 신나는 모험","숙제 도와주기","청소"],0]],39:[["핍에게 유산을 준 사람은?",["죄수 매그위치","이모","선생님"],0],["핍을 늘 따뜻하게 대해 준 사람은?",["조","산초","파리아"],0]],40:[["에드몽이 갇힌 곳은?",["바다 가운데 감옥","궁전","동굴"],0],["감옥에서 에드몽에게 가르침을 준 사람은?",["파리아 신부","산초","톰"],0]],41:[["약을 마시면 무엇으로 변하나요?",["무서운 하이드","커다란 새","로봇"],0],["지킬 박사의 고민은?",["마음속 나쁜 마음","돈이 없어서","날씨가 나빠서"],0]],42:[["햄릿은 어느 나라 왕자인가요?",["덴마크","프랑스","중국"],0],["햄릿 앞에 나타난 유령은 누구라고 했나요?",["아버지","친구","선생님"],0]],43:[["리어왕이 딸들에게 나눠 준 것은?",["나라와 재산","빵","옷"],0],["아버지의 마음을 진짜로 사랑한 딸은?",["코델리아","고너릴","리건"],0]],44:[["셜록 홈즈의 든든한 친구는?",["왓슨 박사","산초","키티"],0],["홈즈가 가장 잘하는 것은?",["관찰하고 추리하기","요리하기","노래하기"],0]],45:[["포그가 약속한 날짜는?",["80일","8일","800일"],0],["세계 일주에 이용한 것은?",["배와 기차","자전거","비행기"],0]],46:[["네모 선장의 잠수함 이름은?",["노틸러스호","타이타닉호","아르고호"],0],["바다 속 여행을 기록한 사람은?",["아로낙스 교수","산초","로빈"],0]],47:[["표류한 소년들은 몇 명?",["15명","5명","50명"],0],["소년들이 도착한 곳은?",["무인도","큰 도시","눈 덮인 산"],0]],48:[["마지막 수업은 무슨 수업이었나요?",["모국어 수업","수학","체육"],0],["선생님이 칠판에 마지막으로 쓴 말은?",["프랑스 만세","잘 가요","숙제"],0]],49:[["보물 지도를 얻은 소년은?",["짐 호킨스","산초","톰"],0],["한쪽 다리를 저는 무서운 선장은?",["실버","파리아","에이해브"],0]],50:[["하이디가 사는 곳은?",["알프스 산","바닷가","큰 도시"],0],["하이디가 웃게 만든 할아버지는?",["알프스 할아버지","선생님","왕"],0]],51:[["주디가 편지를 보낸 사람은?",["키다리 아저씨","선생님","이모"],0],["주디가 다닌 곳은?",["대학","병원","회사"],0]],52:[["돌에 꽂힌 검을 뽑은 사람은?",["아서","리어왕","햄릿"],0],["기사들이 둘러앉은 탁자는?",["원탁","긴 네모 탁자","바위"],0]],53:[["피터 팬이 사는 곳은?",["네버랜드","달","바다 밑"],0],["피터 팬을 따라다니는 요정은?",["팅","키티","루시"],0]],54:[["나무 인형의 이름은?",["피노키오","산초","피터"],0],["거짓말을 하면 코가 어떻게 되나요?",["길어진다","짧아진다","사라진다"],0]],55:[["공주를 도와준 소년은?",["커디","피터","톰"],0],["고블린들이 사는 곳은?",["지하 동굴","바다","하늘"],0]],56:[["이 책에 나오는 강아지 이름은?",["빙고","몽실","해피"],0],["강아지와 함께하면 어떤 기분이 들까요?",["즐겁고 따뜻해요","심심해요","무서워요"],0]],57:[["허클베리 핀과 함께 뗏목을 탄 사람은?",["짐","산초","호크"],0],["두 사람이 여행한 곳은?",["미시시피 강","큰 바다","높은 산"],0]],58:[["백남준이 만든 새로운 예술은?",["비디오 예술","도자기","탈춤"],0],["백남준은 무엇으로 작품을 만들었나요?",["텔레비전과 비디오","나무와 돌","천과 실"],0]],59:[["김기창이 어릴 때 불편했던 것은?",["귀가 들리지 않았어요","눈이 안 보였어요","다리를 다쳤어요"],0],["김기창이 즐겨 그린 그림은?",["바보 산수","바다 풍경","꽃그림"],0]],60:[["김홍도가 그린 유명한 그림은?",["씨름","아침 식사","수박"],0],["김홍도의 그림 속 주인공은?",["평범한 백성들","임금님","외국 사람"],0]],61:[["김만덕이 굶는 사람들에게 준 것은?",["쌀","옷","배"],0],["김만덕이 살던 곳은?",["제주도","서울","평양"],0]],62:[["이황이 제자들을 가르친 곳은?",["도산서원","성균관","궁궐"],0],["이황이 제자들에게 가장 강조한 것은?",["배움을 게을리 하지 않는 것","돈을 많이 버는 것","높은 벼슬"],0]],63:[["유관순이 외친 말은?",["대한 독립 만세","안녕하세요","고맙습니다"],0],["유관순이 다닌 학교는?",["이화학당","서당","외국 학교"],0]],64:[["정약용이 만든 기계는?",["거중기","비행기","자동차"],0],["정약용이 쓴 유명한 책은?",["목민심서","춘향전","금오신화"],0]],65:[["정조가 쌓은 성은?",["수원 화성","한양 도성","경복궁"],0],["정조의 꿈은?",["백성이 행복한 나라","전쟁에서 이기는 나라","큰 궁궐"],0]],66:[["장영실이 만든 것은?",["측우기","비행기","전화기"],0],["장영실을 아낀 임금은?",["세종대왕","정조","숙종"],0]],67:[["케네디가 꿈꾼 것은?",["달에 사람을 보내는 일","큰 배","높은 성"],0],["케네디의 꿈은 결국?",["이루어졌어요","없던 일이 되었어요","잊혀졌어요"],0]],68:[["아멜리아가 탄 것은?",["비행기","배","자전거"],0],["아멜리아가 보여 준 것은?",["여자도 도전할 수 있다는 것","빨리 달리는 법","노래 잘하기"],0]],69:[["김마리아가 한 일은?",["독립운동","요리 공부","그림 그리기"],0],["김마리아가 다닌 학교는?",["이화학당","서당","체육학교"],0]],70:[["생텍쥐페리가 쓴 책은?",["어린 왕자","춘향전","삼총사"],0],["생텍쥐페리의 직업은?",["비행사","의사","선생님"],0]],71:[["다빈치가 그린 그림은?",["모나리자","씨름","키스"],0],["다빈치의 공책에는 무엇이 있었나요?",["발명품 설계 그림","편지","요리법"],0]],72:[["브뤼헐이 즐겨 그린 것은?",["농민들의 일상","바다","왕의 초상"],0],["브뤼헐의 그림은 어떻게 보이나요?",["사람들이 많이 모여 있어요","아무도 없어요","동물만 있어요"],0]],73:[["클림트의 유명한 그림은?",["키스","씨름","모나리자"],0],["클림트 그림의 특징은?",["황금색으로 반짝여요","아주 어두워요","하얀색뿐이에요"],0]],74:[["아르침볼도가 얼굴을 만들 때 쓴 것은?",["과일과 채소","돌","천"],0],["가까이 보면 어떻게 보이나요?",["과일이 보여요","글자가 보여요","별이 보여요"],0]],75:[["뉴턴이 깨달은 힘은?",["중력","바람","불"],0],["뉴턴에게 영감을 준 것은?",["떨어지는 사과","흐르는 물","날아가는 새"],0]],76:[["매킨토시가 디자인한 것은?",["의자와 건물","자동차","배"],0],["매킨토시는 어느 나라 사람인가요?",["스코틀랜드","이탈리아","일본"],0]],77:[["바리데기가 구한 것은?",["생명의 약수","황금","예쁜 옷"],0],["바리데기가 찾아간 곳은?",["저승","하늘","바다 밑"],0]],78:[["이아손이 찾으러 간 것은?",["황금 양털","보물 상자","불꽃"],0],["영웅들이 함께 탄 배 이름은?",["아르고호","노틸러스호","제나호"],0]],79:[["프시케의 사랑은 누구였나요?",["에로스","이아손","아르고"],0],["프시케가 시험을 이긴 힘은?",["사랑과 믿음","힘과 돈","노래"],0]],80:[["이야기에 나오는 열두 달은 무엇일까요?",["한 해의 열두 달","열두 명의 왕","열두 마리 새"],0],["소녀가 열두 달에게 받은 것은?",["귀한 선물","많은 돈","예쁜 옷"],0]],81:[["면색이가 골탕을 먹인 사람은?",["저승사자","임금님","도둑"],0],["면색이가 이긴 방법은?",["꾀를 내어서","힘으로","돈으로"],0]],82:[["아버지가 하는 일은?",["신발 장수","농사","그림"],0],["아들이 아버지에게 배운 것은?",["정성과 꾸준함","빨리 달리기","노래"],0]],83:[["원자력으로 만드는 것은?",["전기","물","종이"],0],["원자력을 쓸 때 가장 조심해야 할 것은?",["안전","속도","색깔"],0]],84:[["우주 센터에서 볼 수 있는 것은?",["로켓","기차","배"],0],["로켓이 날아가는 곳은?",["우주","바다","땅속"],0]],85:[["사건을 풀 때 반지가 쓰는 것은?",["과학 지식","마법","노래"],0],["범인의 흔적으로 자주 쓰이는 것은?",["지문과 발자국","간식","장난감"],0]],86:[["이 책에서 묻는 것은?",["위인지 아래인지","빨간지 파란지","큰지 작은지"],0],["위와 아래를 알려면 무엇을 보아야 하나요?",["어느 쪽에 있는지","색깔","소리"],0]],87:[["빈집에서 찾은 단서는?",["발자국","그림","별"],0],["비밀을 밝히려면 무엇이 필요할까요?",["자세히 관찰하기","그냥 지나가기","눈을 감기"],0]],88:[["하얀 행성은 무엇으로 덮여 있나요?",["눈과 얼음","모래","풀"],0],["무지개는 몇 가지 빛으로 되어 있나요?",["일곱 가지","두 가지","백 가지"],0]],89:[["생각하고 기억하는 곳은?",["뇌","심장","손"],0],["뇌를 건강하게 하려면?",["잠을 잘 자기","밤을 새기","많이 먹기"],0]],90:[["벽에 남은 글씨에서 살피는 것은?",["글씨체와 필기","색깔만","냄새"],0],["과학 수사의 첫걸음은?",["관찰하고 기록하기","지우고 덮기","그냥 두기"],0]],91:[["사자가 한 일은?",["지혜롭게 선택한 것","그냥 먹은 것","잠만 잔 것"],0],["무언가를 고를 때 필요한 것은?",["잘 생각해 보기","남 따라 하기","눈 감고 고르기"],0]],92:[["다섯 왕자가 사고 싶어 한 것은?",["반짝반짝 목걸이","말","성"],0],["물건을 사는 방법으로 맞는 것은?",["돈을 주고 사거나 물건을 바꿔요","그냥 가져가요","아무도 못 사요"],0]],93:[["포코가 떠난 곳은?",["세계 여러 나라","바다 밑","달"],0],["나라마다 다른 것은?",["쓰는 돈과 물건","하늘 색","낮과 밤"],0]],94:[["박쥐가 두 나라에서 쫓겨난 까닭은?",["짐승도 새도 아니라고 해서","너무 커서","소리를 내서"],0],["박쥐의 마음은 어땠을까요?",["외롭고 속상했어요","아주 즐거웠어요","아무렇지 않았어요"],0]],95:[["토토가 탄 것은?",["배 제나호","비행기","자전거"],0],["배를 타고 간 곳은?",["먼 나라","동네 시장","산 위"],0]],96:[["하몬 왕이 아끼던 것은 무엇이었나요?",["돈","사람 마음","꽃"],0],["왕이 마지막에 깨달은 것은?",["사람 마음이 더 소중해요","돈이 제일 좋아요","혼자가 편해요"],0]],97:[["시장에 모이는 것은?",["사람과 물건","자동차만","별"],0],["시장에서 하는 일은?",["물건을 사고팔아요","잠을 자요","공부를 해요"],0]],98:[["모모점에는 무엇을 하러 가나요?",["놀러 가요","이사를 가요","병원에 가요"],0],["가게에 가면 누구를 만날까요?",["친구와 이웃 사람들","아무도 없어요","외계인만"],0]],99:[["지킴이들이 지키는 곳은?",["달포천","바다","운동장"],0],["지킴이가 되면 무엇을 할까요?",["쓰레기를 줍고 깨끗하게 해요","물고기를 잡아요","돌을 던져요"],0]],100:[["선녀들이 사 먹고 싶은 것은?",["엿","아이스크림","과자"],0],["대작전을 하려면 무엇이 필요할까요?",["머리를 맞대고 꾀를 내요","그냥 기다려요","울어요"],0]],101:[["보송이네 식구는?",["사자 형제","토끼 남매","곰 가족"],0],["형제가 힘을 합치면?",["어려운 일도 해내요","자꾸 싸워요","아무것도 못 해요"],0]],102:[["불 도깨비의 성격은?",["이글이글 화가 많아요","아주 조용해요","늘 웃기만 해요"],0],["꽃님이가 도깨비에게 해 준 것은?",["마음을 편안하게 해 줬어요","큰 소리로 혼냈어요","도망갔어요"],0]],103:[["드래건맨을 어떻게 설득하나요?",["차근차근 이유를 말해요","큰 소리로 화내요","때려요"],0],["설득을 잘하려면 무엇이 필요할까요?",["상대 마음을 먼저 생각해요","내 말만 해요","귀를 막아요"],0]],104:[["준이와 몽실이는 무엇을 함께 하나요?",["함께 놀고 지내요","서로 싸우기만 해요","만나지 않아요"],0],["단짝 친구와 지내려면?",["서로 아껴 주고 양보해요","내 것만 챙겨요","명령만 해요"],0]],105:[["무엇을 모으나요?",["초코별 상자","돌멩이","구슬"],0],["하나씩 모으면 어떻게 되나요?",["큰 것을 만들 수 있어요","사라져요","작아져요"],0]],106:[["여사님이 만드는 것은?",["김치","빵","주스"],0],["김치를 어디까지 보내려 했나요?",["우주","바닷속","옆집"],0]],107:[["집을 지을 때 필요한 것은?",["벽돌을 차곡차곡 쌓는 일","그냥 기다리기","노래 부르기"],0],["최고의 집은 어떤 집일까요?",["가족과 함께 사는 집","아주 큰 집","아무도 없는 집"],0]],108:[["숲속 나라 왕이 되면 누구를 돌보나요?",["숲속 친구들","혼자만","아무도"],0],["좋은 왕은 어떤 사람일까요?",["남의 말을 잘 들어요","혼자 결정해요","놀기만 해요"],0]],109:[["미나와 올리는 어떤 사이인가요?",["단짝 친구","원수","남남"],0],["사이좋게 지내려면?",["양보하고 배려해요","내 것만 챙겨요","무시해요"],0]],110:[["만득이가 간 곳은?",["시장","학교","병원"],0],["시장에서 무엇을 하나요?",["물건을 사고팔아요","공부해요","잠을 자요"],0]],111:[["아이가 계속 배가 고픈 까닭은?",["먹어도 또 배가 고파요","아침을 안 먹어서","잠이 부족해서"],0],["아이는 그래서 어떻게 했나요?",["많이 많이 먹었어요","아무것도 안 먹었어요","물만 마셨어요"],0]],112:[["콩콩이가 간 나라는?",["내 맘대로 나라","아무도 없는 나라","동물 나라"],0],["내 맘대로만 하면 어떻게 될까요?",["친구가 불편해져요","모두 즐거워요","아무 일도 없어요"],0]],113:[["딱따구리가 하는 일은?",["나무를 콕콕 쪼아요","노래를 가르쳐요","물을 길어요"],0],["딱따구리는 무엇을 만드나요?",["소리로 시를 만들어요","집을 지어요","그림을 그려요"],0]],114:[["시장에서 볼 수 있는 것은?",["채소와 과일","로켓","공룡"],0],["물건을 사려면 무엇이 필요할까요?",["돈","연필","모자"],0]],115:[["형이 되면 무엇을 해야 할까요?",["동생을 돌봐 줘요","동생을 부려요","혼자 놀아요"],0],["좋은 형은 어떤 사람일까요?",["먼저 양보해요","항상 이기려 해요","동생을 무시해요"],0]],116:[["마녀들이 걸린 병은?",["감기","눈병","치통"],0],["편지를 보내면 무엇을 전할 수 있나요?",["안부와 마음","돈","숙제"],0]],117:[["파티에 가려면 무엇이 필요할까요?",["초대장","우산","가방"],0],["파티에서는 어떻게 해야 할까요?",["친구들과 즐겁게 놀아요","혼자 구석에 있어요","싸워요"],0]]};
+var frRead = rd(FRK.read, {}) || {};
+var frUn = rd(FRK.un, {}) || {};
+var frAct = rd(FRK.act, {}) || {};
+var frArt = rd(FRK.art, {}) || {};
+var frF = "", frUnOnly = false;
+(function(){                                  /* 다른 기기에서 푼 책은 다시 읽지 않은 책으로 */
+  for (var k in frUn){
+    if (!frUn[k]) continue;
+    if (!frRead[k] || Number(frUn[k]) >= Number(frRead[k])) delete frRead[k];
+  }
+})();
+function frIsRead(n){ return !!frRead[String(n)]; }
+function frGenreAll(k){ var n = 0; for (var i = 0; i < FRBK.length; i++) if (FRBK[i][1] === k) n++; return n; }
+function frGenreDone(k){ var n = 0; for (var i = 0; i < FRBK.length; i++) if (FRBK[i][1] === k && frIsRead(FRBK[i][0])) n++; return n; }
+function frDoneAll(){ var n = 0; for (var i = 0; i < FRBK.length; i++) if (frIsRead(FRBK[i][0])) n++; return n; }
+function frGenreOf(k){
+  for (var i = 0; i < FRG.length; i++) if (FRG[i][0] === k) return FRG[i];
+  return [k, "📚", k];
+}
+function frGIdx(k){
+  for (var i = 0; i < FRG.length; i++) if (FRG[i][0] === k) return i;
+  return 0;
+}
+function frBook(n){
+  for (var i = 0; i < FRBK.length; i++) if (String(FRBK[i][0]) === String(n)) return FRBK[i];
+  return null;
+}
+function frRowHTML(b){
+  var n = b[0], g = frGenreOf(b[1]), gi = frGIdx(b[1]), on = frIsRead(n);
+  var act0 = (fraQuizDone(n) || fraArtDone(n));
+  return '<div class="sg-row' + (on ? " read" : "") + '" data-frrow="' + n + '">' +
+    '<span class="sg-no">' + pad2(n) + '</span>' +
+    '<span class="sg-tx"><b class="sg-bt">' + esc(b[2]) + '</b>' +
+      '<span class="sg-h"><i>' + esc(b[3]) + '</i>' + fraBadges(n) +
+      '<em class="sg-pill g' + (gi + 1) + '">' + g[1] + ' ' + esc(g[2]) + '</em></span></span>' +
+    '<button class="sg-act' + (act0 ? " on" : "") + '" type="button" data-fract="' + n + '"' +
+      ' aria-label="' + esc(b[2]) + ' 독후활동 열기">📝</button>' +
+    '<button class="sg-ck' + (on ? " on" : "") + '" type="button" data-frtoggle="' + n + '"' +
+      ' aria-pressed="' + (on ? "true" : "false") + '">' + (on ? "✅ 완독" : "읽었어요") + '</button>' +
+  '</div>';
+}
+function frHTML(){
+  var total = FRBK.length, done = frDoneAll(), i;
+  var chips = '<button class="sg-chip' + (frF === "" && !frUnOnly ? " on" : "") + '" type="button" data-frchip="all">전체 <b>' + done + "/" + total + '</b></button>';
+  for (i = 0; i < FRG.length; i++){
+    var g = FRG[i];
+    if (!frGenreAll(g[0])) continue;
+    chips += '<button class="sg-chip g' + (i + 1) + (frF === g[0] ? " on" : "") + '" type="button" data-frchip="' + g[0] + '">' +
+      g[1] + ' ' + esc(g[2]) + ' <b>' + frGenreDone(g[0]) + "/" + frGenreAll(g[0]) + '</b></button>';
+  }
+  chips += '<button class="sg-chip un' + (frUnOnly ? " on" : "") + '" type="button" data-frchip="un">안 읽은 책만</button>';
+  var prog = '<div class="sg-prog"><b>읽은 책</b><div class="sg-bar"><i style="width:' +
+    (total ? Math.round(done / total * 100) : 0) + '%"></i></div><span>' + done + ' / ' + total + '권</span></div>';
+  var out = "";
+  for (i = 0; i < FRG.length; i++){
+    var gg = FRG[i];
+    if (!frGenreAll(gg[0])) continue;
+    if (frF !== "" && gg[0] !== frF) continue;
+    var rows = "";
+    for (var j = 0; j < FRBK.length; j++){
+      var b = FRBK[j];
+      if (b[1] !== gg[0]) continue;
+      if (frUnOnly && frIsRead(b[0])) continue;
+      rows += frRowHTML(b);
+    }
+    if (!rows && frF === "") continue;
+    out += '<section class="sg-stage"><div class="sg-shd"><b>' + gg[1] + ' ' + esc(gg[2]) + '</b><span class="sg-sn">' + frGenreDone(gg[0]) + ' / ' + frGenreAll(gg[0]) + '권</span></div>' +
+      '<div class="sg-rows">' + (rows || '<div class="rb-empty">이 장르 책은 모두 읽었어요 🎉</div>') + '</div></section>';
+  }
+  if (!out) out = '<div class="rb-empty">' + (frDoneAll() === total ? total + "권을 모두 읽었어요! 정말 대단해 🎉" : "읽을 책이 남아 있지 않아요") + '</div>';
+  return '<div class="sg-head"><span class="sg-em" aria-hidden="true">📕</span>' +
+      '<span class="sg-hi"><b>프뢰벨 책장</b><span>리딩토탈 딥스터디 · 전 ' + total + '권 · 장르별 책목록 + 📝 독후활동</span></span></div>' +
+    '<div class="sg-chips">' + chips + '</div>' + prog + out;
+}
+function frPaint(force){
+  var w = $("rbFrWrap"); if (!w) return;
+  if (!force && w.getAttribute("data-built") === "1"){ frTabN(); return; }
+  w.innerHTML = frHTML();
+  w.setAttribute("data-built", "1");
+  frTabN();
+}
+function frTabN(){
+  var el = $("frTabN");
+  if (el) el.textContent = frDoneAll() + "/" + FRBK.length;
+}
+function frReload(){
+  frRead = rd(FRK.read, {}) || {};
+  frUn = rd(FRK.un, {}) || {};
+  frAct = rd(FRK.act, {}) || {};
+  frArt = rd(FRK.art, {}) || {};
+  for (var k in frUn){
+    if (!frUn[k]) continue;
+    if (!frRead[k] || Number(frUn[k]) >= Number(frRead[k])) delete frRead[k];
+  }
+  frPaint(true);
+}
+function frToggle(n){
+  var key = String(n), b = frBook(n);
+  if (!b) return;
+  if (frRead[key]){
+    delete frRead[key];
+    frUn[key] = Date.now();
+    wr(FRK.un, frUn);
+    if (SB.toast) SB.toast("📕 " + b[2] + " — 읽었어요 표시를 풀었어요");
+  } else {
+    frRead[key] = Date.now();
+    if (frUn[key]) { delete frUn[key]; wr(FRK.un, frUn); }
+    var got = 0;
+    try { got = (SB.earn) ? SB.earn("fr|read|" + key, 2) : 0; } catch(e){ got = 0; }
+    if (got && SB.starFX) SB.starFX(got, "📕 " + b[2] + " 완독!");
+    else if (SB.toast) SB.toast("📕 " + b[2] + " — ✅ 완독으로 표시했어요");
+  }
+  wr(FRK.read, frRead);
+  touchFam();                                  /* 가족 코드로 다른 기기에도 바로 */
+  frPaint(true);
+}
+
+/* ---------- 6.8 📕 프뢰벨 독후활동 — 작은 퀴즈 2문항 + 기억나는 장면 그리기 ---------- */
+var frN = 0;
+var frD = { ctx:null, color:"#22303f", erasing:false, drawing:false, last:null, n:0 };
+function fraState(n){ return frAct[String(n)] || null; }
+function fraQuizDone(n){ var a = fraState(n); return !!(a && a.ok >= 2); }
+function fraArtDone(n){ return !!frArt[String(n)]; }
+function fraBadges(n){
+  var h = "";
+  if (fraQuizDone(n)) h += '<em class="sg-bd q" title="문제를 다 맞혔어요">📝</em>';
+  if (fraArtDone(n)) h += '<em class="sg-bd" title="그림을 저장했어요">🎨</em>';
+  return h ? '<span class="sg-bds">' + h + '</span>' : "";
+}
+function fraQuizHTML(n){
+  var qs = FRA[n] || [], a = fraState(n), qd = (a && a.q) ? a.q : {}, out = "", i, j;
+  for (i = 0; i < qs.length; i++){
+    var x = qs[i], ok = !!qd[i], opts = "";
+    for (j = 0; j < x[1].length; j++){
+      var cls = "sga-opt";
+      if (ok && j === x[2]) cls += " ok";
+      opts += '<button class="' + cls + '" type="button" data-frq="' + i + '" data-oi="' + j + '">' +
+        '<span class="sga-on">' + "①②③".charAt(j) + '</span><span class="sga-ot">' + esc(x[1][j]) + '</span></button>';
+    }
+    out += '<div class="sga-qi"><p class="sga-qq"><span class="sga-qn">' + (i + 1) + '</span>' +
+      '<span>' + esc(x[0]) + '</span></p><div class="sga-opts">' + opts + '</div></div>';
+  }
+  return '<div class="sga-qgrid">' + out + '</div>';
+}
+function fraMsgHTML(n){
+  var qs = FRA[n] || [], a = fraState(n), qd = (a && a.q) ? a.q : {}, got = 0, i;
+  for (i = 0; i < qs.length; i++) if (qd[i]) got++;
+  if (qs.length && got >= qs.length)
+    return '<div class="sga-msg win" id="fraMsg">🎉 ' + qs.length + '문제를 모두 맞혔어요! 정말 잘했어요 ⭐</div>';
+  if (got > 0)
+    return '<div class="sga-msg" id="fraMsg">잘하고 있어요! ' + got + ' / ' + qs.length + '문제 맞혔어요 ⭐</div>';
+  return '<div class="sga-msg" id="fraMsg">정답을 고르면 ⭐ 별을 받아요</div>';
+}
+function fraHTML(b){
+  var n = b[0], g = frGenreOf(b[1]), art0 = frArt[String(n)];
+  var tools = '<button class="rb-tool on" type="button" data-fratool="brush">🖌 붓</button>' +
+    '<button class="rb-tool" type="button" data-fratool="erase">🧽 지우개</button>' +
+    '<button class="rb-tool" type="button" data-fratool="clear">🗑 전체 지우기</button>' +
+    '<button class="rb-tool" type="button" data-fratool="save">💾 그림 저장</button>';
+  return '<div class="sga-h"><span class="sg-no">' + pad2(n) + '</span>' +
+      '<span class="sga-ht"><b>' + esc(b[2]) + '</b><span>' + g[1] + ' ' + esc(g[2]) + ' · ' + esc(b[3]) + ' · 독후활동</span></span>' +
+      '<button class="sga-back" type="button" data-fraact="close">← 프뢰벨 책장</button></div>' +
+    '<div class="sga-card"><div class="sga-ch"><b>📝 작은 퀴즈</b><span>3개 중에 하나를 골라요 · 맞히면 ⭐ +1</span></div>' +
+      '<div id="fraQuiz">' + fraQuizHTML(n) + '</div>' + fraMsgHTML(n) + '</div>' +
+    '<div class="sga-card"><div class="sga-ch"><b>🎨 기억나는 장면 그리기</b><span>손가락으로 그려요 · 책마다 저장돼요</span></div>' +
+      '<div class="sga-cvbox"><canvas id="fraCanvas" width="720" height="380" aria-label="기억나는 장면 그리기"></canvas></div>' +
+      '<div class="rb-pal" id="fraPal"></div>' +
+      '<div class="rb-pal" style="margin-top:.5vh">' + tools + '</div>' +
+      '<div class="rb-art-thumb" id="fraThumb"' + (art0 ? "" : " hidden") + '>' +
+        (art0 ? '<img src="' + art0 + '" alt="내가 그린 그림"><span>저장한 그림이에요 ✓</span>' : "") + '</div>' +
+      '<p class="sga-tip">그림을 다 그리면 💾 그림 저장을 꼭 눌러 주세요.</p></div>';
+}
+function fraPal(){
+  var box = $("fraPal"); if (!box) return;
+  box.innerHTML = PALETTE.map(function(c){
+    return '<button class="rb-sw' + (c === frD.color ? " on" : "") + '" type="button" data-fracolor="' + c +
+      '" style="background:' + c + '" aria-label="색 ' + c + '"></button>';
+  }).join("");
+}
+function fraStyle(ctx){
+  ctx.globalCompositeOperation = frD.erasing ? "destination-out" : "source-over";
+  ctx.strokeStyle = frD.color; ctx.fillStyle = frD.color;
+  ctx.lineWidth = frD.erasing ? 24 : 7;
+}
+function fraDot(p){
+  var ctx = frD.ctx; if (!ctx) return;
+  fraStyle(ctx);
+  ctx.beginPath(); ctx.arc(p.x, p.y, (frD.erasing ? 12 : 3.5), 0, Math.PI * 2); ctx.fill();
+}
+function fraStroke(a, b){
+  var ctx = frD.ctx; if (!ctx) return;
+  fraStyle(ctx);
+  ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+}
+function fraInitCanvas(n){
+  var cv = $("fraCanvas"); if (!cv) return;
+  var dpr = Math.min(2, window.devicePixelRatio || 1);
+  var rect = cv.getBoundingClientRect();
+  var W = Math.max(300, Math.round(rect.width || 720)), H = Math.max(150, Math.round(rect.height || 380));
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  var ctx = cv.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, W, H);
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+  frD.ctx = ctx; frD.n = n; frD.erasing = false; frD.drawing = false; frD.last = null;
+  var saved = frArt[String(n)];
+  if (saved){
+    var im = new Image();
+    im.onload = function(){ try { ctx.drawImage(im, 0, 0, W, H); } catch(e){} };
+    im.src = saved;
+  }
+  function pos(e){
+    var r = cv.getBoundingClientRect();
+    return { x:(e.clientX - r.left) * (W / r.width), y:(e.clientY - r.top) * (H / r.height) };
+  }
+  cv.addEventListener("pointerdown", function(e){
+    if (e.button && e.button !== 0) return;
+    try { cv.setPointerCapture(e.pointerId); } catch(err){}
+    frD.drawing = true; frD.last = pos(e); fraDot(frD.last); e.preventDefault();
+  });
+  cv.addEventListener("pointermove", function(e){
+    if (!frD.drawing) return;
+    var p = pos(e); fraStroke(frD.last, p); frD.last = p; e.preventDefault();
+  });
+  function end(){ frD.drawing = false; frD.last = null; }
+  cv.addEventListener("pointerup", end);
+  cv.addEventListener("pointercancel", end);
+  cv.addEventListener("pointerleave", function(){ if (frD.drawing) end(); });
+}
+function fraSave(){
+  var cv = $("fraCanvas"), n = frD.n; if (!cv || !n) return;
+  var url = "";
+  try {
+    var w0 = cv.width || 720, h0 = cv.height || 380, k = Math.min(1, 460 / w0);
+    var oc = document.createElement("canvas");
+    oc.width = Math.max(1, Math.round(w0 * k)); oc.height = Math.max(1, Math.round(h0 * k));
+    var octx = oc.getContext("2d");
+    octx.fillStyle = "#ffffff"; octx.fillRect(0, 0, oc.width, oc.height);
+    octx.drawImage(cv, 0, 0, oc.width, oc.height);
+    try { url = oc.toDataURL("image/webp", 0.72); } catch(e){ url = ""; }
+    if (!url || url.length < 60) url = oc.toDataURL("image/png");
+  } catch(e){ url = ""; }
+  if (!url){ if (SB.toast) SB.toast("그림을 저장하지 못했어요"); return; }
+  frArt[String(n)] = url;
+  if (!wr(FRK.art, frArt)){
+    delete frArt[String(n)];
+    if (SB.toast) SB.toast("저장 공간이 부족해요 · 다른 책 그림을 지우고 다시 해 볼까요?");
+    return;
+  }
+  var th = $("fraThumb");
+  if (th){ th.hidden = false; th.innerHTML = '<img src="' + url + '" alt="내가 그린 그림"><span>저장한 그림이에요 ✓</span>'; }
+  var got = 0;
+  try { got = SB.earn ? SB.earn("frdraw|" + String(n), 1) : 0; } catch(e){ got = 0; }
+  if (got && SB.starFX) SB.starFX(got, "🎨 그림을 저장했어요!");
+  else if (SB.toast) SB.toast("💾 그림을 저장했어요!");
+  frPaint(true);
+}
+function fraAnswer(qi, oi){
+  var n = frD.n || frN; if (!n) return;
+  var qs = FRA[n] || [], x = qs[qi]; if (!x) return;
+  var key = String(n), a = frAct[key] || {};
+  if (!a.q) a.q = {};
+  if (a.q[qi]){ if (SB.toast) SB.toast("이 문제는 이미 맞혔어요 ✓"); return; }
+  if (oi === x[2]){
+    a.q[qi] = 1;
+    var cnt = 0; for (var k in a.q) if (a.q[k]) cnt++;
+    a.ok = cnt; a.ts = Date.now();
+    frAct[key] = a; wr(FRK.act, frAct);
+    var got = 0;
+    try { got = SB.earn ? SB.earn("frq|" + key + "|" + qi, 1) : 0; } catch(e){ got = 0; }
+    var qb = $("fraQuiz"); if (qb) qb.innerHTML = fraQuizHTML(n);
+    var mb = $("fraMsg");
+    if (mb && mb.parentNode){
+      var tmp = document.createElement("div");
+      tmp.innerHTML = fraMsgHTML(n);
+      if (tmp.firstChild) mb.parentNode.replaceChild(tmp.firstChild, mb);
+    }
+    if (cnt >= qs.length){
+      if (SB.starFX) SB.starFX(0, "🎉 " + qs.length + "문제를 모두 맞혔어요! ⭐ +" + got);
+      else if (SB.toast) SB.toast("🎉 모두 맞혔어요!");
+    } else if (got && SB.starFX) SB.starFX(got, "정답이야! 🎉");
+    else if (SB.toast) SB.toast("정답이야! ⭐");
+    frPaint(true);
+  } else {
+    var btn = document.querySelector('[data-frq="' + qi + '"][data-oi="' + oi + '"]');
+    if (btn) btn.classList.add("no");
+    if (SB.toast) SB.toast("아쉬워요! 다시 골라 볼까요?");
+  }
+}
+function fraOpen(n){
+  n = parseInt(n, 10); if (!n) return;
+  var b = frBook(n); if (!b) return;
+  var view = $("viewBook"); if (!view) return;
+  var w = $("rbFrActWrap");
+  if (!w){
+    w = document.createElement("div");
+    w.className = "rb-act rb-hide sgact"; w.id = "rbFrActWrap";
+    w.setAttribute("aria-label", "📕 프뢰벨 독후활동 — 작은 퀴즈와 기억나는 장면 그리기");
+    view.appendChild(w);
+  }
+  frN = n;
+  w.innerHTML = fraHTML(b);
+  MODE = "fract";
+  applyMode();
+  fraPal();
+  fraInitCanvas(n);
+  try { w.scrollTop = 0; } catch(e){}
+  try { view.scrollTop = 0; } catch(e){}
+  var node = w.parentNode;
+  while (node && node !== document.body){
+    try { if (node.scrollTop) node.scrollTop = 0; } catch(e){}
+    node = node.parentNode;
+  }
+  try { if (window.scrollY) window.scrollTo(0, 0); } catch(e){}
+}
+SB.fr = { render: frPaint, reload: frReload, toggle: frToggle, count: frDoneAll, books: FRBK,
+          genres: FRG, open: fraOpen, actState: function(){ return frAct; }, quiz: FRA };
+/* 프뢰벨 목록·독후활동 클릭 (읽었어요 토글과 📝 열기를 확실히 구분한다) */
+document.addEventListener("click", function(e){
+  var el = e.target; if (!el || !el.closest) return;
+  var ck = el.closest("[data-frtoggle]");
+  if (ck){ frToggle(ck.getAttribute("data-frtoggle")); return; }
+  var ac = el.closest("[data-fract]");
+  if (ac){ fraOpen(ac.getAttribute("data-fract")); return; }
+  var ch = el.closest("[data-frchip]");
+  if (ch){
+    var v = ch.getAttribute("data-frchip");
+    if (v === "all"){ frF = ""; frUnOnly = false; }
+    else if (v === "un"){ frUnOnly = !frUnOnly; }
+    else { frF = (frF === v) ? "" : v; }
+    frPaint(true);
+    return;
+  }
+  var rw = el.closest("[data-frrow]");
+  if (rw){ fraOpen(rw.getAttribute("data-frrow")); return; }
+});
+document.addEventListener("click", function(e){
+  var el = e.target; if (!el || !el.closest) return;
+  var qb = el.closest("[data-frq]");
+  if (qb){
+    fraAnswer(parseInt(qb.getAttribute("data-frq"), 10), parseInt(qb.getAttribute("data-oi"), 10));
+    return;
+  }
+  var sw = el.closest("[data-fracolor]");
+  if (sw){
+    frD.color = sw.getAttribute("data-fracolor"); frD.erasing = false;
+    var sws = document.querySelectorAll("#fraPal .rb-sw");
+    for (var i = 0; i < sws.length; i++) sws[i].classList.toggle("on", sws[i] === sw);
+    return;
+  }
+  var tl = el.closest("[data-fratool]");
+  if (tl){
+    var a = tl.getAttribute("data-fratool");
+    if (a === "erase") frD.erasing = true;
+    else if (a === "brush") frD.erasing = false;
+    else if (a === "clear"){
+      var ctx = frD.ctx, cv = $("fraCanvas");
+      if (ctx && cv){
+        ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalCompositeOperation = "source-over"; ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, cv.width, cv.height); ctx.restore();
+      }
+      if (SB.toast) SB.toast("전체를 지웠어요 · 다시 그려 볼까요?");
+    }
+    else if (a === "save") fraSave();
+    var tls = document.querySelectorAll("[data-fratool]");
+    for (var j = 0; j < tls.length; j++) tls[j].classList.toggle("on", a !== "save" && tls[j] === tl);
+    return;
+  }
+  var bk = el.closest("[data-fraact]");
+  if (bk){
+    if (bk.getAttribute("data-fraact") === "close"){ MODE = "froebel"; applyMode(); frPaint(true); }
+    return;
+  }
+});
+try { frTabN(); } catch(e){}
+
 /* ---------- 7. 이벤트 ---------- */
 document.addEventListener("click", function(e){
   var el = e.target; if (!el || !el.closest) return;
@@ -28760,12 +29194,13 @@ document.addEventListener("click", function(e){
   var tab = el.closest("[data-rbtab]");
   if (tab){
     var m = tab.getAttribute("data-rbtab");
-    MODE = (m === "shelf" || m === "korbook" || m === "engbook" || m === "samguk") ? m : "tree";
+    MODE = (m === "shelf" || m === "korbook" || m === "engbook" || m === "samguk" || m === "froebel") ? m : "tree";
     applyMode();
     if (MODE === "shelf") paintShelves();
     if (MODE === "korbook" && SB.videoHub && SB.videoHub.renderKB) SB.videoHub.renderKB();
     if (MODE === "engbook" && SB.videoHub && SB.videoHub.renderEB) SB.videoHub.renderEB();
     if (MODE === "samguk" && SB.sg && SB.sg.render) SB.sg.render(true);
+    if (MODE === "froebel" && SB.fr && SB.fr.render) SB.fr.render(true);
     return;
   }
   var chip = el.closest("[data-rbchip]");
