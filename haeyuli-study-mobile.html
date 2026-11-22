@@ -5626,7 +5626,8 @@ body.mob .sg-ck{font-size:2.9vw;padding:1.9vw 3vw;}
 .sg-act.on{background:linear-gradient(135deg,#f3e9ff,#ffe9f4);color:#7a3fb0;box-shadow:inset 0 0 0 .2vh #d6bcf0;}
 .sg-act:active{transform:scale(.96);}
 /* 🔊 나우 아임 리딩 원어민 음원 재생 버튼·진행 바 */
-.sg-row.aud{grid-template-columns:auto minmax(0,1fr) auto auto auto;}
+.sg-aw{display:flex;align-items:center;margin-top:.3vh;}
+body.mob .sg-aw{margin-top:.9vw;}
 .sg-play{flex:0 0 auto;display:inline-flex;align-items:center;gap:.4vh;border-radius:999px;padding:.78vh 1.15vh;font-size:1.24vh;font-weight:900;white-space:nowrap;
   background:linear-gradient(135deg,#eaf4ff,#dcebff);color:#1f5fa8;box-shadow:inset 0 0 0 .18vh #c2ddfa;cursor:pointer;}
 .sg-play .sg-play-i{font-size:1.3vh;line-height:1;}
@@ -5637,7 +5638,6 @@ body.mob .sg-ck{font-size:2.9vw;padding:1.9vw 3vw;}
 .sg-ab{grid-column:1/-1;display:none;height:.55vh;border-radius:999px;background:#e8eef6;overflow:hidden;}
 .sg-row.playing .sg-ab{display:block;}
 .sg-ab i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#7fc5f2,#2f7fc7);transition:width .18s linear;}
-body.mob .sg-row.aud{gap:1.4vw;}
 body.mob .sg-play{font-size:2.6vw;padding:1.6vw 2.1vw;gap:.8vw;border-radius:999px;}
 body.mob .sg-play .sg-play-i{font-size:3vw;}
 body.mob .sg-ab{height:1.1vw;}
@@ -30698,9 +30698,10 @@ function shRowHTML(d, b){
     '<span class="sg-no">' + pad2(b[2]) + '</span>' +
     '<span class="sg-tx"><b class="sg-bt">' + esc(b[3]) + '</b>' +
       '<span class="sg-h"><i>' + esc(b[4]) + '</i>' + shaBadges(d, id) +
-      '<em class="sg-pill g' + (shGIdx(d, b[1]) + 1) + '">' + g[1] + ' ' + esc(g[2]) + '</em></span></span>' +
-    (aud ? '<button class="sg-play" type="button" data-shaud="' + id + '" data-shk="' + d.k + '"' +
-      ' aria-pressed="false" aria-label="' + esc(b[3]) + ' 원어민 음원 듣기"><span class="sg-play-i" aria-hidden="true">🔊</span><span class="sg-play-t">음원 듣기</span></button>' : '') +
+      '<em class="sg-pill g' + (shGIdx(d, b[1]) + 1) + '">' + g[1] + ' ' + esc(g[2]) + '</em></span>' +
+      (aud ? '<span class="sg-aw"><button class="sg-play" type="button" data-shaud="' + id + '" data-shk="' + d.k + '"' +
+        ' aria-pressed="false" aria-label="' + esc(b[3]) + ' 원어민 음원 듣기"><span class="sg-play-i" aria-hidden="true">🔊</span><span class="sg-play-t">음원 듣기</span></button></span>' : '') +
+      '</span>' +
     '<button class="sg-act' + (act0 ? " on" : "") + '" type="button" data-shact="' + id + '" data-shk="' + d.k + '"' +
       ' aria-label="' + esc(b[3]) + ' 독후활동 열기">📝</button>' +
     '<button class="sg-ck' + (on ? " on" : "") + '" type="button" data-shtoggle="' + id + '" data-shk="' + d.k + '"' +
