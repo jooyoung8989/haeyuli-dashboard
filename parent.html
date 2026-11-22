@@ -36,18 +36,24 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 img,svg{display:block}
 
 /* ---------- 상단 ---------- */
-.top{
+/* 헤더와 탭을 한 덩어리로 붙여 둔다 — 아이폰 상태 표시줄·안전영역에 제목이 깔리지 않게 */
+.headstick{
   position:sticky; top:0; z-index:30;
-  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-  padding:12px 14px; padding-top:max(12px,env(safe-area-inset-top));
-  background:rgba(255,255,255,.86); backdrop-filter:blur(10px);
+  padding-top:max(18px,calc(env(safe-area-inset-top,0px) + 14px));
+  background:rgba(255,255,255,.92); backdrop-filter:blur(12px);
   border-bottom:1px solid var(--line);
 }
-.brand{display:flex;align-items:center;gap:9px;min-width:0;flex:1 1 170px}
-.brand .bi{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:1.05rem;
+.top{
+  display:flex; align-items:center; gap:10px 8px; flex-wrap:wrap;
+  padding:4px 14px 10px;
+  background:transparent;
+}
+.brand{display:flex;align-items:center;gap:9px;min-width:0;flex:1 1 170px;padding:1px 0}
+.brand .bi{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:1.05rem;line-height:1;
   background:linear-gradient(160deg,#fff2cd,#d9f6ea);box-shadow:var(--shadow-sm);flex:0 0 auto}
-.brand b{display:block;font-size:.98rem;letter-spacing:-.02em;line-height:1.15}
-.brand span{display:block;font-size:.72rem;color:var(--muted);font-weight:700;letter-spacing:-.01em}
+.brand>div{min-width:0;padding:1px 0}
+.brand b{display:block;font-size:.98rem;letter-spacing:-.02em;line-height:1.36;padding:1px 0 2px;white-space:normal;overflow:visible}
+.brand span{display:block;font-size:.72rem;color:var(--muted);font-weight:700;letter-spacing:-.01em;line-height:1.32;margin-top:1px}
 .topact{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .badge{
   display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 11px;border-radius:999px;
@@ -75,9 +81,12 @@ img,svg{display:block}
 
 /* ---------- 탭 ---------- */
 .tabs{
-  position:sticky; top:0; z-index:20;
-  display:flex; gap:6px; padding:8px 12px; overflow-x:auto; scrollbar-width:none;
-  background:rgba(255,255,255,.9); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)
+  display:flex; gap:6px; padding:0 12px 8px; overflow-x:auto; scrollbar-width:none;
+  background:transparent
+}
+/* 좁은 화면에서는 탭 4개가 한 번에 보이게 줄바꿈 (가로 스크롤로 숨지 않게) */
+@media(max-width:560px){
+  .tabs{flex-wrap:wrap; overflow:visible; row-gap:6px}
 }
 .tabs::-webkit-scrollbar{display:none}
 .tabs button{
@@ -300,6 +309,43 @@ footer a{font-size:.76rem;font-weight:800;color:var(--ink-soft);text-decoration:
   border-radius:10px;padding:7px 11px;box-shadow:var(--shadow-sm)}
 footer p{margin:0;font-size:.68rem;font-weight:700;color:var(--muted)}
 
+/* ---------- 연간 요약 (문제집 연동) ---------- */
+.annsum{display:flex;align-items:center;gap:12px;margin:2px 0 10px;flex-wrap:wrap}
+.annsum>b{font-size:1.7rem;font-weight:900;letter-spacing:-.05em;line-height:1;color:#0d6b4c}
+.annsum>b em{font-style:normal;font-size:.86rem;font-weight:800;color:var(--muted);margin-left:2px}
+.annsum .t{font-size:.76rem;font-weight:800;color:var(--ink-soft);line-height:1.45}
+.annsum .t small{display:block;font-size:.71rem;font-weight:700;color:var(--muted)}
+.cal-row .bars .bar.wb{box-shadow:inset 0 0 0 1.5px rgba(37,110,156,.38),var(--shadow-sm);padding:0 4px;justify-content:center;font-size:.68rem}
+.cal-row .bars .bar.wb.plan{background:repeating-linear-gradient(135deg,#f4f9fd,#f4f9fd 6px,#e8f2fa 6px,#e8f2fa 12px);color:#5d7c94}
+.subcard .sr2{margin-top:5px;font-size:.7rem;font-weight:800;color:var(--muted)}
+.subcard .sr2 b{color:var(--ink-soft)}
+/* ---------- 문제집 ↔ 연간 월 ---------- */
+.wbmo{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+.wbmo label{display:flex;flex-direction:column;gap:3px;font-size:.68rem;font-weight:800;color:var(--muted);min-width:0}
+.wbmo select{height:36px;border-radius:9px;border:1px solid var(--line);background:#fbfdff;padding:0 8px;font-size:.84rem;font-weight:800;width:100%}
+/* ---------- 🐷 용돈 ---------- */
+.pigbox{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px;border-radius:16px;
+  background:linear-gradient(160deg,#fff6de,#f7fbfe);border:1px solid #ffe9b8}
+.pigbox .pig{min-width:0;flex:1 1 150px}
+.pigbox .pig b{display:block;font-size:1.7rem;font-weight:900;letter-spacing:-.04em;line-height:1.15;color:#8a5a08}
+.pigbox .pig span{font-size:.72rem;font-weight:800;color:#a8905f}
+.pigbox .side{display:flex;gap:8px;flex-wrap:wrap}
+.pigbox .side div{padding:8px 11px;border-radius:11px;background:rgba(255,255,255,.78);box-shadow:inset 0 0 0 1px #ffe9b8}
+.pigbox .side b{display:block;font-size:.92rem;font-weight:900;letter-spacing:-.02em}
+.pigbox .side span{font-size:.66rem;font-weight:800;color:var(--muted)}
+.mquick{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 2px}
+.mquick button{height:32px;padding:0 11px;border-radius:9px;font-size:.78rem;font-weight:900;
+  background:#fff;border:1px solid var(--line);color:var(--ink-soft);box-shadow:var(--shadow-sm)}
+.moneyrow{display:flex;gap:7px;align-items:stretch;margin-top:8px;flex-wrap:wrap}
+.moneyrow input{flex:1 1 120px;min-width:0;height:44px;border-radius:12px;border:1px solid var(--line);
+  background:#fbfdff;padding:0 12px;font-size:1.02rem;font-weight:900;letter-spacing:-.02em}
+.moneyrow .btn{height:44px;border-radius:12px;padding:0 14px;font-size:.86rem}
+.mlrow{display:flex;align-items:center;gap:8px;font-size:.79rem;font-weight:700;padding:8px 10px;border-radius:11px;background:#f7fbfe}
+.mlrow .w{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mlrow .a{flex:0 0 auto;font-weight:900;color:#0d6b4c}
+.mlrow .a.minus{color:#b4472f}
+.mlrow .at{flex:0 0 auto;font-size:.7rem;font-weight:800;color:var(--muted)}
+
 #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);z-index:120;
   background:rgba(30,52,68,.94);color:#fff;font-size:.82rem;font-weight:800;letter-spacing:-.01em;
   padding:11px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:.22s;max-width:88vw;text-align:center}
@@ -314,6 +360,7 @@ footer p{margin:0;font-size:.68rem;font-weight:700;color:var(--muted)}
 </head>
 <body>
 
+<div class="headstick">
 <header class="top">
   <div class="brand">
     <div class="bi">🧑‍🍼</div>
@@ -332,7 +379,9 @@ footer p{margin:0;font-size:.68rem;font-weight:700;color:var(--muted)}
   <button type="button" class="on" data-tab="check" role="tab" aria-pressed="true">📊 학습 기록</button>
   <button type="button" data-tab="wb" role="tab" aria-pressed="false">📘 문제집</button>
   <button type="button" data-tab="annual" role="tab" aria-pressed="false">🗓️ 연간 진도표</button>
+  <button type="button" data-tab="money" role="tab" aria-pressed="false">🐷 용돈</button>
 </nav>
+</div>
 
 <main>
   <!-- ============ 탭 1 ============ -->
@@ -383,7 +432,42 @@ footer p{margin:0;font-size:.68rem;font-weight:700;color:var(--muted)}
     </div>
   </section>
 
-  <!-- ============ 탭 3 ============ -->
+  <!-- ============ 탭 3 — 🐷 용돈 ============ -->
+  <section id="tab-money" hidden>
+    <div class="wrap">
+      <div class="card">
+        <h3>🐷 해율이 저금통 <span class="sub" id="moneySub"></span></h3>
+        <div class="pigbox">
+          <div class="pig"><b id="pigAmount">0원</b><span>지금 저금통</span></div>
+          <div class="side">
+            <div><b id="pigIn">0원</b><span>이번 달 받은 용돈</span></div>
+            <div><b id="pigOut">0원</b><span>이번 달 쓴 돈</span></div>
+          </div>
+        </div>
+        <div class="hint" style="margin-top:12px">사유를 고르고 금액을 넣으면 <b>해율이 스터디 보드·가족 대시보드 저금통</b>에 바로 들어가요 (가족 코드로 양방향).</div>
+        <div class="chips" id="moneyWhy"></div>
+        <div class="moneyrow">
+          <input id="moneyAmt" type="number" inputmode="numeric" min="1" step="100" placeholder="금액 (원)">
+          <button class="btn pri" type="button" id="moneyGive">＋ 용돈 주기</button>
+          <button class="btn warn" type="button" id="moneySpend">－ 쓰기</button>
+        </div>
+        <div class="mquick" id="moneyQuick">
+          <button type="button" data-mq="100">+100</button>
+          <button type="button" data-mq="200">+200</button>
+          <button type="button" data-mq="500">+500</button>
+          <button type="button" data-mq="1000">+1,000</button>
+          <button type="button" data-mq="2000">+2,000</button>
+          <button type="button" data-mq="5000">+5,000</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>📜 입출금 내역 <span class="sub" id="moneyLogSub"></span></h3>
+        <div class="money-log" id="moneyAll"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 탭 4 ============ -->
   <section id="tab-annual" hidden>
     <div class="wrap">
       <div class="card">
@@ -400,13 +484,14 @@ footer p{margin:0;font-size:.68rem;font-weight:700;color:var(--muted)}
           </div>
         </div>
         <h3>📈 연간 과정 달성률 <span class="sub" id="annPct"></span></h3>
+        <div class="annsum" id="annSum"></div>
         <div class="pbar" id="annBar"></div>
         <div class="legend">
           <span><i style="background:#dfebf3"></i>예정</span>
           <span><i style="background:#f5b02c"></i>진행중</span>
           <span><i style="background:#2fae7f"></i>완료</span>
-          <span style="margin-left:auto;color:#9fb4c4">빈 칸 <b>+</b> 터치 = 추가 · 막대 터치 = 수정</span>
         </div>
+        <div class="hint" style="margin:6px 0 0">빈 칸 + 터치 = 과정 추가 · 막대 터치 = 수정 · <b>파란 테두리 막대 = 📘 문제집</b></div>
         <div class="calbox">
           <div class="cal">
             <div class="cal-head">
@@ -509,6 +594,85 @@ var SUBEM = { "국어":"📖", "영어":"🔤", "수학":"🔢", "한자":"漢",
 var TAGNAME = { p:"지면", b:"보드", k:"책", t:"패드", v:"영상" };
 var PRESET = { "5":[0,1,2,3,4], "7":[0,1,2,3,4,5,6], "2":[5,6] };
 var PALETTE = ["#ffd9e0","#ffe3bf","#cfe8ff","#dcd7ff","#d6f0d8","#ffe9a8","#e6dcff","#d8f1f6","#ffdccd","#e3f0d1"];
+
+/* =====================================================================
+   기본 숙제표 — 스터디 보드 SB.hw5.SCHED 와 똑같은 목록을 여기에도 내장한다
+   · 보드가 오늘 숙제 요약(hwday)을 아직 올리지 않아도,
+     hwplan(체크) · wb(문제집) · carry(미룬 숙제)만으로 이름·개수를 그대로 보여 준다
+   ===================================================================== */
+function HI(id, s, t, tag){ return { id:id, s:s, t:t, tag:tag || "p" }; }
+var SCHED = [
+  /* 월 */ [
+    HI("padam","패드","아이캔두 학습 (아침)","t"),
+    HI("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)","b"),
+    HI("mathgit","수학","기탄 연산 10문제","b"),
+    HI("read","책","한글책 1권 + 영어책 1권","k")
+  ],
+  /* 화 */ [
+    HI("padam","패드","아이캔두 학습 (아침)","t"),
+    HI("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)","b"),
+    HI("ensight","영어","사이트워드 1단계","b"),
+    HI("razkids","영어","라즈키즈 영어","t"),
+    HI("mathshape","수학","도형·시계","b"),
+    HI("hanjaw","한자","낱말·뜻 쓰기","b"),
+    HI("read","책","한글책 1권 + 영어책 1권","k")
+  ],
+  /* 수 */ [
+    HI("padam","패드","아이캔두 학습 (아침)","t"),
+    HI("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)","b"),
+    HI("kowrite","국어","받아쓰기","b"),
+    HI("histquiz","역사","역사 퀴즈","b"),
+    HI("maththink","수학","그림 사고력","b"),
+    HI("read","책","한글책 1권 + 영어책 1권","k")
+  ],
+  /* 목 */ [
+    HI("padam","패드","아이캔두 학습 (아침)","t"),
+    HI("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)","b"),
+    HI("enwg","영어","단어키우기 10문제","b"),
+    HI("razkids","영어","라즈키즈 영어","t"),
+    HI("mathsaem","수학","하루 셈하기","b"),
+    HI("kovocab","국어","어휘·개념","b"),
+    HI("cntalk","중국어","일상대화 따라 말하고 녹음","b"),
+    HI("read","책","한글책 1권 + 영어책 1권","k")
+  ],
+  /* 금 */ [
+    HI("padam","패드","아이캔두 학습 (아침)","t"),
+    HI("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)","b"),
+    HI("enword","영어","단어카드·게임","b"),
+    HI("mathbase1","수학","1학년 기초수학","b"),
+    HI("histworld","역사","세계사 연표","b"),
+    HI("read","책","한글책 1권 + 영어책 1권","k")
+  ],
+  /* 토 */ [
+    HI("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)","b"),
+    HI("enwol","영어","월팸","b"),
+    HI("mathg2","수학","2학년 선행","b"),
+    HI("cncard","중국어","단어 카드 10개","b"),
+    HI("razkids","영어","라즈키즈 영어","t"),
+    HI("padmath","수학","아이캔두 수학","t"),
+    HI("doyoen","영어","도요새 영어","t"),
+    HI("doyocn","중국어","도요새 중국어","t"),
+    HI("read","책","한글책 2권 + 영어책 1권","k")
+  ],
+  /* 일 */ [
+    HI("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)","b"),
+    HI("enbook","영어","그림 동화책(AR) 1권","b"),
+    HI("mathgugu","수학","구구단 원리","b"),
+    HI("hanjatext","한자","교과서 핵심한자","b"),
+    HI("padmath","수학","아이캔두 수학","t"),
+    HI("doyoen","영어","도요새 영어","t"),
+    HI("doyocn","중국어","도요새 중국어","t"),
+    HI("read","책","한글책 1권","k")
+  ]
+];
+/* 평일(월~금) 영상 숙제 두 가지 — 보드와 같은 순서로 뒤에 붙인다 */
+(function(){
+  for (var d = 0; d < 5; d++){
+    SCHED[d].push(HI("vidread", "책", "책 음독 영상 찍기 (월~금)", "v"));
+    SCHED[d].push(HI("videng", "영어", "영어책 영상 찍기 (월~금)", "v"));
+  }
+})();
+var LADDER = [[5,1000],[14,1000],[21,1000],[30,10000]];   /* 보드의 연속 숙제 잭팟 사다리 */
 
 /* =====================================================================
    가족 코드 · 클라우드
@@ -839,51 +1003,195 @@ function annualItems(year){
   var a = annualData(), y = (a.years && a.years[String(year)]) || [];
   return Array.isArray(y) ? y.slice() : [];
 }
+/* ---------------- 기기 · 가족 문서에서 직접 세기 (hwday 가 없을 때) ---------------- */
+function dayIdxOf(ds){ return (new Date(String(ds) + "T00:00:00").getDay() + 6) % 7; }
+/* 날짜별로 체크한 숙제 개수 — hwplan(체크) 에서 hwplanUn(마지막에 푼 시각) 을 빼고 센다 */
+function checkedDays(){
+  var plan = pick(cloud().hwplan, lsGet(K.hwplan, {})) || {};
+  var un = pick(cloud().hwplanUn, lsGet(K.hwplanUn, {})) || {};
+  var out = {}, ds, k;
+  for (ds in plan){
+    var chk = plan[ds];
+    if (!chk || typeof chk !== "object") continue;
+    var n = 0, u = (un[ds] && typeof un[ds] === "object") ? un[ds] : {};
+    for (k in chk) if (num(chk[k]) && !(u[k] && num(u[k]) >= num(chk[k]))) n++;
+    if (n) out[ds] = n;
+  }
+  return out;
+}
+/* 하루 숙제를 전부 끝낸 날 — 보드가 남긴 완료 표시 + 기본 목록의 개수만큼 체크한 날 */
+function completeDays(){
+  var out = {}, k;
+  var dm = pick(cloud().done, lsGet(K.done, {})) || {};
+  for (k in dm) if (dm[k] && dm[k].d) out[k] = 1;
+  var st = lsGet(K.streak, {}) || {};
+  for (k in (st.days || {})) if (st.days[k]) out[k] = 1;
+  var picked = checkedDays();
+  for (k in picked){
+    var dt = new Date(String(k) + "T00:00:00");
+    if (!dt || isNaN(dt.getTime())) continue;
+    var need = (SCHED[dayIdxOf(k)] || []).length;
+    if (need > 0 && picked[k] >= need) out[k] = 1;
+  }
+  return out;
+}
 function attendInfo(){
   var h = hwday();
   if (h && h.attend && typeof h.attend === "object") return h.attend;
-  var a = lsGet(K.attend, {}), days = (a && a.days) ? a.days : {}, month = todayIso().slice(0, 7), n = 0, total = 0;
-  for (var k in days){ if (days[k] && days[k].star){ total++; if (k.slice(0, 7) === month) n++; } }
-  return { month:n, total:total, streak:0 };
+  var a = lsGet(K.attend, {}) || {}, days = (a && a.days) ? a.days : {}, month = todayIso().slice(0, 7), k;
+  var set = {}, n = 0, total = 0, st = 0;
+  for (k in days) if (days[k] && days[k].star) set[k] = 1;
+  var picked = checkedDays();
+  for (k in picked) set[k] = 1;
+  var ks = Object.keys(set).sort();
+  total = ks.length;
+  ks.forEach(function(x){ if (x.slice(0, 7) === month) n++; });
+  var d = todayIso();
+  if (!set[d]){ var p = new Date(); p.setDate(p.getDate() - 1); d = iso(p); }
+  while (set[d] && st < 4000){ st++; var q = new Date(d + "T00:00:00"); q.setDate(q.getDate() - 1); d = iso(q); }
+  return { month:n, total:total, streak:st };
 }
 function streakInfo(){
   var h = hwday();
   if (h && h.streak && typeof h.streak === "object") return h.streak;
-  /* 이 기기에 기록이 있으면 직접 센다 */
-  var st = lsGet(K.streak, {}), done = lsGet(K.done, {}), days = {}, k;
-  for (k in done) if (done[k] && done[k].d) days[k] = 1;
-  for (k in (st.days || {})) if (st.days[k]) days[k] = 1;
-  var d = todayIso(), n = 0;
+  var days = completeDays(), d = todayIso(), n = 0;
   if (!days[d]){ var p = new Date(); p.setDate(p.getDate() - 1); d = iso(p); }
   while (days[d] && n < 4000){ n++; var q = new Date(d + "T00:00:00"); q.setDate(q.getDate() - 1); d = iso(q); }
   var next = null;
-  [[5,1000],[14,1000],[21,1000],[30,10000]].forEach(function(x){ if (!next && x[0] > n) next = { d:x[0], amt:x[1] }; });
+  LADDER.forEach(function(x){ if (!next && x[0] > n) next = { d:x[0], amt:x[1] }; });
   return { days:n, next:next };
 }
 
 /* ---------------- 오늘의 숙제 ---------------- */
-/* 보드가 올려 둔 hwday(오늘 숙제 요약)를 그대로 쓴다.
-   아직 없으면(보드를 한 번도 안 열었거나 오늘 기록 전) 숙제 체크 기록만으로 보여 준다. */
+/* 보드가 올려 둔 hwday(오늘 숙제 요약)가 있으면 그대로 쓴다.
+   아직 없으면(보드를 오늘 안 열었거나 오래된 가족 문서) 내장 기본 숙제표 + 문제집 + 미른 숙제 +
+   체크 기록(hwplan) 만으로 이름·개수를 똑같이 맞춰 보여 준다. */
+function carryData(){
+  var c = cloud().carry;
+  if (!c || typeof c !== "object") c = lsGet("haeyuli.hwcarry.v1", null);
+  if (!c || typeof c !== "object") c = {};
+  return { out:(c.out && typeof c.out === "object") ? c.out : {},
+           in:(c.in && typeof c.in === "object") ? c.in : {} };
+}
+/* 오늘 풀 쪽 — 보드 SB.wb.rangeFor 와 같은 규칙 */
+function wbRange(w, ds, base){
+  if (base === null || base === undefined) base = w.cur;
+  if (base >= w.total) return null;
+  var today = todayIso(), k = 0;
+  if (ds && ds !== today){
+    if (ds < today) return { past:true };
+    var t = new Date(today + "T00:00:00"), g = new Date(String(ds) + "T00:00:00");
+    t.setDate(t.getDate() + 1);
+    while (t < g){
+      if (w.days.indexOf((t.getDay() + 6) % 7) >= 0) k++;
+      t.setDate(t.getDate() + 1);
+    }
+  }
+  var start = base + w.daily * k + 1;
+  if (start > w.total) return null;
+  var end = Math.min(start + w.daily - 1, w.total);
+  return { start:start, end:end };
+}
+/* 그날 나오는 문제집 숙제 (보드 SB.wb.itemsFor 와 같은 규칙) */
+function wbItemsFor(di, ds){
+  var today = todayIso(), out = [], list = wbData().list;
+  for (var i = 0; i < list.length; i++){
+    var w = list[i];
+    if (!w.hw) continue;
+    if (w.days.indexOf(di) < 0) continue;
+    var base = w.cur;
+    var a = (w.adv && w.adv[today]) ? w.adv[today] : null;
+    if (ds === today && a && typeof a.from === "number") base = a.from;
+    var r = wbRange(w, ds, base), txt;
+    if (!r) txt = w.nm + " · 다 풀었어요 🎉";
+    else if (r.past) txt = w.nm;
+    else txt = w.nm + " · p." + r.start + "~" + r.end + " (" + (r.end - r.start + 1) + "쪽)";
+    out.push({ id:"wb:" + w.id, s:w.sub, t:txt, tag:"p" });
+  }
+  return out;
+}
+/* 기본 목록 (문제집은 같은 과목 첫 항목 앞에 끼워 넣는다 — 보드와 같은 순서) */
+function itemsBase(di){
+  var base = SCHED[di] || [];
+  var wb = wbItemsFor(di, todayIso());
+  if (!wb.length) return base.slice();
+  var out = [], seen = {}, used = {}, i, j;
+  for (i = 0; i < base.length; i++){
+    var it = base[i];
+    if (!seen[it.s]){
+      seen[it.s] = 1;
+      for (j = 0; j < wb.length; j++) if (wb[j].s === it.s && !used[wb[j].id]){ used[wb[j].id] = 1; out.push(wb[j]); }
+    }
+    out.push(it);
+  }
+  for (j = 0; j < wb.length; j++) if (!used[wb[j].id]) out.push(wb[j]);
+  return out;
+}
+/* 오늘 목록 + 어제 미룬 숙제(받음) + 오늘 내일로 미룸(표시) */
+function itemsList(di, ds){
+  var base = itemsBase(di), out = [], i;
+  for (i = 0; i < base.length; i++) out.push({ id:base[i].id, s:base[i].s, t:base[i].t, g:base[i].tag || "p" });
+  var cr = carryData(), dayKey = ds || todayIso();
+  var mvOut = (cr.out[dayKey] && typeof cr.out[dayKey] === "object") ? cr.out[dayKey] : {};
+  var mvIn = (cr.in[dayKey] && typeof cr.in[dayKey] === "object") ? cr.in[dayKey] : {};
+  var have = {};
+  for (i = 0; i < out.length; i++) have[out[i].id] = 1;
+  Object.keys(mvIn).sort().forEach(function(id){
+    var r = mvIn[id];
+    if (!r || typeof r !== "object" || r.del) return;
+    if (have[id]){
+      for (var j = 0; j < out.length; j++) if (out[j].id === id) out[j].c = 1;
+      return;
+    }
+    out.push({ id:id, s:String(r.s || ""), t:String(r.t || ""), g:String(r.g || "b"), c:1 });
+    have[id] = 1;
+  });
+  for (i = 0; i < out.length; i++){
+    var o = mvOut[out[i].id];
+    if (o && typeof o === "object" && !o.del) out[i].m = 1;
+  }
+  return out;
+}
 function hwToday(){
   var h = hwday(), t = todayIso();
   if (h && h.date === t && Array.isArray(h.items)){
-    return { date:t, items:h.items.map(function(x){
-      return { id:String(x.id || ""), s:String(x.s || ""), t:String(x.t || ""), g:String(x.g || "p"),
-               ok:!!x.ok, c:!!x.c, m:!!x.m };
-    }), total:num(h.total), done:num(h.done), fromBoard:true };
+    var bw = [], bt = 0, bd = 0, i2;
+    for (i2 = 0; i2 < h.items.length; i2++){
+      var x = h.items[i2];
+      var it = { id:String(x.id || ""), s:String(x.s || ""), t:String(x.t || ""), g:String(x.g || "p"),
+                 ok:!!x.ok, c:!!x.c, m:!!x.m };
+      bw.push(it);
+      if (it.m) continue;
+      bt++;
+      if (it.ok) bd++;
+    }
+    return { date:t, items:bw, total:bt, done:bd, fromBoard:true };
   }
+  /* 보드 요약이 없다 — 기본 숙제표 + 체크 기록으로 직접 만든다 */
+  var di = dayIdxOf(t);
+  var list = itemsList(di, t);
   var plan = pick(cloud().hwplan, lsGet(K.hwplan, {})) || {};
   var un = pick(cloud().hwplanUn, lsGet(K.hwplanUn, {})) || {};
   var chk = (plan[t] && typeof plan[t] === "object") ? plan[t] : {};
   var unch = (un[t] && typeof un[t] === "object") ? un[t] : {};
-  var items = [], k;
-  for (k in chk){
-    var ts = num(chk[k]);
-    if (!ts) continue;
-    if (unch[k] && num(unch[k]) >= ts) continue;
-    items.push({ id:k, s:wbName(k), t:wbLabel(k), g:(String(k).indexOf("wb:") === 0 ? "p" : "b"), ok:true });
+  function isDone(id){
+    var ts = num(chk[id]);
+    if (!ts) return false;
+    if (unch[id] && num(unch[id]) >= ts) return false;
+    return true;
   }
-  return { date:t, items:items, total:items.length, done:items.length, fromBoard:false, partial:true };
+  var items = [], total = 0, done = 0, seen = {}, i;
+  for (i = 0; i < list.length; i++){
+    var li = list[i], ok = isDone(li.id);
+    seen[li.id] = 1;
+    if (li.m){ items.push({ id:li.id, s:li.s, t:li.t, g:li.g, ok:ok, c:!!li.c, m:true }); continue; }
+    total++;
+    if (ok) done++;
+    items.push({ id:li.id, s:li.s, t:li.t, g:li.g, ok:ok, c:!!li.c, m:false });
+  }
+  /* 기본 목록에 없는 체크(지난 목록·보드에서 사라진 항목)는 이름을 알 수 없어 목록에 넣지 않는다
+     — "숙제 체크"만 가득 차던 원인 */
+  return { date:t, items:items, total:total, done:done, fromBoard:false };
 }
 function wbById(id){
   var list = wbData().list;
@@ -908,38 +1216,36 @@ function renderCheck(){
   $("hwDate").textContent = (dObj.getMonth() + 1) + "월 " + dObj.getDate() + "일 (" + DAYN[(dObj.getDay() + 6) % 7] + ")";
 
   var hw = hwToday();
-  var pct = hw.total > 0 ? Math.round(hw.done / hw.total * 100) : 0;
+  var hasHw = hw.total > 0;
+  var pct = hasHw ? Math.round(hw.done / hw.total * 100) : 0;
   var C = 2 * Math.PI * 31;
   var ring = '<div class="ring"><svg viewBox="0 0 78 78" aria-hidden="true">' +
       '<defs><linearGradient id="grd" x1="0" y1="0" x2="1" y2="1">' +
       '<stop offset="0%" stop-color="#7fd7b1"/><stop offset="100%" stop-color="#2fae7f"/></linearGradient></defs>' +
       '<circle class="tr" cx="39" cy="39" r="31"/>' +
-      (hw.fromBoard
+      (hasHw
         ? '<circle class="fg" cx="39" cy="39" r="31" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' +
           (C * (1 - pct / 100)).toFixed(1) + '"/>'
         : '<circle class="fg" cx="39" cy="39" r="31" stroke="#cfe4f2" stroke-dasharray="3 7"/>') +
       '</svg>' +
-      '<b>' + (hw.fromBoard ? pct + '<span class="pc">%</span>' : hw.done + '<span class="pc">개</span>') + '</b></div>';
+      '<b>' + (hasHw ? pct + '<span class="pc">%</span>' : hw.done + '<span class="pc">개</span>') + '</b></div>';
   var head = '<div class="hw-top">' + ring +
-      '<div class="hw-sum"><div class="big">' + (hw.fromBoard ? hw.done + ' / ' + hw.total + '<em>완료</em>' : hw.done + '<em>개 완료</em>') +
+      '<div class="hw-sum"><div class="big">' + (hasHw ? hw.done + ' / ' + hw.total + '<em>완료</em>' : hw.done + '<em>개 완료</em>') +
       '</div>' +
-      '<div class="note">' + (hw.fromBoard
-        ? (hw.total === 0 ? "오늘 숙제 기록이 아직 없어요"
-          : (hw.done >= hw.total ? "오늘 숙제를 전부 끝냈어요 🎉" : (hw.total - hw.done) + "개 남았어요"))
+      '<div class="note">' + (hasHw
+        ? (hw.done >= hw.total ? "오늘 숙제를 전부 끝냈어요 🎉" : (hw.total - hw.done) + "개 남았어요")
         : (hw.done ? "체크한 숙제" : "아직 체크한 숙제가 없어요")) +
       '</div></div></div>';
   var list = "";
   if (hw.items.length){
     list = '<ul class="hw-list">' + hw.items.map(function(it){
-      return '<li class="' + (it.ok ? "ok" : (it.m ? "moved" : "")) + '"><span class="ck">' + (it.ok ? "✓" : (it.m ? "➡️" : "")) + '</span>' +
+      return '<li class="' + (it.m ? "moved" : (it.ok ? "ok" : "")) + '"><span class="ck">' + (it.ok ? "✓" : (it.m ? "➡️" : "")) + '</span>' +
         '<span class="tx">' + esc(it.t || "(숙제)") + (it.s ? ' · ' + esc(it.s) : "") + '</span>' +
         (it.m ? '<span class="mv">내일로 미룸</span>' : (it.c ? '<span class="mv c">➡️ 미룬</span>' : '<span class="tg">' + (TAGNAME[it.g] || "") + '</span>')) +
         '</li>';
     }).join("") + '</ul>';
   } else {
-    list = '<div class="empty">' + (hw.fromBoard
-      ? "오늘은 등록된 숙제가 없어요"
-      : "해율이 기기에서 <b>오늘의 숙제</b>를 한 번 열면 전체 개수까지 여기에 채워져요") + '</div>';
+    list = '<div class="empty">오늘은 등록된 숙제가 없어요</div>';
   }
   $("hwBody").innerHTML = head + list;
 
@@ -950,7 +1256,7 @@ function renderCheck(){
     ['sun', "🔥 연속 숙제", si.days + '<em>일</em>', nextTxt],
     ['blue', "📅 이번 달 출석", att.month + '<em>일</em>', "연속 " + (att.streak || 0) + "일 · 전체 " + (att.total || 0) + "일"],
     ['grape', "⭐ 모은 별", st + '<em>개</em>', "문제·숙제·출석으로 모은 별"],
-    ['mint', "🐷 저금통", Number(mny.piggy || 0).toLocaleString("ko-KR") + '<em>원</em>', "숙제·공부 보상이 쌓여요"]
+    ['mint', "🐷 저금통", Number(mny.piggy || 0).toLocaleString("ko-KR") + '<em>원</em>', " 용돈 탭에서 주기·쓰기"]
   ];
   $("statGrid").innerHTML = cards.map(function(c){
     return '<div class="stat ' + c[0] + '"><span class="k">' + c[1] + '</span><span class="v">' + c[2] +
@@ -1083,6 +1389,93 @@ function dayLabel(days){
   if (days.length === 2 && days.indexOf(5) >= 0 && days.indexOf(6) >= 0) return "주말";
   return days.map(function(i){ return DAYN[i]; }).join("");
 }
+
+/* =====================================================================
+   📘 문제집 ↔ 🗓️ 연간 진도표 연동
+   · 문제집마다 시작 월 ~ 종료 월(자동 = 지금 달)을 둔다
+   · 그 값은 가족 문서 annual 안에 'wb:<문제집id>' 과정으로 남기므로
+     보드가 문제집 진도를 올려도 월 설정이 사라지지 않고, 연간 진도표가 실제 진행률로 그려진다
+   ===================================================================== */
+var SUBID = { "국어":"kor", "독서":"read", "영어":"en", "수학":"math", "한자":"hanja", "중국어":"cn", "역사":"hist" };
+function subIdFor(name, subs){
+  subs = subs || annualSubs();
+  var want = SUBID[name] || "", i;
+  for (i = 0; i < subs.length; i++) if (subs[i].nm === name) return subs[i].id;
+  if (want) for (i = 0; i < subs.length; i++) if (subs[i].id === want) return subs[i].id;
+  return "etc";
+}
+function wbMonthMap(year){
+  var out = {}, list = annualItems(year);
+  for (var i = 0; i < list.length; i++){
+    var x = list[i];
+    if (String(x.id).indexOf("wb:") === 0) out[String(x.id).slice(3)] = x;
+  }
+  return out;
+}
+function wbMonths(w, year, map){
+  var now = new Date(), curY = now.getFullYear(), curM = now.getMonth() + 1;
+  var it = (map || {})[w.id] || null;
+  var sm = it ? Math.min(12, Math.max(1, num(it.sm, curM))) : curM;
+  var em = it ? Math.min(12, Math.max(1, num(it.em, curM))) : curM;
+  var auto = it ? (it.note === "auto" ? 1 : 0) : 1;
+  if (!sm) sm = curM;
+  if (!em) em = sm;
+  if (auto){
+    if (year === curY) em = Math.max(sm, curM);
+    else if (year < curY) em = 12;
+    else em = sm;
+  }
+  if (em < sm) em = sm;
+  return { sm:sm, em:em, auto:auto, item:it };
+}
+function monthOpts(sel, isEm, auto){
+  var o = "", m;
+  if (isEm) o += '<option value="0"' + (auto ? " selected" : "") + '>자동 (지금 달)</option>';
+  for (m = 1; m <= 12; m++){
+    o += '<option value="' + m + '"' + ((!auto && m === sel) ? " selected" : "") + '>' + m + '월</option>';
+  }
+  return o;
+}
+function putWbMonth(d, w, sm, em, auto){
+  var year = new Date().getFullYear();
+  var a = (d.annual && typeof d.annual === "object") ? d.annual : { v:1, subs:[], years:{}, del:{} };
+  ensureSubs(a);
+  var list = ensureYear(a, year);
+  var id = "wb:" + w.id;
+  var rec = { id:id, sub:subIdFor(w.sub, a.subs), sm:sm, em:em, title:String(w.nm || ""),
+              note:(auto ? "auto" : ""), st:"plan", at:Date.now() };
+  var found = false;
+  for (var i = 0; i < list.length; i++) if (String(list[i].id) === id){ list[i] = rec; found = true; }
+  if (!found) list.push(rec);
+  a.at = Date.now();
+  d.annual = a;
+}
+function dropWbMonth(d, wid){
+  var year = new Date().getFullYear();
+  var a = (d.annual && typeof d.annual === "object") ? d.annual : null;
+  if (!a) return;
+  if (!a.del || typeof a.del !== "object") a.del = {};
+  var id = "wb:" + wid;
+  a.del["i:" + id] = Date.now();
+  var list = ensureYear(a, year);
+  a.years[String(year)] = list.filter(function(x){ return String(x.id) !== id; });
+  a.at = Date.now();
+  d.annual = a;
+}
+function wbMonthSave(id){
+  var smEl = document.querySelector('#wbList [data-wbm="' + id + ':sm"]');
+  var emEl = document.querySelector('#wbList [data-wbm="' + id + ':em"]');
+  if (!smEl || !emEl) return;
+  var sm = Math.min(12, Math.max(1, num(smEl.value, 1)));
+  var emv = num(emEl.value, 0);
+  var auto = (emv <= 0) ? 1 : 0;
+  var em = auto ? Math.max(sm, new Date().getMonth() + 1) : Math.min(12, Math.max(sm, emv));
+  var w = wbById(id);
+  if (!w) return;
+  commit(function(d){ putWbMonth(d, w, sm, em, auto); }).then(function(ok){
+    if (ok) toast("🗓️ " + w.nm + " · " + sm + "월~" + (auto ? (em + "월(자동)") : (em + "월")) + " · 연간 진도표에 반영");
+  });
+}
 function renderWB(){
   if (editingForm()) return;              /* 숫자를 입력 중이면 다시 그리지 않는다 */
   var list = wbItems();
@@ -1101,18 +1494,25 @@ function renderWB(){
     $("wbList").innerHTML = '<div class="empty">아직 등록된 문제집이 없어요 · <b>➕ 문제집 추가</b>로 등록해 주세요</div>';
     return;
   }
+  var thisYear = new Date().getFullYear(), MONMAP = wbMonthMap(thisYear);
   $("wbList").innerHTML = list.map(function(w){
+    var mo = wbMonths(w, thisYear, MONMAP);
     var days = w.days.map(function(i){
       return '<button type="button" class="chip on" data-wbday="' + esc(w.id) + ':' + i + '">' + DAYN[i] + '</button>';
     }).join("");
     return '<div class="wbcard" data-card="' + esc(w.id) + '">' +
       '<div class="wb-h"><span class="em">' + (SUBEM[w.sub] || "📘") + '</span>' +
         '<div class="nm"><b>' + esc(w.nm) + '</b><span>' + esc(w.sub) + ' · ' + dayLabel(w.days) +
-          ' · 하루 ' + w.daily + '쪽</span></div>' +
+          ' · 하루 ' + w.daily + '쪽 · 🗓️ ' + mo.sm + '월~' + mo.em + '월</span></div>' +
         '<button class="btn sm warn" type="button" data-wbdel="' + esc(w.id) + '">삭제</button></div>' +
       '<div class="wb-bar"><i style="width:' + wbPct(w) + '%"></i></div>' +
       '<div class="wb-meta"><b>' + w.cur + ' / ' + w.total + '쪽</b><span>' + wbPct(w) + '%</span>' +
         '<span class="rem">' + (remaining(w) > 0 ? ("남은 " + remaining(w) + "쪽 · " + daysLeft(w) + "일치") : "다 풀었어요 🎉") + '</span></div>' +
+      '<div class="wbmo">' +
+        '<label>🗓️ 시작 월<select data-wbm="' + esc(w.id) + ':sm">' + monthOpts(mo.sm, false, false) + '</select></label>' +
+        '<label>종료 월<select data-wbm="' + esc(w.id) + ':em">' + monthOpts(mo.em, true, !!mo.auto) + '</select></label>' +
+      '</div>' +
+      '<div class="hint" style="margin:6px 0 0">이 달 범위가 <b>🗓️ 연간 진도표</b>에 그려지고, 연간 달성률도 이 문제집 진행률로 계산돼요.</div>' +
       '<div class="chips"><span class="lb">요일</span>' + days +
         '<button type="button" class="chip pre" data-wbpreset="' + esc(w.id) + ':5">평일</button>' +
         '<button type="button" class="chip pre" data-wbpreset="' + esc(w.id) + ':7">매일</button>' +
@@ -1265,6 +1665,7 @@ function wbDelete(id){
   if (!w) return;
   commit(function(d){
     d.wb = { v:1, list: wbListOf(d.wb).filter(function(x){ return x.id !== id; }) };
+    dropWbMonth(d, id);
   }).then(function(ok){ if (ok) toast("문제집을 지웠어요"); });
 }
 function openAddWb(){
@@ -1276,6 +1677,10 @@ function openAddWb(){
     '<div class="two"><div class="field"><span>전체 쪽수</span><input type="number" inputmode="numeric" min="1" id="dTotal" placeholder="예: 120"></div>' +
     '<div class="field"><span>현재까지 쪽수</span><input type="number" inputmode="numeric" min="0" id="dCur" placeholder="0"></div></div>' +
     '<div class="field"><span>하루 분량(쪽)</span><input type="number" inputmode="numeric" min="1" id="dDaily" placeholder="예: 2"></div>' +
+    '<div class="two"><div class="field"><span>🗓️ 시작 월</span><select id="dSm">' +
+      monthOpts(new Date().getMonth() + 1, false, false) + '</select></div>' +
+    '<div class="field"><span>종료 월</span><select id="dEm">' +
+      monthOpts(new Date().getMonth() + 1, true, true) + '</select></div></div>' +
     '<div class="field"><span>요일</span><div class="stchips" id="dDays">' +
       DAYN.map(function(d, i){ return '<button type="button" class="stchip' + (i < 5 ? " on" : "") + '" data-dday="' + i + '" data-st="day">' +
         d + '</button>'; }).join("") + '</div></div>' +
@@ -1291,6 +1696,11 @@ function addWbFromSheet(){
   var sub = ($("dSub") || {}).value || "국어";
   var hw = $("dHw") ? ($("dHw").checked ? 1 : 0) : 1;
   var days = WBDRAFT.days.slice();
+  var curM = new Date().getMonth() + 1;
+  var smVal = Math.min(12, Math.max(1, num(($("dSm") || {}).value, curM)));
+  var emRaw = num(($("dEm") || {}).value, 0);
+  var emAuto = (emRaw <= 0) ? 1 : 0;
+  var emVal = emAuto ? Math.max(smVal, curM) : Math.min(12, Math.max(smVal, emRaw));
   if (!nm){ toast("문제집 이름을 적어 주세요"); return; }
   if (total <= 0){ toast("전체 쪽수를 적어 주세요"); return; }
   if (cur > total) cur = total;
@@ -1300,6 +1710,7 @@ function addWbFromSheet(){
     var list = wbListOf(d.wb);
     list.push(w);
     d.wb = { v:1, list:list };
+    putWbMonth(d, w, smVal, emVal, emAuto);
   }).then(function(ok){
     if (!ok) return;
     closeSheet();
@@ -1307,8 +1718,98 @@ function addWbFromSheet(){
   });
 }
 
+/* ---------------- 연간 진도표에서 문제집 막대를 누르면 ---------------- */
+function openWbInfo(id){
+  var w = wbById(id);
+  if (!w){ toast("문제집을 찾지 못했어요"); return; }
+  var year = AN.year, mo = wbMonths(w, year, wbMonthMap(year)), pct = wbPct(w);
+  var st = (w.total > 0 && w.cur >= w.total) ? "다 풀었어요 🎉" : (w.cur > 0 ? "진행중" : "아직 시작 전");
+  openSheet("📘 " + w.nm,
+    '<div class="hint">' + esc(w.sub) + ' · ' + esc(dayLabel(w.days)) + ' · 하루 ' + w.daily + '쪽 · 🗓️ ' + mo.sm + '~' + mo.em + '월' + (mo.auto ? ' (자동)' : '') + '</div>' +
+    '<div class="wb-bar"><i style="width:' + pct + '%"></i></div>' +
+    '<div class="wb-meta"><b>' + w.cur + ' / ' + w.total + '쪽</b><span>' + pct + '%</span><span class="rem">' + st + '</span></div>' +
+    '<div class="hint" style="margin-top:10px">연간 진도표의 이 막대와 <b>연간 과정 달성률</b>은 이 문제집의 쪽 진행률로 계산돼요.월 범위는 <b>📘 문제집</b> 탭에서 바꿀 수 있어요.</div>' +
+    '<div class="sheet-a"><button class="btn ghost" type="button" data-close="1">닫기</button>' +
+      '<button class="btn pri" type="button" id="wbGoTab">📘 문제집에서 보기</button></div>');
+}
+
 /* =====================================================================
-   탭 3 — 연간 학습 진도표
+   탭 3 — 🐷 용돈 주기 / 쓰기
+   · 가족 문서 money(piggy · bank · log) 를 그대로 고친다 — 스터디 보드·대시보드 저금통과 양방향
+   ===================================================================== */
+var MONEY = { why:"칭찬", em:"🙌", kind:"give" };
+var GIVE_WHY = [["🙌","칭찬"],["🧹","심부름"],["📅","숙제 완료"],["📚","책 읽기"],["🧺","자기 정리"]];
+var TAKE_WHY = [["🍬","간식"],["🧸","장난감"],["📕","책 사기"],["🏦","저축"],["🎁","선물"]];
+function renderMoney(){
+  var m = money(), piggy = num(m.piggy, 0), log = Array.isArray(m.log) ? m.log : [];
+  var month = todayIso().slice(0, 7), inSum = 0, outSum = 0;
+  log.forEach(function(x){
+    if (String(x.at || "").slice(0, 7) !== month) return;
+    var a = Number(x.amt);
+    if (!isFinite(a)) return;
+    a = Math.round(a);
+    if (a > 0) inSum += a; else outSum += -a;
+  });
+  $("pigAmount").textContent = piggy.toLocaleString("ko-KR") + "원";
+  $("pigIn").textContent = inSum.toLocaleString("ko-KR") + "원";
+  $("pigOut").textContent = outSum.toLocaleString("ko-KR") + "원";
+  $("moneySub").textContent = famCode() ? (famCode() + " · 해율이 기기와 함께") : "가족 코드를 연결해 주세요";
+  $("moneyLogSub").textContent = log.length ? (log.length + "건") : "";
+
+  var chip = function(em, nm, kind){
+    var on = (kind === MONEY.kind && nm === MONEY.why);
+    return '<button type="button" class="chip' + (on ? " on" : "") + '" data-why="' + esc(nm) + '" data-kind="' + kind +
+      '" data-em="' + esc(em) + '">' + em + ' ' + esc(nm) + '</button>';
+  };
+  $("moneyWhy").innerHTML = '<div class="chips"><span class="lb">＋ 주기</span>' +
+      GIVE_WHY.map(function(x){ return chip(x[0], x[1], "give"); }).join("") + '</div>' +
+    '<div class="chips" style="margin-top:6px"><span class="lb">－ 쓰기</span>' +
+      TAKE_WHY.map(function(x){ return chip(x[0], x[1], "take"); }).join("") + '</div>';
+
+  $("moneyAll").innerHTML = log.length ? log.slice(0, 80).map(function(x){
+    var a = Number(x.amt);
+    if (!isFinite(a)) a = 0;
+    return '<div class="mlrow"><span class="w">' + esc(x.why || (a < 0 ? "쓰기" : "용돈")) + '</span>' +
+      '<span class="a' + (a < 0 ? " minus" : "") + '">' + esc(x.t || ((a > 0 ? "+" : "-") + Math.abs(a).toLocaleString("ko-KR") + "원")) + '</span>' +
+      '<span class="at">' + esc(String(x.at || "").slice(5).replace("-", "/")) + '</span></div>';
+  }).join("") : '<div class="empty">아직 입출금 내역이 없어요</div>';
+}
+function moneyMove(sign){
+  var el = $("moneyAmt");
+  var amt = Math.round(num(el ? el.value : 0, 0));
+  if (amt <= 0){ toast("금액을 1원 이상 적어 주세요"); return; }
+  var why = String(MONEY.why || "용돈");
+  if (sign > 0 && MONEY.kind !== "give") why = "용돈";
+  if (sign < 0 && MONEY.kind !== "take") why = "쓰기";
+  var piggy = num(money().piggy, 0);
+  if (sign < 0 && amt > piggy){ toast("저금통에 " + piggy.toLocaleString("ko-KR") + "원뿐이라 그만큼은 못 빼요"); return; }
+  if (!famCode()){ toast("가족 코드를 먼저 연결해 주세요"); openFam(); return; }
+  var delta = sign < 0 ? -amt : amt;
+  var rid = "parent-" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36);
+  commit(function(d){
+    var mm = (d.money && typeof d.money === "object") ? d.money : { piggy:0, bank:[], log:[] };
+    if (!Array.isArray(mm.bank)) mm.bank = [];
+    if (!Array.isArray(mm.log)) mm.log = [];
+    mm.piggy = Math.max(0, num(mm.piggy, 0) + delta);
+    mm.log.unshift({
+      t:(delta > 0 ? "+" : "-") + Math.abs(delta).toLocaleString("ko-KR") + "원",
+      amt:delta,
+      at:todayIso() + " " + new Date().toTimeString().slice(0, 5),
+      why:(delta > 0 ? ("엄마 · " + why) : ("쓰기 · " + why)),
+      rid:rid
+    });
+    mm.log = mm.log.slice(0, 600);
+    d.money = mm;
+  }).then(function(ok){
+    if (!ok) return;
+    if (el) el.value = "";
+    toast(delta > 0 ? ("🐷 " + amt.toLocaleString("ko-KR") + "원을 넣었어요 · 해율이 보드 저금통에도")
+                    : ("🐷 " + amt.toLocaleString("ko-KR") + "원을 뻐어요"));
+  });
+}
+
+/* =====================================================================
+   탭 4 — 연간 학습 진도표
    ===================================================================== */
 var AN = { year:new Date().getFullYear(), edit:null };
 function subColor(id){
@@ -1334,61 +1835,141 @@ function lanes(items){
   });
   return out;
 }
+function booksForYear(year){
+  var map = wbMonthMap(year), list = wbData().list, curY = new Date().getFullYear();
+  var subs = annualSubs(), subIds = {}, out = [], i;
+  subs.forEach(function(s){ subIds[s.id] = 1; });
+  for (i = 0; i < list.length; i++){
+    var w = list[i], it = map[w.id] || null;
+    if (!it && year !== curY) continue;
+    var m = wbMonths(w, year, map);
+    var pages = num(w.total), page = Math.min(num(w.cur), pages);
+    var st = pages <= 0 ? "plan" : (page >= pages ? "done" : (page > 0 ? "doing" : "plan"));
+    var pct = pages > 0 ? Math.min(100, Math.round(page / pages * 100)) : 0;
+    var sid = (it && it.sub && subIds[it.sub]) ? it.sub : subIdFor(w.sub, subs);
+    if (sid === "etc" || !subIds[sid]) sid = "etc";
+    out.push({ w:w, sm:m.sm, em:m.em, st:st, pct:pct, sub:sid, page:page, pages:pages });
+  }
+  return out;
+}
 function renderAnnual(){
   var year = AN.year;
+  var now = new Date(), curY = now.getFullYear(), thisMonth = now.getMonth() + 1;
   $("yrNow").textContent = year + "년";
   $("annYear2").textContent = year + "년 기준";
-  var items = annualItems(year);
-  var done = items.filter(function(x){ return x.st === "done"; }).length;
-  var doing = items.filter(function(x){ return x.st === "doing"; }).length;
-  var plan = items.length - done - doing;
-  var pct = items.length ? Math.round(done / items.length * 100) : 0;
-  $("annPct").textContent = "완료 " + done + " · 진행 " + doing + " · 예정 " + plan + " · " + pct + "%";
-  $("annBar").innerHTML = items.length
-    ? '<i class="d1" style="width:' + (done / items.length * 100) + '%"></i>' +
-      '<i class="d2" style="width:' + (doing / items.length * 100) + '%"></i>' +
-      '<i class="d3" style="width:' + (plan / items.length * 100) + '%"></i>'
-    : '<i class="d3" style="width:100%"></i>';
+  /* 직접 추가한 과정 (wb: 로 시작하는 문제집 연동 줄은 따로 그린다) */
+  var items = annualItems(year).filter(function(x){ return String(x.id).indexOf("wb:") !== 0; });
+  var books = booksForYear(year);
+  var mDone = items.filter(function(x){ return x.st === "done"; }).length;
+  var mDoing = items.filter(function(x){ return x.st === "doing"; }).length;
+  var mPlan = items.length - mDone - mDoing;
+  var manualPct = items.length ? Math.round(mDone / items.length * 100) : 0;
 
-  var thisMonth = new Date().getMonth() + 1, thisYear = new Date().getFullYear();
+  /* 연간 달성률 = 📘 문제집 탭에 등록한 문제집의 실제 쪽 진행률 */
+  var bPages = 0, bCur = 0, bDone = 0, bDoing = 0, bPlan = 0, pDoing = 0, pPlan = 0;
+  books.forEach(function(b){
+    bPages += b.pages; bCur += b.page;
+    if (b.st === "done") bDone++;
+    else if (b.st === "doing"){ bDoing++; pDoing += (b.pages - b.page); }
+    else { bPlan++; pPlan += b.pages; }
+  });
+  var bookPct = bPages > 0 ? Math.round(bCur / bPages * 100) : 0;
+  var hasBooks = books.length > 0;
+
+  $("annPct").textContent = hasBooks
+    ? ("📘 문제집 " + books.length + "권 · 완료 " + bDone + " · 진행중 " + bDoing + " · 예정 " + bPlan)
+    : "📘 문제집 탭에서 등록하면 여기에 쌓여요";
+  $("annSum").innerHTML = hasBooks
+    ? '<b>' + bookPct + '<em>%</em></b><span class="t">📘 등록한 문제집 진행률 · ' +
+      bCur.toLocaleString("ko-KR") + ' / ' + bPages.toLocaleString("ko-KR") + '쪽' +
+      '<small>' + (items.length ? ("직접 추가한 과정 " + items.length + "개 · 완료 " + mDone + " (" + manualPct + "%)")
+                                : "직접 추가한 과정은 아직 없어요") + '</small></span>'
+    : '<b>' + manualPct + '<em>%</em></b><span class="t">직접 추가한 과정 기준 · 완료 ' + mDone + ' / ' + items.length + '개' +
+      '<small>📘 문제집 탭에서 문제집을 등록하면 실제 문제집 진행률로 바뀌어요</small></span>';
+  $("annBar").innerHTML = bPages > 0
+    ? '<i class="d1" style="width:' + (bCur / bPages * 100) + '%"></i>' +
+      '<i class="d2" style="width:' + (pDoing / bPages * 100) + '%"></i>' +
+      '<i class="d3" style="width:' + (pPlan / bPages * 100) + '%"></i>'
+    : (items.length
+        ? '<i class="d1" style="width:' + (mDone / items.length * 100) + '%"></i>' +
+          '<i class="d2" style="width:' + (mDoing / items.length * 100) + '%"></i>' +
+          '<i class="d3" style="width:' + (mPlan / items.length * 100) + '%"></i>'
+        : '<i class="d3" style="width:100%"></i>');
+
   $("calHead").innerHTML = [1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){
-    return '<i class="' + (year === thisYear && m === thisMonth ? "now" : "") + '">' + m + '</i>';
+    return '<i class="' + (year === curY && m === thisMonth ? "now" : "") + '">' + m + '</i>';
   }).join("");
 
+  /* 줄 = 과목 (+ 과목을 못 찾은 문제집은 '기타 문제집' 줄) */
   var subs = annualSubs();
+  var rows = subs.map(function(s){ return { id:s.id, nm:s.nm }; });
+  if (books.filter(function(b){ return b.sub === "etc"; }).length) rows.push({ id:"etc", nm:"기타 문제집" });
+
   var html = "";
-  subs.forEach(function(s){
-    var mine = items.filter(function(x){ return x.sub === s.id; });
-    var ln = lanes(mine);
-    var maxLane = 0;
-    mine.forEach(function(x){ maxLane = Math.max(maxLane, ln[x.id]); });
+  rows.forEach(function(r){
+    var mine = items.filter(function(x){ return x.sub === r.id; });
+    var myBooks = books.filter(function(b){ return b.sub === r.id; });
+    var laneItems = mine.map(function(x){ return { id:x.id, sm:x.sm, em:x.em }; })
+      .concat(myBooks.map(function(b){ return { id:"wb:" + b.w.id, sm:b.sm, em:b.em }; }));
+    var ln = lanes(laneItems), maxLane = 0;
+    laneItems.forEach(function(x){ maxLane = Math.max(maxLane, ln[x.id] || 0); });
     var covered = {};
-    mine.forEach(function(x){ for (var m = x.sm; m <= x.em; m++) covered[m] = 1; });
+    laneItems.forEach(function(x){ for (var m = x.sm; m <= x.em; m++) covered[m] = 1; });
     var cells = "";
     for (var m = 1; m <= 12; m++){
-      cells += '<button type="button" class="' + (covered[m] ? "covered" : "") + '" data-addcell="' + esc(s.id) + ":" + m +
-        '" aria-label="' + esc(s.nm) + " " + m + '월 추가">+</button>';
+      cells += '<button type="button" class="' + (covered[m] ? "covered" : "") + '" data-addcell="' + esc(r.id) + ":" + m +
+        '" aria-label="' + esc(r.nm) + " " + m + '월 추가">+</button>';
     }
     var bars = mine.map(function(x){
       return '<button type="button" class="bar ' + x.st + '" style="--c1:' + x.sm + ';--c2:' + (x.em + 1) + ';--lane:' + ln[x.id] + '" ' +
         'data-item="' + esc(x.id) + '" title="' + esc(x.title || "과정") + ' · ' + x.sm + "~" + x.em + '월 · ' + stName(x.st) + '">' +
         (x.st === "done" ? "✓ " : "") + '<span>' + esc(x.title || "과정") + '</span></button>';
     }).join("");
+    bars += myBooks.map(function(b){
+      var bid = "wb:" + b.w.id, span = b.em - b.sm + 1;
+      /* 한 달짜리 막대는 폭이 좁아 이름이 잘리므로 퍼센트만 — 이름은 누르면 나와요 */
+      var label = span <= 1 ? (b.pct + "%") : ("📘 " + esc(b.w.nm) + (b.pages ? " " + b.pct + "%" : ""));
+      return '<button type="button" class="bar wb ' + b.st + '" style="--c1:' + b.sm + ';--c2:' + (b.em + 1) + ';--lane:' + ln[bid] + '" ' +
+        'data-wbitem="' + esc(b.w.id) + '" title="' + esc(b.w.nm) + ' · ' + b.sm + "~" + b.em + '월 · ' +
+        (b.pages ? (b.page + "/" + b.pages + "쪽 · ") : "") + stName(b.st) + '">' +
+        (b.st === "done" ? "✓ " : "") + '<span>' + label + '</span></button>';
+    }).join("");
     var h = Math.max(42, 4 + maxLane * 27 + 4);
     html += '<div class="cal-row" style="height:' + h + 'px">' +
-      '<span class="lbl"><span style="--tint:' + subColor(s.id) + '">' + esc(s.nm) + '</span></span>' +
+      '<span class="lbl"><span style="--tint:' + subColor(r.id) + '">' + esc(r.nm) + '</span></span>' +
       '<div class="cells">' + cells + '</div>' +
       '<div class="bars" style="height:' + h + 'px">' + bars + '</div></div>';
   });
   $("calBody").innerHTML = html || '<div class="empty">과목이 없어요 · ⚙️ 과목 편집으로 추가해 주세요</div>';
+  /* 이번 달(또는 첫 달)이 바로 보이게 가로 위치를 맞춘다 — 해가 바뀔 때만 */
+  if (AN.scrollYear !== year){
+    AN.scrollYear = year;
+    try {
+      var cb = document.querySelector(".calbox"), cal = cb ? cb.querySelector(".cal") : null;
+      if (cb && cal){
+        var W = cal.scrollWidth, lblW = 72, colW = Math.max(1, (W - lblW) / 12);
+        var mm = (year === curY) ? thisMonth : 1;
+        cb.scrollLeft = Math.max(0, lblW + (mm - 0.5) * colW - cb.clientWidth / 2);
+      }
+    } catch(e){}
+  }
 
-  $("subCards").innerHTML = subs.map(function(s){
-    var mine = items.filter(function(x){ return x.sub === s.id; });
+  $("subCards").innerHTML = rows.map(function(r){
+    var mine = items.filter(function(x){ return x.sub === r.id; });
+    var myBooks = books.filter(function(b){ return b.sub === r.id; });
     var dn = mine.filter(function(x){ return x.st === "done"; }).length;
-    var pc = mine.length ? Math.round(dn / mine.length * 100) : 0;
-    return '<div class="subcard"><div class="sn"><i style="background:' + subColor(s.id) + '"></i>' + esc(s.nm) + '</div>' +
-      '<div class="sr"><span>' + dn + "/" + mine.length + '</span><span class="bar"><i style="width:' + pc + '%"></i></span>' +
-      '<span>' + (mine.length ? pc + "%" : "—") + '</span></div></div>';
+    var mp = mine.length ? Math.round(dn / mine.length * 100) : 0;
+    var bt = 0, bp = 0;
+    myBooks.forEach(function(b){ bt += b.pages; bp += b.page; });
+    var show = bt > 0 ? Math.round(bp / bt * 100) : mp;
+    var has = (bt > 0 || mine.length > 0);
+    return '<div class="subcard"><div class="sn"><i style="background:' + subColor(r.id) + '"></i>' + esc(r.nm) + '</div>' +
+      '<div class="sr"><span>' + (bt > 0 ? ("📘 " + myBooks.length + "권") : (mine.length ? ("과정 " + mine.length) : "—")) + '</span>' +
+        '<span class="bar"><i style="width:' + show + '%"></i></span><span>' + (has ? show + "%" : "—") + '</span></div>' +
+      '<div class="sr2">' + (bt > 0 ? ("<b>" + bp.toLocaleString("ko-KR") + "</b> / " + bt.toLocaleString("ko-KR") + "쪽") : "") +
+        (bt > 0 && mine.length ? " · " : "") +
+        (mine.length ? ("직접 추가 " + mine.length + "개 · 완료 <b>" + dn + "</b>") : "") +
+      '</div></div>';
   }).join("");
 }
 
@@ -1564,18 +2145,20 @@ function backupRestore(){
   });
 }
 function clearYear(){
-  var year = AN.year, n = annualItems(year).length;
-  if (!n){ toast(year + "년에 등록된 과정이 없어요"); return; }
-  if (!confirm(year + "년에 등록된 과정 " + n + "개를 지울까요?\n과목 목록과 다른 해 기록은 그대로 남아요.")) return;
+  var year = AN.year;
+  var manual = annualItems(year).filter(function(x){ return String(x.id).indexOf("wb:") !== 0; });
+  var n = manual.length;
+  if (!n){ toast(year + "년에 직접 추가한 과정이 없어요"); return; }
+  if (!confirm(year + "년에 직접 추가한 과정 " + n + "개를 지울까요?\n과목 목록·문제집 월 범위·다른 해 기록은 그대로 남아요.")) return;
   commit(function(d){
     var a = (d.annual && typeof d.annual === "object") ? d.annual : { v:1, subs:[], years:{}, del:{} };
     if (!a.del || typeof a.del !== "object") a.del = {};
     var list = ensureYear(a, year), now = Date.now();
-    list.forEach(function(x){ a.del["i:" + x.id] = now; });
-    a.years[String(year)] = [];
+    list.forEach(function(x){ if (String(x.id).indexOf("wb:") !== 0) a.del["i:" + x.id] = now; });
+    a.years[String(year)] = list.filter(function(x){ return String(x.id).indexOf("wb:") === 0; });
     a.at = now;
     d.annual = a;
-  }).then(function(ok){ if (ok) toast("🔄 " + year + "년을 비웠어요"); });
+  }).then(function(ok){ if (ok) toast("🔄 " + year + "년 과정을 비웠어요 · 문제집 월 범위는 그대로"); });
 }
 
 /* =====================================================================
@@ -1705,6 +2288,7 @@ function renderAll(){
   renderCheck();
   renderWB();
   renderAnnual();
+  renderMoney();
   paintSync();
 }
 function switchTab(name){
@@ -1717,8 +2301,10 @@ function switchTab(name){
   $("tab-check").hidden = (name !== "check");
   $("tab-wb").hidden = (name !== "wb");
   $("tab-annual").hidden = (name !== "annual");
+  $("tab-money").hidden = (name !== "money");
   if (name === "wb") renderWB();
-  if (name === "annual") renderAnnual();
+  if (name === "annual"){ AN.scrollYear = null; renderAnnual(); }
+  if (name === "money") renderMoney();
   if (name === "check") renderCheck();
 }
 
@@ -1746,6 +2332,24 @@ document.addEventListener("click", function(e){
   if (t.closest("#momClearAll")){ clearMomAll(); return; }
   var mc = t.closest("[data-momclear]");
   if (mc){ clearMom(num(mc.getAttribute("data-momclear"), 0)); return; }
+
+  /* 용돈 */
+  var wh = t.closest("#moneyWhy [data-why]");
+  if (wh){
+    MONEY.why = wh.getAttribute("data-why") || "용돈";
+    MONEY.kind = wh.getAttribute("data-kind") || "give";
+    MONEY.em = wh.getAttribute("data-em") || "";
+    renderMoney();
+    return;
+  }
+  var mqa = t.closest("[data-mq]");
+  if (mqa){
+    var mi = $("moneyAmt");
+    if (mi){ mi.value = String(num(mqa.getAttribute("data-mq"), 0)); }
+    return;
+  }
+  if (t.closest("#moneyGive")){ moneyMove(1); return; }
+  if (t.closest("#moneySpend")){ moneyMove(-1); return; }
 
   /* 문제집 */
   if (t.closest("#btnAddWb")){ openAddWb(); return; }
@@ -1806,6 +2410,9 @@ document.addEventListener("click", function(e){
     }
     return;
   }
+  var wbb = t.closest("[data-wbitem]");
+  if (wbb){ openWbInfo(wbb.getAttribute("data-wbitem")); return; }
+  if (t.closest("#wbGoTab")){ closeSheet(); switchTab("wb"); return; }
   var ist = t.closest("[data-ist]");
   if (ist){
     AN.edit.st = ist.getAttribute("data-ist");
@@ -1831,7 +2438,10 @@ document.addEventListener("change", function(e){
   if (!t || !t.getAttribute) return;
   if (t.getAttribute("data-wbtog")){
     wbToggleHW(t.getAttribute("data-wbtog"), !!t.checked);
+    return;
   }
+  var mo = t.getAttribute("data-wbm");
+  if (mo) wbMonthSave(String(mo).split(":")[0]);
 });
 document.addEventListener("keydown", function(e){
   if (e.key === "Escape" && !$("modal").hidden) closeSheet();
