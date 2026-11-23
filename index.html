@@ -5911,6 +5911,9 @@ window.YULI_BGM = (function(){
 
   function play(){
     if (!AC) return;
+    /* 첫 터치 전에는 AudioContext 를 아예 만들지 않는다 —
+       iOS 사파리는 '제스처 안에서 만든' 컨텍스트가 가장 확실하게 열린다. */
+    if (!ctx && !unlocked){ paint(); return; }
     if (!build()) return;
     if (ctx.state !== "running") resumeNow();
     if (playing) return;
