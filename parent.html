@@ -1118,7 +1118,7 @@ function annualItems(year){
    · 아이캔두 학습(아침) · 아이캔두 수학 · 라즈키즈 영어 · 도요새 영어/중국어처럼
      패드로 하는 학습의 요일을 여기서 정한다. 가족 문서의 padplan 필드로
      해율이 스터디 보드 두 벌(haeyuli-english-board · haeyuli-study-mobile)과 양방향 동기화.
-   · 기본 5개는 끄기·이름/요일 수정, 직접 추가한 항목은 삭제까지 된다.
+   · 기본 5개도 끄기·이름/요일 수정·삭제가 된다(지운 기본 항목은 del 기록으로 되살아나지 않는다).
    · 항목 id 를 그대로 두므로 보드의 haeyuli.hwplan.v1 체크 기록은 요일을 옮겨도 따라간다.
    ===================================================================== */
 var PADK = "haeyuli.padplan.v1";
@@ -1178,9 +1178,11 @@ function padMerge(local, cloud){
   var out = [];
   PADDEF.forEach(function(d0){
     var e = map[d0.id];
-    if (!e || (num(del[d0.id]) > 0 && num(del[d0.id]) >= e.at)){
+    /* 기본 항목도 지울 수 있다 — del 기록이 있으면 다시 살리지 않는다 */
+    if (num(del[d0.id]) > 0 && num(del[d0.id]) >= (e ? num(e.at) : 0)) return;
+    if (!e){
       e = { id:d0.id, name:d0.name, subject:d0.subject, days:d0.days.slice(), on:true,
-            builtIn:true, at:(e ? num(e.at) : 0) };
+            builtIn:true, at:0 };
     }
     if (!e.name) e.name = d0.name;
     e.name = String(e.name).slice(0, 40);
@@ -2009,13 +2011,19 @@ function addWbFromSheet(){
    ===================================================================== */
 var PADDRAFT = { days:[0,1,2,3,4] };
 function padCommit(mut, okMsg){
+  /* 이 기기에 먼저 저장한다 — 인터넷이나 가족 코드가 없어도 삭제·수정이 바로 반영된다 */
+  var ldoc = padMerge(padLocal(), null);
+  mut(ldoc);
+  ldoc.v = 1; ldoc.at = Date.now();
+  lsSet(PADK, ldoc);
+  try { renderPad(); renderCheck(); } catch(e){}
   return commit(function(d){
-    var doc = padMerge(padLocal(), d.padplan || null);
-    mut(doc);
+    var doc = padMerge(ldoc, d.padplan || null);
     doc.v = 1; doc.at = Date.now();
     d.padplan = doc;
   }).then(function(ok){
-    if (ok){ renderPad(); renderCheck(); if (okMsg) toast(okMsg); }
+    try { renderPad(); renderCheck(); } catch(e){}
+    if (okMsg) toast(ok ? okMsg : okMsg + " · 이 기기에 저장했어요");
     return ok;
   });
 }
@@ -2077,7 +2085,7 @@ function renderPad(){
       '<div class="wb-h"><span class="em">' + (SUBEM[p.subject] || "📱") + '</span>' +
         '<div class="nm"><b>' + esc(p.name) + '</b><span>' + esc(p.subject) + ' · ' + dayLabel(p.days) +
           (p.builtIn ? '' : ' · 직접 추가') + '</span></div>' +
-        (p.builtIn ? '' : '<button class="btn sm warn" type="button" data-paddel="' + esc(p.id) + '">삭제</button>') +
+        '<button class="btn sm warn" type="button" data-paddel="' + esc(p.id) + '">삭제</button>' +
       '</div>' +
       '<div class="pad-now' + (p.on && !runs ? ' rest' : '') + '">' + now + '</div>' +
       '<div class="chips"><span class="lb">요일</span>' + days + '</div>' +
@@ -2132,7 +2140,6 @@ function padSaveCard(id){
 }
 function padDelete(id){
   var p = padById(id); if (!p) return;
-  if (p.builtIn){ toast("기본 패드 학습은 끄기만 할 수 있어요"); return; }
   var now = Date.now();
   padCommit(function(doc){
     doc.list = doc.list.filter(function(x){ return x.id !== id; });

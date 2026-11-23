@@ -24071,6 +24071,7 @@ function snap(){
     engread: read("haeyuli.engread.v1", null),
     engwb: read("haeyuli.engwb.v1", null),
     swwb: read("haeyuli.sw_wb.v1", null),
+    nirwb: read("haeyuli.nir.wb.v1", null),
     ntfy: ntRead(),
     rb: {
       read: read(K.rbRead, {}),
@@ -24105,9 +24106,9 @@ function snap(){
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry, engread:d.engread, engwb:d.engwb, swwb:d.swwb, padplan:d.padplan });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry, engread:d.engread, engwb:d.engwb, swwb:d.swwb, nirwb:d.nirwb, padplan:d.padplan });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry, s.engread, s.engwb, s.swwb, s.padplan]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry, s.engread, s.engwb, s.swwb, s.nirwb, s.padplan]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -24706,6 +24707,7 @@ function buildDoc(local, cloud, base, code){
     engread: mergeEngDone(local.engread, c.engread),
     engwb: mergeEngDone(local.engwb, c.engwb),
     swwb: mergeEngDone(local.swwb, c.swwb),
+    nirwb: mergeEngDone(local.nirwb, c.nirwb),
     carry: mergeCarry(local.carry, c.carry),
     padplan: (padApi() ? padApi().merge(local.padplan, c.padplan)
                         : (c.padplan || local.padplan || null)),
@@ -24762,6 +24764,13 @@ function applyDoc(doc){
     try { if (SB.wbRefresh) SB.wbRefresh(); } catch(e){}
   }
   var swNow = mergeEngDone(read("haeyuli.sw_wb.v1", null), doc.swwb);
+
+  /* 📘 나우 아임 리딩 사이트워드 워크북 — 끝낸 낱말을 두 기기에서 합친다 */
+  var nwNow = mergeEngDone(read("haeyuli.nir.wb.v1", null), doc.nirwb);
+  if (JSON.stringify(nwNow) !== JSON.stringify(read("haeyuli.nir.wb.v1", null))){
+    write("haeyuli.nir.wb.v1", nwNow); changed = true;
+    try { if (SB.nirWB && SB.nirWB.refresh) SB.nirWB.refresh(); } catch(e){}
+  }
   if (JSON.stringify(swNow) !== JSON.stringify(read("haeyuli.sw_wb.v1", null))){
     write("haeyuli.sw_wb.v1", swNow); changed = true;
     try { if (SB.swwbRefresh) SB.swwbRefresh(); } catch(e){}
@@ -31684,6 +31693,15 @@ function shaMsgHTML(d, id){
     return '<div class="sga-msg" id="shaMsg">잘하고 있어요! ' + got + ' / ' + qs.length + '문제 맞혔어요 ⭐</div>';
   return '<div class="sga-msg" id="shaMsg">정답을 고르면 ⭐ 별을 받아요</div>';
 }
+/* 🖼️ 그림 단어 카드 · 📒 사이트워드 워크북 — 모듈(SB.nirWB)이 없으면 조용히 빈칸 */
+function nirWBCards(id){
+  try { if (window.SB && SB.nirWB) return SB.nirWB.gridHTML(String(id)); } catch(e){}
+  return "";
+}
+function nirWBSheet(id){
+  try { if (window.SB && SB.nirWB) return SB.nirWB.wbHTML(String(id)); } catch(e){}
+  return "";
+}
 function shaHTML(d, b){
   var id = b[0], g = shG(d, b[1]), art0 = shSt(d).art[String(id)];
   var tools = '<button class="rb-tool on" type="button" data-shtool="brush">🖌 붓</button>' +
@@ -31695,6 +31713,9 @@ function shaHTML(d, b){
       '<button class="sga-back" type="button" data-shback="1">← ' + esc(d.n) + '</button></div>' +
     '<div class="sga-card"><div class="sga-ch"><b>📝 작은 퀴즈</b><span>3개 중에 하나를 골라요 · 맞히면 ⭐ +1</span></div>' +
       '<div id="shaQuiz">' + shaQuizHTML(d, id) + '</div>' + shaMsgHTML(d, id) + '</div>' +
+    '<div class="sga-card" id="nirWB"><div class="sga-ch"><b>🖼️ 그림 단어 · 📒 사이트워드 독후활동</b><span>그림을 누르면 발음이 나와요 · 따라 쓰고 찾고 동그라미</span></div>' +
+      '<div class="nwg-grid" id="nirWBGrid">' + nirWBCards(id) + '</div>' +
+      '<div class="nw-wb" id="nwWB">' + nirWBSheet(id) + '</div></div>' +
     '<div class="sga-card"><div class="sga-ch"><b>🎨 기억나는 장면 그리기</b><span>손가락으로 그려요 · 책마다 저장돼요</span></div>' +
       '<div class="sga-cvbox"><canvas id="shaCanvas" width="720" height="380" aria-label="기억나는 장면 그리기"></canvas></div>' +
       '<div class="rb-pal" id="shaPal"></div>' +
@@ -31838,6 +31859,7 @@ function shaOpen(k, id){
   applyMode();
   shaPal();
   shaInitCanvas(d, id);
+  try { if (SB.nirWB) SB.nirWB.mount(d, id); } catch(e){}
   try { w.scrollTop = 0; } catch(e){}
   try { view.scrollTop = 0; } catch(e){}
   var node = w.parentNode;
@@ -31852,25 +31874,131 @@ SB.shelf = { render: shPaint, reload: shReloadAll, defs: SHELF_DEFS,
   audioStop: function(){ try { nirAudStop(); } catch(e){} } };
 
 /* ---------- 🔊 나우 아임 리딩 원어민 음원 재생 (한 번에 한 권만 재생) ---------- */
-var NIRPL = { a: null, row: null, id: null };
+var NIRPL = { a:null, row:null, id:null, key:"", saved:0, seeking:false, lastSave:0 };
+var NPOSK = "haeyuli.nir.pos.v1";
+
+/* ---------- 🔖 어디까지 들었는지 (책마다 저장) ---------- */
+function nirPosAll(){
+  try { var o = JSON.parse(localStorage.getItem(NPOSK) || "{}"); return (o && typeof o === "object") ? o : {}; } catch(e){ return {}; }
+}
+function nirPosGet(k){ var v = Number(nirPosAll()[k]); return (isFinite(v) && v > 0) ? v : 0; }
+function nirPosSet(k, t){
+  if (!k) return;
+  var o = nirPosAll();
+  if (isFinite(t) && t > 1.2) o[k] = Math.round(t * 10) / 10; else delete o[k];
+  try { localStorage.setItem(NPOSK, JSON.stringify(o)); } catch(e){}
+}
+function nirPosClear(k){ var o = nirPosAll(); if (o[k] != null){ delete o[k]; try { localStorage.setItem(NPOSK, JSON.stringify(o)); } catch(e){} } }
+function nirFmt(s){ s = Math.max(0, Math.floor(Number(s) || 0)); var m = Math.floor(s / 60), x = s % 60; return m + ":" + (x < 10 ? "0" : "") + x; }
+function nirNum(v){ return (isFinite(v) && v > 0) ? Number(v) : 0; }
+
+/* ---------- 🎚️ 아래에 뜨는 플레이어 (탐색 바 · ±10초) ---------- */
+function nirDock(){
+  var d = document.getElementById("nirDock");
+  if (d) return d;
+  var css = ''
+    + '.nirdock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));'
+    + 'width:min(560px,calc(100% - 16px));z-index:9998;background:#fff;border-radius:16px;padding:8px 11px 10px;'
+    + 'box-shadow:0 8px 26px rgba(20,60,90,.22),0 0 0 1px #e2edf5;font-family:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;}'
+    + '.nirdock[hidden]{display:none!important;}'
+    + '.nirdock-h{display:flex;align-items:center;gap:8px;}'
+    + '.nirdock-h b{flex:1;min-width:0;font-size:13px;font-weight:800;color:#1b4c6b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
+    + '.nirdock-x{flex:0 0 auto;border:0;background:#f2f6f9;border-radius:50%;width:26px;height:26px;color:#6b8398;font-size:12px;line-height:1;}'
+    + '.nirdock-r{display:flex;align-items:center;gap:8px;margin-top:7px;}'
+    + '.nirdock-r span{font-size:11px;font-weight:800;color:#8aa6b8;min-width:38px;text-align:center;font-variant-numeric:tabular-nums;}'
+    + '#nirSeek{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:#e2edf5;outline:none;}'
+    + '#nirSeek::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#0d6f9e;box-shadow:0 1px 5px rgba(0,0,0,.25);}'
+    + '#nirSeek::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#0d6f9e;}'
+    + '.nirdock-b{display:flex;gap:6px;margin-top:7px;}'
+    + '.nirdock-b button{flex:1;border:0;background:#f2f8fc;color:#25506d;font-weight:800;font-size:12px;border-radius:10px;padding:8px 0;'
+    + 'font-family:inherit;-webkit-tap-highlight-color:transparent;}'
+    + '.nirdock-b button:active{transform:scale(.97);}'
+    + '.nirdock-b button.on{background:#0d6f9e;color:#fff;}'
+    + '.nirdock-b .wide{flex:1.25;}';
+  try { var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st); } catch(e){}
+  d = document.createElement("div");
+  d.className = "nirdock"; d.id = "nirDock"; d.hidden = true;
+  d.innerHTML = '<div class="nirdock-h"><b id="nirDTitle">나우 아임 리딩</b>'
+    + '<button class="nirdock-x" type="button" data-nirclose="1" aria-label="플레이어 닫기">✕</button></div>'
+    + '<div class="nirdock-r"><span id="nirDCur">0:00</span>'
+    + '<input id="nirSeek" type="range" min="0" max="1000" value="0" step="1" aria-label="듣는 위치 옮기기">'
+    + '<span id="nirDEnd">0:00</span></div>'
+    + '<div class="nirdock-b"><button type="button" data-nirseek="-10">⏪ 10초</button>'
+    + '<button type="button" class="wide" data-nirplay="1">⏸️ 멈춤</button>'
+    + '<button type="button" data-nirseek="10">10초 ⏩</button>'
+    + '<button type="button" data-nirfirst="1">⏮ 처음</button></div>';
+  document.body.appendChild(d);
+  return d;
+}
+function nirDockShow(title){
+  var d = nirDock(); d.hidden = false;
+  var t = document.getElementById("nirDTitle"); if (t) t.textContent = title || "나우 아임 리딩";
+}
+function nirDockHide(){ var d = document.getElementById("nirDock"); if (d) d.hidden = true; }
+function nirDockSync(){
+  var d = document.getElementById("nirDock"), a = NIRPL.a;
+  if (!d || !a) return;
+  var dur = nirNum(a.duration), cur = nirNum(a.currentTime);
+  var cEl = document.getElementById("nirDCur"), eEl = document.getElementById("nirDEnd");
+  if (cEl) cEl.textContent = nirFmt(cur);
+  if (eEl) eEl.textContent = nirFmt(dur);
+  var seek = document.getElementById("nirSeek");
+  if (seek && !NIRPL.seeking) seek.value = dur ? Math.min(1000, Math.round(cur / dur * 1000)) : 0;
+  var pb = d.querySelector("[data-nirplay]");
+  if (pb){
+    var on = !a.paused && !a.ended;
+    pb.textContent = on ? "⏸️ 멈춤" : (cur > 1 ? "▶️ 이어 듣기" : "▶️ 재생");
+    pb.classList.toggle("on", on);
+  }
+}
+function nirAudUI(mode){
+  var P = NIRPL, row = P.row;
+  if (row){
+    row.classList.toggle("playing", mode === "play");
+    var bt = row.querySelector(".sg-play");
+    if (bt){
+      bt.classList.toggle("on", mode === "play");
+      bt.setAttribute("aria-pressed", mode === "play" ? "true" : "false");
+      var ic = bt.querySelector(".sg-play-i"), tx = bt.querySelector(".sg-play-t");
+      if (ic) ic.textContent = mode === "play" ? "⏸️" : "🔊";
+      if (tx) tx.textContent = mode === "play" ? "멈춤" : (P.saved > 1 ? "이어 듣기" : "음원 듣기");
+    }
+    if (mode === "stop"){ var bar = row.querySelector(".sg-ab i"); if (bar) bar.style.width = "0%"; }
+  }
+  if (mode === "stop") nirDockHide();
+  nirDockSync();
+}
+function nirSavePos(){
+  var P = NIRPL;
+  if (!P.a || !P.key) return;
+  var t = nirNum(P.a.currentTime);
+  if (P.a.ended || t < 1.2) return;
+  nirPosSet(P.key, t);
+  P.saved = t;
+}
+function nirPause(){
+  var a = NIRPL.a;
+  if (a){ try { a.pause(); } catch(e){} nirSavePos(); }
+  nirAudUI("pause");
+}
 function nirAudStop(){
-  var P = NIRPL || {};
+  var P = NIRPL;
   if (P.a){
+    if (nirNum(P.a.currentTime) > 1.2 && !P.a.ended) nirPosSet(P.key, P.a.currentTime);
     try { P.a.pause(); } catch(e){}
-    try { P.a.currentTime = 0; } catch(e){}
     try { P.a.removeAttribute("src"); P.a.load(); } catch(e){}
   }
-  if (P.row){
-    P.row.classList.remove("playing");
-    var bar = P.row.querySelector(".sg-ab i"); if (bar) bar.style.width = "0%";
-    var bt = P.row.querySelector(".sg-play");
-    if (bt){
-      bt.classList.remove("on"); bt.setAttribute("aria-pressed", "false");
-      var ic = bt.querySelector(".sg-play-i"), tx = bt.querySelector(".sg-play-t");
-      if (ic) ic.textContent = "🔊"; if (tx) tx.textContent = "음원 듣기";
-    }
-  }
-  NIRPL = { a: null, row: null, id: null };
+  nirAudUI("stop");
+  NIRPL = { a:null, row:null, id:null, key:"", saved:0, seeking:false, lastSave:0 };
+}
+function nirSeekTo(t){
+  var a = NIRPL.a; if (!a) return;
+  var dur = nirNum(a.duration); if (!dur) return;
+  t = Math.max(0, Math.min(dur - 0.15, t));
+  try { a.currentTime = t; } catch(e){}
+  NIRPL.seeking = false;
+  nirPosSet(NIRPL.key, t);
+  nirDockSync();
 }
 /* 📡 추가 음원(raw.githubusercontent)이 막히면 github.com/raw 주소로 한 번 더 시도한다 */
 function nirAudFallback(a){
@@ -31892,21 +32020,54 @@ function nirAudFallback(a){
 function nirAudToggle(btn){
   var row = btn && btn.closest ? btn.closest("[data-aud]") : null;
   if (!row) return;
-  if (NIRPL.row === row && NIRPL.a && !NIRPL.a.paused){ nirAudStop(); return; }
+  /* 같은 책을 다시 누르면 → 멈춤/이어서 (처음으로 되돌리지 않는다) */
+  if (NIRPL.row === row && NIRPL.a){
+    if (NIRPL.a.paused){
+      var p0 = null;
+      try { p0 = NIRPL.a.play(); } catch(e){}
+      if (p0 && p0.catch) p0.catch(function(){});
+      nirDockShow(document.getElementById("nirDTitle") ? document.getElementById("nirDTitle").textContent : "");
+      nirAudUI("play");
+    } else nirPause();
+    return;
+  }
   nirAudStop();
   var src = row.getAttribute("data-aud") || ""; if (!src) return;
+  var id = row.getAttribute("data-shrow") || "", shk = row.getAttribute("data-shk") || "";
   var a;
   try { a = new Audio(); } catch(e){ if (SB.toast) SB.toast("이 기기에서는 음원을 재생할 수 없어요"); return; }
   a.preload = "auto";
   try { a.setAttribute("playsinline", ""); } catch(e){}
   a.src = src;
+  var key = shk + "|" + id;
+  var btEl = row.querySelector(".sg-bt");
+  var title = (btEl && btEl.textContent ? btEl.textContent : "") || "나우 아임 리딩";
   var bar = row.querySelector(".sg-ab i");
+  NIRPL = { a:a, row:row, id:id, key:key, saved:nirPosGet(key), seeking:false, lastSave:0 };
+  a.addEventListener("loadedmetadata", function(){
+    if (NIRPL.a !== a) return;
+    var dur = nirNum(a.duration), p = NIRPL.saved;
+    if (p > 1.5 && dur && p < dur - 2.5){
+      try { a.currentTime = p; } catch(e){}
+      if (SB.toast) SB.toast("🔖 " + nirFmt(p) + "부터 이어서 들려요");
+    }
+    nirDockSync();
+  });
   a.addEventListener("timeupdate", function(){
     if (NIRPL.a !== a) return;
     var d = a.duration;
     if (bar && d && isFinite(d) && d > 0) bar.style.width = Math.min(100, (a.currentTime / d) * 100).toFixed(1) + "%";
+    nirDockSync();
+    var now = Date.now();
+    if (now - NIRPL.lastSave > 1200){ NIRPL.lastSave = now; nirSavePos(); }
   });
-  a.addEventListener("ended", function(){ if (NIRPL.a === a) nirAudStop(); });
+  a.addEventListener("play", function(){ if (NIRPL.a === a) nirAudUI("play"); });
+  a.addEventListener("pause", function(){ if (NIRPL.a === a && !a.ended){ nirSavePos(); nirAudUI("pause"); } });
+  a.addEventListener("ended", function(){
+    if (NIRPL.a !== a) return;
+    nirPosClear(NIRPL.key);          /* 끝까지 들었으면 저장 위치를 지운다 */
+    nirAudUI("stop");
+  });
   a.addEventListener("error", function(){
     if (NIRPL.a !== a) return;
     if (nirAudFallback(a)) return;
@@ -31917,20 +32078,14 @@ function nirAudToggle(btn){
     a.preservesPitch = true; a.mozPreservesPitch = true; a.webkitPreservesPitch = true;
     a.playbackRate = shRate(); a.defaultPlaybackRate = shRate();
   } catch(e){}
-  NIRPL = { a: a, row: row, id: row.getAttribute("data-shrow") };
-  row.classList.add("playing");
-  var bt = row.querySelector(".sg-play");
-  if (bt){
-    bt.classList.add("on"); bt.setAttribute("aria-pressed", "true");
-    var ic = bt.querySelector(".sg-play-i"), tx = bt.querySelector(".sg-play-t");
-    if (ic) ic.textContent = "⏸️"; if (tx) tx.textContent = "멈춤";
-  }
+  nirDockShow(title);
+  nirAudUI("play");
   var pr = null;
   try { pr = a.play(); } catch(e){ pr = null; }
   if (pr && pr.then){
     pr.then(function(){}, function(){
       if (NIRPL.a !== a) return;
-      if (a.__fb) return;            /* 폴백으로 주소를 바꾼 뒤 도착한 예전 요청의 실패는 무시 */
+      if (a.__fb) return;
       if (nirAudFallback(a)) return;
       nirAudStop();
       if (SB.toast) SB.toast("음원 재생을 시작하지 못했어요. 다시 눌러 주세요.");
@@ -31938,6 +32093,42 @@ function nirAudToggle(btn){
   }
 }
 
+/* ---------- 🎚️ 플레이어 조작 ---------- */
+document.addEventListener("click", function(e){
+  var el = e.target; if (!el || !el.closest) return;
+  if (!el.closest("#nirDock")) return;
+  var a = NIRPL.a;
+  if (el.closest("[data-nirclose]")){ if (a) nirPause(); nirDockHide(); return; }
+  if (el.closest("[data-nirplay]")){
+    if (!a) return;
+    if (a.paused){
+      var p = null; try { p = a.play(); } catch(e2){}
+      if (p && p.catch) p.catch(function(){});
+      nirAudUI("play");
+    } else nirPause();
+    return;
+  }
+  var sk = el.closest("[data-nirseek]");
+  if (sk){ if (a) nirSeekTo(nirNum(a.currentTime) + Number(sk.getAttribute("data-nirseek") || 0)); return; }
+  if (el.closest("[data-nirfirst]")){ if (a) nirSeekTo(0); return; }
+});
+document.addEventListener("input", function(e){
+  var el = e.target; if (!el || el.id !== "nirSeek") return;
+  var a = NIRPL.a; if (!a) return;
+  NIRPL.seeking = true;
+  var dur = nirNum(a.duration); if (!dur) return;
+  var t = dur * (Number(el.value) / 1000);
+  var cEl = document.getElementById("nirDCur"); if (cEl) cEl.textContent = nirFmt(t);
+  try { a.currentTime = t; } catch(e){}
+}, false);
+document.addEventListener("change", function(e){
+  var el = e.target; if (!el || el.id !== "nirSeek") return;
+  NIRPL.seeking = false; nirSavePos(); nirDockSync();
+}, false);
+window.addEventListener("pagehide", function(){ try { nirSavePos(); } catch(e){} });
+document.addEventListener("visibilitychange", function(){
+  if (document.visibilityState === "hidden"){ try { nirSavePos(); } catch(e){} }
+});
 
 /* ---------- 🔊 음원 속도 (🐢 0.75x · 1.0x · 📖 1.25x) ----------
    · 고른 속도는 이 기기에 저장되고, 재생 중이거나 다음 책을 눌러도 그대로 쓴다
@@ -38373,9 +38564,11 @@ function padpMerge(local, cloud){
   var out = [];
   PADP_DEF.forEach(function(d0){
     var e = map[d0.id];
-    if (!e || (pNum(del[d0.id]) > 0 && pNum(del[d0.id]) >= e.at)){
+    /* 기본 항목도 지울 수 있다 — del 기록이 있으면 다시 살리지 않는다 */
+    if (pNum(del[d0.id]) > 0 && pNum(del[d0.id]) >= (e ? pNum(e.at) : 0)) return;
+    if (!e){
       e = { id:d0.id, name:d0.name, subject:d0.subject, days:d0.days.slice(), on:true,
-            builtIn:true, at:(e ? pNum(e.at) : 0) };
+            builtIn:true, at:0 };
     }
     if (!e.name) e.name = d0.name;
     e.name = String(e.name).slice(0, 40);
@@ -43125,5 +43318,1991 @@ else bind();
 
 </script>
 
+<script>
+/* =====================================================================
+   📘 나우 아임 리딩 독후활동 — 🖼️ 그림 단어 + 📒 사이트워드 워크북 (나우 아임 리딩 · ORT)
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+/* 그림 단어 판 — 인라인 SVG 100×100 (플래시카드풍 납작한 그림) */
+var SVG = function(inner){ return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + inner + '</svg>'; };
+var ART = {};
+var PW = {};   /* key: [영단어, 한글뜻] */
+
+/* ---------- 동물 ---------- */
+ART.cat = SVG('<ellipse cx="50" cy="62" rx="27" ry="25" fill="#f3b26b"/>'
+ + '<path d="M29 44 L22 18 L47 32 Z" fill="#e2954c"/><path d="M71 44 L78 18 L53 32 Z" fill="#e2954c"/>'
+ + '<path d="M31 41 L27 26 L41 34 Z" fill="#f8c9a4"/><path d="M69 41 L73 26 L59 34 Z" fill="#f8c9a4"/>'
+ + '<circle cx="50" cy="58" r="22" fill="#f8c48c"/>'
+ + '<circle cx="41" cy="55" r="3.2" fill="#41301f"/><circle cx="59" cy="55" r="3.2" fill="#41301f"/>'
+ + '<path d="M46 64 L54 64 L50 69 Z" fill="#e9738c"/>'
+ + '<path d="M50 69 q-5 6 -9 2 M50 69 q5 6 9 2" stroke="#8a5a2b" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
+ + '<path d="M18 55 h11 M18 62 h11 M82 55 h-11 M82 62 h-11" stroke="#c98d52" stroke-width="1.6" stroke-linecap="round"/>');
+ART.dog = SVG('<ellipse cx="50" cy="66" rx="26" ry="20" fill="#c98a55"/>'
+ + '<circle cx="50" cy="52" r="24" fill="#e0a469"/>'
+ + '<ellipse cx="27" cy="50" rx="8" ry="17" fill="#a9713f" transform="rotate(-12 27 50)"/>'
+ + '<ellipse cx="73" cy="50" rx="8" ry="17" fill="#a9713f" transform="rotate(12 73 50)"/>'
+ + '<ellipse cx="50" cy="62" rx="13" ry="10" fill="#f6dcbf"/>'
+ + '<circle cx="42" cy="49" r="3.2" fill="#3a2a1c"/><circle cx="58" cy="49" r="3.2" fill="#3a2a1c"/>'
+ + '<ellipse cx="50" cy="58" rx="5" ry="4" fill="#4a3626"/>'
+ + '<path d="M50 62 v5 M50 67 q-5 4 -8 1 M50 67 q5 4 8 1" stroke="#7a5330" stroke-width="1.8" fill="none" stroke-linecap="round"/>');
+ART.rat = SVG('<ellipse cx="50" cy="60" rx="30" ry="24" fill="#b0b8c2"/>'
+ + '<circle cx="26" cy="40" r="12" fill="#c3cbd4"/><circle cx="74" cy="40" r="12" fill="#c3cbd4"/>'
+ + '<circle cx="26" cy="40" r="6" fill="#e8b6bd"/><circle cx="74" cy="40" r="6" fill="#e8b6bd"/>'
+ + '<circle cx="41" cy="57" r="3" fill="#333f4a"/><circle cx="59" cy="57" r="3" fill="#333f4a"/>'
+ + '<circle cx="50" cy="66" r="4.5" fill="#e88da0"/>'
+ + '<path d="M50 70 v6 M50 76 q-6 4 -9 0 M50 76 q6 4 9 0" stroke="#8a939c" stroke-width="1.6" fill="none"/>'
+ + '<path d="M20 62 h13 M20 69 h13 M80 62 h-13 M80 69 h-13" stroke="#9aa4ae" stroke-width="1.4" stroke-linecap="round"/>');
+ART.mouse = ART.rat;
+ART.fox = SVG('<path d="M28 40 L18 12 L48 30 Z" fill="#e07a3c"/><path d="M72 40 L82 12 L52 30 Z" fill="#e07a3c"/>'
+ + '<path d="M31 36 L24 20 L43 32 Z" fill="#f6c39a"/><path d="M69 36 L76 20 L57 32 Z" fill="#f6c39a"/>'
+ + '<ellipse cx="50" cy="58" rx="29" ry="25" fill="#e8843f"/>'
+ + '<path d="M50 44 q-16 2 -18 18 q6 14 18 14 q12 0 18 -14 q-2 -16 -18 -18 Z" fill="#fbe3c8"/>'
+ + '<circle cx="40" cy="55" r="3" fill="#3a2a1c"/><circle cx="60" cy="55" r="3" fill="#3a2a1c"/>'
+ + '<ellipse cx="50" cy="66" rx="4.5" ry="3.5" fill="#3a2a1c"/>'
+ + '<path d="M50 70 v4 M50 74 q-5 4 -8 0 M50 74 q5 4 8 0" stroke="#7a4a24" stroke-width="1.6" fill="none"/>');
+ART.pig = SVG('<circle cx="50" cy="56" r="28" fill="#f2a8b8"/>'
+ + '<path d="M26 36 L22 20 L40 30 Z" fill="#e08fa2"/><path d="M74 36 L78 20 L60 30 Z" fill="#e08fa2"/>'
+ + '<ellipse cx="50" cy="66" rx="14" ry="11" fill="#f7c3ce"/>'
+ + '<ellipse cx="44" cy="66" rx="2.6" ry="3.4" fill="#c9707f"/><ellipse cx="56" cy="66" rx="2.6" ry="3.4" fill="#c9707f"/>'
+ + '<circle cx="40" cy="49" r="3" fill="#5a3a37"/><circle cx="60" cy="49" r="3" fill="#5a3a37"/>');
+ART.cow = SVG('<ellipse cx="50" cy="56" rx="30" ry="26" fill="#fdfdfd"/>'
+ + '<path d="M26 34 q-8 -8 -2 -14 q4 6 10 8 Z" fill="#e0d6c4"/><path d="M74 34 q8 -8 2 -14 q-4 6 -10 8 Z" fill="#e0d6c4"/>'
+ + '<ellipse cx="28" cy="42" rx="8" ry="6" fill="#4a4a4a" transform="rotate(-20 28 42)"/>'
+ + '<circle cx="40" cy="52" r="3.2" fill="#3c3c3c"/><circle cx="60" cy="52" r="3.2" fill="#3c3c3c"/>'
+ + '<ellipse cx="50" cy="68" rx="16" ry="12" fill="#f7b9c6"/>'
+ + '<ellipse cx="44" cy="68" rx="2.4" ry="3" fill="#c97d8c"/><ellipse cx="56" cy="68" rx="2.4" ry="3" fill="#c97d8c"/>'
+ + '<circle cx="76" cy="46" r="6" fill="#4a4a4a" opacity=".8"/>');
+ART.horse = SVG('<ellipse cx="50" cy="48" rx="22" ry="26" fill="#b5794a"/>'
+ + '<path d="M32 26 L36 8 L48 22 Z" fill="#a2673c"/><path d="M68 26 L64 8 L52 22 Z" fill="#a2673c"/>'
+ + '<path d="M74 34 q10 6 6 22 q-2 12 -10 14 q6 -18 4 -36 Z" fill="#8a5730"/>'
+ + '<ellipse cx="50" cy="62" rx="17" ry="14" fill="#d8a878"/>'
+ + '<circle cx="40" cy="44" r="3.4" fill="#33261a"/><circle cx="60" cy="44" r="3.4" fill="#33261a"/>'
+ + '<ellipse cx="46" cy="58" rx="2.4" ry="3.2" fill="#5d3f26"/><ellipse cx="54" cy="58" rx="2.4" ry="3.2" fill="#5d3f26"/>'
+ + '<path d="M50 64 v8" stroke="#a2673c" stroke-width="2"/>');
+ART.deer = SVG('<ellipse cx="50" cy="58" rx="24" ry="23" fill="#c08a55"/>'
+ + '<path d="M40 34 q-6 -12 -14 -14 q4 6 6 12 q-8 -4 -12 0 q8 2 14 6 Z" fill="#8f6136"/>'
+ + '<path d="M60 34 q6 -12 14 -14 q-4 6 -6 12 q8 -4 12 0 q-8 2 -14 6 Z" fill="#8f6136"/>'
+ + '<path d="M38 36 q4 -6 8 -2 q-4 6 -8 2 Z" fill="#e6c79d"/><path d="M62 36 q-4 -6 -8 -2 q4 6 8 2 Z" fill="#e6c79d"/>'
+ + '<circle cx="41" cy="55" r="3.2" fill="#33241a"/><circle cx="59" cy="55" r="3.2" fill="#33241a"/>'
+ + '<ellipse cx="50" cy="68" rx="11" ry="9" fill="#eed3ad"/>'
+ + '<ellipse cx="50" cy="66" rx="4" ry="3" fill="#4a3423"/>'
+ + '<circle cx="50" cy="69" r="1.6" fill="#4a3423"/><circle cx="46" cy="71" r="1.4" fill="#4a3423"/><circle cx="54" cy="71" r="1.4" fill="#4a3423"/>');
+ART.bear = SVG('<circle cx="27" cy="32" r="12" fill="#a9764a"/><circle cx="73" cy="32" r="12" fill="#a9764a"/>'
+ + '<circle cx="27" cy="32" r="6" fill="#d3a77b"/><circle cx="73" cy="32" r="6" fill="#d3a77b"/>'
+ + '<ellipse cx="50" cy="58" rx="29" ry="27" fill="#c08f5f"/>'
+ + '<ellipse cx="50" cy="68" rx="15" ry="12" fill="#e8cba4"/>'
+ + '<circle cx="40" cy="52" r="3.2" fill="#33241a"/><circle cx="60" cy="52" r="3.2" fill="#33241a"/>'
+ + '<ellipse cx="50" cy="64" rx="5" ry="4" fill="#4a3423"/>'
+ + '<path d="M50 68 v5 M50 73 q-5 4 -8 1 M50 73 q5 4 8 1" stroke="#7a5530" stroke-width="1.8" fill="none"/>');
+ART.rabbit = SVG('<ellipse cx="36" cy="24" rx="8" ry="22" fill="#e8e2dc" transform="rotate(-10 36 24)"/>'
+ + '<ellipse cx="64" cy="24" rx="8" ry="22" fill="#e8e2dc" transform="rotate(10 64 24)"/>'
+ + '<ellipse cx="36" cy="25" rx="4" ry="16" fill="#f6c3cd" transform="rotate(-10 36 25)"/>'
+ + '<ellipse cx="64" cy="25" rx="4" ry="16" fill="#f6c3cd" transform="rotate(10 64 25)"/>'
+ + '<ellipse cx="50" cy="62" rx="26" ry="24" fill="#f6f2ee"/>'
+ + '<circle cx="41" cy="58" r="3.2" fill="#3a3a3a"/><circle cx="59" cy="58" r="3.2" fill="#3a3a3a"/>'
+ + '<path d="M46 67 L54 67 L50 71 Z" fill="#efa2b3"/>'
+ + '<path d="M50 71 v4 M50 75 q-5 4 -8 0 M50 75 q5 4 8 0" stroke="#b09a92" stroke-width="1.6" fill="none"/>');
+ART.sheep = SVG('<circle cx="50" cy="54" r="30" fill="#fbf7f2"/>'
+ + '<circle cx="26" cy="44" r="12" fill="#fbf7f2"/><circle cx="74" cy="44" r="12" fill="#fbf7f2"/>'
+ + '<circle cx="30" cy="66" r="12" fill="#f4efe8"/><circle cx="70" cy="66" r="12" fill="#f4efe8"/>'
+ + '<ellipse cx="50" cy="62" rx="16" ry="17" fill="#d9cfc4"/>'
+ + '<circle cx="44" cy="58" r="2.8" fill="#40372f"/><circle cx="56" cy="58" r="2.8" fill="#40372f"/>'
+ + '<path d="M46 68 q4 3 8 0" stroke="#8a7d70" stroke-width="1.6" fill="none" stroke-linecap="round"/>');
+ART.goat = SVG('<ellipse cx="50" cy="58" rx="24" ry="24" fill="#eee7dc"/>'
+ + '<path d="M36 34 q-10 -10 -16 -6 q6 4 8 10 Z" fill="#b9a68c"/><path d="M64 34 q10 -10 16 -6 q-6 4 -8 10 Z" fill="#b9a68c"/>'
+ + '<path d="M34 44 q-8 2 -10 10 q8 0 12 -6 Z" fill="#e2d8c9"/><path d="M66 44 q8 2 10 10 q-8 0 -12 -6 Z" fill="#e2d8c9"/>'
+ + '<circle cx="42" cy="56" r="3" fill="#3f3a33"/><circle cx="58" cy="56" r="3" fill="#3f3a33"/>'
+ + '<ellipse cx="50" cy="68" rx="10" ry="8" fill="#ddd2c2"/>'
+ + '<path d="M50 74 q-3 10 2 14 q4 -6 3 -14 Z" fill="#e8dfd2"/>');
+ART.yak = SVG('<ellipse cx="50" cy="58" rx="30" ry="26" fill="#5c4a3c"/>'
+ + '<path d="M24 40 q-12 -4 -16 4 q10 2 16 6 Z" fill="#d9cbb4"/><path d="M76 40 q12 -4 16 4 q-10 2 -16 6 Z" fill="#d9cbb4"/>'
+ + '<circle cx="28" cy="44" r="13" fill="#4a3a2e"/><circle cx="72" cy="44" r="13" fill="#4a3a2e"/>'
+ + '<path d="M22 66 q-4 16 4 20 q4 -12 4 -20 Z" fill="#4a3a2e"/><path d="M78 66 q4 16 -4 20 q-4 -12 -4 -20 Z" fill="#4a3a2e"/>'
+ + '<circle cx="40" cy="54" r="3.2" fill="#1f1710"/><circle cx="60" cy="54" r="3.2" fill="#1f1710"/>'
+ + '<ellipse cx="50" cy="68" rx="12" ry="10" fill="#7d6a58"/>'
+ + '<circle cx="46" cy="68" r="2" fill="#2b2119"/><circle cx="54" cy="68" r="2" fill="#2b2119"/>');
+ART.lion = SVG('<circle cx="50" cy="56" r="34" fill="#d98b3f"/>'
+ + '<path d="M50 22 l6 10 11 -4 -3 11 11 4 -8 8 7 9 -12 1 2 12 -10 -6 -4 11 -6 -10 -9 8 -1 -12 -12 1 7 -10 -9 -7 12 -3 -3 -11 11 3 Z" fill="#c67730" opacity=".55"/>'
+ + '<circle cx="50" cy="58" r="23" fill="#f2c184"/>'
+ + '<circle cx="41" cy="54" r="3.2" fill="#33261a"/><circle cx="59" cy="54" r="3.2" fill="#33261a"/>'
+ + '<ellipse cx="50" cy="66" rx="12" ry="9" fill="#f8dcb0"/>'
+ + '<path d="M45 64 h10 l-5 5 Z" fill="#8a5a2b"/>'
+ + '<path d="M50 69 v4 M50 73 q-5 4 -8 0 M50 73 q5 4 8 0" stroke="#8a5a2b" stroke-width="1.6" fill="none"/>');
+ART.zebra = SVG('<ellipse cx="50" cy="60" rx="24" ry="23" fill="#fafafa" stroke="#e2e2e2" stroke-width="1.6"/>'
+ + '<path d="M33 34 l-4 -18 l18 11 Z" fill="#f0efef" stroke="#dedede" stroke-width="1.4"/><path d="M67 34 l4 -18 l-18 11 Z" fill="#f0efef" stroke="#dedede" stroke-width="1.4"/>'
+ + '<path d="M35 32 q15 -13 30 0 q-6 -8 -15 -8 q-9 0 -15 8 Z" fill="#2f2f2f"/>'
+ + '<path d="M40 18 l3 9 M50 16 l0 10 M60 18 l-3 9" stroke="#2f2f2f" stroke-width="3" stroke-linecap="round"/>'
+ + '<path d="M27 52 q8 -6 12 1 q4 6 0 10 M73 52 q-8 -6 -12 1 q-4 6 0 10" stroke="#2f2f2f" stroke-width="3.2" fill="none" stroke-linecap="round"/>'
+ + '<ellipse cx="50" cy="70" rx="13" ry="11" fill="#4a4a4a"/>'
+ + '<circle cx="41" cy="52" r="3.2" fill="#2f2f2f"/><circle cx="59" cy="52" r="3.2" fill="#2f2f2f"/>'
+ + '<ellipse cx="45" cy="68" rx="2" ry="2.6" fill="#c8c8c8"/><ellipse cx="55" cy="68" rx="2" ry="2.6" fill="#c8c8c8"/>'
+ + '<path d="M44 76 q6 3 12 0" stroke="#2f2f2f" stroke-width="1.8" fill="none" stroke-linecap="round"/>');
+ART.elephant = SVG('<circle cx="50" cy="52" r="30" fill="#a9b6c4"/>'
+ + '<path d="M22 46 q-16 -10 -18 4 q10 2 16 10 Z" fill="#93a2b2"/><path d="M78 46 q16 -10 18 4 q-10 2 -16 10 Z" fill="#93a2b2"/>'
+ + '<path d="M50 66 q-10 4 -10 16 q0 10 8 10 q8 0 8 -10 q0 -8 -4 -12 Z" fill="#9dabb9"/>'
+ + '<circle cx="39" cy="48" r="3.4" fill="#2f3a45"/><circle cx="61" cy="48" r="3.4" fill="#2f3a45"/>'
+ + '<circle cx="39" cy="48" r="7" fill="none" stroke="#c3cfda" stroke-width="1.4"/>'
+ + '<circle cx="61" cy="48" r="7" fill="none" stroke="#c3cfda" stroke-width="1.4"/>');
+ART.monkey = SVG('<circle cx="24" cy="52" r="11" fill="#a9743f"/><circle cx="76" cy="52" r="11" fill="#a9743f"/>'
+ + '<circle cx="24" cy="52" r="6" fill="#e5bd93"/><circle cx="76" cy="52" r="6" fill="#e5bd93"/>'
+ + '<circle cx="50" cy="52" r="28" fill="#8f5f34"/>'
+ + '<ellipse cx="50" cy="58" rx="22" ry="20" fill="#e5bd93"/>'
+ + '<circle cx="41" cy="50" r="3.2" fill="#33241a"/><circle cx="59" cy="50" r="3.2" fill="#33241a"/>'
+ + '<ellipse cx="50" cy="64" rx="6" ry="4.5" fill="#7a4f2c"/>'
+ + '<path d="M42 70 q8 6 16 0" stroke="#7a4f2c" stroke-width="2" fill="none" stroke-linecap="round"/>');
+ART.chimp = SVG('<circle cx="23" cy="48" r="10" fill="#6b4a2e"/><circle cx="77" cy="48" r="10" fill="#6b4a2e"/>'
+ + '<circle cx="50" cy="52" r="28" fill="#5c3d24"/>'
+ + '<ellipse cx="50" cy="62" rx="21" ry="18" fill="#c99a6d"/>'
+ + '<path d="M30 34 q20 -14 40 0 q-6 8 -20 8 q-14 0 -20 -8 Z" fill="#4a301b"/>'
+ + '<circle cx="41" cy="52" r="3.2" fill="#2a1b10"/><circle cx="59" cy="52" r="3.2" fill="#2a1b10"/>'
+ + '<path d="M44 68 q6 5 12 0" stroke="#8a5f38" stroke-width="2" fill="none" stroke-linecap="round"/>');
+ART.sloth = SVG('<circle cx="50" cy="54" r="29" fill="#b9a58c"/>'
+ + '<path d="M28 44 q10 -8 20 0 q-10 6 -20 0 Z" fill="#6b5a48"/><path d="M72 44 q-10 -8 -20 0 q10 6 20 0 Z" fill="#6b5a48"/>'
+ + '<circle cx="40" cy="48" r="8" fill="#f0e2cd"/><circle cx="60" cy="48" r="8" fill="#f0e2cd"/>'
+ + '<circle cx="40" cy="48" r="3" fill="#33241a"/><circle cx="60" cy="48" r="3" fill="#33241a"/>'
+ + '<ellipse cx="50" cy="66" rx="12" ry="10" fill="#e8d7bf"/>'
+ + '<ellipse cx="50" cy="63" rx="4" ry="3" fill="#4a3b2b"/>'
+ + '<path d="M50 68 v4 M50 72 q-5 3 -8 0 M50 72 q5 3 8 0" stroke="#8a7761" stroke-width="1.6" fill="none"/>');
+ART.bat = SVG('<ellipse cx="50" cy="52" rx="13" ry="16" fill="#5c4b6b"/>'
+ + '<path d="M38 42 q-24 -16 -30 6 q14 -2 18 8 q4 -10 12 -14 Z" fill="#6d5a7d"/>'
+ + '<path d="M62 42 q24 -16 30 6 q-14 -2 -18 8 q-4 -10 -12 -14 Z" fill="#6d5a7d"/>'
+ + '<path d="M40 38 l-4 -12 l12 6 Z" fill="#5c4b6b"/><path d="M60 38 l4 -12 l-12 6 Z" fill="#5c4b6b"/>'
+ + '<circle cx="45" cy="50" r="2.8" fill="#f5d76e"/><circle cx="55" cy="50" r="2.8" fill="#f5d76e"/>'
+ + '<path d="M46 60 q4 3 8 0" stroke="#cdbfd8" stroke-width="1.6" fill="none"/>');
+ART.skunk = SVG('<path d="M72 84 q26 -6 22 -40 q-2 -22 -14 -30 q8 18 2 34 q-4 20 -18 32 Z" fill="#fdfdfd" stroke="#e2e2e2" stroke-width="1.6"/>'
+ + '<path d="M74 82 q16 -10 14 -30 q0 -12 -6 -20 q2 20 -2 30 q-2 10 -8 18 Z" fill="#3d3a45"/>'
+ + '<ellipse cx="46" cy="66" rx="24" ry="20" fill="#3d3a45"/>'
+ + '<circle cx="30" cy="44" r="9" fill="#3d3a45"/><circle cx="62" cy="44" r="9" fill="#3d3a45"/>'
+ + '<ellipse cx="46" cy="50" rx="21" ry="19" fill="#3d3a45"/>'
+ + '<path d="M46 31 q-7 6 -6 16 q1 8 6 10 q5 -2 6 -10 q1 -10 -6 -16 Z" fill="#fdfdfd"/>'
+ + '<circle cx="38" cy="47" r="3" fill="#fdfdfd"/><circle cx="54" cy="47" r="3" fill="#fdfdfd"/>'
+ + '<circle cx="46" cy="58" r="3" fill="#f0a0b0"/>'
+ + '<path d="M40 62 q6 4 12 0" stroke="#cfcfd6" stroke-width="1.8" fill="none" stroke-linecap="round"/>');
+ART.owl = SVG('<ellipse cx="50" cy="56" rx="28" ry="30" fill="#a98a6b"/>'
+ + '<path d="M28 30 l-6 -14 l16 6 Z" fill="#8f7154"/><path d="M72 30 l6 -14 l-16 6 Z" fill="#8f7154"/>'
+ + '<circle cx="39" cy="50" r="11" fill="#f6eedd"/><circle cx="61" cy="50" r="11" fill="#f6eedd"/>'
+ + '<circle cx="39" cy="50" r="4.5" fill="#33281c"/><circle cx="61" cy="50" r="4.5" fill="#33281c"/>'
+ + '<path d="M50 56 l-7 8 h14 Z" fill="#e8a34c"/>'
+ + '<path d="M30 68 q20 12 40 0" stroke="#8f7154" stroke-width="2" fill="none"/>');
+ART.bird = SVG('<ellipse cx="52" cy="62" rx="26" ry="22" fill="#7fb6e8"/>'
+ + '<circle cx="66" cy="42" r="16" fill="#8cc0ea"/>'
+ + '<path d="M80 40 l12 6 l-12 6 Z" fill="#f2b64c"/>'
+ + '<circle cx="70" cy="38" r="2.8" fill="#25333f"/>'
+ + '<path d="M40 54 q14 8 26 0 q-4 18 -14 20 q-10 -2 -12 -20 Z" fill="#5a9bd6"/>'
+ + '<path d="M32 74 q-10 2 -14 -6" stroke="#5a9bd6" stroke-width="4" fill="none" stroke-linecap="round"/>');
+ART.duck = SVG('<ellipse cx="46" cy="64" rx="28" ry="20" fill="#f5cf5b"/>'
+ + '<circle cx="62" cy="40" r="16" fill="#f7d96e"/>'
+ + '<path d="M76 38 q14 -2 14 6 q-2 6 -14 4 Z" fill="#f08a3c"/>'
+ + '<circle cx="64" cy="34" r="2.8" fill="#3a3020"/>'
+ + '<path d="M28 50 q14 6 24 2 q-6 12 -18 12 q-8 0 -6 -14 Z" fill="#e8bf45"/>'
+ + '<path d="M22 68 q-6 -2 -8 -10" stroke="#e8bf45" stroke-width="5" fill="none" stroke-linecap="round"/>');
+ART.chick = SVG('<circle cx="50" cy="56" r="26" fill="#f7d96e"/>'
+ + '<path d="M50 26 q6 -8 10 -2 q-6 0 -10 6 Z" fill="#f7d96e"/>'
+ + '<path d="M50 26 q-6 -8 -10 -2 q6 0 10 6 Z" fill="#f7d96e"/>'
+ + '<circle cx="42" cy="52" r="3.2" fill="#3a3020"/><circle cx="58" cy="52" r="3.2" fill="#3a3020"/>'
+ + '<path d="M44 62 l12 0 l-6 8 Z" fill="#f08a3c"/>'
+ + '<path d="M26 74 q8 6 16 2" stroke="#e8bf45" stroke-width="4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M74 74 q-8 6 -16 2" stroke="#e8bf45" stroke-width="4" fill="none" stroke-linecap="round"/>');
+ART.frog = SVG('<ellipse cx="50" cy="62" rx="30" ry="24" fill="#7fc08a"/>'
+ + '<circle cx="34" cy="38" r="13" fill="#8ecb98"/><circle cx="66" cy="38" r="13" fill="#8ecb98"/>'
+ + '<circle cx="34" cy="38" r="7" fill="#fdfdfd"/><circle cx="66" cy="38" r="7" fill="#fdfdfd"/>'
+ + '<circle cx="34" cy="39" r="3.6" fill="#25332a"/><circle cx="66" cy="39" r="3.6" fill="#25332a"/>'
+ + '<path d="M30 62 q20 12 40 0" stroke="#4f8a5c" stroke-width="3" fill="none" stroke-linecap="round"/>'
+ + '<circle cx="42" cy="54" r="2.4" fill="#5c9d68"/><circle cx="58" cy="54" r="2.4" fill="#5c9d68"/>'
+ + '<path d="M22 78 q-8 2 -10 -6" stroke="#7fc08a" stroke-width="5" fill="none" stroke-linecap="round"/>'
+ + '<path d="M78 78 q8 2 10 -6" stroke="#7fc08a" stroke-width="5" fill="none" stroke-linecap="round"/>');
+ART.snake = SVG('<path d="M20 84 q0 -16 16 -16 q16 0 16 -14 q0 -12 -14 -12 q-12 0 -12 10" stroke="#7fc08a" stroke-width="13" fill="none" stroke-linecap="round"/>'
+ + '<circle cx="26" cy="52" r="9" fill="#8ecb98"/>'
+ + '<circle cx="23" cy="49" r="2.4" fill="#25332a"/><circle cx="30" cy="49" r="2.4" fill="#25332a"/>'
+ + '<path d="M26 62 q4 6 8 2" stroke="#e9705f" stroke-width="2" fill="none" stroke-linecap="round"/>'
+ + '<path d="M20 78 q10 8 22 4" stroke="#5c9d68" stroke-width="3" fill="none"/>');
+ART.fish = SVG('<path d="M20 50 q18 -22 40 -22 q16 0 22 22 q-6 22 -22 22 q-22 0 -40 -22 Z" fill="#f2a24c"/>'
+ + '<path d="M82 50 l14 -12 v24 Z" fill="#e08a35"/>'
+ + '<circle cx="34" cy="44" r="3.4" fill="#3a2a1c"/>'
+ + '<path d="M46 40 q10 10 0 20" stroke="#e08a35" stroke-width="3" fill="none"/>'
+ + '<path d="M60 30 q6 20 0 40" stroke="#e08a35" stroke-width="2" fill="none" opacity=".6"/>'
+ + '<path d="M58 62 q6 10 14 8 q-4 -8 -14 -8 Z" fill="#e08a35"/>');
+ART.whale = SVG('<path d="M14 58 q14 -24 44 -24 q24 0 28 24 q-4 20 -28 20 q-30 0 -44 -20 Z" fill="#6fa8dc"/>'
+ + '<path d="M86 58 q10 -12 14 -4 q-6 2 -6 8 q-2 4 -8 -4 Z" fill="#5a94c9"/>'
+ + '<path d="M20 44 q6 -12 6 0 q0 8 -6 0 Z" fill="#a8cdec"/>'
+ + '<circle cx="36" cy="52" r="3.2" fill="#25333f"/>'
+ + '<path d="M48 62 q12 6 24 0" stroke="#4f86b8" stroke-width="2" fill="none"/>'
+ + '<circle cx="70" cy="36" r="3" fill="#cbe3f7"/><circle cx="78" cy="28" r="2.2" fill="#cbe3f7"/>');
+ART.seal = SVG('<ellipse cx="50" cy="64" rx="30" ry="22" fill="#9fb2c0"/>'
+ + '<circle cx="50" cy="42" r="20" fill="#adbdc9"/>'
+ + '<circle cx="42" cy="40" r="3" fill="#2c3740"/><circle cx="58" cy="40" r="3" fill="#2c3740"/>'
+ + '<ellipse cx="50" cy="50" rx="4" ry="3" fill="#4a5866"/>'
+ + '<path d="M50 53 v4 M50 57 q-5 4 -8 0 M50 57 q5 4 8 0" stroke="#77889a" stroke-width="1.6" fill="none"/>'
+ + '<path d="M34 54 h12 M34 60 h12 M66 54 h-12 M66 60 h-12" stroke="#c4d0da" stroke-width="1.4" stroke-linecap="round"/>'
+ + '<path d="M74 70 q12 -2 14 8 q-12 2 -14 -8 Z" fill="#8fa3b2"/>');
+ART.turtle = SVG('<ellipse cx="50" cy="62" rx="30" ry="20" fill="#8fbf6a"/>'
+ + '<path d="M22 60 q6 -22 28 -22 q22 0 28 22 Z" fill="#6f9f4c"/>'
+ + '<path d="M50 38 v22 M32 46 l6 16 M68 46 l-6 16" stroke="#8fbf6a" stroke-width="2.4"/>'
+ + '<circle cx="82" cy="56" r="9" fill="#94c46f"/>'
+ + '<circle cx="85" cy="53" r="2.2" fill="#2f3a25"/>'
+ + '<path d="M21 66 q-8 4 -8 12 q8 0 11 -8 Z" fill="#8fbf6a"/>'
+ + '<path d="M76 66 q8 4 8 12 q-8 0 -11 -8 Z" fill="#8fbf6a"/>');
+ART.octopus = SVG('<circle cx="50" cy="46" r="24" fill="#c48bd0"/>'
+ + '<path d="M28 60 q-6 18 4 26 q6 -10 4 -22 M42 64 q-4 20 6 26 q4 -10 0 -24 M58 64 q4 20 -6 24 q-2 -12 0 -24 M72 60 q6 18 -4 24 q-4 -12 -2 -24" stroke="#b376c0" stroke-width="7" fill="none" stroke-linecap="round"/>'
+ + '<circle cx="42" cy="42" r="4" fill="#3a2b42"/><circle cx="58" cy="42" r="4" fill="#3a2b42"/>'
+ + '<path d="M44 56 q6 5 12 0" stroke="#8a5a99" stroke-width="2" fill="none" stroke-linecap="round"/>');
+ART.unicorn = SVG('<path d="M50 20 l6 18 h-12 Z" fill="#f5cf5b"/>'
+ + '<ellipse cx="50" cy="56" rx="25" ry="24" fill="#fbf3fa"/>'
+ + '<path d="M30 40 l-8 -14 l16 6 Z" fill="#f3dff2"/><path d="M70 40 l8 -14 l-16 6 Z" fill="#f3dff2"/>'
+ + '<path d="M28 48 q-4 14 2 22" stroke="#e8b7e4" stroke-width="8" fill="none" stroke-linecap="round"/>'
+ + '<circle cx="41" cy="54" r="3.2" fill="#4a3a58"/><circle cx="59" cy="54" r="3.2" fill="#4a3a58"/>'
+ + '<ellipse cx="50" cy="68" rx="11" ry="8" fill="#f6dcea"/>'
+ + '<circle cx="50" cy="67" r="2" fill="#c98fc4"/>');
+ART.bug = SVG('<ellipse cx="50" cy="58" rx="21" ry="24" fill="#e9705f"/>'
+ + '<path d="M50 34 v48" stroke="#c2543f" stroke-width="2.4"/>'
+ + '<path d="M34 44 h32 M32 56 h36 M34 68 h32" stroke="#c2543f" stroke-width="2.2"/>'
+ + '<circle cx="50" cy="30" r="13" fill="#c2543f"/>'
+ + '<circle cx="45" cy="28" r="3" fill="#fdfdfd"/><circle cx="55" cy="28" r="3" fill="#fdfdfd"/>'
+ + '<path d="M42 20 q-6 -10 -12 -10 M58 20 q6 -10 12 -10" stroke="#8a3f30" stroke-width="2.2" fill="none" stroke-linecap="round"/>'
+ + '<path d="M30 66 l-12 10 M70 66 l12 10 M30 54 l-12 -2 M70 54 l12 -2" stroke="#8a3f30" stroke-width="2.2" stroke-linecap="round"/>');
+ART.crab = SVG('<ellipse cx="50" cy="60" rx="22" ry="17" fill="#e9705f"/>'
+ + '<path d="M30 48 q-16 -8 -18 -20 q10 -4 14 6 q4 -8 8 0 q0 10 -4 14 Z" fill="#e9705f"/>'
+ + '<path d="M70 48 q16 -8 18 -20 q-10 -4 -14 6 q-4 -8 -8 0 q0 10 4 14 Z" fill="#e9705f"/>'
+ + '<circle cx="43" cy="50" r="3" fill="#3a2620"/><circle cx="57" cy="50" r="3" fill="#3a2620"/>'
+ + '<path d="M28 68 l-8 12 M40 74 l-2 12 M60 74 l2 12 M72 68 l8 12" stroke="#c2543f" stroke-width="3" stroke-linecap="round"/>');
+ART.caterpillar = SVG('<circle cx="24" cy="64" r="13" fill="#8fc46a"/><circle cx="40" cy="58" r="14" fill="#7fbf5c"/>'
+ + '<circle cx="58" cy="60" r="14" fill="#8fc46a"/><circle cx="74" cy="56" r="15" fill="#7fbf5c"/>'
+ + '<circle cx="81" cy="50" r="2.6" fill="#2f3a25"/><circle cx="71" cy="50" r="2.6" fill="#2f3a25"/>'
+ + '<path d="M76 46 q4 -10 10 -10 M68 46 q-4 -10 -10 -10" stroke="#5c8a42" stroke-width="2" fill="none" stroke-linecap="round"/>'
+ + '<path d="M78 64 q6 2 8 -2" stroke="#3f6b2e" stroke-width="2" fill="none"/>');
+ART.butterfly = SVG('<path d="M50 52 q-26 -30 -34 -8 q-6 20 18 22 q12 2 16 -6 Z" fill="#f0a6c8"/>'
+ + '<path d="M50 52 q26 -30 34 -8 q6 20 -18 22 q-12 2 -16 -6 Z" fill="#f0a6c8"/>'
+ + '<path d="M50 60 q-20 6 -22 24 q16 4 22 -12 Z" fill="#f7c2d8"/>'
+ + '<path d="M50 60 q20 6 22 24 q-16 4 -22 -12 Z" fill="#f7c2d8"/>'
+ + '<ellipse cx="50" cy="56" rx="4" ry="18" fill="#5b4258"/>'
+ + '<path d="M48 40 q-6 -10 -10 -12 M52 40 q6 -10 10 -12" stroke="#5b4258" stroke-width="2" fill="none" stroke-linecap="round"/>');
+ART.moth = SVG('<path d="M50 50 q-24 -26 -34 -4 q-4 18 20 18 q10 0 14 -6 Z" fill="#e8dcc4"/>'
+ + '<path d="M50 50 q24 -26 34 -4 q4 18 -20 18 q-10 0 -14 -6 Z" fill="#e8dcc4"/>'
+ + '<path d="M50 56 q-14 6 -16 22 q14 2 16 -12 Z" fill="#d9c9ab"/>'
+ + '<path d="M50 56 q14 6 16 22 q-14 2 -16 -12 Z" fill="#d9c9ab"/>'
+ + '<circle cx="44" cy="46" r="4" fill="#6b5a3c" opacity=".4"/><circle cx="56" cy="46" r="4" fill="#6b5a3c" opacity=".4"/>'
+ + '<ellipse cx="50" cy="56" rx="3.4" ry="16" fill="#7a6a4c"/>'
+ + '<path d="M48 40 q-6 -8 -10 -8 M52 40 q6 -8 10 -8" stroke="#7a6a4c" stroke-width="2" fill="none" stroke-linecap="round"/>');
+ART.ape = SVG('<circle cx="50" cy="54" r="28" fill="#8a5f3c"/>'
+ + '<circle cx="22" cy="34" r="9" fill="#8a5f3c"/><circle cx="78" cy="34" r="9" fill="#8a5f3c"/>'
+ + '<circle cx="22" cy="34" r="4.5" fill="#d3a880"/><circle cx="78" cy="34" r="4.5" fill="#d3a880"/>'
+ + '<ellipse cx="50" cy="62" rx="20" ry="17" fill="#d3a880"/>'
+ + '<circle cx="41" cy="48" r="3.4" fill="#2a1c10"/><circle cx="59" cy="48" r="3.4" fill="#2a1c10"/>'
+ + '<path d="M31 44 q10 -10 38 0" stroke="#6f4a2c" stroke-width="3" fill="none"/>'
+ + '<path d="M42 68 q8 6 16 0" stroke="#7a4f2c" stroke-width="2" fill="none" stroke-linecap="round"/>');
+ART.penguin = SVG('<ellipse cx="50" cy="58" rx="24" ry="30" fill="#3a4450"/>'
+ + '<ellipse cx="50" cy="64" rx="15" ry="20" fill="#fdfdfd"/>'
+ + '<circle cx="42" cy="40" r="3" fill="#fdfdfd"/><circle cx="58" cy="40" r="3" fill="#fdfdfd"/>'
+ + '<path d="M44 46 l12 0 l-6 7 Z" fill="#f2a24c"/>'
+ + '<path d="M26 58 q-8 8 -2 16 q6 -4 6 -14 Z" fill="#3a4450"/>'
+ + '<path d="M74 58 q8 8 2 16 q-6 -4 -6 -14 Z" fill="#3a4450"/>');
+
+/* ---------- 사람·동작 도우미 ---------- */
+function kid(o){
+  o = o || {};
+  var sk = o.skin || "#f6d3b4", cl = o.cloth || "#6fa8dc", hair = o.hair || "#4a3626", pose = o.pose || "stand";
+  var s = '<circle cx="50" cy="28" r="12" fill="' + hair + '"/>'
+    + '<circle cx="50" cy="30" r="10" fill="' + sk + '"/>'
+    + '<path d="M39 27 q11 -12 22 0" fill="' + hair + '"/>'
+    + '<circle cx="46" cy="30" r="1.8" fill="#3a2a1c"/><circle cx="54" cy="30" r="1.8" fill="#3a2a1c"/>'
+    + '<path d="M46 36 q4 3 8 0" stroke="#b5745c" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
+  if (pose === "run"){
+    s += '<path d="M50 42 q-2 12 0 20" stroke="' + cl + '" stroke-width="11" stroke-linecap="round" fill="none"/>'
+      + '<path d="M50 46 q-14 4 -18 -6 M50 46 q14 6 18 -2" stroke="' + sk + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M50 62 q-12 8 -16 18 M50 62 q12 4 12 18" stroke="' + cl + '" stroke-width="5.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M16 44 h8 M14 52 h10 M18 60 h7" stroke="#9db4c4" stroke-width="2" stroke-linecap="round"/>';
+  } else if (pose === "jump"){
+    s += '<path d="M50 42 q-2 12 0 18" stroke="' + cl + '" stroke-width="11" stroke-linecap="round" fill="none"/>'
+      + '<path d="M50 46 q-12 -8 -16 -18 M50 46 q12 -8 16 -18" stroke="' + sk + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M50 60 q-10 4 -14 12 M50 60 q10 4 14 12" stroke="' + cl + '" stroke-width="5.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M18 84 q32 8 64 0" stroke="#c8d8e2" stroke-width="2.4" fill="none"/>';
+  } else if (pose === "hop"){
+    s += '<path d="M50 42 q-2 12 0 18" stroke="' + cl + '" stroke-width="11" stroke-linecap="round" fill="none"/>'
+      + '<path d="M50 46 q-12 -4 -16 -12 M50 46 q12 2 16 -6" stroke="' + sk + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M50 60 q-2 8 -8 12" stroke="' + cl + '" stroke-width="5.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M58 60 q6 6 4 12" stroke="' + cl + '" stroke-width="5.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M22 82 q10 -10 20 -2" stroke="#c8d8e2" stroke-width="2.4" fill="none"/>';
+  } else if (pose === "sit"){
+    s += '<path d="M50 42 q0 10 0 16" stroke="' + cl + '" stroke-width="11" stroke-linecap="round" fill="none"/>'
+      + '<path d="M50 46 q-10 6 -12 14 M50 46 q10 6 12 14" stroke="' + sk + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M50 58 q10 0 12 8 M50 66 v10" stroke="' + cl + '" stroke-width="5.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M30 66 q18 6 34 0 v6 q-18 5 -34 0 Z" fill="#c99a63"/>'
+      + '<path d="M34 72 v14 M60 72 v14" stroke="#a97b48" stroke-width="4" stroke-linecap="round"/>';
+  } else if (pose === "dance"){
+    s += '<path d="M50 42 q-3 12 0 18" stroke="' + cl + '" stroke-width="11" stroke-linecap="round" fill="none"/>'
+      + '<path d="M50 46 q-14 -6 -18 -18 M50 46 q14 -6 18 -18" stroke="' + sk + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M50 60 q-10 6 -10 18 M50 60 q12 4 10 18" stroke="' + cl + '" stroke-width="5.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M18 34 q-4 -8 2 -12 M84 40 q6 -6 2 -12" stroke="#a48bd0" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+      + '<circle cx="16" cy="20" r="3" fill="#a48bd0"/><circle cx="86" cy="26" r="3" fill="#a48bd0"/>';
+  } else if (pose === "climb"){
+    s += '<path d="M26 16 v72 M74 16 v72" stroke="#c99a63" stroke-width="4.4" stroke-linecap="round"/>'
+      + '<path d="M26 30 h48 M26 52 h48 M26 74 h48" stroke="#c99a63" stroke-width="3.6" stroke-linecap="round"/>'
+      + '<path d="M50 42 q-2 10 0 16" stroke="' + cl + '" stroke-width="11" stroke-linecap="round" fill="none"/>'
+      + '<path d="M50 46 q-10 -10 -14 -18 M50 46 q10 -10 14 -18" stroke="' + sk + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M50 58 q-8 6 -10 16 M50 58 q8 6 10 16" stroke="' + cl + '" stroke-width="5.4" fill="none" stroke-linecap="round"/>';
+  } else if (pose === "swim"){
+    s += '<path d="M50 50 q-2 8 0 12" stroke="' + cl + '" stroke-width="11" stroke-linecap="round" fill="none"/>'
+      + '<path d="M50 52 q-12 -8 -16 -2 M50 52 q12 -8 16 -2" stroke="' + sk + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M10 74 q8 -6 16 0 t16 0 t16 0 t16 0 t16 0" stroke="#6fa8dc" stroke-width="4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M10 86 q8 -6 16 0 t16 0 t16 0 t16 0 t16 0" stroke="#a8cdec" stroke-width="3" fill="none" stroke-linecap="round"/>';
+  } else if (pose === "eat"){
+    s += '<path d="M50 42 q-2 12 0 18" stroke="' + cl + '" stroke-width="11" stroke-linecap="round" fill="none"/>'
+      + '<path d="M50 46 q-12 4 -14 12 M50 46 q10 -6 12 -14" stroke="' + sk + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M50 60 v16 M44 84 h16" stroke="' + cl + '" stroke-width="5" stroke-linecap="round"/>'
+      + '<path d="M24 66 q0 -12 12 -12 q12 0 12 12 Z" fill="#e9705f"/>'
+      + '<circle cx="36" cy="56" r="3" fill="#7fc08a"/>';
+  } else {
+    s += '<path d="M50 42 q0 12 0 20" stroke="' + cl + '" stroke-width="11" stroke-linecap="round" fill="none"/>'
+      + '<path d="M50 48 q-13 6 -15 16 M50 48 q13 6 15 16" stroke="' + sk + '" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M45 62 v20 M55 62 v20" stroke="' + cl + '" stroke-width="6" stroke-linecap="round"/>'
+      + '<path d="M41 86 h8 M51 86 h8" stroke="#4a5866" stroke-width="4" stroke-linecap="round"/>';
+  }
+  return s;
+}
+function numTxt(t, c){
+  return '<text x="50" y="72" text-anchor="middle" font-size="52" font-weight="800" fill="' + (c || "#4a6fa5") + '" font-family="Verdana,Arial,sans-serif">' + t + '</text>';
+}
+function faceMouth(happy){
+  return happy
+    ? '<path d="M40 62 q10 12 20 0" stroke="#8a5a4a" stroke-width="3" fill="none" stroke-linecap="round"/>'
+    : '<path d="M40 68 q10 -10 20 0" stroke="#8a5a4a" stroke-width="3" fill="none" stroke-linecap="round"/>';
+}
+
+/* ---------- 사물 ---------- */
+ART.hat = SVG('<path d="M28 52 q0 -26 22 -26 q22 0 22 26 Z" fill="#6fa8dc"/>'
+ + '<path d="M20 52 h60 q4 0 4 6 q0 6 -6 6 h-56 q-6 0 -6 -6 q0 -6 4 -6 Z" fill="#4f86b8"/>'
+ + '<circle cx="50" cy="28" r="3.4" fill="#f5cf5b"/>');
+ART.mat = SVG('<path d="M14 60 h72 v16 h-72 Z" fill="#e2a35c"/><path d="M18 64 h64 v8 h-64 Z" fill="#f2c184"/>'
+ + '<path d="M26 60 v16 M38 60 v16 M50 60 v16 M62 60 v16 M74 60 v16" stroke="#c98a55" stroke-width="1.6"/>');
+ART.rug = SVG('<path d="M16 46 h68 v34 h-68 Z" fill="#a48bd0"/><path d="M22 52 h56 v22 h-56 Z" fill="#f6e9f7"/>'
+ + '<path d="M22 62 h56" stroke="#c9b3e0" stroke-width="2"/>'
+ + '<path d="M16 46 v34 M12 46 v34 M84 46 v34 M88 46 v34" stroke="#8f74c1" stroke-width="1.6"/>');
+ART.bed = SVG('<path d="M12 24 h9 v60 h-9 Z" fill="#c99a63"/><path d="M79 38 h9 v46 h-9 Z" fill="#c99a63"/>'
+ + '<path d="M21 62 h58 v10 h-58 Z" fill="#fdfcf7" stroke="#e2ebf2" stroke-width="1.6"/>'
+ + '<path d="M21 70 h67 v12 h-67 Z" fill="#7fb6e8"/>'
+ + '<path d="M25 46 q0 -9 9 -9 h18 q9 0 9 9 v14 h-36 Z" fill="#f6f2ee" stroke="#dfe6ec" stroke-width="1.6"/>'
+ + '<path d="M18 82 h72" stroke="#a97b48" stroke-width="4" stroke-linecap="round"/>');
+ART.plant = SVG('<path d="M36 64 h28 l-4 26 h-20 Z" fill="#d98b3f"/><path d="M32 60 h36 v8 h-36 Z" fill="#c97a30"/>'
+ + '<path d="M50 60 q0 -22 -14 -30 q-4 18 8 26 Z" fill="#7fc08a"/>'
+ + '<path d="M50 60 q0 -26 14 -34 q6 18 -8 28 Z" fill="#6cb07a"/>'
+ + '<path d="M50 60 v-34" stroke="#4f8a5c" stroke-width="3" stroke-linecap="round"/>');
+ART.cup = SVG('<path d="M26 34 h34 v32 q0 12 -12 12 h-10 q-12 0 -12 -12 Z" fill="#fdfcf7" stroke="#c8d8e2" stroke-width="2"/>'
+ + '<path d="M26 44 h34 v10 h-34 Z" fill="#e9705f"/>'
+ + '<path d="M60 44 q14 0 14 12 q0 12 -14 12" stroke="#c8d8e2" stroke-width="5" fill="none"/>'
+ + '<path d="M34 22 q-4 -6 0 -10 M46 22 q-4 -6 0 -10" stroke="#c8d8e2" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M18 86 h64" stroke="#e2ebf2" stroke-width="3" stroke-linecap="round"/>');
+ART.box = SVG('<path d="M18 36 h64 v50 h-64 Z" fill="#e8b06a"/><path d="M18 36 h64 v12 h-64 Z" fill="#d99a4e"/>'
+ + '<path d="M50 36 v50" stroke="#c98a45" stroke-width="3"/>'
+ + '<path d="M28 56 h14 M58 56 h14" stroke="#f6d7ac" stroke-width="3" stroke-linecap="round"/>');
+ART.gift = SVG('<path d="M18 44 h64 v44 h-64 Z" fill="#f0907f"/><path d="M18 36 h64 v12 h-64 Z" fill="#e07a68"/>'
+ + '<path d="M50 36 v52" stroke="#f5cf5b" stroke-width="7"/>'
+ + '<path d="M26 36 q-6 -16 6 -16 q10 0 18 16 q8 -16 18 -16 q12 0 6 16 Z" fill="#f5cf5b"/>'
+ + '<circle cx="50" cy="34" r="4" fill="#e8b74c"/>');
+ART.ball = SVG('<circle cx="50" cy="50" r="30" fill="#fdfcf7" stroke="#dfe6ec" stroke-width="2"/>'
+ + '<path d="M50 20 q10 14 10 30 q0 16 -10 30 Z" fill="#e9705f"/>'
+ + '<path d="M50 20 q-10 14 -10 30 q0 16 10 30 Z" fill="#7fb6e8"/>'
+ + '<path d="M22 40 q14 6 28 6 q14 0 28 -6" stroke="#dfe6ec" stroke-width="2" fill="none"/>'
+ + '<circle cx="50" cy="50" r="4" fill="#f5cf5b"/>');
+ART.book = SVG('<path d="M14 32 q18 -8 36 2 q18 -10 36 -2 v46 q-18 -8 -36 2 q-18 -10 -36 -2 Z" fill="#fdfcf7" stroke="#c8d8e2" stroke-width="2"/>'
+ + '<path d="M50 34 v46" stroke="#9db4c4" stroke-width="3"/>'
+ + '<path d="M22 44 q10 -3 20 1 M22 56 q10 -3 20 1 M22 68 q10 -3 20 1 M58 45 q10 -4 20 -1 M58 57 q10 -4 20 -1 M58 69 q10 -4 20 -1" stroke="#c8d8e2" stroke-width="2.4" stroke-linecap="round"/>');
+ART.teddy = SVG('<circle cx="30" cy="32" r="9" fill="#c99a63"/><circle cx="70" cy="32" r="9" fill="#c99a63"/>'
+ + '<circle cx="50" cy="50" r="24" fill="#d3a77b"/>'
+ + '<circle cx="41" cy="46" r="3" fill="#3a2a1c"/><circle cx="59" cy="46" r="3" fill="#3a2a1c"/>'
+ + '<ellipse cx="50" cy="58" rx="9" ry="7" fill="#f0dcc2"/>'
+ + '<ellipse cx="50" cy="56" rx="3.4" ry="2.6" fill="#4a3423"/>'
+ + '<path d="M50 60 v3 M50 63 q-4 3 -7 1 M50 63 q4 3 7 1" stroke="#8a5a2b" stroke-width="1.6" fill="none"/>'
+ + '<path d="M50 72 q-14 6 -18 18 M50 72 q14 6 18 18" stroke="#c99a63" stroke-width="6" stroke-linecap="round"/>');
+ART.sock = SVG('<path d="M40 18 h20 v34 q0 8 8 12 q12 6 8 18 q-2 8 -14 6 q-16 -4 -22 -16 v-54 Z" fill="#fdfdfd"/>'
+ + '<path d="M40 18 h20 v10 h-20 Z" fill="#6fa8dc"/><path d="M40 34 h20 v6 h-20 Z" fill="#6fa8dc"/>'
+ + '<path d="M62 74 q10 2 10 10 q-8 4 -14 -4 Z" fill="#e9705f"/>');
+ART.shoes = SVG('<path d="M14 60 q0 -8 8 -8 h10 v10 q10 0 16 8 q4 6 0 10 h-34 Z" fill="#6fa8dc"/>'
+ + '<path d="M14 70 h34" stroke="#fdfdfd" stroke-width="4"/>'
+ + '<path d="M54 52 q0 -8 8 -8 h10 v10 q10 0 16 8 q4 6 0 10 h-34 Z" fill="#e9705f"/>'
+ + '<path d="M54 62 h34" stroke="#fdfdfd" stroke-width="4"/>'
+ + '<path d="M10 84 h44 M50 76 h44" stroke="#c8d8e2" stroke-width="3" stroke-linecap="round"/>');
+ART.shirt = SVG('<path d="M36 22 h28 l16 10 l-8 14 l-8 -4 v40 h-36 v-40 l-8 4 l-8 -14 Z" fill="#f7d96e"/>'
+ + '<path d="M42 22 q8 10 16 0" stroke="#e8b74c" stroke-width="3" fill="none"/>'
+ + '<path d="M50 36 v46" stroke="#e8b74c" stroke-width="2"/>');
+ART.bag = SVG('<path d="M24 40 h52 l6 46 h-64 Z" fill="#7fc08a"/>'
+ + '<path d="M36 40 q0 -18 14 -18 q14 0 14 18" stroke="#5c9d68" stroke-width="5" fill="none"/>'
+ + '<path d="M32 56 h36" stroke="#cdebd6" stroke-width="4"/>');
+ART.tent = SVG('<path d="M50 20 L88 84 H12 Z" fill="#f0907f"/>'
+ + '<path d="M50 20 L50 84" stroke="#e07a68" stroke-width="2"/>'
+ + '<path d="M50 46 L68 84 H32 Z" fill="#fbe0da"/>'
+ + '<path d="M50 20 L38 84" stroke="#e07a68" stroke-width="1.6"/>'
+ + '<path d="M50 20 L62 84" stroke="#e07a68" stroke-width="1.6"/>');
+ART.block = SVG('<path d="M20 52 h24 v24 h-24 Z" fill="#f0907f"/><path d="M20 52 h24 v6 h-24 Z" fill="#e07a68"/>'
+ + '<path d="M50 52 h26 v26 h-26 Z" fill="#7fb6e8"/><path d="M50 52 h26 v6 h-26 Z" fill="#5f9bd0"/>'
+ + '<path d="M34 24 h26 v26 h-26 Z" fill="#f7d96e"/><path d="M34 24 h26 v6 h-26 Z" fill="#e8b74c"/>'
+ + '<text x="47" y="44" text-anchor="middle" font-size="16" font-weight="800" fill="#b08b28" font-family="Arial">A</text>'
+ + '<text x="62" y="72" text-anchor="middle" font-size="16" font-weight="800" fill="#3b6f9e" font-family="Arial">B</text>');
+ART.watch = SVG('<circle cx="50" cy="50" r="22" fill="#4a5866"/><circle cx="50" cy="50" r="17" fill="#fdfdfd"/>'
+ + '<path d="M50 50 v-10 M50 50 l8 5" stroke="#4a5866" stroke-width="2.4" stroke-linecap="round"/>'
+ + '<path d="M38 30 h24 l-3 -12 h-18 Z" fill="#7fb6e8"/><path d="M38 70 h24 l-3 12 h-18 Z" fill="#7fb6e8"/>');
+ART.umbrella = SVG('<path d="M12 52 q0 -32 38 -32 q38 0 38 32 q-8 -6 -16 0 q-8 -6 -16 0 q-8 -6 -16 0 q-8 -6 -16 0 q-8 -6 -12 0 Z" fill="#e9705f"/>'
+ + '<path d="M50 20 v54 q0 10 10 10 q8 0 8 -8" stroke="#8a5a4b" stroke-width="3.4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M50 20 v32" stroke="#c2543f" stroke-width="1.6"/>');
+ART.kite = SVG('<path d="M50 12 L76 44 L50 78 L24 44 Z" fill="#f7d96e"/>'
+ + '<path d="M50 12 v66 M24 44 h52" stroke="#e8b74c" stroke-width="1.8"/>'
+ + '<path d="M50 78 q10 8 4 14 q-6 6 2 14" stroke="#9db4c4" stroke-width="2.4" fill="none"/>'
+ + '<path d="M54 92 l6 -4 l-2 8 Z" fill="#f0907f"/>');
+ART.car = SVG('<path d="M12 62 q0 -12 10 -12 h12 l8 -12 h20 l10 12 h10 q8 0 8 12 v10 h-78 Z" fill="#e9705f"/>'
+ + '<path d="M36 50 h14 l6 -10 h12 l8 10 Z" fill="#cfe6f7"/>'
+ + '<circle cx="30" cy="74" r="9" fill="#3a4450"/><circle cx="72" cy="74" r="9" fill="#3a4450"/>'
+ + '<circle cx="30" cy="74" r="3.4" fill="#c8d8e2"/><circle cx="72" cy="74" r="3.4" fill="#c8d8e2"/>');
+ART.bus = SVG('<path d="M10 26 h80 v46 h-80 Z" fill="#f5cf5b"/>'
+ + '<path d="M16 32 h20 v16 h-20 Z" fill="#cfe6f7"/><path d="M42 32 h20 v16 h-20 Z" fill="#cfe6f7"/><path d="M68 32 h16 v16 h-16 Z" fill="#cfe6f7"/>'
+ + '<path d="M10 54 h80" stroke="#e8b74c" stroke-width="2"/>'
+ + '<circle cx="28" cy="76" r="8" fill="#3a4450"/><circle cx="72" cy="76" r="8" fill="#3a4450"/>');
+ART.bike = SVG('<circle cx="28" cy="62" r="17" fill="none" stroke="#4a5866" stroke-width="3.4"/>'
+ + '<circle cx="72" cy="62" r="17" fill="none" stroke="#4a5866" stroke-width="3.4"/>'
+ + '<path d="M28 62 l16 -24 h16 l12 24 M44 38 h20 M50 62 h22" stroke="#e9705f" stroke-width="3.4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M44 38 l6 24" stroke="#e9705f" stroke-width="3.4"/>'
+ + '<path d="M56 30 h10" stroke="#3a4450" stroke-width="3.4" stroke-linecap="round"/>');
+ART.boat = SVG('<path d="M14 62 h72 l-10 20 h-52 Z" fill="#c99a63"/>'
+ + '<path d="M50 14 v46" stroke="#8a6a44" stroke-width="3"/>'
+ + '<path d="M50 18 q22 8 22 32 h-22 Z" fill="#fdfdfd"/>'
+ + '<path d="M50 18 q-18 8 -18 32 h18 Z" fill="#7fb6e8"/>'
+ + '<path d="M8 86 q10 -6 20 0 t20 0 t20 0 t20 0" stroke="#6fa8dc" stroke-width="3.4" fill="none"/>');
+ART.yoyo = SVG('<circle cx="50" cy="58" r="24" fill="#e9705f"/><circle cx="50" cy="58" r="15" fill="#f7d96e"/>'
+ + '<circle cx="50" cy="58" r="5" fill="#e9705f"/>'
+ + '<path d="M50 34 q4 -18 -2 -24" stroke="#9db4c4" stroke-width="2" fill="none"/>');
+ART.igloo = SVG('<path d="M12 82 q0 -50 38 -50 q38 0 38 50 Z" fill="#f2f7fb"/>'
+ + '<path d="M28 82 v-22 q0 -10 10 -10 h24 q10 0 10 10 v22 Z" fill="#7fb6e8"/>'
+ + '<path d="M22 58 h56 M18 70 h64 M50 32 v50" stroke="#d5e5ef" stroke-width="2"/>');
+ART.nest = SVG('<path d="M14 56 q36 28 72 0 q-4 26 -36 26 q-32 0 -36 -26 Z" fill="#b5843f"/>'
+ + '<path d="M20 60 q12 6 22 4 M36 70 q14 4 26 0 M62 58 q10 2 16 -2" stroke="#8a5f2a" stroke-width="2" fill="none"/>'
+ + '<ellipse cx="38" cy="50" rx="10" ry="12" fill="#fdf6ea" stroke="#e0d3bf" stroke-width="1.8" transform="rotate(-12 38 50)"/>'
+ + '<ellipse cx="60" cy="50" rx="10" ry="12" fill="#fdf6ea" stroke="#e0d3bf" stroke-width="1.8" transform="rotate(12 60 50)"/>');
+ART.drum = SVG('<ellipse cx="50" cy="34" rx="30" ry="12" fill="#f6f2ee"/>'
+ + '<path d="M20 34 v30 q0 12 30 12 q30 0 30 -12 v-30 Z" fill="#e9705f"/>'
+ + '<path d="M20 50 q30 10 60 0" stroke="#c2543f" stroke-width="2"/>'
+ + '<path d="M34 40 l-14 -22 M66 40 l14 -22" stroke="#c99a63" stroke-width="3.4" stroke-linecap="round"/>');
+ART.rock = SVG('<path d="M16 78 q-4 -26 20 -32 q8 -18 26 -10 q26 0 26 26 q4 16 -14 20 Z" fill="#a3aeb8"/>'
+ + '<path d="M36 50 q8 -8 16 -2 q6 6 0 12 q-10 4 -16 -10 Z" fill="#c3ccd4"/>'
+ + '<path d="M60 66 q8 -4 14 2" stroke="#8d99a4" stroke-width="2.4" fill="none" stroke-linecap="round"/>');
+ART.bone = SVG('<path d="M30 50 q-12 -2 -12 -10 q0 -10 10 -10 q8 0 10 6 h24 q2 -6 10 -6 q10 0 10 10 q0 8 -12 10 q12 2 12 10 q0 10 -10 10 q-8 0 -10 -6 h-24 q-2 6 -10 6 q-10 0 -10 -10 q0 -8 12 -10 Z" fill="#fdfcf7" stroke="#e2d8c9" stroke-width="2"/>'
+ + '<path d="M40 46 h20 M40 54 h20" stroke="#eee4d4" stroke-width="2"/>');
+ART.dollar = SVG('<path d="M14 34 h72 v32 h-72 Z" fill="#8fd3a8"/><path d="M14 34 h72 v8 h-72 Z" fill="#6cb98c"/>'
+ + '<circle cx="50" cy="50" r="13" fill="#e8f7ee"/><text x="50" y="57" text-anchor="middle" font-size="18" font-weight="800" fill="#3f8a5c" font-family="Arial">$</text>');
+ART.penny = SVG('<circle cx="50" cy="50" r="30" fill="#e8b74c"/><circle cx="50" cy="50" r="24" fill="#f5cf5b"/>'
+ + '<text x="50" y="60" text-anchor="middle" font-size="26" font-weight="800" fill="#a8791f" font-family="Arial">1</text>');
+ART.soap = SVG('<path d="M20 52 h60 v22 q0 10 -10 10 h-40 q-10 0 -10 -10 Z" fill="#cfe6f7" stroke="#a8cdec" stroke-width="2"/>'
+ + '<path d="M20 52 h60 v8 h-60 Z" fill="#a8cdec"/>'
+ + '<text x="50" y="72" text-anchor="middle" font-size="11" font-weight="800" fill="#5f9bd0" font-family="Arial">SOAP</text>'
+ + '<circle cx="32" cy="38" r="9" fill="#fdfdfd" stroke="#d5e5ef" stroke-width="2"/>'
+ + '<circle cx="52" cy="28" r="7" fill="#fdfdfd" stroke="#d5e5ef" stroke-width="2"/>'
+ + '<circle cx="70" cy="36" r="6" fill="#fdfdfd" stroke="#d5e5ef" stroke-width="2"/>');
+ART.trap = SVG('<path d="M62 26 l14 -14" stroke="#c99a63" stroke-width="5" stroke-linecap="round"/>'
+ + '<path d="M52 34 q-22 6 -26 26 q-2 18 16 20 q22 2 28 -18 q4 -18 -18 -28 Z" fill="none" stroke="#9db4c4" stroke-width="3.4"/>'
+ + '<path d="M40 44 q-14 10 -12 26 M58 44 q14 10 11 26 M30 58 q20 6 40 0 M30 70 q20 6 40 0" stroke="#c8d8e2" stroke-width="2"/>'
+ + '<circle cx="46" cy="58" r="4" fill="#e9705f"/>');
+ART.seesaw = SVG('<path d="M50 84 l12 -20 h-24 Z" fill="#c99a63"/>'
+ + '<path d="M16 50 l68 10" stroke="#e9705f" stroke-width="6" stroke-linecap="round"/>'
+ + '<circle cx="22" cy="42" r="9" fill="#7fb6e8"/><circle cx="78" cy="68" r="9" fill="#f0907f"/>'
+ + '<path d="M50 60 v24" stroke="#a97b48" stroke-width="2"/>');
+ART.slide = SVG('<path d="M24 20 h8 v64 h-8 Z" fill="#c99a63"/>'
+ + '<path d="M28 24 q40 6 44 56" stroke="#7fb6e8" stroke-width="10" fill="none" stroke-linecap="round"/>'
+ + '<path d="M28 40 h16 M28 56 h14 M28 72 h12" stroke="#c99a63" stroke-width="3.4" stroke-linecap="round"/>'
+ + '<path d="M10 84 h80" stroke="#7fc08a" stroke-width="5" stroke-linecap="round"/>');
+ART.swing = SVG('<path d="M14 26 h72 M20 26 l14 -10 M80 26 l-14 -10" stroke="#c99a63" stroke-width="6" stroke-linecap="round"/>'
+ + '<path d="M32 26 v34 M68 26 v34" stroke="#9db4c4" stroke-width="2.4"/>'
+ + '<path d="M26 60 h12 v8 h-12 Z M62 60 h12 v8 h-12 Z" fill="#e9705f"/>'
+ + '<path d="M14 84 q36 6 72 0" stroke="#7fc08a" stroke-width="4" fill="none"/>');
+
+/* ---------- 음식 ---------- */
+ART.apple = SVG('<path d="M50 28 q-4 -10 4 -16" stroke="#7a5a34" stroke-width="3" fill="none" stroke-linecap="round"/>'
+ + '<path d="M54 18 q14 -8 18 2 q-12 8 -18 -2 Z" fill="#7fc08a"/>'
+ + '<path d="M50 30 q-26 -8 -26 22 q0 30 26 38 q26 -8 26 -38 q0 -30 -26 -22 Z" fill="#e9705f"/>'
+ + '<path d="M36 44 q-6 6 -4 16" stroke="#f6a99c" stroke-width="4" fill="none" stroke-linecap="round"/>');
+ART.bread = SVG('<path d="M18 50 q0 -22 32 -22 q32 0 32 22 v24 q0 10 -10 10 h-44 q-10 0 -10 -10 Z" fill="#e8b06a"/>'
+ + '<path d="M22 40 q6 -10 10 -2 M36 36 q6 -10 10 -2 M52 38 q6 -10 10 -2 M66 42 q6 -8 10 -2" stroke="#c98a45" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M24 58 h52" stroke="#d99a4e" stroke-width="2"/>');
+ART.milk = SVG('<path d="M30 34 h40 v46 h-40 Z" fill="#fdfdfd"/>'
+ + '<path d="M30 34 l8 -16 h24 l8 16 Z" fill="#cfe6f7"/>'
+ + '<path d="M30 50 h40 v16 h-40 Z" fill="#7fb6e8"/>'
+ + '<text x="50" y="63" text-anchor="middle" font-size="11" font-weight="800" fill="#fdfdfd" font-family="Arial">MILK</text>');
+ART.banana = SVG('<path d="M24 30 q4 40 40 44 q16 2 22 -8 q-18 24 -46 14 q-30 -10 -26 -50 q0 -6 6 -6 q4 0 4 6 Z" fill="#f5cf5b"/>'
+ + '<path d="M24 30 q0 -8 6 -8" stroke="#8a6a2a" stroke-width="3" fill="none" stroke-linecap="round"/>'
+ + '<path d="M34 40 q4 28 30 34" stroke="#e0bd45" stroke-width="2.4" fill="none"/>');
+ART.cake = SVG('<path d="M20 58 h60 v22 h-60 Z" fill="#f6c3ce"/><path d="M20 50 h60 v12 h-60 Z" fill="#fbe0e6"/>'
+ + '<path d="M20 50 q6 8 12 0 q6 8 12 0 q6 8 12 0 q6 8 12 0 q6 8 12 0" fill="#fdf3f6"/>'
+ + '<path d="M50 32 v14" stroke="#7fb6e8" stroke-width="4"/>'
+ + '<path d="M50 22 q6 8 0 12 q-6 -4 0 -12 Z" fill="#f5cf5b"/>'
+ + '<path d="M14 80 h72" stroke="#c8d8e2" stroke-width="4" stroke-linecap="round"/>');
+ART.pie = SVG('<path d="M12 60 h76 l-6 20 h-64 Z" fill="#e8b06a"/>'
+ + '<path d="M18 60 q32 -26 64 0 Z" fill="#f0c98a"/>'
+ + '<path d="M26 58 q6 -12 12 -6 M40 50 q6 -12 12 -6 M54 50 q6 -12 12 -6" stroke="#c98a45" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+ + '<path d="M12 60 q38 10 76 0" stroke="#c98a45" stroke-width="2.4" fill="none"/>');
+ART.toast = SVG('<path d="M22 40 q0 -16 14 -16 q4 -8 14 -8 q10 0 14 8 q14 0 14 16 v40 q0 4 -4 4 h-48 q-4 0 -4 -4 Z" fill="#e8b06a"/>'
+ + '<path d="M31 42 q0 -10 9 -10 q4 -6 10 -6 q6 0 10 6 q9 0 9 10 v32 h-38 Z" fill="#f6d7ac"/>'
+ + '<path d="M40 56 q10 -7 20 0 v10 q-10 7 -20 0 Z" fill="#f5cf5b"/>');
+ART.tea = SVG('<path d="M24 40 h40 v30 q0 12 -12 12 h-16 q-12 0 -12 -12 Z" fill="#fdfdfd"/>'
+ + '<path d="M64 46 q14 0 14 10 q0 10 -14 10" stroke="#d5dee6" stroke-width="5" fill="none"/>'
+ + '<path d="M24 56 h40 v14 q0 12 -12 12 h-16 q-12 0 -12 -12 Z" fill="#c99a63"/>'
+ + '<path d="M46 40 v-8 q0 -6 8 -6" stroke="#9db4c4" stroke-width="2" fill="none"/>'
+ + '<path d="M16 86 h68" stroke="#c8d8e2" stroke-width="4" stroke-linecap="round"/>');
+ART.juice = SVG('<path d="M32 28 h36 l-4 54 h-28 Z" fill="#f7cfa4"/>'
+ + '<path d="M32 44 h36 l-2 26 h-32 Z" fill="#f5b04c"/>'
+ + '<path d="M58 26 l10 -14" stroke="#9db4c4" stroke-width="3.4" stroke-linecap="round"/>'
+ + '<circle cx="62" cy="30" r="9" fill="#f2a24c" stroke="#e08a35" stroke-width="2"/>');
+ART.icecream = SVG('<path d="M36 48 h28 l-14 40 Z" fill="#e8b06a"/>'
+ + '<path d="M38 52 l12 34 M48 52 l-8 34" stroke="#c98a45" stroke-width="1.6"/>'
+ + '<circle cx="50" cy="40" r="14" fill="#f6c3ce"/><circle cx="38" cy="46" r="11" fill="#fdf3f6"/>'
+ + '<circle cx="62" cy="46" r="11" fill="#c8e6c9"/>'
+ + '<circle cx="50" cy="24" r="4" fill="#e9705f"/>');
+ART.plum = SVG('<circle cx="48" cy="54" r="24" fill="#a48bd0"/><circle cx="60" cy="58" r="15" fill="#b79fd8"/>'
+ + '<path d="M48 30 q-2 -10 2 -16" stroke="#7a5a34" stroke-width="3" fill="none" stroke-linecap="round"/>'
+ + '<path d="M50 16 q14 -4 14 6 q-10 4 -14 -6 Z" fill="#7fc08a"/>'
+ + '<path d="M48 34 q-4 22 6 42" stroke="#8f74c1" stroke-width="2" fill="none"/>');
+ART.egg = SVG('<path d="M50 14 q23 0 23 36 q0 34 -23 34 q-23 0 -23 -34 q0 -36 23 -36 Z" fill="#fdf6ea" stroke="#d8c8b0" stroke-width="2.4"/>'
+ + '<path d="M37 44 q-5 12 0 24" stroke="#efe1cb" stroke-width="5" fill="none" stroke-linecap="round"/>');
+ART.food = SVG('<ellipse cx="50" cy="72" rx="38" ry="12" fill="#fdfcf7" stroke="#d5dee6" stroke-width="2"/>'
+ + '<circle cx="34" cy="62" r="10" fill="#e9705f"/><circle cx="52" cy="56" r="11" fill="#7fc08a"/>'
+ + '<circle cx="68" cy="62" r="9" fill="#f5cf5b"/>'
+ + '<path d="M24 46 q12 -10 24 0" stroke="#c8d8e2" stroke-width="2" fill="none"/>');
+/* ---------- 자연 ---------- */
+ART.sun = SVG('<circle cx="50" cy="50" r="20" fill="#f5cf5b"/>'
+ + '<circle cx="50" cy="50" r="13" fill="#f7dd7f"/>'
+ + '<path d="M50 14 v8 M50 78 v8 M14 50 h8 M78 50 h8 M24 24 l6 6 M70 70 l6 6 M76 24 l-6 6 M30 70 l-6 6" stroke="#f5cf5b" stroke-width="4" stroke-linecap="round"/>');
+ART.moon = SVG('<path d="M64 16 q-34 8 -30 42 q2 24 26 30 q-34 6 -46 -20 q-10 -30 14 -48 q16 -12 36 -4 Z" fill="#f5cf5b"/>'
+ + '<circle cx="30" cy="40" r="3" fill="#f7dd7f" opacity=".7"/><circle cx="36" cy="60" r="2.4" fill="#f7dd7f" opacity=".7"/>');
+ART.star = SVG('<path d="M50 12 l11 26 28 3 -21 19 6 28 -24 -14 -24 14 6 -28 L11 41 l28 -3 Z" fill="#f5cf5b"/>'
+ + '<path d="M50 12 l11 26 28 3 -21 19 6 28 -24 -14 Z" fill="#f7dd7f"/>');
+ART.tree = SVG('<path d="M44 60 h12 v28 h-12 Z" fill="#a97b48"/>'
+ + '<path d="M50 12 q26 4 24 26 q14 4 10 20 q-4 14 -20 12 q-10 12 -24 4 q-16 4 -22 -10 q-6 -16 8 -22 q-4 -22 24 -30 Z" fill="#7fc08a"/>'
+ + '<path d="M34 44 q10 8 26 4" stroke="#5c9d68" stroke-width="2.4" fill="none"/>');
+ART.water = SVG('<path d="M50 12 q26 30 26 46 q0 24 -26 24 q-26 0 -26 -24 q0 -16 26 -46 Z" fill="#7fb6e8"/>'
+ + '<path d="M38 58 q0 12 10 14" stroke="#cfe6f7" stroke-width="4" fill="none" stroke-linecap="round"/>');
+ART.rain = SVG('<path d="M26 46 q0 -14 16 -14 q4 -12 20 -8 q14 2 14 16 q10 2 10 10 q0 10 -12 10 h-40 q-14 0 -14 -12 q0 -2 6 -2 Z" fill="#c8d8e2"/>'
+ + '<path d="M32 64 l-4 14 M48 64 l-4 14 M64 64 l-4 14" stroke="#7fb6e8" stroke-width="4" stroke-linecap="round"/>');
+ART.snow = SVG('<path d="M50 14 v72 M20 32 l60 36 M80 32 l-60 36" stroke="#a8cdec" stroke-width="4" stroke-linecap="round"/>'
+ + '<path d="M50 26 l-7 -7 M50 26 l7 -7 M50 74 l-7 7 M50 74 l7 7" stroke="#a8cdec" stroke-width="3" stroke-linecap="round"/>'
+ + '<circle cx="50" cy="50" r="6" fill="#cfe6f7"/>');
+ART.wind = SVG('<path d="M14 40 q18 -12 32 0 q12 10 26 0 q10 -6 14 2" stroke="#9db4c4" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M18 58 q22 -10 36 2 q12 10 24 2" stroke="#c8d8e2" stroke-width="4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M22 74 q18 -8 30 2" stroke="#c8d8e2" stroke-width="4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M74 62 q10 0 8 10 q-2 6 -10 4" stroke="#9db4c4" stroke-width="3" fill="none" stroke-linecap="round"/>');
+ART.sky = SVG('<rect x="10" y="14" width="80" height="72" rx="10" fill="#cfe6f7"/>'
+ + '<circle cx="34" cy="38" r="12" fill="#f5cf5b"/>'
+ + '<path d="M52 52 q0 -10 12 -10 q4 -8 14 -4 q10 2 10 12 q8 0 8 8 q0 8 -10 8 h-28 q-10 0 -10 -8 q0 -6 4 -6 Z" fill="#fdfdfd"/>');
+ART.earth = SVG('<circle cx="50" cy="50" r="30" fill="#6fa8dc"/>'
+ + '<path d="M30 30 q14 -4 18 8 q4 10 -6 12 q-10 2 -12 -8 q-2 -8 0 -12 Z" fill="#7fc08a"/>'
+ + '<path d="M54 40 q14 -6 18 6 q2 10 -8 12 q-8 2 -10 -8 q-2 -6 0 -10 Z" fill="#7fc08a"/>'
+ + '<path d="M40 66 q12 -6 18 2 q4 8 -8 10 q-10 2 -10 -6 Z" fill="#7fc08a"/>');
+ART.leaf = SVG('<path d="M22 74 q-4 -44 40 -54 q14 -2 18 4 q-6 46 -46 54 q-8 2 -12 -4 Z" fill="#7fc08a"/>'
+ + '<path d="M26 72 q18 -26 46 -40" stroke="#4f8a5c" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+ + '<path d="M38 58 l-2 -12 M48 50 l-1 -12 M58 44 l0 -10 M34 64 l12 2 M44 56 l12 2" stroke="#4f8a5c" stroke-width="1.8" stroke-linecap="round"/>');
+ART.fire = SVG('<path d="M50 12 q16 20 8 30 q-4 6 -10 2 q-2 12 8 14 q14 4 12 18 q-2 12 -18 12 q-18 0 -20 -16 q-2 -14 10 -22 q-4 -12 10 -38 Z" fill="#f2884b"/>'
+ + '<path d="M50 42 q8 8 4 16 q-2 6 -8 4 q-4 8 4 12 q8 4 6 10 q-2 6 -8 6 q-8 0 -8 -8 q0 -8 6 -12 q-2 -8 4 -28 Z" fill="#f5cf5b"/>');
+ART.mud = SVG('<ellipse cx="50" cy="72" rx="36" ry="14" fill="#a97b48"/>'
+ + '<path d="M24 66 q4 -10 12 -6 q6 4 0 8 Z" fill="#8a5f2a"/>'
+ + '<circle cx="62" cy="60" r="5" fill="#8a5f2a"/><circle cx="72" cy="52" r="3.4" fill="#8a5f2a"/>'
+ + '<path d="M30 48 q4 -10 12 -4" stroke="#8a5f2a" stroke-width="3" fill="none" stroke-linecap="round"/>');
+ART.pond = SVG('<ellipse cx="50" cy="66" rx="38" ry="18" fill="#7fb6e8"/>'
+ + '<ellipse cx="50" cy="64" rx="30" ry="12" fill="#a8cdec"/>'
+ + '<path d="M66 48 l6 -22 M72 48 l8 -26" stroke="#5c9d68" stroke-width="3" stroke-linecap="round"/>'
+ + '<circle cx="34" cy="60" r="3" fill="#fdfdfd" opacity=".8"/>');
+/* ---------- 사람·장소 ---------- */
+ART.house = SVG('<path d="M50 14 L90 48 H10 Z" fill="#e9705f"/>'
+ + '<path d="M22 46 h56 v38 h-56 Z" fill="#f6d7ac"/>'
+ + '<path d="M42 84 v-22 h16 v22 Z" fill="#c99a63"/>'
+ + '<path d="M26 54 h14 v12 h-14 Z" fill="#7fb6e8"/><path d="M60 54 h14 v12 h-14 Z" fill="#7fb6e8"/>'
+ + '<path d="M64 20 h8 v14 h-8 Z" fill="#a97b48"/>');
+ART.city = SVG('<path d="M14 84 V44 h20 v40 Z" fill="#9db4c4"/><path d="M38 84 V26 h22 v58 Z" fill="#7fb6e8"/><path d="M64 84 V52 h22 v32 Z" fill="#c8d8e2"/>'
+ + '<path d="M18 52 h4 v6 h-4 Z M26 52 h4 v6 h-4 Z M18 64 h4 v6 h-4 Z M26 64 h4 v6 h-4 Z" fill="#fdfdfd"/>'
+ + '<path d="M43 34 h5 v6 h-5 Z M52 34 h5 v6 h-5 Z M43 46 h5 v6 h-5 Z M52 46 h5 v6 h-5 Z M43 58 h5 v6 h-5 Z M52 58 h5 v6 h-5 Z" fill="#fdfdfd"/>'
+ + '<path d="M69 60 h5 v6 h-5 Z M78 60 h5 v6 h-5 Z M69 72 h5 v6 h-5 Z M78 72 h5 v6 h-5 Z" fill="#fdfdfd"/>');
+ART.shop = SVG('<path d="M14 44 h72 v40 h-72 Z" fill="#f6d7ac"/>'
+ + '<path d="M12 30 h76 l-6 14 h-64 Z" fill="#e9705f"/>'
+ + '<path d="M18 30 l4 14 M32 30 l2 14 M46 30 l0 14 M60 30 l0 14 M74 30 l-2 14" stroke="#fdfdfd" stroke-width="3"/>'
+ + '<path d="M32 84 v-20 h16 v20 Z" fill="#c99a63"/>'
+ + '<path d="M58 54 h18 v14 h-18 Z" fill="#7fb6e8"/>');
+ART.school = SVG('<path d="M18 84 V40 h64 v44 Z" fill="#f6d7ac"/>'
+ + '<path d="M14 40 L50 16 L86 40 Z" fill="#e9705f"/>'
+ + '<path d="M34 84 v-22 h32 v22 Z" fill="#c99a63"/>'
+ + '<path d="M24 50 h12 v10 h-12 Z M64 50 h12 v10 h-12 Z" fill="#7fb6e8"/>'
+ + '<path d="M50 16 v-8 h10 v6" stroke="#9db4c4" stroke-width="3" fill="none"/>'
+ + '<circle cx="50" cy="30" r="5" fill="#fdfdfd"/>');
+ART.park = SVG('<path d="M40 50 h8 v34 h-8 Z" fill="#a97b48"/>'
+ + '<circle cx="44" cy="40" r="20" fill="#7fc08a"/>'
+ + '<path d="M64 84 h26 M64 70 h26 M66 70 v14 M88 70 v14" stroke="#c99a63" stroke-width="3" stroke-linecap="round"/>'
+ + '<path d="M10 84 h80" stroke="#7fc08a" stroke-width="6" stroke-linecap="round"/>');
+ART.farm = SVG('<path d="M18 84 V46 h30 v38 Z" fill="#e9705f"/>'
+ + '<path d="M14 46 L33 26 L52 46 Z" fill="#c2543f"/>'
+ + '<path d="M30 84 v-18 h8 v18 Z" fill="#fdfdfd"/>'
+ + '<path d="M56 84 V56 h30 v28 Z" fill="#f6d7ac"/><path d="M52 56 L71 42 L90 56 Z" fill="#c99a63"/>'
+ + '<path d="M8 84 h84" stroke="#7fc08a" stroke-width="5" stroke-linecap="round"/>');
+ART.mom = SVG('<circle cx="50" cy="52" r="24" fill="#4a3626"/>'
+ + '<circle cx="50" cy="54" r="20" fill="#f6d3b4"/>'
+ + '<path d="M30 40 q20 -18 40 0 q-4 8 -20 8 q-16 0 -20 -8 Z" fill="#4a3626"/>'
+ + '<circle cx="42" cy="54" r="2.6" fill="#3a2a1c"/><circle cx="58" cy="54" r="2.6" fill="#3a2a1c"/>'
+ + '<path d="M44 64 q6 6 12 0" stroke="#c9707f" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+ + '<circle cx="30" cy="46" r="2" fill="#f2a0a0"/><circle cx="70" cy="46" r="2" fill="#f2a0a0"/>'
+ + '<circle cx="30" cy="74" r="4" fill="#f2a0a0"/><circle cx="70" cy="74" r="4" fill="#f2a0a0"/>');
+ART.dad = SVG('<circle cx="50" cy="54" r="21" fill="#f6d3b4"/>'
+ + '<path d="M29 48 q4 -22 21 -22 q17 0 21 22 q-10 -8 -21 -8 q-11 0 -21 8 Z" fill="#4a3626"/>'
+ + '<circle cx="42" cy="56" r="2.6" fill="#3a2a1c"/><circle cx="58" cy="56" r="2.6" fill="#3a2a1c"/>'
+ + '<path d="M44 66 q6 5 12 0" stroke="#b5745c" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M30 46 q-3 8 0 12 M70 46 q3 8 0 12" stroke="#e8bfa4" stroke-width="2" fill="none"/>');
+ART.baby = SVG('<circle cx="50" cy="52" r="24" fill="#f8dcc4"/>'
+ + '<path d="M50 26 q-6 -10 2 -12 q6 0 4 8" fill="#c9a06a"/>'
+ + '<circle cx="40" cy="50" r="2.8" fill="#4a3626"/><circle cx="60" cy="50" r="2.8" fill="#4a3626"/>'
+ + '<circle cx="30" cy="58" r="4" fill="#f2a0a0" opacity=".6"/><circle cx="70" cy="58" r="4" fill="#f2a0a0" opacity=".6"/>'
+ + '<path d="M44 62 q6 5 12 0" stroke="#c9707f" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+ + '<circle cx="50" cy="70" r="5" fill="#f7c2d8"/><circle cx="50" cy="70" r="2" fill="#e8a0bc"/>');
+ART.boy = SVG(kid({ pose:"stand", cloth:"#6fa8dc", hair:"#4a3626" }));
+ART.man = SVG(kid({ pose:"stand", cloth:"#4a6fa5", hair:"#3a2a1c" }));
+ART.king = SVG('<path d="M26 34 l4 -18 l10 10 l10 -14 l10 14 l10 -10 l4 18 Z" fill="#f5cf5b"/>'
+ + '<circle cx="50" cy="54" r="21" fill="#f6d3b4"/>'
+ + '<circle cx="42" cy="52" r="2.6" fill="#3a2a1c"/><circle cx="58" cy="52" r="2.6" fill="#3a2a1c"/>'
+ + '<path d="M44 62 q6 5 12 0" stroke="#b5745c" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M40 72 q10 8 20 0 q0 12 -10 12 q-10 0 -10 -12 Z" fill="#f0f0f0" opacity=".9"/>'
+ + '<path d="M34 74 q16 6 32 0" stroke="#f0e2cd" stroke-width="6" fill="none" stroke-linecap="round"/>');
+ART.doctor = SVG('<path d="M34 24 q0 -12 16 -12 q16 0 16 12 Z" fill="#fdfcf7" stroke="#d5dee6" stroke-width="2"/>'
+ + '<circle cx="50" cy="50" r="18" fill="#f6d3b4"/>'
+ + '<circle cx="43" cy="48" r="2.4" fill="#3a2a1c"/><circle cx="57" cy="48" r="2.4" fill="#3a2a1c"/>'
+ + '<path d="M45 58 q5 4 10 0" stroke="#b5745c" stroke-width="2.2" fill="none" stroke-linecap="round"/>'
+ + '<path d="M24 86 q26 -26 52 0 Z" fill="#fdfcf7" stroke="#d5dee6" stroke-width="2"/>'
+ + '<path d="M50 66 v14 M43 73 h14" stroke="#e9705f" stroke-width="4" stroke-linecap="round"/>'
+ + '<path d="M64 70 q10 2 8 10" stroke="#9db4c4" stroke-width="2.4" fill="none"/>');
+ART.cook = SVG('<path d="M32 30 q0 -12 18 -12 q18 0 18 12 q10 3 10 11 h-56 q0 -8 10 -11 Z" fill="#f2f6f9" stroke="#c8d8e2" stroke-width="2.2"/>'
+ + '<path d="M32 30 q4 -8 8 -4 M50 18 q6 0 8 6 M60 30 q6 -4 8 4" stroke="#dfe6ec" stroke-width="2" fill="none"/>'
+ + '<circle cx="50" cy="56" r="17" fill="#f6d3b4"/>'
+ + '<circle cx="43" cy="54" r="2.4" fill="#3a2a1c"/><circle cx="57" cy="54" r="2.4" fill="#3a2a1c"/>'
+ + '<path d="M45 64 q5 4 10 0" stroke="#b5745c" stroke-width="2.2" fill="none" stroke-linecap="round"/>'
+ + '<path d="M26 86 q24 -22 48 0 Z" fill="#f6ecd8" stroke="#d8c8b0" stroke-width="2.2"/>'
+ + '<path d="M30 80 q20 6 40 0" stroke="#dfe6ec" stroke-width="2" fill="none"/>');
+ART.teacher = SVG('<path d="M12 20 h30 v22 h-30 Z" fill="#4a5866"/>'
+ + '<path d="M16 26 h22 M16 32 h16 M16 38 h20" stroke="#c8d8e2" stroke-width="2"/>'
+ + '<path d="M46 44 q0 -14 16 -14 q16 0 16 14 Z" fill="#4a3626"/>'
+ + '<circle cx="62" cy="46" r="14" fill="#f6d3b4"/>'
+ + '<path d="M50 40 q4 -12 12 -12 q10 0 14 12 q-6 -6 -14 -6 q-8 0 -12 6 Z" fill="#4a3626"/>'
+ + '<circle cx="57" cy="46" r="2.2" fill="#3a2a1c"/><circle cx="67" cy="46" r="2.2" fill="#3a2a1c"/>'
+ + '<path d="M58 54 q4 3 8 0" stroke="#b5745c" stroke-width="2" fill="none" stroke-linecap="round"/>'
+ + '<path d="M44 86 q18 -22 36 0 Z" fill="#7fc08a"/>'
+ + '<path d="M44 62 l-16 -10" stroke="#c99a63" stroke-width="3" stroke-linecap="round"/>');
+ART.police = SVG('<path d="M32 24 h36 l-4 10 h-28 Z" fill="#4a6fa5"/>'
+ + '<path d="M32 34 h36 v6 h-36 Z" fill="#3a5a8a"/>'
+ + '<circle cx="50" cy="50" r="17" fill="#f6d3b4"/>'
+ + '<circle cx="43" cy="48" r="2.4" fill="#3a2a1c"/><circle cx="57" cy="48" r="2.4" fill="#3a2a1c"/>'
+ + '<path d="M45 58 q5 4 10 0" stroke="#b5745c" stroke-width="2.2" fill="none" stroke-linecap="round"/>'
+ + '<path d="M28 84 q22 -22 44 0 Z" fill="#4a6fa5"/>'
+ + '<path d="M50 66 l3 6 h-6 Z" fill="#f5cf5b"/>');
+ART.hug = SVG('<circle cx="36" cy="40" r="12" fill="#f6d3b4"/><circle cx="64" cy="40" r="12" fill="#f6d3b4"/>'
+ + '<path d="M36 32 q-8 -8 -2 -10 q6 -2 8 6 Z" fill="#4a3626"/><path d="M64 32 q8 -8 2 -10 q-6 -2 -8 6 Z" fill="#4a3626"/>'
+ + '<path d="M22 84 q0 -22 14 -24 q14 4 14 24 Z" fill="#f0907f"/>'
+ + '<path d="M78 84 q0 -22 -14 -24 q-14 4 -14 24 Z" fill="#7fb6e8"/>'
+ + '<path d="M36 56 q14 10 28 0" stroke="#f6d3b4" stroke-width="6" fill="none" stroke-linecap="round"/>'
+ + '<path d="M50 14 q4 -6 8 0 q2 6 -8 12 q-10 -6 -8 -12 q4 -6 8 0 Z" fill="#e9705f"/>');
+/* ---------- 낱말 개념 ---------- */
+ART.big = SVG('<circle cx="46" cy="52" r="32" fill="#7fb6e8"/><circle cx="80" cy="76" r="9" fill="#f0907f"/>');
+ART.small = SVG('<circle cx="38" cy="46" r="12" fill="#f0907f"/><circle cx="64" cy="64" r="26" fill="#7fb6e8"/>');
+ART.up = SVG('<path d="M50 18 l24 26 h-14 v38 h-20 v-38 h-14 Z" fill="#7fc08a"/>');
+ART.down = SVG('<path d="M50 82 l24 -26 h-14 v-38 h-20 v38 h-14 Z" fill="#f0907f"/>');
+ART.sleep = SVG('<path d="M46 20 q-26 6 -24 32 q2 18 20 22 q-26 4 -34 -16 q-8 -24 12 -36 q12 -8 26 -2 Z" fill="#a48bd0"/>'
+ + '<text x="60" y="42" font-size="20" font-weight="800" fill="#8f74c1" font-family="Arial">Z</text>'
+ + '<text x="70" y="30" font-size="14" font-weight="800" fill="#b79fd8" font-family="Arial">z</text>'
+ + '<text x="78" y="22" font-size="10" font-weight="800" fill="#cbbbe6" font-family="Arial">z</text>');
+ART.run = SVG(kid({ pose:"run" }));
+ART.jump = SVG(kid({ pose:"jump" }));
+ART.swim = SVG(kid({ pose:"swim" }));
+ART.hop = SVG(kid({ pose:"hop" }));
+ART.sit = SVG(kid({ pose:"sit" }));
+ART.dance = SVG(kid({ pose:"dance", cloth:"#f0907f" }));
+ART.climb = SVG(kid({ pose:"climb" }));
+ART.eat = SVG(kid({ pose:"eat" }));
+ART.hide = SVG('<path d="M14 46 h72 v42 h-72 Z" fill="#e8b06a"/><path d="M14 46 h72 v8 h-72 Z" fill="#d99a4e"/>'
+ + '<circle cx="40" cy="34" r="9" fill="#f6d3b4"/><circle cx="60" cy="34" r="9" fill="#f6d3b4"/>'
+ + '<circle cx="40" cy="34" r="2.6" fill="#3a2a1c"/><circle cx="60" cy="34" r="2.6" fill="#3a2a1c"/>'
+ + '<path d="M30 26 q10 -10 20 0 M50 26 q10 -10 20 0" stroke="#4a3626" stroke-width="2.4" fill="none"/>'
+ + '<circle cx="76" cy="60" r="6" fill="none" stroke="#c98a45" stroke-width="3"/>');
+ART.fast = SVG('<path d="M24 58 q0 -10 8 -10 h10 l6 -10 h18 l8 10 h6 q6 0 6 10 v8 h-62 Z" fill="#e9705f"/>'
+ + '<path d="M42 48 h12 l4 -8 h10 l6 8 Z" fill="#cfe6f7"/>'
+ + '<circle cx="36" cy="68" r="7" fill="#3a4450"/><circle cx="70" cy="68" r="7" fill="#3a4450"/>'
+ + '<path d="M10 40 h14 M6 50 h12 M12 60 h10" stroke="#9db4c4" stroke-width="3" stroke-linecap="round"/>');
+ART.hot = SVG('<path d="M50 20 q14 18 6 26 q-4 4 -8 0 q-2 10 6 12 q12 2 10 14 q-2 10 -16 10 q-14 0 -16 -12 q-2 -12 8 -18 q-2 -12 10 -32 Z" fill="#f2884b"/>'
+ + '<path d="M50 46 q6 6 2 12 q-2 4 -6 2 q-2 6 4 8 q6 2 4 8 q-2 4 -6 4 q-6 0 -6 -6 q0 -6 4 -10 q-2 -6 4 -18 Z" fill="#f5cf5b"/>');
+ART.cold = SVG('<path d="M50 16 v68 M22 34 l56 32 M78 34 l-56 32" stroke="#7fb6e8" stroke-width="4.4" stroke-linecap="round"/>'
+ + '<path d="M50 28 l-8 -8 M50 28 l8 -8 M50 72 l-8 8 M50 72 l8 8" stroke="#a8cdec" stroke-width="3.4" stroke-linecap="round"/>'
+ + '<circle cx="50" cy="50" r="7" fill="#cfe6f7"/>');
+ART.wet = SVG('<path d="M36 20 q18 22 18 34 q0 18 -18 18 q-18 0 -18 -18 q0 -12 18 -34 Z" fill="#7fb6e8"/>'
+ + '<path d="M68 32 q12 16 12 24 q0 12 -12 12 q-12 0 -12 -12 q0 -8 12 -24 Z" fill="#a8cdec"/>'
+ + '<path d="M18 84 q10 -6 20 0 t20 0 t20 0" stroke="#cfe6f7" stroke-width="3.4" fill="none" stroke-linecap="round"/>');
+ART.messy = SVG('<path d="M20 60 q-6 -10 4 -14 q-2 -10 8 -10 q10 0 10 10 q8 -2 8 6 q0 8 -10 8 Z" fill="#6fa8dc"/>'
+ + '<path d="M52 40 q10 -8 16 0 q6 8 -2 12 q-10 2 -14 -12 Z" fill="#e9705f"/>'
+ + '<path d="M34 78 q-8 -4 -6 -12 q4 -8 12 -4 l6 8 Z" fill="#f5cf5b"/>'
+ + '<path d="M58 74 h18 v14 h-18 Z" fill="#7fc08a" transform="rotate(-12 67 81)"/>'
+ + '<path d="M24 88 h52" stroke="#c8d8e2" stroke-width="3" stroke-linecap="round"/>');
+ART.happy = SVG('<circle cx="50" cy="50" r="30" fill="#f7d96e"/>'
+ + '<circle cx="39" cy="42" r="3.4" fill="#5a4324"/><circle cx="61" cy="42" r="3.4" fill="#5a4324"/>'
+ + '<path d="M34 58 q16 16 32 0" stroke="#8a5a2b" stroke-width="4" fill="none" stroke-linecap="round"/>'
+ + '<circle cx="30" cy="56" r="4" fill="#f2a0a0" opacity=".7"/><circle cx="70" cy="56" r="4" fill="#f2a0a0" opacity=".7"/>');
+ART.sad = SVG('<circle cx="50" cy="50" r="30" fill="#a8cdec"/>'
+ + '<circle cx="39" cy="42" r="3.4" fill="#334a63"/><circle cx="61" cy="42" r="3.4" fill="#334a63"/>'
+ + '<path d="M34 66 q16 -14 32 0" stroke="#4a6a8a" stroke-width="4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M40 52 q2 8 -2 10 M60 52 q-2 8 2 10" stroke="#cfe6f7" stroke-width="3" fill="none" stroke-linecap="round"/>');
+ART.loud = SVG('<path d="M20 40 h14 l16 -14 v48 l-16 -14 h-14 Z" fill="#e9705f"/>'
+ + '<path d="M58 38 q8 12 0 24 M66 30 q14 20 0 40" stroke="#f0907f" stroke-width="4" fill="none" stroke-linecap="round"/>'
+ + '<path d="M76 24 q18 26 0 52" stroke="#f6b3a8" stroke-width="3" fill="none" stroke-linecap="round"/>');
+ART.fat = SVG('<ellipse cx="50" cy="58" rx="34" ry="26" fill="#f3b26b"/>'
+ + '<circle cx="34" cy="36" r="9" fill="#e2954c"/><circle cx="66" cy="36" r="9" fill="#e2954c"/>'
+ + '<circle cx="50" cy="42" r="18" fill="#f8c48c"/>'
+ + '<circle cx="43" cy="40" r="2.6" fill="#41301f"/><circle cx="57" cy="40" r="2.6" fill="#41301f"/>'
+ + '<path d="M44 48 q6 5 12 0" stroke="#8a5a2b" stroke-width="2" fill="none" stroke-linecap="round"/>'
+ + '<path d="M24 66 q10 6 18 4" stroke="#e2954c" stroke-width="3" fill="none" stroke-linecap="round"/>'
+ + '<path d="M70 78 q12 -4 12 -16" stroke="#e2954c" stroke-width="4" fill="none" stroke-linecap="round"/>');
+ART.count = SVG('<path d="M30 40 q-8 0 -8 10 v26 q0 8 8 8 h40 q8 0 8 -8 v-26 q0 -10 -8 -10 Z" fill="#f6d3b4"/>'
+ + '<path d="M32 40 v-10 M42 40 v-18 M52 40 v-22 M62 40 v-18 M70 40 v-10" stroke="#f6d3b4" stroke-width="8" stroke-linecap="round"/>'
+ + '<text x="34" y="70" font-size="12" font-weight="800" fill="#7fb6e8" font-family="Arial">1</text>'
+ + '<text x="48" y="70" font-size="12" font-weight="800" fill="#7fc08a" font-family="Arial">2</text>'
+ + '<text x="62" y="70" font-size="12" font-weight="800" fill="#f0907f" font-family="Arial">3</text>');
+ART.ten = SVG(numTxt("10"));
+ART.hundred = SVG('<text x="50" y="66" text-anchor="middle" font-size="38" font-weight="800" fill="#4a6fa5" font-family="Verdana,Arial,sans-serif">100</text>'
+ + '<path d="M16 80 h68" stroke="#c8d8e2" stroke-width="3" stroke-linecap="round"/>');
+ART.pattern = SVG('<circle cx="22" cy="34" r="9" fill="#7fb6e8"/><rect x="44" y="25" width="18" height="18" rx="3" fill="#f0907f"/>'
+ + '<circle cx="84" cy="34" r="9" fill="#7fb6e8"/>'
+ + '<rect x="13" y="60" width="18" height="18" rx="3" fill="#f0907f"/><circle cx="53" cy="69" r="9" fill="#7fb6e8"/>'
+ + '<rect x="75" y="60" width="18" height="18" rx="3" fill="#f0907f"/>');
+ART.circle = SVG('<circle cx="50" cy="50" r="30" fill="#7fb6e8"/>');
+ART.square = SVG('<rect x="20" y="20" width="60" height="60" rx="6" fill="#f0907f"/>');
+ART.spot = SVG('<circle cx="50" cy="50" r="30" fill="#f6d3b4"/>'
+ + '<circle cx="34" cy="36" r="5" fill="#c9707f"/><circle cx="60" cy="32" r="4" fill="#c9707f"/>'
+ + '<circle cx="72" cy="52" r="5.4" fill="#c9707f"/><circle cx="44" cy="64" r="4" fill="#c9707f"/>'
+ + '<circle cx="22" cy="58" r="3.4" fill="#c9707f"/><circle cx="56" cy="72" r="3" fill="#c9707f"/>');
+ART.tail = SVG('<path d="M18 74 q10 -34 34 -40 q22 -6 34 10 q-16 -2 -28 6 q-18 10 -24 30 Z" fill="#c99a63"/>'
+ + '<path d="M26 78 q6 -24 24 -32" stroke="#a97b48" stroke-width="2.4" fill="none"/>'
+ + '<path d="M78 34 q12 -4 12 8 q-8 2 -12 -8 Z" fill="#e8d3b4"/>');
+ART.nose = SVG('<path d="M50 24 q-14 0 -14 18 q0 10 8 16 q-6 2 -6 8 h24 q0 -6 -6 -8 q8 -6 8 -16 q0 -18 -14 -18 Z" fill="#f6d3b4"/>'
+ + '<circle cx="42" cy="46" r="2.6" fill="#c99a8a"/><circle cx="58" cy="46" r="2.6" fill="#c99a8a"/>');
+ART.hand = SVG('<path d="M28 66 q-10 -2 -10 -12 q0 -8 8 -8 h6 V28 q0 -8 8 -8 q8 0 8 8 v12 h4 V20 q0 -8 8 -8 q8 0 8 8 v20 h4 V26 q0 -8 8 -8 q8 0 8 8 v40 q0 18 -18 18 h-16 q-16 0 -26 -18 Z" fill="#f6d3b4"/>'
+ + '<path d="M60 56 h16" stroke="#e8bfa4" stroke-width="2.4" stroke-linecap="round"/>');
+ART.foot = SVG('<path d="M34 20 q10 0 10 14 v18 q0 8 -6 8 h-8 q-8 0 -8 -10 q0 -6 4 -10 q-4 -20 8 -20 Z" fill="#f6d3b4"/>'
+ + '<path d="M24 62 h28 v8 q0 10 -12 10 h-8 q-10 0 -10 -10 Z" fill="#f6d3b4"/>'
+ + '<circle cx="40" cy="84" r="3" fill="#f0c4a8"/><circle cx="30" cy="84" r="3" fill="#f0c4a8"/>');
+ART.head = SVG('<circle cx="50" cy="48" r="26" fill="#f6d3b4"/>'
+ + '<path d="M24 44 q2 -26 26 -26 q24 0 26 26 q-10 -12 -26 -12 q-16 0 -26 12 Z" fill="#4a3626"/>'
+ + '<circle cx="41" cy="48" r="3" fill="#3a2a1c"/><circle cx="59" cy="48" r="3" fill="#3a2a1c"/>'
+ + '<path d="M44 58 q6 5 12 0" stroke="#c9707f" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+ + '<path d="M50 66 v8" stroke="#f0c4a8" stroke-width="4"/>');
+ART.eye = SVG('<path d="M14 50 q36 -30 72 0 q-36 30 -72 0 Z" fill="#fdfdfd"/>'
+ + '<circle cx="50" cy="50" r="13" fill="#6fa8dc"/><circle cx="50" cy="50" r="6" fill="#25333f"/>'
+ + '<circle cx="45" cy="45" r="3" fill="#fdfdfd" opacity=".9"/>'
+ + '<path d="M14 50 q36 -30 72 0" stroke="#c8d8e2" stroke-width="2" fill="none"/>');
+ART.face = SVG('<circle cx="50" cy="50" r="30" fill="#f6d3b4"/>'
+ + '<path d="M20 44 q2 -28 30 -28 q28 0 30 28 q-12 -14 -30 -14 q-18 0 -30 14 Z" fill="#4a3626"/>'
+ + '<circle cx="39" cy="48" r="3" fill="#3a2a1c"/><circle cx="61" cy="48" r="3" fill="#3a2a1c"/>'
+ + '<path d="M44 60 q6 6 12 0" stroke="#c9707f" stroke-width="2.6" fill="none" stroke-linecap="round"/>');
+ART.night = SVG('<rect x="8" y="10" width="84" height="80" rx="10" fill="#2f3a52"/>'
+ + '<path d="M62 26 q-22 4 -20 26 q2 16 18 20 q-22 4 -30 -14 q-8 -22 10 -30 q10 -6 22 -2 Z" fill="#f5cf5b"/>'
+ + '<circle cx="28" cy="30" r="2" fill="#fdf6ea"/><circle cx="78" cy="66" r="2.4" fill="#fdf6ea"/><circle cx="36" cy="66" r="1.8" fill="#fdf6ea"/>');
+ART.yes = SVG('<circle cx="50" cy="50" r="30" fill="#7fc08a"/>'
+ + '<path d="M32 52 l12 12 l24 -26" stroke="#fdfdfd" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>');
+ART.no = SVG('<circle cx="50" cy="50" r="30" fill="#e9705f"/>'
+ + '<path d="M34 34 l32 32 M66 34 l-32 32" stroke="#fdfdfd" stroke-width="7" stroke-linecap="round"/>');
+
+/* ---------- ORT 이야기 그림 ---------- */
+ART.key = SVG('<circle cx="34" cy="34" r="18" fill="none" stroke="#f5cf5b" stroke-width="9"/>'
+ + '<path d="M47 47 L78 78" stroke="#f5cf5b" stroke-width="9" stroke-linecap="round"/>'
+ + '<path d="M66 66 l10 6 M72 72 l8 -6" stroke="#f5cf5b" stroke-width="7" stroke-linecap="round"/>'
+ + '<circle cx="30" cy="30" r="4" fill="#e8b74c"/>');
+ART.dragon = SVG('<path d="M34 26 q-12 -12 -4 -16 q6 8 14 8 q8 0 14 -8 q8 4 -4 16 Z" fill="#5c9d68"/>'
+ + '<ellipse cx="50" cy="52" rx="24" ry="20" fill="#7fc08a"/>'
+ + '<path d="M28 44 q-16 -6 -18 6 q12 2 18 8 Z" fill="#8ecb98"/>'
+ + '<path d="M72 44 q16 -6 18 6 q-12 2 -18 8 Z" fill="#8ecb98"/>'
+ + '<path d="M40 70 l-2 12 M60 70 l2 12" stroke="#5c9d68" stroke-width="6" stroke-linecap="round"/>'
+ + '<circle cx="58" cy="46" r="4.4" fill="#fdfdfd"/><circle cx="59" cy="46" r="2.2" fill="#25332a"/>'
+ + '<path d="M70 54 q8 2 8 8 l-9 -1 Z" fill="#e9705f"/>'
+ + '<path d="M34 52 q14 -6 26 0" stroke="#5c9d68" stroke-width="2.4" fill="none"/>'
+ + '<path d="M26 66 q-10 8 -4 14 q8 -2 8 -10" fill="#7fc08a"/>');
+ART.castle = SVG('<path d="M16 84 V40 h12 v-8 h10 v8 h12 v-8 h10 v8 h12 v44 Z" fill="#c8d8e2"/>'
+ + '<path d="M16 40 h12 v-8 h10 v8 h12 v-8 h10 v8 h12" fill="none" stroke="#a3b4c0" stroke-width="2"/>'
+ + '<path d="M42 84 V62 q0 -10 8 -10 q8 0 8 10 v22 Z" fill="#4a5866"/>'
+ + '<path d="M20 50 h8 v8 h-8 Z M72 50 h8 v8 h-8 Z" fill="#6fa8dc"/>'
+ + '<path d="M50 12 l10 12 h-20 Z" fill="#e9705f"/>');
+ART.balloon = SVG('<path d="M50 14 q22 0 22 28 q0 22 -22 32 q-22 -10 -22 -32 q0 -28 22 -28 Z" fill="#e9705f"/>'
+ + '<path d="M50 14 q10 0 10 28 q0 20 -10 32" fill="#f0907f"/>'
+ + '<path d="M50 74 q-3 8 2 12 q6 2 4 -6" stroke="#9db4c4" stroke-width="2" fill="none"/>'
+ + '<path d="M30 36 q4 -10 10 -12" stroke="#f6b3a8" stroke-width="3" fill="none" stroke-linecap="round"/>');
+ART.flower = SVG('<circle cx="50" cy="40" r="9" fill="#f5cf5b"/>'
+ + '<circle cx="50" cy="22" r="10" fill="#f0907f"/><circle cx="68" cy="34" r="10" fill="#f0907f"/>'
+ + '<circle cx="64" cy="54" r="10" fill="#f0907f"/><circle cx="36" cy="54" r="10" fill="#f0907f"/>'
+ + '<circle cx="32" cy="34" r="10" fill="#f0907f"/>'
+ + '<path d="M50 58 v30" stroke="#5c9d68" stroke-width="4" stroke-linecap="round"/>'
+ + '<path d="M50 72 q-14 -4 -16 8 q14 4 16 -8 Z" fill="#7fc08a"/>');
+ART.tooth = SVG('<path d="M50 16 q18 0 18 20 q0 14 -4 26 q-2 14 -8 14 q-6 0 -6 -12 q0 -6 -4 -6 q-4 0 -4 6 q0 12 -6 12 q-6 0 -8 -14 q-4 -12 -4 -26 q0 -20 18 -20 Z" fill="#fdfcf7" stroke="#dfe6ec" stroke-width="2"/>'
+ + '<circle cx="44" cy="30" r="3" fill="#e8f0f6"/>');
+ART.plane = SVG('<path d="M12 54 q0 -8 10 -9 l52 -7 q14 -2 14 8 q0 8 -12 10 l-52 6 q-12 1 -12 -8 Z" fill="#f2f7fb" stroke="#c8d8e2" stroke-width="2"/>'
+ + '<path d="M44 46 L30 24 h9 l18 20 Z" fill="#7fb6e8"/>'
+ + '<path d="M44 54 L36 74 h9 l14 -18 Z" fill="#7fb6e8"/>'
+ + '<path d="M74 40 l6 -12 h8 l-4 15 Z" fill="#7fb6e8"/>'
+ + '<circle cx="62" cy="50" r="2.4" fill="#6fa8dc"/><circle cx="70" cy="49" r="2.4" fill="#6fa8dc"/>');
+ART.helicopter = SVG('<ellipse cx="48" cy="58" rx="24" ry="16" fill="#7fc08a"/>'
+ + '<circle cx="66" cy="54" r="11" fill="#cfe6f7"/>'
+ + '<path d="M14 40 h68" stroke="#4a5866" stroke-width="4" stroke-linecap="round"/>'
+ + '<path d="M48 40 v-8" stroke="#4a5866" stroke-width="4"/>'
+ + '<path d="M32 74 h32" stroke="#5c9d68" stroke-width="5" stroke-linecap="round"/>'
+ + '<path d="M22 74 v6 M74 74 v6" stroke="#5c9d68" stroke-width="4"/>');
+ART.pirate = SVG('<path d="M26 36 h48 l-5 9 h-38 Z" fill="#3d3a45"/>'
+ + '<path d="M20 45 q30 -10 60 0 q-8 6 -30 6 q-22 0 -30 -6 Z" fill="#3d3a45"/>'
+ + '<circle cx="50" cy="62" r="19" fill="#f6d3b4"/>'
+ + '<path d="M32 54 l36 -2" stroke="#3d3a45" stroke-width="3"/>'
+ + '<circle cx="40" cy="57" r="7" fill="#3d3a45"/><circle cx="60" cy="57" r="2.8" fill="#3a2a1c"/>'
+ + '<path d="M42 72 q8 5 16 0" stroke="#b5745c" stroke-width="2.4" fill="none" stroke-linecap="round"/>');
+ART.monster = SVG('<path d="M20 60 q0 -30 30 -30 q30 0 30 30 v24 h-60 Z" fill="#a48bd0"/>'
+ + '<path d="M28 32 l-6 -14 l12 6 Z" fill="#8f74c1"/><path d="M72 32 l6 -14 l-12 6 Z" fill="#8f74c1"/>'
+ + '<circle cx="40" cy="52" r="7" fill="#fdfdfd"/><circle cx="60" cy="52" r="7" fill="#fdfdfd"/>'
+ + '<circle cx="41" cy="53" r="3.4" fill="#3a2b42"/><circle cx="59" cy="53" r="3.4" fill="#3a2b42"/>'
+ + '<path d="M36 72 l6 -8 l6 8 l6 -8 l6 8" fill="none" stroke="#6f5798" stroke-width="3"/>');
+ART.snowman = SVG('<circle cx="50" cy="66" r="22" fill="#fdfcf7" stroke="#dfe6ec" stroke-width="2"/>'
+ + '<circle cx="50" cy="40" r="15" fill="#fdfcf7" stroke="#dfe6ec" stroke-width="2"/>'
+ + '<circle cx="45" cy="38" r="2.4" fill="#3a4450"/><circle cx="55" cy="38" r="2.4" fill="#3a4450"/>'
+ + '<path d="M50 42 l8 4 l-8 3 Z" fill="#f2a24c"/>'
+ + '<path d="M36 30 q14 -10 28 0 Z" fill="#e9705f"/>'
+ + '<path d="M28 60 l-12 -6 M72 60 l12 -6" stroke="#a97b48" stroke-width="3" stroke-linecap="round"/>'
+ + '<circle cx="50" cy="58" r="2" fill="#9db4c4"/><circle cx="50" cy="66" r="2" fill="#9db4c4"/><circle cx="50" cy="74" r="2" fill="#9db4c4"/>');
+ART.pool = SVG('<rect x="10" y="40" width="80" height="44" rx="10" fill="#7fb6e8"/>'
+ + '<path d="M10 54 q14 -8 26 0 t26 0 t26 0" stroke="#cfe6f7" stroke-width="4" fill="none"/>'
+ + '<path d="M22 40 v-8 M22 32 h14" stroke="#9db4c4" stroke-width="4" stroke-linecap="round"/>'
+ + '<path d="M64 30 l6 -10 M72 30 l6 -10" stroke="#9db4c4" stroke-width="3" stroke-linecap="round"/>');
+ART.hospital = SVG('<path d="M18 84 V36 h64 v48 Z" fill="#fdfcf7" stroke="#dfe6ec" stroke-width="2"/>'
+ + '<path d="M34 30 q0 -10 16 -10 q16 0 16 10 Z" fill="#e9705f"/>'
+ + '<path d="M50 46 v14 M43 53 h14" stroke="#e9705f" stroke-width="6" stroke-linecap="round"/>'
+ + '<path d="M30 70 h10 v14 h-10 Z M60 70 h10 v14 h-10 Z" fill="#cfe6f7"/>');
+ART.zoo = SVG('<circle cx="50" cy="44" r="14" fill="#f2b26b"/>'
+ + '<circle cx="45" cy="42" r="2.6" fill="#3a2a1c"/><circle cx="55" cy="42" r="2.6" fill="#3a2a1c"/>'
+ + '<ellipse cx="50" cy="49" rx="5" ry="4" fill="#e0a469"/>'
+ + '<path d="M8 88 V56 M32 88 V52 M68 88 V52 M92 88 V56" stroke="#c99a63" stroke-width="6" stroke-linecap="round"/>'
+ + '<path d="M8 62 h24 M32 58 h36 M68 58 h24 M8 74 h24 M32 72 h36 M68 72 h24" stroke="#c99a63" stroke-width="4"/>');
+ART.crown = SVG('<path d="M20 68 l6 -34 l14 14 l10 -22 l10 22 l14 -14 l6 34 Z" fill="#f5cf5b"/>'
+ + '<path d="M20 68 h60 v10 h-60 Z" fill="#e8b74c"/>'
+ + '<circle cx="50" cy="48" r="4" fill="#e9705f"/><circle cx="32" cy="56" r="3" fill="#7fb6e8"/><circle cx="68" cy="56" r="3" fill="#7fc08a"/>');
+ART.ship = SVG('<path d="M14 58 h72 l-10 24 h-52 Z" fill="#4a6fa5"/>'
+ + '<path d="M22 58 h56 v6 h-56 Z" fill="#fdfcf7"/>'
+ + '<path d="M50 16 v42 M50 18 q18 6 18 30 h-18 Z" fill="#f6f2ee" stroke="#dfe6ec" stroke-width="2"/>'
+ + '<circle cx="50" cy="44" r="3" fill="#e9705f"/>'
+ + '<path d="M8 86 q12 -6 22 0 t22 0 t22 0 t18 0" stroke="#6fa8dc" stroke-width="4" fill="none"/>');
+ART.island = SVG('<path d="M8 76 q14 -14 34 -12 q26 -8 40 12 q14 4 10 10 h-88 Z" fill="#e8d3a8"/>'
+ + '<path d="M50 62 V36" stroke="#a97b48" stroke-width="4"/>'
+ + '<path d="M50 36 q-16 -8 -20 4 q14 6 20 -4 Z" fill="#7fc08a"/>'
+ + '<path d="M50 36 q16 -8 20 4 q-14 6 -20 -4 Z" fill="#5c9d68"/>'
+ + '<circle cx="50" cy="36" r="3" fill="#c99a63"/>'
+ + '<path d="M8 86 q10 -6 20 0 t20 0 t20 0 t22 0" stroke="#7fb6e8" stroke-width="4" fill="none"/>');
+ART.mountain = SVG('<path d="M6 84 L38 24 L58 60 L70 44 L94 84 Z" fill="#9db4c4"/>'
+ + '<path d="M38 24 L52 50 L44 54 L34 46 Z" fill="#fdfcf7"/>'
+ + '<path d="M70 44 L80 62 L72 64 L64 58 Z" fill="#fdfcf7"/>'
+ + '<path d="M6 84 h88" stroke="#7fc08a" stroke-width="5" stroke-linecap="round"/>');
+ART.glasses = SVG('<circle cx="32" cy="50" r="15" fill="none" stroke="#4a5866" stroke-width="4"/>'
+ + '<circle cx="68" cy="50" r="15" fill="none" stroke="#4a5866" stroke-width="4"/>'
+ + '<path d="M47 48 q3 -4 6 0" stroke="#4a5866" stroke-width="3" fill="none"/>'
+ + '<path d="M17 46 l-8 -4 M83 46 l8 -4" stroke="#4a5866" stroke-width="3" stroke-linecap="round"/>'
+ + '<path d="M24 44 q6 -6 14 0" stroke="#cfe6f7" stroke-width="2" fill="none"/>');
+ART.scarf = SVG('<path d="M26 20 q24 12 48 0 q6 10 -2 14 q-22 10 -44 0 q-8 -4 -2 -14 Z" fill="#e9705f"/>'
+ + '<path d="M40 32 v46 q0 8 10 8 q8 0 10 -8 l-4 -46 Z" fill="#f0907f"/>'
+ + '<path d="M40 60 h20 M40 70 h20" stroke="#c2543f" stroke-width="3"/>');
+ART.jacket = SVG('<path d="M36 20 h28 l18 12 l-8 14 l-8 -4 v42 h-32 v-42 l-8 4 l-8 -14 Z" fill="#4a6fa5"/>'
+ + '<path d="M50 20 v64" stroke="#3a5a8a" stroke-width="3"/>'
+ + '<path d="M42 20 q8 8 16 0" stroke="#3a5a8a" stroke-width="3" fill="none"/>'
+ + '<circle cx="56" cy="44" r="2.4" fill="#f5cf5b"/><circle cx="56" cy="58" r="2.4" fill="#f5cf5b"/>');
+ART.rainbow = SVG('<path d="M12 78 q0 -38 38 -38 q38 0 38 38" fill="none" stroke="#e9705f" stroke-width="8"/>'
+ + '<path d="M20 78 q0 -30 30 -30 q30 0 30 30" fill="none" stroke="#f5cf5b" stroke-width="8"/>'
+ + '<path d="M28 78 q0 -22 22 -22 q22 0 22 22" fill="none" stroke="#7fc08a" stroke-width="8"/>'
+ + '<path d="M36 78 q0 -14 14 -14 q14 0 14 14" fill="none" stroke="#7fb6e8" stroke-width="8"/>'
+ + '<path d="M8 84 q18 -8 36 0 t36 0 t18 0" fill="#f2f7fb"/>');
+ART.dinosaur = SVG('<path d="M20 66 q-4 -26 20 -30 q8 -14 24 -8 q18 4 18 22 q0 18 -18 22 l-6 14 h-8 l-2 -14 h-14 l-2 14 h-8 Z" fill="#7fc08a"/>'
+ + '<circle cx="70" cy="40" r="3" fill="#25332a"/>'
+ + '<path d="M16 48 q-12 -6 -8 -14 q8 2 10 8 Z" fill="#5c9d68"/>'
+ + '<path d="M32 40 l4 -10 l6 8 M46 34 l4 -10 l6 8" fill="#5c9d68"/>'
+ + '<circle cx="40" cy="56" r="2.4" fill="#5c9d68"/><circle cx="52" cy="54" r="2.4" fill="#5c9d68"/>');
+ART.rocket = SVG('<path d="M50 10 q18 16 18 44 h-36 q0 -28 18 -44 Z" fill="#fdfcf7" stroke="#dfe6ec" stroke-width="2"/>'
+ + '<circle cx="50" cy="38" r="8" fill="#7fb6e8"/>'
+ + '<path d="M32 44 l-12 18 h12 Z" fill="#e9705f"/><path d="M68 44 l12 18 h-12 Z" fill="#e9705f"/>'
+ + '<path d="M42 54 h16 v8 h-16 Z" fill="#9db4c4"/>'
+ + '<path d="M42 64 q8 18 8 22 q0 -4 8 -22 Z" fill="#f2a24c"/>');
+ART.treasure = SVG('<path d="M18 52 h64 v30 h-64 Z" fill="#b5843f"/><path d="M18 52 q32 -16 64 0 Z" fill="#c99a63"/>'
+ + '<path d="M18 64 h64" stroke="#8a5f2a" stroke-width="3"/>'
+ + '<rect x="44" y="60" width="12" height="12" rx="2" fill="#f5cf5b"/>'
+ + '<circle cx="50" cy="66" r="2" fill="#b08b28"/>'
+ + '<circle cx="30" cy="42" r="1.8" fill="#b08b28"/><circle cx="70" cy="42" r="1.8" fill="#b08b28"/>');
+ART.clown = SVG('<path d="M34 30 q0 -14 16 -14 q16 0 16 14 h8 q-4 10 -8 10 h-32 q-4 0 -8 -10 Z" fill="#4a5866"/>'
+ + '<circle cx="50" cy="52" r="22" fill="#fdfcf7" stroke="#dfe6ec" stroke-width="2"/>'
+ + '<circle cx="42" cy="48" r="3" fill="#3a2a1c"/><circle cx="58" cy="48" r="3" fill="#3a2a1c"/>'
+ + '<circle cx="50" cy="58" r="5" fill="#e9705f"/>'
+ + '<path d="M38 64 q12 10 24 0" stroke="#e9705f" stroke-width="3" fill="none"/>'
+ + '<circle cx="30" cy="12" r="0" fill="#fff"/>');
+
+var NB = {
+ "mw1":{sw:["the", "is"],pw:["big", "small", "up"]},
+ "mw2":{sw:["on", "the"],pw:["seesaw", "up", "down"]},
+ "mw3":{sw:["the", "is"],pw:["city", "car", "shop"]},
+ "mw4":{sw:["go", "look"],pw:["car", "bus", "bike"]},
+ "mw5":{sw:["is", "it"],pw:["cat", "hat", "rat"]},
+ "mw6":{sw:["the", "is"],pw:["sleep", "cat", "bird"]},
+ "mw7":{sw:["I", "like"],pw:["run", "jump", "swim"]},
+ "mw8":{sw:["the", "can"],pw:["farm", "cow", "duck"]},
+ "mw9":{sw:["is", "in"],pw:["mouse", "house", "bed"]},
+ "mw10":{sw:["my", "is"],pw:["baby", "milk", "hug"]},
+ "la1":{sw:["I", "see"],pw:["apple", "leaf", "water"]},
+ "la2":{sw:["I", "like"],pw:["icecream", "ten", "cup"]},
+ "la3":{sw:["is", "my"],pw:["face", "happy", "sad"]},
+ "la4":{sw:["I", "like"],pw:["apple", "bread", "milk"]},
+ "la5":{sw:["too", "my"],pw:["dog", "cat", "fish"]},
+ "la6":{sw:["he", "she"],pw:["doctor", "cook", "teacher"]},
+ "la7":{sw:["is", "the"],pw:["cake", "star", "circle"]},
+ "la8":{sw:["my", "can"],pw:["hand", "foot", "head"]},
+ "la9":{sw:["my", "is"],pw:["mom", "dad", "baby"]},
+ "la10":{sw:["I", "my"],pw:["hat", "shirt", "shoes"]},
+ "mwp1":{sw:["yes", "no"],pw:["yes", "no", "hand"]},
+ "mwp2":{sw:["not", "on"],pw:["hat", "shoes", "hand"]},
+ "mwp3":{sw:["a", "in"],pw:["tree", "monkey", "snake"]},
+ "mwp4":{sw:["we", "can"],pw:["ball", "slide", "swing"]},
+ "mwp5":{sw:["and", "my"],pw:["mom", "dad", "hug"]},
+ "mwp6":{sw:["that", "is"],pw:["ball", "book", "teddy"]},
+ "mwp7":{sw:["to", "go"],pw:["park", "school", "shop"]},
+ "mwp8":{sw:["we", "like"],pw:["drum", "dance", "happy"]},
+ "pp1":{sw:["the", "is"],pw:["rat", "sleep", "mat"]},
+ "pp2":{sw:["the", "can"],pw:["fox", "hop", "pond"]},
+ "pp3":{sw:["the", "is"],pw:["pig", "sit", "mud"]},
+ "pp4":{sw:["on", "the"],pw:["bug", "rug", "cup"]},
+ "pp5":{sw:["a", "for"],pw:["bed", "dog", "cat"]},
+ "pp6":{sw:["the", "is"],pw:["plant", "sun", "water"]},
+ "pp7":{sw:["can", "the"],pw:["frog", "hop", "pond"]},
+ "pp8":{sw:["and", "the"],pw:["water", "cup", "wet"]},
+ "pp9":{sw:["a", "for"],pw:["elephant", "gift", "hat"]},
+ "pp10":{sw:["is", "the"],pw:["egg", "chick", "foot"]},
+ "aa1":{sw:["the", "is"],pw:["cat", "fat", "rat"]},
+ "aa2":{sw:["the", "is"],pw:["dog", "hot", "sun"]},
+ "aa3":{sw:["the", "can"],pw:["pig", "dance", "hat"]},
+ "aa4":{sw:["a", "in"],pw:["bear", "water", "soap"]},
+ "aa5":{sw:["the", "is"],pw:["foot", "wet", "duck"]},
+ "aa6":{sw:["the", "can"],pw:["crab", "trap", "pond"]},
+ "aa7":{sw:["the", "is"],pw:["frog", "police", "pond"]},
+ "aa8":{sw:["a", "for"],pw:["fish", "gift", "water"]},
+ "aa9":{sw:["the", "is"],pw:["duck", "mud", "wet"]},
+ "aa10":{sw:["the", "can"],pw:["deer", "loud", "snow"]},
+ "cc1":{sw:["the", "is"],pw:["yak", "hot", "sun"]},
+ "cc2":{sw:["the", "is"],pw:["bear", "big", "small"]},
+ "cc3":{sw:["the", "is"],pw:["dog", "wet", "water"]},
+ "cc4":{sw:["the", "can"],pw:["fox", "sad", "food"]},
+ "cc5":{sw:["a", "my"],pw:["bat", "night", "tree"]},
+ "cc6":{sw:["the", "in"],pw:["bed", "bug", "night"]},
+ "cc7":{sw:["the", "can"],pw:["skunk", "run", "tree"]},
+ "cc8":{sw:["the", "is"],pw:["chimp", "banana", "tree"]},
+ "cc9":{sw:["the", "can"],pw:["sloth", "tree", "nose"]},
+ "cc10":{sw:["the", "is"],pw:["moth", "rock", "dance"]},
+ "az1":{sw:["a", "my"],pw:["ape", "cake", "hug"]},
+ "az2":{sw:["the", "can"],pw:["goat", "boat", "water"]},
+ "az3":{sw:["the", "can"],pw:["fish", "swim", "water"]},
+ "az4":{sw:["the", "is"],pw:["horse", "drum", "dance"]},
+ "az5":{sw:["the", "can"],pw:["seal", "swim", "fast"]},
+ "az6":{sw:["the", "can"],pw:["snake", "dance", "tree"]},
+ "az7":{sw:["the", "is"],pw:["horse", "baby", "run"]},
+ "az8":{sw:["the", "is"],pw:["mouse", "hug", "happy"]},
+ "az9":{sw:["a", "for"],pw:["unicorn", "food", "star"]},
+ "az10":{sw:["the", "is"],pw:["sheep", "messy", "box"]},
+ "sa1":{sw:["a", "the"],pw:["whale", "water", "boat"]},
+ "sa2":{sw:["for", "is"],pw:["toast", "bread", "hot"]},
+ "sa3":{sw:["I", "see"],pw:["pie", "apple", "ten"]},
+ "sa4":{sw:["on", "a"],pw:["horse", "boat", "water"]},
+ "sa5":{sw:["a", "is"],pw:["cake", "milk", "happy"]},
+ "sa6":{sw:["a", "can"],pw:["ape", "milk", "cup"]},
+ "sa7":{sw:["the", "is"],pw:["frog", "food", "hot"]},
+ "sa8":{sw:["on", "the"],pw:["mouse", "cold", "wet"]},
+ "sa9":{sw:["no", "for"],pw:["plum", "food", "bag"]},
+ "sa10":{sw:["for", "the"],pw:["tea", "cup", "cake"]},
+ "rt1":{sw:["the", "is"],pw:["chick", "hat", "sun"]},
+ "rt2":{sw:["the", "can"],pw:["king", "hat", "house"]},
+ "rt3":{sw:["the", "in"],pw:["bag", "box", "ball"]},
+ "rt4":{sw:["the", "is"],pw:["man", "hat", "car"]},
+ "rt5":{sw:["a", "for"],pw:["tent", "tree", "night"]},
+ "rt6":{sw:["the", "is"],pw:["nest", "bird", "tree"]},
+ "rt7":{sw:["the", "can"],pw:["block", "ball", "box"]},
+ "rt8":{sw:["and", "the"],pw:["spot", "dog", "ball"]},
+ "rt9":{sw:["the", "can"],pw:["skunk", "ball", "jump"]},
+ "rt10":{sw:["the", "is"],pw:["deer", "sad", "rain"]},
+ "og1":{sw:["the", "can"],pw:["car", "fast", "fire"]},
+ "og2":{sw:["and", "the"],pw:["ball", "run", "happy"]},
+ "og3":{sw:["a", "is"],pw:["fish", "water", "messy"]},
+ "og4":{sw:["the", "is"],pw:["snow", "car", "cold"]},
+ "og5":{sw:["the", "is"],pw:["rain", "sad", "car"]},
+ "og6":{sw:["the", "is"],pw:["sky", "kite", "up"]},
+ "og7":{sw:["the", "can"],pw:["boat", "water", "sun"]},
+ "og8":{sw:["my", "is"],pw:["boy", "ball", "happy"]},
+ "og9":{sw:["the", "can"],pw:["wind", "tree", "hat"]},
+ "og10":{sw:["the", "is"],pw:["sun", "sky", "night"]},
+ "lp1":{sw:["what", "a"],pw:["eye", "star", "sky"]},
+ "lp2":{sw:["a", "is"],pw:["penny", "hand", "happy"]},
+ "lp3":{sw:["and", "the"],pw:["boy", "dog", "run"]},
+ "lp4":{sw:["the", "can"],pw:["rock", "climb", "up"]},
+ "lp5":{sw:["the", "can"],pw:["ball", "run", "happy"]},
+ "lp6":{sw:["the", "is"],pw:["ball", "star", "happy"]},
+ "lp7":{sw:["the", "can"],pw:["water", "sun", "fast"]},
+ "lp8":{sw:["and", "the"],pw:["dance", "shirt", "happy"]},
+ "lp9":{sw:["the", "is"],pw:["tent", "tree", "night"]},
+ "lp10":{sw:["you", "it"],pw:["run", "jump", "happy"]},
+ "wp1":{sw:["a", "is"],pw:["hat", "rabbit", "star"]},
+ "wp2":{sw:["what", "it"],pw:["box", "cat", "ball"]},
+ "wp3":{sw:["look", "see"],pw:["eye", "tree", "bird"]},
+ "wp4":{sw:["my", "is"],pw:["sock", "shirt", "messy"]},
+ "wp5":{sw:["where", "is"],pw:["tree", "box", "hide"]},
+ "wp6":{sw:["we", "can"],pw:["jump", "run", "climb"]},
+ "wp7":{sw:["it", "is"],pw:["moon", "owl", "night"]},
+ "wp8":{sw:["my", "is"],pw:["car", "bike", "fast"]},
+ "mm1a":{sw:["the", "is"],pw:["pattern", "circle", "square"]},
+ "mm1b":{sw:["the", "is"],pw:["spot", "ten", "hand"]},
+ "mm1c":{sw:["from", "to"],pw:["head", "tail", "dog"]},
+ "mm1d":{sw:["all", "my"],pw:["teddy", "ball", "box"]},
+ "mm1e":{sw:["a", "my"],pw:["pig", "dollar", "shop"]},
+ "mm2a":{sw:["the", "is"],pw:["school", "hundred", "cake"]},
+ "mm2b":{sw:["the", "can"],pw:["cake", "eat", "box"]},
+ "mm2c":{sw:["the", "can"],pw:["foot", "count", "duck"]},
+ "mm2d":{sw:["I", "not"],pw:["count", "sad", "book"]},
+ "mm2e":{sw:["a", "my"],pw:["dog", "sun", "sleep"]},
+ "sc1a":{sw:["the", "can"],pw:["up", "star", "fire"]},
+ "sc1b":{sw:["the", "is"],pw:["bone", "dog", "hand"]},
+ "sc1c":{sw:["my", "is"],pw:["earth", "water", "tree"]},
+ "sc1d":{sw:["it", "can"],pw:["plant", "water", "sun"]},
+ "sc1e":{sw:["the", "is"],pw:["caterpillar", "leaf", "butterfly"]},
+ "sc2a":{sw:["it", "is"],pw:["frog", "egg", "water"]},
+ "sc2b":{sw:["a", "the"],pw:["rain", "wind", "sun"]},
+ "sc2c":{sw:["all", "is"],pw:["water", "wet", "duck"]},
+ "sc2d":{sw:["what", "are"],pw:["cat", "dog", "bird"]},
+ "sc2e":{sw:["of", "the"],pw:["rock", "box", "big"]},
+ "abc1":{sw:["is", "for"],pw:["apple"]},
+ "abc2":{sw:["is", "for"],pw:["bear"]},
+ "abc3":{sw:["is", "for"],pw:["cat"]},
+ "abc4":{sw:["is", "for"],pw:["dog"]},
+ "abc5":{sw:["is", "for"],pw:["egg"]},
+ "abc6":{sw:["is", "for"],pw:["fish"]},
+ "abc7":{sw:["is", "for"],pw:["goat"]},
+ "abc8":{sw:["is", "for"],pw:["hat"]},
+ "abc9":{sw:["is", "for"],pw:["igloo"]},
+ "abc10":{sw:["is", "for"],pw:["juice"]},
+ "abc11":{sw:["is", "for"],pw:["kite"]},
+ "abc12":{sw:["is", "for"],pw:["lion"]},
+ "abc13":{sw:["is", "for"],pw:["moon"]},
+ "abc14":{sw:["is", "for"],pw:["nest"]},
+ "abc15":{sw:["is", "for"],pw:["octopus"]},
+ "abc16":{sw:["is", "for"],pw:["pig"]},
+ "abc17":{sw:["is", "for"],pw:["king"]},
+ "abc18":{sw:["is", "for"],pw:["rabbit"]},
+ "abc19":{sw:["is", "for"],pw:["sun"]},
+ "abc20":{sw:["is", "for"],pw:["turtle"]},
+ "abc21":{sw:["is", "for"],pw:["umbrella"]},
+ "abc22":{sw:["is", "for"],pw:["car"]},
+ "abc23":{sw:["is", "for"],pw:["watch"]},
+ "abc24":{sw:["is", "for"],pw:["yoyo"]},
+ "abc25":{sw:["is", "for"],pw:["yoyo"]},
+ "abc26":{sw:["is", "for"],pw:["zebra"]},
+};
+var NPW = {
+ "cat":["cat", "고양이"],
+ "dog":["dog", "강아지"],
+ "rat":["rat", "쥐"],
+ "mouse":["mouse", "생쥐"],
+ "fox":["fox", "여우"],
+ "pig":["pig", "돼지"],
+ "cow":["cow", "소"],
+ "horse":["horse", "말"],
+ "deer":["deer", "사슴"],
+ "bear":["bear", "곰"],
+ "rabbit":["rabbit", "토끼"],
+ "sheep":["sheep", "양"],
+ "goat":["goat", "염소"],
+ "yak":["yak", "야크"],
+ "lion":["lion", "사자"],
+ "zebra":["zebra", "얼룩말"],
+ "elephant":["elephant", "코끼리"],
+ "monkey":["monkey", "원숭이"],
+ "chimp":["chimp", "침팬지"],
+ "sloth":["sloth", "나무늘보"],
+ "bat":["bat", "박쥐"],
+ "skunk":["skunk", "스컹크"],
+ "owl":["owl", "부엉이"],
+ "bird":["bird", "새"],
+ "duck":["duck", "오리"],
+ "chick":["chick", "병아리"],
+ "frog":["frog", "개구리"],
+ "snake":["snake", "뱀"],
+ "fish":["fish", "물고기"],
+ "whale":["whale", "고래"],
+ "seal":["seal", "물개"],
+ "turtle":["turtle", "거북"],
+ "octopus":["octopus", "문어"],
+ "unicorn":["unicorn", "유니콘"],
+ "bug":["bug", "벌레"],
+ "crab":["crab", "게"],
+ "caterpillar":["caterpillar", "애벌레"],
+ "butterfly":["butterfly", "나비"],
+ "moth":["moth", "나방"],
+ "ape":["ape", "유인원"],
+ "penguin":["penguin", "펭귄"],
+ "hat":["hat", "모자"],
+ "mat":["mat", "깔개"],
+ "rug":["rug", "양탄자"],
+ "bed":["bed", "침대"],
+ "plant":["plant", "식물"],
+ "cup":["cup", "컵"],
+ "box":["box", "상자"],
+ "gift":["gift", "선물"],
+ "ball":["ball", "공"],
+ "book":["book", "책"],
+ "teddy":["teddy", "곰인형"],
+ "sock":["sock", "양말"],
+ "shoes":["shoes", "신발"],
+ "shirt":["shirt", "셔츠"],
+ "bag":["bag", "가방"],
+ "tent":["tent", "텐트"],
+ "block":["block", "블록"],
+ "watch":["watch", "시계"],
+ "umbrella":["umbrella", "우산"],
+ "kite":["kite", "연"],
+ "car":["car", "자동차"],
+ "bus":["bus", "버스"],
+ "bike":["bike", "자전거"],
+ "boat":["boat", "배"],
+ "yoyo":["yoyo", "요요"],
+ "igloo":["igloo", "이글루"],
+ "nest":["nest", "둥지"],
+ "drum":["drum", "드럼"],
+ "rock":["rock", "돌"],
+ "bone":["bone", "뼈"],
+ "dollar":["dollar", "달러"],
+ "penny":["penny", "동전"],
+ "soap":["soap", "비누"],
+ "trap":["trap", "그물"],
+ "seesaw":["seesaw", "시소"],
+ "slide":["slide", "미끄럼틀"],
+ "swing":["swing", "그네"],
+ "apple":["apple", "사과"],
+ "bread":["bread", "빵"],
+ "milk":["milk", "우유"],
+ "banana":["banana", "바나나"],
+ "cake":["cake", "케이크"],
+ "pie":["pie", "파이"],
+ "toast":["toast", "토스트"],
+ "tea":["tea", "차"],
+ "juice":["juice", "주스"],
+ "icecream":["icecream", "아이스크림"],
+ "plum":["plum", "자두"],
+ "egg":["egg", "달걀"],
+ "food":["food", "음식"],
+ "sun":["sun", "해"],
+ "moon":["moon", "달"],
+ "star":["star", "별"],
+ "tree":["tree", "나무"],
+ "water":["water", "물"],
+ "rain":["rain", "비"],
+ "snow":["snow", "눈"],
+ "wind":["wind", "바람"],
+ "sky":["sky", "하늘"],
+ "earth":["earth", "지구"],
+ "leaf":["leaf", "잎"],
+ "fire":["fire", "불"],
+ "mud":["mud", "진흙"],
+ "pond":["pond", "연못"],
+ "house":["house", "집"],
+ "city":["city", "도시"],
+ "shop":["shop", "가게"],
+ "school":["school", "학교"],
+ "park":["park", "공원"],
+ "farm":["farm", "농장"],
+ "mom":["mom", "엄마"],
+ "dad":["dad", "아빠"],
+ "baby":["baby", "아기"],
+ "boy":["boy", "남자아이"],
+ "man":["man", "어른 남자"],
+ "king":["king", "왕"],
+ "doctor":["doctor", "의사"],
+ "cook":["cook", "요리사"],
+ "teacher":["teacher", "선생님"],
+ "police":["police", "경찰"],
+ "hug":["hug", "안아 주기"],
+ "big":["big", "큰"],
+ "small":["small", "작은"],
+ "up":["up", "위로"],
+ "down":["down", "아래로"],
+ "sleep":["sleep", "자다"],
+ "run":["run", "달리다"],
+ "jump":["jump", "뛰다"],
+ "swim":["swim", "헤엄치다"],
+ "hop":["hop", "폴짝 뛰다"],
+ "sit":["sit", "앉다"],
+ "dance":["dance", "춤추다"],
+ "climb":["climb", "오르다"],
+ "eat":["eat", "먹다"],
+ "hide":["hide", "숨다"],
+ "fast":["fast", "빠른"],
+ "hot":["hot", "뜨거운"],
+ "cold":["cold", "차가운"],
+ "wet":["wet", "젖은"],
+ "messy":["messy", "엉망인"],
+ "happy":["happy", "기쁜"],
+ "sad":["sad", "슬픈"],
+ "loud":["loud", "시끄러운"],
+ "fat":["fat", "뚱뚱한"],
+ "count":["count", "세다"],
+ "ten":["ten", "열(10)"],
+ "hundred":["hundred", "백(100)"],
+ "pattern":["pattern", "규칙"],
+ "circle":["circle", "동그라미"],
+ "square":["square", "네모"],
+ "spot":["spot", "점"],
+ "tail":["tail", "꼬리"],
+ "nose":["nose", "코"],
+ "hand":["hand", "손"],
+ "foot":["foot", "발"],
+ "head":["head", "머리"],
+ "eye":["eye", "눈"],
+ "face":["face", "얼굴"],
+ "night":["night", "밤"],
+ "yes":["yes", "그래"],
+ "no":["no", "아니야"],
+ "key":["key", "열쇠"],
+ "dragon":["dragon", "용"],
+ "castle":["castle", "성"],
+ "balloon":["balloon", "풍선"],
+ "flower":["flower", "꽃"],
+ "tooth":["tooth", "이(치아)"],
+ "plane":["plane", "비행기"],
+ "helicopter":["helicopter", "헬리콥터"],
+ "pirate":["pirate", "해적"],
+ "monster":["monster", "괴물"],
+ "snowman":["snowman", "눈사람"],
+ "pool":["pool", "수영장"],
+ "hospital":["hospital", "병원"],
+ "zoo":["zoo", "동물원"],
+ "crown":["crown", "왕관"],
+ "ship":["ship", "배"],
+ "island":["island", "섬"],
+ "mountain":["mountain", "산"],
+ "glasses":["glasses", "안경"],
+ "scarf":["scarf", "목도리"],
+ "jacket":["jacket", "재킷"],
+ "rainbow":["rainbow", "무지개"],
+ "dinosaur":["dinosaur", "공룡"],
+ "rocket":["rocket", "로켓"],
+ "treasure":["treasure", "보물"],
+ "clown":["clown", "광대"],
+};
+var NSENT = {
+"the": [
+"I see the {w}.",
+"Look at the {w}."
+],
+"a": [
+"I see {a}.",
+"It is {a}."
+],
+"is": [
+"The {w} is here.",
+"This is my {w}."
+],
+"it": [
+"It is {a}.",
+"I see it."
+],
+"I": [
+"I like the {w}.",
+"I can see the {w}."
+],
+"can": [
+"The {w} can go.",
+"I can see the {w}."
+],
+"see": [
+"I see the {w}.",
+"Can you see the {w}?"
+],
+"like": [
+"I like the {w}.",
+"We like the {w}."
+],
+"my": [
+"This is my {w}.",
+"I like my {w}."
+],
+"we": [
+"We see the {w}.",
+"We like the {w}."
+],
+"go": [
+"We go to the {p}.",
+"I go with my {w}."
+],
+"look": [
+"Look at the {w}.",
+"Look! I can see it."
+],
+"to": [
+"We go to the {p}.",
+"I like to see the {w}."
+],
+"you": [
+"You can see the {w}.",
+"I like you."
+],
+"he": [
+"He is my dad.",
+"He can see the {w}."
+],
+"she": [
+"She is my mom.",
+"She can see the {w}."
+],
+"in": [
+"The {w} is in the box.",
+"I see it in the {w}."
+],
+"on": [
+"The {w} is on the mat.",
+"Look at the {w} on it."
+],
+"for": [
+"This is for my {w}.",
+"A {w} is for me."
+],
+"what": [
+"What is the {w}?",
+"What can you see?"
+],
+"where": [
+"Where is the {w}?",
+"Where can it be?"
+],
+"yes": [
+"Yes, I see the {w}.",
+"Yes, it is here."
+],
+"no": [
+"No, it is not the {w}.",
+"No, I can not see it."
+],
+"not": [
+"The {w} is not here.",
+"It is not my {w}."
+],
+"too": [
+"It is too big.",
+"The {w} is too big."
+],
+"that": [
+"That is my {w}.",
+"I see that {w}."
+],
+"and": [
+"I see the {w} and the {p}.",
+"My {w} and my {p}."
+],
+"are": [
+"The {w} are here.",
+"We are here."
+],
+"of": [
+"Lots of {w}.",
+"One of the {w}."
+],
+"from": [
+"From head to {w}.",
+"It is from my {w}."
+],
+"all": [
+"All of the {w}.",
+"It is all mine."
+]
+};
+var OB = {
+ "st2-1":{sw:["the", "is"],pw:["monkey", "dance", "ball"]},
+ "st2-2":{sw:["the", "is"],pw:["tree", "car", "cat"]},
+ "st2-3":{sw:["the", "is"],pw:["rain", "hat", "water"]},
+ "st2-4":{sw:["the", "is"],pw:["boy", "box", "bird"]},
+ "st2-5":{sw:["the", "is"],pw:["water", "car", "cat"]},
+ "st2-6":{sw:["the", "is"],pw:["bug", "water", "cake"]},
+ "st2-7":{sw:["the", "is"],pw:["bird", "dog", "hat"]},
+ "st2-8":{sw:["the", "is"],pw:["dog", "cat", "ball"]},
+ "st2-9":{sw:["the", "is"],pw:["star", "tree", "cake"]},
+ "st2-10":{sw:["the", "is"],pw:["dog", "hat", "water"]},
+ "st2-11":{sw:["the", "is"],pw:["dragon", "ball", "box"]},
+ "st2-12":{sw:["the", "is"],pw:["drum", "tree", "car"]},
+ "st2-13":{sw:["the", "is"],pw:["egg", "hat", "water"]},
+ "st2-14":{sw:["the", "is"],pw:["box", "bird", "dog"]},
+ "st2-15":{sw:["the", "is"],pw:["fire", "car", "cat"]},
+ "st2-16":{sw:["the", "is"],pw:["bird", "food", "water"]},
+ "st2-17":{sw:["the", "is"],pw:["apple", "nose", "bird"]},
+ "st2-18":{sw:["the", "is"],pw:["ball", "pool", "cat"]},
+ "st2-19":{sw:["the", "is"],pw:["teacher", "cake", "tree"]},
+ "st2-20":{sw:["the", "is"],pw:["star", "cake", "dog"]},
+ "st2-21":{sw:["the", "is"],pw:["ball", "box", "bird"]},
+ "st2-22":{sw:["the", "is"],pw:["monkey", "run", "tree"]},
+ "st2-23":{sw:["the", "is"],pw:["big", "flower", "hat"]},
+ "st2-24":{sw:["the", "is"],pw:["ball", "box", "bird"]},
+ "st2-25":{sw:["the", "is"],pw:["big", "egg", "car"]},
+ "st2-26":{sw:["the", "is"],pw:["water", "cake", "tree"]},
+ "st2-27":{sw:["the", "is"],pw:["bird", "dog", "hat"]},
+ "st2-28":{sw:["the", "is"],pw:["cat", "ball", "box"]},
+ "st2-29":{sw:["the", "is"],pw:["gift", "mom", "cake"]},
+ "st2-30":{sw:["the", "is"],pw:["pond", "dog", "hat"]},
+ "st2-31":{sw:["the", "is"],pw:["teddy", "cake", "ball"]},
+ "st2-32":{sw:["the", "is"],pw:["star", "shoes", "tree"]},
+ "st2-33":{sw:["the", "is"],pw:["star", "dog", "hat"]},
+ "st2-34":{sw:["the", "is"],pw:["dog", "box", "bird"]},
+ "st2-35":{sw:["the", "is"],pw:["car", "cat", "ball"]},
+ "st2-36":{sw:["the", "is"],pw:["moon", "water", "cake"]},
+ "st2-37":{sw:["the", "is"],pw:["soap", "bird", "dog"]},
+ "st2-38":{sw:["the", "is"],pw:["baby", "cat", "ball"]},
+ "st2-39":{sw:["the", "is"],pw:["water", "cake", "tree"]},
+ "st2-40":{sw:["the", "is"],pw:["balloon", "dog", "hat"]},
+ "st2-41":{sw:["the", "is"],pw:["spot", "ball", "box"]},
+ "st2-42":{sw:["the", "is"],pw:["cake", "tree", "car"]},
+ "st2-43":{sw:["the", "is"],pw:["shoes", "hat", "water"]},
+ "st2-44":{sw:["the", "is"],pw:["tooth", "box", "bird"]},
+ "st2-45":{sw:["the", "is"],pw:["rain", "car", "cat"]},
+ "st2-46":{sw:["the", "is"],pw:["plane", "water", "cake"]},
+ "st2-47":{sw:["the", "is"],pw:["star", "bird", "dog"]},
+ "st2-48":{sw:["the", "is"],pw:["run", "cat", "ball"]},
+ "st3-1":{sw:["a", "can"],pw:["duck", "run", "water"]},
+ "st3-2":{sw:["a", "can"],pw:["nose", "bike", "ball"]},
+ "st3-3":{sw:["a", "can"],pw:["pond", "tree", "shoes"]},
+ "st3-4":{sw:["a", "can"],pw:["cold", "water", "dog"]},
+ "st3-5":{sw:["a", "can"],pw:["mud", "soap", "ball"]},
+ "st3-6":{sw:["a", "can"],pw:["drum", "shoes", "sun"]},
+ "st3-7":{sw:["a", "can"],pw:["pond", "dog", "tree"]},
+ "st3-8":{sw:["a", "can"],pw:["egg", "mud", "duck"]},
+ "st3-9":{sw:["a", "can"],pw:["sun", "bike", "ball"]},
+ "st3-10":{sw:["a", "can"],pw:["cat", "tree", "pond"]},
+ "st3-11":{sw:["a", "can"],pw:["swing", "duck", "water"]},
+ "st3-12":{sw:["a", "can"],pw:["water", "bike", "ball"]},
+ "st3-13":{sw:["a", "can"],pw:["clown", "tree", "shoes"]},
+ "st3-14":{sw:["a", "can"],pw:["food", "water", "dog"]},
+ "st3-15":{sw:["a", "can"],pw:["shop", "ball", "mud"]},
+ "st3-16":{sw:["a", "can"],pw:["boat", "shoes", "sun"]},
+ "st3-17":{sw:["a", "can"],pw:["dog", "pond", "tree"]},
+ "st3-18":{sw:["a", "can"],pw:["snowman", "mud", "duck"]},
+ "st3-19":{sw:["a", "can"],pw:["fire", "sun", "bike"]},
+ "st3-20":{sw:["a", "can"],pw:["star", "pond", "tree"]},
+ "st3-21":{sw:["a", "can"],pw:["pool", "duck", "water"]},
+ "st3-22":{sw:["a", "can"],pw:["eye", "bike", "ball"]},
+ "st3-23":{sw:["a", "can"],pw:["book", "tree", "shoes"]},
+ "st3-24":{sw:["a", "can"],pw:["cold", "water", "dog"]},
+ "st3-25":{sw:["a", "can"],pw:["hospital", "ball", "mud"]},
+ "st3-26":{sw:["a", "can"],pw:["bike", "shoes", "sun"]},
+ "st3-27":{sw:["a", "can"],pw:["bird", "dog", "pond"]},
+ "st3-28":{sw:["a", "can"],pw:["egg", "mud", "duck"]},
+ "st3-29":{sw:["a", "can"],pw:["zoo", "sun", "bike"]},
+ "st3-30":{sw:["a", "can"],pw:["monkey", "pond", "tree"]},
+ "st3-31":{sw:["a", "can"],pw:["teddy", "duck", "water"]},
+ "st3-32":{sw:["a", "can"],pw:["monkey", "car", "bike"]},
+ "st3-33":{sw:["a", "can"],pw:["dragon", "tree", "shoes"]},
+ "st3-34":{sw:["a", "can"],pw:["water", "dog", "pond"]},
+ "st3-35":{sw:["a", "can"],pw:["mom", "car", "ball"]},
+ "st3-36":{sw:["a", "can"],pw:["helicopter", "shoes", "sun"]},
+ "st3-37":{sw:["a", "can"],pw:["king", "castle", "dog"]},
+ "st3-38":{sw:["a", "can"],pw:["bug", "mud", "duck"]},
+ "st3-39":{sw:["a", "can"],pw:["sun", "bike", "ball"]},
+ "st3-40":{sw:["a", "can"],pw:["sun", "pond", "tree"]},
+ "st3-41":{sw:["a", "can"],pw:["tree", "duck", "water"]},
+ "st3-42":{sw:["a", "can"],pw:["bike", "ball", "mud"]},
+ "st4-1":{sw:["look", "see"],pw:["goat", "car", "shop"]},
+ "st4-2":{sw:["look", "see"],pw:["car", "water", "hat"]},
+ "st4-3":{sw:["look", "see"],pw:["water", "rain", "tree"]},
+ "st4-4":{sw:["look", "see"],pw:["shirt", "shop", "dog"]},
+ "st4-5":{sw:["look", "see"],pw:["school", "hat", "boat"]},
+ "st4-6":{sw:["look", "see"],pw:["shop", "tree", "cake"]},
+ "st4-7":{sw:["look", "see"],pw:["house", "shop", "dog"]},
+ "st4-8":{sw:["look", "see"],pw:["star", "house", "boat"]},
+ "st4-9":{sw:["look", "see"],pw:["cake", "water", "hat"]},
+ "st4-10":{sw:["look", "see"],pw:["house", "rain", "tree"]},
+ "st4-11":{sw:["look", "see"],pw:["car", "shop", "dog"]},
+ "st4-12":{sw:["look", "see"],pw:["rain", "water", "hat"]},
+ "st4-13":{sw:["look", "see"],pw:["wet", "rain", "tree"]},
+ "st4-14":{sw:["look", "see"],pw:["rain", "shop", "dog"]},
+ "st4-15":{sw:["look", "see"],pw:["rock", "mom", "hat"]},
+ "st4-16":{sw:["look", "see"],pw:["hug", "tree", "cake"]},
+ "st4-17":{sw:["look", "see"],pw:["dog", "house", "rain"]},
+ "st4-18":{sw:["look", "see"],pw:["balloon", "boat", "car"]},
+ "st4-19":{sw:["look", "see"],pw:["wet", "shirt", "cake"]},
+ "st4-20":{sw:["look", "see"],pw:["house", "rain", "tree"]},
+ "st4-21":{sw:["look", "see"],pw:["plane", "elephant", "car"]},
+ "st4-22":{sw:["look", "see"],pw:["scarf", "water", "hat"]},
+ "st4-23":{sw:["look", "see"],pw:["dragon", "dance", "rain"]},
+ "st4-24":{sw:["look", "see"],pw:["boy", "wet", "shop"]},
+ "st4-25":{sw:["look", "see"],pw:["jacket", "hat", "boat"]},
+ "st4-26":{sw:["look", "see"],pw:["mud", "tree", "cake"]},
+ "st4-27":{sw:["look", "see"],pw:["tent", "dog", "house"]},
+ "st4-28":{sw:["look", "see"],pw:["boat", "car", "shop"]},
+ "st4-29":{sw:["look", "see"],pw:["cake", "water", "hat"]},
+ "st4-30":{sw:["look", "see"],pw:["bag", "house", "rain"]},
+ "st4-31":{sw:["look", "see"],pw:["star", "car", "shop"]},
+ "st4-32":{sw:["look", "see"],pw:["foot", "water", "hat"]},
+ "st4-33":{sw:["look", "see"],pw:["rain", "tree", "cake"]},
+ "st4-34":{sw:["look", "see"],pw:["mom", "star", "glasses"]},
+ "st4-35":{sw:["look", "see"],pw:["cake", "hat", "boat"]},
+ "st4-36":{sw:["look", "see"],pw:["seal", "tree", "cake"]},
+ "st4-37":{sw:["look", "see"],pw:["dog", "house", "rain"]},
+ "st4-38":{sw:["look", "see"],pw:["ball", "boat", "car"]},
+ "st4-39":{sw:["look", "see"],pw:["bug", "zoo", "cake"]},
+ "st4-40":{sw:["look", "see"],pw:["rock", "house", "rain"]},
+ "st4-41":{sw:["look", "see"],pw:["mountain", "car", "shop"]},
+ "st4-42":{sw:["look", "see"],pw:["rocket", "water", "hat"]},
+ "st5-1":{sw:["we", "go"],pw:["star", "key", "tree"]},
+ "st5-2":{sw:["we", "go"],pw:["pirate", "castle", "star"]},
+ "st5-3":{sw:["we", "go"],pw:["dragon", "tree", "water"]},
+ "st5-4":{sw:["we", "go"],pw:["mom", "boat", "house"]},
+ "st5-5":{sw:["we", "go"],pw:["castle", "star", "ball"]},
+ "st5-6":{sw:["we", "go"],pw:["house", "water", "plant"]},
+ "st5-7":{sw:["we", "go"],pw:["house", "key", "dragon"]},
+ "st5-8":{sw:["we", "go"],pw:["ball", "tree", "boat"]},
+ "st5-9":{sw:["we", "go"],pw:["icecream", "plant", "castle"]},
+ "st5-10":{sw:["we", "go"],pw:["key", "dragon", "water"]},
+ "st5-11":{sw:["we", "go"],pw:["run", "tree", "boat"]},
+ "st5-12":{sw:["we", "go"],pw:["monster", "castle", "star"]},
+ "st5-13":{sw:["we", "go"],pw:["star", "baby", "dragon"]},
+ "st5-14":{sw:["we", "go"],pw:["tent", "boat", "house"]},
+ "st5-15":{sw:["we", "go"],pw:["star", "ball", "tree"]},
+ "st5-16":{sw:["we", "go"],pw:["boat", "water", "plant"]},
+ "st5-17":{sw:["we", "go"],pw:["star", "school", "house"]},
+ "st5-18":{sw:["we", "go"],pw:["mom", "helicopter", "ball"]},
+ "st5-19":{sw:["we", "go"],pw:["sleep", "plant", "castle"]},
+ "st5-20":{sw:["we", "go"],pw:["park", "key", "dragon"]},
+ "st5-21":{sw:["we", "go"],pw:["monster", "tree", "boat"]},
+ "st5-22":{sw:["we", "go"],pw:["monkey", "castle", "star"]},
+ "st5-23":{sw:["we", "go"],pw:["run", "dragon", "water"]},
+ "st5-24":{sw:["we", "go"],pw:["boat", "house", "key"]},
+ "st5-25":{sw:["we", "go"],pw:["star", "ball", "tree"]},
+ "st5-26":{sw:["we", "go"],pw:["flower", "water", "plant"]},
+ "st5-27":{sw:["we", "go"],pw:["rat", "house", "key"]},
+ "st5-28":{sw:["we", "go"],pw:["dog", "ball", "tree"]},
+ "st5-29":{sw:["we", "go"],pw:["fire", "plant", "castle"]},
+ "st5-30":{sw:["we", "go"],pw:["plane", "clown", "key"]},
+ "st5-31":{sw:["we", "go"],pw:["king", "water", "tree"]},
+ "st5-32":{sw:["we", "go"],pw:["crab", "island", "castle"]},
+ "st5-33":{sw:["we", "go"],pw:["dragon", "water", "plant"]},
+ "st5-34":{sw:["we", "go"],pw:["boat", "house", "key"]},
+ "st5-35":{sw:["we", "go"],pw:["night", "star", "ball"]},
+ "st5-36":{sw:["we", "go"],pw:["frog", "water", "plant"]},
+ "st6-1":{sw:["my", "like"],pw:["plant", "ship", "crown"]},
+ "st6-2":{sw:["my", "like"],pw:["man", "treasure", "tree"]},
+ "st6-3":{sw:["my", "like"],pw:["park", "castle", "water"]},
+ "st6-4":{sw:["my", "like"],pw:["mountain", "dinosaur", "crown"]},
+ "st6-5":{sw:["my", "like"],pw:["tree", "book", "ship"]},
+ "st6-6":{sw:["my", "like"],pw:["treasure", "water", "star"]},
+ "st6-7":{sw:["my", "like"],pw:["monster", "key", "castle"]},
+ "st6-8":{sw:["my", "like"],pw:["apple", "book", "ship"]},
+ "st6-9":{sw:["my", "like"],pw:["king", "star", "treasure"]},
+ "st6-10":{sw:["my", "like"],pw:["gift", "key", "castle"]},
+ "st6-11":{sw:["my", "like"],pw:["car", "run", "ship"]},
+ "st6-12":{sw:["my", "like"],pw:["key", "treasure", "tree"]},
+ "st6-13":{sw:["my", "like"],pw:["city", "castle", "water"]},
+ "st6-14":{sw:["my", "like"],pw:["crown", "monster", "key"]},
+ "st6-15":{sw:["my", "like"],pw:["crown", "tree", "book"]},
+ "st6-16":{sw:["my", "like"],pw:["ship", "water", "star"]},
+ "st6-17":{sw:["my", "like"],pw:["book", "monster", "key"]},
+ "st6-18":{sw:["my", "like"],pw:["book", "ship", "crown"]},
+ "st6-19":{sw:["my", "like"],pw:["star", "treasure", "tree"]},
+ "st6-20":{sw:["my", "like"],pw:["island", "key", "castle"]},
+ "st6-21":{sw:["my", "like"],pw:["happy", "ship", "crown"]},
+ "st7-1":{sw:["that", "is"],pw:["apple", "earth", "rocket"]},
+ "st7-2":{sw:["that", "is"],pw:["tree", "key", "penny"]},
+ "st7-3":{sw:["that", "is"],pw:["house", "ship", "block"]},
+ "st7-4":{sw:["that", "is"],pw:["key", "tree", "water"]},
+ "st7-5":{sw:["that", "is"],pw:["tree", "penny", "star"]},
+ "st7-6":{sw:["that", "is"],pw:["ship", "block", "island"]},
+ "st7-7":{sw:["that", "is"],pw:["car", "water", "earth"]},
+ "st7-8":{sw:["that", "is"],pw:["sad", "star", "rocket"]},
+ "st7-9":{sw:["that", "is"],pw:["penny", "island", "key"]},
+ "st7-10":{sw:["that", "is"],pw:["earth", "ship", "block"]},
+ "st7-11":{sw:["that", "is"],pw:["rocket", "tree", "water"]},
+ "st7-12":{sw:["that", "is"],pw:["block", "key", "penny"]},
+ "st7-13":{sw:["that", "is"],pw:["night", "ship", "block"]},
+ "st7-14":{sw:["that", "is"],pw:["tree", "water", "earth"]},
+ "st7-15":{sw:["that", "is"],pw:["book", "rock", "penny"]},
+ "st7-16":{sw:["that", "is"],pw:["book", "rock", "block"]},
+ "st7-17":{sw:["that", "is"],pw:["water", "earth", "ship"]},
+ "st7-18":{sw:["that", "is"],pw:["big", "bread", "star"]},
+ "st7-19":{sw:["that", "is"],pw:["happy", "car", "island"]},
+ "st8-1":{sw:["and", "the"],pw:["rug", "dollar", "boat"]},
+ "st8-2":{sw:["and", "the"],pw:["boat", "key", "monster"]},
+ "st8-3":{sw:["and", "the"],pw:["rainbow", "car", "city"]},
+ "st8-4":{sw:["and", "the"],pw:["plane", "rug", "dollar"]},
+ "st8-5":{sw:["and", "the"],pw:["city", "monster", "star"]},
+ "st8-6":{sw:["and", "the"],pw:["water", "tree", "key"]},
+ "st8-7":{sw:["and", "the"],pw:["dollar", "boat", "rainbow"]},
+ "st8-8":{sw:["and", "the"],pw:["star", "rug", "dollar"]},
+ "st8-9":{sw:["and", "the"],pw:["hug", "tree", "key"]},
+ "st8-10":{sw:["and", "the"],pw:["rainbow", "city", "water"]},
+ "st8-11":{sw:["and", "the"],pw:["water", "rug", "dollar"]},
+ "st8-12":{sw:["and", "the"],pw:["mountain", "key", "monster"]},
+ "st9-1":{sw:["where", "is"],pw:["tree", "island", "castle"]},
+ "st9-2":{sw:["where", "is"],pw:["rain", "castle", "ship"]},
+ "st9-3":{sw:["where", "is"],pw:["dog", "key", "star"]},
+ "st9-4":{sw:["where", "is"],pw:["box", "king", "eye"]},
+ "st9-5":{sw:["where", "is"],pw:["run", "treasure", "water"]},
+ "st9-6":{sw:["where", "is"],pw:["tree", "key", "star"]},
+ "st9-7":{sw:["where", "is"],pw:["water", "eye", "mountain"]},
+ "st9-8":{sw:["where", "is"],pw:["helicopter", "water", "castle"]},
+ "st9-9":{sw:["where", "is"],pw:["boat", "star", "ship"]},
+ "st9-10":{sw:["where", "is"],pw:["mountain", "island", "dog"]},
+ "st9-11":{sw:["where", "is"],pw:["plane", "car", "castle"]},
+ "st9-12":{sw:["where", "is"],pw:["key", "ship", "treasure"]},
+};
+
+var KW = "haeyuli.nir.wb.v1", KS = "haeyuli.nir.wbs.v1";
+
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+  return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]; }); }
+function toast(m){ try { if (SB.toast) SB.toast(m); } catch(e){} }
+function confetti(){ try { if (SB.confetti) SB.confetti(); } catch(e){} }
+function say(t, lang){ try { SB.speak(String(t || ""), 0.86, lang || "en-US"); } catch(e){} }
+function read(k, fb){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; } }
+function write(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+
+/* ---------- 저장 ---------- */
+function doneMap(){
+  var d = read(KW, null);
+  if (!d || typeof d !== "object" || Array.isArray(d)) d = {};
+  if (!d.done || typeof d.done !== "object" || Array.isArray(d.done)) d.done = {};
+  d.v = 1;
+  return d;
+}
+function isDone(id, w){ return !!(doneMap().done[id + "|" + w] > 0); }
+function stepsStore(){
+  var d = read(KS, null);
+  if (!d || typeof d !== "object" || Array.isArray(d)) d = {};
+  d.v = 1; if (!d.st || typeof d.st !== "object") d.st = {};
+  return d;
+}
+function st(id, w){
+  var d = stepsStore();
+  if (!d.st[id + "|" + w]) d.st[id + "|" + w] = { t:0, f:[], c:[] };
+  var s = d.st[id + "|" + w];
+  if (!s.f || !s.f.length) s.f = [];
+  if (!s.c || !s.c.length) s.c = [];
+  return s;
+}
+function saveSt(id, w, s){
+  var d = stepsStore();
+  d.st[id + "|" + w] = s; write(KS, d);
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
+}
+
+/* ---------- 책별 낱말 ---------- */
+function W(id){
+  var x = NB[id] || (typeof OB !== "undefined" ? OB[id] : null);
+  if (!x) x = { sw:["the","is"], pw:["cat","dog","box"] };
+  return x;
+}
+function pwMeta(k){ return NPW[k] || [k, ""]; }
+function artOf(k){ return ART[k] || ART.box; }
+function other(x, i){ return x.pw[Math.min(i, x.pw.length - 1)] || x.pw[0]; }
+function an(w){ return (/^[aeiou]/i.test(String(w)) ? "an " : "a ") + w; }
+/* 문장에 쓸 낱말 — 그림 낱말 중 '것(명사)'를 먼저 고른다 (big·run 같은 말은 문장에 안 맞음) */
+var NONOUN = { big:1, small:1, up:1, down:1, sleep:1, run:1, jump:1, swim:1, hop:1, sit:1, dance:1, climb:1,
+  eat:1, hide:1, fast:1, hot:1, cold:1, wet:1, messy:1, happy:1, sad:1, loud:1, fat:1, count:1, ten:1,
+  hundred:1, pattern:1, yes:1, no:1, hug:1, pilot:1 };
+var FBN = { mw1:"hat", mw7:"park", wp6:"ball", lp10:"ball", mwp1:"hand", "st2-10":"ball", "st2-14":"ball" };
+function nouns(id){
+  var x = W(id), out = [];
+  for (var i = 0; i < x.pw.length; i++) if (!NONOUN[x.pw[i]]) out.push(pwMeta(x.pw[i])[0]);
+  if (!out.length) out.push(FBN[id] || "cat");
+  return out;
+}
+function sentences(id, sw){
+  var x = W(id), s = NSENT[sw] || ["I see the {w}.", "Look at the {w}."];
+  var ns = nouns(id), w1 = ns[0], w2 = ns[1] || ns[0];
+  return s.map(function(line){
+    return line.replace(/\{a\}/g, an(w1)).replace(/\{w\}/g, w1).replace(/\{p\}/g, w2);
+  });
+}
+
+/* ---------- 그림 단어 카드 ---------- */
+function gridHTML(id){
+  var x = W(id);
+  return x.pw.map(function(k){
+    var m = pwMeta(k);
+    return '<button class="nwg-c" type="button" data-nwsay="' + esc(k) + '" aria-label="' + esc(m[0]) + ' 발음 듣기">'
+      + '<span class="nwg-art">' + artOf(k) + '</span>'
+      + '<b>' + esc(m[0]) + '</b><em>' + esc(m[1]) + '</em></button>';
+  }).join("");
+}
+
+/* ---------- 사이트워드 워크북 ---------- */
+var NWI = 0;                     /* 지금 보고 있는 사이트워드 차례 */
+var NWCUR = { d:null, id:"", cv:null, ctx:null, dpr:1, paths:[], cur:null, pen:0, colors:["#e0a06a","#7fb6e8","#7ecbb0","#f0907f"] };
+
+function wordOf(id){ var x = W(id); return x.sw[Math.min(NWI, x.sw.length - 1)] || x.sw[0]; }
+function guideSVG(w, color){
+  var fs = w.length > 3 ? 26 : (w.length > 2 ? 30 : 34);
+  return '<div class="sww-guide"><svg viewBox="0 0 100 39" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+    + '<text x="50" y="30" text-anchor="middle" font-size="' + fs + '" fill="none" stroke="#c9d6df" stroke-width="1" stroke-dasharray="1.7 1.9">' + esc(w) + '</text>'
+    + '<text x="50" y="30" text-anchor="middle" font-size="' + fs + '" fill="' + color + '" opacity=".12">' + esc(w) + '</text>'
+    + '<path d="M6 33.5 H94" stroke="#e4eef6" stroke-width=".7"/><path d="M6 12 H94" stroke="#eef6fb" stroke-width=".6"/>'
+    + '</svg></div>';
+}
+function findGrid(id, w){
+  var pool = ["the","is","a","it","I","my","can","see","we","you","and","to","in","on","look","he","she","go"];
+  var seed = 0, ks = id + w;
+  for (var i = 0; i < ks.length; i++) seed = (seed * 31 + ks.charCodeAt(i)) & 0x7fffffff;
+  function rnd(n){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; }
+  var need = 3, slots = {}, n = 0, guard = 0;
+  while (n < need && guard < 400){ guard++; var p = rnd(8); if (!slots[p]){ slots[p] = 1; n++; } }
+  var out = [];
+  for (i = 0; i < 8; i++){
+    if (slots[i]) out.push(w);
+    else {
+      var c = pool[rnd(pool.length)];
+      if (String(c).toLowerCase() === String(w).toLowerCase()) c = pool[(rnd(pool.length) + 3) % pool.length];
+      out.push(c);
+    }
+  }
+  return out;
+}
+function tokensOf(s){ return String(s).split(/\s+/); }
+function isTarget(tok, w){ return String(tok).toLowerCase().replace(/[^a-z']/g, "") === String(w).toLowerCase(); }
+function findNeed(id, w){ return findGrid(id, w).filter(function(t){ return String(t).toLowerCase() === String(w).toLowerCase(); }).length; }
+function findGot(id, w){ var g = findGrid(id, w), s = st(id, w), n = 0; for (var i = 0; i < g.length; i++) if (String(g[i]).toLowerCase() === String(w).toLowerCase() && s.f.indexOf(i) >= 0) n++; return n; }
+function circNeed(id, w){ var n = 0; sentences(id, w).forEach(function(l){ tokensOf(l).forEach(function(t){ if (isTarget(t, w)) n++; }); }); return n; }
+function circGot(id, w){ var s = st(id, w), n = 0; sentences(id, w).forEach(function(l, si){ tokensOf(l).forEach(function(t, ti){ if (isTarget(t, w) && s.c.indexOf(si + ":" + ti) >= 0) n++; }); }); return n; }
+function steps(id, w){
+  var s = st(id, w);
+  var a = !!s.t, f = findGot(id, w) >= findNeed(id, w), c = circGot(id, w) >= circNeed(id, w);
+  return { trace:a, find:f, circ:c, all:(a && f && c) };
+}
+function stepBar(id, w){
+  var t = steps(id, w);
+  return '<span class="sww-step' + (t.trace ? " done" : "") + '">1 따라쓰기 ' + (t.trace ? "✓" : "·") + '</span>'
+    + '<span class="sww-step' + (t.find ? " done" : "") + '">2 찾기 ' + findGot(id, w) + "/" + findNeed(id, w) + '</span>'
+    + '<span class="sww-step' + (t.circ ? " done" : "") + '">3 동그라미 ' + circGot(id, w) + "/" + circNeed(id, w) + '</span>';
+}
+function wbHTML(id){
+  var x = W(id), w = wordOf(id), s = st(id, w), col = NWCUR.colors[NWI % 4];
+  var tabs = x.sw.map(function(v, i){
+    return '<button class="nw-tab' + (i === NWI ? " on" : "") + (isDone(id, v) ? " done" : "") + '" type="button" data-nwword="' + i + '" aria-pressed="' + (i === NWI) + '">' + (isDone(id, v) ? "✅ " : "") + esc(v) + '</button>';
+  }).join("");
+  var tiles = findGrid(id, w).map(function(t, i){
+    var on = s.f.indexOf(i) >= 0;
+    return '<button class="sww-f' + (on ? " found" : "") + '" type="button" data-nwf="' + i + '" style="' + (on ? "background:" + col : "") + '">' + esc(t) + '</button>';
+  }).join("");
+  var sents = sentences(id, w).map(function(line, si){
+    var body = tokensOf(line).map(function(t, ti){
+      var on = s.c.indexOf(si + ":" + ti) >= 0;
+      return '<button class="sww-word' + (on ? " on" : "") + '" type="button" data-nwtok="' + si + ":" + ti + '">' + esc(t) + '</button>';
+    }).join(" ");
+    return '<div class="sww-sent"><div class="sww-line">' + body + '</div>'
+      + '<button class="nw-say" type="button" data-nwsent="' + si + '" aria-label="문장 듣기">🔊</button></div>';
+  }).join("");
+  var fin = isDone(id, w)
+    ? '<div class="sww-fin"><b>✅ 이 낱말 완성! (⭐ +1)</b></div>' : '';
+  return '<div class="nw-tabs" id="nwTabs">' + tabs + '<span class="nw-steps" id="nwSteps">' + stepBar(id, w) + '</span></div>'
+    + '<div class="nw-sec"><div class="sww-sh"><b>1 · ✏️ ‘' + esc(w) + '’ 따라 쓰기</b><span>점선을 손가락·펜슬로 따라가요</span>'
+    + '<button class="nw-say" type="button" data-nwsay="' + esc(w) + '">🔊 ' + esc(w) + '</button></div>'
+    + '<div class="sww-cvbox"><div id="nwGuide">' + guideSVG(w, col) + '</div><canvas class="sww-cv nw-cv" aria-label="따라 쓰기 판"></canvas></div>'
+    + '<div class="sww-pens">' + NWCUR.colors.map(function(c, i){
+        return '<button class="sww-pen' + (NWCUR.pen === i ? " on" : "") + '" type="button" data-nwpen="' + i + '" style="background:' + c + '" aria-label="색 ' + (i + 1) + '"></button>';
+      }).join("") + '<button class="sww-pen er' + (NWCUR.pen === 9 ? " on" : "") + '" type="button" data-nwpen="9">지우개</button>'
+    + '<button class="eg-btn" type="button" data-nwclear="1">처음부터</button></div></div>'
+    + '<div class="nw-sec"><div class="sww-sh"><b>2 · 🔍 Find it!</b><span>‘' + esc(w) + '’를 모두 눌러요</span></div>'
+    + '<div class="sww-find">' + tiles + '</div></div>'
+    + '<div class="nw-sec"><div class="sww-sh"><b>3 · 📝 문장에서 ‘' + esc(w) + '’에 동그라미</b><span>문장을 듣고 낱말을 톡 눌러요</span></div>'
+    + sents + '</div><div id="nwFin">' + fin + '</div>';
+}
+
+/* ---------- 캔버스 ---------- */
+function redraw(){
+  var c = NWCUR; if (!c.ctx) return;
+  c.ctx.clearRect(0, 0, c.cv.width / c.dpr, c.cv.height / c.dpr);
+  c.paths.forEach(function(p){
+    var pts = p.pts; if (!pts.length) return;
+    c.ctx.beginPath(); c.ctx.strokeStyle = p.c; c.ctx.lineWidth = p.w;
+    c.ctx.moveTo(pts[0][0], pts[0][1]);
+    for (var i = 1; i < pts.length; i++) c.ctx.lineTo(pts[i][0], pts[i][1]);
+    if (pts.length === 1) c.ctx.lineTo(pts[0][0] + .2, pts[0][1] + .2);
+    c.ctx.stroke();
+  });
+}
+function mountCanvas(){
+  var cv = document.querySelector("#nirWB .nw-cv"); if (!cv) return;
+  var box = cv.parentNode;
+  var dpr = Math.min(3, window.devicePixelRatio || 1);
+  var w = Math.max(140, box.clientWidth || 320), h = Math.max(80, box.clientHeight || 140);
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  var ctx = cv.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+  NWCUR.cv = cv; NWCUR.ctx = ctx; NWCUR.dpr = dpr; NWCUR.paths = []; NWCUR.cur = null;
+  redraw();
+  if (cv.__nwBind) return;
+  cv.__nwBind = 1;
+  function pos(ev){ var r = cv.getBoundingClientRect(); return [ev.clientX - r.left, ev.clientY - r.top]; }
+  cv.addEventListener("pointerdown", function(ev){
+    try { cv.setPointerCapture(ev.pointerId); } catch(e){}
+    var er = (NWCUR.pen === 9);
+    NWCUR.cur = { c: er ? "#ffffff" : NWCUR.colors[NWCUR.pen], w: er ? 20 : 5, pts:[pos(ev)] };
+    NWCUR.paths.push(NWCUR.cur);
+    var id = NWCUR.id, w = wordOf(id), s = st(id, w);
+    if (!s.t){ s.t = 1; saveSt(id, w, s); refreshSteps(id, w); }
+    ev.preventDefault(); redraw();
+  });
+  cv.addEventListener("pointermove", function(ev){
+    if (!NWCUR.cur) return;
+    var p = pos(ev), last = NWCUR.cur.pts[NWCUR.cur.pts.length - 1];
+    if (Math.abs(p[0] - last[0]) + Math.abs(p[1] - last[1]) < 1.2) return;
+    NWCUR.cur.pts.push(p); redraw(); ev.preventDefault();
+  });
+  function up(ev){
+    if (!NWCUR.cur) return;
+    NWCUR.cur = null;
+    try { if (ev && ev.pointerId != null) cv.releasePointerCapture(ev.pointerId); } catch(e){}
+  }
+  cv.addEventListener("pointerup", up);
+  cv.addEventListener("pointercancel", up);
+  cv.addEventListener("pointerleave", up);
+}
+
+/* ---------- 진행·완료 ---------- */
+function refreshSteps(id, w){
+  var el = document.getElementById("nwSteps");
+  if (el) el.innerHTML = stepBar(id, w);
+}
+function afterStep(id, w){
+  refreshSteps(id, w);
+  var t = steps(id, w);
+  if (!t.all || isDone(id, w)) return;
+  var d = doneMap();
+  d.done[id + "|" + w] = Date.now();
+  if (!write(KW, d)){ toast("저장 공간이 부족해요"); return; }
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
+  var got = 0;
+  try { got = SB.earn ? SB.earn("nirwb|" + id + "|" + w, 1, { skipStudyBonus:true }) : 0; } catch(e){ got = 0; }
+  try { if (SB.markDaily) SB.markDaily("en"); } catch(e){}
+  var fin = document.getElementById("nwFin");
+  if (fin) fin.innerHTML = '<div class="sww-fin"><b>✅ ‘' + esc(w) + '’ 완성! (⭐ +1)</b></div>';
+  var tabs = document.getElementById("nwTabs");
+  if (tabs){
+    var btns = tabs.querySelectorAll("[data-nwword]");
+    for (var i = 0; i < btns.length; i++) if (btns[i].textContent.replace("✅ ", "").trim() === w) btns[i].classList.add("done");
+  }
+  confetti();
+  toast("🎉 ‘" + w + "’ 사이트워드 워크북 완료!" + (got > 0 ? " ⭐ +" + got : ""));
+  try { if (SB.family && SB.family.sync) setTimeout(function(){ SB.family.sync(); }, 250); } catch(e){}
+}
+
+/* ---------- 열기 ---------- */
+function mount(d, id){
+  NWCUR.d = d; NWCUR.id = id; NWCUR.pen = 0; NWI = 0;
+  var box = document.getElementById("nwWB");
+  if (box) box.innerHTML = wbHTML(id);
+  mountCanvas();
+}
+function open(id){ /* 책을 열 때 카드까지 다시 그린다 */ }
+
+/* ---------- 클릭 ---------- */
+document.addEventListener("click", function(e){
+  var el = e.target; if (!el || !el.closest) return;
+  var wrap = el.closest("#nirWB"); if (!wrap) return;
+  var id = NWCUR.id; if (!id) return;
+  var t;
+  if ((t = el.closest("[data-nwsay]"))){
+    var k = t.getAttribute("data-nwsay"), m = pwMeta(k);
+    say(m[0]); e.preventDefault(); return;
+  }
+  if ((t = el.closest("[data-nwword]"))){
+    NWI = parseInt(t.getAttribute("data-nwword"), 10) || 0;
+    var box = document.getElementById("nwWB");
+    if (box) box.innerHTML = wbHTML(id);
+    mountCanvas();
+    e.preventDefault(); return;
+  }
+  if ((t = el.closest("[data-nwsent]"))){
+    var si = parseInt(t.getAttribute("data-nwsent"), 10);
+    say(sentences(id, wordOf(id))[si] || ""); e.preventDefault(); return;
+  }
+  if ((t = el.closest("[data-nwpen]"))){
+    NWCUR.pen = parseInt(t.getAttribute("data-nwpen"), 10) || 0;
+    var pens = wrap.querySelectorAll(".sww-pen");
+    for (var i = 0; i < pens.length; i++) pens[i].classList.remove("on");
+    t.classList.add("on"); e.preventDefault(); return;
+  }
+  if ((t = el.closest("[data-nwclear]"))){
+    NWCUR.paths = []; redraw();
+    var w0 = wordOf(id), s0 = st(id, w0); s0.t = 0; saveSt(id, w0, s0); refreshSteps(id, w0);
+    e.preventDefault(); return;
+  }
+  if ((t = el.closest("[data-nwf]"))){
+    var k2 = parseInt(t.getAttribute("data-nwf"), 10), w1 = wordOf(id);
+    var g = findGrid(id, w1), tok = String(g[k2] || "");
+    var s = st(id, w1);
+    if (String(tok).toLowerCase() === String(w1).toLowerCase()){
+      if (s.f.indexOf(k2) < 0){ s.f.push(k2); saveSt(id, w1, s); }
+      t.classList.add("found"); t.style.background = NWCUR.colors[NWI % 4];
+      say(tok); afterStep(id, w1);
+    } else {
+      t.classList.remove("miss"); void t.offsetWidth; t.classList.add("miss");
+      toast("‘" + tok + "’는 ‘" + w1 + "’가 아니에요 🙂");
+    }
+    e.preventDefault(); return;
+  }
+  if ((t = el.closest("[data-nwtok]"))){
+    var pp = String(t.getAttribute("data-nwtok") || "").split(":");
+    var si2 = parseInt(pp[0], 10), ti2 = parseInt(pp[1], 10);
+    var w2 = wordOf(id), line = sentences(id, w2)[si2] || "";
+    var tok2 = tokensOf(line)[ti2] || "";
+    if (isTarget(tok2, w2)){
+      var s2 = st(id, w2), key = si2 + ":" + ti2, at = s2.c.indexOf(key);
+      if (at >= 0){ s2.c.splice(at, 1); t.classList.remove("on"); }
+      else { s2.c.push(key); t.classList.add("on"); say(tok2); }
+      saveSt(id, w2, s2); afterStep(id, w2);
+    } else {
+      t.classList.remove("on"); void t.offsetWidth; t.classList.add("miss");
+      toast("문장 속 ‘" + w2 + "’를 찾아 눌러 봐요 🙂");
+    }
+    e.preventDefault(); return;
+  }
+});
+
+/* ---------- 바깥에서 쓰는 것 ---------- */
+SB.nirWB = {
+  gridHTML: gridHTML,
+  wbHTML: wbHTML,
+  mount: mount,
+  word: function(id){ return wordOf(id || NWCUR.id); },
+  done: function(id, w){ return isDone(id, w); },
+  steps: function(id, w){ return steps(id, w); },
+  data: function(id){ return W(id); },
+  refresh: function(){ var id = NWCUR.id; if (id && document.getElementById("nwWB")) mount(NWCUR.d, id); }
+};
+
+/* ---------- 스타일 ---------- */
+var CSS = ''
+ + '.nwg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.55vh;margin:.2vh 0 .4vh;max-width:620px;}'
+ + '.nwg-c{display:flex;flex-direction:column;align-items:center;gap:.15em;padding:.7vh .3vh .5vh;border-radius:1.2vh;'
+ + 'background:#fbfdff;box-shadow:inset 0 0 0 .14vh #e2edf5;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;}'
+ + '.nwg-c:active{transform:scale(.97);}'
+ + '.nwg-art{display:block;width:100%;max-width:min(11vh,120px);}'
+ + '.nwg-art svg{width:100%;height:auto;display:block;}'
+ + '.nwg-c b{font-family:"Helvetica Neue",Arial,"Liberation Sans",sans-serif;font-size:clamp(12px,1.7vh,18px);font-weight:800;color:#1b4c6b;letter-spacing:-.01em;}'
+ + '.nwg-c em{font-style:normal;font-size:clamp(9px,1.2vh,13px);font-weight:700;color:#8aa6b8;}'
+ + '.nw-tabs{display:flex;align-items:center;gap:.4vh;flex-wrap:wrap;margin-bottom:.5vh;}'
+ + '.nw-tab{min-width:3.6rem;height:3.2vh;min-height:2rem;padding:0 .9vh;border-radius:999px;background:#fff;color:#5f7f93;'
+ + 'font-family:"Helvetica Neue",Arial,sans-serif;font-weight:800;font-size:clamp(12px,1.7vh,17px);border:0;'
+ + 'box-shadow:inset 0 0 0 .16vh #dfeaf2;cursor:pointer;}'
+ + '.nw-tab.on{background:#eaf7ff;color:#0d6f9e;box-shadow:inset 0 0 0 .22vh #9fd3ee;}'
+ + '.nw-tab.done{color:#1f8a5c;background:#f2fdf8;box-shadow:inset 0 0 0 .16vh #bfe9d4;}'
+ + '.nw-steps{display:flex;gap:.35vh;flex-wrap:wrap;margin-left:auto;}'
+ + '.nw-sec{margin-top:.7vh;padding-top:.6vh;border-top:.14vh solid #eef5f9;}'
+ + '.nw-sec:first-of-type{border-top:0;padding-top:0;}'
+ + '.nw-say{border:0;background:#eaf7ff;color:#0d6f9e;border-radius:999px;padding:.2em .7em;font-weight:800;'
+ + 'font-size:clamp(10px,1.35vh,14px);cursor:pointer;margin-left:auto;}'
+ + '.nw-cv{height:14vh;}'
+ + '.sww-word.miss{animation:egshake .35s;}'
+ + '#nirWB .sww-cvbox{aspect-ratio:2.4/1;max-height:20vh;min-height:88px;}'
+ + '@media (max-width:520px){.nwg-grid{gap:.45vh;}.nwg-art{max-width:9.5vh;}.nw-cv{height:12vh;}}'
+ + '';
+try { var stEl = document.createElement("style"); stEl.id = "nirWBStyle"; stEl.textContent = CSS; document.head.appendChild(stEl); } catch(e){}
+})();
+
+</script>
 </body>
 </html>
