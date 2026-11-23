@@ -8659,6 +8659,9 @@ if (document.readyState === "loading") document.addEventListener("DOMContentLoad
    ========================================================= */
 (function(){
 "use strict";
+/* ✅ 2026-11-23 임시 제한 해제 — 아래 GATE_ENABLED 를 true 로 되돌리면 20명 선착순 게이트가 그대로 복구됩니다.
+   (카운터 · 슬롯 키 · 폭파/차단 화면 · hit/peek 로직 모두 원형 그대로 보존) */
+var GATE_ENABLED = false;
 var NS = "picoach-pjb-20261119-9f3c";
 var KEY = "share-slots10v1";
 var LIMIT = 20;
@@ -8679,6 +8682,14 @@ function open(n){
   var cnt = document.getElementById("shareCount");
   if(cnt) cnt.textContent = String(n || 0);
   if(bar) bar.hidden = false;
+  if(app) app.hidden = false;
+}
+
+function openNow(){
+  /* 제한 해제 모드 — 접속 인원 확인·차감 없이 곱바로 본문을 어는다 */
+  gone(wait);
+  var bar = document.getElementById("shareBar");
+  if(bar) bar.hidden = true;
   if(app) app.hidden = false;
 }
 
@@ -8764,6 +8775,7 @@ function ready(fn){
 }
 
 ready(function(){
+  if(!GATE_ENABLED){ openNow(); return; }                               /* 임시 해제: 카운터 조회 없이 본문 표시 */
   var slot = get(SLOT_KEY);
   if(slot === "granted"){ open(Number(get(CNT_KEY) || 0)); return; }   /* 이미 승인된 기기: 재차감 없이 그대로 */
   if(slot === "blown"){                                               /* 마감 캐시 기기: 한도 확대 여부만 재확인 */
