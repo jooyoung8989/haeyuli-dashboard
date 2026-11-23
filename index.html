@@ -5594,13 +5594,21 @@ body .sch-head .sch-time{font-size:1.35vh;}
 .bgm-btn.off{background:#f4f6f5;color:#8b9a92;box-shadow:inset 0 0 0 .18vh #e3eae6;}
 .bgm-btn.done{background:#fff9e2;color:#8a5f06;box-shadow:inset 0 0 0 .18vh #f0d98a;}
 .bgm-btn.late{background:#f2f5fb;color:#4a6688;box-shadow:inset 0 0 0 .18vh #d8e2f0;}
+/* 아직 소리가 열리지 않은 상태 — 한 번만 콕 눌러 달라고 알린다 */
+.bgm-btn.need{background:#eaf4ff;color:#18578f;box-shadow:inset 0 0 0 .18vh #b7d7f3,0 .18vh .5vh rgba(24,87,143,.12);}
 .bgm-btn.urgent{animation:bgmPulse 1.5s ease-out infinite;}
+.bgm-btn.need{animation:bgmNeed 1.8s ease-out infinite;}
 @keyframes bgmPulse{
   0%{box-shadow:inset 0 0 0 .18vh #ffc9b4,0 0 0 0 rgba(214,84,44,.30);}
   70%{box-shadow:inset 0 0 0 .18vh #ffc9b4,0 0 0 .9vh rgba(214,84,44,0);}
   100%{box-shadow:inset 0 0 0 .18vh #ffc9b4,0 0 0 0 rgba(214,84,44,0);}
 }
-@media (prefers-reduced-motion:reduce){ .bgm-btn.urgent{animation:none;} }
+@keyframes bgmNeed{
+  0%{box-shadow:inset 0 0 0 .18vh #b7d7f3,0 0 0 0 rgba(24,87,143,.30);}
+  70%{box-shadow:inset 0 0 0 .18vh #b7d7f3,0 0 0 .95vh rgba(24,87,143,0);}
+  100%{box-shadow:inset 0 0 0 .18vh #b7d7f3,0 0 0 0 rgba(24,87,143,0);}
+}
+@media (prefers-reduced-motion:reduce){ .bgm-btn.urgent,.bgm-btn.need{animation:none;} }
 .bgm-prev{
   height:3.7vh;padding:0 .95vh;border-radius:999px;font-size:1.12vh;font-weight:900;white-space:nowrap;
   background:#fffbe9;color:#9a6f0c;box-shadow:inset 0 0 0 .18vh #f3e0a6;
@@ -5628,7 +5636,7 @@ window.YULI_BGM = (function(){
   "use strict";
   var STORE = "yuli.bgm.on";
   var AC = window.AudioContext || window.webkitAudioContext;
-  var MASTER = 0.95;
+  var MASTER = 2.20;          /* 아이폰 스피커에서도 들리게 — 컴프레서가 피크를 잡아 준다 */
 
   var enabled = true;
   try { if (localStorage.getItem(STORE) === "0") enabled = false; } catch(e){}
@@ -5637,8 +5645,11 @@ window.YULI_BGM = (function(){
   var calmBus = null, urgentBus = null;
   var mode = null, step = 0, nextAt = 0, timer = null;
   var onSchool = false, remainMin = null, allDone = false;
-  var previewUntil = 0, pvTimer = null, tailTimer = null, lastResume = 0;
+  var previewUntil = 0, pvTimer = null, tailTimer = null;
   var playing = false, notes = 0;
+  var unlocked = false, silentEl = null, silentDone = false;
+  /* iOS 가 오디오 세션을 확실히 열도록 첫 터치에서 한 번 재생하는 2ms 무음 WAV */
+  var SILENT_WAV = "data:audio/wav;base64,UklGRkQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==";
 
   var BPM_CALM = 84, BPM_URGENT = 150;
   var CALM_STEP = 60 / BPM_CALM / 2;      /* 8분음표 */
@@ -5757,14 +5768,14 @@ window.YULI_BGM = (function(){
 
     if (beat === 0){
       var ch = CALM_CHORDS[bar];
-      for (var k = 0; k < ch.length; k++) pad(ch[k], t, CALM_STEP * 8 * 0.96, 0.030);
-      bass(CALM_ROOTS[bar], t, CALM_STEP * 4.2, 0.155, calmBus);
+      for (var k = 0; k < ch.length; k++) pad(ch[k], t, CALM_STEP * 8 * 0.96, 0.046);
+      bass(CALM_ROOTS[bar], t, CALM_STEP * 4.2, 0.170, calmBus);
     }
-    if (beat === 4) bass(CALM_ROOTS[bar] + 12, t, CALM_STEP * 1.6, 0.055, calmBus);
+    if (beat === 4) bass(CALM_ROOTS[bar] + 12, t, CALM_STEP * 1.6, 0.062, calmBus);
 
     var mel = Math.floor(s / CALM_LEN) % 2 ? CALM_MEL_B : CALM_MEL_A;
     var m = mel[i];
-    if (m) marimba(m, t, CALM_STEP * 2.6, beat === 0 ? 0.165 : 0.125);
+    if (m) marimba(m, t, CALM_STEP * 2.6, beat === 0 ? 0.180 : 0.140);
   }
 
   function playUrgent(s, t){
@@ -5774,21 +5785,22 @@ window.YULI_BGM = (function(){
     var ch = URG_CHORDS[bar];
     var tones = [ch[0], ch[1], ch[2], ch[0] + 12];
 
-    chip(tones[URG_ARP[ph]], t, URG_STEP * 1.5, (ph === 0 || ph === 8) ? 0.070 : 0.042);
+    chip(tones[URG_ARP[ph]], t, URG_STEP * 1.5, (ph === 0 || ph === 8) ? 0.105 : 0.064);
 
     var lead = URG_LEAD[bar];
     for (var k = 0; k < lead.length; k++){
-      if (lead[k][1] === ph) chip(lead[k][0], t, URG_STEP * 3.4, 0.105);
+      if (lead[k][1] === ph) chip(lead[k][0], t, URG_STEP * 3.4, 0.150);
     }
 
-    if (ph % 2 === 0) bass(URG_ROOTS[bar], t, URG_STEP * 1.7, ph === 0 ? 0.135 : 0.105, urgentBus);
-    if (ph === 4 || ph === 12) tick(t, 0.050, 5200);
-    else if (ph % 2 === 1) tick(t, 0.014, 8200);
+    if (ph % 2 === 0) bass(URG_ROOTS[bar], t, URG_STEP * 1.7, ph === 0 ? 0.165 : 0.130, urgentBus);
+    if (ph === 4 || ph === 12) tick(t, 0.062, 5200);
+    else if (ph % 2 === 1) tick(t, 0.018, 8200);
   }
 
   /* ---------------- 오디오 그래프 ---------------- */
   function build(){
     if (ctx || !AC) return !!ctx;
+    try { if (navigator.audioSession && navigator.audioSession.type !== "playback") navigator.audioSession.type = "playback"; } catch(e){}
     ctx = new AC();
     var comp = ctx.createDynamicsCompressor();
     comp.threshold.value = -18; comp.knee.value = 20; comp.ratio.value = 3;
@@ -5843,21 +5855,64 @@ window.YULI_BGM = (function(){
     }
   }
 
-  function tryResume(){
+  /* 쿨다운 없이 바로 resume — 아이폰 사파리는 touchend/click 한 번하나로 열어야 하는데,
+     예전 코드는 pointerdown 에서 1.2초 쿨다운을 채워 버려 정작 click 에서 resume 이 막혔다. */
+  function resumeNow(){
     if (!ctx) return;
-    var now = Date.now();
-    if (now - lastResume < 1200) return;
-    lastResume = now;
+    if (ctx.state === "running") return;
     try {
       var p = ctx.resume();
-      if (p && p.then) p.then(function(){ if (playing) sync(); }).catch(function(){});
+      if (p && p.then) p.then(function(){ if (playing || wantSound() || Date.now() < previewUntil) sync(); else paint(); }).catch(function(){});
     } catch(e){}
+  }
+
+  /* 첫 터치/클릭에서 오디오 잠금을 '동기적으로' 해제한다.
+     iOS 사파리: (1) navigator.audioSession.type = "playback" 이어야 측면 무음 스위치가 켜져 있어도 소리가 나고,
+                 (2) 같은 제스처 안에서 resume() + 1샘플 무음 BufferSource 재생이 필요하며,
+                 (3) 일부 버전은 초소형 무음 <audio> 도 한 번 재생해 줘야 Web Audio 출력이 열린다. */
+  function unlockFromGesture(){
+    if (!AC) return false;
+    try {
+      if (navigator.audioSession && navigator.audioSession.type !== "playback"){
+        navigator.audioSession.type = "playback";
+      }
+    } catch(e){}
+    if (!build()) return false;
+    unlocked = true;
+    try {
+      if (ctx.state !== "running"){
+        var p = ctx.resume();
+        if (p && p.then) p.then(function(){ sync(); }).catch(function(){});
+      }
+    } catch(e){}
+    try {
+      var b = ctx.createBuffer(1, 1, ctx.sampleRate);
+      var src = ctx.createBufferSource();
+      src.buffer = b; src.connect(ctx.destination); src.start(0);
+    } catch(e){}
+    if (!silentDone){
+      silentDone = true;
+      try {
+        if (!silentEl){
+          silentEl = document.createElement("audio");
+          silentEl.setAttribute("playsinline", "");
+          silentEl.setAttribute("webkit-playsinline", "");
+          silentEl.setAttribute("aria-hidden", "true");
+          silentEl.preload = "auto";
+          silentEl.volume = 0.01;
+          silentEl.src = SILENT_WAV;
+        }
+        var ap = silentEl.play();
+        if (ap && ap.catch) ap.catch(function(){});
+      } catch(e){}
+    }
+    return true;
   }
 
   function play(){
     if (!AC) return;
     if (!build()) return;
-    if (ctx.state !== "running") tryResume();
+    if (ctx.state !== "running") resumeNow();
     if (playing) return;
     playing = true;
     var t = ctx.currentTime;
@@ -5879,10 +5934,8 @@ window.YULI_BGM = (function(){
     if (calmBus){ calmBus.gain.cancelScheduledValues(t); calmBus.gain.setTargetAtTime(0.0001, t, 0.06); }
     if (urgentBus){ urgentBus.gain.cancelScheduledValues(t); urgentBus.gain.setTargetAtTime(0.0001, t, 0.06); }
     clearTimeout(tailTimer);
-    tailTimer = setTimeout(function(){
-      if (playing || !ctx) return;
-      if (ctx.state === "running") { try { ctx.suspend(); } catch(e){} }
-    }, 900);
+    /* 예전에는 900ms 뒤 ctx.suspend() 했는데, 그러면 다시 등원 탭에 들어올 때
+       iOS 가 새 제스처를 요구해 소리가 안 났다. 조용히 0 으로 두고 계속 running 으로 둔다. */
   }
 
   /* ---------------- 상태 ---------------- */
@@ -5905,14 +5958,18 @@ window.YULI_BGM = (function(){
     var tx = document.getElementById("bgmTx");
     var prev = document.getElementById("bgmPrev");
     if (!btn || !ic || !tx) return;
-    var pv = Date.now() < previewUntil;
+    var pv = enabled && Date.now() < previewUntil;
+    var live = !!(ctx && ctx.state === "running");
+    var needTap = !!(wantSound() && !live);
     var key = (enabled ? 1 : 0) + "|" + (allDone ? 1 : 0) + "|" +
-              (remainMin === null ? "x" : (remainMin <= 0 ? 0 : Math.min(remainMin, 11))) + "|" + (pv ? 1 : 0);
+              (remainMin === null ? "x" : (remainMin <= 0 ? 0 : Math.min(remainMin, 11))) + "|" + (pv ? 1 : 0) +
+              "|" + (live ? 1 : 0) + "|" + (needTap ? 1 : 0);
     if (key === uiKey) return;
     uiKey = key;
 
     var cls = "", icon = "🌿", text = "잔잔 모드";
     if (pv){ cls = "urgent"; icon = "⚡"; text = "미리듣는 중"; }
+    else if (needTap){ cls = "need"; icon = "🔊"; text = "눌러서 소리 켜기"; }
     else if (!enabled){ cls = "off"; icon = "🔇"; text = "음소거"; }
     else if (allDone){ cls = "done"; icon = "🎉"; text = "준비 완료"; }
     else if (remainMin !== null && remainMin <= 0){ cls = "late"; icon = "🎒"; text = "출발 시간"; }
@@ -5923,9 +5980,12 @@ window.YULI_BGM = (function(){
     ic.textContent = icon;
     tx.textContent = text;
     btn.setAttribute("aria-pressed", enabled ? "true" : "false");
-    btn.title = enabled
-      ? "등원 음악 켜짐 · 눌러서 끄기 (10분 남으면 급박하게 바뀌어요)"
-      : "등원 음악 꺼짐 · 눌러서 켜기";
+    btn.setAttribute("aria-label", needTap ? "등원 음악 소리 켜기" : (enabled ? "등원 음악 끄기" : "등원 음악 켜기"));
+    btn.title = needTap
+      ? "한 번 눌러 주면 등원 음악이 흘러요"
+      : (enabled
+        ? "등원 음악 켜짐 · 눌러서 끄기 (10분 남으면 급박하게 바뀌어요)"
+        : "등원 음악 꺼짐 · 눌러서 켜기");
     if (prev){
       prev.textContent = pv ? "⏹ 그만" : "⚡ 미리";
       prev.className = "bgm-prev" + (pv ? " on" : "");
@@ -5933,12 +5993,12 @@ window.YULI_BGM = (function(){
   }
 
   function sync(){
-    var pv = Date.now() < previewUntil;
+    var pv = enabled && Date.now() < previewUntil;
     if (wantSound() || pv){
       play();
       var m = currentMode();
       if (mode !== m) setMode(m);
-      if (ctx && ctx.state !== "running") tryResume();
+      if (ctx && ctx.state !== "running") resumeNow();
     } else if (playing){
       halt();
     }
@@ -5956,10 +6016,13 @@ window.YULI_BGM = (function(){
 
   function tab(isSchool){
     onSchool = !!isSchool;
+    /* 등원 탭을 떠나면 미리듣기도 함께 끝낸다 */
+    if (!onSchool && Date.now() < previewUntil){ previewUntil = 0; clearTimeout(pvTimer); }
     sync();
   }
 
   function preview(sec){
+    if (!enabled){ enabled = true; try { localStorage.setItem(STORE, "1"); } catch(e){} }  /* 미리듣기는 소리를 켠다 */
     var d = (sec || 8) * 1000;
     previewUntil = Date.now() + d;
     clearTimeout(pvTimer);
@@ -5968,12 +6031,21 @@ window.YULI_BGM = (function(){
   }
 
   function previewToggle(){
-    if (Date.now() < previewUntil){ previewUntil = 0; clearTimeout(pvTimer); sync(); }
+    if (!enabled) preview(8);
+    else if (Date.now() < previewUntil){ previewUntil = 0; clearTimeout(pvTimer); sync(); }
     else preview(8);
   }
 
   function toggle(){
+    /* 배지가 "눌러서 소리 켜기" 라고 말하고 있으면, 첫 탭은 끄기가 아니라 켜기다 */
+    if (enabled && !playing && wantSound()){
+      unlockFromGesture();
+      sync();
+      resumeNow();
+      return;
+    }
     enabled = !enabled;
+    if (!enabled && Date.now() < previewUntil){ previewUntil = 0; clearTimeout(pvTimer); }
     try { localStorage.setItem(STORE, enabled ? "1" : "0"); } catch(e){}
     if (enabled && !wantSound() && (allDone || (remainMin !== null && remainMin <= 0))){
       preview(6);            /* 준비 완료·출발 시간에는 잠깐 들려준다 */
@@ -5985,22 +6057,37 @@ window.YULI_BGM = (function(){
   function bind(){
     var btn = document.getElementById("bgmToggle");
     var prev = document.getElementById("bgmPrev");
-    if (btn) btn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
-    if (prev) prev.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); previewToggle(); });
+    if (btn) btn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); unlockFromGesture(); toggle(); });
+    if (prev) prev.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); unlockFromGesture(); previewToggle(); });
     var pane = document.getElementById("pane-school");
     onSchool = !!(pane && pane.classList.contains("active"));
     paint();
   }
 
-  /* 첫 터치에서 오디오 잠금 해제 · 화면 복귀 시 다시 이어 붙이기 */
-  document.addEventListener("pointerdown", function(){
+  /* 첫 터치에서 오디오 잠금 해제 · 화면 복귀 시 다시 이어 붙이기
+     iOS 사파리는 touchstart/touchend/click 을 제스처로 인정하므로 셋 다 잡고,
+     pointerdown 만 믿지 않는다(예전 코드가 여기서 쿨다운을 채워 click 을 막았다). */
+  function onGesture(e){
+    unlockFromGesture();
+    if (e && e.type === "click"){
+      var t = e.target;
+      if (t && t.closest && t.closest("#bgmToggle,#bgmPrev")) return;   /* 버튼은 자기 핸들러가 처리 */
+    }
     if (!onSchool) return;
-    if (playing){ if (ctx && ctx.state !== "running") tryResume(); }
-    else if (wantSound()) sync();
-  }, true);
+    if (wantSound() || Date.now() < previewUntil || playing) sync();
+  }
+  var GESTURES = ["touchstart", "touchend", "pointerdown", "click", "keydown"];
+  for (var gi = 0; gi < GESTURES.length; gi++){
+    try { document.addEventListener(GESTURES[gi], onGesture, { passive: true, capture: true }); }
+    catch(e){ document.addEventListener(GESTURES[gi], onGesture, true); }
+  }
   document.addEventListener("visibilitychange", function(){
-    if (!document.hidden && playing && ctx && ctx.state !== "running") tryResume();
+    if (!document.hidden && playing && ctx && ctx.state !== "running") resumeNow();
   });
+  if (window.addEventListener){
+    window.addEventListener("pageshow", function(){ if (playing) resumeNow(); });
+    window.addEventListener("focus", function(){ if (playing) resumeNow(); });
+  }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
   else bind();
@@ -6012,9 +6099,13 @@ window.YULI_BGM = (function(){
     preview: preview,
     sync: sync,
     state: function(){
+      var as = null;
+      try { as = navigator.audioSession ? navigator.audioSession.type : null; } catch(e){}
       return { enabled: enabled, onSchool: onSchool, remainMin: remainMin, allDone: allDone,
-               playing: playing, mode: mode, ctx: ctx ? ctx.state : null, notes: notes };
+               playing: playing, mode: mode, ctx: ctx ? ctx.state : null, notes: notes,
+               unlocked: unlocked, audioSession: as, needsTap: !!(wantSound() && !(ctx && ctx.state === "running")) };
     },
+    unlock: unlockFromGesture,
     level: function(){
       if (!analyser) return { rms: 0, peak: 0 };
       var a = new Float32Array(analyser.fftSize);
