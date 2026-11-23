@@ -13442,9 +13442,31 @@ function pet(){
   if (!p.coll || typeof p.coll !== "object") p.coll = {};
   if (p.field && !FIELD[p.field]) p.field = null;
   if (p.stage > 2 && !p.field) p.field = "land";   /* 예전 저장과 호환 */
+  /* 예전 저장·동기화 오류로 캐릭터 번호가 비어 있어도 그림이 사라지지 않게 복구 */
+  if (p.stage >= 1 && !Number(p.no)) { var recNo = stageNoOf(p); if (recNo) p.no = recNo; }
+  p.eggs = Math.max(1, Math.floor(Number(p.eggs) || 1));   /* 세대(새 알 받은 횟수) */
   return p;
 }
 function savePet(p){ p.ts = Date.now(); p.at = Date.now(); writeJSON(TK, p); }
+
+/* 단계·분야로 원래 캐릭터 번호를 되찾는다 (그림이 비지 않게) */
+function stageNoOf(p){
+  if (!p) return CH.baby.no;
+  var st = Number(p.stage) || 0;
+  if (st <= 0) return null;
+  var f = (p.field && CH.kid[p.field]) ? p.field : "land";
+  if (st === 1) return CH.baby.no;
+  if (st === 2) return p.field ? CH.kid[f].no : CH.baby.no;      /* 분야 고르기 전에는 베이비 그림 */
+  if (st === 3) return CH.young[f].no;
+  if (st === 4) { var t = p.tier || tierOf(p); return (CH.adult[f][t] || CH.adult[f].S).no; }
+  return CH.secret[f].no;
+}
+function petNo(p){
+  if (!p || Number(p.stage) === 0) return null;
+  var n = Number(p.no);
+  if (n > 0) return n;
+  return stageNoOf(p) || CH.baby.no;
+}
 
 /* 시간이 지나면 배고파지고 심심해져요 */
 function tick(){
@@ -13538,9 +13560,11 @@ function chooseField(f){
 
 function newEgg(){
   var p = pet(), keep = p.coll || {};
-  var n = { v:1, stage:0, field:null, no:null, grow:0, joy:64, hunger:28,
-            ts:Date.now(), at:Date.now(), history:[], coll:keep, school:null, tier:null, eggs:(p.eggs || 1) + 1 };
+  var n = { v:1, stage:0, field:null, no:null, grow:0, joy:64, hunger:28, clean:85,
+            ts:Date.now(), at:Date.now(), history:[], coll:keep, school:null, tier:null,
+            eggs: Math.max(1, Number(p.eggs) || 1) + 1 };
   savePet(n);
+  try { hideNotice(); } catch(e){}            /* 새 알이 알림장 카드에 가리지 않게 */
   say("🥚 새 알이 도착했어! 따뜻하게 품어 줘~");
   if (SB.toast) SB.toast("🥚 새 알을 받았어요! (지금까지 키운 친구는 도감에 남아요)");
   paint();
@@ -13571,13 +13595,29 @@ function paintHome(){
   var box = $("haPet"), p = pet();
   if (!box) return;
   if (p.stage === 0) box.innerHTML = '<span class="ha-egg">🥚</span>';
-  else box.innerHTML = petHTML(p.no || 500) + (isSchooling(p) ? '<span class="ha-bag">🎒</span>' : "");
+  else box.innerHTML = petHTML(petNo(p) || CH.baby.no) + (isSchooling(p) ? '<span class="ha-bag">🎒</span>' : "");
 }
 function paintYard(){
   var d = $("dog"), p = pet(), img = $("petImg"), wear = $("petWear"), bag = $("petBag");
   if (!d) return;
   d.setAttribute("data-stage", String(p.stage));
-  if (img && p.no) { img.src = "tama-img/" + p.no + ".webp"; img.alt = labelOf(p); }
+  if (img){
+    if (!img.__tamaFix){
+      img.__tamaFix = 1;
+      img.addEventListener("error", function(){
+        var fb = "tama-img/" + CH.baby.no + ".webp";
+        if (this.getAttribute("src") !== fb) this.src = fb;
+      });
+    }
+    var showNo = petNo(p);
+    if (p.stage === 0){
+      img.removeAttribute("src"); img.alt = "알";
+    } else if (showNo){
+      var wantSrc = "tama-img/" + showNo + ".webp";
+      if (img.getAttribute("src") !== wantSrc) img.src = wantSrc;
+      img.alt = labelOf(p);
+    }
+  }
   if (wear) wear.innerHTML = wearHTML();
   if (bag) bag.hidden = !isSchooling(p);
   d.setAttribute("aria-label", labelOf(p) + " 쓰다듬기");
@@ -14286,7 +14326,7 @@ function openSchool(){
     var badges = (pk ? sup.em : "") + (wears.length ? wears.map(function(a){ return a.em; }).join("") : "🎒");
     var mine = pk ? "책가방 + " + sup.nm + " 챙겼어!" : "준비물을 못 챙겼어… 🥺";
     me.innerHTML = '<span class="ts-me-in" style="--x:' + s2.x + '%;--y:' + s2.y + '%">'
-      + petHTML(p.no)
+      + petHTML(petNo(p) || CH.baby.no)
       + '<b class="ts-nm me">내 친구 · ' + esc(labelOf(p)) + '</b>'
       + '<span class="ts-badge">' + badges + '</span>'
       + '<span class="ts-bub me">' + esc(mine) + '</span></span>';
@@ -24455,22 +24495,48 @@ function mergeTama(l, c){
   c = (c && typeof c === "object" && !Array.isArray(c)) ? c : null;
   if (!l) return c;
   if (!c) return l;
+  var numOr = function(v, f){ return (typeof v === "number" && isFinite(v)) ? v : f; };
+  var le = Math.max(1, num(l.eggs) || 1), ce = Math.max(1, num(c.eggs) || 1);
   var pick = (num(c.at) > num(l.at)) ? c : l;
-  var out = {
-    v:1,
-    stage: Math.max(num(l.stage), num(c.stage)),
-    field: pick.field || l.field || c.field || null,
-    no: pick.no || l.no || c.no || null,
-    tier: pick.tier || l.tier || c.tier || null,
-    grow: Math.max(num(l.grow), num(c.grow)),
-    joy: num(pick.joy), hunger: num(pick.hunger), clean: num(pick.clean),
-    ts: Date.now(), at: Math.max(num(l.at), num(c.at), 1),
-    history: [], coll: {}, school: pick.school || null
-  };
-  if (out.stage !== num(pick.stage)) {           /* 이쪽이 더 자란 다마고치면 그 이름·분야를 지킨다 */
-    out.field = (num(l.stage) >= num(c.stage)) ? (l.field || out.field) : (c.field || out.field);
-    out.no = (num(l.stage) >= num(c.stage)) ? (l.no || out.no) : (c.no || out.no);
-    out.tier = (num(l.stage) >= num(c.stage)) ? (l.tier || out.tier) : (c.tier || out.tier);
+  /* 🥚 새 알을 받은 세대(eggs)가 더 큰 쪽이 있으면 그 세대를 통째로 쓴다.
+     새 알을 받았는데 다른 기기의 옛 어른 다마고치로 되돌아가던 문제를 막는다. */
+  var gen = (le !== ce) ? ((le > ce) ? l : c) : null;
+  var out;
+  if (gen){
+    out = {
+      v:1,
+      stage: Math.max(0, Math.min(5, num(gen.stage))),
+      field: gen.field || null,
+      no: gen.no || null,
+      tier: gen.tier || null,
+      grow: Math.max(0, num(gen.grow)),
+      joy: numOr(gen.joy, numOr(l.joy, numOr(c.joy, 64))),
+      hunger: numOr(gen.hunger, numOr(l.hunger, numOr(c.hunger, 28))),
+      clean: numOr(gen.clean, numOr(l.clean, numOr(c.clean, 72))),
+      ts: Date.now(), at: Math.max(num(l.at), num(c.at), 1),
+      history: [], coll: {}, school: gen.school || null,
+      eggs: Math.max(le, ce)
+    };
+  } else {
+    out = {
+      v:1,
+      stage: Math.max(num(l.stage), num(c.stage)),
+      field: pick.field || l.field || c.field || null,
+      no: pick.no || l.no || c.no || null,
+      tier: pick.tier || l.tier || c.tier || null,
+      grow: Math.max(num(l.grow), num(c.grow)),
+      joy: numOr(pick.joy, numOr(l.joy, numOr(c.joy, 64))),
+      hunger: numOr(pick.hunger, numOr(l.hunger, numOr(c.hunger, 28))),
+      clean: numOr(pick.clean, numOr(l.clean, numOr(c.clean, 72))),
+      ts: Date.now(), at: Math.max(num(l.at), num(c.at), 1),
+      history: [], coll: {}, school: pick.school || null,
+      eggs: le
+    };
+    if (out.stage !== num(pick.stage)) {           /* 이쪽이 더 자란 다마고치면 그 이름·분야를 지킨다 */
+      out.field = (num(l.stage) >= num(c.stage)) ? (l.field || out.field) : (c.field || out.field);
+      out.no = (num(l.stage) >= num(c.stage)) ? (l.no || out.no) : (c.no || out.no);
+      out.tier = (num(l.stage) >= num(c.stage)) ? (l.tier || out.tier) : (c.tier || out.tier);
+    }
   }
   [l.coll, c.coll].forEach(function(m){
     if (!m || typeof m !== "object") return;
@@ -24488,6 +24554,7 @@ function mergeTama(l, c){
   });
   h.sort(function(a, b){ return num(a.at) - num(b.at); });
   out.history = h.slice(-40);
+  out.eggs = Math.max(le, ce);
   return out;
 }
 /* 🛋️ 다마고치 방 — 산 물건은 합치고(많은 쪽), 입은 것은 마지막에 손댄 쪽 */
