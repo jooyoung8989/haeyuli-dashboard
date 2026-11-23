@@ -1353,6 +1353,12 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
         <select id="schHour" aria-label="등원 목표 시"></select><span class="st-col">:</span><select id="schMin" aria-label="등원 목표 분"></select>
       </div>
       <span class="sch-time" id="schTime">오전 8:00 · 출발 9:00</span>
+      <div class="bgm-chip" id="bgmChip">
+        <button type="button" class="bgm-btn" id="bgmToggle" aria-pressed="true" aria-label="등원 음악 켜기·끄기" title="등원 음악 켜짐 · 눌러서 끄기">
+          <span class="bgm-ic" aria-hidden="true" id="bgmIc">🌿</span><span id="bgmTx">잔잔 모드</span>
+        </button>
+        <button type="button" class="bgm-prev" id="bgmPrev" title="급박 음악 미리듣기(8초)">⚡ 미리</button>
+      </div>
     </div>
 
     <div class="cd">
@@ -3927,6 +3933,9 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
 
     if (allDone && !lastAllDone) celebrate();
     lastAllDone = allDone;
+
+    /* 🎵 등원 BGM — 남은 시간에 따라 잔잔/급박 모드를 바꾼다 */
+    if (window.YULI_BGM) window.YULI_BGM.countdown(diffMs, allDone);
   }
 
   function positionBubble(pos){
@@ -4535,6 +4544,7 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     if (name === "settings") renderStars(false);
     if (name === "home") { renderHome(); }
     if (name === "school") { positionBubble(); renderCountdown(new Date()); }
+    if (window.YULI_BGM) window.YULI_BGM.tab(name === "school");
     /* 보던 탭을 주소(#탭)에도 남겨 둔다 — 새로고침해도 같은 화면으로 돌아온다 */
     try {
       var keep = location.pathname + location.search + (name === "home" ? "" : "#" + name);
@@ -5569,5 +5579,453 @@ body .sch-head .sch-time{font-size:1.35vh;}
   body #pane-money .treat-grid{ min-height:0; }
 }
 </style>
+<style id="bgm1124css">
+/* ===== 🎵 등원 BGM 컨트롤 ===== */
+.bgm-chip{display:inline-flex;align-items:center;gap:.4vh;margin-left:auto;min-width:0;}
+.bgm-btn{
+  display:inline-flex;align-items:center;gap:.45vh;height:3.7vh;padding:0 1.15vh;border-radius:999px;
+  background:#f3fbf5;color:#2b6b4a;font-size:1.28vh;font-weight:900;white-space:nowrap;
+  box-shadow:inset 0 0 0 .18vh #d5e9db,0 .18vh .5vh rgba(47,107,79,.07);
+  transition:background .18s,box-shadow .18s,color .18s,transform .12s;
+}
+.bgm-btn .bgm-ic{font-size:1.55vh;line-height:1;}
+.bgm-btn:active{transform:scale(.97);}
+.bgm-btn.urgent{background:#fff2ec;color:#c0431f;box-shadow:inset 0 0 0 .18vh #ffc9b4,0 .18vh .5vh rgba(192,67,31,.12);}
+.bgm-btn.off{background:#f4f6f5;color:#8b9a92;box-shadow:inset 0 0 0 .18vh #e3eae6;}
+.bgm-btn.done{background:#fff9e2;color:#8a5f06;box-shadow:inset 0 0 0 .18vh #f0d98a;}
+.bgm-btn.late{background:#f2f5fb;color:#4a6688;box-shadow:inset 0 0 0 .18vh #d8e2f0;}
+.bgm-btn.urgent{animation:bgmPulse 1.5s ease-out infinite;}
+@keyframes bgmPulse{
+  0%{box-shadow:inset 0 0 0 .18vh #ffc9b4,0 0 0 0 rgba(214,84,44,.30);}
+  70%{box-shadow:inset 0 0 0 .18vh #ffc9b4,0 0 0 .9vh rgba(214,84,44,0);}
+  100%{box-shadow:inset 0 0 0 .18vh #ffc9b4,0 0 0 0 rgba(214,84,44,0);}
+}
+@media (prefers-reduced-motion:reduce){ .bgm-btn.urgent{animation:none;} }
+.bgm-prev{
+  height:3.7vh;padding:0 .95vh;border-radius:999px;font-size:1.12vh;font-weight:900;white-space:nowrap;
+  background:#fffbe9;color:#9a6f0c;box-shadow:inset 0 0 0 .18vh #f3e0a6;
+}
+.bgm-prev:active{transform:scale(.97);}
+.bgm-prev.on{background:#ffe9a8;color:#7a4f00;box-shadow:inset 0 0 0 .18vh #eecd6a;}
+@media (max-width:520px){
+  .bgm-chip{gap:.3vh;}
+  .bgm-btn{height:3.4vh;font-size:1.16vh;padding:0 .9vh;gap:.35vh;}
+  .bgm-btn .bgm-ic{font-size:1.4vh;}
+  .bgm-prev{height:3.4vh;font-size:1vh;padding:0 .75vh;}
+}
+</style>
+
+<script id="bgm1124js">
+/* =========================================================================
+   🎵 등원 BGM — 등원 탭에서만 흐른다.
+   · 남은 시간 10분 초과  → 🌿 잔잔 모드 (동숲 아침 느낌 · 마림바 · 84 BPM)
+   · 남은 시간 10분 이하  → ⚡ 급박 모드 (칩튠 · 150 BPM · 스타카토)
+   · 준비 4/4 완료 또는 등원 시간이 지나면 스스로 멈춘다.
+   외부 음원 파일 없이 Web Audio 로 그 자리에서 연주한다(저작권·용량·오프라인 걱정 없음).
+   iOS Safari 자동재생 정책: 첫 탭/터치에서 AudioContext 를 만들고 resume() 한다.
+   ========================================================================= */
+window.YULI_BGM = (function(){
+  "use strict";
+  var STORE = "yuli.bgm.on";
+  var AC = window.AudioContext || window.webkitAudioContext;
+  var MASTER = 0.95;
+
+  var enabled = true;
+  try { if (localStorage.getItem(STORE) === "0") enabled = false; } catch(e){}
+
+  var ctx = null, master = null, analyser = null, noiseBuf = null;
+  var calmBus = null, urgentBus = null;
+  var mode = null, step = 0, nextAt = 0, timer = null;
+  var onSchool = false, remainMin = null, allDone = false;
+  var previewUntil = 0, pvTimer = null, tailTimer = null, lastResume = 0;
+  var playing = false, notes = 0;
+
+  var BPM_CALM = 84, BPM_URGENT = 150;
+  var CALM_STEP = 60 / BPM_CALM / 2;      /* 8분음표 */
+  var URG_STEP  = 60 / BPM_URGENT / 4;    /* 16분음표 */
+
+  /* ---------------- 음계/구성 ---------------- */
+  function hz(m){ return 440 * Math.pow(2, (m - 69) / 12); }
+
+  /* 잔잔: Fmaj7 – Dm7 – Gm7 – C7, 4마디(8분음표 32칸) */
+  var CALM_LEN = 32;
+  var CALM_CHORDS = [[53,57,60,64],[50,53,57,60],[55,58,62,65],[48,52,55,58]];
+  var CALM_ROOTS  = [41,38,43,36];
+  var CALM_MEL_A = [
+    69,0,72,76, 0,72,69,67,
+    77,0,74,0, 69,0,74,0,
+    70,74,0,77, 0,74,70,0,
+    72,0,76,0, 79,0,76,72
+  ];
+  var CALM_MEL_B = [
+    65,0,69,72, 0,69,65,0,
+    74,0,69,65, 0,69,74,0,
+    70,0,74,67, 0,70,74,0,
+    72,0,67,64, 0,67,72,0
+  ];
+
+  /* 급박: C – Am – F – G, 4마디(16분음표 64칸) */
+  var URG_LEN = 64;
+  var URG_CHORDS = [[60,64,67],[57,60,64],[53,57,60],[55,59,62]];
+  var URG_ROOTS  = [48,45,41,43];
+  var URG_ARP    = [0,1,2,3, 2,1,0,1, 2,3,2,1, 0,1,2,3];
+  var URG_LEAD = [
+    [[79,0],[76,4],[84,8],[79,12]],
+    [[81,0],[76,4],[84,8],[81,12]],
+    [[77,0],[72,4],[81,8],[77,12]],
+    [[79,0],[74,4],[83,8],[79,12]]
+  ];
+
+  /* ---------------- 소리 만들기 ---------------- */
+  function marimba(m, t, dur, vol){
+    var f = hz(m);
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    var o2 = ctx.createOscillator(), g2 = ctx.createGain();
+    var lp = ctx.createBiquadFilter();
+    lp.type = "lowpass"; lp.frequency.value = Math.min(5200, f * 7); lp.Q.value = 0.4;
+    o.type = "triangle"; o.frequency.value = f;
+    o2.type = "sine"; o2.frequency.value = f * 2.004;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(Math.max(vol, 0.0002), t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    g2.gain.setValueAtTime(0.0001, t);
+    g2.gain.exponentialRampToValueAtTime(Math.max(vol * 0.22, 0.0002), t + 0.008);
+    g2.gain.exponentialRampToValueAtTime(0.0001, t + dur * 0.45);
+    o.connect(g); o2.connect(g2); g.connect(lp); g2.connect(lp); lp.connect(calmBus);
+    o.start(t); o2.start(t); o.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+    notes++;
+  }
+
+  function pad(m, t, dur, vol){
+    var o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
+    o.type = "triangle"; o.frequency.value = hz(m);
+    lp.type = "lowpass"; lp.frequency.value = 1500;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.5);
+    g.gain.linearRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(lp); lp.connect(calmBus);
+    o.start(t); o.stop(t + dur + 0.1);
+  }
+
+  function bass(m, t, dur, vol, dest){
+    var o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
+    o.type = "sine"; o.frequency.value = hz(m);
+    lp.type = "lowpass"; lp.frequency.value = 900;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(Math.max(vol, 0.0002), t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(lp); lp.connect(dest);
+    o.start(t); o.stop(t + dur + 0.05);
+    notes++;
+  }
+
+  function chip(m, t, dur, vol){
+    var f = hz(m);
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    var o2 = ctx.createOscillator(), g2 = ctx.createGain();
+    var lp = ctx.createBiquadFilter();
+    lp.type = "lowpass"; lp.frequency.value = 4200; lp.Q.value = 0.7;
+    o.type = "square"; o.frequency.value = f;
+    o2.type = "triangle"; o2.frequency.value = f * 2;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(Math.max(vol, 0.0002), t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    g2.gain.setValueAtTime(0.0001, t);
+    g2.gain.exponentialRampToValueAtTime(Math.max(vol * 0.30, 0.0002), t + 0.005);
+    g2.gain.exponentialRampToValueAtTime(0.0001, t + dur * 0.7);
+    o.connect(g); o2.connect(g2); g.connect(lp); g2.connect(lp); lp.connect(urgentBus);
+    o.start(t); o2.start(t); o.stop(t + dur + 0.02); o2.stop(t + dur + 0.02);
+    notes++;
+  }
+
+  function tick(t, vol, hp){
+    if (!noiseBuf) return;
+    var s = ctx.createBufferSource(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+    s.buffer = noiseBuf;
+    f.type = "highpass"; f.frequency.value = hp || 6800;
+    g.gain.setValueAtTime(Math.max(vol, 0.0002), t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+    s.connect(f); f.connect(g); g.connect(urgentBus);
+    s.start(t); s.stop(t + 0.07);
+  }
+
+  /* ---------------- 두 가지 모드 연주 ---------------- */
+  function playCalm(s, t){
+    var i = s % CALM_LEN;
+    var bar = Math.floor(i / 8) % 4;
+    var beat = i % 8;
+
+    if (beat === 0){
+      var ch = CALM_CHORDS[bar];
+      for (var k = 0; k < ch.length; k++) pad(ch[k], t, CALM_STEP * 8 * 0.96, 0.030);
+      bass(CALM_ROOTS[bar], t, CALM_STEP * 4.2, 0.155, calmBus);
+    }
+    if (beat === 4) bass(CALM_ROOTS[bar] + 12, t, CALM_STEP * 1.6, 0.055, calmBus);
+
+    var mel = Math.floor(s / CALM_LEN) % 2 ? CALM_MEL_B : CALM_MEL_A;
+    var m = mel[i];
+    if (m) marimba(m, t, CALM_STEP * 2.6, beat === 0 ? 0.165 : 0.125);
+  }
+
+  function playUrgent(s, t){
+    var i = s % URG_LEN;
+    var bar = Math.floor(i / 16) % 4;
+    var ph = i % 16;
+    var ch = URG_CHORDS[bar];
+    var tones = [ch[0], ch[1], ch[2], ch[0] + 12];
+
+    chip(tones[URG_ARP[ph]], t, URG_STEP * 1.5, (ph === 0 || ph === 8) ? 0.070 : 0.042);
+
+    var lead = URG_LEAD[bar];
+    for (var k = 0; k < lead.length; k++){
+      if (lead[k][1] === ph) chip(lead[k][0], t, URG_STEP * 3.4, 0.105);
+    }
+
+    if (ph % 2 === 0) bass(URG_ROOTS[bar], t, URG_STEP * 1.7, ph === 0 ? 0.135 : 0.105, urgentBus);
+    if (ph === 4 || ph === 12) tick(t, 0.050, 5200);
+    else if (ph % 2 === 1) tick(t, 0.014, 8200);
+  }
+
+  /* ---------------- 오디오 그래프 ---------------- */
+  function build(){
+    if (ctx || !AC) return !!ctx;
+    ctx = new AC();
+    var comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -18; comp.knee.value = 20; comp.ratio.value = 3;
+    comp.attack.value = 0.01; comp.release.value = 0.25;
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 1024;
+    master = ctx.createGain();
+    master.gain.value = 0;
+    calmBus = ctx.createGain(); calmBus.gain.value = 0;
+    urgentBus = ctx.createGain(); urgentBus.gain.value = 0;
+    calmBus.connect(master); urgentBus.connect(master);
+    master.connect(comp); comp.connect(analyser); analyser.connect(ctx.destination);
+
+    noiseBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.2), ctx.sampleRate);
+    var d = noiseBuf.getChannelData(0);
+    for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+
+    return true;
+  }
+
+  function setMode(m){
+    if (!ctx || !calmBus || !urgentBus) return;
+    if (m === mode) return;
+    mode = m;
+    step = 0;
+    var t = ctx.currentTime;
+    nextAt = t + 0.06;
+    if (m === "calm"){
+      calmBus.gain.cancelScheduledValues(t);
+      calmBus.gain.setTargetAtTime(1, t, 0.20);
+      urgentBus.gain.cancelScheduledValues(t);
+      urgentBus.gain.setTargetAtTime(0.0001, t, 0.10);
+    } else {
+      urgentBus.gain.cancelScheduledValues(t);
+      urgentBus.gain.setTargetAtTime(1, t, 0.05);
+      calmBus.gain.cancelScheduledValues(t);
+      calmBus.gain.setTargetAtTime(0.0001, t, 0.14);
+    }
+  }
+
+  function schedule(){
+    if (!ctx || !mode || !playing) return;
+    if (ctx.state !== "running") return;
+    var horizon = ctx.currentTime + 0.22;
+    if (nextAt < ctx.currentTime - 0.05) nextAt = ctx.currentTime + 0.03;
+    var guard = 0;
+    while (nextAt < horizon && guard++ < 80){
+      if (mode === "calm") playCalm(step, nextAt);
+      else playUrgent(step, nextAt);
+      nextAt += (mode === "calm" ? CALM_STEP : URG_STEP);
+      step++;
+    }
+  }
+
+  function tryResume(){
+    if (!ctx) return;
+    var now = Date.now();
+    if (now - lastResume < 1200) return;
+    lastResume = now;
+    try {
+      var p = ctx.resume();
+      if (p && p.then) p.then(function(){ if (playing) sync(); }).catch(function(){});
+    } catch(e){}
+  }
+
+  function play(){
+    if (!AC) return;
+    if (!build()) return;
+    if (ctx.state !== "running") tryResume();
+    if (playing) return;
+    playing = true;
+    var t = ctx.currentTime;
+    master.gain.cancelScheduledValues(t);
+    master.gain.setTargetAtTime(MASTER, t, 0.10);
+    clearTimeout(tailTimer);
+    if (!timer) timer = setInterval(schedule, 30);
+  }
+
+  function halt(){
+    if (timer){ clearInterval(timer); timer = null; }
+    if (!playing) return;
+    playing = false;
+    mode = null;
+    if (!ctx) return;
+    var t = ctx.currentTime;
+    master.gain.cancelScheduledValues(t);
+    master.gain.setTargetAtTime(0.0001, t, 0.08);
+    if (calmBus){ calmBus.gain.cancelScheduledValues(t); calmBus.gain.setTargetAtTime(0.0001, t, 0.06); }
+    if (urgentBus){ urgentBus.gain.cancelScheduledValues(t); urgentBus.gain.setTargetAtTime(0.0001, t, 0.06); }
+    clearTimeout(tailTimer);
+    tailTimer = setTimeout(function(){
+      if (playing || !ctx) return;
+      if (ctx.state === "running") { try { ctx.suspend(); } catch(e){} }
+    }, 900);
+  }
+
+  /* ---------------- 상태 ---------------- */
+  function wantSound(){
+    if (!enabled || !onSchool) return false;
+    if (allDone) return false;
+    if (remainMin === null || remainMin <= 0) return false;
+    return true;
+  }
+
+  function currentMode(){
+    if (Date.now() < previewUntil) return "urgent";
+    return (remainMin !== null && remainMin <= 10) ? "urgent" : "calm";
+  }
+
+  var uiKey = "";
+  function paint(){
+    var btn = document.getElementById("bgmToggle");
+    var ic = document.getElementById("bgmIc");
+    var tx = document.getElementById("bgmTx");
+    var prev = document.getElementById("bgmPrev");
+    if (!btn || !ic || !tx) return;
+    var pv = Date.now() < previewUntil;
+    var key = (enabled ? 1 : 0) + "|" + (allDone ? 1 : 0) + "|" +
+              (remainMin === null ? "x" : (remainMin <= 0 ? 0 : Math.min(remainMin, 11))) + "|" + (pv ? 1 : 0);
+    if (key === uiKey) return;
+    uiKey = key;
+
+    var cls = "", icon = "🌿", text = "잔잔 모드";
+    if (pv){ cls = "urgent"; icon = "⚡"; text = "미리듣는 중"; }
+    else if (!enabled){ cls = "off"; icon = "🔇"; text = "음소거"; }
+    else if (allDone){ cls = "done"; icon = "🎉"; text = "준비 완료"; }
+    else if (remainMin !== null && remainMin <= 0){ cls = "late"; icon = "🎒"; text = "출발 시간"; }
+    else if (remainMin !== null && remainMin <= 10){ cls = "urgent"; icon = "⚡"; text = "급박 모드"; }
+    else if (remainMin === null){ icon = "🌿"; text = "잔잔 모드"; }
+
+    btn.className = "bgm-btn" + (cls ? " " + cls : "");
+    ic.textContent = icon;
+    tx.textContent = text;
+    btn.setAttribute("aria-pressed", enabled ? "true" : "false");
+    btn.title = enabled
+      ? "등원 음악 켜짐 · 눌러서 끄기 (10분 남으면 급박하게 바뀌어요)"
+      : "등원 음악 꺼짐 · 눌러서 켜기";
+    if (prev){
+      prev.textContent = pv ? "⏹ 그만" : "⚡ 미리";
+      prev.className = "bgm-prev" + (pv ? " on" : "");
+    }
+  }
+
+  function sync(){
+    var pv = Date.now() < previewUntil;
+    if (wantSound() || pv){
+      play();
+      var m = currentMode();
+      if (mode !== m) setMode(m);
+      if (ctx && ctx.state !== "running") tryResume();
+    } else if (playing){
+      halt();
+    }
+    paint();
+  }
+
+  /* ---------------- 바깥에서 부르는 것 ---------------- */
+  function countdown(diffMs, done){
+    allDone = !!done;
+    if (typeof diffMs === "number" && !isNaN(diffMs)){
+      remainMin = diffMs > 0 ? Math.ceil(diffMs / 60000) : 0;
+    }
+    sync();
+  }
+
+  function tab(isSchool){
+    onSchool = !!isSchool;
+    sync();
+  }
+
+  function preview(sec){
+    var d = (sec || 8) * 1000;
+    previewUntil = Date.now() + d;
+    clearTimeout(pvTimer);
+    pvTimer = setTimeout(function(){ previewUntil = 0; sync(); }, d + 40);
+    sync();
+  }
+
+  function previewToggle(){
+    if (Date.now() < previewUntil){ previewUntil = 0; clearTimeout(pvTimer); sync(); }
+    else preview(8);
+  }
+
+  function toggle(){
+    enabled = !enabled;
+    try { localStorage.setItem(STORE, enabled ? "1" : "0"); } catch(e){}
+    if (enabled && !wantSound() && (allDone || (remainMin !== null && remainMin <= 0))){
+      preview(6);            /* 준비 완료·출발 시간에는 잠깐 들려준다 */
+    } else {
+      sync();
+    }
+  }
+
+  function bind(){
+    var btn = document.getElementById("bgmToggle");
+    var prev = document.getElementById("bgmPrev");
+    if (btn) btn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
+    if (prev) prev.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); previewToggle(); });
+    var pane = document.getElementById("pane-school");
+    onSchool = !!(pane && pane.classList.contains("active"));
+    paint();
+  }
+
+  /* 첫 터치에서 오디오 잠금 해제 · 화면 복귀 시 다시 이어 붙이기 */
+  document.addEventListener("pointerdown", function(){
+    if (!onSchool) return;
+    if (playing){ if (ctx && ctx.state !== "running") tryResume(); }
+    else if (wantSound()) sync();
+  }, true);
+  document.addEventListener("visibilitychange", function(){
+    if (!document.hidden && playing && ctx && ctx.state !== "running") tryResume();
+  });
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+  else bind();
+
+  return {
+    countdown: countdown,
+    tab: tab,
+    toggle: toggle,
+    preview: preview,
+    sync: sync,
+    state: function(){
+      return { enabled: enabled, onSchool: onSchool, remainMin: remainMin, allDone: allDone,
+               playing: playing, mode: mode, ctx: ctx ? ctx.state : null, notes: notes };
+    },
+    level: function(){
+      if (!analyser) return { rms: 0, peak: 0 };
+      var a = new Float32Array(analyser.fftSize);
+      analyser.getFloatTimeDomainData(a);
+      var s = 0, p = 0;
+      for (var i = 0; i < a.length; i++){ s += a[i] * a[i]; if (Math.abs(a[i]) > p) p = Math.abs(a[i]); }
+      return { rms: Math.sqrt(s / a.length), peak: p };
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
