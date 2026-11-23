@@ -219,6 +219,25 @@ main{padding:14px 12px 40px; max-width:1080px; margin:0 auto}
 .wb-a{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
 .tog{display:flex;align-items:center;gap:7px;font-size:.75rem;font-weight:800;color:var(--ink-soft);margin-top:9px}
 .tog input{width:17px;height:17px;accent-color:#2fae7f}
+/* ---------- 📱 패드 학습 · 요일별 설정 ---------- */
+#padCard h3{flex-wrap:wrap;row-gap:7px}
+#padCard h3 .ttl{flex:1 1 100%;min-width:0}
+#padCard h3 .sub{margin-left:0}
+#padCard h3 .btn{margin-left:auto}
+.padcard+.padcard{margin-top:10px}
+.padcard.off{background:#fbfdff;border-style:dashed}
+.padcard.off .wb-h .nm b{color:var(--muted)}
+.pad-pre{margin-top:4px}
+.pad-now{display:inline-flex;align-items:center;gap:4px;min-height:22px;padding:2px 8px;border-radius:7px;
+  font-size:.68rem;font-weight:900;letter-spacing:-.01em;background:var(--mint-soft);color:#0d6b4c;margin-top:7px}
+.padcard.off .pad-now{background:#f1f5f9;color:var(--muted)}
+.padcard .pad-now.rest{background:#eef5fa;color:#4a6d86}
+.pad-edit{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;margin-top:9px}
+.pad-edit .row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;align-items:end}
+.pad-edit input{max-width:520px}
+.pad-edit label{display:flex;flex-direction:column;gap:3px;font-size:.68rem;font-weight:800;color:var(--muted);min-width:0}
+.pad-edit input,.pad-edit select{height:36px;border-radius:9px;border:1px solid var(--line);background:#fbfdff;
+  padding:0 8px;font-size:.86rem;font-weight:800;width:100%;min-width:0}
 .alertbox{border:1px solid #ffe0b8;background:#fffaf0;border-radius:14px;padding:11px 12px;margin-bottom:10px}
 .alertbox b{font-size:.84rem}
 .alertbox .al{display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;padding:5px 0;flex-wrap:wrap}
@@ -501,6 +520,14 @@ footer p{margin:0;font-size:.68rem;font-weight:700;color:var(--muted)}
         <div id="wbAlerts"></div>
         <div id="wbList"></div>
       </div>
+      <div class="card" id="padCard">
+        <h3><span class="ttl">📱 패드 학습 · 요일별 설정</span>
+          <span class="sub" id="padSub"></span>
+          <button class="btn sm pri" id="btnAddPad" type="button">➕ 패드 학습 추가</button>
+        </h3>
+        <div class="hint">아이캔두·라즈키즈·도요새처럼 <b>패드로 하는 학습</b>의 요일을 여기서 바꾸면 해율이 스터디 보드의 <b>오늘의 숙제</b>와 <b>이번 주 시간표</b>에 바로 반영돼요. 요일 칩을 누르면 바로 저장되고, <b>오늘의 숙제에 넣기</b>를 끄면 그 학습은 숙제에서 빠져요.</div>
+        <div id="padList"></div>
+      </div>
     </div>
   </section>
 
@@ -669,7 +696,7 @@ var SHELF_NAMES = [
 ];
 var DAYN = ["월","화","수","목","금","토","일"];
 var SUBS = ["국어","영어","수학","한자","중국어","기타"];
-var SUBEM = { "국어":"📖", "영어":"🔤", "수학":"🔢", "한자":"漢", "중국어":"🀄", "기타":"📘" };
+var SUBEM = { "국어":"📖", "영어":"🔤", "수학":"🔢", "한자":"漢", "중국어":"🀄", "기타":"📘", "패드":"📱" };
 var TAGNAME = { p:"지면", b:"보드", k:"책", t:"패드", v:"영상" };
 var PRESET = { "5":[0,1,2,3,4], "7":[0,1,2,3,4,5,6], "2":[5,6] };
 var PALETTE = ["#ffd9e0","#ffe3bf","#cfe8ff","#dcd7ff","#d6f0d8","#ffe9a8","#e6dcff","#d8f1f6","#ffdccd","#e3f0d1"];
@@ -987,6 +1014,10 @@ function applyLocal(doc){
     var m0 = lsGet(K.mom, null), mm = mergeMom(m0, doc.momnote);
     if (mm && JSON.stringify(mm) !== JSON.stringify(m0)) lsSet(K.mom, mm);
   }
+  if (doc.padplan && typeof doc.padplan === "object"){
+    var p0 = padLocal(), pmm = padMerge(p0, doc.padplan);
+    if (JSON.stringify(pmm) !== JSON.stringify(p0)) lsSet(PADK, pmm);
+  }
 }
 
 /* ---------------- 끌어오기 / 올리기 ---------------- */
@@ -1082,6 +1113,124 @@ function annualItems(year){
   var a = annualData(), y = (a.years && a.years[String(year)]) || [];
   return Array.isArray(y) ? y.slice() : [];
 }
+/* =====================================================================
+   📱 패드 학습 · 요일별 설정 — haeyuli.padplan.v1
+   · 아이캔두 학습(아침) · 아이캔두 수학 · 라즈키즈 영어 · 도요새 영어/중국어처럼
+     패드로 하는 학습의 요일을 여기서 정한다. 가족 문서의 padplan 필드로
+     해율이 스터디 보드 두 벌(haeyuli-english-board · haeyuli-study-mobile)과 양방향 동기화.
+   · 기본 5개는 끄기·이름/요일 수정, 직접 추가한 항목은 삭제까지 된다.
+   · 항목 id 를 그대로 두므로 보드의 haeyuli.hwplan.v1 체크 기록은 요일을 옮겨도 따라간다.
+   ===================================================================== */
+var PADK = "haeyuli.padplan.v1";
+var PADSUBS = ["패드", "국어", "영어", "수학", "한자", "중국어", "기타"];
+var PADDEF = [
+  { id:"padam",   name:"아이캔두 학습 (아침)", subject:"패드",   days:[0,1,2,3,4] },
+  { id:"padmath", name:"아이캔두 수학",        subject:"수학",   days:[5,6] },
+  { id:"razkids", name:"라즈키즈 영어",        subject:"영어",   days:[1,3,5] },
+  { id:"doyoen",  name:"도요새 영어",          subject:"영어",   days:[5,6] },
+  { id:"doyocn",  name:"도요새 중국어",        subject:"중국어", days:[5,6] }
+];
+function padDays(v){
+  var out = [], src = Array.isArray(v) ? v : [], i;
+  for (i = 0; i < src.length; i++){
+    var n = num(src[i], -1);
+    if (n >= 0 && n < 7 && out.indexOf(n) < 0) out.push(n);
+  }
+  return out.sort();
+}
+function padRaw(v){
+  v = (v && typeof v === "object" && !Array.isArray(v)) ? v : {};
+  return { list: Array.isArray(v.list) ? v.list : [],
+           del: (v.del && typeof v.del === "object" && !Array.isArray(v.del)) ? v.del : {} };
+}
+function padDef(id){
+  for (var i = 0; i < PADDEF.length; i++) if (PADDEF[i].id === id) return PADDEF[i];
+  return null;
+}
+/* 병합 — 같은 id 는 at(마지막 수정 시각)이 최신인 쪽, 삭제 표시(del)가 그보다 최근이면 지운다 */
+function padMerge(local, cloud){
+  var A = padRaw(local), B = padRaw(cloud), map = {}, order = [], del = {};
+  [A, B].forEach(function(o){
+    for (var k in o.del) del[k] = Math.max(num(del[k]), num(o.del[k]));
+  });
+  function put(x){
+    if (!x || typeof x !== "object") return;
+    var id = String(x.id || "").slice(0, 40);
+    if (!id) return;
+    var at = num(x.at), prev = map[id];
+    if (!prev){
+      map[id] = { id:id,
+        name:String(x.name == null ? (x.nm || "") : x.name).slice(0, 40),
+        subject:String(x.subject == null ? (x.sub || "패드") : x.subject).slice(0, 10),
+        days:padDays(x.days), on:!(x.on === 0 || x.on === false), builtIn:!!x.builtIn, at:at };
+      order.push(id);
+      return;
+    }
+    if (at <= prev.at) return;
+    prev.name = String(x.name == null ? prev.name : x.name).slice(0, 40);
+    prev.subject = String(x.subject == null ? prev.subject : x.subject).slice(0, 10);
+    prev.days = padDays(x.days);
+    prev.on = !(x.on === 0 || x.on === false);
+    prev.builtIn = !!x.builtIn;
+    prev.at = at;
+  }
+  A.list.forEach(put); B.list.forEach(put);
+  var out = [];
+  PADDEF.forEach(function(d0){
+    var e = map[d0.id];
+    if (!e || (num(del[d0.id]) > 0 && num(del[d0.id]) >= e.at)){
+      e = { id:d0.id, name:d0.name, subject:d0.subject, days:d0.days.slice(), on:true,
+            builtIn:true, at:(e ? num(e.at) : 0) };
+    }
+    if (!e.name) e.name = d0.name;
+    e.name = String(e.name).slice(0, 40);
+    e.builtIn = true;
+    out.push(e);
+  });
+  order.forEach(function(id){
+    if (padDef(id)) return;
+    var e = map[id];
+    if (!e) return;
+    if (num(del[id]) > 0 && num(del[id]) >= e.at) return;
+    if (!e.name) e.name = "패드 학습";
+    out.push(e);
+  });
+  return { v:1, list:out, del:del };
+}
+function padLocal(){ return padRaw(lsGet(PADK, null)); }
+function padDoc(){ return padMerge(padLocal(), cloud().padplan || null); }
+function padList(){ return padDoc().list; }
+function padById(id){
+  var list = padList();
+  for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+  return null;
+}
+/* 그 요일(월=0 … 일=6)에 나오는 패드 학습 — 보드 SB.hw5.items 와 같은 규칙 */
+function padItemsFor(di){
+  var out = [], list = padList();
+  for (var i = 0; i < list.length; i++){
+    var p = list[i];
+    if (!p.on) continue;
+    if (p.days.indexOf(di) < 0) continue;
+    out.push({ id:p.id, s:p.subject, t:p.name, tag:"t" });
+  }
+  return out;
+}
+/* 기본 숙제표에서 고정 패드 항목 자리에 그날의 패드 학습을 끼워 넣는다 */
+function schedFor(di){
+  var base = SCHED[di] || [], pads = padItemsFor(di), out = [], placed = false, i, j;
+  for (i = 0; i < base.length; i++){
+    var it = base[i];
+    if (it.tag === "t"){
+      if (!placed){ placed = true; for (j = 0; j < pads.length; j++) out.push(pads[j]); }
+      continue;
+    }
+    out.push(it);
+  }
+  if (!placed) for (j = 0; j < pads.length; j++) out.push(pads[j]);
+  return out;
+}
+
 /* ---------------- 기기 · 가족 문서에서 직접 세기 (hwday 가 없을 때) ---------------- */
 function dayIdxOf(ds){ return (new Date(String(ds) + "T00:00:00").getDay() + 6) % 7; }
 /* 날짜별로 체크한 숙제 개수 — hwplan(체크) 에서 hwplanUn(마지막에 푼 시각) 을 빼고 센다 */
@@ -1109,7 +1258,7 @@ function completeDays(){
   for (k in picked){
     var dt = new Date(String(k) + "T00:00:00");
     if (!dt || isNaN(dt.getTime())) continue;
-    var need = (SCHED[dayIdxOf(k)] || []).length;
+    var need = schedFor(dayIdxOf(k)).length;
     if (need > 0 && picked[k] >= need) out[k] = 1;
   }
   return out;
@@ -1191,7 +1340,7 @@ function wbItemsFor(di, ds){
 }
 /* 기본 목록 (문제집은 같은 과목 첫 항목 앞에 끼워 넣는다 — 보드와 같은 순서) */
 function itemsBase(di){
-  var base = SCHED[di] || [];
+  var base = schedFor(di);                 /* 📱 패드 학습은 부모가 정한 요일대로 */
   var wb = wbItemsFor(di, todayIso());
   if (!wb.length) return base.slice();
   var out = [], seen = {}, used = {}, i, j;
@@ -1234,9 +1383,30 @@ function itemsList(di, ds){
 function hwToday(){
   var h = hwday(), t = todayIso();
   if (h && h.date === t && Array.isArray(h.items)){
+    /* 📱 패드 학습 — 보드가 올린 요약(hwday)이 낡았어도 부모가 바꾼 요일이 바로 보이게 맞춘다 */
+    var pdi = dayIdxOf(t), pads = padItemsFor(pdi), pmap = {}, seenP = {}, src = [], i0;
+    for (i0 = 0; i0 < pads.length; i0++) pmap[pads[i0].id] = pads[i0];
+    var pl0 = pick(cloud().hwplan, lsGet(K.hwplan, {})) || {};
+    var pu0 = pick(cloud().hwplanUn, lsGet(K.hwplanUn, {})) || {};
+    var pc0 = (pl0[t] && typeof pl0[t] === "object") ? pl0[t] : {};
+    var pn0 = (pu0[t] && typeof pu0[t] === "object") ? pu0[t] : {};
+    for (i0 = 0; i0 < h.items.length; i0++){
+      var hx = h.items[i0] || {}, hid = String(hx.id || ""), hg = String(hx.g || "p");
+      if (hg === "t"){
+        if (!pmap[hid]) continue;          /* 부모가 요일에서 뺀 패드 학습은 오늘 목록에서도 뺀다 */
+        seenP[hid] = 1;
+      }
+      src.push(hx);
+    }
+    for (i0 = 0; i0 < pads.length; i0++){
+      if (seenP[pads[i0].id]) continue;    /* 새로 들어온 패드 학습 — 체크 기록이 있으면 완료로 */
+      var ts0 = num(pc0[pads[i0].id]), un0 = num(pn0[pads[i0].id]);
+      var ok0 = !!ts0 && !(un0 && un0 >= ts0);
+      src.push({ id:pads[i0].id, s:pads[i0].s, t:pads[i0].t, g:"t", ok:ok0 ? 1 : 0, c:0, m:0 });
+    }
     var bw = [], bt = 0, bd = 0, i2;
-    for (i2 = 0; i2 < h.items.length; i2++){
-      var x = h.items[i2];
+    for (i2 = 0; i2 < src.length; i2++){
+      var x = src[i2];
       var it = { id:String(x.id || ""), s:String(x.s || ""), t:String(x.t || ""), g:String(x.g || "p"),
                  ok:!!x.ok, c:!!x.c, m:!!x.m };
       bw.push(it);
@@ -1393,7 +1563,7 @@ function renderCheck(){
 function editingForm(){
   var a = document.activeElement;
   if (!a || !a.getAttribute) return false;
-  return (a.getAttribute("data-mom") !== null) || !!a.getAttribute("data-wbf");
+  return (a.getAttribute("data-mom") !== null) || !!a.getAttribute("data-wbf") || !!a.getAttribute("data-padnm");
 }
 function renderMom(){
   if (editingForm()) return;              /* 입력 중에 다시 그리면 글자가 날아간다 */
@@ -1831,6 +2001,170 @@ function addWbFromSheet(){
     if (!ok) return;
     closeSheet();
     toast("📘 " + nm + " 등록 · 오늘의 숙제에 나와요");
+  });
+}
+
+/* =====================================================================
+   📱 패드 학습 카드 — 요일 칩 · 평일/매일/주말 · 켜기/끄기 · 이름/과목 · 추가/삭제
+   ===================================================================== */
+var PADDRAFT = { days:[0,1,2,3,4] };
+function padCommit(mut, okMsg){
+  return commit(function(d){
+    var doc = padMerge(padLocal(), d.padplan || null);
+    mut(doc);
+    doc.v = 1; doc.at = Date.now();
+    d.padplan = doc;
+  }).then(function(ok){
+    if (ok){ renderPad(); renderCheck(); if (okMsg) toast(okMsg); }
+    return ok;
+  });
+}
+function padSet(id, patch, msg){
+  var now = Date.now();
+  padCommit(function(doc){
+    var found = null;
+    for (var i = 0; i < doc.list.length; i++) if (doc.list[i].id === id) found = doc.list[i];
+    if (!found) return;
+    for (var k in patch) if (Object.prototype.hasOwnProperty.call(patch, k)) found[k] = patch[k];
+    found.at = now;
+  }, msg);
+}
+/* 입력 중이던 이름·과목은 다시 그려도 남긴다 (저장 전 글자가 사라지지 않게) */
+function padDraft(){
+  var out = {}, els, i;
+  els = document.querySelectorAll("#padList [data-padnm]");
+  for (i = 0; i < els.length; i++) out[els[i].getAttribute("data-padnm")] = els[i].value;
+  els = document.querySelectorAll("#padList [data-padsub]");
+  for (i = 0; i < els.length; i++) out["s:" + els[i].getAttribute("data-padsub")] = els[i].value;
+  return out;
+}
+function padDraftApply(draft){
+  if (!draft) return;
+  var id, el;
+  for (id in draft){
+    if (!Object.prototype.hasOwnProperty.call(draft, id)) continue;
+    if (id.indexOf("s:") === 0){
+      el = document.querySelector('[data-padsub="' + id.slice(2) + '"]');
+      if (el && draft[id] !== el.value) el.value = draft[id];
+    } else {
+      el = document.querySelector('[data-padnm="' + id + '"]');
+      if (el && draft[id] !== el.value) el.value = draft[id];
+    }
+  }
+}
+function padEditing(){
+  var a = document.activeElement;
+  return !!(a && a.getAttribute && a.getAttribute("data-padnm") !== null);
+}
+function renderPad(){
+  if (padEditing()) return;              /* 이름을 입력하는 동안에는 다시 그리지 않는다 (커서·포커스 유지) */
+  var host = $("padList"); if (!host) return;
+  var draft = padDraft();
+  var list = padList(), t = todayIso(), di = dayIdxOf(t), onN = 0;
+  for (var i = 0; i < list.length; i++) if (list[i].on) onN++;
+  var todayN = padItemsFor(di).length;
+  $("padSub").textContent = (todayN ? "오늘 " + todayN + "개 · " : "") + onN + "/" + list.length + "개 켜짐";
+
+  host.innerHTML = list.map(function(p){
+    var days = DAYN.map(function(nm, i2){
+      var on = (p.days.indexOf(i2) >= 0);
+      return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + (on ? 'true' : 'false') +
+        '" data-padday="' + esc(p.id) + ':' + i2 + '">' + nm + '</button>';
+    }).join("");
+    var runs = p.on && p.days.indexOf(di) >= 0;
+    var now = !p.on ? "꺼 둠 · 숙제에 안 나와요" : (runs ? "오늘 숙제에 나와요" : "오늘은 쉬는 날");
+    return '<div class="wbcard padcard' + (p.on ? '' : ' off') + '" data-padcard="' + esc(p.id) + '">' +
+      '<div class="wb-h"><span class="em">' + (SUBEM[p.subject] || "📱") + '</span>' +
+        '<div class="nm"><b>' + esc(p.name) + '</b><span>' + esc(p.subject) + ' · ' + dayLabel(p.days) +
+          (p.builtIn ? '' : ' · 직접 추가') + '</span></div>' +
+        (p.builtIn ? '' : '<button class="btn sm warn" type="button" data-paddel="' + esc(p.id) + '">삭제</button>') +
+      '</div>' +
+      '<div class="pad-now' + (p.on && !runs ? ' rest' : '') + '">' + now + '</div>' +
+      '<div class="chips"><span class="lb">요일</span>' + days + '</div>' +
+      '<div class="chips pad-pre"><span class="lb">빠른 설정</span>' +
+        '<button type="button" class="chip pre" data-padpreset="' + esc(p.id) + ':5">평일</button>' +
+        '<button type="button" class="chip pre" data-padpreset="' + esc(p.id) + ':7">매일</button>' +
+        '<button type="button" class="chip pre" data-padpreset="' + esc(p.id) + ':2">주말</button>' +
+      '</div>' +
+      '<div class="pad-edit">' +
+        '<label>이름<input type="text" maxlength="40" data-padnm="' + esc(p.id) + '" value="' + esc(p.name) + '"></label>' +
+        '<div class="row"><label>과목<select data-padsub="' + esc(p.id) + '">' +
+          PADSUBS.map(function(sb){
+            return '<option value="' + sb + '"' + (sb === p.subject ? ' selected' : '') + '>' + sb + '</option>';
+          }).join("") + '</select></label>' +
+          '<button class="btn pri" type="button" data-padsave="' + esc(p.id) + '">저장</button></div>' +
+      '</div>' +
+      '<label class="tog"><input type="checkbox" data-padtog="' + esc(p.id) + '"' + (p.on ? ' checked' : '') +
+        '> 오늘의 숙제에 넣기</label>' +
+    '</div>';
+  }).join("");
+  padDraftApply(draft);
+}
+function padToggleDay(id, idx){
+  var p = padById(id); if (!p) return;
+  var days = p.days.slice(), at = days.indexOf(idx);
+  if (at >= 0){ if (days.length === 1){ toast("요일은 하루 이상 골라 주세요"); return; } days.splice(at, 1); }
+  else days.push(idx);
+  days.sort();
+  var added = (days.indexOf(idx) >= 0);
+  padSet(id, { days:days }, "📱 " + p.name + " · " + dayLabel(days) +
+    (added ? " 추가 · 오늘의 숙제·시간표에 바로 반영" : " 해제 · 오늘의 숙제·시간표에 바로 반영"));
+}
+function padPreset(id, key){
+  var p = padById(id); if (!p) return;
+  var days = (PRESET[key] || PRESET["5"]).slice();
+  padSet(id, { days:days }, "📱 " + p.name + " · " + dayLabel(days) + " · 학습계획에 바로 반영");
+}
+function padToggleOn(id, on){
+  var p = padById(id); if (!p) return;
+  padSet(id, { on:!!on }, on ? ("📱 " + p.name + " 다시 켰어요 · 숙제에 나와요")
+                             : ("📱 " + p.name + " 껐어요 · 숙제에서 빠져요"));
+}
+function padSaveCard(id){
+  var p = padById(id); if (!p) return;
+  var nmEl = document.querySelector('[data-padnm="' + id + '"]');
+  var sbEl = document.querySelector('[data-padsub="' + id + '"]');
+  var nm = String((nmEl && nmEl.value) || "").trim().slice(0, 40);
+  var sb = String((sbEl && sbEl.value) || p.subject);
+  if (!nm){ toast("패드 학습 이름을 적어 주세요"); return; }
+  if (PADSUBS.indexOf(sb) < 0) sb = "기타";
+  padSet(id, { name:nm, subject:sb }, "📱 " + nm + " 저장 · 보드에 바로 반영");
+}
+function padDelete(id){
+  var p = padById(id); if (!p) return;
+  if (p.builtIn){ toast("기본 패드 학습은 끄기만 할 수 있어요"); return; }
+  var now = Date.now();
+  padCommit(function(doc){
+    doc.list = doc.list.filter(function(x){ return x.id !== id; });
+    doc.del[id] = now;
+  }, "📱 " + p.name + " 지웠어요");
+}
+function openAddPad(){
+  PADDRAFT = { days:[0,1,2,3,4] };
+  openSheet('📱 패드 학습 추가',
+    '<div class="field"><span>이름</span><input type="text" id="dpNm" maxlength="40" placeholder="예: 아이캔두 영어" value=""></div>' +
+    '<div class="field"><span>과목</span><select id="dpSub">' + PADSUBS.map(function(sb){
+      return '<option value="' + sb + '"' + (sb === "패드" ? " selected" : "") + '>' + sb + '</option>';
+    }).join("") + '</select></div>' +
+    '<div class="field"><span>요일</span><div class="stchips" id="dpDays">' + DAYN.map(function(d, i){
+      return '<button type="button" class="stchip' + (i < 5 ? " on" : "") + '" data-pdday="' + i + '" data-st="plan">' + d + '</button>';
+    }).join("") + '</div></div>' +
+    '<div class="hint">여기서 추가한 패드 학습은 해율이 보드의 <b>오늘의 숙제</b>·<b>이번 주 시간표</b>에 바로 나오고, 나중에 <b>삭제</b>도 할 수 있어요.</div>' +
+    '<div class="sheet-a"><button class="btn ghost" type="button" data-close="1">취소</button>' +
+    '<button class="btn pri" type="button" id="dpSave">패드 학습 추가</button></div>');
+}
+function addPadFromSheet(){
+  var nm = String(($("dpNm") || {}).value || "").trim().slice(0, 40);
+  var sb = String(($("dpSub") || {}).value || "패드");
+  if (!nm){ toast("패드 학습 이름을 적어 주세요"); return; }
+  if (!PADDRAFT.days.length){ toast("요일을 하루 이상 골라 주세요"); return; }
+  if (PADSUBS.indexOf(sb) < 0) sb = "기타";
+  var id = "pad" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36);
+  var days = PADDRAFT.days.slice(), now = Date.now();
+  padCommit(function(doc){
+    doc.list.push({ id:id, name:nm, subject:sb, days:days, on:true, builtIn:false, at:now });
+  }, "📱 " + nm + " 추가 · " + dayLabel(days) + " 숙제에 나와요").then(function(ok){
+    if (ok) closeSheet();
   });
 }
 
@@ -2485,6 +2819,7 @@ function closeSheet(){
 function renderAll(){
   renderCheck();
   renderWB();
+  renderPad();
   renderAnnual();
   renderMoney();
   paintSync();
@@ -2505,7 +2840,7 @@ function switchTab(name){
   $("tab-wb").hidden = (name !== "wb");
   $("tab-annual").hidden = (name !== "annual");
   $("tab-money").hidden = (name !== "money");
-  if (name === "wb") renderWB();
+  if (name === "wb"){ renderWB(); renderPad(); }
   if (name === "annual"){ AN.scrollYear = null; renderAnnual(); }
   if (name === "money") renderMoney();
   if (name === "check") renderCheck();
@@ -2578,6 +2913,43 @@ document.addEventListener("click", function(e){
   }
   if (t.closest("#moneyGive")){ moneyMove(1); return; }
   if (t.closest("#moneySpend")){ moneyMove(-1); return; }
+
+  /* 📱 패드 학습 */
+  if (t.closest("#btnAddPad")){ openAddPad(); return; }
+  if (t.id === "dpSave"){ addPadFromSheet(); return; }
+  var pdday = t.closest("[data-pdday]");
+  if (pdday){
+    var pdx = num(pdday.getAttribute("data-pdday"), 0), pda = PADDRAFT.days.indexOf(pdx);
+    if (pda >= 0){ if (PADDRAFT.days.length === 1) return; PADDRAFT.days.splice(pda, 1); }
+    else PADDRAFT.days.push(pdx);
+    PADDRAFT.days.sort();
+    pdday.classList.toggle("on");
+    return;
+  }
+  var pday = t.closest("[data-padday]");
+  if (pday){
+    var pm1 = String(pday.getAttribute("data-padday")).split(":");
+    padToggleDay(pm1[0], num(pm1[1], 0));
+    return;
+  }
+  var ppre = t.closest("[data-padpreset]");
+  if (ppre){
+    var pm2 = String(ppre.getAttribute("data-padpreset")).split(":");
+    padPreset(pm2[0], pm2[1]);
+    return;
+  }
+  var psv = t.closest("[data-padsave]");
+  if (psv){ padSaveCard(psv.getAttribute("data-padsave")); return; }
+  var pdl = t.closest("[data-paddel]");
+  if (pdl){
+    var pdlId = pdl.getAttribute("data-paddel");
+    if (pdl.getAttribute("data-arm") === "1"){ padDelete(pdlId); }
+    else {
+      pdl.setAttribute("data-arm", "1"); pdl.textContent = "정말 지울까요?";
+      setTimeout(function(){ try { pdl.removeAttribute("data-arm"); pdl.textContent = "삭제"; } catch(e){} }, 3200);
+    }
+    return;
+  }
 
   /* 문제집 */
   if (t.closest("#btnAddWb")){ openAddWb(); return; }
@@ -2677,6 +3049,10 @@ document.addEventListener("change", function(e){
   if (!t || !t.getAttribute) return;
   if (t.getAttribute("data-wbtog")){
     wbToggleHW(t.getAttribute("data-wbtog"), !!t.checked);
+    return;
+  }
+  if (t.getAttribute("data-padtog")){
+    padToggleOn(t.getAttribute("data-padtog"), !!t.checked);
     return;
   }
   var mo = t.getAttribute("data-wbm");

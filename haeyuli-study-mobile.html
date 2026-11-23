@@ -24036,6 +24036,25 @@ function mergeWb(l, c){
   return { v:1, list: out };
 }
 
+/* 📱 패드 학습 모듈(SB.pad)을 안전하게 — 이 스크립트보다 뒤에 정의되므로 없을 때는 클라우드 값을 그대로 둔다 */
+/* 지금 SCHED 에 들어 있는 패드 항목 모양 — 같은 기기 다른 탭(부모 페이지)이 저장소에 먼저
+   써 둔 경우에도 다시 만들었는지 비교하려고 */
+function padSchedSig(){
+  try {
+    var sc = (window.SB && SB.hw5 && SB.hw5.sched) || null;
+    if (!sc) return "";
+    var out = [];
+    for (var d = 0; d < 7; d++){
+      var a = sc[d] || [], x = [];
+      for (var i = 0; i < a.length; i++) if (a[i] && a[i].tag === "t") x.push(a[i].id + "/" + a[i].t);
+      out.push(x.join("|"));
+    }
+    return out.join(";");
+  } catch(e){ return ""; }
+}
+function padApi(){
+  try { return (window.SB && SB.pad) ? SB.pad : null; } catch(e){ return null; }
+}
 function snap(){
   var pl = read(K.plan, { days:{} });
   try { if (SB.week && SB.week.plan) pl = SB.week.plan(); } catch(e){}
@@ -24081,13 +24100,14 @@ function snap(){
     shelves: shelfSnap(),
     hwday: hwdaySnap(),
     momnote: momNotes(),
-    carry: read("haeyuli.hwcarry.v1", null)
+    carry: read("haeyuli.hwcarry.v1", null),
+    padplan: (padApi() ? padApi().load() : null)
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry, engread:d.engread, engwb:d.engwb, swwb:d.swwb });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry, engread:d.engread, engwb:d.engwb, swwb:d.swwb, padplan:d.padplan });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry, s.engread, s.engwb, s.swwb]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry, s.engread, s.engwb, s.swwb, s.padplan]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -24687,6 +24707,8 @@ function buildDoc(local, cloud, base, code){
     engwb: mergeEngDone(local.engwb, c.engwb),
     swwb: mergeEngDone(local.swwb, c.swwb),
     carry: mergeCarry(local.carry, c.carry),
+    padplan: (padApi() ? padApi().merge(local.padplan, c.padplan)
+                        : (c.padplan || local.padplan || null)),
     hwday: local.hwday || c.hwday || null,
     at: Date.now()
   };
@@ -24824,6 +24846,25 @@ function applyDoc(doc){
       write("haeyuli.hwcarry.v1", cnew);
       changed = true;
       try { if (SB.carryRefresh) SB.carryRefresh(); } catch(e){}
+      try { if (SB.hwplanRefresh) SB.hwplanRefresh(); } catch(e){}
+    }
+  }
+  /* 📱 패드 학습 요일 — 부모 페이지에서 바꾼 요일·새로 추가한 패드 학습을 이 기기 오늘의 숙제·주간 시간표에 바로 */
+  var padApiRef = padApi();
+  if (padApiRef && doc.padplan && typeof doc.padplan === "object"){
+    var ppCur = padApiRef.merge(padApiRef.load(), null), ppNew = padApiRef.merge(ppCur, doc.padplan);
+    if (JSON.stringify(ppNew) !== JSON.stringify(ppCur)){
+      padApiRef.save(ppNew);
+      changed = true;
+    }
+    /* 부모 페이지가 같은 기기(같은 브라우저)면 저장소를 먼저 바꿔 두므로 값 비교만으로는 놓친다
+       — SCHED 를 다시 만들고, 모양이 달라졌을 때만 다시 그린다 */
+    var ps0 = padSchedSig();
+    try { padApiRef.rebuild(); } catch(e){}
+    if (padSchedSig() !== ps0){
+      changed = true;
+      try { if (SB.hw5 && SB.hw5.render) SB.hw5.render(); } catch(e){}
+      try { if (SB.week && SB.week.render) SB.week.render(); } catch(e){}
       try { if (SB.hwplanRefresh) SB.hwplanRefresh(); } catch(e){}
     }
   }
@@ -38174,28 +38215,30 @@ function B(id, s, t, go){ return { id:id, s:s, t:t, tag:"b", go:go || null }; }
 function K(id, s, t, go){ return { id:id, s:s, t:t, tag:"k", go:go || null }; }
 function T(id, s, t, go){ return { id:id, s:s, t:t, tag:"t", go:go || null }; }
 function V(id, s, t, go){ return { id:id, s:s, t:t, tag:"v", go:go || null }; }
+/* 📱 패드 학습 — 부모 페이지에서 요일을 바꾸는 자리 (아래 padplan 모듈이 그날의 패드 학습으로 채운다) */
+var PADSLOT = { __pad:1 };
 
 var SCHED = [
   /* 월 */
   [
-    T("padam","패드","아이캔두 학습 (아침)"),
+    PADSLOT,
     B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en","call"]),
     B("mathgit","수학","기탄 연산 10문제", ["study","math","calc"]),
     K("read","책","한글책 1권 + 영어책 1권", ["book","main"])
   ],
   /* 화 */
   [
-    T("padam","패드","아이캔두 학습 (아침)"),
+    PADSLOT,
     B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en","call"]),
     B("ensight","영어","사이트워드 1단계", ["study","en","sight"]),
-    T("razkids","영어","라즈키즈 영어"),
+    PADSLOT,
     B("mathshape","수학","도형·시계", ["study","math","shape"]),
     B("hanjaw","한자","낱말·뜻 쓰기", ["study","hanja","word"]),
     K("read","책","한글책 1권 + 영어책 1권", ["book","main"])
   ],
   /* 수 */
   [
-    T("padam","패드","아이캔두 학습 (아침)"),
+    PADSLOT,
     B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en","call"]),
     B("kowrite","국어","받아쓰기", ["study","ko","write"]),
     B("histquiz","역사","역사 퀴즈", ["study","history","quiz"]),
@@ -38204,10 +38247,10 @@ var SCHED = [
   ],
   /* 목 */
   [
-    T("padam","패드","아이캔두 학습 (아침)"),
+    PADSLOT,
     B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en","call"]),
     B("enwg","영어","단어키우기 10문제", ["study","en","wordgrow"]),
-    T("razkids","영어","라즈키즈 영어"),
+    PADSLOT,
     B("mathsaem","수학","하루 셈하기", ["study","math","saem"]),
     B("kovocab","국어","어휘·개념", ["study","ko","vocab"]),
     B("cntalk","중국어","일상대화 따라 말하고 녹음", ["study","cn","talk"]),
@@ -38215,7 +38258,7 @@ var SCHED = [
   ],
   /* 금 */
   [
-    T("padam","패드","아이캔두 학습 (아침)"),
+    PADSLOT,
     B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en","call"]),
     B("enword","영어","단어카드·게임", ["study","en","talk"]),
     B("mathbase1","수학","1학년 기초수학", ["study","math","base1"]),
@@ -38228,10 +38271,10 @@ var SCHED = [
     B("enwol","영어","월팸", ["study","en","wolpaem"]),
     B("mathg2","수학","2학년 선행", ["study","math","grade2"]),
     B("cncard","중국어","단어 카드 10개", ["study","cn","cards"]),
-    T("razkids","영어","라즈키즈 영어"),
-    T("padmath","수학","아이캔두 수학"),
-    T("doyoen","영어","도요새 영어", ["book","main"]),
-    T("doyocn","중국어","도요새 중국어", ["study","cn","cards"]),
+    PADSLOT,
+    PADSLOT,
+    PADSLOT,
+    PADSLOT,
     K("read","책","한글책 2권 + 영어책 1권", ["book","main"])
   ],
   /* 일 */
@@ -38240,9 +38283,9 @@ var SCHED = [
     B("enbook","영어","그림 동화책(AR) 1권", ["study","en","book"]),
     B("mathgugu","수학","구구단 원리", ["study","math","gugu"]),
     B("hanjatext","한자","교과서 핵심한자", ["study","hanja","text"]),
-    T("padmath","수학","아이캔두 수학"),
-    T("doyoen","영어","도요새 영어", ["book","main"]),
-    T("doyocn","중국어","도요새 중국어", ["study","cn","cards"]),
+    PADSLOT,
+    PADSLOT,
+    PADSLOT,
     K("read","책","한글책 1권", ["book","main"])
   ]
 ];
@@ -38254,6 +38297,140 @@ var SCHED = [
     SCHED[d].push(V("videng", "영어", "영어책 영상 찍기 (월~금)"));
   }
 })();
+
+/* =====================================================================
+   📱 패드 학습 요일별 설정 (2026-11-23) · haeyuli.padplan.v1
+   · 부모 페이지(parent.html)의 📘 문제집 탭 > 📱 패드 학습 · 요일별 설정에서
+     요일을 바꾸거나 새 패드 학습을 추가/삭제하면 가족 코드 문서(padplan)로 넘어와
+     이 보드의 오늘의 숙제 · 이번 주 시간표가 그 자리에서 바뀐다.
+   · 기본 5개: 아이캔두 학습(아침) 월~금 · 아이캔두 수학 토·일 · 라즈키즈 영어 화·목·토
+               · 도요새 영어 토·일 · 도요새 중국어 토·일
+   · id 를 그대로 두므로 haeyuli.hwplan.v1 체크 기록은 요일을 옮겨도 따라간다
+   ===================================================================== */
+var PADP_KEY = "haeyuli.padplan.v1";
+var PADP_DEF = [
+  { id:"padam",   name:"아이캔두 학습 (아침)", subject:"패드",   days:[0,1,2,3,4] },
+  { id:"padmath", name:"아이캔두 수학",        subject:"수학",   days:[5,6] },
+  { id:"razkids", name:"라즈키즈 영어",        subject:"영어",   days:[1,3,5] },
+  { id:"doyoen",  name:"도요새 영어",          subject:"영어",   days:[5,6] },
+  { id:"doyocn",  name:"도요새 중국어",        subject:"중국어", days:[5,6] }
+];
+/* 기본 항목은 원래 있던 '바로 가기' 를 그대로 둔다 */
+var PADP_GO = { doyoen:["book","main"], doyocn:["study","cn","cards"] };
+function pNum(v, fb){
+  var n = Number(v);
+  return isFinite(n) ? n : (fb === undefined ? 0 : fb);
+}
+function pDays(v){
+  var out = [], src = Array.isArray(v) ? v : [];
+  for (var i = 0; i < src.length; i++){
+    var n = pNum(src[i], -1);
+    if (n >= 0 && n < 7 && out.indexOf(n) < 0) out.push(n);
+  }
+  return out.sort();
+}
+function pRaw(v){
+  v = (v && typeof v === "object" && !Array.isArray(v)) ? v : {};
+  return { list: Array.isArray(v.list) ? v.list : [],
+           del: (v.del && typeof v.del === "object" && !Array.isArray(v.del)) ? v.del : {} };
+}
+function pDef(id){
+  for (var i = 0; i < PADP_DEF.length; i++) if (PADP_DEF[i].id === id) return PADP_DEF[i];
+  return null;
+}
+/* 병합 — 같은 id 는 at(마지막 수정 시각)이 최신인 쪽, 삭제 표시(del)가 그보다 최근이면 지운다 */
+function padpMerge(local, cloud){
+  var A = pRaw(local), B = pRaw(cloud), map = {}, order = [], del = {}, kk;
+  [A, B].forEach(function(o){
+    for (var k in o.del) del[k] = Math.max(pNum(del[k]), pNum(o.del[k]));
+  });
+  function put(x){
+    if (!x || typeof x !== "object") return;
+    var id = String(x.id || "").slice(0, 40);
+    if (!id) return;
+    var at = pNum(x.at), prev = map[id];
+    if (!prev){
+      map[id] = {
+        id:id,
+        name:String(x.name == null ? (x.nm || "") : x.name).slice(0, 40),
+        subject:String(x.subject == null ? (x.sub || "패드") : x.subject).slice(0, 10),
+        days:pDays(x.days),
+        on:!(x.on === 0 || x.on === false),
+        builtIn:!!x.builtIn, at:at
+      };
+      order.push(id);
+      return;
+    }
+    if (at <= prev.at) return;
+    prev.name = String(x.name == null ? prev.name : x.name).slice(0, 40);
+    prev.subject = String(x.subject == null ? prev.subject : x.subject).slice(0, 10);
+    prev.days = pDays(x.days);
+    prev.on = !(x.on === 0 || x.on === false);
+    prev.builtIn = !!x.builtIn;
+    prev.at = at;
+  }
+  A.list.forEach(put); B.list.forEach(put);
+  var out = [];
+  PADP_DEF.forEach(function(d0){
+    var e = map[d0.id];
+    if (!e || (pNum(del[d0.id]) > 0 && pNum(del[d0.id]) >= e.at)){
+      e = { id:d0.id, name:d0.name, subject:d0.subject, days:d0.days.slice(), on:true,
+            builtIn:true, at:(e ? pNum(e.at) : 0) };
+    }
+    if (!e.name) e.name = d0.name;
+    e.name = String(e.name).slice(0, 40);
+    e.builtIn = true;
+    out.push(e);
+  });
+  order.forEach(function(id){
+    if (pDef(id)) return;
+    var e = map[id];
+    if (!e) return;
+    if (pNum(del[id]) > 0 && pNum(del[id]) >= e.at) return;
+    if (!e.name) e.name = "패드 학습";
+    out.push(e);
+  });
+  return { v:1, list:out, del:del };
+}
+function padpLoad(){
+  try { return pRaw(JSON.parse(localStorage.getItem(PADP_KEY) || "null")); }
+  catch(e){ return pRaw(null); }
+}
+function padpSave(doc){
+  try { localStorage.setItem(PADP_KEY, JSON.stringify(doc)); return true; } catch(e){ return false; }
+}
+function padpList(){ return padpMerge(padpLoad(), null).list; }
+/* 그 요일(월=0 … 일=6)에 나오는 패드 학습 */
+function padpItems(di){
+  var out = [], list = padpList();
+  for (var i = 0; i < list.length; i++){
+    var p = list[i];
+    if (!p.on) continue;
+    if (p.days.indexOf(di) < 0) continue;
+    out.push({ id:p.id, s:p.subject, t:p.name, tag:"t", go:(PADP_GO[p.id] || null) });
+  }
+  return out;
+}
+/* SCHED 를 padplan 으로 다시 채운다 — 원래 패드 항목이 있던 자리에 그날의 패드 학습을 넣는다 */
+var PADP_BASE = null;
+function rebuildSched(){
+  if (!PADP_BASE) PADP_BASE = SCHED.map(function(a){ return a.slice(); });
+  for (var d = 0; d < 7; d++){
+    var base = PADP_BASE[d] || [], pads = padpItems(d), out = [], placed = false, i, j;
+    for (i = 0; i < base.length; i++){
+      var it = base[i];
+      if (it && it.__pad){
+        if (!placed){ placed = true; for (j = 0; j < pads.length; j++) out.push(pads[j]); }
+        continue;
+      }
+      out.push(it);
+    }
+    if (!placed) for (j = 0; j < pads.length; j++) out.push(pads[j]);
+    SCHED[d] = out;
+  }
+  return SCHED;
+}
+rebuildSched();
 /* 30일 연속 쿠폰(🏆)은 그대로 두고, 돈 잭팟은 이 사다리로 준다 */
 var LADDER = [[5, 1000], [14, 1000], [21, 1000], [30, 10000]];
 
@@ -38425,6 +38602,8 @@ function toggle(id){
   try { if (st.all && SB.onAllHw) SB.onAllHw(st, jkwBase); } catch(e){}
   touchFam();
 }
+SB.pad = { list:padpList, items:padpItems, merge:padpMerge, load:padpLoad, save:padpSave,
+           rebuild:rebuildSched, def:PADP_DEF, key:PADP_KEY };
 SB.hw5 = { status:status, toggle:toggle, sched:SCHED, ladder:LADDER,
            items:items, dayDone:dayDone, iso:iso, dayIdx:dayIdx, tag:TAG, wb:wbDay };
 SB.hw5.render = render;
