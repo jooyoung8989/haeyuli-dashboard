@@ -3361,22 +3361,19 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     return dateKey(d) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
   }
   function boardCode(){
-    var fs = "";
-    try { if (window.FAMSYNC && FAMSYNC.code) fs = String(FAMSYNC.code() || "").toUpperCase(); } catch(e){}
     var bf = readJSON(KEYBFAM, null);
     if (!bf || typeof bf !== "object") bf = {};
     var bc = bf.code ? String(bf.code).toUpperCase() : "";
+    if (bc) return bc;
+    /* 보드 코드가 아직 없으면 가족 코드 연결(FAMSYNC) 코드를 그대로 쓴다 — 한 번만 적어 두고 계속 같이 씀 */
+    var fs = "";
+    try { if (window.FAMSYNC && FAMSYNC.code) fs = String(FAMSYNC.code() || "").toUpperCase(); } catch(e){}
     if (fs){
-      /* 가족 코드 연결(FAMSYNC)이 늘 우선 — 스터디 보드가 쓰는 haeyuli.family.v1 도 같은 코드로 맞춘다 */
-      if (bc !== fs){
-        bf.code = fs;
-        bf.base = bc ? Math.max(0, Math.round(Number(bReadMoney().piggy) || 0)) : 0;
-        bf.lastSync = Number(bf.lastSync) || 0;
-        writeJSON(KEYBFAM, bf);
-      }
-      return fs;
+      bf.code = fs;
+      if (typeof bf.base !== "number" || !isFinite(bf.base)) bf.base = 0;
+      writeJSON(KEYBFAM, bf);
     }
-    return bc;
+    return fs;
   }
   function mbNs(code){ return "haeyuli-" + String(code || "").toLowerCase(); }
   function mbGet(code){
@@ -5006,8 +5003,20 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     now: function(){ return nowAll; },
     applyNow: applyNow,
     renderNow: renderNow,
-    /* 가족 코드가 새로 연결·해제되면 용돈·별도 그 코드로 바로 맞춘다 */
-    famCodeChanged: function(){
+    /* 가족 코드가 새로 연결·해제되면 용돈·별(haeyuli.money.v1 · yuli.stars.v2)도 그 코드로 바로 맞춘다 */
+    famCodeChanged: function(code){
+      try {
+        var bf = readJSON(KEYBFAM, null);
+        if (!bf || typeof bf !== "object") bf = {};
+        var nc = String(code || "").toUpperCase();
+        var old = bf.code ? String(bf.code).toUpperCase() : "";
+        if (nc && nc !== old){
+          /* 코드가 바뀌면 기준값을 이 기기 저금통으로 맞춰 다른 가족 돈을 덮어쓰지 않게 한다 */
+          bf.code = nc;
+          bf.base = Math.max(0, Math.round(Number(bReadMoney().piggy) || 0));
+          writeJSON(KEYBFAM, bf);
+        }
+      } catch(e){}
       try { if (typeof bSyncNow === "function") bSyncNow(false); } catch(e){}
       try { if (typeof renderStars === "function") renderStars(false); } catch(e){}
     },
@@ -5130,8 +5139,8 @@ function fmtHM(ts){
   return pad2(d.getHours()) + ":" + pad2(d.getMinutes());
 }
 /* 가족 코드가 생기거나 바뀌면 대시보드의 용돈·별(haeyuli.money.v1 · yuli.stars.v2)도 같은 코드로 바로 맞춘다 */
-function hookFam(){
-  try { if (window.YULI && YULI.famCodeChanged) YULI.famCodeChanged(); } catch(e){}
+function hookFam(code){
+  try { if (window.YULI && YULI.famCodeChanged) YULI.famCodeChanged(code); } catch(e){}
 }
 
 /* ---------------- 저장된 연결 상태 ---------------- */
@@ -5455,7 +5464,7 @@ function createCode(){
   localize(curDay());
   saveF();
   paint();
-  hookFam();
+  hookFam(code);
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
   /* 🔔 엄마 폰 푸시 토픽도 함께 만들어 올린다 */
   try { if (window.NTFY) NTFY.ensureTopic(code); } catch(e){}
@@ -5496,7 +5505,7 @@ function joinCode(){
     paint();
     toastMsg("🔗 가족 코드 " + code + " 로 연결했어요");
     closeModal();
-    hookFam();
+    hookFam(code);
     syncOnce(false);
   }).catch(function(e){
     setState("인터넷 연결을 확인해 주세요", true);
@@ -5511,7 +5520,7 @@ function leaveCode(){
   F = { base:{ v:1, days:{} } };
   saveF();
   paint();
-  hookFam();
+  hookFam("");
   toastMsg("이 기기만 쓰는 상태로 돌아왔어요");
 }
 function copyCode(){
