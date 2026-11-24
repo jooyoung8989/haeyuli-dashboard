@@ -64,6 +64,14 @@
   .mark{position:absolute; top:50%; width:4px; height:16px; margin-left:-2px; transform:translateY(-50%);
     background:var(--gold); border-radius:2px; opacity:.85;}
   @media (max-width:520px){ .mark{width:3px; height:11px; margin-left:-1.5px;} }
+  @media (max-height:640px) and (orientation:portrait){
+    header{padding:6px 4px 0;}
+    .brand small{display:none;}
+    .stage{max-height:44vh;}
+    .centerplay{width:54px; height:54px; font-size:20px;}
+    .bigstart .playcircle{width:60px; height:60px; font-size:26px;}
+    .bigstart .t2{display:none;}
+  }
   .mark.done{background:var(--green);}
   .knob{position:absolute; top:50%; width:14px; height:14px; margin-left:-7px; transform:translateY(-50%);
     background:#fff; border-radius:50%; box-shadow:0 1px 5px rgba(0,0,0,.5); pointer-events:none;}
@@ -120,14 +128,31 @@
     padding:13px 18px; font-size:15px; font-weight:800; font-family:inherit; cursor:pointer;}
   .tips{font-size:11.5px; color:#8f9bd6; line-height:1.5; text-align:center; padding:0 6px;}
 
-  /* 가로 모드·낮은 화면: 영상은 위에 붙여 두고 문제 카드만 스크롤 */
-  @media (max-height:640px){
-    header{padding:6px 4px 0;}
+  /* 가로 모드·낮은 화면: 영상은 왼쪽, 문제 카드는 오른쪽에 나란히 */
+  @media (orientation:landscape) and (max-height:640px){
+    html,body{height:100%; overflow:hidden;}
+    .wrap{max-width:none; height:100vh; height:100dvh; display:grid; gap:8px 10px;
+      grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+      grid-template-rows:auto auto auto 1fr;
+      grid-template-areas:"head head" "stage quiz" "bar quiz" "chap chap";
+      padding:6px 8px calc(6px + env(safe-area-inset-bottom));}
+    header{grid-area:head; padding:0 2px;}
     .brand small{display:none;}
-    .stage{max-height:44vh; position:sticky; top:2px; z-index:9;}
-    .centerplay{width:54px; height:54px; font-size:20px;}
-    .bigstart .playcircle{width:60px; height:60px; font-size:26px;}
+    .stage{grid-area:stage; position:static; max-height:none; align-self:start; border-radius:10px;}
+    .ctrlbar1{grid-area:bar; align-self:start;}
+    .ctrlbar2{display:none;}
+    .quiz{grid-area:quiz; overflow-y:auto; align-self:stretch; padding:10px 12px 12px;}
+    .endcard{grid-area:quiz; overflow-y:auto; align-self:start;}
+    .chapters{grid-area:chap;}
+    .tips{display:none;}
+    .qen{font-size:18px;}
+    .qko{font-size:12px; margin-bottom:8px;}
+    .opts{grid-template-columns:1fr;}
+    .opt{min-height:48px; padding:9px 12px; font-size:15px;}
+    .opt .em{font-size:20px;}
+    .ch{padding:6px 10px; font-size:12px;}
     .bigstart .t2{display:none;}
+    .centerplay{width:54px; height:54px; font-size:20px;}
   }
 </style>
 </head>
@@ -152,7 +177,7 @@
     <div class="flash" id="flash"></div>
   </div>
 
-  <div class="ctrl">
+  <div class="ctrl ctrlbar1">
     <button class="cbtn" id="btnBack">⟲10</button>
     <div class="barwrap" id="barwrap">
       <div class="bar" id="bar">
@@ -163,7 +188,7 @@
     <button class="cbtn" id="btnFwd">10⟳</button>
     <div class="time" id="time">0:00 / 0:00</div>
   </div>
-  <div class="ctrl" style="gap:10px">
+  <div class="ctrl ctrlbar2" style="gap:10px">
     <button class="cbtn wide" id="btnPlay">▶ 재생</button>
     <button class="cbtn" id="btnMute">🔊</button>
   </div>
