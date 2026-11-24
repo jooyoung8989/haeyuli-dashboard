@@ -138,17 +138,20 @@
       padding:6px 8px calc(6px + env(safe-area-inset-bottom));}
     header{grid-area:head; padding:0 2px;}
     .brand small{display:none;}
-    .stage{grid-area:stage; position:static; max-height:none; align-self:start; border-radius:10px;}
-    .ctrlbar1{grid-area:bar; align-self:start;}
+    .stage{grid-area:stage; position:static; max-height:calc(100dvh - 200px); align-self:start; border-radius:10px;}
+    .ctrlbar1{grid-area:bar; align-self:start; background:rgba(9,13,36,.9); border-radius:12px; padding:2px 4px;}
     .ctrlbar2{display:none;}
     .quiz{grid-area:quiz; overflow-y:auto; align-self:stretch; padding:10px 12px 12px;}
     .endcard{grid-area:quiz; overflow-y:auto; align-self:start;}
     .chapters{grid-area:chap;}
     .tips{display:none;}
-    .qen{font-size:18px;}
-    .qko{font-size:12px; margin-bottom:8px;}
-    .opts{grid-template-columns:1fr;}
-    .opt{min-height:48px; padding:9px 12px; font-size:15px;}
+    .qen{font-size:17px; margin:0 0 2px;}
+    .qko{font-size:11.5px; margin-bottom:6px;}
+    .opts{grid-template-columns:1fr; gap:6px;}
+    .opt{min-height:42px; padding:7px 11px; font-size:14.5px; border-radius:11px;}
+    .opt .lbl small{font-size:11px;}
+    .qnum{font-size:11px; padding:3px 8px;}
+    .qskip{font-size:11px; padding:4px 8px;}
     .opt .em{font-size:20px;}
     .ch{padding:6px 10px; font-size:12px;}
     .bigstart .t2{display:none;}
