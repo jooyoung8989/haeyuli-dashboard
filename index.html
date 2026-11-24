@@ -2468,7 +2468,10 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
   function pushNow(){
     clearTimeout(nowPushTimer);
     nowPushTimer = setTimeout(function(){
-      try { if (window.FAMSYNC && FAMSYNC.sync) FAMSYNC.sync(); } catch(e){}
+      try {
+        if (window.FAMSYNC && FAMSYNC.quiet) FAMSYNC.quiet();      /* 알림 없이 저장 */
+        else if (window.FAMSYNC && FAMSYNC.sync) FAMSYNC.sync();
+      } catch(e){}
     }, 400);
   }
   function setNow(who, text){
