@@ -5695,7 +5695,7 @@ window.YULI_BGM = (function(){
   var onSchool = false, remainMin = null, allDone = false;
   var previewUntil = 0, pvTimer = null;
   var player = null, ytReady = false, curVid = null, ytState = -1;
-  var playing = false, commanded = false, lastErr = 0;
+  var playing = false, commanded = false, lastErr = 0, hold = false;
   var uiKey = "";
 
   function save(){ try { localStorage.setItem(STORE, enabled ? "1" : "0"); } catch(e){} }
@@ -5804,7 +5804,7 @@ window.YULI_BGM = (function(){
   }
 
   function switchTo(vid){
-    curVid = vid; lastErr = 0;
+    curVid = vid; lastErr = 0; hold = false;
     if (!ytReady || !player) return;
     try { player.loadVideoById({ videoId: vid }); } catch(e){}
     try { player.setLoop(true); } catch(e){}
@@ -5814,6 +5814,7 @@ window.YULI_BGM = (function(){
   /* ---------------- 상태 → 플레이어 ---------------- */
   function apply(){
     if (!shouldPlay()){
+      hold = false;
       if (playing || ytState === 1 || ytState === 3) pausePlaying();
       paint();
       return;
@@ -5822,7 +5823,7 @@ window.YULI_BGM = (function(){
     if (!ytReady){ paint(); return; }
     var vid = V[mode()];
     if (curVid !== vid) switchTo(vid);
-    else if (!playing && !commanded) startPlaying();
+    else if (!playing && !commanded && !hold) startPlaying();
     paint();
   }
 
@@ -5913,6 +5914,7 @@ window.YULI_BGM = (function(){
 
   function preview(sec){
     if (!enabled){ enabled = true; save(); }        /* 미리듣기는 소리를 켠다 */
+    hold = false;
     var d = (sec || 8) * 1000;
     previewUntil = Date.now() + d;
     clearTimeout(pvTimer);
@@ -5930,11 +5932,12 @@ window.YULI_BGM = (function(){
   function toggle(){
     /* 배지가 "눌러서 소리 켜기" 라고 말하고 있으면, 첫 탭은 끄기가 아니라 켜기다 */
     if (enabled && !playing && wantSound()){
-      commanded = false;
+      commanded = false; hold = false;
       ready(function(){ ensurePlayer(); });
       startPlaying();
       return;
     }
+    hold = false;
     enabled = !enabled;
     if (!enabled && Date.now() < previewUntil){ previewUntil = 0; clearTimeout(pvTimer); }
     save();
@@ -5950,13 +5953,15 @@ window.YULI_BGM = (function(){
     if (!enabled || !onSchool) return;
     if (!shouldPlay()) return;
     ready(function(){ ensurePlayer(); });
-    if (ytReady && player && !playing){ commanded = false; startPlaying(); }
+    if (ytReady && player && !playing){ commanded = false; hold = false; startPlaying(); }
   }
 
   function hitToggle(){
     if (!enabled){ enabled = true; save(); }
     if (!shouldPlay()){ paint(); return; }
-    if (playing){ pausePlaying(); paint(); return; }
+    /* 사용자가 직접 멈추면 다음 카운트다운 틱이 다시 켜지 않도록 hold 로 붙잡아 둔다 */
+    if (playing){ hold = true; pausePlaying(); paint(); return; }
+    hold = false;
     ready(function(){ ensurePlayer(); });
     if (ytReady && player){ commanded = false; startPlaying(); }
     else paint();
