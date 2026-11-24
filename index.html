@@ -5695,7 +5695,7 @@ window.YULI_BGM = (function(){
   var onSchool = false, remainMin = null, allDone = false;
   var previewUntil = 0, pvTimer = null;
   var player = null, ytReady = false, curVid = null, ytState = -1;
-  var playing = false, commanded = false, lastErr = 0, hold = false;
+  var playing = false, commanded = false, lastErr = 0, hold = false, playToken = 0;
   var uiKey = "";
 
   function save(){ try { localStorage.setItem(STORE, enabled ? "1" : "0"); } catch(e){} }
@@ -5780,15 +5780,18 @@ window.YULI_BGM = (function(){
 
   function startPlaying(){
     if (!ytReady || !player) return;
+    var tok = ++playToken;
     try { player.unMute(); player.setVolume(100); player.playVideo(); } catch(e){}
     commanded = true;
     playing = true;
     paint();
-    /* iOS 는 첫 playVideo 가 무시되는 경우가 있어 한 박자 뒤 한 번 더 눌러 준다 */
-    setTimeout(function(){ nudge(); }, 800);
-    setTimeout(function(){ nudge(); }, 2200);
+    /* iOS 는 첫 playVideo 가 무시되는 경우가 있어 한 박자 뒤 한 번 더 눌러 준다.
+       그 사이 사용자가 멈췄으면(pausePlaying 이 토큰을 올림) 다시 켜지 않는다. */
+    setTimeout(function(){ nudge(tok); }, 800);
+    setTimeout(function(){ nudge(tok); }, 2200);
   }
-  function nudge(){
+  function nudge(tok){
+    if (tok !== playToken) return;
     if (!ytReady || !player || !shouldPlay()) return;
     if (ytState === 1 || ytState === 3){ playing = true; paint(); return; }
     try { player.unMute(); player.setVolume(100); player.playVideo(); } catch(e){}
@@ -5798,6 +5801,7 @@ window.YULI_BGM = (function(){
   }
 
   function pausePlaying(){
+    playToken++;
     commanded = false;
     if (ytReady && player){ try { player.pauseVideo(); } catch(e){} }
     playing = false;
@@ -5812,7 +5816,19 @@ window.YULI_BGM = (function(){
   }
 
   /* ---------------- 상태 → 플레이어 ---------------- */
+  /* 플레이어가 실제로 어떤 상태인지 한 번 맞춰 본다 (우리 쪽 표시가 어긋나지 않게) */
+  function syncFromPlayer(){
+    if (!ytReady || !player) return;
+    var ps;
+    try { ps = player.getPlayerState(); } catch(e){ return; }
+    if (typeof ps !== "number" || ps < 0) return;
+    ytState = ps;
+    if (ps === 1 || ps === 3) playing = true;
+    else if (ps === 2 || ps === 0) playing = false;
+  }
+
   function apply(){
+    syncFromPlayer();
     if (!shouldPlay()){
       hold = false;
       if (playing || ytState === 1 || ytState === 3) pausePlaying();
