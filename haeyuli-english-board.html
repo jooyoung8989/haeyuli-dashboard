@@ -31338,6 +31338,19 @@ SB.shelf = { render: shPaint, reload: shReloadAll, defs: SHELF_DEFS,
 /* ---------- 🔊 나우 아임 리딩 원어민 음원 재생 (한 번에 한 권만 재생) ---------- */
 var NIRPL = { a:null, row:null, id:null, key:"", saved:0, seeking:false, preview:null, lastSave:0 };
 var NPOSK = "haeyuli.nir.pos.v1";
+var NIRCH = {"mw1":[64.6,113.7],"mw2":[48.4,96.6],"mw3":[53.7,96.4],"mw4":[69.3,122.1],"mw5":[52.5,100.7],"mw6":[58.4,122.0],"mw7":[50.3,120.6],"mw8":[66.9,152.3],"mw9":[50.5,98.5],"mw10":[58.2,139.7],"la1":[95.7,143.7],"la2":[83.2,130.4],"la3":[79.7,124.3],"la4":[77.0,123.3],"la5":[84.1,132.9],"la6":[72.3,112.2],"la7":[76.3,142.5],"la8":[81.7,127.2],"la9":[83.8,129.2],"la10":[77.9,123.2],"pp1":[86.2,126.3],"pp2":[59.5,114.4],"pp3":[58.4,114.7],"pp4":[61.3,106.8],"pp5":[67.0,130.8],"pp6":[57.0,115.8],"pp7":[59.1,123.7],"pp8":[55.4,101.9],"pp9":[55.5,102.6],"pp10":[56.9,104.9],"aa1":[96.8,154.0],"aa2":[82.4,144.6],"aa3":[79.7,143.4],"aa4":[76.4,131.2],"aa5":[76.7,139.8],"aa6":[69.0,128.5],"aa7":[72.4,149.2],"aa8":[65.0,127.6],"aa9":[70.2,132.6],"aa10":[70.8,130.7],"cc1":[96.4,175.8],"cc2":[65.3,119.2],"cc3":[70.0,124.9],"cc4":[77.5,150.8],"cc5":[75.4,138.1],"cc6":[65.9,129.3],"cc7":[86.5,162.1],"cc8":[74.1,127.9],"cc9":[83.3,164.6],"cc10":[66.6,132.5],"az1":[103.1,167.3],"az2":[73.3,135.8],"az3":[74.5,130.9],"az4":[67.8,133.8],"az5":[66.2,113.0],"az6":[69.2,132.7],"az7":[74.1,134.2],"az8":[63.2,109.5],"az9":[76.2,137.1],"az10":[64.7,131.0],"sa1":[81.1,145.3],"sa2":[72.0,135.1],"sa3":[72.9,136.8],"sa4":[73.0,138.9],"sa5":[67.3,130.1],"sa6":[61.6,129.0],"sa7":[71.3,136.8],"sa8":[71.3,148.6],"sa9":[73.3,127.0],"sa10":[60.5,122.5],"og1":[119.3,224.9],"og2":[112.0,220.6],"og3":[99.1,197.3],"og4":[119.8,221.5],"og5":[95.2,189.6],"og6":[110.2,236.2],"og7":[105.1,215.7],"og8":[106.4,200.5],"og9":[101.0,196.9],"og10":[121.2,223.9],"lp1":[122.3,226.1],"lp2":[86.2,191.5],"lp3":[88.5,177.9],"lp4":[75.5,169.8],"lp5":[100.8,202.9],"lp6":[83.5,176.3],"lp7":[97.1,207.0],"lp8":[83.1,183.8],"lp9":[92.4,192.4],"lp10":[99.4,210.5],"wp1":[85.8,133.6],"wp2":[42.4,89.7],"wp3":[59.3,101.5],"wp4":[44.7,91.0],"wp5":[41.2,89.4],"wp6":[53.2,88.5],"wp7":[46.0,83.3],"wp8":[46.5,93.1],"abc1":[55.5,86.2],"abc2":[32.0,59.8],"abc3":[32.2,63.9],"abc4":[30.6,59.0],"abc5":[33.2,63.6],"abc6":[30.0,61.9],"abc7":[29.8,60.8],"abc8":[34.6,66.0],"abc9":[33.5,63.7],"abc10":[34.5,66.5],"abc11":[35.3,66.9],"abc12":[33.3,61.7],"abc13":[36.2,68.4],"abc14":[32.8,64.9],"abc15":[33.9,73.8],"abc16":[31.9,75.9],"abc17":[34.1,65.0],"abc18":[32.9,64.0],"abc19":[33.7,63.4],"abc20":[32.9,65.1],"abc21":[35.7,67.9],"abc22":[32.6,60.4],"abc23":[33.9,66.4],"abc24":[33.5,65.7],"abc25":[33.4,63.1],"abc26":[34.8,71.5],"mm1a":[136.6,256.6],"mm1b":[100.5,194.7],"mm1c":[130.5,290.3],"mm1d":[140.0,298.8],"mm1e":[130.1,267.0],"mm2a":[119.2,244.7],"mm2b":[100.5,176.5],"mm2c":[96.4,166.3],"mm2d":[95.2,187.3],"mm2e":[131.2,250.3],"sc1a":[165.6,334.3],"sc1b":[119.0,247.0],"sc1c":[120.1,258.7],"sc1d":[121.6,258.8],"sc1e":[111.0,241.4],"sc2a":[115.6,279.6],"sc2b":[135.0,325.7],"sc2c":[122.5,269.4],"sc2d":[128.1,296.3],"sc2e":[102.6,198.9]};
+var NIRCHL = ["읽기", "챈트", "따라 말하기"];
+/* 책 id 로 구간 목록([{t,n}])을 만든다. 구간 정보가 없으면 null */
+function nirChapters(id){
+  var v = NIRCH[String(id || "")];
+  if (!v || !v.length) return null;
+  var out = [{ t:0, n:NIRCHL[0] }];
+  for (var i = 0; i < v.length; i++){
+    var t = Number(v[i]);
+    if (isFinite(t) && t > 3) out.push({ t:t, n:NIRCHL[i + 1] || ("파트 " + (i + 2)) });
+  }
+  return out.length > 1 ? out : null;
+}
 
 /* ---------- 🔖 어디까지 들었는지 (책마다 저장) ---------- */
 function nirPosAll(){
@@ -31479,7 +31492,17 @@ function nirDock(){
     + 'background:#0d6f9e;border:3px solid #fff;box-shadow:0 1px 6px rgba(13,111,158,.45);transition:transform .1s ease;}'
     + '#nirSeek.dragging .nr-seek-knob{transform:scale(1.18);}'
     + '#nirSeek:focus-visible .nr-seek-track{box-shadow:0 0 0 3px rgba(13,111,158,.22);}'
-    + 'body.nirdock-on .rb-act{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px));}'
+    + '.nr-segs{position:absolute;inset:0;pointer-events:none;z-index:2;}'
+    + '.nr-segs i{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:#f08a4b;border-radius:1px;box-shadow:0 0 0 1px #fff;}'
+    + '.nirdock-sg{display:flex;gap:5px;margin-top:7px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}'
+    + '.nirdock-sg[hidden]{display:none!important;}'
+    + '.nirdock-sg::-webkit-scrollbar{display:none;}'
+    + '.nirdock-sg button{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;border:1px solid #d9e8f2;background:#f6fbfe;color:#2f6484;font-family:inherit;font-weight:800;font-size:11px;line-height:1;border-radius:999px;padding:7px 10px;-webkit-tap-highlight-color:transparent;white-space:nowrap;}'
+    + '.nirdock-sg button b{font-weight:800;color:#7fa3b8;}'
+    + '.nirdock-sg button em{font-style:normal;font-variant-numeric:tabular-nums;color:#7fa3b8;}'
+    + '.nirdock-sg button.on{background:#0d6f9e;border-color:#0d6f9e;color:#fff;box-shadow:0 2px 7px rgba(13,111,158,.3);}'
+    + '.nirdock-sg button.on b,.nirdock-sg button.on em{color:#cfe6f5;}'
+    + 'body.nirdock-on .rb-act{padding-bottom:calc(196px + env(safe-area-inset-bottom,0px));}'
     + '.nirdock-b{display:flex;gap:6px;margin-top:7px;}'
     + '.nirdock-b button{flex:1;border:0;background:#f2f8fc;color:#25506d;font-weight:800;font-size:12px;border-radius:10px;padding:8px 0;'
     + 'font-family:inherit;-webkit-tap-highlight-color:transparent;}'
@@ -31493,8 +31516,9 @@ function nirDock(){
     + '<button class="nirdock-x" type="button" data-nirclose="1" aria-label="플레이어 닫기">✕</button></div>'
     + '<div class="nirdock-r"><span id="nirDCur">0:00</span>'
     + '<div id="nirSeek" class="nr-seek" role="slider" tabindex="0" aria-label="듣는 위치 옮기기" aria-valuemin="0" aria-valuemax="1000" aria-valuenow="0" aria-valuetext="0:00 / 0:00">'
-    + '<div class="nr-seek-track" id="nirSeekTrack"><div class="nr-seek-fill" id="nirSeekFill"></div><div class="nr-seek-knob" id="nirSeekKnob"></div></div></div>'
+    + '<div class="nr-seek-track" id="nirSeekTrack"><div class="nr-seek-fill" id="nirSeekFill"></div><div class="nr-segs" id="nirSegs"></div><div class="nr-seek-knob" id="nirSeekKnob"></div></div></div>'
     + '<span id="nirDEnd">0:00</span></div>'
+    + '<div class="nirdock-sg" id="nirDSeg" hidden></div>'
     + '<div class="nirdock-b"><button type="button" data-nirseek="-10">⏪ 10초</button>'
     + '<button type="button" class="wide" data-nirplay="1">⏸️ 멈춤</button>'
     + '<button type="button" data-nirseek="10">10초 ⏩</button>'
@@ -31507,6 +31531,7 @@ function nirDockShow(title){
   var d = nirDock(); d.hidden = false;
   try { document.body.classList.add("nirdock-on"); } catch(e){}
   var t = document.getElementById("nirDTitle"); if (t) t.textContent = title || "나우 아임 리딩";
+  try { nirSegBuild(); } catch(e){}
 }
 function nirDockHide(){
   var d = document.getElementById("nirDock"); if (d) d.hidden = true;
@@ -31521,12 +31546,47 @@ function nirDockSync(){
   if (cEl) cEl.textContent = nirFmt(shown);
   if (eEl) eEl.textContent = nirFmt(dur);
   if (!NIRPL.seeking) nirSeekPaint(cur, dur);
+  try { nirSegMark(shown); } catch(e){}
   var pb = d.querySelector("[data-nirplay]");
   if (pb){
     var on = !a.paused && !a.ended;
     pb.textContent = on ? "⏸️ 멈춤" : (cur > 1 ? "▶️ 이어 듣기" : "▶️ 재생");
     pb.classList.toggle("on", on);
   }
+}
+/* 🎧 구간 칩·구분 눈금 — 현재 듣는 구간을 하이라이트한다 */
+function nirSegBuild(){
+  var wrap = document.getElementById("nirDSeg"), ticks = document.getElementById("nirSegs");
+  if (!wrap) return;
+  var list = nirChapters(NIRPL.id);
+  var dur = nirNum(NIRPL.a ? NIRPL.a.duration : 0);
+  wrap.innerHTML = ""; if (ticks) ticks.innerHTML = "";
+  if (!list){ wrap.hidden = true; return; }
+  wrap.hidden = false;
+  var html = "", marks = ["①", "②", "③", "④", "⑤"];
+  for (var i = 0; i < list.length; i++){
+    html += '<button type="button" data-nirseg="' + list[i].t + '" aria-label="' + list[i].n + ' ' + nirFmt(list[i].t) + '부터 듣기">'
+          + '<b>' + (marks[i] || (i + 1)) + '</b>' + list[i].n + '<em>' + nirFmt(list[i].t) + '</em></button>';
+  }
+  wrap.innerHTML = html;
+  if (ticks && dur > 0){
+    var t = "";
+    for (var j = 1; j < list.length; j++){
+      var p = Math.max(0, Math.min(100, (list[j].t / dur) * 100));
+      t += '<i style="left:' + p.toFixed(2) + '%"></i>';
+    }
+    ticks.innerHTML = t;
+  }
+  nirSegMark(nirNum(NIRPL.a ? NIRPL.a.currentTime : 0));
+}
+function nirSegMark(t){
+  var wrap = document.getElementById("nirDSeg");
+  if (!wrap || wrap.hidden) return;
+  var list = nirChapters(NIRPL.id); if (!list) return;
+  var idx = 0;
+  for (var i = 0; i < list.length; i++){ if (t >= list[i].t - 0.4) idx = i; }
+  var btns = wrap.querySelectorAll("button[data-nirseg]");
+  for (var k = 0; k < btns.length; k++) btns[k].classList.toggle("on", k === idx);
 }
 function nirAudUI(mode){
   var P = NIRPL, row = P.row;
@@ -31628,6 +31688,7 @@ function nirAudToggle(btn){
       try { a.currentTime = p; } catch(e){}
       if (SB.toast) SB.toast("🔖 " + nirFmt(p) + "부터 이어서 들려요");
     }
+    try { nirSegBuild(); } catch(e){}
     nirDockSync();
   });
   a.addEventListener("timeupdate", function(){
@@ -31683,6 +31744,17 @@ document.addEventListener("click", function(e){
       if (p && p.catch) p.catch(function(){});
       nirAudUI("play");
     } else nirPause();
+    return;
+  }
+  var sg = el.closest("[data-nirseg]");
+  if (sg){
+    if (!a) return;
+    var st = Number(sg.getAttribute("data-nirseg")) || 0;
+    try { a.currentTime = st; } catch(e){}
+    NIRPL.seeking = false; NIRPL.preview = null;
+    nirPosSet(NIRPL.key, st);
+    if (a.paused){ var pp = null; try { pp = a.play(); } catch(e3){} if (pp && pp.catch) pp.catch(function(){}); }
+    nirAudUI("play"); nirDockSync(); nirSegMark(st);
     return;
   }
   var sk = el.closest("[data-nirseek]");
