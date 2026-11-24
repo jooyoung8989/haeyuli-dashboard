@@ -5695,7 +5695,7 @@ window.YULI_BGM = (function(){
   var onSchool = false, remainMin = null, allDone = false;
   var previewUntil = 0, pvTimer = null;
   var player = null, ytReady = false, curVid = null, ytState = -1;
-  var playing = false, commanded = false, lastErr = 0, hold = false, playToken = 0;
+  var playing = false, commanded = false, lastErr = 0, hold = false, playToken = 0, idleSince = 0;
   var uiKey = "";
 
   function save(){ try { localStorage.setItem(STORE, enabled ? "1" : "0"); } catch(e){} }
@@ -5851,6 +5851,20 @@ window.YULI_BGM = (function(){
     var vid = V[mode()];
     if (curVid !== vid) switchTo(vid);
     else if (!playing && !commanded && !hold) startPlaying();
+    selfHeal();
+    paint();
+  }
+
+  /* 곡을 바꾸는 순간(광고·버퍼링)에 유튜브가 '아직 시작 안 됨'(-1)이나 '대기'(5)에 머무는
+     경우가 있다. 3초 넘게 그대로면 한 번 더 재생을 걸어 스스로 살아나게 한다. */
+  function selfHeal(){
+    if (!ytReady || !player || !shouldPlay() || hold || playing || lastErr){ idleSince = 0; return; }
+    if (ytState !== -1 && ytState !== 5){ idleSince = 0; return; }
+    if (!idleSince){ idleSince = Date.now(); return; }
+    if (Date.now() - idleSince < 3000) return;
+    idleSince = 0;
+    commanded = false;
+    try { player.unMute(); player.setVolume(100); player.playVideo(); } catch(e){}
     paint();
   }
 
