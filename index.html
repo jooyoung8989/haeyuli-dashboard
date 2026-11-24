@@ -160,14 +160,14 @@ img{display:block;}
 .dust .dl{font-size:1.42vh;font-weight:800;opacity:.85;letter-spacing:-.02vh;}
 .dust .di{font-size:3.1vh;line-height:1.05;}
 .dust .dg{font-size:1.62vh;font-weight:900;}
-.wmain{display:flex;flex-direction:column;justify-content:center;gap:.35vh;min-width:0;flex:0 0 auto;}
-.wnow{display:flex;align-items:center;gap:.9vh;}
+.wmain{display:flex;flex-direction:column;justify-content:center;gap:.35vh;min-width:0;flex:0 1 auto;}
+.wnow{display:flex;align-items:center;gap:.9vh;min-width:0;}
 .wicon{font-size:4.1vh;line-height:1;}
 .wtemp{font-size:4.9vh;font-weight:900;color:#1f3b52;line-height:1;letter-spacing:-.12vh;}
 .wtemp small{font-size:2.5vh;font-weight:900;vertical-align:baseline;}
-.wsub{display:flex;flex-wrap:nowrap;gap:1.1vh;font-size:1.5vh;color:#6b7c74;font-weight:700;white-space:nowrap;}
+.wsub{display:flex;flex-wrap:wrap;gap:.2vh 1.1vh;min-width:0;font-size:1.5vh;color:#6b7c74;font-weight:700;white-space:nowrap;overflow:hidden;}
 .wsub b{color:#3d4a43;font-weight:900;}
-.whours{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6vh;margin-left:auto;flex:1 1 auto;max-width:38vh;}
+.whours{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6vh;margin-left:auto;flex:0 1 auto;min-width:0;max-width:32vh;}
 .hour{background:#f4f8fb;border-radius:1.2vh;padding:.5vh .2vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15vh;}
 .hour .ht{font-size:1.35vh;font-weight:800;color:#6b7c74;}
 .hour .hi{font-size:2.1vh;line-height:1.1;}
@@ -186,6 +186,8 @@ img{display:block;}
   background:#fff;color:#2b6b48;font-size:1.45vh;font-weight:900;line-height:1;box-shadow:0 .1vh .4vh rgba(0,0,0,.12);
 }
 .wtip .retry:active{transform:scale(.92);}
+/* 가족 코드 배너가 보이면 본문을 그만큼 내려 겹치지 않게 (배너는 맨 위 띠에) */
+body.has-fsbar .app{padding-top:6.8vh;}
 .wtip.err{background:#fff2ec;color:#a4501f;}
 .wtip.err .retry{background:#fff;color:#a4501f;padding:0 1vh;width:auto;border-radius:999px;}
 .weathercard.stale .whours,.weathercard.stale .wmain{opacity:.72;}
@@ -700,6 +702,11 @@ img{display:block;}
   line-height:1.12;overflow:hidden;}
 .now-state .ns-emoji{flex:0 0 auto;font-size:4vh;line-height:1;}
 .now-state .ns-txt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+/* 외출 중 + 도착 예정 시간은 둘째 줄 배지로 깔끔하게 */
+.now-state.eta{flex-wrap:wrap;gap:.25vh .7vh;align-content:center;}
+.now-state.eta .ns-txt{flex:1 1 auto;}
+.now-state .ns-eta{flex:0 0 auto;font-size:1.55vh;font-weight:900;color:#2f6ea8;background:#eaf4ff;
+  border-radius:999px;padding:.22vh .9vh;white-space:nowrap;box-shadow:inset 0 0 0 .16vh #cfe6fb;}
 .now-state .ns-when{margin-left:auto;flex:0 0 auto;font-size:1.02vh;font-weight:800;color:#b3b8a8;}
 .now-quick{flex:0 0 auto;display:flex;gap:.4vh;}
 .now-quick button{flex:1 1 0;min-width:0;min-height:3.6vh;border-radius:.9vh;background:#f6faf8;color:#4a5d53;
@@ -1145,7 +1152,7 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
 }
 
 /* ============ 👨‍👩‍👧 가족 코드 · 등원 준비 배너 ============ */
-.fsbar{position:fixed;left:50%;top:8.6vh;transform:translate(-50%,-170%);z-index:70;
+.fsbar{position:fixed;left:50%;top:.9vh;transform:translate(-50%,-170%);z-index:70;
   display:flex;align-items:center;gap:.9vh;max-width:min(94vw,86vh);min-width:0;
   padding:1.05vh 1.7vh;border-radius:999px;background:#fff;
   box-shadow:0 .6vh 1.8vh rgba(84,120,100,.22),inset 0 0 0 .22vh #e2efe8;
@@ -1279,10 +1286,21 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
             <span class="nshift" id="nowMomWhen">방금</span>
           </div>
           <div class="now-state" id="nowMomState"><span class="ns-emoji">🏠</span><span class="ns-txt">집에 있음</span></div>
+          <button type="button" class="now-bub empty" id="nowMomBub" data-now="mom" aria-label="엄마 한마디 적기">
+            <span class="nb-tx" id="nowMomBubTx">👋 한마디 남기기</span>
+            <span class="nb-at" id="nowMomBubAt"></span>
+          </button>
           <div class="now-quick" id="nowMomQuick">
             <button type="button" data-now="mom" data-val="🏠 집에 있음">🏠 집에 있음</button>
             <button type="button" data-now="mom" data-val="🚶 외출 중">🚶 외출 중</button>
             <button type="button" data-now="mom" data-val="📖 공부 중">📖 공부 중</button>
+          </div>
+          <div class="now-eta" id="nowMomEta" hidden>
+            <span class="ne-lb">🕒 도착</span>
+            <select id="nowMomEtaH" aria-label="도착 예정 시"></select><span class="ne-c">시</span>
+            <select id="nowMomEtaM" aria-label="도착 예정 분"></select><span class="ne-c">분</span>
+            <button type="button" class="ne-ok" data-now="mom">확인</button>
+            <button type="button" class="ne-x" data-now="mom" aria-label="도착 시간 닫기">✕</button>
           </div>
           <form class="now-form" data-now="mom" autocomplete="off">
             <input type="text" maxlength="22" placeholder="직접 입력 (예: 장보는 중)" aria-label="엄마 상태 직접 입력">
@@ -1295,10 +1313,21 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
             <span class="nshift" id="nowDadShift">근무 미정</span>
           </div>
           <div class="now-state" id="nowDadState"><span class="ns-emoji">🚒</span><span class="ns-txt">당직 중</span></div>
+          <button type="button" class="now-bub empty" id="nowDadBub" data-now="dad" aria-label="아빠 한마디 적기">
+            <span class="nb-tx" id="nowDadBubTx">👋 한마디 남기기</span>
+            <span class="nb-at" id="nowDadBubAt"></span>
+          </button>
           <div class="now-quick" id="nowDadQuick">
             <button type="button" data-now="dad" data-val="🏠 집에 있음">🏠 집에 있음</button>
             <button type="button" data-now="dad" data-val="🚶 외출 중">🚶 외출 중</button>
             <button type="button" data-now="dad" data-val="🚒 당직 중">🚒 당직 중</button>
+          </div>
+          <div class="now-eta" id="nowDadEta" hidden>
+            <span class="ne-lb">🕒 도착</span>
+            <select id="nowDadEtaH" aria-label="도착 예정 시"></select><span class="ne-c">시</span>
+            <select id="nowDadEtaM" aria-label="도착 예정 분"></select><span class="ne-c">분</span>
+            <button type="button" class="ne-ok" data-now="dad">확인</button>
+            <button type="button" class="ne-x" data-now="dad" aria-label="도착 시간 닫기">✕</button>
           </div>
           <form class="now-form" data-now="dad" autocomplete="off">
             <input type="text" maxlength="22" placeholder="직접 입력 (예: 퇴근길)" aria-label="아빠 상태 직접 입력">
@@ -1380,20 +1409,18 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     </div>
 
 
-    <!-- 🎵 등원 BGM 미니 플레이어 (유튜브 · 등원 탭 안에서만 재생) -->
+    <!-- 🎵 등원 BGM (광고 없는 mp3 · 등원 탭 안에서만 재생) -->
     <div class="bgm-bar" id="bgmBar">
       <div class="bgm-now">
         <span class="bgm-now-ic" id="bgmNowIc" aria-hidden="true">🌿</span>
         <div class="bgm-now-tx">
           <b id="bgmNowName">아침 노래</b>
-          <span id="bgmNowSub">모동숲 아침 BGM · 여유 있을 때</span>
+          <span id="bgmNowSub">모동숲 아침 멜로디 · 여유 있을 때</span>
         </div>
         <span class="bgm-now-state on" id="bgmNowState">⏸ 멈춤</span>
       </div>
-      <div class="bgm-frame">
-        <div id="bgmYt"></div>
-        <button type="button" class="bgm-hit" id="bgmHit" aria-label="등원 음악 재생·멈춤" title="눌러서 음악 켜기"></button>
-      </div>
+      <button type="button" class="bgm-play" id="bgmPlay" aria-label="등원 음악 재생·멈춤" title="눌러서 음악 켜기">▶</button>
+      <audio id="bgmAudio" loop playsinline preload="none" aria-hidden="true"></audio>
     </div>
 
     <div class="cards" id="cards">
@@ -1714,6 +1741,20 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
   </div>
 </div>
 
+<!-- 💬 엄마·아빠 한마디 적기 (바텀시트) -->
+<div class="msheet" id="msgSheet" aria-hidden="true">
+  <div class="msheet-card" role="dialog" aria-modal="true" aria-label="한마디 적기">
+    <div class="msheet-head"><span id="msgSheetTitle">👩 엄마 한마디</span><button id="msgClose" type="button" aria-label="닫기">✕</button></div>
+    <textarea id="msgInput" maxlength="60" placeholder="예: 오늘 3시에 데리러 갈게 💛" aria-label="한마디 내용"></textarea>
+    <div class="msg-quick" id="msgQuick"></div>
+    <div class="msheet-foot">
+      <button class="btn btn-ghost" id="msgDel" type="button">지우기</button>
+      <button class="btn btn-ghost" id="msgCancel" type="button">취소</button>
+      <button class="btn btn-primary" id="msgSave" type="button">저장</button>
+    </div>
+  </div>
+</div>
+
 <!-- 👨‍👩‍👧 가족 코드 · 등원 준비 배너 -->
 <div class="fsbar" id="fsBar" role="status" aria-live="polite"></div>
 
@@ -1798,7 +1839,12 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
   starState.total = Math.max(0, Math.round(starState.total));
   var ledger = readJSON(KEY.ledger, {}) || {};
 
-  function saveStars(){ writeJSON(KEY.stars, starState); writeJSON(KEY.ledger, ledger); }
+  function saveStars(){
+    writeJSON(KEY.stars, starState);
+    writeJSON(KEY.ledger, ledger);
+    /* 대시보드에서 별을 얻거나 쓰면 가족 클라우드(haeyuli-<코드>)에도 바로 반영 */
+    try { if (typeof bPushSoon === "function") bPushSoon(); } catch(e){}
+  }
 
   /* ===== 영어 보드에서 돌아올 때 완료 전달 (?eng_done=YYYY-MM-DD&stars=N) ===== */
   (function syncEnglishDone(){
@@ -2338,6 +2384,8 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
       if (!d[w] || typeof d[w] !== "object") d[w] = { text:"", at:0 };
       if (typeof d[w].text !== "string") d[w].text = "";
       if (typeof d[w].at !== "number" || !isFinite(d[w].at)) d[w].at = 0;
+      if (typeof d[w].msg !== "string") d[w].msg = "";
+      if (typeof d[w].msgAt !== "number" || !isFinite(d[w].msgAt)) d[w].msgAt = 0;
     });
     return d;
   }
@@ -2370,13 +2418,40 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
       var st = document.getElementById("now" + cap + "State");
       if (st) {
         var txt = nowText(w), sp = splitEmoji(txt);
-        st.innerHTML = '<span class="ns-emoji">' + escHtml(sp.e || "🙂") + '</span>' +
-                       '<span class="ns-txt">' + escHtml(sp.t || txt) + '</span>';
+        var em = String(sp.t || txt);
+        var emMatch = em.match(/(\d{1,2})\s*시\s*(\d{1,2})\s*분\s*도착\s*예정/);
+        if (emMatch){
+          var mainTxt = em.replace(/\s*\(?\s*\d{1,2}\s*시\s*\d{1,2}\s*분\s*도착\s*예정\s*\)?/, "").trim() || "외출 중";
+          st.className = "now-state eta";
+          st.innerHTML = '<span class="ns-emoji">' + escHtml(sp.e || "🙂") + '</span>' +
+                         '<span class="ns-txt">' + escHtml(mainTxt) + '</span>' +
+                         '<span class="ns-eta">(' + emMatch[1] + '시 ' + emMatch[2] + '분 도착예정)</span>';
+        } else {
+          st.className = "now-state";
+          st.innerHTML = '<span class="ns-emoji">' + escHtml(sp.e || "🙂") + '</span>' +
+                         '<span class="ns-txt">' + escHtml(em) + '</span>';
+        }
+      }
+      /* 💬 말풍선 — 엄마 칸·아빠 칸에 각각 한마디 */
+      var bub = document.getElementById("now" + cap + "Bub");
+      var btx = document.getElementById("now" + cap + "BubTx");
+      var bat = document.getElementById("now" + cap + "BubAt");
+      if (bub && btx){
+        var msg = (nowAll[w] && nowAll[w].msg) || "";
+        var msp = splitEmoji(msg);
+        btx.textContent = msg ? (msg) : "👋 한마디 남기기";
+        bub.classList.toggle("empty", !msg);
+        if (bat) bat.textContent = (msg && nowAll[w].msgAt) ? whenText(nowAll[w].msgAt) : "";
+        bub.setAttribute("aria-label", (w === "mom" ? "엄마" : "아빠") + " 한마디 " + (msg ? "고치기 · " + msp.t : "적기"));
       }
       var q = document.getElementById("now" + cap + "Quick");
       if (q) {
         var bs = q.querySelectorAll("button");
-        for (var i = 0; i < bs.length; i++) bs[i].classList.toggle("on", bs[i].getAttribute("data-val") === nowText(w));
+        var cur = nowText(w);
+        for (var i = 0; i < bs.length; i++){
+          var dv = bs[i].getAttribute("data-val") || "";
+          bs[i].classList.toggle("on", !!dv && (cur === dv || cur.indexOf(dv) === 0));
+        }
       }
     });
     var mw = document.getElementById("nowMomWhen");
@@ -2390,16 +2465,32 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     }
   }
   var nowPushTimer = null;
-  function setNow(who, text){
-    text = String(text == null ? "" : text).trim();
-    if (!text) return false;
-    nowAll[who] = { text:text.slice(0, 30), at:Date.now() };
-    saveNowAll();
-    renderNow();
+  function pushNow(){
     clearTimeout(nowPushTimer);
     nowPushTimer = setTimeout(function(){
       try { if (window.FAMSYNC && FAMSYNC.sync) FAMSYNC.sync(); } catch(e){}
     }, 400);
+  }
+  function setNow(who, text){
+    text = String(text == null ? "" : text).trim();
+    if (!text) return false;
+    if (!nowAll[who]) nowAll[who] = { text:"", at:0, msg:"", msgAt:0 };
+    nowAll[who].text = text.slice(0, 30);
+    nowAll[who].at = Date.now();
+    saveNowAll();
+    renderNow();
+    pushNow();
+    return true;
+  }
+  /* 💬 한마디(말풍선) — 상태와 따로 저장되고 가족 코드로 다른 기기에도 보인다 */
+  function setMsg(who, text){
+    text = String(text == null ? "" : text).replace(/\s+/g, " ").trim().slice(0, 60);
+    if (!nowAll[who]) nowAll[who] = { text:"", at:0, msg:"", msgAt:0 };
+    nowAll[who].msg = text;
+    nowAll[who].msgAt = Date.now();
+    saveNowAll();
+    renderNow();
+    pushNow();
     return true;
   }
   function applyNow(doc){
@@ -2408,20 +2499,191 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     ["mom","dad"].forEach(function(w){
       var x = doc[w];
       if (!x || typeof x !== "object") return;
-      var cur = nowAll[w] || { text:"", at:0 };
-      if ((Number(x.at) || 0) > (Number(cur.at) || 0)) {
-        nowAll[w] = { text:String(x.text || ""), at:Number(x.at) || 0 };
+      var cur = nowAll[w] || (nowAll[w] = { text:"", at:0, msg:"", msgAt:0 });
+      var t = Number(x.at) || 0, mt = Number(x.msgAt) || 0;
+      if (t > (Number(cur.at) || 0)) {
+        cur.text = String(x.text || "");
+        cur.at = t;
+        changed = true;
+      }
+      if (mt > (Number(cur.msgAt) || 0)) {
+        cur.msg = String(x.msg || "");
+        cur.msgAt = mt;
         changed = true;
       }
     });
     if (changed) { saveNowAll(); renderNow(); }
     return changed;
   }
+  /* ---------- 🕒 외출중 도착 예정 시간 ---------- */
+  var ETA_RE = /(\d{1,2})\s*시\s*(\d{1,2})\s*분\s*도착\s*예정/;
+  function capOf(who){ return who === "mom" ? "Mom" : "Dad"; }
+  function etaOf(who){
+    var t = (nowAll[who] && nowAll[who].text) || "";
+    var m = String(t).match(ETA_RE);
+    if (!m) return null;
+    return { h: Math.max(0, Math.min(23, parseInt(m[1], 10) || 0)),
+             m: Math.max(0, Math.min(59, parseInt(m[2], 10) || 0)) };
+  }
+  function etaSelects(who){
+    return {
+      row: document.getElementById("now" + capOf(who) + "Eta"),
+      h: document.getElementById("now" + capOf(who) + "EtaH"),
+      m: document.getElementById("now" + capOf(who) + "EtaM")
+    };
+  }
+  function fillEtaSelects(){
+    ["mom","dad"].forEach(function(w){
+      var s = etaSelects(w);
+      if (s.h && !s.h.options.length){
+        for (var i = 0; i < 24; i++){
+          var o = document.createElement("option");
+          o.value = String(i); o.textContent = String(i);
+          s.h.appendChild(o);
+        }
+      }
+      if (s.m && !s.m.options.length){
+        for (var j = 0; j < 60; j += 5){
+          var p = document.createElement("option");
+          p.value = String(j); p.textContent = pad2(j);
+          s.m.appendChild(p);
+        }
+      }
+    });
+  }
+  function openEta(who){
+    var s = etaSelects(who);
+    if (!s.row || !s.h || !s.m) return;
+    fillEtaSelects();
+    var e = etaOf(who);
+    if (!e){
+      var d = new Date(Date.now() + 30 * 60000);
+      var mm = Math.ceil(d.getMinutes() / 5) * 5;
+      var hh = d.getHours();
+      if (mm >= 60){ mm = 0; hh = (hh + 1) % 24; }
+      e = { h: hh, m: mm };
+    }
+    s.h.value = String(e.h);
+    s.m.value = String(Math.floor(e.m / 5) * 5);
+    s.row.hidden = false;
+  }
+  function closeEta(who){
+    var s = etaSelects(who);
+    if (s.row) s.row.hidden = true;
+  }
+  function applyEta(who){
+    var s = etaSelects(who);
+    if (!s.h || !s.m) return;
+    var h = Math.max(0, Math.min(23, parseInt(s.h.value, 10) || 0));
+    var m = Math.max(0, Math.min(55, parseInt(s.m.value, 10) || 0));
+    setNow(who, "🚶 외출 중 (" + h + "시 " + m + "분 도착예정)");
+    closeEta(who);
+    toastMsg((who === "mom" ? "엄마" : "아빠") + " 외출 중 · " + h + "시 " + m + "분 도착예정");
+  }
+
+  /* ---------- 💬 한마디 적기 (바텀시트) ---------- */
+  var msgWho = "mom";
+  var MSG_QUICK = ["오늘 3시에 데리러 갈게 💛", "맛있는 거 사 갖고 갈게 🍦", "조금만 기다려 줘 ⏰", "오늘도 화이팅! 💪"];
+  function msgSheet(){ return document.getElementById("msgSheet"); }
+  function openMsg(who){
+    var sh = msgSheet();
+    if (!sh) return;
+    msgWho = who;
+    var ttl = document.getElementById("msgSheetTitle");
+    if (ttl) ttl.textContent = (who === "mom" ? "👩 엄마" : "👨 아빠") + " 한마디";
+    var inp = document.getElementById("msgInput");
+    var del = document.getElementById("msgDel");
+    var cur = (nowAll[who] && nowAll[who].msg) || "";
+    if (inp) inp.value = cur;
+    if (del) del.style.display = cur ? "" : "none";
+    var qk = document.getElementById("msgQuick");
+    if (qk && !qk.children.length){
+      MSG_QUICK.forEach(function(t){
+        var b = document.createElement("button");
+        b.type = "button"; b.textContent = t;
+        b.addEventListener("click", function(){
+          var i2 = document.getElementById("msgInput");
+          if (i2) { i2.value = t; i2.focus(); }
+        });
+        qk.appendChild(b);
+      });
+    }
+    sh.classList.add("show");
+    sh.setAttribute("aria-hidden", "false");
+    setTimeout(function(){
+      if (!inp) return;
+      try { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); } catch(e){}
+    }, 70);
+  }
+  function closeMsg(){
+    var sh = msgSheet();
+    if (!sh) return;
+    sh.classList.remove("show");
+    sh.setAttribute("aria-hidden", "true");
+    var card = sh.querySelector(".msheet-card");
+    if (card) card.style.transform = "";
+    try { var inp = document.getElementById("msgInput"); if (inp) inp.blur(); } catch(e){}
+  }
+  function saveMsg(){
+    var inp = document.getElementById("msgInput");
+    var v = String((inp && inp.value) || "").trim();
+    setMsg(msgWho, v);
+    closeMsg();
+    toastMsg(v ? "💬 한마디를 남겼어요 · 다른 기기에도 함께 보여요" : "한마디를 지웠어요");
+  }
+  function setupMsgSheet(){
+    var sh = msgSheet();
+    if (!sh || sh.__b) return;
+    sh.__b = 1;
+    var byId = function(id, fn){ var e = document.getElementById(id); if (e) e.addEventListener("click", fn); };
+    byId("msgClose", closeMsg);
+    byId("msgCancel", closeMsg);
+    byId("msgSave", saveMsg);
+    byId("msgDel", function(){
+      var inp = document.getElementById("msgInput");
+      if (inp) inp.value = "";
+      setMsg(msgWho, "");
+      closeMsg();
+      toastMsg("한마디를 지웠어요");
+    });
+    sh.addEventListener("click", function(e){ if (e.target === sh) closeMsg(); });
+    var inp = document.getElementById("msgInput");
+    if (inp){
+      inp.addEventListener("input", function(){
+        var del = document.getElementById("msgDel");
+        if (del) del.style.display = inp.value.trim() ? "" : "none";
+      });
+      inp.addEventListener("keydown", function(e){
+        if (e.key === "Enter" && !e.shiftKey){ e.preventDefault(); saveMsg(); }
+        else if (e.key === "Escape"){ e.preventDefault(); closeMsg(); }
+      });
+    }
+    /* iOS 사파리: 키보드가 올라오면 바텀시트를 키보드 위로 올린다 */
+    try {
+      var vv = window.visualViewport;
+      if (vv){
+        var shift = function(){
+          var card = sh.querySelector(".msheet-card");
+          if (!card || !sh.classList.contains("show")) return;
+          var gap = Math.max(0, (window.innerHeight - vv.height - (vv.offsetTop || 0)));
+          card.style.transform = gap > 40 ? "translateY(" + (-gap) + "px)" : "";
+        };
+        vv.addEventListener("resize", shift);
+        vv.addEventListener("scroll", shift);
+      }
+    } catch(e){}
+  }
+
   function setupNowCards(){
     var qs = document.querySelectorAll(".now-quick button");
     for (var i = 0; i < qs.length; i++) {
       (function(b){
-        b.addEventListener("click", function(){ setNow(b.getAttribute("data-now"), b.getAttribute("data-val")); });
+        b.addEventListener("click", function(){
+          var who = b.getAttribute("data-now"), val = b.getAttribute("data-val") || "";
+          setNow(who, val);
+          if (/외출/.test(val)) openEta(who);
+          else closeEta(who);
+        });
       })(qs[i]);
     }
     var fs = document.querySelectorAll(".now-form");
@@ -2431,11 +2693,28 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
           ev.preventDefault();
           var inp = f.querySelector("input");
           if (!inp || !inp.value.trim()) return;
-          setNow(f.getAttribute("data-now"), inp.value);
+          var who = f.getAttribute("data-now");
+          setNow(who, inp.value);
           inp.value = "";
+          closeEta(who);
         });
       })(fs[j]);
     }
+    /* 💬 말풍선 누르면 한마디 적기 */
+    ["mom","dad"].forEach(function(w){
+      var bub = document.getElementById("now" + capOf(w) + "Bub");
+      if (bub) bub.addEventListener("click", function(){ openMsg(w); });
+    });
+    fillEtaSelects();
+    var oks = document.querySelectorAll(".now-eta .ne-ok");
+    for (var k = 0; k < oks.length; k++){
+      (function(b){ b.addEventListener("click", function(){ applyEta(b.getAttribute("data-now")); }); })(oks[k]);
+    }
+    var xss = document.querySelectorAll(".now-eta .ne-x");
+    for (var n = 0; n < xss.length; n++){
+      (function(b){ b.addEventListener("click", function(){ closeEta(b.getAttribute("data-now")); }); })(xss[n]);
+    }
+    setupMsgSheet();
   }
 
   var calCursor = new Date();
@@ -3079,12 +3358,22 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     return dateKey(d) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
   }
   function boardCode(){
-    try {
-      var bf = readJSON(KEYBFAM, null);
-      if (bf && typeof bf === "object" && bf.code) return String(bf.code).toUpperCase();
-    } catch(e) {}
-    try { if (window.FAMSYNC && FAMSYNC.code) return String(FAMSYNC.code() || "").toUpperCase(); } catch(e) {}
-    return "";
+    var fs = "";
+    try { if (window.FAMSYNC && FAMSYNC.code) fs = String(FAMSYNC.code() || "").toUpperCase(); } catch(e){}
+    var bf = readJSON(KEYBFAM, null);
+    if (!bf || typeof bf !== "object") bf = {};
+    var bc = bf.code ? String(bf.code).toUpperCase() : "";
+    if (fs){
+      /* 가족 코드 연결(FAMSYNC)이 늘 우선 — 스터디 보드가 쓰는 haeyuli.family.v1 도 같은 코드로 맞춘다 */
+      if (bc !== fs){
+        bf.code = fs;
+        bf.base = bc ? Math.max(0, Math.round(Number(bReadMoney().piggy) || 0)) : 0;
+        bf.lastSync = Number(bf.lastSync) || 0;
+        writeJSON(KEYBFAM, bf);
+      }
+      return fs;
+    }
+    return bc;
   }
   function mbNs(code){ return "haeyuli-" + String(code || "").toLowerCase(); }
   function mbGet(code){
@@ -3132,28 +3421,62 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     banks.sort(function(a, b){ return String(a.at || "").localeCompare(String(b.at || "")) || String(a.id).localeCompare(String(b.id)); });
     return { piggy:piggy, bank:banks, log:logs };
   }
+  /* 스터디 보드와 똑같은 별 합치기 — 원장은 합집합(이미 받은 별은 안 잃는다), 총합은 큰 쪽 */
+  function bMergeStars(ls, ll, cs, cl){
+    var led = {}, k;
+    ll = (ll && typeof ll === "object") ? ll : {};
+    cl = (cl && typeof cl === "object") ? cl : {};
+    for (k in ll) if (Object.prototype.hasOwnProperty.call(ll, k)) led[k] = Number(ll[k]) || 0;
+    for (k in cl){
+      if (!Object.prototype.hasOwnProperty.call(cl, k)) continue;
+      var v = Number(cl[k]) || 0;
+      if (!(k in led) || v > led[k]) led[k] = v;
+    }
+    var lt = Math.max(0, Math.round(Number((ls && ls.total) || 0) || 0));
+    var ct = Math.max(0, Math.round(Number((cs && cs.total) || 0) || 0));
+    return { total: Math.max(lt, ct), led: led };
+  }
 
   var bSync = { busy:false, last:0, err:"", timer:null };
+  function bSameLed(a, b){
+    a = (a && typeof a === "object") ? a : {};
+    b = (b && typeof b === "object") ? b : {};
+    var ka = Object.keys(a), kb = Object.keys(b);
+    if (ka.length !== kb.length) return false;
+    for (var i = 0; i < ka.length; i++){
+      if (!(ka[i] in b)) return false;
+      if ((Number(a[ka[i]]) || 0) !== (Number(b[ka[i]]) || 0)) return false;
+    }
+    return true;
+  }
   function updateMoneyHint(){
     var el = document.getElementById("wSyncHint");
     var lg = document.getElementById("wLogHint");
     var code = boardCode();
-    if (!el) return;
+    function titles(t){
+      var sb = document.getElementById("starBadge"), mb = document.getElementById("moneyBadge");
+      if (sb) sb.title = t;
+      if (mb) mb.title = t;
+    }
+    if (!el) { return; }
     if (!code) {
       el.textContent = "이 기기에만 저장돼요 · 가족 코드를 연결하면 스터디 보드와 함께 써요";
       el.className = "whint";
       if (lg) lg.textContent = "용돈·간식 기록";
+      titles("이 기기에만 저장돼요 · 가족 코드를 연결하면 함께 써요");
       return;
     }
     if (bSync.err) {
       el.textContent = "⚠️ 마지막 동기화 실패 · 다시 맞추는 중이에요";
       el.className = "whint err";
       if (lg) lg.textContent = "용돈·간식 기록";
+      titles("⚠️ 동기화 실패 · 다시 맞추는 중 · 가족 코드 " + code);
       return;
     }
-    el.textContent = "🔄 스터디 보드와 함께 저장돼요 · 가족 코드 " + code;
+    el.textContent = "🔄 스터디 보드·부모 페이지와 함께 저장돼요 · 가족 코드 " + code;
     el.className = "whint ok";
-    if (lg) lg.textContent = "스터디 보드와 함께 쓰는 기록";
+    if (lg) lg.textContent = "스터디 보드·부모 페이지와 함께 쓰는 기록";
+    titles("⭐·🪙 스터디 보드·부모 페이지와 함께 저장돼요 · 가족 코드 " + code);
   }
   function bSyncNow(manual){
     var code = boardCode();
@@ -3161,7 +3484,8 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     if (bSync.busy) return Promise.resolve(false);
     bSync.busy = true;
     return mbGet(code).then(function(cloud){
-      var remote = (cloud && typeof cloud === "object" && cloud.money) ? cloud.money : { piggy:0, bank:[], log:[] };
+      var cdoc = (cloud && typeof cloud === "object") ? cloud : null;
+      var remote = (cdoc && cdoc.money && typeof cdoc.money === "object") ? cdoc.money : { piggy:0, bank:[], log:[] };
       var fam = readJSON(KEYBFAM, null);
       if (!fam || typeof fam !== "object") fam = {};
       var base = Number(fam.base) || 0;
@@ -3169,19 +3493,33 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
       var merged = bMergeMoney(local, remote, base);
       bMoney = merged;
       bWriteMoney(merged);
+      /* ⭐ 별도 같은 문서(haeyuli-<코드>)의 stars·sled 를 스터디 보드와 똑같은 규칙으로 맞춘다 */
+      var stM = bMergeStars(starState, ledger, cdoc && cdoc.stars, cdoc && cdoc.sled);
+      var curT = Math.max(0, Math.round(Number(starState.total) || 0));
+      var starChanged = (stM.total !== curT) || !bSameLed(ledger, stM.led);
+      if (starChanged){
+        starState.total = stM.total;
+        ledger = stM.led;
+        writeJSON(KEY.stars, starState);
+        writeJSON(KEY.ledger, ledger);
+      }
       fam.base = merged.piggy;
-      fam.code = fam.code || code;
+      fam.code = code;
       fam.lastSync = Date.now();
       writeJSON(KEYBFAM, fam);
       var doc = {};
-      if (cloud && typeof cloud === "object") {
-        for (var k in cloud) if (Object.prototype.hasOwnProperty.call(cloud, k)) doc[k] = cloud[k];
-      }
-      doc.v = 1; doc.code = code; doc.money = merged; doc.at = Date.now();
+      if (cdoc) for (var k in cdoc) if (Object.prototype.hasOwnProperty.call(cdoc, k)) doc[k] = cdoc[k];
+      doc.v = 1; doc.code = code; doc.money = merged;
+      doc.stars = { total: stM.total };
+      doc.sled = stM.led;
+      doc.at = Date.now();
       bSync.last = Date.now(); bSync.err = "";
       renderWallet();
-      renderStars(false);
-      var same = cloud && JSON.stringify(remote) === JSON.stringify(merged);
+      if (starChanged) renderStars(false);
+      var same = !!cdoc &&
+        JSON.stringify(cdoc.money || null) === JSON.stringify(merged) &&
+        Math.max(0, Math.round(Number((cdoc.stars && cdoc.stars.total) || 0) || 0)) === stM.total &&
+        bSameLed(cdoc.sled, stM.led);
       if (same) return true;
       return mbPut(code, doc).then(function(){ return true; });
     }).catch(function(e){
@@ -3190,11 +3528,12 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     }).then(function(r){
       bSync.busy = false;
       updateMoneyHint();
-      if (manual) toastMsg(r ? "🔄 스터디 보드 저금통을 맞췄어요" : "동기화하지 못했어요 · 인터넷을 확인해 주세요");
+      if (manual) toastMsg(r ? "🔄 스터디 보드·부모 페이지의 용돈·별을 맞췄어요" : "동기화하지 못했어요 · 인터넷을 확인해 주세요");
       return r;
     });
   }
   function bPushSoon(){
+    if (!bSync) return;
     clearTimeout(bSync.timer);
     bSync.timer = setTimeout(function(){ bSyncNow(false); }, 250);
   }
@@ -4664,6 +5003,11 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     now: function(){ return nowAll; },
     applyNow: applyNow,
     renderNow: renderNow,
+    /* 가족 코드가 새로 연결·해제되면 용돈·별도 그 코드로 바로 맞춘다 */
+    famCodeChanged: function(){
+      try { if (typeof bSyncNow === "function") bSyncNow(false); } catch(e){}
+      try { if (typeof renderStars === "function") renderStars(false); } catch(e){}
+    },
     refresh: function(){ renderCards(); renderDashBottom(); renderCountdown(new Date()); renderNow(); }
   };
 
@@ -4781,6 +5125,10 @@ function fmtHM(ts){
   if (!ts) return "";
   var d = new Date(num(ts));
   return pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+}
+/* 가족 코드가 생기거나 바뀌면 대시보드의 용돈·별(haeyuli.money.v1 · yuli.stars.v2)도 같은 코드로 바로 맞춘다 */
+function hookFam(){
+  try { if (window.YULI && YULI.famCodeChanged) YULI.famCodeChanged(); } catch(e){}
 }
 
 /* ---------------- 저장된 연결 상태 ---------------- */
@@ -4904,18 +5252,22 @@ function readNowStore(){
   var d = readJ(KNOW, null);
   if (!d || typeof d !== "object") d = {};
   ["mom","dad"].forEach(function(w){
-    if (!d[w] || typeof d[w] !== "object") d[w] = { text:"", at:0 };
+    if (!d[w] || typeof d[w] !== "object") d[w] = { text:"", at:0, msg:"", msgAt:0 };
+    if (typeof d[w].msg !== "string") d[w].msg = "";
+    if (typeof d[w].msgAt !== "number" || !isFinite(d[w].msgAt)) d[w].msgAt = 0;
   });
   return d;
 }
+/* 상태(text)와 💬 말풍선(msg)을 각자의 시각으로 골라 합친다 — 둘 다 잃지 않는다 */
 function mergeNow(remoteNow){
   var local = readNowStore(), out = {};
   var r = (remoteNow && typeof remoteNow === "object") ? remoteNow : {};
   ["mom","dad"].forEach(function(w){
-    var a = local[w] || { text:"", at:0 };
-    var b = (r[w] && typeof r[w] === "object") ? r[w] : { text:"", at:0 };
-    var pick = (num(b.at) > num(a.at)) ? b : a;
-    out[w] = { text: String(pick.text || ""), at: num(pick.at) };
+    var a = local[w] || {}, b = (r[w] && typeof r[w] === "object") ? r[w] : {};
+    var p = (num(b.at) > num(a.at)) ? b : a;
+    var pm = (num(b.msgAt) > num(a.msgAt)) ? b : a;
+    out[w] = { text: String(p.text || ""), at: num(p.at),
+               msg: String(pm.msg || ""), msgAt: num(pm.msgAt) };
   });
   try { window.localStorage.setItem(KNOW, JSON.stringify(out)); } catch(e){}
   try { if (window.YULI && YULI.applyNow) YULI.applyNow(out); } catch(e){}
@@ -4967,6 +5319,7 @@ function renderBar(){
   lastBarHTML = html;
   bar.className = cls;
   bar.innerHTML = html;
+  try { document.body.classList.toggle("has-fsbar", cls.indexOf("show") >= 0); } catch(e){}
   var link = $("fsLink");
   if (link && !link.__b) { link.__b = 1; link.addEventListener("click", openModal); }
   if (F.code) {
@@ -4981,9 +5334,10 @@ function renderBar(){
   placeBar();
 }
 function placeBar(){
-  var bar = $("fsBar"), nav = document.querySelector(".nav");
-  if (!bar || !nav) return;
-  bar.style.top = Math.round(nav.getBoundingClientRect().bottom + 6) + "px";
+  /* 배너는 화면 맨 위 띠에 따로 띄우고, 배너가 보일 때만 본문을 그만큼 내린다 (가리지 않게) */
+  var bar = $("fsBar");
+  if (!bar) return;
+  bar.style.top = "";
 }
 
 /* ---------------- 연결 상태 표시 ---------------- */
@@ -5087,11 +5441,18 @@ function pushSoon(){
 /* ---------------- 코드 만들기 · 연결 · 해제 ---------------- */
 function createCode(){
   if (F.code) return;
-  var code = newCode();
+  /* 학습 보드에서 이미 쓰던 가족 코드가 있으면 그 코드를 그대로 쓴다 — 용돈·별·숙제·지금 상태가 한 코드로 묶임 */
+  var reuse = "";
+  try {
+    var bf = readJ("haeyuli.family.v1", null);
+    if (bf && typeof bf === "object" && bf.code) reuse = String(bf.code).toUpperCase().replace(/[^0-9A-Z]/g, "").slice(0, 8);
+  } catch(e){}
+  var code = reuse || newCode();
   F = { code:code, base:{ v:1, days:{} }, lastSync:0, lastError:"", at: Date.now() };
   localize(curDay());
   saveF();
   paint();
+  hookFam();
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
   /* 🔔 엄마 폰 푸시 토픽도 함께 만들어 올린다 */
   try { if (window.NTFY) NTFY.ensureTopic(code); } catch(e){}
@@ -5132,6 +5493,7 @@ function joinCode(){
     paint();
     toastMsg("🔗 가족 코드 " + code + " 로 연결했어요");
     closeModal();
+    hookFam();
     syncOnce(false);
   }).catch(function(e){
     setState("인터넷 연결을 확인해 주세요", true);
@@ -5146,6 +5508,7 @@ function leaveCode(){
   F = { base:{ v:1, days:{} } };
   saveF();
   paint();
+  hookFam();
   toastMsg("이 기기만 쓰는 상태로 돌아왔어요");
 }
 function copyCode(){
@@ -5596,8 +5959,134 @@ body .sch-head .sch-time{font-size:1.35vh;}
   body #pane-money .treat-grid{ min-height:0; }
 }
 </style>
+<style id="now1124css">
+/* ===== 💬 엄마·아빠 말풍선 ===== */
+.now-bub{flex:0 0 auto;position:relative;display:flex;align-items:center;gap:.45vh;width:100%;min-width:0;
+  min-height:3vh;margin-top:.35vh;padding:.28vh .7vh;border-radius:1.1vh;text-align:left;
+  background:#fff8fb;box-shadow:inset 0 0 0 .18vh #f4d5e1;color:#7a4a5c;}
+.now-card.dad .now-bub{background:#f6faff;box-shadow:inset 0 0 0 .18vh #d6e4f6;color:#3f5a77;}
+.now-bub::before{content:"";position:absolute;left:1.5vh;top:-.5vh;width:.95vh;height:.95vh;transform:rotate(45deg);
+  background:#fff8fb;border-radius:.12vh;box-shadow:inset .18vh .18vh 0 #f4d5e1;}
+.now-card.dad .now-bub::before{background:#f6faff;box-shadow:inset .18vh .18vh 0 #d6e4f6;}
+.now-bub .nb-tx{flex:1 1 auto;min-width:0;font-size:1.28vh;font-weight:800;line-height:1.2;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.now-bub.empty .nb-tx{color:#bdaab3;font-weight:700;}
+.now-bub .nb-at{flex:0 0 auto;font-size:.95vh;font-weight:800;color:#bdaab3;}
+.now-bub:active{transform:scale(.994);}
+
+/* ===== 🕒 외출중 도착 예정 시간 ===== */
+.now-eta{flex:0 0 auto;display:flex;align-items:center;flex-wrap:wrap;gap:.3vh;
+  min-height:3vh;padding:.25vh .5vh;border-radius:.95vh;background:#f1f7ff;box-shadow:inset 0 0 0 .18vh #d3e3f7;}
+.now-eta[hidden]{display:none;}
+.now-eta .ne-lb{font-size:1.05vh;font-weight:900;color:#3f5f86;white-space:nowrap;}
+.now-eta select{border:0;background:#fff;border-radius:.55vh;font-size:1.1vh;font-weight:900;color:#22496f;
+  padding:.1vh .15vh;-webkit-appearance:none;appearance:none;text-align:center;text-align-last:center;
+  width:3.3rem;box-shadow:inset 0 0 0 .14vh #cddff2;cursor:pointer;}
+.now-eta .ne-c{font-size:1vh;font-weight:900;color:#6a89ad;margin:0 -.1vh;}
+.now-eta .ne-ok{margin-left:auto;min-height:2.5vh;padding:0 .8vh;border-radius:.7vh;background:#3f86e0;color:#fff;
+  font-size:1.05vh;font-weight:900;}
+.now-eta .ne-x{min-height:2.5vh;width:2.5vh;border-radius:.7vh;background:#e6eef9;color:#7c93ae;font-size:1vh;font-weight:900;}
+
+/* ===== 💬 한마디 적기 (폰·태블릿 바텀시트) ===== */
+.msheet{position:fixed;inset:0;z-index:130;display:none;align-items:flex-end;justify-content:center;background:rgba(20,32,28,.36);}
+.msheet.show{display:flex;}
+.msheet-card{width:100%;max-width:600px;background:#fff;border-radius:2.2vh 2.2vh 0 0;
+  padding:1.3vh 1.3vh calc(1.3vh + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:.8vh;
+  box-shadow:0 -1vh 3vh rgba(0,0,0,.2);max-height:86vh;transition:transform .12s ease-out;}
+.msheet-head{display:flex;align-items:center;gap:.5vh;font-size:1.85vh;font-weight:900;color:#2f4238;}
+.msheet-head button{margin-left:auto;width:4vh;height:4vh;border-radius:50%;background:#f1f5f3;color:#7c8f86;
+  font-size:1.6vh;font-weight:900;}
+#msgInput{width:100%;min-height:10vh;max-height:24vh;border-radius:1.3vh;border:.2vh solid #e2ebe6;background:#fafcfb;
+  padding:.9vh 1vh;font-size:1.75vh;line-height:1.42;font-weight:700;color:#22302a;resize:none;outline:none;
+  font-family:inherit;}
+#msgInput:focus{border-color:#8fd7ae;background:#fff;}
+.msg-quick{display:flex;flex-wrap:wrap;gap:.45vh;}
+.msg-quick button{min-height:3.5vh;padding:0 1vh;border-radius:999px;background:#f4f9f6;color:#44614f;
+  font-size:1.3vh;font-weight:800;box-shadow:inset 0 0 0 .16vh #ddeae2;white-space:nowrap;}
+.msg-quick button:active{background:#e8f6ee;}
+.msheet-foot{display:flex;gap:.55vh;}
+.msheet-foot .btn{flex:1 1 auto;min-height:5vh;border-radius:1.2vh;font-size:1.65vh;font-weight:900;}
+.msheet-foot #msgDel{flex:0 0 auto;padding:0 1.3vh;color:#b1533a;background:#fff4f0;box-shadow:inset 0 0 0 .18vh #f6d2c6;}
+@media (max-width:520px){
+  .now-bub{min-height:3.4vh;}
+  .now-bub .nb-tx{font-size:1.5vh;}
+  .now-eta{min-height:3.5vh;}
+  .now-eta select{font-size:1.35vh;}
+  .msheet-card{max-height:88vh;}
+  #msgInput{font-size:1.9vh;min-height:12vh;}
+  .msheet-foot .btn{min-height:5.4vh;font-size:1.8vh;}
+}
+
+/* ===== 📱 폰(390×844) 레이아웃 — 홈 카드를 한 줄로 쌓고 위아래로 넘겨 본다 ===== */
+@media (max-width:640px){
+  html,body{overflow:auto;height:auto;min-height:100%;}
+  .app{height:auto;min-height:100dvh;padding:1vh .9vh calc(1.4vh + env(safe-area-inset-bottom,0px));gap:1vh;}
+  .pane{flex:0 0 auto;min-height:0;}
+  .pane.active{display:flex;}
+  #pane-home{gap:1vh;}
+  .dash-top{height:auto;grid-template-columns:minmax(0,1fr);gap:1vh;}
+  .clockcard{min-height:17vh;}
+  .weathercard{min-height:22vh;}
+  .wtop{flex-wrap:wrap;gap:.6vh 1vh;}
+  .dust{height:auto;min-height:9vh;width:8.6vh;}
+  .whours{flex:1 1 100%;max-width:none;margin-left:0;gap:.45vh;}
+  .wsub{font-size:1.35vh;}
+  .dash-main{grid-template-columns:minmax(0,1fr);gap:1vh;}
+  .hcal{min-height:0;}
+  .hcal-grid{grid-template-rows:none !important;grid-auto-rows:minmax(4.7vh,auto);}
+  .now-wrap{grid-template-rows:none;grid-template-columns:minmax(0,1fr);gap:.8vh;}
+  .now-card{min-height:22vh;}
+  .dash-bottom{height:auto;grid-template-columns:minmax(0,1fr);gap:1vh;}
+  .dday{min-height:24vh;}
+  .dprep{min-height:35vh;}
+  body .bgm-bar{border-radius:1.6vh;}
+  /* 상단 바: 폰에서는 탭을 두 줄로 다 보이게 */
+  .nav{row-gap:.6vh;}
+  .brand{font-size:1.9vh;}
+  .brand .brand-text{font-size:1.9vh;}
+  .tabs{flex-wrap:wrap;overflow:visible;}
+  .tab{flex:1 1 auto;justify-content:center;font-size:1.5vh;padding:.7vh .8vh;}
+  /* 가족 코드 배너는 맨 위 띠에 따로 띄워 머리글을 가리지 않게 */
+  .fsbar{top:.8vh;max-width:94vw;}
+  /* 🎒 등원 */
+  #pane-school{gap:.9vh;}
+  .sch-head{padding:.9vh 1.1vh;gap:.5vh .7vh;}
+  .sch-title{font-size:1.85vh;}
+  .sch-date{font-size:1.25vh;}
+  .sch-target{order:5;width:100%;margin-left:0;justify-content:center;}
+  .sch-time{order:6;margin-left:0;font-size:1.35vh;}
+  .bgm-chip{order:7;margin-left:auto;}
+  .cd{height:auto;min-height:15vh;flex-wrap:wrap;gap:.5vh;padding:.8vh 1.1vh;}
+  .cd-left{flex:1 1 100%;}
+  .cd-right{flex:1 1 100%;height:11vh;padding-top:2vh;}
+  .cards{flex:0 0 auto;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(17vh,auto);gap:.9vh;}
+  .card .label{font-size:2.1vh;padding:.6vh 1.3vh;}
+  .card .num{width:3.7vh;height:3.7vh;font-size:1.9vh;}
+  /* 🐾 강아지 */
+  .puppy-wrap{grid-template-columns:minmax(0,1fr);flex:0 0 auto;}
+  .pg-col{min-width:0;}
+  .stage-card{min-height:36vh;flex:0 0 auto;}
+  /* 👮 아빠 출근표 */
+  .dad-wrap{grid-template-columns:minmax(0,1fr);flex:0 0 auto;gap:.9vh;}
+  .cal-card{min-height:0;}
+  .cal-grid{grid-template-rows:none !important;grid-auto-rows:minmax(5.4vh,auto);}
+  .dad-side{min-width:0;min-height:0;}
+  .sheet{padding:1.1vh 1.2vh;min-width:0;}
+  .sheet-head{flex-wrap:wrap;}
+  .sheet-head .hint{margin-left:0;white-space:normal;}
+  .dadrow label{flex:0 0 100%;}
+  .dadrow{flex-wrap:wrap;gap:.5vh;}
+  .dadrow input[type=date]{flex:1 1 auto;min-width:0;}
+  .shift-chips{gap:.45vh;}
+  /* 목록형 칸은 폰에서 내용만큼 늘려 잘리지 않게 */
+  .week-list{flex:0 0 auto;overflow:visible;}
+  .wrow{flex:0 0 auto;min-height:4.6vh;}
+  .bag-list{flex:0 0 auto;}
+  .bag-row{flex:0 0 auto;min-height:5.2vh;}
+}
+</style>
 <style id="bgm1124css">
-/* ===== 🎵 등원 BGM 컨트롤 ===== */
+/* ===== 🎵 등원 BGM 컨트롤 (광고 없는 mp3 · 등원 탭 안에서만 재생) ===== */
 .bgm-chip{display:inline-flex;align-items:center;gap:.4vh;min-width:0;}
 .bgm-btn{
   display:inline-flex;align-items:center;gap:.45vh;height:3.7vh;padding:0 1.15vh;border-radius:999px;
@@ -5639,34 +6128,36 @@ body .sch-head .sch-time{font-size:1.35vh;}
   .bgm-prev{height:3.4vh;font-size:1vh;padding:0 .75vh;}
 }
 
-/* ===== 🎵 등원 미니 플레이어 (유튜브) ===== */
+/* ===== 🎵 등원 BGM 상태 줄 (유튜브·광고·영상 없이 소리만) ===== */
 .bgm-bar{
-  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.9vh 1.4vh;
-  background:#fff;border-radius:2.2vh;box-shadow:var(--card-shadow);padding:.8vh 1.2vh;
+  flex:0 0 auto;display:flex;align-items:center;gap:1vh;
+  background:#fff;border-radius:2.2vh;box-shadow:var(--card-shadow);padding:.7vh 1.1vh;
 }
-.bgm-now{display:flex;align-items:center;gap:1vh;min-width:0;flex:1 1 140px;}
-.bgm-now-ic{font-size:3vh;line-height:1;flex:0 0 auto;filter:drop-shadow(0 .15vh .2vh rgba(0,0,0,.08));}
-.bgm-now-tx{display:flex;flex-direction:column;min-width:0;gap:.15vh;}
-.bgm-now-tx b{font-size:1.95vh;font-weight:900;color:var(--green-deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.bgm-now-tx span{font-size:1.2vh;font-weight:800;color:#8aa094;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.bgm-now-state{flex:0 0 auto;height:3.1vh;display:inline-flex;align-items:center;padding:0 1.1vh;border-radius:999px;
-  font-size:1.15vh;font-weight:900;white-space:nowrap;background:#eef6f1;color:#2f7a51;}
+.bgm-now{display:flex;align-items:center;gap:.9vh;min-width:0;flex:1 1 auto;}
+.bgm-now-ic{font-size:2.8vh;line-height:1;flex:0 0 auto;filter:drop-shadow(0 .15vh .2vh rgba(0,0,0,.08));}
+.bgm-now-tx{display:flex;flex-direction:column;min-width:0;gap:.1vh;}
+.bgm-now-tx b{font-size:1.8vh;font-weight:900;color:var(--green-deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bgm-now-tx span{font-size:1.15vh;font-weight:800;color:#8aa094;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bgm-now-state{flex:0 0 auto;height:3vh;display:inline-flex;align-items:center;padding:0 1vh;border-radius:999px;
+  font-size:1.1vh;font-weight:900;white-space:nowrap;background:#eef6f1;color:#2f7a51;}
 .bgm-now-state.off{background:#f2f4f3;color:#7f8f86;}
 .bgm-now-state.need{background:#eaf4ff;color:#1f6f9c;animation:bgmNeed 1.8s ease-out infinite;}
 .bgm-now-state.pv{background:#fff2e3;color:#b46a12;}
 .bgm-now-state.err{background:#fff0ea;color:#b4441f;}
-.bgm-frame{position:relative;flex:0 0 auto;width:208px;height:117px;border-radius:1.6vh;overflow:hidden;
-  background:#0e1712;box-shadow:inset 0 0 0 .18vh rgba(0,0,0,.08),0 .3vh .9vh rgba(60,90,70,.18);}
-.bgm-frame iframe,.bgm-frame #bgmYt{position:absolute;inset:0;width:100%!important;height:100%!important;border:0;display:block;}
-.bgm-hit{position:absolute;inset:0;z-index:3;border:0;background:transparent;cursor:pointer;border-radius:inherit;}
-.bgm-hit:focus-visible{outline:.25vh solid #7fc3a1;outline-offset:-.4vh;}
+.bgm-play{flex:0 0 auto;width:5vh;height:5vh;border-radius:50%;background:#eaf7ef;color:#2b6b4a;
+  font-size:1.9vh;font-weight:900;line-height:1;display:grid;place-items:center;
+  box-shadow:inset 0 0 0 .2vh #cfe9d9,0 .2vh .6vh rgba(47,107,79,.10);transition:transform .12s,background .18s;}
+.bgm-play:active{transform:scale(.95);}
+.bgm-play.on{background:#fff2ec;color:#c0431f;box-shadow:inset 0 0 0 .2vh #ffc9b4,0 .2vh .6vh rgba(192,67,31,.12);}
+.bgm-play.need{background:#eaf4ff;color:#18578f;box-shadow:inset 0 0 0 .2vh #b7d7f3;animation:bgmNeed 1.8s ease-out infinite;}
 @media (max-width:520px){
-  .bgm-bar{gap:.7vh .8vh;padding:.7vh .8vh;justify-content:center;}
-  .bgm-now{gap:.6vh;flex:0 1 auto;justify-content:center;}
-  .bgm-now-ic{font-size:2.4vh;}
-  .bgm-now-tx b{font-size:1.6vh;}
-  .bgm-now-tx span{font-size:1.02vh;}
+  .bgm-bar{gap:.7vh;padding:.6vh .8vh;}
+  .bgm-now{gap:.6vh;}
+  .bgm-now-ic{font-size:2.3vh;}
+  .bgm-now-tx b{font-size:1.55vh;}
+  .bgm-now-tx span{font-size:1vh;}
   .bgm-now-state{height:2.6vh;font-size:1vh;padding:0 .7vh;}
+  .bgm-play{width:4.4vh;height:4.4vh;font-size:1.7vh;}
 }
 </style>
 
@@ -5674,33 +6165,33 @@ body .sch-head .sch-time{font-size:1.35vh;}
 window.YULI_BGM = (function(){
   "use strict";
   /* =======================================================================
-     🎵 등원 BGM — 유튜브 두 곡
-       · 남은 시간 10분 초과 → 🌿 아침 노래  (wOcXnWlBlj4 · 모동숲 메인 BGM)
-       · 남은 시간 10분 이하 → ⚡ 급박 노래  (vxdrkrRxiz8 · 지각할 때 듣는 노래)
-       · 준비 4/4 완료 또는 등원 시간이 지나면 스스로 멈춘다.
-       · 유튜브 앱으로 튕기지 않도록 등원 탭 안의 미니 플레이어(IFrame API)에서만 재생한다.
-       · iOS Safari 자동재생 정책: 첫 터치에서 unMute() + setVolume(100) + playVideo().
+     🎵 등원 BGM — 광고 없는 mp3 두 곡 (school-bgm/calm.mp3 · school-bgm/urgent.mp3)
+       · 남은 시간 10분 초과 → 🌿 아침 노래
+       · 남은 시간 10분 이하 → ⚡ 급박 노래
+       · 준비 4/4 완료 · 출발 시간 경과 · 다른 탭으로 이동 → 스스로 멈춘다
+       · 유튜브·iframe 없음 → 광고 0, 화면 차지 0. 소리만 흐른다.
+       · iOS Safari: 첫 터치 안에서 audioSession="playback" + audio.play()
      ======================================================================= */
   var STORE = "yuli.bgm.on";
-  var V = { calm: "wOcXnWlBlj4", urgent: "vxdrkrRxiz8" };
+  var SRC = { calm: "./school-bgm/calm.mp3", urgent: "./school-bgm/urgent.mp3" };
   var SONG = {
-    calm:   { icon: "🌿", name: "아침 노래", sub: "모동숲 아침 BGM · 여유 있을 때" },
-    urgent: { icon: "⚡", name: "급박 노래", sub: "지각할 때 듣는 노래 · 10분 이하" }
+    calm:   { icon: "🌿", name: "아침 노래", sub: "모동숲 아침 멜로디 · 여유 있을 때" },
+    urgent: { icon: "⚡", name: "급박 노래", sub: "빠른 멜로디 · 10분 이하" }
   };
-  var API_SRC = "https://www.youtube.com/iframe_api";
 
   var enabled = true;
   try { if (localStorage.getItem(STORE) === "0") enabled = false; } catch(e){}
 
   var onSchool = false, remainMin = null, allDone = false;
   var previewUntil = 0, pvTimer = null;
-  var player = null, ytReady = false, curVid = null, ytState = -1;
-  var playing = false, commanded = false, lastErr = 0, hold = false, playToken = 0, idleSince = 0, healTries = 0;
-  var uiKey = "";
+  var audio = null, curMode = "", playing = false, hold = false, lastErr = "";
+  var uiKey = "", playToken = 0, gestured = false;
 
   function save(){ try { localStorage.setItem(STORE, enabled ? "1" : "0"); } catch(e){} }
-
-  /* ---------------- 상태 ---------------- */
+  function el(){
+    if (!audio) audio = document.getElementById("bgmAudio");
+    return audio;
+  }
   function baseMode(){ return (remainMin !== null && remainMin <= 10) ? "urgent" : "calm"; }
   function previewing(){ return enabled && Date.now() < previewUntil; }
   function mode(){ return previewing() ? "urgent" : baseMode(); }
@@ -5711,161 +6202,60 @@ window.YULI_BGM = (function(){
     return true;
   }
   function shouldPlay(){ return wantSound() || previewing(); }
+  function isOn(){ var a = el(); return !!(a && !a.paused); }
 
-  /* ---------------- 유튜브 IFrame API ---------------- */
-  function ready(cb){
-    if (window.YT && window.YT.Player){ try { cb(); } catch(e){} return; }
-    window.__yuliCbs = window.__yuliCbs || [];
-    window.__yuliCbs.push(cb);
-    if (window.__yuliLoading) return;
-    window.__yuliLoading = true;
-    var prev = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = function(){
-      if (typeof prev === "function"){ try { prev(); } catch(e){} }
-      ytApiReady();
-    };
-    var s = document.createElement("script");
-    s.src = API_SRC; s.async = true;
-    s.onerror = function(){ window.__yuliLoading = false; paint(); };
-    (document.head || document.documentElement).appendChild(s);
-  }
-  function ytApiReady(){
-    var q = window.__yuliCbs || [];
-    window.__yuliCbs = [];
-    for (var i = 0; i < q.length; i++){ try { q[i](); } catch(e){} }
+  function setSrc(m){
+    var a = el();
+    if (!a) return;
+    var want = SRC[m] || SRC.calm;
+    if (a.getAttribute("data-src") === want) return;
+    a.setAttribute("data-src", want);
+    lastErr = "";
+    try { a.src = want; } catch(e){}
+    try { a.load(); } catch(e){}
+    curMode = m;
   }
 
-  function ensurePlayer(){
-    if (player) return true;
-    if (!(window.YT && window.YT.Player)){ ready(function(){ ensurePlayer(); apply(); }); return false; }
-    var host = document.getElementById("bgmYt");
-    if (!host) return false;
-    var vid = V[mode()];
-    var vars = {
-      playsinline: 1, enablejsapi: 1, loop: 1, playlist: vid,
-      rel: 0, controls: 0, disablekb: 1, fs: 0, iv_load_policy: 3, modestbranding: 1
-    };
-    try { if (location.protocol === "http:" || location.protocol === "https:") vars.origin = location.origin; } catch(e){}
-    player = new window.YT.Player("bgmYt", {
-      width: "100%", height: "100%", videoId: vid, playerVars: vars,
-      events: {
-        onReady: function(e){
-          ytReady = true; curVid = vid; commanded = false; lastErr = 0;
-          try { e.target.setVolume(100); } catch(err){}
-          try { e.target.setLoop(true); } catch(err){}
-          try {
-            var f = e.target.getIframe();
-            if (f){
-              f.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
-              f.setAttribute("title", "등원 음악 플레이어");
-            }
-          } catch(err){}
-          apply();
-        },
-        onStateChange: function(e){
-          ytState = e.data;
-          if (e.data === 1){ playing = true; }
-          else if (e.data === 2){ playing = false; commanded = false; }
-          else if (e.data === 0){                    /* loop=1 이 막히는 경우 대비 */
-            playing = false;
-            if (ytReady && shouldPlay()){ try { player.seekTo(0); player.playVideo(); playing = true; } catch(err){} }
-          }
-          paint();
-        },
-        onError: function(e){ lastErr = e.data || 0; playing = false; paint(); }
-      }
-    });
-    return true;
-  }
-
-  function startPlaying(){
-    if (!ytReady || !player) return;
-    healTries = 0;
+  function playNow(){
+    var a = el();
+    if (!a) return;
     var tok = ++playToken;
-    try { player.unMute(); player.setVolume(100); player.playVideo(); } catch(e){}
-    commanded = true;
-    playing = true;
-    paint();
-    /* iOS 는 첫 playVideo 가 무시되는 경우가 있어 한 박자 뒤 한 번 더 눌러 준다.
-       그 사이 사용자가 멈췄으면(pausePlaying 이 토큰을 올림) 다시 켜지 않는다. */
-    setTimeout(function(){ nudge(tok); }, 800);
-    setTimeout(function(){ nudge(tok); }, 2200);
-  }
-  function nudge(tok){
-    if (tok !== playToken) return;
-    if (!ytReady || !player || !shouldPlay()) return;
-    if (ytState === 1 || ytState === 3){ playing = true; paint(); return; }
-    try { player.unMute(); player.setVolume(100); player.playVideo(); } catch(e){}
-    /* 끝내 안 열렸으면 '재생 중'이라고 우기지 않고 다시 눌러 달라고 표시한다 */
-    if (ytState === 5 || ytState === -1){ playing = false; }
-    paint();
-  }
-
-  /* 화면 쪽 플래그가 아니라 유튜브 플레이어가 실제로 재생 중인지 */
-  function reallyPlaying(){
-    if (ytReady && player){
-      var ps = -1;
-      try { ps = player.getPlayerState(); } catch(e){}
-      if (ps === 1 || ps === 3) return true;
-      if (ps === 2 || ps === 0) return false;
+    try { if ("audioSession" in navigator) navigator.audioSession.type = "playback"; } catch(e){}
+    try { a.muted = false; a.volume = 1; } catch(e){}
+    var p = null;
+    try { p = a.play(); } catch(e){ p = null; }
+    if (p && p.catch){
+      p.catch(function(){
+        /* 아직 터치가 없었거나 잠깐 막힌 경우 — 한 박자 뒤 한 번만 더 */
+        setTimeout(function(){
+          if (tok !== playToken || !shouldPlay()) { paint(); return; }
+          try { var q = a.play(); if (q && q.catch) q.catch(function(){ paint(); }); } catch(e){ paint(); }
+        }, 350);
+      });
     }
-    return playing;
+    paint();
   }
-
-  function pausePlaying(){
+  function pauseNow(){
     playToken++;
-    commanded = false;
-    if (ytReady && player){ try { player.pauseVideo(); } catch(e){} }
+    var a = el();
+    if (a){ try { a.pause(); } catch(e){} }
     playing = false;
   }
 
-  function switchTo(vid){
-    curVid = vid; lastErr = 0; hold = false; healTries = 0;
-    if (!ytReady || !player) return;
-    try { player.loadVideoById({ videoId: vid }); } catch(e){}
-    try { player.setLoop(true); } catch(e){}
-    ytState = 3; commanded = true; playing = true;
-  }
-
-  /* ---------------- 상태 → 플레이어 ---------------- */
-  /* 플레이어가 실제로 어떤 상태인지 한 번 맞춰 본다 (우리 쪽 표시가 어긋나지 않게) */
-  function syncFromPlayer(){
-    if (!ytReady || !player) return;
-    var ps;
-    try { ps = player.getPlayerState(); } catch(e){ return; }
-    if (typeof ps !== "number" || ps < 0) return;
-    ytState = ps;
-    if (ps === 1 || ps === 3) playing = true;
-    else if (ps === 2 || ps === 0) playing = false;
-  }
-
   function apply(){
-    syncFromPlayer();
+    var a = el();
+    if (!a) return;
+    setSrc(mode());
     if (!shouldPlay()){
       hold = false;
-      if (playing || ytState === 1 || ytState === 3) pausePlaying();
+      if (!a.paused) pauseNow();
+      playing = false;
       paint();
       return;
     }
-    if (!player){ ensurePlayer(); paint(); return; }
-    if (!ytReady){ paint(); return; }
-    var vid = V[mode()];
-    if (curVid !== vid) switchTo(vid);
-    else if (!playing && !commanded && !hold) startPlaying();
-    selfHeal();
-    paint();
-  }
-
-  /* 곡을 바꾸는 순간(광고·버퍼링)에 유튜브가 '아직 시작 안 됨'(-1)이나 '대기'(5)에 머무는
-     경우가 있다. 3초 넘게 그대로면 한 번 더 재생을 걸어 스스로 살아나게 한다. */
-  function selfHeal(){
-    if (!ytReady || !player || !shouldPlay() || hold || lastErr || healTries >= 3){ idleSince = 0; return; }
-    if (ytState !== -1 && ytState !== 5){ idleSince = 0; return; }
-    if (!idleSince){ idleSince = Date.now(); return; }
-    if (Date.now() - idleSince < 3000) return;
-    idleSince = 0; healTries++;
-    commanded = false;
-    try { player.unMute(); player.setVolume(100); player.playVideo(); } catch(e){}
+    if (hold){ playing = isOn(); paint(); return; }
+    if (a.paused && gestured) playNow();
+    playing = isOn();
     paint();
   }
 
@@ -5875,14 +6265,16 @@ window.YULI_BGM = (function(){
     var ic = document.getElementById("bgmIc");
     var tx = document.getElementById("bgmTx");
     var prev = document.getElementById("bgmPrev");
+    var playBtn = document.getElementById("bgmPlay");
     if (!btn || !ic || !tx) return;
 
     var pv = previewing();
     var m = mode();
-    var needTap = !!(wantSound() && !playing);
+    var on = isOn();
+    var needTap = !!(wantSound() && !on);
     var key = [enabled ? 1 : 0, allDone ? 1 : 0,
                remainMin === null ? "x" : (remainMin <= 0 ? 0 : Math.min(remainMin, 11)),
-               pv ? 1 : 0, playing ? 1 : 0, m, curVid || "-", lastErr, ytReady ? 1 : 0].join("|");
+               pv ? 1 : 0, on ? 1 : 0, m, curMode || "-", lastErr || "-"].join("|");
 
     if (key !== uiKey){
       uiKey = key;
@@ -5911,17 +6303,18 @@ window.YULI_BGM = (function(){
       }
     }
 
-    /* 미니 플레이어 옆 곡 정보 */
+    /* 곡 정보 + 재생 상태 */
     var nowIc = document.getElementById("bgmNowIc");
     var nowName = document.getElementById("bgmNowName");
     var nowSub = document.getElementById("bgmNowSub");
     var nowSt = document.getElementById("bgmNowState");
     if (nowIc && nowName && nowSub && nowSt){
-      var s = SONG[m];
-      nowIc.textContent = s.icon;
-      nowName.textContent = s.name;
-      nowSub.textContent = pv ? "미리듣는 중 · 잠깐만 나와요"
-        : (lastErr ? "이 곡은 지금 재생이 안 돼요" : s.sub);
+      var s = SONG[m] || SONG.calm;
+      if (nowIc.textContent !== s.icon) nowIc.textContent = s.icon;
+      if (nowName.textContent !== s.name) nowName.textContent = s.name;
+      var sub = pv ? "미리듣는 중 · 8초만 나와요"
+        : (lastErr ? "이 곡 파일을 불러오지 못했어요" : s.sub);
+      if (nowSub.textContent !== sub) nowSub.textContent = sub;
       var st = "● 재생 중", sc = "on";
       if (lastErr){ st = "⚠️ 재생 불가"; sc = "err"; }
       else if (pv){ st = "▶ 미리듣기"; sc = "pv"; }
@@ -5929,13 +6322,19 @@ window.YULI_BGM = (function(){
       else if (allDone){ st = "🎉 준비 완료"; sc = "off"; }
       else if (remainMin !== null && remainMin <= 0){ st = "🎒 출발 시간"; sc = "off"; }
       else if (needTap){ st = "🔊 눌러서 켜기"; sc = "need"; }
-      else if (playing){ st = "● 재생 중"; sc = "on"; }
+      else if (on){ st = "● 재생 중"; sc = "on"; }
       else { st = "⏸ 멈춤"; sc = "off"; }
       if (nowSt.textContent !== st) nowSt.textContent = st;
       if (nowSt.className !== "bgm-now-state " + sc) nowSt.className = "bgm-now-state " + sc;
     }
-    var hit = document.getElementById("bgmHit");
-    if (hit) hit.title = playing ? "눌러서 음악 멈추기" : "눌러서 음악 켜기";
+    if (playBtn){
+      var pcls = "bgm-play" + (on ? " on" : (needTap ? " need" : ""));
+      if (playBtn.className !== pcls) playBtn.className = pcls;
+      var pic = on ? "⏸" : (needTap ? "🔊" : "▶");
+      if (playBtn.textContent !== pic) playBtn.textContent = pic;
+      playBtn.setAttribute("aria-label", on ? "등원 음악 멈추기" : "등원 음악 재생");
+      playBtn.title = on ? "눌러서 음악 멈추기" : "눌러서 음악 켜기";
+    }
   }
 
   /* ---------------- 바깥에서 부르는 것 ---------------- */
@@ -5950,18 +6349,19 @@ window.YULI_BGM = (function(){
   function tab(isSchool){
     onSchool = !!isSchool;
     if (!onSchool && Date.now() < previewUntil){ previewUntil = 0; clearTimeout(pvTimer); }
-    if (onSchool && !player) ready(function(){ ensurePlayer(); apply(); });
+    if (onSchool) setSrc(mode());
     apply();
   }
 
   function preview(sec){
     if (!enabled){ enabled = true; save(); }        /* 미리듣기는 소리를 켠다 */
     hold = false;
+    gestured = true;
     var d = (sec || 8) * 1000;
     previewUntil = Date.now() + d;
     clearTimeout(pvTimer);
     pvTimer = setTimeout(function(){ previewUntil = 0; apply(); }, d + 40);
-    commanded = false;
+    setSrc("urgent");
     apply();
   }
 
@@ -5973,10 +6373,10 @@ window.YULI_BGM = (function(){
 
   function toggle(){
     /* 배지가 "눌러서 소리 켜기" 라고 말하고 있으면, 첫 탭은 끄기가 아니라 켜기다 */
-    if (enabled && !reallyPlaying() && wantSound()){
-      commanded = false; hold = false;
-      ready(function(){ ensurePlayer(); });
-      startPlaying();
+    gestured = true;
+    if (enabled && !isOn() && wantSound()){
+      hold = false;
+      playNow();
       return;
     }
     hold = false;
@@ -5990,62 +6390,61 @@ window.YULI_BGM = (function(){
     }
   }
 
-  /* 첫 터치/클릭 — iOS 사파리는 제스처 안에서 unMute+playVideo 를 해야 소리가 난다 */
+  /* 첫 터치/클릭 — iOS 사파리는 제스처 안에서 play() 를 해야 소리가 난다 */
   function gesturePlay(){
     if (!enabled || !onSchool) return;
     if (!shouldPlay()) return;
-    ready(function(){ ensurePlayer(); });
-    if (ytReady && player && !reallyPlaying()){ commanded = false; hold = false; startPlaying(); }
+    var a = el();
+    if (!a) return;
+    gestured = true;
+    if (a.paused && !hold) playNow();
   }
 
   function hitToggle(){
+    gestured = true;
     if (!enabled){ enabled = true; save(); }
     if (!shouldPlay()){ paint(); return; }
-    /* 사용자가 직접 멈추면 다음 카운트다운 틱이 다시 켜지 않도록 hold 로 붙잡아 둔다 */
-    if (reallyPlaying()){ hold = true; pausePlaying(); paint(); return; }
+    /* 사용자가 직접 멈추면 다음 카운트다운 틱이 다시 켜지지 않도록 hold 로 붙잡아 둔다 */
+    if (isOn()){ hold = true; pauseNow(); paint(); return; }
     hold = false;
-    ready(function(){ ensurePlayer(); });
-    if (ytReady && player){ commanded = false; startPlaying(); }
-    else paint();
+    playNow();
+  }
+
+  function bindAudio(a){
+    if (!a || a.__b) return;
+    a.__b = 1;
+    a.addEventListener("playing", function(){ playing = true; lastErr = ""; paint(); });
+    a.addEventListener("pause", function(){ playing = false; paint(); });
+    a.addEventListener("ended", function(){
+      /* loop 가 막힌 경우에도 이어서 재생 */
+      if (shouldPlay() && !hold){ try { a.currentTime = 0; } catch(e){} playNow(); }
+    });
+    a.addEventListener("error", function(){ lastErr = (a.error && a.error.code) || "e"; paint(); });
+    a.addEventListener("loadedmetadata", function(){ if (lastErr){ lastErr = ""; paint(); } });
+    a.addEventListener("canplay", function(){ if (lastErr){ lastErr = ""; } paint(); });
   }
 
   function bind(){
     var btn = document.getElementById("bgmToggle");
     var prevBtn = document.getElementById("bgmPrev");
-    var hit = document.getElementById("bgmHit");
+    var playBtn = document.getElementById("bgmPlay");
     /* toggle() 이 켜기/끄기를 스스로 판단한다 — 여기서 gesturePlay() 를 먼저 부르면
        '멈춘 상태에서 켜기'가 '재생 후 곧바로 음소거'로 뒤집힌다. */
     if (btn) btn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
     if (prevBtn) prevBtn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); previewToggle(); });
-    /* 미니 플레이어는 iframe 위에 얹혀 있어 click 이 삼켜질 때가 있다 —
-       pointerdown/touchstart 에서 바로 처리하고, 뒤따르는 click 은 한 번만 받는다. */
-    if (hit){
-      var hitAt = 0;
-      var hitAct = function(e){
-        var t = Date.now();
-        if (t - hitAt < 450) return;
-        hitAt = t;
-        if (e && e.cancelable) e.preventDefault();
-        if (e && e.stopPropagation) e.stopPropagation();
-        hitToggle();
-      };
-      try { hit.addEventListener("pointerdown", hitAct, { passive: false }); }
-      catch(err){ hit.addEventListener("pointerdown", hitAct, false); }
-      hit.addEventListener("touchstart", hitAct, { passive: true });
-      hit.addEventListener("click", hitAct);
-    }
+    if (playBtn) playBtn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); hitToggle(); });
 
+    bindAudio(el());
     var pane = document.getElementById("pane-school");
     onSchool = !!(pane && pane.classList.contains("active"));
-    if (onSchool) ready(function(){ ensurePlayer(); apply(); });
+    if (onSchool) setSrc(mode());
     paint();
   }
 
   function onGesture(e){
     var t = e && e.target;
-    /* BGM 칩·미니 플레이어 안쪽 터치는 각자 핸들러가 처리한다 —
-       여기서 먼저 재생을 걸어 버리면 '멈추기'가 '재생'으로 뒤집혀 보인다. */
-    if (t && t.closest && t.closest("#bgmToggle,#bgmPrev,#bgmHit,#bgmBar")) return;
+    /* BGM 칩·상태 줄 안쪽 터치는 각자 핸들러가 처리한다 */
+    if (t && t.closest && t.closest("#bgmToggle,#bgmPrev,#bgmPlay,#bgmBar")) return;
     gesturePlay();
   }
   var GESTURES = ["touchstart", "touchend", "pointerdown", "click", "keydown"];
@@ -6069,15 +6468,14 @@ window.YULI_BGM = (function(){
     preview: preview,
     sync: apply,
     state: function(){
+      var a = el();
       return {
         enabled: enabled, onSchool: onSchool, remainMin: remainMin, allDone: allDone,
-        playing: playing, mode: mode(), vid: curVid, yt: ytState, ready: ytReady,
-        error: lastErr, previewing: previewing(),
-        needsTap: !!(wantSound() && !playing),
-        src: (function(){
-          var f = document.getElementById("bgmYt");
-          return (f && f.tagName === "IFRAME") ? f.src : null;
-        })()
+        playing: isOn(), paused: a ? a.paused : true, mode: mode(), src: a ? a.getAttribute("data-src") : null,
+        currentSrc: a ? a.currentSrc : null, ready: a ? a.readyState : -1,
+        error: lastErr, previewing: previewing(), time: a ? a.currentTime : 0,
+        duration: a ? a.duration : 0,
+        needsTap: !!(wantSound() && !isOn())
       };
     }
   };
