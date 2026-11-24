@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>월팸 스텝바이스텝 1편 · 인터랙티브</title>
+<meta name="theme-color" content="#0f1533">
+<style>
+  :root{
+    --bg:#0f1533; --bg2:#182052; --card:#202a63; --line:#33407e;
+    --txt:#f2f5ff; --dim:#a9b4e6; --gold:#ffd24a; --green:#37d67a; --red:#ff6b6b;
+    --blue:#5b8cff;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0; background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    -webkit-text-size-adjust:100%;}
+  body{min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; align-items:center;}
+  .wrap{width:100%; max-width:980px; padding:0 10px calc(14px + env(safe-area-inset-bottom)); display:flex; flex-direction:column; gap:10px;}
+
+  header{width:100%; display:flex; align-items:center; gap:10px; padding:10px 4px 2px;}
+  .brand{font-size:15px; font-weight:800; letter-spacing:-.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1;}
+  .brand small{display:block; font-size:11px; font-weight:600; color:var(--dim); letter-spacing:0;}
+  .stars{display:flex; align-items:center; gap:6px; background:var(--card); border:1px solid var(--line);
+    border-radius:999px; padding:6px 12px; font-weight:800; font-size:15px; flex:0 0 auto;}
+  .stars .ico{font-size:16px;}
+  .stars.pop{animation:pop .5s ease;}
+  @keyframes pop{0%{transform:scale(1)}35%{transform:scale(1.28)}100%{transform:scale(1)}}
+  .iconbtn{background:var(--card); border:1px solid var(--line); color:var(--txt); border-radius:12px;
+    padding:7px 10px; font-size:13px; font-weight:700; cursor:pointer; flex:0 0 auto;}
+  .iconbtn:active{transform:scale(.96);}
+
+  /* ---------- video ---------- */
+  .stage{position:relative; width:100%; aspect-ratio:16/9; background:#000; border-radius:14px; overflow:hidden;
+    box-shadow:0 8px 26px rgba(0,0,0,.45);}
+  video{width:100%; height:100%; display:block; background:#000; object-fit:contain;}
+  .bigstart{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:12px; background:radial-gradient(circle at 50% 45%, rgba(30,45,120,.72), rgba(6,9,26,.92)); cursor:pointer;
+    text-align:center; padding:16px; transition:opacity .25s;}
+  .bigstart.hide{opacity:0; pointer-events:none;}
+  .playcircle{width:82px; height:82px; border-radius:50%; background:linear-gradient(160deg,#ffe07a,#ffb703);
+    display:flex; align-items:center; justify-content:center; font-size:34px; color:#3a2400;
+    box-shadow:0 6px 20px rgba(255,183,3,.45); padding-left:6px;}
+  .bigstart .t1{font-size:19px; font-weight:900;}
+  .bigstart .t2{font-size:13px; color:#cdd6ff; line-height:1.5; max-width:420px;}
+  .centerplay{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:70px; height:70px;
+    border-radius:50%; background:rgba(10,16,40,.62); border:2px solid rgba(255,255,255,.6); color:#fff;
+    font-size:26px; display:none; align-items:center; justify-content:center; padding-left:4px; cursor:pointer; backdrop-filter:blur(3px);}
+  .centerplay.show{display:flex;}
+  .flash{position:absolute; inset:0; background:rgba(55,214,122,.35); opacity:0; pointer-events:none;}
+  .flash.on{animation:fl .6s ease;}
+  @keyframes fl{0%{opacity:.85}100%{opacity:0}}
+
+  /* ---------- controls ---------- */
+  .ctrl{display:flex; align-items:center; gap:8px; width:100%;}
+  .cbtn{background:var(--card); border:1px solid var(--line); color:var(--txt); border-radius:12px;
+    min-width:52px; height:46px; font-size:17px; font-weight:800; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; user-select:none;}
+  .cbtn:active{transform:scale(.95);}
+  .cbtn.wide{flex:1; font-size:15px;}
+  .barwrap{position:relative; flex:1; height:46px; display:flex; align-items:center; cursor:pointer; touch-action:none;}
+  .bar{position:relative; width:100%; height:8px; background:#2b356e; border-radius:99px; overflow:visible;}
+  .barfill{position:absolute; left:0; top:0; bottom:0; width:0%; background:linear-gradient(90deg,#6f9bff,#9b7bff); border-radius:99px;}
+  .mark{position:absolute; top:50%; width:4px; height:16px; margin-left:-2px; transform:translateY(-50%);
+    background:var(--gold); border-radius:2px; opacity:.85;}
+  .mark.done{background:var(--green);}
+  .knob{position:absolute; top:50%; width:14px; height:14px; margin-left:-7px; transform:translateY(-50%);
+    background:#fff; border-radius:50%; box-shadow:0 1px 5px rgba(0,0,0,.5); pointer-events:none;}
+  .time{font-variant-numeric:tabular-nums; font-size:12px; color:var(--dim); font-weight:700; min-width:86px; text-align:center;}
+
+  /* ---------- quiz ---------- */
+  .quiz{width:100%; background:linear-gradient(180deg,#1b2456,#141b45); border:1px solid var(--line);
+    border-radius:16px; padding:14px 14px 16px; display:none; animation:slideup .28s ease;}
+  .quiz.show{display:block;}
+  @keyframes slideup{from{opacity:0; transform:translateY(10px)}to{opacity:1; transform:none}}
+  .qtop{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;}
+  .qnum{font-size:12px; font-weight:800; color:#0c1030; background:var(--gold); border-radius:999px; padding:4px 10px;}
+  .qskip{font-size:12px; font-weight:700; color:var(--dim); background:none; border:1px solid var(--line);
+    border-radius:999px; padding:5px 10px; cursor:pointer;}
+  .qen{font-size:22px; font-weight:900; letter-spacing:-.3px; line-height:1.3; margin:2px 0 4px;}
+  .qko{font-size:13px; color:var(--dim); font-weight:700; margin-bottom:12px;}
+  .opts{display:grid; grid-template-columns:1fr; gap:9px;}
+  @media (min-width:600px){ .opts{grid-template-columns:1fr 1fr;} }
+  .opt{display:flex; align-items:center; gap:11px; width:100%; text-align:left; cursor:pointer;
+    background:#26307a; border:2px solid #3b48a0; color:var(--txt); border-radius:14px; padding:13px 14px;
+    font-family:inherit; font-size:17px; font-weight:800; min-height:58px; transition:transform .08s, background .15s, border-color .15s;}
+  .opt:active{transform:scale(.985);}
+  .opt .em{font-size:24px; line-height:1; width:30px; text-align:center; flex:0 0 auto;}
+  .opt .lbl{flex:1; line-height:1.25;}
+  .opt .lbl small{display:block; font-size:12px; font-weight:700; color:#c3cbf5; margin-top:2px;}
+  .opt.right{background:#155f3a; border-color:var(--green);}
+  .opt.wrong{background:#5d2030; border-color:var(--red); animation:shake .34s;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
+  .fb{margin-top:11px; font-size:14px; font-weight:800; min-height:20px; line-height:1.45;}
+  .fb.ok{color:var(--green);}
+  .fb.no{color:#ffb3b3;}
+
+  /* ---------- chapters ---------- */
+  .chapters{width:100%;}
+  .chhead{font-size:12px; font-weight:800; color:var(--dim); margin:2px 2px 6px; display:flex; justify-content:space-between;}
+  .chlist{display:flex; gap:8px; overflow-x:auto; padding:2px 2px 8px; scrollbar-width:thin; -webkit-overflow-scrolling:touch;}
+  .ch{flex:0 0 auto; display:flex; align-items:center; gap:7px; background:var(--card); border:1px solid var(--line);
+    color:var(--txt); border-radius:12px; padding:9px 12px; font-size:13px; font-weight:800; cursor:pointer; white-space:nowrap;}
+  .ch .n{font-size:11px; background:#3a4796; border-radius:999px; padding:1px 6px; color:#dfe5ff;}
+  .ch.done{border-color:var(--green);}
+  .ch.done .n{background:var(--green); color:#06240f;}
+  .ch.cur{outline:2px solid var(--blue); outline-offset:1px;}
+
+  /* ---------- end card ---------- */
+  .endcard{width:100%; background:linear-gradient(180deg,#22307a,#161d4a); border:1px solid var(--line); border-radius:16px;
+    padding:18px; text-align:center; display:none;}
+  .endcard.show{display:block;}
+  .endcard h2{margin:6px 0 6px; font-size:22px;}
+  .endcard p{margin:0 0 14px; color:var(--dim); font-size:14px; font-weight:700;}
+  .endcard .row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+  .primary{background:linear-gradient(160deg,#ffe07a,#ffb703); color:#3a2400; border:none; border-radius:12px;
+    padding:13px 22px; font-size:16px; font-weight:900; font-family:inherit; cursor:pointer;}
+  .ghost{background:var(--card); color:var(--txt); border:1px solid var(--line); border-radius:12px;
+    padding:13px 18px; font-size:15px; font-weight:800; font-family:inherit; cursor:pointer;}
+  .tips{font-size:11.5px; color:#8f9bd6; line-height:1.5; text-align:center; padding:0 6px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">🌏 월팸 스텝바이스텝 <b>1편</b>
+      <small>문제가 나오면 영상이 잠깐 멈춰요</small>
+    </div>
+    <div class="stars" id="starBox"><span class="ico">⭐</span><span id="starCount">0</span></div>
+    <button class="iconbtn" id="btnReset" title="처음부터">↺</button>
+  </header>
+
+  <div class="stage" id="stage">
+    <video id="v" playsinline webkit-playsinline preload="metadata" src="sbs-media/sbs1.mp4"></video>
+    <div class="bigstart" id="bigstart">
+      <div class="playcircle">▶</div>
+      <div class="t1">시작하기</div>
+      <div class="t2">영상이 흐르다가 문제가 나오면 자동으로 멈춰요.<br>답을 고르면 이어서 재생돼요!</div>
+    </div>
+    <div class="centerplay" id="centerplay">▶</div>
+    <div class="flash" id="flash"></div>
+  </div>
+
+  <div class="ctrl">
+    <button class="cbtn" id="btnBack">⟲10</button>
+    <div class="barwrap" id="barwrap">
+      <div class="bar" id="bar">
+        <div class="barfill" id="barfill"></div>
+        <div class="knob" id="knob"></div>
+      </div>
+    </div>
+    <button class="cbtn" id="btnFwd">10⟳</button>
+    <div class="time" id="time">0:00 / 0:00</div>
+  </div>
+  <div class="ctrl" style="gap:10px">
+    <button class="cbtn wide" id="btnPlay">▶ 재생</button>
+    <button class="cbtn" id="btnMute">🔊</button>
+  </div>
+
+  <section class="quiz" id="quiz">
+    <div class="qtop">
+      <span class="qnum" id="qnum">문제 1</span>
+      <button class="qskip" id="qskip">그냥 넘어가기 →</button>
+    </div>
+    <div class="qen" id="qen"></div>
+    <div class="qko" id="qko"></div>
+    <div class="opts" id="opts"></div>
+    <div class="fb" id="fb"></div>
+  </section>
+
+  <section class="endcard" id="endcard">
+    <div style="font-size:34px">🎉</div>
+    <h2>1편 끝!</h2>
+    <p id="endmsg">별 0개를 모았어요.</p>
+    <div class="row">
+      <button class="primary" id="btnAgain">처음부터 다시 보기</button>
+      <button class="ghost" id="btnJumpBack">마지막 문제부터</button>
+    </div>
+  </section>
+
+  <div class="chapters">
+    <div class="chhead"><span>문제 목록 — 눌러서 바로 가기</span><span id="chdone">0 / 10</span></div>
+    <div class="chlist" id="chlist"></div>
+  </div>
+  <div class="tips">월팸 스텝바이스텝 1편 · 시범용 인터랙티브 플레이어 · 만든이 박주영</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= 문제 데이터 ================= */
+  var QUIZ = [
+    { t:1199.5, chip:"🧺 바구니", qEn:"What's in Minnie's basket?",
+      qKo:"미니의 바구니 속에는 무엇이 있을까요?",
+      opts:[ {em:"🔤", en:"ABC letters", ko:"알파벳 글자", ok:true},
+             {em:"🐱", en:"a cat", ko:"고양이"},
+             {em:"🎩", en:"a hat", ko:"모자"} ],
+      hint:"미니가 'In my basket are my ___'라고 노래해요. 알록달록한 글자들이 가득해요!" },
+
+    { t:1591.0, chip:"🔤 A·B·C", qEn:"Is this an A, a B, or a C?",
+      qKo:"이건 A, B, C 중 어떤 글자일까요?",
+      opts:[ {em:"🅰️", en:"A", ko:"에이", ok:true},
+             {em:"🅱️", en:"B", ko:"비"},
+             {em:"🌜", en:"C", ko:"씨"} ],
+      hint:"화면에 크게 보이는 글자를 소리 내어 읽어 보세요. 뾰족한 다리가 두 개! " },
+
+    { t:2086.0, chip:"👦👧 너는?", qEn:"How about you? Are you a girl or a boy?",
+      qKo:"선생님이 물어봐요. 나는 여자아이일까요, 남자아이일까요? (둘 다 정답!)",
+      opts:[ {em:"👧", en:"I'm a girl.", ko:"나는 여자아이예요", ok:true, any:true},
+             {em:"👦", en:"I'm a boy.", ko:"나는 남자아이예요", ok:true, any:true} ],
+      hint:"정답이 정해져 있지 않아요. 내가 무엇인지 골라 보세요!" },
+
+    { t:2103.0, chip:"🐶 강아지", qEn:"What is the dog's name?",
+      qKo:"미키의 강아지 이름은 무엇일까요?",
+      opts:[ {em:"🐶", en:"Pluto", ko:"플루토", ok:true},
+             {em:"🐕", en:"Goofy", ko:"구피"},
+             {em:"🦆", en:"Donald", ko:"도널드"} ],
+      hint:"노란 강아지예요. 'This is my dog, ___' 하고 미키가 소개해요." },
+
+    { t:2363.0, chip:"👸 공주님", qEn:"What's her name?",
+      qKo:"이 공주님의 이름은 무엇일까요?",
+      opts:[ {em:"👠", en:"Cinderella", ko:"신데렐라"},
+             {em:"🐰", en:"Alice", ko:"앨리스"},
+             {em:"🍎", en:"Snow White", ko:"백설공주", ok:true} ],
+      hint:"빨간 사과와 일곱 난쟁이로 유명한 공주님이에요." },
+
+    { t:2514.5, chip:"🎩 모자", qEn:"What's on Mickey's head?",
+      qKo:"미키 머리 위에 있는 것은 무엇일까요?",
+      opts:[ {em:"🎩", en:"a hat", ko:"모자", ok:true},
+             {em:"🪄", en:"a wand", ko:"마법 지팡이"},
+             {em:"🪑", en:"a table", ko:"탁자"} ],
+      hint:"머리에 쓰는 물건이에요. 미키의 마법 모자!" },
+
+    { t:2573.8, chip:"🕳️ 모자 속", qEn:"What's in Mickey's hat?",
+      qKo:"데이지가 모자 속을 들여다봐요. 무엇이 들어 있을까요?",
+      opts:[ {em:"🫙", en:"Nothing", ko:"아무것도 없어요", ok:true},
+             {em:"🐱", en:"a cat", ko:"고양이"},
+             {em:"🍎", en:"an apple", ko:"사과"} ],
+      hint:"데이지가 고개를 절레절레 흔들어요. 텅 비어 있어요!" },
+
+    { t:2761.6, chip:"👏 박수", qEn:"Is she clapping?",
+      qKo:"저 아이가 박수를 치고 있나요?",
+      opts:[ {em:"🙆‍♀️", en:"Yes, she is.", ko:"네, 그리고 있어요", ok:true},
+             {em:"🙅‍♂️", en:"No, he's not.", ko:"아니요, 안 하고 있어요"} ],
+      hint:"손뼉을 짝짝 치고 있으면 'Yes, she is.'라고 말해요." },
+
+    { t:2930.0, chip:"🏠 H-O-U-S-E", qEn:"H-O-U-S-E spells …?",
+      qKo:"모자에 H, O, U, S, E 를 넣었어요. 무엇이 나올까요?",
+      opts:[ {em:"🏠", en:"house", ko:"집", ok:true},
+             {em:"🐭", en:"mouse", ko:"쥐"},
+             {em:"🎩", en:"hat", ko:"모자"} ],
+      hint:"H는 'ㅎ' 소리! H-O-U-S-E 는 '하우스'라고 읽어요." },
+
+    { t:3026.0, chip:"🐭 미키!", qEn:"M-I-C-K-E-Y  M-O-U-S-E!",
+      qKo:"글자를 다 넣고 지팡이를 휘두르면 무엇이 나올까요?",
+      opts:[ {em:"🐭", en:"Another Mickey Mouse", ko:"또 다른 미키 마우스", ok:true},
+             {em:"🐱", en:"a cat", ko:"고양이"},
+             {em:"🐶", en:"a dog", ko:"강아지"} ],
+      hint:"M-I-C-K-E-Y, M-O-U-S-E! 미키 마우스가 나와요." }
+  ];
+
+  var KEY = "sbs.demo.v1";
+  var state = { solved:[], stars:0, started:false };
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(raw){ var s = JSON.parse(raw); if(s && typeof s === "object"){ state = Object.assign(state, s); } }
+  }catch(e){}
+  if(!Array.isArray(state.solved)) state.solved = [];
+  state.stars = state.solved.length;
+
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var v = $("v"), quiz = $("quiz"), opts = $("opts"), fb = $("fb");
+  var bigstart = $("bigstart"), centerplay = $("centerplay"), flash = $("flash");
+  var barfill = $("barfill"), knob = $("knob"), barwrap = $("barwrap"), timeEl = $("time");
+  var chlist = $("chlist"), starCount = $("starCount"), starBox = $("starBox"), chdone = $("chdone");
+  var endcard = $("endcard"), endmsg = $("endmsg");
+
+  var current = -1;         // 지금 떠 있는 문제 index
+  var lastTime = 0;
+  var seeking = false;
+  var DUR = 3464.23;
+
+  /* ================= 진행 바 표시 ================= */
+  function fmt(sec){
+    if(!isFinite(sec) || sec < 0) sec = 0;
+    var m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+  function buildMarks(){
+    QUIZ.forEach(function(q, i){
+      var d = document.createElement("div");
+      d.className = "mark";
+      d.id = "mark" + i;
+      d.style.left = (q.t / DUR * 100) + "%";
+      $("bar").appendChild(d);
+    });
+  }
+  function paintMarks(){
+    QUIZ.forEach(function(q, i){
+      var el = $("mark" + i);
+      if(!el) return;
+      el.classList.toggle("done", state.solved.indexOf(i) >= 0);
+    });
+  }
+
+  function updateBar(){
+    var pct = Math.min(100, Math.max(0, (v.currentTime / DUR) * 100));
+    barfill.style.width = pct + "%";
+    knob.style.left = pct + "%";
+    timeEl.textContent = fmt(v.currentTime) + " / " + fmt(DUR);
+  }
+
+  /* ================= 문제 목록(챕터) ================= */
+  function buildChapters(){
+    chlist.innerHTML = "";
+    QUIZ.forEach(function(q, i){
+      var b = document.createElement("button");
+      b.className = "ch";
+      b.id = "ch" + i;
+      b.innerHTML = '<span class="n">' + (i + 1) + '</span><span>' + q.chip + '</span>';
+      b.addEventListener("click", function(){ jumpTo(i); });
+      chlist.appendChild(b);
+    });
+    paintChapters();
+  }
+  function paintChapters(){
+    QUIZ.forEach(function(q, i){
+      var el = $("ch" + i);
+      if(!el) return;
+      el.classList.toggle("done", state.solved.indexOf(i) >= 0);
+    });
+    var n = state.solved.length;
+    chdone.textContent = n + " / " + QUIZ.length;
+    starCount.textContent = String(state.stars);
+  }
+
+  /* ================= 문제 띄우기 ================= */
+  function openQuiz(i){
+    current = i;
+    var q = QUIZ[i];
+    $("qnum").textContent = "문제 " + (i + 1) + " / " + QUIZ.length;
+    $("qen").textContent = q.qEn;
+    $("qko").textContent = q.qKo;
+    fb.textContent = "";
+    fb.className = "fb";
+    opts.innerHTML = "";
+    q.opts.forEach(function(o, oi){
+      var b = document.createElement("button");
+      b.className = "opt";
+      b.type = "button";
+      b.innerHTML = '<span class="em">' + o.em + '</span><span class="lbl">' + o.en +
+                    (o.ko ? '<small>' + o.ko + '</small>' : '') + '</span>';
+      b.addEventListener("click", function(){ answer(b, o, i); });
+      opts.appendChild(b);
+    });
+    quiz.classList.add("show");
+    paintCur();
+    try{ quiz.scrollIntoView({behavior:"smooth", block:"nearest"}); }catch(e){}
+  }
+
+  function closeQuiz(){
+    quiz.classList.remove("show");
+    current = -1;
+    paintCur();
+  }
+
+  function paintCur(){
+    QUIZ.forEach(function(q, i){
+      var el = $("ch" + i);
+      if(!el) return;
+      el.classList.toggle("cur", i === current);
+    });
+  }
+
+  var misses = 0;
+  function answer(btn, o, i){
+    if(!o.ok){
+      misses++;
+      btn.classList.add("wrong");
+      setTimeout(function(){ btn.classList.remove("wrong"); }, 420);
+      fb.className = "fb no";
+      fb.textContent = misses === 1
+        ? "다시 한번 골라 볼까요? 😊"
+        : "괜찮아요! " + QUIZ[i].hint;
+      return;
+    }
+    // 정답
+    btn.classList.add("right");
+    var rest = opts.querySelectorAll(".opt");
+    for(var k = 0; k < rest.length; k++){ rest[k].disabled = true; }
+    if(state.solved.indexOf(i) < 0){ state.solved.push(i); state.stars = state.solved.length; save(); }
+    fb.className = "fb ok";
+    fb.textContent = (o.any ? "멋져요! 나는 " + o.en + " 😊 ⭐+1" : "정답이에요! 잘했어요 🎉 ⭐+1");
+    flash.classList.remove("on"); void flash.offsetWidth; flash.classList.add("on");
+    starBox.classList.remove("pop"); void starBox.offsetWidth; starBox.classList.add("pop");
+    paintChapters(); paintMarks();
+    setTimeout(function(){
+      closeQuiz();
+      misses = 0;
+      v.play().catch(function(){});
+    }, 1150);
+  }
+
+  /* ================= 재생 제어 ================= */
+  function showBigStart(){ bigstart.classList.remove("hide"); }
+  function hideBigStart(){ bigstart.classList.add("hide"); state.started = true; save(); }
+
+  function play(){
+    hideBigStart();
+    v.play().catch(function(){});
+  }
+  function togglePlay(){
+    if(v.paused){ play(); } else { v.pause(); }
+  }
+  function jumpTo(i){
+    endcard.classList.remove("show");
+    var q = QUIZ[i];
+    var idx = state.solved.indexOf(i);
+    if(idx >= 0) state.solved.splice(idx, 1);   // 다시 풀 수 있게
+    save(); paintChapters(); paintMarks();
+    closeQuiz(); misses = 0;
+    seeking = true;
+    v.currentTime = Math.max(0, q.t - 3.2);
+    lastTime = v.currentTime;
+    seeking = false;
+    hideBigStart();
+    v.play().catch(function(){});
+    setTimeout(function(){ seeking = false; }, 400);
+  }
+
+  function checkQuiz(){
+    if(v.paused) return;
+    var t = v.currentTime;
+    for(var i = 0; i < QUIZ.length; i++){
+      var q = QUIZ[i];
+      if(lastTime < q.t && t >= q.t && (t - q.t) < 1.6 && state.solved.indexOf(i) < 0){
+        lastTime = t;
+        v.pause();
+        openQuiz(i);
+        return;
+      }
+    }
+    lastTime = t;
+  }
+
+  function tick(){
+    if(!v.paused){
+      checkQuiz();
+      updateBar();
+    }
+    requestAnimationFrame(tick);
+  }
+
+  /* ================= 이벤트 ================= */
+  bigstart.addEventListener("click", play);
+  centerplay.addEventListener("click", play);
+  v.addEventListener("click", togglePlay);
+
+  v.addEventListener("play", function(){
+    centerplay.classList.remove("show");
+    $("btnPlay").textContent = "⏸ 일시정지";
+    hideBigStart();
+  });
+  v.addEventListener("pause", function(){
+    if(current < 0 && !v.ended) centerplay.classList.add("show");
+    $("btnPlay").textContent = "▶ 재생";
+    lastTime = v.currentTime;
+  });
+  v.addEventListener("timeupdate", function(){
+    if(!seeking) checkQuiz();
+    updateBar();
+  });
+  v.addEventListener("loadedmetadata", function(){
+    if(v.duration && isFinite(v.duration)){ DUR = v.duration; }
+    buildMarks(); paintMarks(); updateBar();
+  });
+  v.addEventListener("ended", function(){
+    endcard.classList.add("show");
+    endmsg.textContent = "별 " + state.stars + "개를 모았어요. (" + QUIZ.length + "문제 중 " +
+      state.solved.length + "문제 정답)";
+    centerplay.classList.remove("show");
+    try{ endcard.scrollIntoView({behavior:"smooth", block:"nearest"}); }catch(e){}
+  });
+  v.addEventListener("error", function(){
+    fb.className = "fb no";
+    fb.textContent = "영상을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.";
+  });
+
+  $("btnPlay").addEventListener("click", togglePlay);
+  $("btnBack").addEventListener("click", function(){ v.currentTime = Math.max(0, v.currentTime - 10); });
+  $("btnFwd").addEventListener("click", function(){ v.currentTime = Math.min(DUR, v.currentTime + 10); });
+  $("btnMute").addEventListener("click", function(){
+    v.muted = !v.muted;
+    $("btnMute").textContent = v.muted ? "🔇" : "🔊";
+  });
+  $("qskip").addEventListener("click", function(){
+    if(current >= 0){ var i = current; closeQuiz(); v.play().catch(function(){}); }
+  });
+  $("btnReset").addEventListener("click", function(){
+    if(!confirm("별과 푼 문제를 모두 지우고 처음부터 시작할까요?")) return;
+    state.solved = []; state.stars = 0; save();
+    paintChapters(); paintMarks();
+    endcard.classList.remove("show");
+    v.currentTime = 0; closeQuiz();
+  });
+  $("btnAgain").addEventListener("click", function(){
+    endcard.classList.remove("show");
+    state.solved = []; state.stars = 0; save();
+    paintChapters(); paintMarks();
+    v.currentTime = 0; lastTime = 0; closeQuiz();
+    v.play().catch(function(){});
+  });
+  $("btnJumpBack").addEventListener("click", function(){ jumpTo(QUIZ.length - 1); });
+
+  /* 진행 바 스크럽 */
+  var dragging = false;
+  function scrub(e){
+    var r = barwrap.getBoundingClientRect();
+    var x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    var pct = Math.min(1, Math.max(0, x / r.width));
+    v.currentTime = pct * DUR;
+    lastTime = v.currentTime;
+    updateBar();
+  }
+  barwrap.addEventListener("pointerdown", function(e){
+    dragging = true; seeking = true; scrub(e);
+    try{ barwrap.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  barwrap.addEventListener("pointermove", function(e){ if(dragging) scrub(e); });
+  barwrap.addEventListener("pointerup", function(e){
+    dragging = false; lastTime = v.currentTime;
+    setTimeout(function(){ seeking = false; }, 250);
+  });
+  barwrap.addEventListener("pointercancel", function(){ dragging = false; setTimeout(function(){ seeking = false; }, 250); });
+
+  window.addEventListener("keydown", function(e){
+    if(e.code === "Space"){ e.preventDefault(); togglePlay(); }
+    else if(e.code === "ArrowLeft"){ v.currentTime = Math.max(0, v.currentTime - 5); }
+    else if(e.code === "ArrowRight"){ v.currentTime = Math.min(DUR, v.currentTime + 5); }
+  });
+
+  /* ================= 시작 ================= */
+  buildChapters();
+  paintChapters();
+  updateBar();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
