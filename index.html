@@ -5800,6 +5800,17 @@ window.YULI_BGM = (function(){
     paint();
   }
 
+  /* 화면 쪽 플래그가 아니라 유튜브 플레이어가 실제로 재생 중인지 */
+  function reallyPlaying(){
+    if (ytReady && player){
+      var ps = -1;
+      try { ps = player.getPlayerState(); } catch(e){}
+      if (ps === 1 || ps === 3) return true;
+      if (ps === 2 || ps === 0) return false;
+    }
+    return playing;
+  }
+
   function pausePlaying(){
     playToken++;
     commanded = false;
@@ -5947,7 +5958,7 @@ window.YULI_BGM = (function(){
 
   function toggle(){
     /* 배지가 "눌러서 소리 켜기" 라고 말하고 있으면, 첫 탭은 끄기가 아니라 켜기다 */
-    if (enabled && !playing && wantSound()){
+    if (enabled && !reallyPlaying() && wantSound()){
       commanded = false; hold = false;
       ready(function(){ ensurePlayer(); });
       startPlaying();
@@ -5969,14 +5980,14 @@ window.YULI_BGM = (function(){
     if (!enabled || !onSchool) return;
     if (!shouldPlay()) return;
     ready(function(){ ensurePlayer(); });
-    if (ytReady && player && !playing){ commanded = false; hold = false; startPlaying(); }
+    if (ytReady && player && !reallyPlaying()){ commanded = false; hold = false; startPlaying(); }
   }
 
   function hitToggle(){
     if (!enabled){ enabled = true; save(); }
     if (!shouldPlay()){ paint(); return; }
     /* 사용자가 직접 멈추면 다음 카운트다운 틱이 다시 켜지 않도록 hold 로 붙잡아 둔다 */
-    if (playing){ hold = true; pausePlaying(); paint(); return; }
+    if (reallyPlaying()){ hold = true; pausePlaying(); paint(); return; }
     hold = false;
     ready(function(){ ensurePlayer(); });
     if (ytReady && player){ commanded = false; startPlaying(); }
@@ -5987,7 +5998,9 @@ window.YULI_BGM = (function(){
     var btn = document.getElementById("bgmToggle");
     var prevBtn = document.getElementById("bgmPrev");
     var hit = document.getElementById("bgmHit");
-    if (btn) btn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); gesturePlay(); toggle(); });
+    /* toggle() 이 켜기/끄기를 스스로 판단한다 — 여기서 gesturePlay() 를 먼저 부르면
+       '멈춘 상태에서 켜기'가 '재생 후 곧바로 음소거'로 뒤집힌다. */
+    if (btn) btn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
     if (prevBtn) prevBtn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); previewToggle(); });
     /* 미니 플레이어는 iframe 위에 얹혀 있어 click 이 삼켜질 때가 있다 —
        pointerdown/touchstart 에서 바로 처리하고, 뒤따르는 click 은 한 번만 받는다. */
@@ -6014,10 +6027,10 @@ window.YULI_BGM = (function(){
   }
 
   function onGesture(e){
-    if (e && e.type === "click"){
-      var t = e.target;
-      if (t && t.closest && t.closest("#bgmToggle,#bgmPrev,#bgmHit")) return;   /* 버튼은 자기 핸들러가 처리 */
-    }
+    var t = e && e.target;
+    /* BGM 칩·미니 플레이어 안쪽 터치는 각자 핸들러가 처리한다 —
+       여기서 먼저 재생을 걸어 버리면 '멈추기'가 '재생'으로 뒤집혀 보인다. */
+    if (t && t.closest && t.closest("#bgmToggle,#bgmPrev,#bgmHit,#bgmBar")) return;
     gesturePlay();
   }
   var GESTURES = ["touchstart", "touchend", "pointerdown", "click", "keydown"];
