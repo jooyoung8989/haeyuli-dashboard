@@ -5989,7 +5989,23 @@ window.YULI_BGM = (function(){
     var hit = document.getElementById("bgmHit");
     if (btn) btn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); gesturePlay(); toggle(); });
     if (prevBtn) prevBtn.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); previewToggle(); });
-    if (hit) hit.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); hitToggle(); });
+    /* 미니 플레이어는 iframe 위에 얹혀 있어 click 이 삼켜질 때가 있다 —
+       pointerdown/touchstart 에서 바로 처리하고, 뒤따르는 click 은 한 번만 받는다. */
+    if (hit){
+      var hitAt = 0;
+      var hitAct = function(e){
+        var t = Date.now();
+        if (t - hitAt < 450) return;
+        hitAt = t;
+        if (e && e.cancelable) e.preventDefault();
+        if (e && e.stopPropagation) e.stopPropagation();
+        hitToggle();
+      };
+      try { hit.addEventListener("pointerdown", hitAct, { passive: false }); }
+      catch(err){ hit.addEventListener("pointerdown", hitAct, false); }
+      hit.addEventListener("touchstart", hitAct, { passive: true });
+      hit.addEventListener("click", hitAct);
+    }
 
     var pane = document.getElementById("pane-school");
     onSchool = !!(pane && pane.classList.contains("active"));
