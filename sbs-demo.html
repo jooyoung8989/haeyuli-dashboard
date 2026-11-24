@@ -63,6 +63,7 @@
   .barfill{position:absolute; left:0; top:0; bottom:0; width:0%; background:linear-gradient(90deg,#6f9bff,#9b7bff); border-radius:99px;}
   .mark{position:absolute; top:50%; width:4px; height:16px; margin-left:-2px; transform:translateY(-50%);
     background:var(--gold); border-radius:2px; opacity:.85;}
+  @media (max-width:520px){ .mark{width:3px; height:11px; margin-left:-1.5px;} }
   .mark.done{background:var(--green);}
   .knob{position:absolute; top:50%; width:14px; height:14px; margin-left:-7px; transform:translateY(-50%);
     background:#fff; border-radius:50%; box-shadow:0 1px 5px rgba(0,0,0,.5); pointer-events:none;}
@@ -118,6 +119,16 @@
   .ghost{background:var(--card); color:var(--txt); border:1px solid var(--line); border-radius:12px;
     padding:13px 18px; font-size:15px; font-weight:800; font-family:inherit; cursor:pointer;}
   .tips{font-size:11.5px; color:#8f9bd6; line-height:1.5; text-align:center; padding:0 6px;}
+
+  /* 가로 모드·낮은 화면: 영상은 위에 붙여 두고 문제 카드만 스크롤 */
+  @media (max-height:640px){
+    header{padding:6px 4px 0;}
+    .brand small{display:none;}
+    .stage{max-height:44vh; position:sticky; top:2px; z-index:9;}
+    .centerplay{width:54px; height:54px; font-size:20px;}
+    .bigstart .playcircle{width:60px; height:60px; font-size:26px;}
+    .bigstart .t2{display:none;}
+  }
 </style>
 </head>
 <body>
@@ -283,6 +294,33 @@
   var seeking = false;
   var DUR = 3464.23;
 
+  /* 문제가 뜰 때 나는 작은 종소리 */
+  var actx = null;
+  function chime(){
+    try{
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return;
+      if(!actx) actx = new AC();
+      if(actx.state === "suspended") actx.resume();
+      var t0 = actx.currentTime;
+      [880, 1320].forEach(function(f, i){
+        var o = actx.createOscillator(), g = actx.createGain();
+        o.type = "sine"; o.frequency.value = f;
+        g.gain.setValueAtTime(0, t0 + i * 0.13);
+        g.gain.linearRampToValueAtTime(0.12, t0 + i * 0.13 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t0 + i * 0.13 + 0.34);
+        o.connect(g); g.connect(actx.destination);
+        o.start(t0 + i * 0.13); o.stop(t0 + i * 0.13 + 0.36);
+      });
+    }catch(e){}
+  }
+
+  function resumePlay(){
+    hideBigStart();
+    var pr = v.play();
+    if(pr && pr.catch){ pr.catch(function(){ centerplay.classList.add("show"); }); }
+  }
+
   /* ================= 진행 바 표시 ================= */
   function fmt(sec){
     if(!isFinite(sec) || sec < 0) sec = 0;
@@ -358,6 +396,7 @@
     });
     quiz.classList.add("show");
     paintCur();
+    chime();
     try{ quiz.scrollIntoView({behavior:"smooth", block:"nearest"}); }catch(e){}
   }
 
@@ -400,7 +439,7 @@
     setTimeout(function(){
       closeQuiz();
       misses = 0;
-      v.play().catch(function(){});
+      resumePlay();
     }, 1150);
   }
 
@@ -410,7 +449,7 @@
 
   function play(){
     hideBigStart();
-    v.play().catch(function(){});
+    resumePlay();
   }
   function togglePlay(){
     if(v.paused){ play(); } else { v.pause(); }
@@ -420,6 +459,7 @@
     var q = QUIZ[i];
     var idx = state.solved.indexOf(i);
     if(idx >= 0) state.solved.splice(idx, 1);   // 다시 풀 수 있게
+    state.stars = state.solved.length;
     save(); paintChapters(); paintMarks();
     closeQuiz(); misses = 0;
     seeking = true;
@@ -427,7 +467,7 @@
     lastTime = v.currentTime;
     seeking = false;
     hideBigStart();
-    v.play().catch(function(){});
+    resumePlay();
     setTimeout(function(){ seeking = false; }, 400);
   }
 
@@ -497,7 +537,7 @@
     $("btnMute").textContent = v.muted ? "🔇" : "🔊";
   });
   $("qskip").addEventListener("click", function(){
-    if(current >= 0){ var i = current; closeQuiz(); v.play().catch(function(){}); }
+    if(current >= 0){ var i = current; closeQuiz(); resumePlay(); }
   });
   $("btnReset").addEventListener("click", function(){
     if(!confirm("별과 푼 문제를 모두 지우고 처음부터 시작할까요?")) return;
@@ -511,7 +551,7 @@
     state.solved = []; state.stars = 0; save();
     paintChapters(); paintMarks();
     v.currentTime = 0; lastTime = 0; closeQuiz();
-    v.play().catch(function(){});
+    resumePlay();
   });
   $("btnJumpBack").addEventListener("click", function(){ jumpTo(QUIZ.length - 1); });
 
