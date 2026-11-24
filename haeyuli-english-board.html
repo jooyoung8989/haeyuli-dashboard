@@ -31124,7 +31124,7 @@ function shaArtDone(d, id){ return !!shSt(d).art[String(id)]; }
 function shaBadges(d, id){
   var h = "";
   if (shaQuizDone(d, id)) h += '<em class="sg-bd q" title="문제를 다 맞혔어요">📝</em>';
-  if (shaArtDone(d, id)) h += '<em class="sg-bd" title="그림을 저장했어요">🎨</em>';
+  if (shaArtDone(d, id) && !(d.k === "nir" || d.k === "ort")) h += '<em class="sg-bd" title="그림을 저장했어요">🎨</em>';
   return h ? '<span class="sg-bds">' + h + '</span>' : "";
 }
 function shaQuizHTML(d, id){
@@ -31166,6 +31166,16 @@ function shaHTML(d, b){
     '<button class="rb-tool" type="button" data-shtool="erase">🧽 지우개</button>' +
     '<button class="rb-tool" type="button" data-shtool="clear">🗑 전체 지우기</button>' +
     '<button class="rb-tool" type="button" data-shtool="save">💾 그림 저장</button>';
+  /* 📘 나우 아임 리딩 · 🌳 ORT 는 그리기 없이 퀴즈·단어 활동만 한다 */
+  var noDraw = (d.k === "nir" || d.k === "ort");
+  var drawCard = noDraw ? "" :
+    '<div class="sga-card"><div class="sga-ch"><b>🎨 기억나는 장면 그리기</b><span>손가락으로 그려요 · 책마다 저장돼요</span></div>' +
+      '<div class="sga-cvbox"><canvas id="shaCanvas" width="720" height="380" aria-label="기억나는 장면 그리기"></canvas></div>' +
+      '<div class="rb-pal" id="shaPal"></div>' +
+      '<div class="rb-pal" style="margin-top:.5vh">' + tools + '</div>' +
+      '<div class="rb-art-thumb" id="shaThumb"' + (art0 ? "" : " hidden") + '>' +
+        (art0 ? '<img src="' + art0 + '" alt="내가 그린 그림"><span>저장한 그림이에요 ✓</span>' : "") + '</div>' +
+      '<p class="sga-tip">그림을 다 그리면 💾 그림 저장을 꼭 눌러 주세요.</p></div>';
   return '<div class="sga-h"><span class="sg-no">' + pad2(b[2]) + '</span>' +
       '<span class="sga-ht"><b>' + esc(b[3]) + '</b><span>' + g[1] + ' ' + esc(g[2]) + ' · ' + esc(b[4]) + ' · 독후활동</span></span>' +
       '<button class="sga-back" type="button" data-shback="1">← ' + esc(d.n) + '</button></div>' +
@@ -31174,13 +31184,7 @@ function shaHTML(d, b){
     '<div class="sga-card" id="nirWB"><div class="sga-ch"><b>🖼️ 그림 단어 · 📒 사이트워드 독후활동</b><span>그림을 누르면 발음이 나와요 · 따라 쓰고 찾고 동그라미</span></div>' +
       '<div class="nwg-grid" id="nirWBGrid">' + nirWBCards(id) + '</div>' +
       '<div class="nw-wb" id="nwWB">' + nirWBSheet(id) + '</div></div>' +
-    '<div class="sga-card"><div class="sga-ch"><b>🎨 기억나는 장면 그리기</b><span>손가락으로 그려요 · 책마다 저장돼요</span></div>' +
-      '<div class="sga-cvbox"><canvas id="shaCanvas" width="720" height="380" aria-label="기억나는 장면 그리기"></canvas></div>' +
-      '<div class="rb-pal" id="shaPal"></div>' +
-      '<div class="rb-pal" style="margin-top:.5vh">' + tools + '</div>' +
-      '<div class="rb-art-thumb" id="shaThumb"' + (art0 ? "" : " hidden") + '>' +
-        (art0 ? '<img src="' + art0 + '" alt="내가 그린 그림"><span>저장한 그림이에요 ✓</span>' : "") + '</div>' +
-      '<p class="sga-tip">그림을 다 그리면 💾 그림 저장을 꼭 눌러 주세요.</p></div>';
+    drawCard;
 }
 function shaPal(){
   var box = $("shaPal"); if (!box) return;
@@ -31332,7 +31336,7 @@ SB.shelf = { render: shPaint, reload: shReloadAll, defs: SHELF_DEFS,
   audioStop: function(){ try { nirAudStop(); } catch(e){} } };
 
 /* ---------- 🔊 나우 아임 리딩 원어민 음원 재생 (한 번에 한 권만 재생) ---------- */
-var NIRPL = { a:null, row:null, id:null, key:"", saved:0, seeking:false, lastSave:0 };
+var NIRPL = { a:null, row:null, id:null, key:"", saved:0, seeking:false, preview:null, lastSave:0 };
 var NPOSK = "haeyuli.nir.pos.v1";
 
 /* ---------- 🔖 어디까지 들었는지 (책마다 저장) ---------- */
@@ -31350,6 +31354,109 @@ function nirPosClear(k){ var o = nirPosAll(); if (o[k] != null){ delete o[k]; tr
 function nirFmt(s){ s = Math.max(0, Math.floor(Number(s) || 0)); var m = Math.floor(s / 60), x = s % 60; return m + ":" + (x < 10 ? "0" : "") + x; }
 function nirNum(v){ return (isFinite(v) && v > 0) ? Number(v) : 0; }
 
+/* 🎚️ 손으로 끄는 탐색 바
+   · 트랙 아무 곳이나 톡 눌러도 그 지점으로 바로 이동한다
+   · 끄는 동안에는 시간 표시·손잡이만 따라오고, 손을 떼는 순간 그 자리에서 재생한다 */
+function nirSeekPaint(t, dur){
+  var bar = document.getElementById("nirSeek"); if (!bar) return;
+  dur = nirNum(dur);
+  var p = dur > 0 ? Math.max(0, Math.min(1, nirNum(t) / dur)) : 0;
+  var pct = (p * 100).toFixed(2) + "%";
+  var fill = document.getElementById("nirSeekFill"), knob = document.getElementById("nirSeekKnob");
+  if (fill) fill.style.width = pct;
+  if (knob) knob.style.left = pct;
+  try {
+    bar.setAttribute("aria-valuenow", String(Math.round(p * 1000)));
+    bar.setAttribute("aria-valuetext", nirFmt(nirNum(t)) + " / " + nirFmt(dur));
+  } catch(e){}
+}
+function nirSeekAt(e){
+  var bar = document.getElementById("nirSeek"), a = NIRPL.a;
+  if (!bar || !a) return null;
+  var tr = document.getElementById("nirSeekTrack") || bar;
+  var r = tr.getBoundingClientRect();
+  var w = r.width || 1;
+  var cx = (e && e.touches && e.touches.length) ? e.touches[0].clientX : (e ? e.clientX : 0);
+  if (!isFinite(cx)) cx = 0;
+  var p = Math.max(0, Math.min(1, (cx - r.left) / w));
+  var dur = nirNum(a.duration);
+  return { p:p, t: dur ? p * dur : 0 };
+}
+function nirSeekPreview(pos){
+  if (!pos) return;
+  NIRPL.seeking = true;
+  NIRPL.preview = pos.t;
+  var a = NIRPL.a;
+  var cEl = document.getElementById("nirDCur");
+  if (cEl) cEl.textContent = nirFmt(pos.t);
+  nirSeekPaint(pos.t, a ? a.duration : 0);
+  var bar = document.getElementById("nirSeek");
+  if (bar) bar.classList.add("dragging");
+}
+function nirSeekDrop(pos){
+  var bar = document.getElementById("nirSeek");
+  if (bar) bar.classList.remove("dragging");
+  var a = NIRPL.a;
+  NIRPL.seeking = false;
+  NIRPL.preview = null;
+  if (!a) return;
+  var dur = nirNum(a.duration);
+  if (!dur || !pos){ nirDockSync(); return; }
+  var t = Math.max(0, Math.min(dur - 0.1, pos.t));
+  try { a.currentTime = t; } catch(e){}
+  NIRPL.preview = null;
+  nirPosSet(NIRPL.key, t);
+  nirSeekPaint(t, dur);
+  nirDockSync();
+}
+function nirSeekBind(bar){
+  if (!bar || bar.__nirseek) return;
+  bar.__nirseek = 1;
+  var dragging = false;
+  function down(e){
+    if (!e) return;
+    if (e.button != null && e.button !== 0) return;
+    dragging = true;
+    try { bar.focus({ preventScroll:true }); } catch(err){ try { bar.focus(); } catch(e2){} }
+    if (e.pointerId != null && bar.setPointerCapture){ try { bar.setPointerCapture(e.pointerId); } catch(err){} }
+    nirSeekPreview(nirSeekAt(e));
+    if (e.cancelable) e.preventDefault();
+  }
+  function move(e){
+    if (!dragging || !e) return;
+    if (e.cancelable) e.preventDefault();
+    nirSeekPreview(nirSeekAt(e));
+  }
+  function up(e){
+    if (!dragging) return;
+    dragging = false;
+    if (e && e.cancelable) e.preventDefault();
+    nirSeekDrop(nirSeekAt(e));
+  }
+  if (window.PointerEvent){
+    bar.addEventListener("pointerdown", down);
+    bar.addEventListener("pointermove", move);
+    bar.addEventListener("pointerup", up);
+    bar.addEventListener("pointercancel", up);
+  } else {
+    bar.addEventListener("touchstart", down, { passive:false });
+    bar.addEventListener("touchmove", move, { passive:false });
+    bar.addEventListener("touchend", up, { passive:false });
+    bar.addEventListener("touchcancel", up, { passive:false });
+    bar.addEventListener("mousedown", down);
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", up);
+  }
+  bar.addEventListener("keydown", function(e){
+    var k = e.key || "";
+    var step = (k === "ArrowRight" || k === "ArrowUp") ? 5 : ((k === "ArrowLeft" || k === "ArrowDown") ? -5 : 0);
+    if (!step) return;
+    var a = NIRPL.a; if (!a) return;
+    e.preventDefault();
+    nirSeekTo(nirNum(a.currentTime) + step);
+  });
+}
+
 /* ---------- 🎚️ 아래에 뜨는 플레이어 (탐색 바 · ±10초) ---------- */
 function nirDock(){
   var d = document.getElementById("nirDock");
@@ -31364,9 +31471,15 @@ function nirDock(){
     + '.nirdock-x{flex:0 0 auto;border:0;background:#f2f6f9;border-radius:50%;width:26px;height:26px;color:#6b8398;font-size:12px;line-height:1;}'
     + '.nirdock-r{display:flex;align-items:center;gap:8px;margin-top:7px;}'
     + '.nirdock-r span{font-size:11px;font-weight:800;color:#8aa6b8;min-width:38px;text-align:center;font-variant-numeric:tabular-nums;}'
-    + '#nirSeek{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:#e2edf5;outline:none;}'
-    + '#nirSeek::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#0d6f9e;box-shadow:0 1px 5px rgba(0,0,0,.25);}'
-    + '#nirSeek::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#0d6f9e;}'
+    + '#nirSeek{flex:1;position:relative;display:flex;align-items:center;height:38px;margin:0 2px;padding:0 14px;box-sizing:border-box;'
+    + 'touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer;outline:none;}'
+    + '.nr-seek-track{position:relative;width:100%;height:10px;border-radius:5px;background:#e2edf5;}'
+    + '.nr-seek-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:5px;background:#8cc7e6;}'
+    + '.nr-seek-knob{position:absolute;top:50%;left:0;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;'
+    + 'background:#0d6f9e;border:3px solid #fff;box-shadow:0 1px 6px rgba(13,111,158,.45);transition:transform .1s ease;}'
+    + '#nirSeek.dragging .nr-seek-knob{transform:scale(1.18);}'
+    + '#nirSeek:focus-visible .nr-seek-track{box-shadow:0 0 0 3px rgba(13,111,158,.22);}'
+    + 'body.nirdock-on .rb-act{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px));}'
     + '.nirdock-b{display:flex;gap:6px;margin-top:7px;}'
     + '.nirdock-b button{flex:1;border:0;background:#f2f8fc;color:#25506d;font-weight:800;font-size:12px;border-radius:10px;padding:8px 0;'
     + 'font-family:inherit;-webkit-tap-highlight-color:transparent;}'
@@ -31379,29 +31492,35 @@ function nirDock(){
   d.innerHTML = '<div class="nirdock-h"><b id="nirDTitle">나우 아임 리딩</b>'
     + '<button class="nirdock-x" type="button" data-nirclose="1" aria-label="플레이어 닫기">✕</button></div>'
     + '<div class="nirdock-r"><span id="nirDCur">0:00</span>'
-    + '<input id="nirSeek" type="range" min="0" max="1000" value="0" step="1" aria-label="듣는 위치 옮기기">'
+    + '<div id="nirSeek" class="nr-seek" role="slider" tabindex="0" aria-label="듣는 위치 옮기기" aria-valuemin="0" aria-valuemax="1000" aria-valuenow="0" aria-valuetext="0:00 / 0:00">'
+    + '<div class="nr-seek-track" id="nirSeekTrack"><div class="nr-seek-fill" id="nirSeekFill"></div><div class="nr-seek-knob" id="nirSeekKnob"></div></div></div>'
     + '<span id="nirDEnd">0:00</span></div>'
     + '<div class="nirdock-b"><button type="button" data-nirseek="-10">⏪ 10초</button>'
     + '<button type="button" class="wide" data-nirplay="1">⏸️ 멈춤</button>'
     + '<button type="button" data-nirseek="10">10초 ⏩</button>'
     + '<button type="button" data-nirfirst="1">⏮ 처음</button></div>';
   document.body.appendChild(d);
+  try { nirSeekBind(d.querySelector("#nirSeek")); } catch(e){}
   return d;
 }
 function nirDockShow(title){
   var d = nirDock(); d.hidden = false;
+  try { document.body.classList.add("nirdock-on"); } catch(e){}
   var t = document.getElementById("nirDTitle"); if (t) t.textContent = title || "나우 아임 리딩";
 }
-function nirDockHide(){ var d = document.getElementById("nirDock"); if (d) d.hidden = true; }
+function nirDockHide(){
+  var d = document.getElementById("nirDock"); if (d) d.hidden = true;
+  try { document.body.classList.remove("nirdock-on"); } catch(e){}
+}
 function nirDockSync(){
   var d = document.getElementById("nirDock"), a = NIRPL.a;
   if (!d || !a) return;
   var dur = nirNum(a.duration), cur = nirNum(a.currentTime);
   var cEl = document.getElementById("nirDCur"), eEl = document.getElementById("nirDEnd");
-  if (cEl) cEl.textContent = nirFmt(cur);
+  var shown = (NIRPL.seeking && NIRPL.preview != null) ? nirNum(NIRPL.preview) : cur;
+  if (cEl) cEl.textContent = nirFmt(shown);
   if (eEl) eEl.textContent = nirFmt(dur);
-  var seek = document.getElementById("nirSeek");
-  if (seek && !NIRPL.seeking) seek.value = dur ? Math.min(1000, Math.round(cur / dur * 1000)) : 0;
+  if (!NIRPL.seeking) nirSeekPaint(cur, dur);
   var pb = d.querySelector("[data-nirplay]");
   if (pb){
     var on = !a.paused && !a.ended;
@@ -31447,14 +31566,14 @@ function nirAudStop(){
     try { P.a.removeAttribute("src"); P.a.load(); } catch(e){}
   }
   nirAudUI("stop");
-  NIRPL = { a:null, row:null, id:null, key:"", saved:0, seeking:false, lastSave:0 };
+  NIRPL = { a:null, row:null, id:null, key:"", saved:0, seeking:false, preview:null, lastSave:0 };
 }
 function nirSeekTo(t){
   var a = NIRPL.a; if (!a) return;
   var dur = nirNum(a.duration); if (!dur) return;
   t = Math.max(0, Math.min(dur - 0.15, t));
   try { a.currentTime = t; } catch(e){}
-  NIRPL.seeking = false;
+  NIRPL.seeking = false; NIRPL.preview = null;
   nirPosSet(NIRPL.key, t);
   nirDockSync();
 }
@@ -31501,7 +31620,7 @@ function nirAudToggle(btn){
   var btEl = row.querySelector(".sg-bt");
   var title = (btEl && btEl.textContent ? btEl.textContent : "") || "나우 아임 리딩";
   var bar = row.querySelector(".sg-ab i");
-  NIRPL = { a:a, row:row, id:id, key:key, saved:nirPosGet(key), seeking:false, lastSave:0 };
+  NIRPL = { a:a, row:row, id:id, key:key, saved:nirPosGet(key), seeking:false, preview:null, lastSave:0 };
   a.addEventListener("loadedmetadata", function(){
     if (NIRPL.a !== a) return;
     var dur = nirNum(a.duration), p = NIRPL.saved;
@@ -31570,19 +31689,7 @@ document.addEventListener("click", function(e){
   if (sk){ if (a) nirSeekTo(nirNum(a.currentTime) + Number(sk.getAttribute("data-nirseek") || 0)); return; }
   if (el.closest("[data-nirfirst]")){ if (a) nirSeekTo(0); return; }
 });
-document.addEventListener("input", function(e){
-  var el = e.target; if (!el || el.id !== "nirSeek") return;
-  var a = NIRPL.a; if (!a) return;
-  NIRPL.seeking = true;
-  var dur = nirNum(a.duration); if (!dur) return;
-  var t = dur * (Number(el.value) / 1000);
-  var cEl = document.getElementById("nirDCur"); if (cEl) cEl.textContent = nirFmt(t);
-  try { a.currentTime = t; } catch(e){}
-}, false);
-document.addEventListener("change", function(e){
-  var el = e.target; if (!el || el.id !== "nirSeek") return;
-  NIRPL.seeking = false; nirSavePos(); nirDockSync();
-}, false);
+/* 탐색 바는 #nirSeek 안에서 직접 포인터 이벤트로 처리한다 (iOS 사파리 터치 포함) */
 window.addEventListener("pagehide", function(){ try { nirSavePos(); } catch(e){} });
 document.addEventListener("visibilitychange", function(){
   if (document.visibilityState === "hidden"){ try { nirSavePos(); } catch(e){} }
