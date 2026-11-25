@@ -6752,7 +6752,7 @@ body.mob .gd-svg{max-width:100%;}
 .mq-free{margin:.7rem 1vh 0;padding:.6rem .7rem;border-radius:.8rem;background:#fbfdfe;box-shadow:inset 0 0 0 1.4px #e6f0f7;
   font-size:clamp(.72rem,1.5vh,.86rem);font-weight:800;color:#7d8b98;line-height:1.45;}
 
-/* 🏫 교과서 핵심한자 — 오늘의 두 낱말 */
+/* 🏫 교과서 핵심한자 — 오늘의 세 낱말 */
 .ht-today{margin:.2vh 0 .6vh;}
 .htt-head{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin-bottom:.5vh;}
 .htt-head b{font-size:clamp(1rem,2.1vh,1.25rem);font-weight:900;color:#1e5478;}
@@ -7665,6 +7665,28 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
 }
 
 </style>
+<style id="qs3css">
+/* 2026-11-25 · 한 세트 3문제 진행 표시 (사고력 · 도형 · 2학년 수학 · 한자) */
+.qs3{display:flex;align-items:center;gap:.45rem;margin:.15rem 0 .55rem;flex-wrap:wrap;}
+.qs3-badge{flex:0 0 auto;min-width:2.9rem;text-align:center;padding:.14rem .5rem;border-radius:999px;
+  background:#1e6fa8;color:#fff;font-size:clamp(.72rem,1.5vh,.88rem);font-weight:900;letter-spacing:.02em;}
+.qs3-bar{position:relative;flex:1 1 3rem;height:.44rem;min-width:2.2rem;border-radius:999px;background:#e3eef7;overflow:hidden;}
+.qs3-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#48b0e8,#1e6fa8);transition:width .25s;}
+.qs3-note{flex:0 0 auto;font-size:clamp(.66rem,1.4vh,.8rem);font-weight:800;color:#7d93a4;}
+.qs3-nextbar{display:flex;justify-content:flex-end;margin-top:.55rem;}
+.qs3-next{padding:.45rem .95rem;border:0;border-radius:.7rem;background:#1e6fa8;color:#fff;
+  font-size:clamp(.8rem,1.7vh,.95rem);font-weight:900;cursor:pointer;box-shadow:0 2px 6px rgba(30,111,168,.28);}
+.qs3-next:active{transform:translateY(1px);}
+.qs3-end{margin:.3rem 0;padding:.9rem .8rem;border-radius:.9rem;background:#f2fbf5;
+  box-shadow:inset 0 0 0 1.6px #c8ecd3;text-align:center;}
+.qs3-end b{display:block;font-size:clamp(.95rem,2vh,1.15rem);font-weight:900;color:#1c7a4a;}
+.qs3-end p{margin:.3rem 0 .6rem;font-size:clamp(.74rem,1.5vh,.9rem);font-weight:800;color:#6d8a79;}
+.qs3-end .mini{padding:.4rem .85rem;}
+.gd-left{font-weight:900;color:#1e6fa8;}
+.gd-btn.go{background:#1e6fa8;color:#fff;border-color:#1e6fa8;}
+.htm-cnt{flex:0 0 auto;padding:.1rem .45rem;border-radius:999px;background:#1e6fa8;color:#fff;
+  font-size:clamp(.66rem,1.4vh,.8rem);font-weight:900;}
+</style>
 </head>
 <body class="mob">
 <script>window.__uHot=0;(function(){var st=function(){window.__uHot=Date.now();};["pointerdown","touchstart","mousedown","keydown","input","change"].forEach(function(t){document.addEventListener(t,st,{capture:true,passive:true});});})();</script>
@@ -8505,7 +8527,7 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
       <div class="mq-wrap">
         <div class="mq-top">
           <b>2️⃣ 2학년 수학</b>
-          <span>교육과정 2학년 · 2-1 6단원 + 2-2 6단원 · 하루 1문제씩 그림과 함께</span>
+          <span>교육과정 2학년 · 2-1 6단원 + 2-2 6단원 · 하루 3문제씩 그림과 함께</span>
         </div>
         <div class="mq-steps" id="g2Steps" role="group" aria-label="2학년 수학 단원 고르기"></div>
         <div class="mq-body">
@@ -9003,7 +9025,7 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
           <div class="hj-title"><b>🏫 교과서 핵심한자</b><span id="htTopic">3학년 1학기 사회 · 우리가 사는 곳</span></div>
           <div class="hj-tools"><span class="hj-num" id="htNum">1 / 12</span></div>
         </div>
-        <p class="hj-tip">충남교육청 「교과서 핵심한자 뜻이랑 소리랑」 3학년 사회·과학 — 글자 그림 두 개가 만나 낱말이 돼요. 하루 두 낱말씩!</p>
+        <p class="hj-tip">충남교육청 「교과서 핵심한자 뜻이랑 소리랑」 3학년 사회·과학 — 글자 그림 두 개가 만나 낱말이 돼요. 하루 세 낱말씩!</p>
         <div class="ht-today" id="htToday"></div>
         <div class="ht-rest" id="htRest" hidden>
         <div class="ht-sets" id="htSets" role="group" aria-label="교과서 핵심한자 단원 고르기"></div>
@@ -18077,74 +18099,140 @@ var SHAPE = [
     o:["직사각형", "삼각형", "원", "오각형"], a:"직사각형", why:"책의 위에서 본 모양은 길쭉한 네모, 곧 직사각형이에요." }
 ];
 
-var TS = { ti:0, si:0 };
+/* 2026-11-25 — 사고력·도형을 '한 세트 3문제'로 바꿔 하루 3문제씩 풀어요 */
+var TH_SET = 3;
+var TS = { ti:0, si:0, tpos:0, spos:0, tact:false, sact:false, tfin:false, sfin:false, tgain:0, sgain:0 };
 
-function thinkBind(panel, attr, item, key, label){
+/* 1 / 3 배지 + 진행 바 — 아이가 몇 문제 남았는지 한눈에 보여요 */
+function qs3Bar(pos, total, done){
+  var w = Math.round((done ? total : (pos + 1)) / total * 100);
+  return '<div class="qs3"><span class="qs3-badge">' + (done ? "⭐ 완료" : (pos + 1) + " / " + total) + '</span>'
+    + '<span class="qs3-bar"><i style="width:' + w + '%"></i></span>'
+    + '<span class="qs3-note">' + (done ? "오늘 " + total + "문제 끝!" : total + "문제 중 " + (pos + 1) + "번째") + '</span></div>';
+}
+function qs3Gain(key, label, total){
+  var got = 0;
+  try { got = SB.earn(key, 1) || 0; } catch(e){ got = 0; }
+  try { SB.markAttendance("math"); } catch(e){}
+  try {
+    if (got){ SB.confetti(); SB.toast("🎉 " + label + " " + total + "문제 완료! ⭐ +" + got); }
+    else { SB.confetti(); SB.toast("🎉 " + label + " " + total + "문제 완료! (오늘 별은 이미 받았어요)"); }
+  } catch(e){}
+  return got;
+}
+function qs3Bind(panel, attr, item, onRight){
   var btns = panel.querySelectorAll("[" + attr + "]");
   for (var i = 0; i < btns.length; i++) (function(b){
     b.addEventListener("click", function(){
       var v = b.getAttribute(attr);
-      if (v === item.a){
-        b.classList.add("ok");
-        var got = 0;
-        try { got = SB.earn(key, 1); } catch(e){ got = 0; }
-        try { SB.markAttendance("math"); } catch(e){}
-        var why = panel.querySelector(".think-why"); if (why) why.hidden = false;
-        if (got) SB.starFX(got, label + " 정답!"); else SB.toast("정답! 💡 " + item.why);
-      } else {
-        b.classList.add("no");
-        SB.toast("한 번 더 살펴봐요 · 그림을 천천히 보면 보여요 🔍");
-      }
+      if (v === item.a) onRight();
+      else { b.classList.add("no"); SB.toast("한 번 더 살펴봐요 · 그림을 천천히 보면 보여요 🔍"); }
     });
   })(btns[i]);
 }
+
 function paintThink(){
   var tp = $("thinkPanel"); if (!tp) return;
-  var t = THINK[TS.ti % THINK.length];
-  tp.setAttribute("data-ti", String(TS.ti % THINK.length));
+  var L = THINK.length, total = TH_SET, pos = TS.tpos % total;
   var key = SB.today() + "|math|think", done = !!SB.readDash().led[key];
-  tp.innerHTML = '<div class="panel-h"><b>🧠 오늘의 사고력</b>'
+  var idx = (TS.ti + pos) % L, t = THINK[idx];
+  tp.setAttribute("data-ti", String(idx));
+  var head = '<div class="panel-h"><b>🧠 오늘의 사고력</b>'
       + '<span class="ph-no2">' + (done ? "⭐ 완료" : "⭐ +1") + '</span>'
-      + '<button class="mini" type="button" data-tnew="1">🔄 다른 문제</button></div>'
+      + '<button class="mini" type="button" data-tnew="1">🔄 다른 문제</button></div>';
+  if (TS.tfin){
+    tp.innerHTML = head + qs3Bar(total, total, true)
+      + '<div class="qs3-end"><b>🎉 오늘 사고력 ' + total + '문제 완료!</b>'
+      + '<p>' + (TS.tgain > 0 ? "⭐ +" + TS.tgain + " 받았어요." : "별은 이미 받았어요.") + ' 새 문제로 한 세트 더 할 수 있어요.</p>'
+      + '<button class="mini" type="button" data-tnew="1">🔄 새 문제 ' + total + '개</button></div>';
+    var nds = tp.querySelectorAll("[data-tnew]");
+    for (var nq = 0; nq < nds.length; nq++) nds[nq].addEventListener("click", thinkNewSet);
+    return;
+  }
+  tp.innerHTML = head + qs3Bar(pos, total, false)
     + '<div class="think-body story">'
       + '<div class="think-art">' + t.svg + '</div>'
       + '<p class="think-q">' + esc(t.q) + '</p>'
       + '<div class="think-opts">' + t.o.map(function(o){
-          return '<button class="think-opt" type="button" data-think="' + esc(o) + '">' + esc(o) + '</button>';
+          return '<button class="think-opt' + (TS.tact && o === t.a ? " ok" : "") + '" type="button" data-think="' + esc(o) + '">' + esc(o) + '</button>';
         }).join("") + '</div>'
-      + '<p class="think-why" hidden>💡 ' + esc(t.why) + '</p>'
+      + (TS.tact ? '<p class="think-why">💡 ' + esc(t.why) + '</p>' : '<p class="think-why" hidden></p>')
+      + (TS.tact ? '<div class="qs3-nextbar"><button class="qs3-next" type="button" data-tnext="1">'
+          + (pos + 1 < total ? "다음 문제 →" : "🎉 " + total + "문제 마치기") + '</button></div>' : "")
     + '</div>';
-  thinkBind(tp, "data-think", t, key, "🧠 사고력");
+  qs3Bind(tp, "data-think", t, function(){ if (TS.tact) return; TS.tact = true; paintThink(); });
   var nb = tp.querySelector("[data-tnew]");
-  if (nb) nb.addEventListener("click", function(){ TS.ti = (TS.ti + 1) % THINK.length; paintThink(); });
+  if (nb) nb.addEventListener("click", thinkNewSet);
+  var nx = tp.querySelector("[data-tnext]");
+  if (nx) nx.addEventListener("click", thinkNext);
 }
+function thinkNewSet(){
+  TS.ti = (TS.ti + TH_SET) % THINK.length;
+  TS.tpos = 0; TS.tact = false; TS.tfin = false; TS.tgain = 0;
+  paintThink();
+}
+function thinkNext(){
+  if (!TS.tact) return;
+  if (TS.tpos + 1 < TH_SET){ TS.tpos++; TS.tact = false; paintThink(); return; }
+  TS.tfin = true;
+  TS.tgain = qs3Gain(SB.today() + "|math|think", "🧠 사고력", TH_SET);
+  paintThink();
+}
+
 function paintShape(){
   var sp = $("shapePanel"); if (!sp) return;
-  var s = SHAPE[TS.si % SHAPE.length];
-  sp.setAttribute("data-si", String(TS.si % SHAPE.length));
+  var L = SHAPE.length, total = TH_SET, pos = TS.spos % total;
   var key = SB.today() + "|math|shape", done = !!SB.readDash().led[key];
-  sp.innerHTML = '<div class="panel-h"><b>🔺 도형 이름 맞추기</b>'
+  var idx = (TS.si + pos) % L, s = SHAPE[idx];
+  sp.setAttribute("data-si", String(idx));
+  var head = '<div class="panel-h"><b>🔺 도형 이름 맞추기</b>'
       + '<span class="ph-no2">' + (done ? "⭐ 완료" : "⭐ +1") + '</span>'
-      + '<button class="mini" type="button" data-snew="1">🔄 다른 문제</button></div>'
+      + '<button class="mini" type="button" data-snew="1">🔄 다른 문제</button></div>';
+  if (TS.sfin){
+    sp.innerHTML = head + qs3Bar(total, total, true)
+      + '<div class="qs3-end"><b>🎉 오늘 도형 ' + total + '문제 완료!</b>'
+      + '<p>' + (TS.sgain > 0 ? "⭐ +" + TS.sgain + " 받았어요." : "별은 이미 받았어요.") + ' 새 문제로 한 세트 더 할 수 있어요.</p>'
+      + '<button class="mini" type="button" data-snew="1">🔄 새 문제 ' + total + '개</button></div>';
+    var nds2 = sp.querySelectorAll("[data-snew]");
+    for (var nq2 = 0; nq2 < nds2.length; nq2++) nds2[nq2].addEventListener("click", shapeNewSet);
+    return;
+  }
+  sp.innerHTML = head + qs3Bar(pos, total, false)
     + '<div class="think-body story">'
       + '<div class="shape-art">' + s.svg + '</div>'
       + '<p class="think-q">' + esc(s.q) + '</p>'
       + '<div class="think-opts">' + s.o.map(function(o){
-          return '<button class="think-opt" type="button" data-shape="' + esc(o) + '">' + esc(o) + '</button>';
+          return '<button class="think-opt' + (TS.sact && o === s.a ? " ok" : "") + '" type="button" data-shape="' + esc(o) + '">' + esc(o) + '</button>';
         }).join("") + '</div>'
-      + '<p class="think-why" hidden>💡 ' + esc(s.why) + '</p>'
+      + (TS.sact ? '<p class="think-why">💡 ' + esc(s.why) + '</p>' : '<p class="think-why" hidden></p>')
+      + (TS.sact ? '<div class="qs3-nextbar"><button class="qs3-next" type="button" data-snext="1">'
+          + (pos + 1 < total ? "다음 문제 →" : "🎉 " + total + "문제 마치기") + '</button></div>' : "")
     + '</div>';
-  thinkBind(sp, "data-shape", s, key, "🔺 도형");
+  qs3Bind(sp, "data-shape", s, function(){ if (TS.sact) return; TS.sact = true; paintShape(); });
   var nb = sp.querySelector("[data-snew]");
-  if (nb) nb.addEventListener("click", function(){ TS.si = (TS.si + 1) % SHAPE.length; paintShape(); });
+  if (nb) nb.addEventListener("click", shapeNewSet);
+  var nx = sp.querySelector("[data-snext]");
+  if (nx) nx.addEventListener("click", shapeNext);
+}
+function shapeNewSet(){
+  TS.si = (TS.si + TH_SET) % SHAPE.length;
+  TS.spos = 0; TS.sact = false; TS.sfin = false; TS.sgain = 0;
+  paintShape();
+}
+function shapeNext(){
+  if (!TS.sact) return;
+  if (TS.spos + 1 < TH_SET){ TS.spos++; TS.sact = false; paintShape(); return; }
+  TS.sfin = true;
+  TS.sgain = qs3Gain(SB.today() + "|math|shape", "🔺 도형", TH_SET);
+  paintShape();
 }
 function renderThink(){
   var d = new Date();
   TS.ti = (d.getDate() + d.getMonth() + 3) % THINK.length;
   TS.si = (d.getDate() + d.getMonth() + 8) % SHAPE.length;
+  TS.tpos = 0; TS.spos = 0; TS.tact = false; TS.sact = false; TS.tfin = false; TS.sfin = false; TS.tgain = 0; TS.sgain = 0;
   paintThink(); paintShape();
 }
-
 /* ---------------------------- 📐 설정 › 학습 설정 탭 ---------------------------- */
 function learnPane(){ return document.querySelector('#settingsModal [data-setpane="learn"]'); }
 function renderLearnPane(){
@@ -35644,10 +35732,10 @@ function smBind(){
 }
 
 /* ==================================================================
-   ②③ 기초수학 1 / 2학년 수학 — 단원별 개념 + 6문제
+   ② 기초수학 1 — 단원별 개념 + 문제 / ③ 2학년 수학 — 하루 3문제 세트
    ================================================================== */
 var B1 = [{"nm":"① 10 만들기·가르기","tip":"10이 되는 두 수를 알면 셈이 아주 빨라져요.","qs":[{"q":"7 + □ = 10","num":3,"hint":"7에 3을 더하면 10이 돼요."},{"q":"6 + 4 = ?","num":10,"hint":"6과 4를 모으면 10이에요."},{"q":"10을 4와 □로 가르면?","num":6,"hint":"10에서 4를 빼면 6이에요."},{"q":"3과 7을 모으면 얼마일까요?","o":["9","10","11"],"a":1,"hint":"3 + 7 = 10"},{"q":"8 + 2 = ?","num":10,"hint":"8에 2를 더하면 10이에요."},{"q":"10을 7과 □로 가르면?","num":3,"hint":"10 - 7 = 3"},{"q":"9 + □ = 10","num":1,"hint":"9에 1을 더하면 10이에요."},{"q":"5 + 5 = ?","num":10,"hint":"5와 5를 모으면 10이에요."},{"q":"10을 2와 □로 가르면?","num":8,"hint":"10 - 2 = 8"},{"q":"4 + 6 = ?","num":10,"hint":"4와 6은 짝이에요."},{"q":"2 + □ = 10","num":8,"hint":"2에 8을 더하면 10이 돼요."},{"q":"10을 8과 □로 가르면?","num":2,"hint":"10에서 8을 빼면 2가 남아요."},{"q":"형광펜 10자루 중 4자루를 친구에게 줬어요. 남은 형광펜은?","num":6,"hint":"10 - 4 = 6"}],"points":["10이 되는 두 수 찾기 (7+3, 6+4)","10을 두 수로 가르기"],"ex":"7 + 3 = 10 · 10 - 6 = 4"},{"nm":"② 10에서 빼기","tip":"10에서 빼면 남는 수를 바로 알 수 있어요.","qs":[{"q":"10 - 3 = ?","num":7,"hint":"10을 3과 7로 가르면 7이 남아요."},{"q":"10 - 8 = ?","num":2,"hint":"10을 8과 2로 가르면 2가 남아요."},{"q":"10 - 5 = ?","num":5,"hint":"10을 반으로 가르면 5와 5예요."},{"q":"사과 10개 중 4개를 먹었어요. 남은 사과는 몇 개?","num":6,"hint":"10 - 4 = 6"},{"q":"10 - 7 = ?","num":3,"hint":"7에 3을 더하면 10이에요."},{"q":"10 - 9 = ?","num":1,"hint":"9에 1을 더하면 10이에요."},{"q":"10 - 2 = ?","num":8,"hint":"10을 2와 8로 가르면 8"},{"q":"10 - 6 = ?","num":4,"hint":"6에 4를 더하면 10이에요."},{"q":"10 - 1 = ?","num":9,"hint":"10에서 1을 빼면 9"},{"q":"사탕 10개 중 3개를 먹었어요. 남은 사탕은?","num":7,"hint":"10 - 3 = 7"},{"q":"10 - □ = 2","num":8,"hint":"10을 2와 8로 가르면 돼요."},{"q":"풍선 10개 중 7개가 하늘로 날아갔어요. 남은 풍선은?","num":3,"hint":"10 - 7 = 3"},{"q":"10 - 3 - 2 = ?","num":5,"hint":"10 - 3 = 7, 7 - 2 = 5"}],"points":["10에서 몇을 빼면 얼마 남는지","그림을 보고 빼기"],"ex":"10 - 3 = 7"},{"nm":"③ 한 자리 덧셈·뺄셈","tip":"10을 넘으면 10을 먼저 만들어요.","qs":[{"q":"5 + 8 = ?","num":13,"hint":"5 + 5 = 10, 남은 3을 더하면 13이에요."},{"q":"9 + 6 = ?","num":15,"hint":"9 + 1 = 10, 남은 5를 더하면 15예요."},{"q":"12 - 7 = ?","num":5,"hint":"12를 10과 2로 나누어 10 - 7 = 3, 3 + 2 = 5"},{"q":"14 - 6 = ?","num":8,"hint":"10 - 6 = 4, 4 + 4 = 8"},{"q":"8 + 7 = ?","num":15,"hint":"8 + 2 = 10, 남은 5를 더하면 15예요."},{"q":"13 - 5 = ?","num":8,"hint":"10 - 5 = 5, 5 + 3 = 8"},{"q":"7 + 6 = ?","num":13,"hint":"7 + 3 = 10, 남은 3을 더해 13"},{"q":"9 + 8 = ?","num":17,"hint":"9 + 1 = 10, 남은 7을 더해 17"},{"q":"15 - 8 = ?","num":7,"hint":"10 - 8 = 2, 2 + 5 = 7"},{"q":"11 - 4 = ?","num":7,"hint":"10 - 4 = 6, 6 + 1 = 7"},{"q":"8 + 9 = ?","num":17,"hint":"8 + 2 = 10, 남은 7을 더하면 17이에요."},{"q":"16 - 9 = ?","num":7,"hint":"10 - 9 = 1, 1 + 6 = 7"},{"q":"13 - 4 = ?","num":9,"hint":"10 - 4 = 6, 6 + 3 = 9"}],"points":["10을 넘는 한 자리 덧셈","십몇에서 한 자리 빼기"],"ex":"8 + 7 = 15"},{"nm":"④ 두 자리 수와 자리값","tip":"십의 자리와 일의 자리를 하나씩 살펴봐요.","qs":[{"q":"46은 십 몇 개와 일 몇 개일까요?","o":["십 4개, 일 6개","십 6개, 일 4개","십 4개, 일 4개"],"a":0,"hint":"46에서 4는 십의 자리, 6은 일의 자리예요."},{"q":"73에서 십의 자리 숫자는?","o":["7","3","0"],"a":0,"hint":"73에서 앞에 있는 7이 십의 자리 숫자예요."},{"q":"52에서 일의 자리 숫자는?","num":2,"hint":"52에서 뒤에 있는 2가 일의 자리 숫자예요."},{"q":"10이 3개, 1이 5개인 수는?","num":35,"hint":"십 3개는 30, 일 5개는 5 — 모두 35예요."},{"q":"80 + 7 = ?","num":87,"hint":"80에 7을 더하면 87이에요."},{"q":"90은 십 몇 개일까요?","num":9,"hint":"90은 십이 9개 모인 수예요."},{"q":"68은 십 몇 개와 일 몇 개일까요?","o":["십 6개, 일 8개","십 8개, 일 6개","십 6개, 일 6개"],"a":0,"hint":"앞이 십, 뒤가 일이에요."},{"q":"95에서 십의 자리 숫자는?","num":9,"hint":"앞에 있는 9가 십의 자리"},{"q":"70 + 5 = ?","num":75,"hint":"70에 5를 더하면 75"},{"q":"10이 8개인 수는?","num":80,"hint":"십이 8개면 80"},{"q":"57에서 십의 자리 숫자는?","num":5,"hint":"앞에 있는 5가 십의 자리 숫자예요."},{"q":"10이 6개, 1이 1개인 수는?","num":61,"hint":"60 + 1 = 61"},{"q":"40 + 8 = ?","num":48,"hint":"40에 8을 더하면 48이에요."}],"points":["십의 자리 숫자·일의 자리 숫자","10이 몇 개, 1이 몇 개인지"],"ex":"46 = 십 4개 + 일 6개"},{"nm":"⑤ 두 수 크기 비교","tip":"큰 수를 먼저 보고 >, < 를 골라요.","qs":[{"q":"74 ○ 77 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"74는 77보다 작아요."},{"q":"56 ○ 65 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"십의 자리 5와 6을 먼저 비교해요."},{"q":"90 ○ 89 에 들어갈 말은?","o":["<",">","="],"a":1,"hint":"90은 89보다 커요."},{"q":"48 ○ 48 에 들어갈 말은?","o":["<",">","="],"a":2,"hint":"두 수가 똑같아요."},{"q":"가장 큰 수는 어느 것일까요?","o":["67","76","70"],"a":1,"hint":"십의 자리가 7인 수 중에서 6이 큰 수예요."},{"q":"가장 작은 수는 어느 것일까요?","o":["58","85","80"],"a":0,"hint":"십의 자리가 5인 수가 가장 작아요."},{"q":"45 ○ 54 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"십의 자리 4와 5를 비교해요."},{"q":"88 ○ 88 에 들어갈 말은?","o":["<",">","="],"a":2,"hint":"두 수가 똑같아요."},{"q":"39 ○ 31 에 들어갈 말은?","o":["<",">","="],"a":1,"hint":"십의 자리는 같고 일의 자리 9 > 1"},{"q":"가장 큰 수는?","o":["72","27","70"],"a":0,"hint":"십의 자리가 가장 큰 수예요."},{"q":"63 ○ 36 에 들어갈 말은?","o":["<",">","="],"a":1,"hint":"십의 자리 6과 3을 비교해요."},{"q":"가장 큰 수는 어느 것일까요?","o":["45","54","49"],"a":1,"hint":"십의 자리가 5인 수가 가장 커요."},{"q":"19 ○ 91 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"십의 자리 1과 9를 비교해요."}],"points":["두 수의 크기를 >, < 로 비교","가장 큰 수·가장 작은 수"],"ex":"74 < 77"},{"nm":"⑥ 시계 보기","tip":"짧은바늘은 시, 긴바늘은 분을 가리켜요.","qs":[{"q":"시계가 가리키는 시각은?","clk":"5,0","o":["5시","6시","12시"],"a":0,"hint":"짧은바늘이 5, 긴바늘이 12를 가리켜요."},{"q":"시계가 가리키는 시각은?","clk":"11,0","o":["1시","11시","10시"],"a":1,"hint":"짧은바늘이 11에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"3,0","o":["3시","12시","9시"],"a":0,"hint":"짧은바늘이 3, 긴바늘이 12예요."},{"q":"시계가 가리키는 시각은?","clk":"8,0","o":["7시","8시","9시"],"a":1,"hint":"짧은바늘이 8에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"2,30","o":["2시 30분","3시 30분","2시 6분"],"a":0,"hint":"긴바늘이 6이면 30분이에요."},{"q":"시계가 가리키는 시각은?","clk":"9,30","o":["9시","9시 30분","8시 30분"],"a":1,"hint":"긴바늘이 6을 가리키면 30분이에요."},{"q":"시계가 가리키는 시각은?","clk":"4,0","o":["4시","5시","12시"],"a":0,"hint":"긴바늘이 12면 정각이에요."},{"q":"시계가 가리키는 시각은?","clk":"10,30","o":["10시 30분","11시 30분","10시 6분"],"a":0,"hint":"긴바늘이 6이면 30분"},{"q":"시계가 가리키는 시각은?","clk":"7,0","o":["6시","7시","8시"],"a":1,"hint":"짧은바늘이 7에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"12,0","o":["12시","1시","6시"],"a":0,"hint":"두 바늘이 모두 12를 가리켜요."},{"q":"시계가 가리키는 시각은?","clk":"5,30","o":["5시 30분","6시 30분","5시 6분"],"a":0,"hint":"긴바늘이 6이면 30분이에요."},{"q":"시계가 가리키는 시각은?","clk":"8,30","o":["8시","8시 30분","9시 30분"],"a":1,"hint":"짧은바늘은 8과 9 사이에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"12,30","o":["12시 30분","1시 30분","12시 6분"],"a":0,"hint":"긴바늘이 6이면 30분이에요."}],"points":["몇 시·몇 시 30분 읽기","짧은바늘은 시, 긴바늘은 분"],"ex":"짧은바늘 5, 긴바늘 12 → 5시"}];
-/* ===== 2️⃣ 2학년 수학 — 교육과정 순서대로, 하루 1문제 + 큰 그림 설명 ===== */
+/* ===== 2️⃣ 2학년 수학 — 교육과정 순서대로, 하루 3문제 + 큰 그림 설명 ===== */
 var G2 = [
  { nm:"① 세 자리 수", sem:"2-1", art:"p3", tip:"백·십·일 자리를 하나씩 보면 큰 수도 쉽게 읽어요.",
    qs:[
@@ -35992,10 +36080,17 @@ function b1Start(){ unitBind(B1CFG); unitStart(B1CFG); }
 function g2Start(){ g2Start_guided(); }
 
 /* ==================================================================
-   2️⃣ 2학년 수학 — 하루 1문제 · 큰 그림 개념 설명 (2022 개정 교육과정 순서)
+   2️⃣ 2학년 수학 — 하루 3문제 · 큰 그림 개념 설명 (2022 개정 교육과정 순서)
    ================================================================== */
-var GD = { unit:0, idx:0, done:false, typed:"", tries:0, drawn:false };
+var GD = { unit:0, idx:0, done:false, typed:"", tries:0, drawn:false, set:[], pos:0, fin:false, gain:0 };
 function g2Day(){ try { return parseInt(String(SB.today() || "").replace(/\D/g, ""), 10) || 0; } catch(e){ return 0; } }
+/* 세트 진행 표시 — 사고력·도형과 같은 모양 (이 파일 안에서도 쓸 수 있게 따로 둬요) */
+function qs3Bar(pos, total, done){
+  var w = Math.round((done ? total : (pos + 1)) / total * 100);
+  return '<div class="qs3"><span class="qs3-badge">' + (done ? "⭐ 완료" : (pos + 1) + " / " + total) + '</span>'
+    + '<span class="qs3-bar"><i style="width:' + w + '%"></i></span>'
+    + '<span class="qs3-note">' + (done ? "오늘 " + total + "문제 끝!" : total + "문제 중 " + (pos + 1) + "번째") + '</span></div>';
+}
 function g2Auto(u){
   var n = G2[u].qs.length, dd = g2Day() % 10000;
   for (var k = 0; k < n; k++){
@@ -36003,6 +36098,21 @@ function g2Auto(u){
     if (G2[u].qs[f] && G2[u].qs[f].d === dd) return f;
   }
   return ((g2Day() + u * 3) % n + n) % n;
+}
+/* 하루 3문제 — 오늘 날짜로 표시된 문제(d)를 먼저 쓰고, 모자라면 이어지는 문제로 채워요 */
+var GD_SET = 3;
+function g2Set(u){
+  var n = G2[u].qs.length, dd = g2Day() % 10000, out = [], k;
+  for (k = 0; k < n && out.length < GD_SET; k++){
+    var f = ((k + u * 3) % n + n) % n;
+    if (G2[u].qs[f] && G2[u].qs[f].d === dd && out.indexOf(f) < 0) out.push(f);
+  }
+  var base = g2Auto(u);
+  for (k = 0; out.length < GD_SET && k < n * 2; k++){
+    var i = ((base + k) % n + n) % n;
+    if (out.indexOf(i) < 0) out.push(i);
+  }
+  return out.slice(0, GD_SET);
 }
 function gdSvg(inner, vb, cls){
   return '<svg class="' + (cls || "gd-svg") + '" viewBox="' + (vb || "0 0 320 220") + '" role="img" aria-hidden="true">' + inner + "</svg>";
@@ -36154,15 +36264,25 @@ function gdUnitCard(){
     + '<div class="gd-figure">' + gdArt(q) + "</div>"
     + '<p class="gd-h">이렇게 생각해요</p>'
     + '<ol class="gd-steps">' + (q.st || []).map(function(s){ return "<li>" + esc(s) + "</li>"; }).join("") + "</ol>"
-    + '<p class="mq-note">교육과정 2학년 · 하루 1문제씩 그림과 함께 천천히</p>';
+    + '<p class="mq-note">교육과정 2학년 · 하루 3문제씩 그림과 함께 천천히</p>';
 }
 function gdQuestion(){
   var box = $("g2QBody"); if (!box) return;
-  var u = G2[GD.unit], q = u.qs[GD.idx];
-  var h = '<p class="gd-q">' + esc(q.q) + "</p>";
+  var u = G2[GD.unit], q = u.qs[GD.idx], total = GD_SET;
+  var qt = $("g2QTitle"); if (qt) qt.textContent = u.nm + " · 오늘의 " + total + "문제";
+  var pr = $("g2Prog"); if (pr) pr.textContent = (GD.fin ? total : (GD.pos + 1)) + " / " + total;
+  if (GD.fin){
+    box.innerHTML = qs3Bar(total, total, true) + '<div class="qs3-end"><b>🎉 오늘 ' + total + '문제 완료!</b>'
+      + '<p>' + (GD.gain > 0 ? "⭐ +" + GD.gain + " 받았어요." : "별은 이미 받았어요.") + '</p>'
+      + '<div class="gd-bar"><button class="gd-btn" type="button" data-gd="more">🔁 다른 문제 3개</button>'
+      + '<button class="gd-btn" type="button" data-gd="nextunit">➡️ 다음 단원</button></div></div>';
+    return;
+  }
+  var h = qs3Bar(GD.pos, total, false)
+    + '<p class="gd-q">' + esc(q.q) + "</p>";
   if (q.o && q.o.length){
     h += '<div class="gd-opts">' + q.o.map(function(t, i){
-      return '<button class="gd-opt" type="button" data-gd="o" data-v="' + i + '">' + esc(t) + "</button>";
+      return '<button class="gd-opt' + (GD.done && i === q.a ? " ok" : "") + '" type="button" data-gd="o" data-v="' + i + '">' + esc(t) + "</button>";
     }).join("") + "</div>";
   } else {
     h += '<div class="gd-in"><b id="gdTyped">' + (GD.typed || "?") + '</b><span class="gd-unitlbl">' + (q.unit || "") + "</span></div>"
@@ -36174,24 +36294,22 @@ function gdQuestion(){
       + "</div>";
   }
   h += '<div class="gd-fb" id="gdFb" aria-live="polite" hidden></div>'
-    + '<div class="gd-bar"><button class="gd-btn" type="button" data-gd="more">🔁 다른 문제 하나 더</button>'
+    + '<div class="gd-bar">'
+    + (GD.done ? '<button class="gd-btn go" type="button" data-gd="next">' + (GD.pos + 1 < total ? "다음 문제 →" : "🎉 " + total + "문제 마치기") + "</button>" : "")
+    + '<button class="gd-btn" type="button" data-gd="more">🔁 다른 문제 3개</button>'
     + '<button class="gd-btn" type="button" data-gd="nextunit">➡️ 다음 단원</button></div>';
   box.innerHTML = h;
-  var qt = $("g2QTitle"); if (qt) qt.textContent = u.nm + " · 오늘의 1문제";
-  var pr = $("g2Prog"); if (pr) pr.textContent = "1 / 1 · " + u.qs.length + "문제 중";
 }
 function gdFeedback(ok){
   var fb = $("gdFb"); if (!fb) return;
-  var u = G2[GD.unit], q = u.qs[GD.idx];
+  var u = G2[GD.unit], q = u.qs[GD.idx], total = GD_SET;
   fb.hidden = false;
   fb.className = "gd-fb " + (ok ? "ok" : "no");
   if (ok){
-    var got = 0;
-    try { got = SB.earn(SB.today() + "|math|grade2|" + GD.unit, 2) || 0; } catch(e){ got = 0; }
-    try { SB.markAttendance("math"); } catch(e){}
     fb.innerHTML = "<b>🎉 정답이에요!</b> " + esc(q.st ? q.st[q.st.length - 1] : "")
-      + (got ? " · ⭐ +" + got : " · 오늘 별은 이미 받았어요");
-    if (got){ try { SB.confetti(); } catch(e){} try { SB.toast("2학년 수학 ⭐ +" + got); } catch(e){} }
+      + ' <span class="gd-left">' + (GD.pos + 1) + " / " + total + "</span>";
+    try { SB.markAttendance("math"); } catch(e){}
+    try { SB.speak("정답이에요", false, "ko-KR"); } catch(e){}
   } else {
     fb.innerHTML = "<b>🙂 한 번 더 생각해 볼까요?</b> 위의 그림과 설명을 다시 읽고 풀어 봐요.";
   }
@@ -36199,29 +36317,58 @@ function gdFeedback(ok){
 function gdCheck(){
   var u = G2[GD.unit], q = u.qs[GD.idx];
   if (GD.done) return;
-  var ok = false;
-  if (q.o && q.o.length){ return; }
+  if (q.o && q.o.length) return;
   var v = String(GD.typed || "").trim();
   if (!v){ try { SB.toast("답을 눌러 주세요!"); } catch(e){} return; }
-  ok = (Number(v) === Number(q.num));
-  if (ok){ GD.done = true; gdFeedback(true); }
+  if (Number(v) === Number(q.num)){ GD.done = true; gdQuestion(); gdFeedback(true); }
   else { GD.tries++; gdFeedback(false); GD.typed = ""; var t = $("gdTyped"); if (t) t.textContent = "?"; }
 }
 function gdPickOption(i){
   var u = G2[GD.unit], q = u.qs[GD.idx];
   if (GD.done) return;
-  if (i === q.a){ GD.done = true; gdFeedback(true); }
-  else gdFeedback(false);
+  if (i === q.a){ GD.done = true; gdQuestion(); gdFeedback(true); }
+  else { GD.tries++; gdFeedback(false); }
 }
-function gdShow(u, i){
-  GD.unit = Math.max(0, Math.min(G2.length - 1, u));
-  GD.idx = (i == null) ? g2Auto(GD.unit) : (i % G2[GD.unit].qs.length);
-  GD.done = false; GD.typed = ""; GD.tries = 0;
+/* 세트 안에서 다음 문제로 → 세 번째까지 풀면 오늘 별(⭐ +2)은 여기서 한 번만 */
+function gdNext(){
+  var total = GD_SET;
+  if (!GD.done) return;
+  if (GD.pos + 1 < total){
+    GD.pos++; GD.idx = GD.set[GD.pos];
+    GD.done = false; GD.typed = ""; GD.tries = 0;
+    gdUnitCard(); gdQuestion(); return;
+  }
+  GD.fin = true;
+  var got = 0;
+  try { got = SB.earn(SB.today() + "|math|grade2|" + GD.unit, 2) || 0; } catch(e){ got = 0; }
+  GD.gain = got;
+  try { SB.markAttendance("math"); } catch(e){}
+  try {
+    if (got){ SB.confetti(); SB.toast("2️⃣ 2학년 수학 " + total + "문제 완료 · ⭐ +" + got); }
+    else { SB.confetti(); SB.toast("2️⃣ 2학년 수학 " + total + "문제 완료! (오늘 별은 이미 받았어요)"); }
+  } catch(e){}
   gdUnitCard(); gdQuestion();
   var steps = $("g2Steps");
   if (steps){
     var bs = steps.querySelectorAll("[data-gqu]");
     for (var k = 0; k < bs.length; k++) bs[k].classList.toggle("on", +bs[k].getAttribute("data-gqu") === GD.unit);
+  }
+}
+function gdShow(u, i){
+  GD.unit = Math.max(0, Math.min(G2.length - 1, u));
+  var n = G2[GD.unit].qs.length, k;
+  if (i == null){ GD.set = g2Set(GD.unit); }
+  else {
+    GD.set = [];
+    for (k = 0; k < GD_SET; k++) GD.set.push((((i + k) % n) + n) % n);
+  }
+  GD.pos = 0; GD.idx = GD.set[0]; GD.fin = false; GD.gain = 0;
+  GD.done = false; GD.typed = ""; GD.tries = 0;
+  gdUnitCard(); gdQuestion();
+  var steps = $("g2Steps");
+  if (steps){
+    var bs = steps.querySelectorAll("[data-gqu]");
+    for (k = 0; k < bs.length; k++) bs[k].classList.toggle("on", +bs[k].getAttribute("data-gqu") === GD.unit);
   }
 }
 function gdBuildSteps(){
@@ -36246,6 +36393,7 @@ function gdBind(){
     else if (a === "back"){ GD.typed = String(GD.typed).slice(0, -1); var el2 = $("gdTyped"); if (el2) el2.textContent = GD.typed || "?"; }
     else if (a === "ok"){ gdCheck(); }
     else if (a === "o"){ gdPickOption(+v); }
+    else if (a === "next"){ gdNext(); }
     else if (a === "more"){ gdShow(GD.unit, GD.idx + 1); }
     else if (a === "nextunit"){ gdShow(GD.unit + 1); }
   });
@@ -36326,7 +36474,7 @@ var WEM = {"생활":"🏡","안전":"🦺","학교":"🏫","서점":"📚","장�
  "용품":"🎒","사막":"🏜","한라산":"🗻","부레옥잠":"🌿","사육":"🐣","필요":"❗","온도":"🌡","곤충":"🐜",
  "고체":"🧱","액체":"🥤","성질":"🔍","기체":"💨","지형":"🗺","지구":"🌍","대기":"☁️","표면":"🪞",
  "소음":"📢","전달":"📣","악기":"🎻","공기":"🌬","예방":"🧼","습관":"🪥","비말":"💦","수칙":"📋","과거":"🕰","동서":"↔️","남북":"↕️","동남":"↘️","서북":"↖️","현재":"📌","춘하추동":"🗓","추석":"🌕","동지":"🍲","좌우":"↔️","전후":"🔃"};
-var HTS = { pick:[], done:[false,false], solved:0 };
+var HTS = { pick:[], done:[false,false,false], solved:0 };
 function htAllWords(){
   var out = [];
   for (var i = 0; i < DATA.length; i++){
@@ -36342,11 +36490,15 @@ function htTodayPick(){
   var day = parseInt(String(todayKey()).replace(/\D/g, ""), 10) || 0;
   var dd = day % 10000, fresh = [];
   for (var f = 0; f < all.length; f++) if (all[f].d === dd) fresh.push(all[f]);
-  if (fresh.length >= 2) return [fresh[0], fresh[1]];
+  if (fresh.length >= 3) return [fresh[0], fresh[1], fresh[2]];
   var i = day % all.length;
   var j = (i + 1 + (day % 7)) % all.length;
   if (j === i) j = (i + 2) % all.length;
-  return [all[i], all[j]];
+  var c = (j + 1 + (day % 5)) % all.length;
+  if (c === i || c === j) c = (c + 1) % all.length;
+  if (c === i || c === j) c = (c + 2) % all.length;
+  if (c === i || c === j) c = (c + 3) % all.length;
+  return [all[i], all[j], all[c]];
 }
 function htSplitChars(w){
   var h = w.h || "", chars = [];
@@ -36375,8 +36527,8 @@ function htMeanOptions(w, all){
 function htRenderToday(){
   var box = $("htToday"); if (!box) return;
   var all = htAllWords();
-  if (!HTS.pick.length){ HTS.pick = htTodayPick(); HTS.done = [false, false]; HTS.solved = 0; }
-  var h = '<div class="htt-head"><b>🌟 오늘의 두 낱말</b><span>글자 그림이 만나 낱말 그림이 돼요 · 하루에 두 낱말이면 충분해요</span></div><div class="htt-cards">';
+  if (!HTS.pick.length){ HTS.pick = htTodayPick(); HTS.done = [false, false, false]; HTS.solved = 0; }
+  var h = '<div class="htt-head"><b>🌟 오늘의 세 낱말</b><span class="htm-cnt" id="httCnt">' + HTS.solved + " / " + HTS.pick.length + '</span><span>글자 그림이 만나 낱말 그림이 돼요 · 하루에 세 낱말씩</span></div><div class="htt-cards">';
   for (var i = 0; i < HTS.pick.length; i++){
     var w = HTS.pick[i], chars = htSplitChars(w), opts = htMeanOptions(w, all);
     h += '<div class="htt-card" data-hcard="' + i + '">'
@@ -36402,7 +36554,7 @@ function htRenderToday(){
       + "</div>";
   }
   h += "</div>"
-    + '<div class="htt-acts"><button class="htt-done" type="button" id="httDone">✓ 두 낱말 다 봤어요 (⭐ +2)</button>'
+    + '<div class="htt-acts"><button class="htt-done" type="button" id="httDone">✓ 세 낱말 다 봤어요 (⭐ +2)</button>'
     + '<button class="htt-btn" type="button" data-htall="1">📚 단원 전체 보기</button></div>';
   box.innerHTML = h;
   var rest = $("htRest"); if (rest) rest.hidden = true;
@@ -36416,6 +36568,7 @@ function htAnswer(cardI, ok, el){
     el.classList.add("ok");
     var fb = $("httFb" + cardI);
     if (fb){ fb.hidden = false; fb.className = "htt-fb ok"; fb.textContent = "🎉 맞았어요! " + HTS.pick[cardI].w + " = " + HTS.pick[cardI].m; }
+    var cnt = $("httCnt"); if (cnt) cnt.textContent = HTS.solved + " / " + HTS.pick.length;
     try { SB.speak(HTS.pick[cardI].w, false, "ko-KR"); } catch(e){}
   } else {
     el.classList.add("no");
@@ -36428,8 +36581,8 @@ function htDone(){
   try { got = SB.earn(todayKey() + "|hanja|daily2", 2) || 0; } catch(e){ got = 0; }
   try { SB.markAttendance("hanja"); } catch(e){}
   try {
-    if (got){ SB.confetti(); SB.toast("🌟 오늘의 두 낱말 완료! ⭐ +" + got); }
-    else SB.toast("🌟 오늘의 두 낱말 완료! (오늘 별은 이미 받았어요)");
+    if (got){ SB.confetti(); SB.toast("🌟 오늘의 세 낱말 완료! ⭐ +" + got); }
+    else SB.toast("🌟 오늘의 세 낱말 완료! (오늘 별은 이미 받았어요)");
   } catch(e){}
 }
 function htBindToday(){
