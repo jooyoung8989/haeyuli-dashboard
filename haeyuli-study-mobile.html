@@ -10289,6 +10289,8 @@ function dailyKey(){ return TODAY + "|eng|daily"; }
 function wordKey(en){ return TODAY + "|eng|word:" + String(en).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
 
 function readDash(){
+  /* ⭐ 별 문서(earned·spent 포함)는 본 별 모듈(SB.readDash)이 관리한다 — 여기서 total 만 덮어쓰면 쓴 별 기록이 날아간다 */
+  if (window.SB && SB.readDash) { try { return SB.readDash(); } catch(e){} }
   var st = readJSON(DASH_STARS, null) || { total:0 };
   var led = readJSON(DASH_LEDGER, null) || {};
   if (typeof st.total !== "number" || !isFinite(st.total)) st.total = 0;
@@ -10297,10 +10299,10 @@ function readDash(){
   return { st:st, led:led };
 }
 function writeDash(st, led){
+  if (window.SB && SB.writeDash) { try { return SB.writeDash(st, led); } catch(e){} }
   try {
     localStorage.setItem(DASH_STARS, JSON.stringify(st));
     localStorage.setItem(DASH_LEDGER, JSON.stringify(led));
-    try { if ((Number(st.total) || 0) > 0) localStorage.setItem("yuli.stars.bak.v1", JSON.stringify({ total:Number(st.total) || 0, at:Date.now() })); } catch(e){}
     return true;
   } catch(e){ return false; }
 }
@@ -10308,7 +10310,11 @@ function awardEng(id, n){
   var d = readDash();
   if (d.led[id]) return false;
   d.led[id] = n;
-  d.st.total = Math.max(0, d.st.total + n);
+  /* 번 별(earned)을 올린다 — 예전 형식(total 만)이면 total 을 earned 로 삼는다 */
+  var e0 = Number(d.st.earned);
+  if (!isFinite(e0) || e0 < 0) e0 = (Number(d.st.total) || 0) + (Number(d.st.spent) || 0);
+  d.st.earned = e0 + n;
+  d.st.total = Math.max(0, d.st.earned - (Number(d.st.spent) || 0));
   writeDash(d.st, d.led);
   try { if (window.SB && SB.autoStar2) SB.autoStar2(id); } catch(e){}
   return true;
@@ -10318,7 +10324,10 @@ function revokeEng(id){
   if (!d.led[id]) return false;
   var n = d.led[id];
   delete d.led[id];
-  d.st.total = Math.max(0, d.st.total - n);
+  var e1 = Number(d.st.earned);
+  if (!isFinite(e1) || e1 < 0) e1 = (Number(d.st.total) || 0) + (Number(d.st.spent) || 0);
+  d.st.earned = Math.max(0, e1 - n);
+  d.st.total = Math.max(0, d.st.earned - (Number(d.st.spent) || 0));
   writeDash(d.st, d.led);
   return true;
 }
@@ -11705,22 +11714,38 @@ SB.dateKey = dateKey;
 
 /* ---------------------------- 별 원장 ---------------------------- */
 var DS = "yuli.stars.v2", DL = "yuli.starledger.v2";
+/* ⭐ 별 문서 = { total, earned, spent, at }
+   · earned(지금까지 번 별)는 줄지 않고 spent(쓴 별)는 늘기만 한다 → total = earned - spent
+   · 가족 동기화는 earned = max, spent = max 로 합치므로, 한 기기에서 쓴 별이
+     다른 기기의 옛 총합(max) 때문에 되살아나지 않는다
+   · earned/spent 가 없던 예전 저장은 earned = total, spent = 0 으로 읽는다 (100% 호환) */
+function snum(v){ v = Number(v); return isFinite(v) ? v : 0; }
+function starParts(st){
+  st = (st && typeof st === "object" && !Array.isArray(st)) ? st : {};
+  var total = Math.max(0, Math.round(snum(st.total)));
+  var spent = Math.max(0, Math.round(snum(st.spent)));
+  var earned = (st.earned === undefined || st.earned === null) ? (total + spent) : Math.max(0, Math.round(snum(st.earned)));
+  if (earned < total + spent) earned = total + spent;
+  return { total: Math.max(0, earned - spent), earned: earned, spent: spent, at: snum(st.at) };
+}
 function readDash(){
   var st = readJSON(DS, null) || { total:0 };
   var led = readJSON(DL, null) || {};
-  if (typeof st.total !== "number" || !isFinite(st.total)) st.total = 0;
-  st.total = Math.max(0, Math.round(st.total));
   if (!led || typeof led !== "object" || Array.isArray(led)) led = {};
-  return { st:st, led:led };
+  return { st: starParts(st), led: led };
 }
 function writeDash(st, led){
   try {
-    localStorage.setItem(DS, JSON.stringify(st)); localStorage.setItem(DL, JSON.stringify(led));
+    var p = starParts(st);
+    p.at = Date.now();                      /* 마지막으로 손댄 시각 — 동기화가 오래된 값을 고르지 않게 */
+    if (!led || typeof led !== "object" || Array.isArray(led)) led = readJSON(DL, {}) || {};
+    localStorage.setItem(DS, JSON.stringify(p)); localStorage.setItem(DL, JSON.stringify(led));
     /* ⭐ 마지막으로 0보다 컸던 별 개수를 따로 남겨 둔다 (새로고침·동기화로 0이 되면 여기서 되살린다) */
-    try { if ((Number(st.total) || 0) > 0) localStorage.setItem("yuli.stars.bak.v1", JSON.stringify({ total:Number(st.total) || 0, at:Date.now() })); } catch(e){}
+    try { if (p.total > 0) localStorage.setItem("yuli.stars.bak.v1", JSON.stringify({ total:p.total, at:Date.now() })); } catch(e){}
     return true;
   } catch(e){ return false; }
 }
+SB.writeDash = writeDash;
 SB.readDash = readDash;
 SB.starsNow = function(){ return readDash().st.total; };
 /* n개를 '목표치'로 지급: 같은 키에 이미 더 많이 있으면 아무것도 주지 않는다(중복 적립 방지) */
@@ -11731,20 +11756,25 @@ SB.earn = function(key, n){
   var prev = parseInt(d.led[key], 10); if (!isFinite(prev) || prev < 0) prev = 0;
   if (n <= prev) return 0;
   d.led[key] = n;
-  d.st.total = Math.max(0, d.st.total + (n - prev));
+  d.st.earned += (n - prev);                        /* 번 별을 올린다 */
+  d.st.total = Math.max(0, d.st.earned - d.st.spent);
   writeDash(d.st, d.led);
   SB.refresh();
   return n - prev;
 };
 SB.spend = function(n){
   n = Math.round(n || 0);
+  if (n <= 0) return true;
   var d = readDash();
   if (d.st.total < n) return false;
-  d.st.total -= n;
+  d.st.spent += n;                                  /* 쓴 별을 쌓는다 — 총합은 earned - spent */
+  d.st.total = Math.max(0, d.st.earned - d.st.spent);
   writeDash(d.st, d.led);
   /* 다 써서 0이 된 것은 '일부러 쓴 것' — 새로고침 때 백업으로 되살리지 않는다 */
   try { if (d.st.total === 0) localStorage.setItem("yuli.stars.reset.v1", String(Date.now())); } catch(e){}
   SB.refresh();
+  /* 쓴 별을 가족 기록에도 바로 알린다 — 다음 동기화에서 옛 총합으로 되살아나지 않게 */
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
   return true;
 };
 SB.refresh = function(){
@@ -13467,6 +13497,9 @@ function pet(){
   /* 예전 저장·동기화 오류로 캐릭터 번호가 비어 있어도 그림이 사라지지 않게 복구 */
   if (p.stage >= 1 && !Number(p.no)) { var recNo = stageNoOf(p); if (recNo) p.no = recNo; }
   p.eggs = Math.max(1, Math.floor(Number(p.eggs) || 1));   /* 세대(새 알 받은 횟수) */
+  /* 돌봄 쿨타임·하루 성장 기록 (버튼 연타로 한 번에 진화하는 것을 막는다) */
+  if (!p.cd || typeof p.cd !== "object" || Array.isArray(p.cd)) p.cd = {};
+  if (!p.dayGrow || typeof p.dayGrow !== "object" || Array.isArray(p.dayGrow)) p.dayGrow = { d:"", n:0 };
   return p;
 }
 function savePet(p){ p.ts = Date.now(); p.at = Date.now(); writeJSON(TK, p); }
@@ -13584,6 +13617,7 @@ function newEgg(){
   var p = pet(), keep = p.coll || {};
   var n = { v:1, stage:0, field:null, no:null, grow:0, joy:64, hunger:28, clean:85,
             ts:Date.now(), at:Date.now(), history:[], coll:keep, school:null, tier:null,
+            cd:{}, dayGrow:{ d:(typeof todayKey === "function" ? todayKey() : ""), n:0 },
             eggs: Math.max(1, Number(p.eggs) || 1) + 1 };
   savePet(n);
   try { hideNotice(); } catch(e){}            /* 새 알이 알림장 카드에 가리지 않게 */
@@ -13654,6 +13688,7 @@ function paintGrow(){
   var pct = need ? Math.round(cur / need * 100) : 100;
   var h = '<div class="tg-top"><b class="tg-stage">' + s.em + " " + esc(s.nm) + '</b>'
     + '<span class="tg-nm">' + esc(labelOf(p)) + (p.stage === 4 ? " (" + (p.tier || tierOf(p)) + ")" : "") + '</span>'
+    + '<span class="tg-star" style="margin-left:auto;margin-right:.35rem;font-weight:900;color:#b8860b;white-space:nowrap">⭐ <b data-stars>' + (SB.starsNow ? SB.starsNow() : 0) + '</b></span>'
     + '<button class="tg-tree" type="button" data-tama="tree">🌳 진화 나무</button></div>';
   if (p.stage >= 5) {
     h += '<div class="tg-bar done"><i style="width:100%"></i><b>완성!</b></div>'
@@ -14065,10 +14100,39 @@ function setDog(state, opts){
 }
 
 /* ---------------------------- 돌봄 ---------------------------- */
+/* 같은 돌봄을 다시 하기까지 기다리는 시간 — 버튼 연타로 한 번에 진화하는 것을 막는다 */
+var CARE_CD = { warm:600000, feed:600000, play:600000, bath:600000, brush:600000, pat:0 };
+var CARE_DAY_MAX = 18;                    /* 하루에 돌봄으로 오르는 성장 합계 상한 */
+function careSay(m){ say(m); if (SB.toast) SB.toast(m); }
+
 function care(kind){
   var p = pet(), c = CARE[kind];
   if (!c) return;
   if (p.stage === 0 && kind !== "warm" && kind !== "pat") { say("아직 알이에요! 먼저 따뜻하게 품어 줘~"); return; }
+  /* ① 이미 가득 찬 상태 — 별도 쓰지 않고 돌아간다 */
+  if (kind === "feed" && p.hunger <= 5) { careSay("지금은 배가 빵빵해요! 조금 뒤에 먹여 주세요 🍚"); return; }
+  if (kind === "play" && p.joy >= 98) { careSay("지금도 충분히 신나 있어요! 조금 뒤에 놀아 주세요 🎾"); return; }
+  if ((kind === "bath" || kind === "brush") && p.clean >= 98) { careSay("반짝반짝 깨끗해요! 조금 뒤에 씻겨 주세요 ✨"); return; }
+  /* ② 같은 돌봄 쿨타임 (10분) — 한 번에 마구 눌러 성장을 몰아 올리지 못하게 */
+  var cdms = CARE_CD[kind] || 0, last = 0;
+  if (cdms){
+    if (!p.cd || typeof p.cd !== "object") p.cd = {};
+    last = Number(p.cd[kind]) || 0;
+    if (last && Date.now() - last < cdms){
+      var left = Math.max(1, Math.ceil((cdms - (Date.now() - last)) / 60000));
+      careSay("방금 해 줬어요! " + left + "분 뒤에 다시 해 주세요 ⏳");
+      return;
+    }
+  }
+  /* ③ 하루 성장 상한 (+18) — 알에서 성체까지 하루에 진화하지 못하게 */
+  var dk = (SB.today ? SB.today() : todayKey());
+  if (!p.dayGrow || typeof p.dayGrow !== "object" || p.dayGrow.d !== dk) p.dayGrow = { d:dk, n:0 };
+  var growLeft = Math.max(0, CARE_DAY_MAX - (Number(p.dayGrow.n) || 0));
+  if ((c.grow || 0) > 0 && growLeft <= 0){
+    careSay("오늘은 다마고치가 많이 자랐어요! 내일 더 크게 해 줘요 🌙");
+    return;
+  }
+  var addGrow = Math.min(c.grow || 0, growLeft);
   if (c.cost) {
     if ((SB.starsNow ? SB.starsNow() : 0) < c.cost) { if (SB.toast) SB.toast("별이 " + (c.cost - SB.starsNow()) + "개 더 필요해요. 공부해서 별을 모아요!"); return; }
     if (!SB.spend(c.cost)) { if (SB.toast) SB.toast("별이 모자라요!"); return; }
@@ -14076,7 +14140,9 @@ function care(kind){
   p.joy = clamp(p.joy + (c.joy || 0), 0, 100);
   p.hunger = clamp(p.hunger + (c.hunger || 0), 0, 100);
   if (c.clean) p.clean = clamp((typeof p.clean === "number" ? p.clean : 72) + c.clean, 0, 100);
-  p.grow += c.grow || 0;
+  if (addGrow > 0){ p.grow += addGrow; p.dayGrow.n = (Number(p.dayGrow.n) || 0) + addGrow; }
+  if (cdms) p.cd[kind] = Date.now();
+  if (addGrow < (c.grow || 0) && SB.toast) SB.toast("🌙 오늘 성장은 여기까지! 기분·배고픔은 좋아졌어요");
   savePet(p);
   say(c.em + " " + c.say);
   if (kind === "bath" || kind === "brush") {
@@ -24106,7 +24172,31 @@ function mergeNtfy(l, c){
   return { topic:pick.topic, on:!!pick.on, at:num(pick.at) || Math.max(la, ca, 1) };
 }
 
-/* 📘 문제집 진도 — 같은 문제집은 마지막에 손댄 쪽(at 최신)이 이긴다 */
+/* 📘 문제집 진도 — 같은 문제집은 마지막에 손댄 쪽(at 최신)이 이기고,
+   ✝️ 지운 문제집(del[id] = 지운 시각)은 del >= at 이면 어느 쪽에 남아 있어도 되살아나지 않는다 */
+function wbDelMap(wb){
+  var d = (wb && typeof wb === "object" && wb.del && typeof wb.del === "object" && !Array.isArray(wb.del)) ? wb.del : {};
+  var out = {}, t;
+  for (var k in d){ t = num(d[k]); if (t > 0) out[String(k)] = t; }
+  return out;
+}
+function mergeWbDel(a, b){
+  var out = {};
+  [a, b].forEach(function(o){
+    var d = wbDelMap(o);
+    for (var kk in d) out[kk] = Math.max(num(out[kk]), num(d[kk]));
+  });
+  return out;
+}
+function wbLiveList(list, del){
+  var out = [];
+  for (var i = 0; i < list.length; i++){
+    var x = list[i], t = num(del[x.id]);
+    if (t > 0 && t >= num(x.at)) continue;        /* 지운 뒤 살아 돌아온 옛 항목 */
+    out.push(x);
+  }
+  return out;
+}
 function mergeWb(l, c){
   var lo = (l && Array.isArray(l.list)) ? l.list : [];
   var co = (c && Array.isArray(c.list)) ? c.list : [];
@@ -24124,7 +24214,8 @@ function mergeWb(l, c){
     if (!id2 || seen[id2]) continue;
     seen[id2] = 1; out.push(co[j]);
   }
-  return { v:1, list: out };
+  var del = mergeWbDel(l, c);
+  return { v:1, list: wbLiveList(out, del), del: del };
 }
 
 /* 📱 패드 학습 모듈(SB.pad)을 안전하게 — 이 스크립트보다 뒤에 정의되므로 없을 때는 클라우드 값을 그대로 둔다 */
@@ -24584,7 +24675,17 @@ function mergeWg(l, c){
   return out;
 }
 
-/* ⭐ 별 — 원장(ledger)은 키 합집합(이미 받은 별은 절대 잃지 않는다), 총합은 0으로 덮어쓰지 않는다 */
+/* ⭐ 별 — 원장(ledger)은 키 합집합(이미 받은 별은 절대 잃지 않는다)
+   · 총합은 earned(번 별) - spent(쓴 별) 로 계산한다. earned·spent 모두 max 로 합치므로
+     한 기기에서 쓴 별이 다른 기기의 옛 총합(max) 때문에 되살아나지 않는다
+   · earned/spent 가 없던 예전 문서는 earned = total, spent = 0 으로 본다 */
+function starPartsForMerge(s){
+  s = (s && typeof s === "object" && !Array.isArray(s)) ? s : {};
+  var total = num(s.total), spent = Math.max(0, Math.round(num(s.spent)));
+  var earned = (s.earned === undefined || s.earned === null) ? (total + spent) : Math.max(0, Math.round(num(s.earned)));
+  if (earned < total + spent) earned = total + spent;
+  return { earned: Math.round(earned), spent: Math.round(spent), at: num(s.at) };
+}
 function mergeStars(ls, ll, cs, cl){
   var led = {}, k;
   ll = (ll && typeof ll === "object") ? ll : {};
@@ -24595,8 +24696,10 @@ function mergeStars(ls, ll, cs, cl){
     var v = num(cl[k]);
     if (!(k in led) || v > led[k]) led[k] = v;
   }
-  var lt = num((ls && ls.total) || 0), ct = num((cs && cs.total) || 0);
-  return { total: Math.max(lt, ct), led: led };
+  var l = starPartsForMerge(ls), c = starPartsForMerge(cs);
+  var earned = Math.max(l.earned, c.earned), spent = Math.max(l.spent, c.spent);
+  return { total: Math.max(0, earned - spent), earned: earned, spent: spent,
+           at: Math.max(l.at, c.at, 1), led: led };
 }
 
 /* 🥚 다마고치 · 방 · 놀이기구 — 기기마다 키운 만큼을 합친다
@@ -24650,6 +24753,29 @@ function mergeTama(l, c){
       out.tier = (num(l.stage) >= num(c.stage)) ? (l.tier || out.tier) : (c.tier || out.tier);
     }
   }
+  /* ⏳ 돌봄 쿨타임은 행동별로 늦은 쪽, 하루 성장 합계는 최신 날짜의 값을 쓴다 (동기화로 초기화되지 않게) */
+  out.cd = {};
+  if (gen){
+    var gc = (gen.cd && typeof gen.cd === "object") ? gen.cd : {};
+    for (var gk in gc) out.cd[gk] = num(gc[gk]);
+  } else {
+    [l.cd, c.cd].forEach(function(m){
+      if (!m || typeof m !== "object") return;
+      for (var kk in m) out.cd[kk] = Math.max(num(out.cd[kk]), num(m[kk]));
+    });
+  }
+  out.dayGrow = (function(){
+    var a1 = (l.dayGrow && typeof l.dayGrow === "object") ? l.dayGrow : null;
+    var a2 = (c.dayGrow && typeof c.dayGrow === "object") ? c.dayGrow : null;
+    if (gen) a1 = (gen.dayGrow && typeof gen.dayGrow === "object") ? gen.dayGrow : null, a2 = null;
+    if (!a1 && !a2) return { d:"", n:0 };
+    if (!a1) return { d:String(a2.d || ""), n:num(a2.n) };
+    if (!a2) return { d:String(a1.d || ""), n:num(a1.n) };
+    var d1 = String(a1.d || ""), d2 = String(a2.d || "");
+    if (d1 > d2) return { d:d1, n:num(a1.n) };
+    if (d2 > d1) return { d:d2, n:num(a2.n) };
+    return { d:d1, n:Math.max(num(a1.n), num(a2.n)) };
+  })();
   [l.coll, c.coll].forEach(function(m){
     if (!m || typeof m !== "object") return;
     for (var k in m) out.coll[k] = Math.max(num(out.coll[k]), num(m[k]));
@@ -24784,7 +24910,7 @@ function buildDoc(local, cloud, base, code){
     ort: ortM.read, ortu: ortM.un, ortreset: ortAt,
     curri: mergeCurri(local.curri, c.curri),
     wb: mergeWb(local.wb, c.wb),
-    stars: { total: stM.total },
+    stars: { total: stM.total, earned: stM.earned, spent: stM.spent, at: stM.at },
     sled: stM.led,
     hwplan: hwM.check,
     hwplanUn: hwM.un,
@@ -24820,9 +24946,10 @@ function applyDoc(doc){
   if (doc.stars !== undefined || doc.sled !== undefined){
     var stM = mergeStars(s.stars, s.sled, doc.stars, doc.sled);
     var curT = num((s.stars && s.stars.total) || 0);
+    var curSp = num((s.stars && s.stars.spent) || 0);
     var curL = (s.sled && typeof s.sled === "object") ? s.sled : {};
-    if (stM.total !== curT || JSON.stringify(stM.led) !== JSON.stringify(curL)){
-      write("yuli.stars.v2", { total: stM.total });
+    if (stM.total !== curT || stM.spent !== curSp || JSON.stringify(stM.led) !== JSON.stringify(curL)){
+      write("yuli.stars.v2", { total: stM.total, earned: stM.earned, spent: stM.spent, at: stM.at });
       write("yuli.starledger.v2", stM.led);
       try { if (SB.starGuard) SB.starGuard(); } catch(e){}
       try { if (SB.refresh) SB.refresh(); } catch(e){}
@@ -38303,14 +38430,31 @@ function norm(w){
   if (!o.daily) o.daily = 1;
   return o;
 }
+function delMap(wb){
+  var d = (wb && typeof wb === "object" && wb.del && typeof wb.del === "object" && !Array.isArray(wb.del)) ? wb.del : {};
+  var out = {}, t;
+  for (var k in d){ t = num(d[k]); if (t > 0) out[String(k)] = t; }
+  return out;
+}
+function liveList(list, del){
+  var out = [];
+  for (var i = 0; i < list.length; i++){
+    var x = norm(list[i]), t = num(del[x.id]);
+    if (t > 0 && t >= num(x.at)) continue;        /* ✝️ 지운 문제집 — 다시 살리지 않는다 */
+    out.push(x);
+  }
+  return out;
+}
 function load(){
   var raw = null;
   try { raw = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e){ raw = null; }
   var list = (raw && typeof raw === "object" && Array.isArray(raw.list)) ? raw.list : [];
-  return { v:1, list: list.map(norm) };
+  var del = delMap(raw);
+  return { v:1, list: liveList(list, del), del: del };
 }
 function save(d, quiet){
-  var out = { v:1, list: (d && Array.isArray(d.list) ? d.list : []).map(norm) };
+  var del = delMap(d);
+  var out = { v:1, list: liveList((d && Array.isArray(d.list) ? d.list : []), del), del: del };
   try { localStorage.setItem(KEY, JSON.stringify(out)); } catch(e){}
   if (!quiet){ paintHome(); famTouch(); }
   return out;
@@ -38595,13 +38739,26 @@ function saveCard(id){
   render();
   toast("📘 " + w.nm + " · " + w.cur + "/" + w.total + "쪽 (하루 " + w.daily + "쪽)");
 }
+var ADDING = false, LASTADD = { key:"", at:0 };
 function addWb(){
+  if (ADDING) return;                       /* 등록 버튼 연타 — 한 번만 */
   readAdd();
   var nm = String(draft.nm || "").trim();
   var total = num(draft.total, 0), cur = num(draft.cur, 0), daily = Math.max(1, num(draft.daily, 1));
   if (!nm){ toast("문제집 이름을 적어 주세요"); return; }
   if (total <= 0){ toast("전체 쪽수를 적어 주세요"); return; }
   if (cur > total) cur = total;
+  var nowMs = Date.now(), akey = nm + "\u0001" + draft.sub;
+  if (LASTADD.key === akey && nowMs - LASTADD.at < 5000){ toast("📘 " + nm + " · 방금 등록했어요"); return; }
+  var d0 = load();
+  for (var q = 0; q < d0.list.length; q++){
+    var x0 = d0.list[q];
+    if (x0.nm === nm && x0.sub === draft.sub && nowMs - num(x0.at) < 5000){
+      toast("📘 " + nm + " · 방금 등록했어요 (같은 문제집이 두 번 들어가지 않게 막았어요)"); return;
+    }
+  }
+  ADDING = true; LASTADD = { key:akey, at:nowMs };
+  setTimeout(function(){ ADDING = false; }, 3000);
   var d = load();
   var id = "c" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36);
   var w = norm({ id:id, nm:nm, sub:draft.sub, total:total, cur:cur, daily:daily,
@@ -38612,6 +38769,7 @@ function addWb(){
   save(d);
   draft = { nm:"", sub:"국어", total:"", cur:"", daily:"", hw:1 };
   ndays = [0,1,2,3,4];
+  ADDING = false;
   render();
   toast("📘 " + nm + " 등록 · 홈 오늘의 숙제에 나와요");
 }
@@ -38705,6 +38863,7 @@ function onClick(e){
     var id = del.getAttribute("data-wbdel");
     if (del.getAttribute("data-wbarm") === "1"){
       var d4 = load();
+      d4.del[id] = Date.now();            /* ✝️ 지운 시각 — 다른 기기·옛 기록이 되살리지 못하게 */
       d4.list = d4.list.filter(function(x){ return x.id !== id; });
       save(d4); render(); toast("문제집을 지웠어요");
     } else {
@@ -40511,6 +40670,8 @@ function guard(){
     var rs = num(read(RSET, 0));
     if (rs && rs >= num(bak.at)) return 0;         /* 엄마가 일부러 0으로 만든 뒤면 되살리지 않는다 */
     st.total = num(bak.total);
+    st.spent = Math.max(0, num(st.spent));
+    st.earned = st.total + st.spent;               /* total = earned - spent 가 맞도록 */
     write(DS, st);
     return st.total;
   } catch(e){ return 0; }
