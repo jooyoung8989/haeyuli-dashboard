@@ -8540,6 +8540,11 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
       </div>
     </section>
 
+    <!-- ================= 🎯 무브무브 곱셈·나눗셈 ================= -->
+    <section class="view mmvview" id="viewMathMove" data-view="math-move" hidden>
+      <div class="mmv-wrap" id="mmvWrap"></div>
+    </section>
+
     <!-- ================= 🎬 수학 영상 (매스버스 · 키출판사) ================= -->
     <section class="view mathvid" id="viewMathVideo" data-view="math-video" hidden>
       <div class="mv-wrap">
@@ -12140,7 +12145,8 @@ var SECS = {
             ["shape", "🔺 도형 이름"], ["clock", "⏰ 시계 읽기"],
             ["think", "🧠 그림 사고력"],
             ["base1", "📘 1학년 현행"], ["grade2", "2️⃣ 2학년 선행"],
-            ["video", "🎬 수학 영상"]],
+            ["video", "🎬 수학 영상"],
+            ["mv", "🎯 무브무브 곱셈"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말·뜻 쓰기"], ["text", "🏫 교과서 핵심한자"]],
   history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["war", "⚔️ 전쟁사"], ["video", "🎬 역사 영상"],
             ["world", "🌍 세계사 연표"], ["compare", "⚖️ 한국 vs 세계"]],
@@ -12151,6 +12157,7 @@ var SECS = {
 var GROUPS = {
   math: [
     { k:"g_calc",   em:"🔢", nm:"연산",         secs:["calc", "saem", "concept", "gugu"] },
+    { k:"g_move",   em:"🎯", nm:"무브무브 곱셈", secs:["mv"] },
     { k:"g_shape",  em:"📐", nm:"도형·시계",    secs:["shape", "clock"] },
     { k:"g_think",  em:"🧩", nm:"사고력",       secs:["think"] },
     { k:"g_course", em:"📘", nm:"1·2학년 과정", secs:["base1", "grade2"] },
@@ -12186,6 +12193,7 @@ var VIEWID = {
   "study:math:saem":"viewMathSaem", "study:math:base1":"viewMathBase1",
   "study:math:grade2":"viewMathG2",
   "study:math:video":"viewMathVideo",
+  "study:math:mv":"viewMathMove",
   "study:hanja:trace":"viewHanja", "study:hanja:word":"viewHanja", "study:hanja:text":"viewHanja",
   "study:history:timeline":"viewHistory", "study:history:goryeo":"viewHistory", "study:history:joseon":"viewHistory",
   "study:history:quiz":"viewHistory", "study:history:war":"viewHistory", "study:history:video":"viewHistory",
@@ -24979,7 +24987,7 @@ function applyDoc(doc){
   var ewNow = mergeEngDone(read("haeyuli.engwb.v1", null), doc.engwb);
   if (JSON.stringify(ewNow) !== JSON.stringify(read("haeyuli.engwb.v1", null))){
     write("haeyuli.engwb.v1", ewNow); changed = true;
-    try { if (SB.wbRefresh) SB.wbRefresh(); } catch(e){}
+    try { if (SB.engwbRefresh) SB.engwbRefresh(); } catch(e){}
   }
   var swNow = mergeEngDone(read("haeyuli.sw_wb.v1", null), doc.swwb);
 
@@ -38879,6 +38887,8 @@ function onClick(e){
 /* 다른 기기(가족 코드)에서 문제집 진도가 오면 다시 그린다 */
 SB.wbRefresh = function(){
   paintHome();
+  try { if (SB.hwplanRefresh) SB.hwplanRefresh(); } catch(e){}
+  try { if (SB.week && SB.week.render) SB.week.render(); } catch(e){}
   var host = $("wbModal");
   if (host && !host.hidden) render();
 };
@@ -43416,7 +43426,7 @@ function bind(){
   });
 }
 
-SB.wbRefresh = function(){ render(); };
+SB.engwbRefresh = function(){ render(); };
 
 var prevEn = SB.onShow && SB.onShow.en;
 SB.onShow.en = function(sub){
@@ -45852,6 +45862,598 @@ var CSS = ''
  + '@media (max-width:520px){.nwg-grid{gap:.45vh;}.nwg-art{max-width:9.5vh;}.nw-cv{height:12vh;}}'
  + '';
 try { var stEl = document.createElement("style"); stEl.id = "nirWBStyle"; stEl.textContent = CSS; document.head.appendChild(stEl); } catch(e){}
+})();
+
+</script>
+<script>
+/* =====================================================================
+   🎯 무브무브 곱셈·나눗셈 놀이 (〈보림 무브무브 개념수학〉 방식 · 2026-11-25)
+   · ① 더하고 또 더하기 — 플랩을 톡 열면 3 + 3 + 3 + 3 으로 펼쳐진다
+   · ② 구슬 묶음 당기기 — 슬라이더를 당길 때마다 구슬 줄이 한 줄씩 색칠된다
+   · ③ 똑같이 나누기 — 구슬이 몇 칸 상자에 똑같이 나뉘어 담긴다
+   · ④ 미니 퀴즈 3문제 — 다 풀면 ⭐ +1 (하루 한 번)
+   저장: haeyuli.mmv.mode.v1 (기기 로컬 · 놀이 모드만)
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+var MODE_KEY = "haeyuli.mmv.mode.v1";
+var PALS  = ["#ffe3d6","#d8ecff","#ddf5d6","#fff1c2","#eadfff","#d5f2ee","#ffddeb","#e5eef7","#f9e8cb"];
+var PALS2 = ["#f08a63","#5aa9e6","#5fbf7c","#e0aa33","#9a7ee0","#3fafa3","#e2749a","#7f9bb0","#cb9a5a"];
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return (SB.esc ? SB.esc(s) : String(s == null ? "" : s)); }
+function readJSON(k, fb){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; } }
+function writeJSON(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+function toast(m){ try { if (SB.toast) SB.toast(m); } catch(e){} }
+function rnd(n){ return Math.floor(Math.random() * n); }
+function pickOne(a){ return a[rnd(a.length)]; }
+function shuffle(a){
+  a = a.slice();
+  for (var i = a.length - 1; i > 0; i--){ var j = rnd(i + 1); var t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+function clamp(n, lo, hi){ return n < lo ? lo : (n > hi ? hi : n); }
+
+var M = {
+  mode: "add",
+  /* ① 더하고 또 더하기 */
+  dan: 3, mul: 4, open: false,
+  /* ② 구슬 묶음 당기기 */
+  per: 5, row: 3, ans: false,
+  /* ③ 똑같이 나누기 */
+  total: 15, fr: 3, sans: false,
+  /* ④ 미니 퀴즈 */
+  qs: [], qi: 0, right: 0, picked: -1, fin: false, got: 0
+};
+var MODES = [
+  ["add",    "➕", "더하고 또 더하기"],
+  ["bundle", "🔵", "구슬 묶음 당기기"],
+  ["share",  "🍬", "똑같이 나누기"],
+  ["quiz",   "⭐", "미니 퀴즈"]
+];
+var TOTALS = [6, 8, 9, 10, 12, 15, 16, 18, 20, 24];
+
+/* ---------------------------- 스타일 ---------------------------- */
+var CSS = ""
++ ".view.mmvview{padding:0;display:flex;flex-direction:column;height:100%;min-height:0;background:none;box-shadow:none;}"
++ ".mmv-wrap{flex:1 1 auto;min-height:min(56vh,520px);overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:.7vh;"
++ "  padding:.8vh .9vh 1.2vh;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px #e6ebf0;-webkit-overflow-scrolling:touch;}"
++ ".mmv-hd{flex:0 0 auto;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;min-width:0;}"
++ ".mmv-hd b{font-size:clamp(15px,1.95vh,21px);font-weight:900;color:#1b3f5c;letter-spacing:-.02em;white-space:nowrap;}"
++ ".mmv-hd span{flex:1 1 12rem;min-width:0;font-size:clamp(10px,1.18vh,13px);font-weight:700;color:#93a3b1;line-height:1.35;}"
++ ".mmv-modes{flex:0 0 auto;display:flex;gap:.38rem;flex-wrap:wrap;}"
++ ".mmv-mode{display:inline-flex;align-items:center;gap:.28rem;height:2.35rem;padding:0 .68rem;border:0;border-radius:999px;"
++ "  font-family:inherit;font-size:clamp(11px,1.35vh,14.5px);font-weight:900;color:#4a6a7f;background:#f4f9fd;"
++ "  box-shadow:inset 0 0 0 1.3px #dde8ef;cursor:pointer;white-space:nowrap;}"
++ ".mmv-mode:hover{background:#eaf6ff;color:#0d5f8a;}"
++ ".mmv-mode.on{background:#eaf6ff;color:#0d5f8a;box-shadow:inset 0 0 0 1.9px #9dcde9;}"
++ ".mmv-mode em{font-style:normal;font-size:clamp(13px,1.7vh,18px);line-height:1;}"
++ ".mmv-panel{flex:0 0 auto;display:flex;flex-direction:column;gap:.62vh;min-width:0;}"
++ ".mmv-row{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;min-width:0;}"
++ ".mmv-lab{flex:0 0 auto;font-size:clamp(11px,1.35vh,14px);font-weight:900;color:#587084;}"
++ ".mmv-chips{display:flex;gap:.28rem;flex-wrap:wrap;min-width:0;}"
++ ".mmv-chip{height:2.3rem;min-width:2.45rem;padding:0 .5rem;border:0;border-radius:12px;font-family:inherit;"
++ "  font-size:clamp(12px,1.5vh,16px);font-weight:900;color:#3f6479;background:#f4f9fd;"
++ "  box-shadow:inset 0 0 0 1.3px #dde8ef;cursor:pointer;}"
++ ".mmv-chip:hover{background:#eaf6ff;}"
++ ".mmv-chip.on{background:#fff3d6;color:#8a5100;box-shadow:inset 0 0 0 1.9px #f0c66a;}"
++ ".mmv-chip small{font-size:.74em;font-weight:800;opacity:.72;margin-left:.05em;}"
++ ".mmv-chip.dim{opacity:.45;}"
++ ".mmv-eq{display:flex;align-items:center;justify-content:center;gap:.45rem;padding:.85vh .6rem;border-radius:16px;"
++ "  background:linear-gradient(140deg,#fff8e6,#fffdf7);box-shadow:inset 0 0 0 1.5px #f0e0b4;flex-wrap:wrap;}"
++ ".mmv-n{font-size:clamp(26px,5.1vh,52px);font-weight:900;color:#22455e;line-height:1;letter-spacing:-.02em;}"
++ ".mmv-op{font-size:clamp(17px,2.9vh,30px);font-weight:900;color:#c08a2a;line-height:1;}"
++ ".mmv-eq small{font-size:clamp(11px,1.4vh,15px);font-weight:900;color:#a98a4a;}"
++ ".mmv-flap{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:clamp(62px,9.5vh,102px);"
++ "  height:clamp(46px,7.4vh,80px);padding:0 .5rem;border:0;border-radius:14px;font-family:inherit;cursor:pointer;"
++ "  font-size:clamp(23px,4.4vh,44px);font-weight:900;color:#fff;background:linear-gradient(150deg,#2f8ec2,#1c5f88);"
++ "  box-shadow:0 4px 10px rgba(28,95,136,.30);transition:transform .12s,background .15s;}"
++ ".mmv-flap:active{transform:scale(.96);}"
++ ".mmv-flap .q{display:block;}"
++ ".mmv-flap .a{display:none;}"
++ ".mmv-flap.on{background:linear-gradient(150deg,#43b37c,#1f8156);box-shadow:0 4px 10px rgba(31,129,86,.28);}"
++ ".mmv-flap.on .q{display:none;}"
++ ".mmv-flap.on .a{display:block;animation:mmvPop .3s ease-out;}"
++ ".mmv-flap.sm{min-width:clamp(52px,7.6vh,80px);height:clamp(40px,6.2vh,66px);font-size:clamp(19px,3.6vh,36px);}"
++ ".mmv-flap .hint{position:absolute;left:50%;bottom:-.42rem;transform:translateX(-50%);font-size:clamp(8px,1.05vh,11px);"
++ "  font-weight:900;color:#fff;background:rgba(28,95,136,.85);padding:.05rem .32rem;border-radius:999px;white-space:nowrap;}"
++ ".mmv-say{margin:0;text-align:center;font-size:clamp(12px,1.62vh,17px);font-weight:800;color:#5c7488;}"
++ ".mmv-say b{color:#c1553a;font-weight:900;}"
++ ".mmv-tip{margin:0;text-align:center;font-size:clamp(10px,1.28vh,13px);font-weight:800;color:#8aa0b0;}"
++ ".mmv-tip b{color:#2f8ec2;}"
++ ".mmv-lid{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;"
++ "  padding:.85vh .8vh;border:0;border-radius:16px;font-family:inherit;cursor:pointer;text-align:center;"
++ "  background:#f7fbff;box-shadow:inset 0 0 0 1.7px #cfe4f2;min-height:clamp(50px,7vh,76px);}"
++ ".mmv-lid:active{transform:scale(.995);}"
++ ".mmv-lid .closed{display:block;font-size:clamp(12px,1.62vh,17px);font-weight:900;color:#3d7fa6;line-height:1.35;}"
++ ".mmv-lid .opened{display:none!important;}"
++ ".mmv-lid.on{background:#f3fdf7;box-shadow:inset 0 0 0 1.9px #a8e3c2;align-items:stretch;}"
++ ".mmv-lid.on .closed{display:none;}"
++ ".mmv-lid.on .opened{display:flex!important;flex-direction:column;gap:.55rem;animation:mmvSlide .28s ease-out;}"
++ ".mmv-addrow{display:flex;align-items:center;justify-content:center;gap:.22rem;flex-wrap:wrap;"
++ "  font-size:clamp(14px,2.05vh,23px);font-weight:900;color:#1f7a55;line-height:1.2;}"
++ ".mmv-addrow .p{color:#2fa06a;}"
++ ".mmv-groups{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;}"
++ ".mmv-grp{display:flex;flex-direction:column;align-items:center;gap:.32rem;padding:.5rem .55rem;border-radius:14px;"
++ "  background:var(--c,#eef6fc);box-shadow:inset 0 0 0 1.4px rgba(20,50,70,.07);animation:mmvGrow .26s ease-out;}"
++ ".mmv-gdots{display:flex;gap:.28rem;flex-wrap:wrap;justify-content:center;max-width:100%;}"
++ ".mmv-gn{font-size:clamp(9px,1.2vh,12.5px);font-weight:900;color:#4a5b68;white-space:nowrap;}"
++ ".mmv-bead{display:inline-block;width:clamp(13px,1.85vh,20px);height:clamp(13px,1.85vh,20px);border-radius:50%;"
++ "  background:#fff;box-shadow:inset 0 0 0 2px #d9e4ec;vertical-align:middle;}"
++ ".mmv-bead.c{box-shadow:inset 0 0 0 2px #ffffff,0 1px 3px rgba(30,60,80,.20);background:#fff;}"
++ ".mmv-grp .mmv-bead{background:var(--d,#7fbdf0);box-shadow:inset 0 0 0 2px #fff,0 1px 3px rgba(30,60,80,.18);}"
++ ".mmv-brow.on .mmv-bead{background:var(--d,#7fbdf0);box-shadow:inset 0 0 0 2px #fff,0 2px 4px rgba(20,50,70,.16);}"
++ ".mmv-box .mmv-bead{background:var(--d,#f0a04b);box-shadow:inset 0 0 0 2px #fff,0 1px 3px rgba(30,60,80,.16);}"
++ ".mmv-wrap.mmv-short .mmv-panel{flex:1 1 auto;justify-content:center;}"
++ ".mmv-beads{display:flex;flex-direction:column;gap:.3vh;padding:.6vh .55vh;border-radius:16px;"
++ "  background:#fbfdff;box-shadow:inset 0 0 0 1.4px #e2ecf3;}"
++ ".mmv-brow{display:flex;align-items:center;gap:.4rem;padding:.18rem .35rem;border-radius:10px;background:#f2f7fb;"
++ "  transition:background .18s;}"
++ ".mmv-brow .mmv-bn{flex:0 0 auto;width:1.35rem;text-align:center;font-size:clamp(9px,1.18vh,12px);font-weight:900;color:#b3c2ce;}"
++ ".mmv-brow .mmv-bd{display:flex;gap:.26rem;flex-wrap:wrap;min-width:0;}"
++ ".mmv-brow.on{background:var(--c,#eef6fc);}"
++ ".mmv-brow.on .mmv-bn{color:#4a5b68;}"
++ ".mmv-slide{display:flex;align-items:center;gap:.5rem;}"
++ ".mmv-slide input[type=range]{flex:1 1 auto;min-width:0;height:2.9rem;accent-color:#2f8ec2;cursor:pointer;}"
++ ".mmv-slide .tick{flex:0 0 auto;font-size:clamp(10px,1.25vh,13px);font-weight:900;color:#9fb2c1;}"
++ ".mmv-step{flex:0 0 auto;width:2.9rem;height:2.9rem;border:0;border-radius:50%;font-family:inherit;cursor:pointer;"
++ "  font-size:clamp(18px,2.4vh,24px);font-weight:900;color:#1c6b96;background:#eef6fc;"
++ "  box-shadow:inset 0 0 0 1.4px #cfe4f2;}"
++ ".mmv-step:active{transform:scale(.94);}"
++ ".mmv-boxes{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:.5rem;}"
++ ".mmv-box{display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:.55rem .35rem .5rem;border-radius:14px;"
++ "  background:#fffdf6;box-shadow:inset 0 0 0 1.5px #f0e0b4;min-width:0;}"
++ ".mmv-box>b{font-size:clamp(9px,1.22vh,12.5px);font-weight:900;color:#a3822f;white-space:nowrap;}"
++ ".mmv-bdots{display:flex;gap:.26rem;flex-wrap:wrap;justify-content:center;min-height:clamp(16px,2.2vh,24px);align-items:center;}"
++ ".mmv-bdots .mmv-bead{animation:mmvDrop .3s ease-out both;animation-delay:calc(var(--i,0) * 34ms);}"
++ ".mmv-box .cnt{font-size:clamp(14px,2vh,21px);font-weight:900;color:#c1553a;line-height:1;}"
++ ".mmv-left{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.5rem .6rem;border-radius:13px;"
++ "  background:#fff4ee;box-shadow:inset 0 0 0 1.5px #f7c9b5;font-size:clamp(11px,1.45vh,15px);font-weight:900;color:#a9542f;}"
++ ".mmv-q{display:flex;flex-direction:column;gap:.6vh;padding:.9vh .9vh;border-radius:16px;background:#fbfdff;"
++ "  box-shadow:inset 0 0 0 1.4px #e2ecf3;}"
++ ".mmv-qh{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}"
++ ".mmv-qh b{font-size:clamp(13px,1.8vh,18px);font-weight:900;color:#1b3f5c;}"
++ ".mmv-prog{margin-left:auto;font-size:clamp(10px,1.25vh,13px);font-weight:900;color:#2f8b6b;background:#f2f8f4;"
++ "  padding:.12rem .55rem;border-radius:999px;box-shadow:inset 0 0 0 1px #d7e8de;white-space:nowrap;}"
++ ".mmv-ask{margin:0;font-size:clamp(14px,1.95vh,20px);font-weight:900;color:#22455e;line-height:1.4;}"
++ ".mmv-pic{display:flex;flex-direction:column;gap:.32rem;padding:.5rem .55rem;border-radius:13px;background:#eaf6fd;"
++ "  box-shadow:inset 0 0 0 1.3px #cfe6f4;align-self:flex-start;max-width:100%;}"
++ ".mmv-pic .mmv-bd{display:flex;gap:.24rem;flex-wrap:wrap;background:#fff;border-radius:9px;padding:.16rem .32rem;"
++ "  box-shadow:inset 0 0 0 1px #dbeaf5;}"
++ ".mmv-pic .mmv-bead{background:#9fd2f0;box-shadow:inset 0 0 0 2px #fff;}"
++ ".mmv-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(5.6rem,1fr));gap:.45rem;}"
++ ".mmv-opt{height:clamp(44px,6.4vh,62px);border:0;border-radius:14px;font-family:inherit;cursor:pointer;"
++ "  font-size:clamp(17px,2.4vh,25px);font-weight:900;color:#33505f;background:#f4f9fd;"
++ "  box-shadow:inset 0 0 0 1.5px #dde8ef;}"
++ ".mmv-opt:active{transform:scale(.985);}"
++ ".mmv-opt.right{background:#eafaf1;color:#12724a;box-shadow:inset 0 0 0 2.2px #7ed4a3;}"
++ ".mmv-opt.wrong{background:#fff0ee;color:#a63a25;box-shadow:inset 0 0 0 2.2px #f3a89b;}"
++ ".mmv-fb{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:clamp(12px,1.65vh,17px);font-weight:900;}"
++ ".mmv-fb.ok{color:#1f8a5c;}"
++ ".mmv-fb.no{color:#c1553a;}"
++ ".mmv-next{height:clamp(40px,5.6vh,54px);padding:0 1rem;border:0;border-radius:999px;font-family:inherit;cursor:pointer;"
++ "  font-size:clamp(12px,1.65vh,17px);font-weight:900;color:#fff;background:linear-gradient(135deg,#2f8ec2,#1c5f88);"
++ "  box-shadow:0 3px 9px rgba(28,95,136,.26);margin-left:auto;}"
++ ".mmv-done{display:flex;flex-direction:column;align-items:center;gap:.55rem;padding:1.2vh .9vh;border-radius:16px;"
++ "  background:linear-gradient(150deg,#fff8e2,#f4fdf7);box-shadow:inset 0 0 0 1.6px #f0e0b4;text-align:center;}"
++ ".mmv-done .big{font-size:clamp(30px,5.4vh,54px);line-height:1;animation:mmvPop .4s ease-out;}"
++ ".mmv-done b{font-size:clamp(14px,2vh,21px);font-weight:900;color:#8a5100;}"
++ ".mmv-done p{margin:0;font-size:clamp(11px,1.45vh,15px);font-weight:800;color:#5c7488;}"
++ ".mmv-done .star{font-size:clamp(13px,1.8vh,18px);font-weight:900;color:#c1553a;}"
++ "@keyframes mmvPop{0%{transform:scale(.55);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1);opacity:1}}"
++ "@keyframes mmvSlide{0%{transform:translateY(-6px);opacity:0}100%{transform:translateY(0);opacity:1}}"
++ "@keyframes mmvGrow{0%{transform:scale(.86);opacity:0}100%{transform:scale(1);opacity:1}}"
++ "@keyframes mmvDrop{0%{transform:translateY(-12px) scale(.6);opacity:0}100%{transform:none;opacity:1}}"
++ "@media (max-width:520px){"
++ " .mmv-wrap{padding:.6rem .55rem .9rem;gap:.5rem;}"
++ " .mmv-mode{height:2.1rem;padding:0 .52rem;font-size:11.5px;}"
++ " .mmv-row{gap:.32rem;}"
++ " .mmv-lab{flex:0 0 100%;margin-bottom:-.05rem;}"
++ " .mmv-chips{gap:.24rem;}"
++ " .mmv-chip{height:2.05rem;min-width:2.02rem;padding:0 .34rem;font-size:11.5px;border-radius:10px;}"
++ " .mmv-chip small{display:none;}"
++ " .mmv-eq{padding:.6rem .4rem;gap:.3rem;}"
++ " .mmv-groups{gap:.35rem;}"
++ " .mmv-grp{padding:.4rem .45rem;}"
++ " .mmv-opt{height:2.9rem;font-size:17px;}"
++ "}";
+
+function ensureCss(){
+  if (document.getElementById("mmvCss")) return;
+  try {
+    var st = document.createElement("style");
+    st.id = "mmvCss"; st.textContent = CSS;
+    document.head.appendChild(st);
+  } catch(e){}
+}
+
+/* ---------------------------- 조각 ---------------------------- */
+function beads(n, cls){
+  var out = "";
+  for (var i = 0; i < n; i++) out += '<i class="mmv-bead' + (cls ? " " + cls : "") + '"></i>';
+  return out;
+}
+function beadRows(n, cls){
+  var out = "";
+  for (var i = 0; i < n; i++) out += '<i class="mmv-bead' + (cls ? " " + cls : "") + '" style="--i:' + i + '"></i>';
+  return out;
+}
+function chipsHTML(list, cur, attr, fmt){
+  var out = "";
+  for (var i = 0; i < list.length; i++){
+    var v = list[i], on = v === cur;
+    out += '<button type="button" class="mmv-chip' + (on ? " on" : "") + '" data-' + attr + '="' + v + '"'
+        + ' aria-pressed="' + (on ? "true" : "false") + '">' + v + (fmt ? '<small>' + fmt(v) + '</small>' : '') + '</button>';
+  }
+  return out;
+}
+
+/* ---------------------------- ① 더하고 또 더하기 --------------- */
+function addPanel(){
+  var a = M.dan, b = M.mul, p = a * b;
+  var plus = "";
+  for (var i = 0; i < b; i++) plus += (i ? '<span class="p">+</span>' : "") + a;
+  var groups = "";
+  for (var g = 0; g < b; g++){
+    groups += '<div class="mmv-grp" style="--c:' + PALS[g % PALS.length] + ';--d:' + PALS2[g % PALS2.length] + '">'
+            +   '<div class="mmv-gdots">' + beads(a) + '</div>'
+            +   '<span class="mmv-gn">' + (g + 1) + '묶음 · ' + a + '개</span>'
+            + '</div>';
+  }
+  var skip = "";
+  for (var s = 1; s <= b; s++) skip += (s > 1 ? ' → ' : '') + (a * s);
+
+  var opened = '<div class="opened">'
+    + '<div class="mmv-addrow">' + plus + '<span class="p">=</span>' + p + '</div>'
+    + '<div class="mmv-groups">' + groups + '</div>'
+    + '</div>';
+
+  return ''
+  + '<div class="mmv-panel">'
+  +   '<div class="mmv-row">'
+  +     '<span class="mmv-lab">몇 씩?</span>'
+  +     '<div class="mmv-chips" role="group" aria-label="몇 씩 묶을지 고르기">' + chipsHTML([2,3,4,5,6,7,8,9], M.dan, "mmdan", function(){ return "개"; }) + '</div>'
+  +   '</div>'
+  +   '<div class="mmv-row">'
+  +     '<span class="mmv-lab">몇 묶음?</span>'
+  +     '<div class="mmv-chips" role="group" aria-label="몇 묶음인지 고르기">' + chipsHTML([1,2,3,4,5,6,7,8,9], M.mul, "mmmul", function(){ return "묶음"; }) + '</div>'
+  +   '</div>'
+  +   '<div class="mmv-eq">'
+  +     '<span class="mmv-n">' + a + '</span>'
+  +     '<span class="mmv-op">×</span>'
+  +     '<span class="mmv-n">' + b + '</span>'
+  +     '<span class="mmv-op">=</span>'
+  +     '<button class="mmv-flap' + (M.open ? " on" : "") + '" type="button" data-mmflap="mul" aria-expanded="' + (M.open ? "true" : "false") + '" aria-label="정답 덮개 열기">'
+  +       '<span class="q">?</span><span class="a">' + p + '</span>'
+  +       '<span class="hint">' + (M.open ? "덮개 닫기" : "톡 눌러 열기") + '</span>'
+  +     '</button>'
+  +   '</div>'
+  +   '<p class="mmv-say">' + a + '개씩 <b>' + b + '</b>묶음이에요</p>'
+  +   '<div class="mmv-lid' + (M.open ? " on" : "") + '" role="button" tabindex="0" data-mmflap="mul" aria-expanded="' + (M.open ? "true" : "false") + '">'
+  +     '<span class="closed">👆 덮개를 눌러서 더하기로 바꿔 보세요</span>'
+  +     opened
+  +   '</div>'
+  +   '<p class="mmv-tip">' + a + '씩 뛰어 세기 · <b>' + skip + '</b></p>'
+  + '</div>';
+}
+
+/* ---------------------------- ② 구슬 묶음 당기기 --------------- */
+var MAXROW = 9;
+function bundlePanel(){
+  var per = M.per, row = M.row, p = per * row;
+  var rows = "";
+  for (var i = 0; i < MAXROW; i++){
+    rows += '<div class="mmv-brow' + (i < row ? " on" : "") + '" style="--c:' + PALS[i % PALS.length] + ';--d:' + PALS2[i % PALS2.length] + '">'
+         +    '<span class="mmv-bn">' + (i + 1) + '</span>'
+         +    '<span class="mmv-bd">' + beads(per) + '</span>'
+         +  '</div>';
+  }
+  return ''
+  + '<div class="mmv-panel">'
+  +   '<div class="mmv-row">'
+  +     '<span class="mmv-lab">몇 개씩 묶을까요?</span>'
+  +     '<div class="mmv-chips" role="group" aria-label="몇 개씩 묶을지 고르기">' + chipsHTML([2,3,4,5,6,7,8,9], M.per, "mmper", function(){ return "개씩"; }) + '</div>'
+  +   '</div>'
+  +   '<div class="mmv-beads" id="mmvBeads">' + rows + '</div>'
+  +   '<div class="mmv-slide">'
+  +     '<button class="mmv-step" type="button" data-mmbs="-1" aria-label="한 묶음 빼기">－</button>'
+  +     '<input type="range" id="mmvRange" min="0" max="' + MAXROW + '" step="1" value="' + row + '" aria-label="몇 묶음인지 당겨서 고르기">'
+  +     '<button class="mmv-step" type="button" data-mmbs="1" aria-label="한 묶음 더하기">＋</button>'
+  +   '</div>'
+  +   '<div class="mmv-eq">'
+  +     '<span class="mmv-n" id="mmvEqRow">' + row + '</span>'
+  +     '<span class="mmv-op">×</span>'
+  +     '<span class="mmv-n">' + per + '</span>'
+  +     '<span class="mmv-op">=</span>'
+  +     '<button class="mmv-flap' + (M.ans ? " on" : "") + '" type="button" id="mmvFlapAns" data-mmflap="ans" aria-expanded="' + (M.ans ? "true" : "false") + '" aria-label="정답 덮개 열기">'
+  +       '<span class="q">?</span><span class="a">' + p + '</span>'
+  +       '<span class="hint">' + (M.ans ? "덮개 닫기" : "먼저 맞혀 보기") + '</span>'
+  +     '</button>'
+  +   '</div>'
+  +   '<p class="mmv-say" id="mmvSay">' + per + '개씩 <b>' + row + '</b>묶음 = <b>' + p + '</b>개</p>'
+  +   '<p class="mmv-tip">슬라이더를 옆으로 쓱 당기면 구슬 줄이 <b>한 줄씩</b> 색칠돼요</p>'
+  + '</div>';
+}
+function bundleSync(){
+  var rows = document.querySelectorAll("#mmvBeads .mmv-brow");
+  for (var i = 0; i < rows.length; i++) rows[i].classList.toggle("on", i < M.row);
+  var rg = $("mmvRange");
+  if (rg && String(rg.value) !== String(M.row)) rg.value = String(M.row);
+  var n = $("mmvEqRow"); if (n) n.textContent = String(M.row);
+  var fl = $("mmvFlapAns");
+  if (fl){
+    fl.classList.toggle("on", M.ans); fl.setAttribute("aria-expanded", M.ans ? "true" : "false");
+    var an = fl.querySelector(".a"); if (an) an.textContent = String(M.per * M.row);
+    var hi = fl.querySelector(".hint"); if (hi) hi.textContent = M.ans ? "덮개 닫기" : "먼저 맞혀 보기";
+  }
+  var say = $("mmvSay");
+  if (say) say.innerHTML = M.per + '개씩 <b>' + M.row + '</b>묶음 = <b>' + (M.per * M.row) + '</b>개';
+}
+
+/* ---------------------------- ③ 똑같이 나누기 ------------------- */
+function sharePanel(){
+  var tot = M.total, fr = M.fr;
+  var each = Math.floor(tot / fr), rest = tot % fr;
+  var cols = Math.min(fr, 3);
+  var boxes = "";
+  for (var i = 0; i < fr; i++){
+    boxes += '<div class="mmv-box" style="--d:' + PALS2[i % PALS2.length] + '">'
+          +    '<b>' + (i + 1) + '명</b>'
+          +    '<span class="mmv-bdots">' + beadRows(each) + '</span>'
+          +    '<span class="cnt">' + each + '개</span>'
+          +  '</div>';
+  }
+  var left = rest
+    ? '<div class="mmv-left">🙅 똑같이 나눠지지 않아요 · 남는 구슬 <b>' + rest + '개</b></div>'
+    : '<div class="mmv-tip">' + tot + '개가 <b>' + fr + '명</b>에게 똑같이 나뉘었어요</div>';
+
+  return ''
+  + '<div class="mmv-panel">'
+  +   '<div class="mmv-row">'
+  +     '<span class="mmv-lab">구슬 몇 개?</span>'
+  +     '<div class="mmv-chips" role="group" aria-label="구슬 개수 고르기">' + chipsHTML(TOTALS, M.total, "mmtot", function(){ return "개"; }) + '</div>'
+  +   '</div>'
+  +   '<div class="mmv-row">'
+  +     '<span class="mmv-lab">몇 명에게?</span>'
+  +     '<div class="mmv-chips" role="group" aria-label="몇 명에게 나눌지 고르기">' + chipsHTML([2,3,4,5,6], M.fr, "mmfr", function(){ return "명"; }) + '</div>'
+  +   '</div>'
+  +   '<div class="mmv-boxes" style="--n:' + cols + '">' + boxes + '</div>'
+  +   left
+  +   '<div class="mmv-eq">'
+  +     '<span class="mmv-n">' + tot + '</span>'
+  +     '<span class="mmv-op">÷</span>'
+  +     '<span class="mmv-n">' + fr + '</span>'
+  +     '<span class="mmv-op">=</span>'
+  +     '<button class="mmv-flap' + (M.sans ? " on" : "") + '" type="button" data-mmflap="shr" aria-expanded="' + (M.sans ? "true" : "false") + '" aria-label="정답 덮개 열기">'
+  +       '<span class="q">?</span><span class="a">' + each + '</span>'
+  +       '<span class="hint">' + (M.sans ? "덮개 닫기" : "먼저 맞혀 보기") + '</span>'
+  +     '</button>'
+  +     (rest ? '<small>남는 ' + rest + '개</small>' : '')
+  +   '</div>'
+  +   '<p class="mmv-say">' + tot + '개를 <b>' + fr + '명</b>에게 똑같이 나누면 한 명이 <b>' + each + '개</b>' + (rest ? ' (남는 ' + rest + '개)' : '') + '</p>'
+  + '</div>';
+}
+
+/* ---------------------------- ④ 미니 퀴즈 ---------------------- */
+function makeOpts(ans){
+  var set = [ans], guard = 0;
+  var cand = [ans - 1, ans + 1, ans + 2, ans - 2, ans + ans, ans + 3, ans * 2, Math.max(1, ans - 3)];
+  while (set.length < 3 && guard < 60){
+    var v = pickOne(cand);
+    if (v > 0 && set.indexOf(v) < 0) set.push(v);
+    guard++;
+  }
+  var k = 1;
+  while (set.length < 3){ if (set.indexOf(ans + k) < 0) set.push(ans + k); k++; }
+  return shuffle(set);
+}
+function newQuiz(){
+  var qs = [];
+  var per = 2 + rnd(8), cnt = 2 + rnd(4);                 /* 그림 보고 세기 */
+  qs.push({ kind:"pic", per:per, cnt:cnt, ans:per * cnt,
+            ask:"구슬이 모두 몇 개일까요?" });
+  var a = 2 + rnd(8), b = 2 + rnd(8);                      /* 곱셈식 */
+  qs.push({ kind:"mul", a:a, b:b, ans:a * b, ask:a + " × " + b + " = ?" });
+  var fr = 2 + rnd(4), each = 2 + rnd(5);                  /* 나눗셈 */
+  qs.push({ kind:"div", fr:fr, total:fr * each, ans:each,
+            ask:(fr * each) + "개를 " + fr + "명에게 똑같이 나누면 한 명은 몇 개일까요?" });
+  for (var i = 0; i < qs.length; i++) qs[i].opts = makeOpts(qs[i].ans);
+  M.qs = qs; M.qi = 0; M.right = 0; M.picked = -1; M.fin = false; M.got = 0;
+}
+function quizPanel(){
+  if (!M.qs.length) newQuiz();
+  if (M.fin){
+    var msg = M.right === 3 ? "3문제 모두 맞았어요! 🎉" : "3문제 중 " + M.right + "개 맞았어요!";
+    return ''
+    + '<div class="mmv-panel">'
+    +   '<div class="mmv-done">'
+    +     '<span class="big">' + (M.right === 3 ? "🏆" : "🎯") + '</span>'
+    +     '<b>' + msg + '</b>'
+    +     '<p>구슬을 직접 묶고 나눠 봤으니 이제 곱셈·나눗셈이 눈에 보여요!</p>'
+    +     '<span class="star">' + (M.got ? "⭐ +" + M.got + " 별을 받았어요" : "오늘 별은 이미 받았어요 · 또 풀어 봐도 좋아요 😊") + '</span>'
+    +     '<button class="mmv-next" type="button" data-mmagain="1" style="margin:0">🔄 한 번 더 풀기</button>'
+    +   '</div>'
+    + '</div>';
+  }
+  var q = M.qs[M.qi];
+  var pic = "";
+  if (q.kind === "pic"){
+    var rows = "";
+    for (var i = 0; i < q.cnt; i++) rows += '<span class="mmv-bd">' + beads(q.per) + '</span>';
+    pic = '<div class="mmv-pic">' + rows + '</div>';
+  }
+  var opts = "";
+  for (var j = 0; j < q.opts.length; j++){
+    var v = q.opts[j], cls = "mmv-opt";
+    if (M.picked >= 0){
+      if (v === q.ans) cls += " right";
+      else if (v === M.picked) cls += " wrong";
+    }
+    opts += '<button class="' + cls + '" type="button" data-mmo="' + v + '"' + (M.picked >= 0 ? " disabled" : "") + '>' + v + (q.kind === "pic" ? "개" : "") + '</button>';
+  }
+  var fb = "";
+  if (M.picked >= 0){
+    var ok = M.picked === q.ans;
+    fb = '<div class="mmv-fb ' + (ok ? "ok" : "no") + '">' + (ok ? "⭕ 정답이에요!" : "❌ 다시 생각해 봐요 — 정답은 " + q.ans) + '</div>'
+       + '<button class="mmv-next" type="button" data-mmnext="1">' + (M.qi >= M.qs.length - 1 ? "결과 보기 →" : "다음 문제 →") + '</button>';
+  }
+  return ''
+  + '<div class="mmv-panel">'
+  +   '<div class="mmv-q">'
+  +     '<div class="mmv-qh"><b>⭐ 미니 퀴즈</b><span class="mmv-prog" id="mmvProg">' + (M.qi + 1) + ' / ' + M.qs.length + '</span></div>'
+  +     '<p class="mmv-ask">' + q.ask + '</p>'
+  +     pic
+  +     '<div class="mmv-opts">' + opts + '</div>'
+  +     fb
+  +   '</div>'
+  + '</div>';
+}
+
+/* ---------------------------- 그리기 ---------------------------- */
+function panelHTML(){
+  if (M.mode === "bundle") return bundlePanel();
+  if (M.mode === "share")  return sharePanel();
+  if (M.mode === "quiz")   return quizPanel();
+  return addPanel();
+}
+function paint(){
+  ensureCss();
+  var wrap = $("mmvWrap");
+  if (!wrap) return;
+  var modes = "";
+  for (var i = 0; i < MODES.length; i++){
+    var m = MODES[i], on = m[0] === M.mode;
+    modes += '<button class="mmv-mode' + (on ? " on" : "") + '" type="button" data-mmmode="' + m[0] + '" aria-pressed="' + (on ? "true" : "false") + '">'
+           + '<em aria-hidden="true">' + m[1] + '</em>' + m[2] + '</button>';
+  }
+  wrap.innerHTML = ''
+  + '<div class="mmv-hd"><b>🎯 무브무브 곱셈·나눗셈</b>'
+  +   '<span>손으로 당기고 덮개를 열어 보며 ‘몇 씩 몇 묶음’을 눈으로 익히는 놀이예요</span></div>'
+  + '<div class="mmv-modes" role="group" aria-label="무브무브 놀이 고르기">' + modes + '</div>'
+  + panelHTML();
+  fitMid();
+}
+function fitMid(){
+  try {
+    var wrap = $("mmvWrap");
+    if (!wrap) return;
+    /* 수학 영상·수세기 화면처럼 카드가 화면 끝까지 차게 (스크롤 화면에서는 남은 높이만큼) */
+    try {
+      var v = $("viewMathMove"), host = document.querySelector(".views");
+      var fixed = getComputedStyle(document.body).overflowY === "hidden";
+      if (v && host && fixed && host.clientHeight > 200){
+        v.style.height = host.clientHeight + "px";
+        wrap.style.minHeight = "";
+      } else if (v){
+        v.style.height = "";
+        var top = wrap.getBoundingClientRect().top + (window.pageYOffset || 0);
+        var avail = Math.round(window.innerHeight - top - 14);
+        wrap.style.minHeight = (window.innerWidth > 520 && avail > 300) ? (avail + "px") : "";
+      }
+    } catch(e){}
+    requestAnimationFrame(function(){
+      try { wrap.classList.toggle("mmv-short", wrap.scrollHeight <= wrap.clientHeight + 1); } catch(e){}
+    });
+  } catch(e){}
+}
+function setMode(mode){
+  if (["add","bundle","share","quiz"].indexOf(mode) < 0) return;
+  M.mode = mode;
+  writeJSON(MODE_KEY, { mode: mode });
+  if (mode === "quiz" && !M.qs.length) newQuiz();
+  paint();
+}
+
+/* ---------------------------- 동작 ---------------------------- */
+function finishQuiz(){
+  if (M.fin) return;
+  M.fin = true;
+  M.got = 0;
+  try {
+    var day = (SB.today ? SB.today() : new Date().toISOString().slice(0, 10));
+    M.got = SB.earn ? SB.earn("math|move:" + day, 1) : 0;
+  } catch(e){ M.got = 0; }
+  try { if (SB.markAttendance) SB.markAttendance("math"); } catch(e){}
+  paint();
+  if (M.got) { try { SB.starFX(M.got, "🎯 무브무브 곱셈 3문제 완료!"); } catch(e){ toast("🎯 3문제 완료! ⭐ +1"); } }
+  else toast("3문제 다 풀었어요! 오늘 별은 이미 받았어요 😊");
+}
+
+function onWrapClick(e){
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var wrap = $("mmvWrap");
+  if (!wrap || !wrap.contains(t)) return;
+  var el;
+  if ((el = t.closest("[data-mmmode]"))){ setMode(el.getAttribute("data-mmmode")); return; }
+  if ((el = t.closest("[data-mmflap]"))){
+    var k = el.getAttribute("data-mmflap");
+    if (k === "mul") M.open = !M.open;
+    else if (k === "ans" || k === "shr"){
+      if (k === "ans") M.ans = !M.ans; else M.sans = !M.sans;
+      var any = $("mmvBeads");
+      if (k === "ans" && any) { bundleSync(); return; }   /* 슬라이더 조작 중엔 다시 그리지 않는다 */
+    }
+    paint(); return;
+  }
+  if ((el = t.closest("[data-mmbs]"))){
+    M.row = clamp(M.row + (parseInt(el.getAttribute("data-mmbs"), 10) || 0), 0, MAXROW);
+    M.ans = false; bundleSync(); return;
+  }
+  if ((el = t.closest("[data-mmdan]"))){ M.dan = parseInt(el.getAttribute("data-mmdan"), 10) || 2; M.open = false; paint(); return; }
+  if ((el = t.closest("[data-mmmul]"))){ M.mul = parseInt(el.getAttribute("data-mmmul"), 10) || 1; M.open = false; paint(); return; }
+  if ((el = t.closest("[data-mmper]"))){ M.per = parseInt(el.getAttribute("data-mmper"), 10) || 2; M.ans = false; paint(); return; }
+  if ((el = t.closest("[data-mmtot]"))){ M.total = parseInt(el.getAttribute("data-mmtot"), 10) || 6; M.sans = false; paint(); return; }
+  if ((el = t.closest("[data-mmfr]"))){ M.fr = parseInt(el.getAttribute("data-mmfr"), 10) || 2; M.sans = false; paint(); return; }
+  if ((el = t.closest("[data-mmo]"))){
+    if (M.picked >= 0) return;
+    M.picked = parseInt(el.getAttribute("data-mmo"), 10);
+    if (M.picked === M.qs[M.qi].ans) M.right++;
+    paint(); return;
+  }
+  if (t.closest("[data-mmnext]")){
+    M.picked = -1;
+    if (M.qi >= M.qs.length - 1) finishQuiz();
+    else { M.qi++; paint(); }
+    return;
+  }
+  if (t.closest("[data-mmagain]")){ newQuiz(); paint(); return; }
+}
+
+function onWrapInput(e){
+  var t = e.target;
+  if (!t || t.id !== "mmvRange") return;
+  M.row = clamp(parseInt(t.value, 10) || 0, 0, MAXROW);
+  M.ans = false;
+  bundleSync();
+}
+
+/* ---------------------------- 연결 ---------------------------- */
+function hook(){
+  ensureCss();
+  document.addEventListener("click", onWrapClick, true);
+  document.addEventListener("input", onWrapInput, true);
+  document.addEventListener("change", onWrapInput, true);
+  document.addEventListener("keydown", function(e){
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var t = e.target;
+    if (t && t.closest && t.closest("[data-mmflap],[data-mmmode]")){ e.preventDefault(); onWrapClick({ target:t }); }
+  }, true);
+  var saved = readJSON(MODE_KEY, null);
+  if (saved && saved.mode && ["add","bundle","share","quiz"].indexOf(saved.mode) >= 0) M.mode = saved.mode;
+  paint();
+  SB.onShow.math = (function(prev){
+    return function(sec){
+      if (prev) { try { prev.apply(this, arguments); } catch(e){} }
+      if (sec === "mv") { try { paint(); } catch(e){} }
+    };
+  })(SB.onShow.math);
+  SB.moveMath = { state:function(){ return { mode:M.mode, dan:M.dan, mul:M.mul, open:M.open, per:M.per, row:M.row, ans:M.ans, total:M.total, fr:M.fr, sans:M.sans, qi:M.qi, right:M.right, fin:M.fin, got:M.got,
+    q:M.qs[M.qi] ? { ask:M.qs[M.qi].ask, ans:M.qs[M.qi].ans, opts:M.qs[M.qi].opts } : null }; } };
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", hook);
+else hook();
 })();
 
 </script>
