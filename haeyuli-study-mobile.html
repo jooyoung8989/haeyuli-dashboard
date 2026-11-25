@@ -8570,12 +8570,12 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
     <!-- ================= 🇰🇷 국어 · 낱말 놀이 ================= -->
     <section class="view kowview" id="viewKoWord" data-view="ko-word" hidden>
       <div class="panel word-game">
-        <div class="panel-h"><b>🎴 낱말 놀이</b><span class="ph-no2" id="wgProg">0 / 8</span></div>
-        <div class="wg-body" id="wgBody"></div>
+        <div class="panel-h"><b>🎴 낱말 놀이</b><span class="ph-no2" id="kwgProg">0 / 8</span></div>
+        <div class="wg-body" id="kwgBody"></div>
       </div>
       <aside class="panel word-list">
         <div class="panel-h"><b>📚 오늘의 낱말</b><span class="ph-no2">뜻도 함께 봐요</span></div>
-        <div class="wg-list" id="wgList"></div>
+        <div class="wg-list" id="kwgList"></div>
       </aside>
     </section>
 
@@ -14670,124 +14670,124 @@ var esc = SB.esc;
 var KEY = "haeyuli.ko.v1";
 
 var DAYS = [
-  { em:"👀", q:"백문이 불여일견.", src:"속담", mean:"백 번 듣는 것보다 한 번 직접 눈으로 보는 것이 더 좋아요. 눈으로 보면 훨씬 잘 알 수 있어요.",
-    words:[["백문","백 번 들음"],["불여","~보다 못함"],["일견","한 번 봄"]],
-    blanks:[{ s:"백문이 □일견.", a:"불여", o:["불여","불가","불행"] },{ s:"직접 □ 보는 것이 제일 잘 알 수 있어요.", a:"눈으로", o:["눈으로","귀로","손으로"] }] },
-  { em:"🏯", q:"공든 탑이 무너지랴.", src:"속담", mean:"정성을 다해 쌓은 탑은 쉽게 무너지지 않아요. 열심히 한 일은 꼭 좋은 결과가 와요.",
-    words:[["공들이다","정성을 다하다"],["탑","높이 쌓아 올린 건물"],["무너지다","쌓인 것이 허물어지다"]],
-    blanks:[{ s:"공든 □이 무너지랴.", a:"탑", o:["탑","집","산"] },{ s:"정성을 다하면 □ 좋은 결과가 와요.", a:"꼭", o:["꼭","절대","가끔"] }] },
-  { em:"🔥", q:"쇠뿔도 단김에 빼라.", src:"속담", mean:"쇠뿔도 불에 달군 김에 빼야 쉽듯이, 일은 마음먹었을 때 바로 해야 해요.",
-    words:[["쇠뿔","소의 뿔"],["단김","불에 달군 김"],["빼다","속에서 끌어내다"]],
-    blanks:[{ s:"쇠뿔도 단김에 □.", a:"빼라", o:["빼라","넣어라","심어라"] },{ s:"일은 마음먹었을 때 □ 시작해요.", a:"바로", o:["바로","내일","나중에"] }] },
-  { em:"🌈", q:"고생 끝에 낙이 온다.", src:"속담", mean:"힘든 일을 참고 견디면 마지막에는 즐거운 일이 찾아와요.",
-    words:[["고생","힘들고 어려운 일"],["낙","즐거움"],["끝","마지막"]],
-    blanks:[{ s:"고생 끝에 □이 온다.", a:"낙", o:["낙","눈","밥"] },{ s:"힘들어도 참으면 □ 일이 와요.", a:"기쁜", o:["기쁜","슬픈","무서운"] }] },
-  { em:"🚶", q:"시작이 반이다.", src:"속담", mean:"무엇이든 시작하기만 하면 절반은 이룬 것과 같아요. 용기 내어 첫걸음을 떼요.",
-    words:[["시작","처음으로 해 보는 일"],["반","둘로 똑같이 나눈 하나"],["용기","무서워도 해 보는 마음"]],
-    blanks:[{ s:"시작이 □이다.", a:"반", o:["반","끝","셋"] },{ s:"용기 내어 □을 떼면 절반은 이룬 거예요.", a:"첫걸음", o:["첫걸음","마지막걸음","두걸음"] }] },
-  { em:"⛏️", q:"우물을 파도 한 우물을 파라.", src:"속담", mean:"여러 곳을 조금씩 하기보다 한 가지를 끝까지 하는 것이 좋아요.",
-    words:[["우물","땅을 파서 물을 얻는 곳"],["파다","땅을 깊이 들어가게 하다"],["한 가지","오직 하나"]],
-    blanks:[{ s:"우물을 파도 □ 우물을 파라.", a:"한", o:["한","두","세"] },{ s:"여러 가지보다 □를 끝까지 해요.", a:"한 가지", o:["한 가지","모든 것","아무것"] }] },
-  { em:"🪨", q:"돌다리도 두들겨 보고 건너라.", src:"속담", mean:"잘 아는 일도 한 번 더 살피고 조심해서 해요.",
-    words:[["돌다리","돌로 놓은 다리"],["두들기다","톡톡 치다"],["건너다","다리를 지나 다른 쪽으로 가다"]],
-    blanks:[{ s:"돌다리도 □ 보고 건너라.", a:"두들겨", o:["두들겨","밟아","던져"] },{ s:"아는 일도 한 번 더 □ 해요.", a:"살피고", o:["살피고","잊고","버리고"] }] },
-  { em:"☀️", q:"쥐구멍에도 볕 들 날 있다.", src:"속담", mean:"아무리 어려운 사람에게도 좋은 날이 찾아와요. 지금 힘들어도 희망을 가져요.",
-    words:[["쥐구멍","쥐가 드나드는 작은 구멍"],["볕","햇빛"],["희망","잘될 것이라는 기대"]],
-    blanks:[{ s:"쥐구멍에도 □ 들 날 있다.", a:"볕", o:["볕","비","눈"] },{ s:"힘들어도 □을 잃지 않아요.", a:"희망", o:["희망","화","걱정"] }] },
-  { em:"🐇", q:"뛰는 놈 위에 나는 놈 있다.", src:"속담", mean:"잘하는 사람 위에도 더 잘하는 사람이 있어요. 그래서 잘난 척하지 않아요.",
-    words:[["뛰다","빠르게 달리다"],["날다","하늘을 가로질러 가다"],["잘난 척","훌륭한 것처럼 굴기"]],
-    blanks:[{ s:"뛰는 놈 위에 □ 놈 있다.", a:"나는", o:["나는","먹는","자는"] },{ s:"내가 잘해도 □ 척하지 않아요.", a:"잘난", o:["잘난","예쁜","빠른"] }] },
-  { em:"🐔", q:"꿩 대신 닭.", src:"속담", mean:"꼭 가지고 싶은 것이 없을 때 다른 것으로 대신해도 괜찮아요.",
-    words:[["꿩","산에 사는 새"],["대신","다른 것으로 바꾸어"],["닭","집에서 기르는 새"]],
-    blanks:[{ s:"꿩 □ 닭.", a:"대신", o:["대신","처럼","보다"] },{ s:"제일 좋은 것이 없으면 □ 좋은 것을 골라요.", a:"다음으로", o:["다음으로","제일","가장"] }] },
-  { em:"✋", q:"열 손가락 깨물어 안 아픈 손가락 없다.", src:"속담", mean:"열 손가락 모두 깨물면 다 아파요. 가족은 누구 하나 미워할 수 없이 다 소중해요.",
-    words:[["열 손가락","양손의 열 개 손가락"],["깨물다","이로 꽉 물다"],["소중하다","아주 중요하고 값지다"]],
-    blanks:[{ s:"열 손가락 깨물어 안 아픈 □ 없다.", a:"손가락", o:["손가락","발가락","이빨"] },{ s:"가족은 모두 □ 소중해요.", a:"똑같이", o:["똑같이","조금만","가끔"] }] },
-  { em:"📚", q:"배움에는 끝이 없다.", src:"명언", mean:"배우는 일은 아무리 많이 해도 끝이 없어요. 오늘도 하나씩 배워요.",
-    words:[["배움","모르던 것을 알게 됨"],["끝","마지막"],["하나씩","하나마다"]],
-    blanks:[{ s:"배움에는 □이 없다.", a:"끝", o:["끝","시작","봄"] },{ s:"오늘도 □씩 배워요.", a:"하나", o:["하나","열","백"] }] },
-  { em:"🌱", q:"실패는 성공의 어머니다.", src:"명언", mean:"실패해도 포기하지 않으면 그 경험이 성공으로 이끌어 줘요.",
-    words:[["실패","하려던 일을 이루지 못함"],["성공","하려던 일을 이루어 냄"],["경험","직접 해 보며 얻은 것"]],
-    blanks:[{ s:"실패는 □의 어머니다.", a:"성공", o:["성공","슬픔","장난"] },{ s:"실패해도 □하지 않아요.", a:"포기", o:["포기","인사","웃음"] }] },
-  { em:"🌿", q:"어제의 나보다 오늘의 내가 조금 더 자랐어요.", src:"좋은 문장", mean:"남과 비교하지 않고 어제보다 나아진 나를 칭찬해 줘요.",
-    words:[["자라다","점점 커지고 나아지다"],["오늘","지금 이 날"],["칭찬","잘했다고 말해 주는 것"]],
-    blanks:[{ s:"어제의 나보다 오늘의 내가 조금 더 □어요.", a:"자랐", o:["자랐","작았","잊었"] },{ s:"남이 아니라 □ 나와 견주어요.", a:"어제의", o:["어제의","내일의","다른"] }] },
-  { em:"🫶", q:"고맙다고 말하면 마음이 두 배로 따뜻해져요.", src:"좋은 문장", mean:"고마운 마음을 말로 표현하면 나도 그 사람도 기분이 좋아져요.",
-    words:[["고맙다","마음이 따뜻하게 느껴지다"],["두 배","두 곱절"],["따뜻하다","기분이 포근하다"]],
-    blanks:[{ s:"고맙다고 말하면 마음이 □ 배로 따뜻해져요.", a:"두", o:["두","세","한"] },{ s:"고마우면 □ 말해요.", a:"바로", o:["바로","나중에","몰래"] }] }
+  { em:"🌦", q:"가랑비에 옷 젖는 줄 모른다.", src:"속담", mean:"조금씩 내리는 가랑비도 오래 맞으면 옷이 다 젖어요. 작은 일도 자꾸 하면 크게 달라져요.",
+    words:[["가랑비","조금씩 가늘게 내리는 비"], ["젖다","물이 배어들다"], ["오래","긴 시간 동안"]],
+    blanks:[{ s:"가랑비에 옷 □ 줄 모른다.", a:"젖는", o:["젖는", "마르는", "드는"] }, { s:"작은 일도 □ 하면 크게 달라져요.", a:"자꾸", o:["자꾸", "한 번", "가끔"] }] },
+  { em:"🐱", q:"고양이 목에 방울 달기.", src:"속담", mean:"고양이 목에 방울을 다는 일은 아무도 나서기 어려워요. 모두가 어려워하는 일을 할 때 쓰는 말이에요.",
+    words:[["방울","흔들면 소리가 나는 작은 것"], ["목","머리와 몸 사이"], ["나서다","앞장서서 하다"]],
+    blanks:[{ s:"고양이 □에 방울 달기.", a:"목", o:["목", "발", "꼬리"] }, { s:"아무도 나서기 어려운 일을 □ 목에 방울 달기라고 해요.", a:"고양이", o:["고양이", "강아지", "토끼"] }] },
+  { em:"🐉", q:"개천에서 용 난다.", src:"속담", mean:"작은 개천에서도 큰 용이 날아올라요. 어려운 곳에서도 훌륭한 사람이 나와요.",
+    words:[["개천","작은 물이 흐르는 내"], ["용","이야기 속의 큰 동물"], ["훌륭하다","아주 잘하고 멋지다"]],
+    blanks:[{ s:"개천에서 □ 난다.", a:"용", o:["용", "꽃", "별"] }, { s:"어려운 곳에서도 □ 사람이 나와요.", a:"훌륭한", o:["훌륭한", "심술궂은", "게으른"] }] },
+  { em:"🐶", q:"하룻강아지 범 무서운 줄 모른다.", src:"속담", mean:"태어난 지 얼마 안 된 강아지는 범이 무서운지 몰라요. 아무것도 모르고 겁 없이 굴 때 쓰는 말이에요.",
+    words:[["하룻강아지","태어난 지 하루 된 강아지"], ["범","호랑이"], ["겁","무서워하는 마음"]],
+    blanks:[{ s:"하룻강아지 □ 무서운 줄 모른다.", a:"범", o:["범", "개", "닭"] }, { s:"아무것도 모르고 □ 없이 굴면 안 돼요.", a:"겁", o:["겁", "힘", "잠"] }] },
+  { em:"💧", q:"돌고 도는 물레방아.", src:"속담", mean:"물레방아는 빙글빙글 돌고 또 돌아요. 세상일도 돌고 돌아 다시 나에게 와요.",
+    words:[["물레방아","물의 힘으로 돌아가는 기계"], ["돌다","빙글빙글 움직이다"], ["세상","우리가 사는 곳"]],
+    blanks:[{ s:"돌고 도는 □.", a:"물레방아", o:["물레방아", "바람개비", "수레"] }, { s:"나쁜 일을 하면 □ 돌아 내게 와요.", a:"돌고", o:["돌고", "숨고", "멈추고"] }] },
+  { em:"😊", q:"웃는 얼굴에는 복이 온다.", src:"속담", mean:"웃는 얼굴로 있으면 사람들이 좋아하고 기분 좋은 일이 생겨요.",
+    words:[["복","좋은 일이 생기는 운"], ["얼굴","눈·코·입이 있는 앞쪽"], ["기분","마음의 느낌"]],
+    blanks:[{ s:"웃는 □에는 복이 온다.", a:"얼굴", o:["얼굴", "손", "방"] }, { s:"웃으면 □ 좋은 일이 생겨요.", a:"기분", o:["기분", "무서운", "슬픈"] }] },
+  { em:"🌱", q:"열심히 심은 씨앗은 꼭 싹이 튼다.", src:"속담", mean:"정성껏 심은 씨앗은 언젠가 꼭 싹이 트고 자라요. 열심히 한 일은 꼭 결과가 와요.",
+    words:[["씨앗","식물이 될 작은 알"], ["싹","새로 돋아난 잎과 줄기"], ["열심히","힘을 다해"]],
+    blanks:[{ s:"열심히 심은 씨앗은 꼭 □이 튼다.", a:"싹", o:["싹", "꽃", "열매"] }, { s:"열심히 하면 □ 좋은 결과가 와요.", a:"꼭", o:["꼭", "절대", "가끔"] }] },
+  { em:"💡", q:"아는 것이 힘이다.", src:"명언", mean:"많이 알면 무엇이든 잘 해낼 수 있어요. 그래서 배우는 것이 아주 중요해요.",
+    words:[["힘","무엇을 해낼 수 있는 기운"], ["알다","머리로 깨닫다"], ["배우다","가르침을 받아 익히다"]],
+    blanks:[{ s:"아는 것이 □이다.", a:"힘", o:["힘", "꿈", "밥"] }, { s:"많이 □ 힘도 세져요.", a:"배우면", o:["배우면", "놀면", "자면"] }] },
+  { em:"🐢", q:"조금씩 매일 하면 어느새 실력이 된다.", src:"명언", mean:"한 번에 많이 하기보다 조금씩이라도 매일 하면 모르는 사이에 잘하게 돼요.",
+    words:[["조금씩","적은 양으로"], ["어느새","모르는 사이에"], ["실력","잘해 낼 수 있는 힘"]],
+    blanks:[{ s:"조금씩 □ 하면 어느새 실력이 돼요.", a:"매일", o:["매일", "가끔", "한 번"] }, { s:"모르는 사이에 □ 늘었어요.", a:"실력이", o:["실력이", "키가", "목소리가"] }] },
+  { em:"💧", q:"작은 물방울이 모여 바다를 이룬다.", src:"좋은 문장", mean:"아주 작은 물방울도 많이 모이면 넓은 바다가 돼요. 작은 노력도 쌓이면 커요.",
+    words:[["물방울","동글동글한 물 한 방울"], ["모이다","한곳에 오다"], ["바다","넓고 짠물이 가득한 곳"]],
+    blanks:[{ s:"작은 □이 모여 바다를 이룬다.", a:"물방울", o:["물방울", "모래", "구슬"] }, { s:"작은 힘도 □ 모으면 커져요.", a:"모여", o:["모여", "사라져", "흩어져"] }] },
+  { em:"🌷", q:"친절한 말 한마디가 봄바람 같다.", src:"좋은 문장", mean:"다정하게 한 말이 듣는 사람 마음을 포근하게 해 줘요. 말은 봄바람처럼 따뜻할 수 있어요.",
+    words:[["친절","다정하고 부드러운 마음"], ["한마디","짧은 말 한 번"], ["봄바람","봄에 부드럽게 부는 바람"]],
+    blanks:[{ s:"친절한 말 한마디가 □ 같다.", a:"봄바람", o:["봄바람", "겨울바람", "태풍"] }, { s:"다정한 □은 마음을 따뜻하게 해요.", a:"말", o:["말", "밥", "눈"] }] },
+  { em:"🧘", q:"서두르면 실수하고 차분하면 보인다.", src:"좋은 문장", mean:"마음이 급해 빨리 하면 잘못하기 쉬워요. 차분히 하면 잘 보이고 잘할 수 있어요.",
+    words:[["서두르다","빨리 하려고 급하게 굴다"], ["실수","잘못함"], ["차분하다","조용하고 침착하다"]],
+    blanks:[{ s:"서두르면 □하고 차분하면 보인다.", a:"실수", o:["실수", "숨", "울음"] }, { s:"급할수록 □ 하게 해요.", a:"차분", o:["차분", "빠르", "크게"] }] },
+  { em:"👀", q:"남의 좋은 점을 먼저 보자.", src:"좋은 문장", mean:"친구의 잘못보다 좋은 점을 먼저 찾아보면 사이가 좋아지고 배울 것도 많아요.",
+    words:[["좋은 점","잘하는 부분"], ["먼저","앞서서"], ["칭찬","잘했다고 말해 줌"]],
+    blanks:[{ s:"남의 □을 먼저 보자.", a:"좋은 점", o:["좋은 점", "나쁜 점", "이름"] }, { s:"먼저 □하면 사이가 좋아져요.", a:"칭찬", o:["칭찬", "흉내", "걱정"] }] },
+  { em:"🤝", q:"약속을 지키면 믿음이 자란다.", src:"좋은 문장", mean:"작은 약속도 꼭 지키면 친구가 나를 믿어 줘요. 믿음은 약속을 지키며 자라요.",
+    words:[["약속","꼭 하기로 정한 일"], ["믿음","굳게 믿는 마음"], ["지키다","어기지 않고 따르다"]],
+    blanks:[{ s:"약속을 □면 믿음이 자란다.", a:"지키", o:["지키", "잊", "미루"] }, { s:"약속을 어기면 □을 잃어요.", a:"믿음", o:["믿음", "돈", "별"] }] },
+  { em:"🙋", q:"궁금하면 물어보는 것이 용기다.", src:"좋은 문장", mean:"모르는 것을 부끄러워하지 않고 묻는 사람은 용감해요. 물어보면 금방 배울 수 있어요.",
+    words:[["궁금하다","알고 싶은 마음이 들다"], ["용기","무서워도 해 보는 마음"], ["묻다","모르는 것을 알려 달라고 하다"]],
+    blanks:[{ s:"궁금하면 □보는 것이 용기다.", a:"물어", o:["물어", "숨겨", "잊어"] }, { s:"모르면 □ 없이 물어봐요.", a:"부끄러움", o:["부끄러움", "화", "심심함"] }] }
 ];
 
 var CLASSIC = [
-  { id:"kkachi", em:"🐦‍⬛", title:"은혜 갚은 까치", lines:[
-      "한 소년이 밭에서 다친 까치를 주워 집에서 정성껏 돌봤어요.",
-      "까치는 날개가 다 나아 날아갔지만 소년은 아무것도 바라지 않았어요.",
-      "어느 날 까치가 반짝이는 구슬을 물어다 소년에게 놓아 주었어요.",
-      "착한 마음은 반드시 따뜻한 보답으로 돌아온답니다."],
-    vocab:[["까치","날개가 검고 배가 흰 새"],["은혜","도움을 받은 고마운 마음"],["보답","받은 도움을 되돌려 줌"]],
-    ask:"까치가 소년에게 구슬을 물어다 준 까닭은 무엇일까요?" },
-  { id:"janguhwa", em:"🌺", title:"장화 홍련", lines:[
-      "장화와 홍련은 사이좋은 자매였어요.",
-      "새엄마는 홍련을 미워해 연못에 밀어 넣었지요.",
-      "홍련은 연못에서 예쁜 꽃이 되어 피어났어요.",
-      "마을 사람들이 억울한 일을 알아봐 주자 새엄마는 잘못을 뉘우쳤어요."],
-    vocab:[["자매","여자끼리 난 형제"],["미워하다","좋아하지 않고 나쁘게 여기다"],["억울하다","잘못이 없는데 나쁜 일을 당하다"]],
-    ask:"홍련이 억울한 일을 당하고도 끝까지 참은 마음은 무엇일까요?" },
-  { id:"eowangja", em:"🌹", title:"어린 왕자", lines:[
-      "어린 왕자는 아주 작은 별에서 장미 한 송이와 살았어요.",
-      "다른 별들을 여행하며 어른들이 이상하다는 것을 알게 되었어요.",
-      "사막에서 만난 여우가 길들임과 소중함을 가르쳐 주었지요.",
-      "어린 왕자는 자기 별의 장미가 가장 소중하다는 걸 깨달았어요."],
-    vocab:[["별","하늘에 빛나는 둥근 천체"],["사막","모래가 넓게 펼쳐진 땅"],["소중","아주 중요함"]],
-    ask:"어린 왕자가 자기 별의 장미를 가장 소중하다고 느낀 까닭은 무엇일까요?" },
-  { id:"miunori", em:"🦢", title:"미운 오리 새끼", lines:[
-      "회색 오리 새끼는 다른 오리들과 달라 놀림을 받았어요.",
-      "혼자가 된 오리 새끼는 추운 겨울을 힘들게 지냈어요.",
-      "봄이 오자 물에 비친 자기 모습이 하얀 백조였어요.",
-      "남과 다르다는 것은 나만의 멋진 빛깔이라는 것을 알았어요."],
-    vocab:[["놀림","남을 웃기려고 흉을 봄"],["백조","목이 길고 하얀 큰 물새"],["다르다","같지 않다"]],
-    ask:"오리 새끼가 봄에 알게 된 사실은 무엇일까요?" },
-  { id:"cinderella", em:"🥿", title:"신데렐라", lines:[
-      "신데렐라는 새엄마와 언니들의 심부름을 혼자 다 했어요.",
-      "무도회에 가고 싶었지만 예쁜 옷도 마차도 없었지요.",
-      "요정 할머니가 예쁜 옷과 유리 구두를 만들어 주었어요.",
-      "자정에 구두 한 짝을 두고 온 신데렐라는 왕자와 다시 만났어요."],
-    vocab:[["무도회","춤추고 노는 저녁 잔치"],["구두","발에 신는 신발"],["자정","밤 열두 시"]],
-    ask:"신데렐라가 자정이 되기 전에 돌아가야 했던 까닭은 무엇일까요?" },
-  { id:"snowwhite", em:"🍎", title:"백설공주", lines:[
-      "백설공주는 눈처럼 하얀 피부에 새까만 머리였어요.",
-      "새엄마 왕비는 백설공주가 더 예쁘다는 말에 화가 났어요.",
-      "백설공주는 숲속 일곱 난쟁이의 집에서 사이좋게 지냈어요.",
-      "왕비의 독사과를 먹고 잠들었지만 왕자의 마음으로 다시 깨어났어요."],
-    vocab:[["새엄마","아버지가 다시 맞은 아내"],["난쟁이","몸집이 아주 작은 사람"],["깨어나다","잠에서 눈을 뜨다"]],
-    ask:"백설공주가 다시 눈을 뜰 수 있었던 까닭은 무엇일까요?" },
-  { id:"pinocchio", em:"🪵", title:"피노키오", lines:[
-      "제페토 할아버지는 나무로 인형 피노키오를 만들었어요.",
-      "피노키오는 거짓말을 하면 코가 길어졌어요.",
-      "고래 배 속에서 할아버지를 만나 용기 있게 구해 냈어요.",
-      "착한 마음이 자라자 진짜 사람 아이가 되었어요."],
-    vocab:[["거짓말","사실이 아닌 것을 사실처럼 말함"],["용기","무서워도 해 보는 마음"],["인형","사람 모양으로 만든 장난감"]],
-    ask:"피노키오가 진짜 아이가 될 수 있었던 까닭은 무엇일까요?" },
-  { id:"thumbelina", em:"🌸", title:"엄지공주", lines:[
-      "꽃 속에서 아주 작은 엄지공주가 태어났어요.",
-      "두꺼비가 엄지공주를 자기 아들의 신부로 데려가려 했어요.",
-      "제비가 엄지공주를 도와 꽃의 나라로 데려다주었어요.",
-      "엄지공주는 꽃의 왕자와 행복하게 살았어요."],
-    vocab:[["엄지","손가락의 맨 끝 부분"],["두꺼비","피부가 울퉁불퉁한 동물"],["제비","봄이 오면 찾아오는 새"]],
-    ask:"엄지공주를 어려움에서 구해 준 동물은 무엇일까요?" },
-  { id:"aladdin", em:"🪔", title:"알라딘", lines:[
-      "알라딘은 동굴에서 낡은 램프 하나를 주웠어요.",
-      "램프를 문지르자 요정이 나타나 소원을 들어주었어요.",
-      "알라딘은 마법사에게서 공주를 지키고 램프를 되찾았어요.",
-      "정직한 마음으로 소원을 바르게 써서 모두 행복해졌어요."],
-    vocab:[["램프","기름을 넣어 불을 켜는 등잔"],["소원","이루고 싶은 것"],["정직","거짓 없이 바른 마음"]],
-    ask:"램프의 요정이 알라딘의 소원을 들어준 까닭은 무엇일까요?" },
-  { id:"bremen", em:"🎺", title:"브레멘 음악대", lines:[
-      "늙은 당나귀가 짐을 지기 힘들어 길을 떠났어요.",
-      "가다가 개와 고양이와 수탉을 만나 함께 가기로 했어요.",
-      "도둑들의 집에 가서 모두 힘을 모아 크게 노래를 불렀어요.",
-      "도둑들은 깜짝 놀라 달아났고 동물들은 그 집에서 살았어요."],
-    vocab:[["음악대","여러 악기로 함께 연주하는 무리"],["당나귀","귀가 길고 짐을 나르는 동물"],["힘을 모으다","함께 힘쓰다"]],
-    ask:"동물들이 도둑을 물리칠 수 있었던 방법은 무엇일까요?" }
+  { id:"seonhwa", em:"🌺", title:"선화공주와 서동", lines:[
+      "서동은 마을 사람들을 위해 맛있는 마를 캐 주는 착한 총각이었어요.",
+      "선화공주는 서동의 노래를 듣고 마음이 끌려 몰래 만났어요.",
+      "공주가 없어진 것을 안 임금님이 크게 화를 냈지만 두 사람은 서로를 믿었어요.",
+      "서동은 훌륭한 임금님이 되어 백성을 따뜻하게 돌봤답니다."],
+    vocab:[["마","땅속에서 자라는 긴 뿌리 채소"], ["마음이 끌리다","좋아하는 마음이 생기다"], ["백성","나라에 사는 사람들"]],
+    ask:"서동이 훌륭한 임금님이 될 수 있었던 까닭은 무엇일까요?" },
+  { id:"ivan", em:"🐟", title:"바보 이반", lines:[
+      "이반은 마을 사람들이 바보라고 불렀지만 마음이 아주 착했어요.",
+      "형들은 재산을 모두 가져가고 이반은 작은 오두막에 남았어요.",
+      "이반은 아픈 사람과 굶는 사람을 만나면 있는 것을 다 나누어 주었어요.",
+      "착한 이반에게는 어느새 친구와 웃음이 가득해졌답니다."],
+    vocab:[["바보","모자란 사람을 낮추어 부르는 말"], ["재산","값나가는 물건과 돈"], ["나누다","여럿에게 갈라 주다"]],
+    ask:"이반이 형들보다 더 행복해진 까닭은 무엇일까요?" },
+  { id:"bluebird", em:"🕊", title:"파랑새", lines:[
+      "치르치르와 미치르 남매는 행복을 주는 파랑새를 찾아 길을 떠났어요.",
+      "지나간 나라, 미래의 나라를 다녀도 파랑새는 보이지 않았어요.",
+      "집으로 돌아온 남매는 자기 집 새장 속 새가 파랑새임을 알았어요.",
+      "행복은 아주 먼 곳이 아니라 내 곁에 있다는 것을 배웠답니다."],
+    vocab:[["행복","마음이 아주 즐겁고 좋은 것"], ["새장","새를 넣어 기르는 상자"], ["곁","가까이 있는 곳"]],
+    ask:"남매가 마지막에 알게 된 행복은 어디에 있었나요?" },
+  { id:"jeanvaljean", em:"🕯", title:"장발장", lines:[
+      "장발장은 가난해서 빵 한 조각을 훔쳐 오래 감옥에 갇혔어요.",
+      "감옥에서 나온 그를 따뜻하게 맞아준 신부님이 은촛대를 선물했어요.",
+      "그 뒤 장발장은 착한 마음으로 가난한 사람들을 도우며 살았어요.",
+      "한 번의 잘못보다 고쳐 가는 마음이 더 크다는 것을 보여 주었답니다."],
+    vocab:[["감옥","죄를 지은 사람을 가두는 곳"], ["신부","교회에서 일하는 사람"], ["선물","마음을 담아 주는 물건"]],
+    ask:"신부님이 장발장에게 은촛대를 준 까닭은 무엇일까요?" },
+  { id:"oz", em:"🌪", title:"오즈의 마법사", lines:[
+      "도로시는 커다란 회오리바람에 휩쓸려 낯선 나라에 떨어졌어요.",
+      "허수아비, 양철 나무꾼, 사자를 만나 함께 오즈를 찾아갔어요.",
+      "어려운 길을 지나면서 도로시는 지혜와 용기를 스스로 키웠어요.",
+      "도로시는 집으로 돌아와 가족 곁이 가장 소중하다는 것을 알았답니다."],
+    vocab:[["회오리바람","빙글빙글 돌며 부는 센 바람"], ["지혜","슬기롭게 생각하는 힘"], ["소중하다","아주 중요하고 값지다"]],
+    ask:"도로시 일행이 어려운 길을 지나며 얻은 것은 무엇일까요?" },
+  { id:"gulliver", em:"⛵", title:"걸리버 여행기", lines:[
+      "걸리버는 배를 타고 가다 폭풍을 만나 작은 나라에 닿았어요.",
+      "그 나라 사람들은 걸리버를 손가락만 한 줄로 묶어 버렸어요.",
+      "걸리버는 조용히 기다리며 그 나라 사람들과 사이좋게 지냈어요.",
+      "서로 다르게 생겨도 이해하면 친구가 된다는 것을 알았답니다."],
+    vocab:[["폭풍","몹시 세차게 부는 바람과 파도"], ["묶다","줄로 감아 매다"], ["이해","뜻을 잘 알아차림"]],
+    ask:"걸리버가 작은 나라 사람들과 친구가 될 수 있었던 까닭은 무엇일까요?" },
+  { id:"donkeyears", em:"👂", title:"임금님 귀는 당나귀 귀", lines:[
+      "한 임금님의 귀가 당나귀처럼 길게 자랐어요.",
+      "임금님은 그 비밀을 숨기려고 늘 모자를 쓰고 다녔어요.",
+      "비밀을 참지 못한 이발사가 대나무 숲에 외쳤더니 숲이 그 소리를 되풀이했어요.",
+      "비밀을 숨기기보다 정직하게 말하는 것이 편하다는 것을 알았답니다."],
+    vocab:[["비밀","남에게 알리지 않는 일"], ["이발사","머리를 잘라 주는 사람"], ["정직","거짓 없이 바른 마음"]],
+    ask:"임금님이 모자를 쓰고 다닌 까닭은 무엇일까요?" },
+  { id:"goblinchestnut", em:"🌰", title:"도깨비와 개암", lines:[
+      "한 나무꾼이 밤길에 도깨비들을 만났어요.",
+      "나무꾼은 겁내지 않고 개암을 깨서 도깨비와 나누어 먹었어요.",
+      "도깨비는 나무꾼이 씩씩하고 재미있어서 마음에 들어 했어요.",
+      "도깨비는 나무꾼에게 보물을 선물하고 즐겁게 돌아갔답니다."],
+    vocab:[["개암","까만 껍질의 작은 견과"], ["씩씩하다","기운차고 용감하다"], ["보물","아주 값진 물건"]],
+    ask:"도깨비가 나무꾼에게 보물을 준 까닭은 무엇일까요?" },
+  { id:"samnyeongogae", em:"🪜", title:"삼년고개", lines:[
+      "마을 앞에는 넘어지면 3년을 산다는 삼 년 고개가 있었어요.",
+      "한 할아버지가 그 고개에서 크게 넘어지고 말았어요.",
+      "할아버지는 울지 않고 벌떡 일어나 자기가 다시 넘어졌다고 했어요.",
+      "지혜롭게 생각하면 무서운 일도 이겨 낼 수 있다는 것을 알았답니다."],
+    vocab:[["고개","고개처럼 높은 언덕길"], ["넘어지다","발이 걸려 쓰러지다"], ["지혜","슬기롭게 생각하는 힘"]],
+    ask:"할아버지가 다시 넘어졌다고 말한 까닭은 무엇일까요?" },
+  { id:"hwanghee", em:"🐂", title:"황희 정승과 두 누렁소", lines:[
+      "황희 정승은 마을 사람들이 모르게 낡은 옷을 입고 밭에 나갔어요.",
+      "한 청년이 소 두 마리를 끌고 지나가며 정승의 흉을 보았어요.",
+      "정승은 화내지 않고 청년에게 길을 비켜 주며 웃었어요.",
+      "청년은 나중에 그 낡은 옷의 주인이 정승인 줄 알고 크게 부끄러워했답니다."],
+    vocab:[["정승","옛날에 나라 일을 맡아 보던 높은 벼슬"], ["흉을 보다","남의 나쁜 점을 말하다"], ["부끄럽다","얼굴이 뜨겁고 민망하다"]],
+    ask:"황희 정승이 청년에게 화를 내지 않은 까닭은 무엇일까요?" }
 ];
 
 function store(){ var s = readJSON(KEY, {}); if (typeof s.day !== "number") s.day = 0; if (typeof s.cx !== "number") s.cx = 0; if (!s.quiz || typeof s.quiz !== "object") s.quiz = {}; return s; }
@@ -15405,18 +15405,20 @@ function $(id){ return document.getElementById(id); }
 function esc(s){ return SB.esc(s); }
 
 var OPP = [
-  ["크다","작다"],["좋다","싫다"],["살다","죽다"],["넣다","빼다"],
-  ["붙이다","떼다"],["묶다","풀다"],["밀다","당기다"],["숨다","나타나다"],
-  ["가르치다","배우다"],["젊다","늙다"],["쌓다","허물다"],["닦다","더럽히다"],
-  ["급하다","느긋하다"],["가난하다","넉넉하다"],["먼저","나중에"],["즐겁다","괴롭다"]
+  ["뚱뚱하다","날씬하다"],["부드럽다","딱딱하다"],["달다","쓰다"],["짜다","싱겁다"],
+  ["들어가다","나오다"],["묻다","대답하다"],["덥히다","식히다"],["잠그다","풀다"],
+  ["기억하다","잊다"],["모이다","헤어지다"],["아끼다","버리다"],["일하다","쉬다"],
+  ["붙잡다","놓다"],["깨우다","재우다"],["감다","뜨다"],["들이마시다","내쉬다"]
 ];
 var SIM = [
-  ["생각하다","궁리하다"],["말하다","이야기하다"],["보다","바라보다"],["걷다","거닐다"],
-  ["뛰다","달리다"],["예쁘다","이쁘다"],["반짝이다","빛나다"],["만나다","마주치다"]
+  ["기뻐하다","좋아하다"],["무섭다","두렵다"],["빠르다","재빠르다"],["조용하다","잠잠하다"],
+  ["도와주다","거들다"],["부지런하다","근면하다"],["이야기","얘기"],["꾸미다","장식하다"]
 ];
 var MEAN = [
-  ["상냥하다","말씨와 태도가 부드럽고 다정하다"],["의젓하다","말과 행동이 점잖고 어른스럽다"],["야무지다","꼼꼼하고 단단하다"],["서운하다","마음에 차지 않아 아쉽다"],
-  ["속상하다","마음이 상해 괴롭다"],["고요하다","아주 조용하고 잠잠하다"],["환하다","빛이 밝고 맑다"],["힘차다","힘이 있고 기운이 세차다"]
+  ["반갑다","만나서 기쁘고 좋다"],["참다","힘들어도 꾹 견디다"],
+  ["흐뭇하다","마음에 들어 기분이 좋다"],["조심하다","잘못이 없도록 살피다"],
+  ["기대하다","좋은 일이 오기를 바라다"],["부러워하다","남의 좋은 것을 가지고 싶어 하다"],
+  ["살피다","자세히 보다"],["도란도란","여럿이 작은 소리로 정답게 이야기하다"]
 ];
 
 var W = { qs:[], i:0, score:0, live:false, pairs:[] };
@@ -15453,7 +15455,7 @@ function build(){
   render();
 }
 function render(){
-  var body = $("wgBody"), prog = $("wgProg"), list = $("wgList");
+  var body = $("kwgBody"), prog = $("kwgProg"), list = $("kwgList");
   if (list) {
     list.innerHTML = W.qs.length ? W.qs.map(function(q){
       return '<div class="wg-card"><b>' + esc(q.pair[0]) + "</b><span>→ " + esc(q.pair[1]) + "</span></div>";
@@ -15484,7 +15486,7 @@ function render(){
 }
 function answer(btn, pick2){
   var q = W.qs[W.i]; if (!q) return;
-  var all = $("wgBody").querySelectorAll(".wg-opt");
+  var all = $("kwgBody").querySelectorAll(".wg-opt");
   for (var i = 0; i < all.length; i++) all[i].disabled = true;
   if (pick2 === q.a) { btn.classList.add("ok"); W.score++; SB.speak(q.a, false, "ko-KR"); }
   else {
@@ -15499,7 +15501,7 @@ function end(){
   var want = sc >= 8 ? 3 : (sc >= 6 ? 2 : (sc >= 4 ? 1 : 0));
   var got = want ? SB.earn(SB.today() + "|ko|word", want) : 0;
   SB.markAttendance("ko");
-  var body = $("wgBody");
+  var body = $("kwgBody");
   if (body) body.innerHTML = '<div class="kq-done"><div class="big">' + (sc >= 6 ? "🏆" : "🌱") + "</div>"
     + "<b>" + sc + " / " + n + " 문제를 맞혔어요!</b>"
     + "<p>" + (got ? "별 " + got + "개를 받았어요!" : (want ? "오늘은 이미 이만큼 받았어요." : "4문제 이상 맞히면 별을 받을 수 있어요.")) + "</p>"
@@ -17971,108 +17973,108 @@ function svgWrap(inner, label){
 }
 /* ---------- 🖼️ 그림 사고력 · 🔺 도형 이름 — 2026-11-24 새 그림 ---------- */
 var THINK = [
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="22" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">연필 7자루</text><text x="20" y="58" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="50" y="58" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="80" y="58" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="110" y="58" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="140" y="58" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="170" y="58" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="200" y="58" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="110" y="96" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">5자루 더 받았어요</text><text x="50" y="132" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="80" y="132" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="110" y="132" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="140" y="132" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text><text x="170" y="132" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">✏️</text></svg>',
-    q:"연필이 7자루 있어요. 5자루를 더 받으면 모두 몇 자루일까요?",
-    o:["10자루", "11자루", "12자루", "13자루"], a:"12자루", why:"7자루에 5자루를 더하면 7+5=12자루예요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="24" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">책 14권</text><rect x="18" y="40" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="44" y="40" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="70" y="40" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="96" y="40" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="122" y="40" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="148" y="40" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="174" y="40" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="18" y="76" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="44" y="76" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="70" y="76" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="96" y="76" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="122" y="76" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="148" y="76" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><rect x="174" y="76" width="20" height="26" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="2"/><line x1="46" y1="81" x2="62" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="62" y1="81" x2="46" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="72" y1="81" x2="88" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="88" y1="81" x2="72" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="98" y1="81" x2="114" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="114" y1="81" x2="98" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="124" y1="81" x2="140" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="140" y1="81" x2="124" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="150" y1="81" x2="166" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="166" y1="81" x2="150" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="176" y1="81" x2="192" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="192" y1="81" x2="176" y2="97" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><text x="110" y="148" font-size="12" font-weight="800" fill="#e2604a" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">6권은 친구에게 빌려줬어요</text></svg>',
-    q:"책장에 책이 14권 있어요. 친구에게 6권을 빌려주면 남은 책은 몇 권일까요?",
-    o:["6권", "7권", "8권", "9권"], a:"8권", why:"14권에서 6권을 빼면 14-6=8권이에요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="20" font-size="11" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">사과나무 3그루 · 한 그루에 5개씩</text><rect x="36" y="88" width="8" height="30" rx="2" fill="#a97b4a" stroke="#7d5730" stroke-width="2"/><circle cx="40" cy="70" r="26" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/><circle cx="28" cy="62" r="4" fill="#e2604a"/><circle cx="46" cy="58" r="4" fill="#e2604a"/><circle cx="54" cy="72" r="4" fill="#e2604a"/><circle cx="30" cy="78" r="4" fill="#e2604a"/><circle cx="44" cy="78" r="4" fill="#e2604a"/><rect x="106" y="88" width="8" height="30" rx="2" fill="#a97b4a" stroke="#7d5730" stroke-width="2"/><circle cx="110" cy="70" r="26" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/><circle cx="98" cy="62" r="4" fill="#e2604a"/><circle cx="116" cy="58" r="4" fill="#e2604a"/><circle cx="124" cy="72" r="4" fill="#e2604a"/><circle cx="100" cy="78" r="4" fill="#e2604a"/><circle cx="114" cy="78" r="4" fill="#e2604a"/><rect x="176" y="88" width="8" height="30" rx="2" fill="#a97b4a" stroke="#7d5730" stroke-width="2"/><circle cx="180" cy="70" r="26" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/><circle cx="168" cy="62" r="4" fill="#e2604a"/><circle cx="186" cy="58" r="4" fill="#e2604a"/><circle cx="194" cy="72" r="4" fill="#e2604a"/><circle cx="170" cy="78" r="4" fill="#e2604a"/><circle cx="184" cy="78" r="4" fill="#e2604a"/><text x="110" y="142" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">사과는 모두 몇 개?</text></svg>',
-    q:"사과나무 3그루에 사과가 한 그루에 5개씩 열렸어요. 사과는 모두 몇 개일까요?",
-    o:["10개", "12개", "15개", "18개"], a:"15개", why:"5개씩 3그루라서 5+5+5=15개예요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="22" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">버스에 15명</text><rect x="14" y="48" width="192" height="62" rx="12" fill="#cfe6f7" stroke="#8fbdd8" stroke-width="3"/><rect x="14" y="48" width="34" height="62" rx="12" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><circle cx="60" cy="66" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="78" cy="66" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="96" cy="66" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="114" cy="66" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="132" cy="66" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="150" cy="66" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="168" cy="66" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="186" cy="66" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="60" cy="90" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="78" cy="90" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="96" cy="90" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="114" cy="90" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="132" cy="90" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="150" cy="90" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><circle cx="168" cy="90" r="7" fill="#ffe08a" stroke="#2f8fc4" stroke-width="1.6"/><line x1="72" y1="84" x2="84" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="84" y1="84" x2="72" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="90" y1="84" x2="102" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="102" y1="84" x2="90" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="108" y1="84" x2="120" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="120" y1="84" x2="108" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="126" y1="84" x2="138" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="138" y1="84" x2="126" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="144" y1="84" x2="156" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="156" y1="84" x2="144" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="162" y1="84" x2="174" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><line x1="174" y1="84" x2="162" y2="96" stroke="#e2604a" stroke-width="3" stroke-linecap="round"/><circle cx="60" cy="66" r="7" fill="#c8f0d4" stroke="#3f9a70" stroke-width="2"/><circle cx="78" cy="66" r="7" fill="#c8f0d4" stroke="#3f9a70" stroke-width="2"/><circle cx="96" cy="66" r="7" fill="#c8f0d4" stroke="#3f9a70" stroke-width="2"/><text x="110" y="130" font-size="12" font-weight="800" fill="#e2604a" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">6명 내리고 3명 탔어요</text></svg>',
-    q:"버스에 사람이 15명 타고 있어요. 정류장에서 6명이 내리고 3명이 타면 버스에는 몇 명이 있을까요?",
-    o:["9명", "11명", "12명", "13명"], a:"12명", why:"15-6=9명에서 3명이 더 타면 9+3=12명이에요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="22" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">지금은 11시</text><circle cx="110" cy="90" r="52" fill="#ffffff" stroke="#2f8fc4" stroke-width="4"/><circle cx="110" cy="90" r="45" fill="none" stroke="#cfe6f7" stroke-width="2"/><text x="110.0" y="65.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">12</text><text x="140.0" y="95.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">3</text><text x="110.0" y="125.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">6</text><text x="80.0" y="95.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">9</text><line x1="110" y1="90" x2="97.0" y2="67.5" stroke="#2b5d7d" stroke-width="5" stroke-linecap="round"/><line x1="110" y1="90" x2="110.0" y2="51.5" stroke="#e2604a" stroke-width="3.4" stroke-linecap="round"/><circle cx="110" cy="90" r="3.4" fill="#2b5d7d"/></svg>',
-    q:"지금 11시예요. 1시간 뒤는 몇 시일까요?",
-    o:["10시", "11시 30분", "12시", "1시"], a:"12시", why:"11시에서 1시간 지나면 12시예요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="22" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">오늘은 토요일</text><rect x="20" y="46" width="56" height="58" rx="10" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><text x="48" y="68" font-size="12" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">오늘</text><text x="48" y="94" font-size="20" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">토</text><text x="80" y="82" font-size="22" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">›</text><rect x="84" y="46" width="56" height="58" rx="10" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/><text x="112" y="68" font-size="12" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">내일</text><text x="112" y="94" font-size="20" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">일</text><text x="144" y="82" font-size="22" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">›</text><rect x="148" y="46" width="56" height="58" rx="10" fill="#ffe08a" stroke="#c9a03c" stroke-width="3"/><text x="176" y="68" font-size="12" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">모레</text><text x="176" y="94" font-size="20" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">?</text><text x="110" y="132" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">모레는 무슨 요일일까?</text></svg>',
-    q:"오늘은 토요일이에요. 모레는 무슨 요일일까요?",
-    o:["일요일", "월요일", "화요일", "금요일"], a:"월요일", why:"토요일 다음 날은 일요일, 그다음 날이 모레라서 월요일이에요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="24" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">해율이는 앞에서 3번째</text><text x="24" y="92" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">🧒</text><text x="52" y="92" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">🧒</text><text x="80" y="92" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">🧒</text><circle cx="80" cy="84" r="17" fill="none" stroke="#e2604a" stroke-width="3"/><text x="80" y="48" font-size="16" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">⭐</text><text x="108" y="92" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">🧒</text><text x="136" y="92" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">🧒</text><text x="164" y="92" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">🧒</text><text x="192" y="92" font-size="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">🧒</text><text x="160" y="118" font-size="11" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">뒤에 4명 더 있어요</text></svg>',
-    q:"줄을 서 있는데 해율이가 앞에서 3번째예요. 해율이 뒤에 4명이 더 있으면 줄은 모두 몇 명일까요?",
-    o:["6명", "7명", "8명", "9명"], a:"7명", why:"앞에서 3번째까지 3명, 뒤에 4명이라서 3+4=7명이에요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="22" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">한 상자에 5개씩 · 2상자</text><rect x="18" y="38" width="86" height="78" rx="10" fill="#f2e3ca" stroke="#8a6a3a" stroke-width="3"/><rect x="28" y="48" width="18" height="20" rx="4" fill="#8a5a2b" stroke="#5d3a18" stroke-width="2"/><rect x="52" y="48" width="18" height="20" rx="4" fill="#8a5a2b" stroke="#5d3a18" stroke-width="2"/><rect x="76" y="48" width="18" height="20" rx="4" fill="#8a5a2b" stroke="#5d3a18" stroke-width="2"/><rect x="28" y="78" width="18" height="20" rx="4" fill="#8a5a2b" stroke="#5d3a18" stroke-width="2"/><rect x="52" y="78" width="18" height="20" rx="4" fill="#8a5a2b" stroke="#5d3a18" stroke-width="2"/><rect x="116" y="38" width="86" height="78" rx="10" fill="#f2e3ca" stroke="#8a6a3a" stroke-width="3"/><rect x="126" y="48" width="18" height="20" rx="4" fill="#8a5a2b" stroke="#5d3a18" stroke-width="2"/><rect x="150" y="48" width="18" height="20" rx="4" fill="#8a5a2b" stroke="#5d3a18" stroke-width="2"/><rect x="174" y="48" width="18" height="20" rx="4" fill="#8a5a2b" stroke="#5d3a18" stroke-width="2"/><rect x="126" y="78" width="18" height="20" rx="4" fill="#8a5a2b" stroke="#5d3a18" stroke-width="2"/><rect x="150" y="78" width="18" height="20" rx="4" fill="#8a5a2b" stroke="#5d3a18" stroke-width="2"/><text x="110" y="138" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">초콜릿은 모두 몇 개?</text></svg>',
-    q:"초콜릿이 한 상자에 5개씩 들어 있어요. 2상자면 초콜릿은 모두 몇 개일까요?",
-    o:["7개", "10개", "12개", "15개"], a:"10개", why:"5개씩 2상자라서 5+5=10개예요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="22" font-size="12" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">500원 1개 · 100원 3개</text><circle cx="52" cy="88" r="26" fill="#ffe08a" stroke="#c9a03c" stroke-width="3"/><text x="52" y="94" font-size="14" font-weight="800" fill="#8a6a1a" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">500</text><circle cx="112" cy="88" r="17" fill="#ffe08a" stroke="#c9a03c" stroke-width="2.4"/><text x="112" y="93" font-size="10" font-weight="800" fill="#8a6a1a" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">100</text><circle cx="148" cy="88" r="17" fill="#ffe08a" stroke="#c9a03c" stroke-width="2.4"/><text x="148" y="93" font-size="10" font-weight="800" fill="#8a6a1a" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">100</text><circle cx="184" cy="88" r="17" fill="#ffe08a" stroke="#c9a03c" stroke-width="2.4"/><text x="184" y="93" font-size="10" font-weight="800" fill="#8a6a1a" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">100</text><text x="110" y="140" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">모두 얼마일까?</text></svg>',
-    q:"주머니에 500원짜리 동전 1개와 100원짜리 동전 3개가 있어요. 모두 얼마일까요?",
-    o:["600원", "700원", "800원", "900원"], a:"800원", why:"500원에 100원씩 3개를 더하면 500+300=800원이에요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="22" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">5씩 커지는 수</text><circle cx="26" cy="84" r="18" fill="#eaf6ff" stroke="#8fc6e8" stroke-width="3"/><text x="26" y="90" font-size="14" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">5</text><text x="47" y="52" font-size="12" font-weight="800" fill="#8aa6b8" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">+5</text><circle cx="68" cy="84" r="18" fill="#eaf6ff" stroke="#8fc6e8" stroke-width="3"/><text x="68" y="90" font-size="14" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">10</text><text x="89" y="52" font-size="12" font-weight="800" fill="#8aa6b8" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">+5</text><circle cx="110" cy="84" r="18" fill="#eaf6ff" stroke="#8fc6e8" stroke-width="3"/><text x="110" y="90" font-size="14" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">15</text><text x="131" y="52" font-size="12" font-weight="800" fill="#8aa6b8" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">+5</text><circle cx="152" cy="84" r="18" fill="#eaf6ff" stroke="#8fc6e8" stroke-width="3"/><text x="152" y="90" font-size="14" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">20</text><text x="173" y="52" font-size="12" font-weight="800" fill="#8aa6b8" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">+5</text><circle cx="194" cy="84" r="18" fill="#ffe6a3" stroke="#e0a92c" stroke-width="3"/><text x="194" y="90" font-size="14" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">?</text><text x="110" y="132" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">□에 들어갈 수는?</text></svg>',
-    q:"5, 10, 15, 20, □ 처럼 5씩 커지고 있어요. □에 들어갈 수는 얼마일까요?",
-    o:["21", "23", "25", "30"], a:"25", why:"5씩 커지므로 20 다음 수는 20+5=25예요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="22" font-size="11" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">사탕 12개 · 4명에게 똑같이</text><ellipse cx="34" cy="108" rx="23" ry="8" fill="#f3e3c4" stroke="#d9c39c" stroke-width="2"/><circle cx="24" cy="80" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><circle cx="34" cy="74" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><circle cx="44" cy="80" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><ellipse cx="86" cy="108" rx="23" ry="8" fill="#f3e3c4" stroke="#d9c39c" stroke-width="2"/><circle cx="76" cy="80" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><circle cx="86" cy="74" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><circle cx="96" cy="80" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><ellipse cx="138" cy="108" rx="23" ry="8" fill="#f3e3c4" stroke="#d9c39c" stroke-width="2"/><circle cx="128" cy="80" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><circle cx="138" cy="74" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><circle cx="148" cy="80" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><ellipse cx="190" cy="108" rx="23" ry="8" fill="#f3e3c4" stroke="#d9c39c" stroke-width="2"/><circle cx="180" cy="80" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><circle cx="190" cy="74" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><circle cx="200" cy="80" r="6.5" fill="#ff9aa2" stroke="#e2604a" stroke-width="1.8"/><text x="110" y="146" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">한 사람은 몇 개씩?</text></svg>',
-    q:"사탕 12개를 4명에게 똑같이 나누어 주면 한 사람은 몇 개씩 받을까요?",
-    o:["2개", "3개", "4개", "6개"], a:"3개", why:"3개씩 4명이면 3+3+3+3=12개라서 한 사람은 3개예요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="26" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">빨간 구슬 6개</text><circle cx="28" cy="58" r="10" fill="#e2604a" stroke="#a33c2c" stroke-width="2"/><circle cx="60" cy="58" r="10" fill="#e2604a" stroke="#a33c2c" stroke-width="2"/><circle cx="92" cy="58" r="10" fill="#e2604a" stroke="#a33c2c" stroke-width="2"/><circle cx="124" cy="58" r="10" fill="#e2604a" stroke="#a33c2c" stroke-width="2"/><circle cx="156" cy="58" r="10" fill="#e2604a" stroke="#a33c2c" stroke-width="2"/><circle cx="188" cy="58" r="10" fill="#e2604a" stroke="#a33c2c" stroke-width="2"/><text x="110" y="100" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">파란 구슬 4개</text><circle cx="46" cy="128" r="10" fill="#6bb7ef" stroke="#2f8fc4" stroke-width="2"/><circle cx="78" cy="128" r="10" fill="#6bb7ef" stroke="#2f8fc4" stroke-width="2"/><circle cx="110" cy="128" r="10" fill="#6bb7ef" stroke="#2f8fc4" stroke-width="2"/><circle cx="142" cy="128" r="10" fill="#6bb7ef" stroke="#2f8fc4" stroke-width="2"/></svg>',
-    q:"빨간 구슬 6개와 파란 구슬 4개가 있어요. 더 많은 구슬은 어느 색일까요?",
-    o:["빨간 구슬", "파란 구슬", "둘이 같아요", "알 수 없어요"], a:"빨간 구슬", why:"6개와 4개를 견주면 6이 더 커서 빨간 구슬이 2개 더 많아요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="22" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">지금은 4시</text><circle cx="110" cy="86" r="50" fill="#ffffff" stroke="#2f8fc4" stroke-width="4"/><circle cx="110" cy="86" r="43" fill="none" stroke="#cfe6f7" stroke-width="2"/><text x="110.0" y="63.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">12</text><text x="138.0" y="91.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">3</text><text x="110.0" y="119.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">6</text><text x="82.0" y="91.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">9</text><line x1="110" y1="86" x2="131.7" y2="98.5" stroke="#2b5d7d" stroke-width="5" stroke-linecap="round"/><line x1="110" y1="86" x2="110.0" y2="49.0" stroke="#e2604a" stroke-width="3.4" stroke-linecap="round"/><circle cx="110" cy="86" r="3.4" fill="#2b5d7d"/><text x="110" y="150" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">1시간 전은 몇 시?</text></svg>',
-    q:"지금 4시예요. 1시간 전은 몇 시였을까요?",
-    o:["2시", "3시", "4시 30분", "5시"], a:"3시", why:"4시보다 1시간 앞이면 3시예요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="78" y="22" font-size="11" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">8시 30분에 집을 나섰어요</text><circle cx="66" cy="92" r="46" fill="#ffffff" stroke="#2f8fc4" stroke-width="4"/><circle cx="66" cy="92" r="39" fill="none" stroke="#cfe6f7" stroke-width="2"/><text x="66.0" y="73.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">12</text><text x="90.0" y="97.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">3</text><text x="66.0" y="121.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">6</text><text x="42.0" y="97.0" font-size="12" font-weight="800" fill="#5b7f96" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">9</text><line x1="66" y1="92" x2="43.8" y2="98.0" stroke="#2b5d7d" stroke-width="5" stroke-linecap="round"/><line x1="66" y1="92" x2="66.0" y2="126.0" stroke="#e2604a" stroke-width="3.4" stroke-linecap="round"/><circle cx="66" cy="92" r="3.4" fill="#2b5d7d"/><defs><marker id="a24" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6a3a"/></marker></defs><line x1="116" y1="92" x2="150" y2="92" stroke="#8a6a3a" stroke-width="3" stroke-linecap="round" stroke-dasharray="5 4" marker-end="url(#a24)"/><text x="184" y="86" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">20분</text><text x="184" y="104" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">걸렸어요</text></svg>',
-    q:"8시 30분에 집을 나와 학교까지 20분 걸렸어요. 학교에 몇 시에 도착했을까요?",
-    o:["8시 40분", "8시 50분", "9시", "9시 10분"], a:"8시 50분", why:"8시 30분에서 20분 뒤는 8시 50분이에요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><text x="110" y="22" font-size="12" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">귤 8개 · 바구니 2개</text><rect x="22" y="54" width="76" height="66" rx="10" fill="#f3e3c4" stroke="#d9c39c" stroke-width="3"/><circle cx="42" cy="74" r="10" fill="#ffa94d" stroke="#e08030" stroke-width="2"/><circle cx="76" cy="74" r="10" fill="#ffa94d" stroke="#e08030" stroke-width="2"/><circle cx="42" cy="102" r="10" fill="#ffa94d" stroke="#e08030" stroke-width="2"/><circle cx="76" cy="102" r="10" fill="#ffa94d" stroke="#e08030" stroke-width="2"/><rect x="122" y="54" width="76" height="66" rx="10" fill="#f3e3c4" stroke="#d9c39c" stroke-width="3"/><circle cx="142" cy="74" r="10" fill="#ffa94d" stroke="#e08030" stroke-width="2"/><circle cx="176" cy="74" r="10" fill="#ffa94d" stroke="#e08030" stroke-width="2"/><circle cx="142" cy="102" r="10" fill="#ffa94d" stroke="#e08030" stroke-width="2"/><circle cx="176" cy="102" r="10" fill="#ffa94d" stroke="#e08030" stroke-width="2"/><text x="110" y="142" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">한 바구니에 몇 개씩?</text></svg>',
-    q:"귤 8개를 바구니 2개에 똑같이 나누어 담으면 한 바구니에 몇 개씩 담을까요?",
-    o:["3개", "4개", "5개", "6개"], a:"4개", why:"4개씩 2바구니면 4+4=8개라서 한 바구니에 4개예요." },
-  { svg:'<svg viewBox="0 0 220 160" role="img" aria-label="그림 문제"><rect width="220" height="160" rx="10" fill="#f7fbff"/><ellipse cx="66" cy="98" rx="46" ry="34" fill="#3f9a70" stroke="#2b6b4d" stroke-width="4"/><path d="M40 84 q10 10 20 0" stroke="#2b6b4d" stroke-width="3" fill="none"/><text x="66" y="44" font-size="13" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">수박 한 통</text><circle cx="166" cy="108" r="18" fill="#e2604a" stroke="#a33c2c" stroke-width="3"/><path d="M160 90 q6 -8 12 -2" fill="#3f9a70"/><text x="166" y="60" font-size="12" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">사과 한 개</text><text x="110" y="148" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">어느 것이 더 무거울까?</text></svg>',
-    q:"수박 한 통과 사과 한 개 중에서 더 무거운 것은 무엇일까요?",
-    o:["수박", "사과", "둘이 같아요", "알 수 없어요"], a:"수박", why:"수박은 사과보다 훨씬 크고 무거워요. 크기가 클수록 무거운 경우가 많아요." }
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">풍선 9개</text><text x=\"22\" y=\"72\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"44\" y=\"72\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"66\" y=\"72\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"88\" y=\"72\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"110\" y=\"72\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"132\" y=\"72\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"154\" y=\"72\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"176\" y=\"72\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"198\" y=\"72\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"110\" y=\"104\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">4개는 하늘로 날아갔어요</text><text x=\"62\" y=\"136\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"92\" y=\"136\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"122\" y=\"136\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text><text x=\"152\" y=\"136\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🎈</text></svg>",
+    q:"풍선이 9개 있어요. 그중 4개가 하늘로 날아갔어요. 남은 풍선은 몇 개일까요?",
+    o:["4개", "5개", "6개", "9개"], a:"5개", why:"9개에서 4개를 빼면 9-4=5개예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">오리 3마리 · 6마리 더</text><text x=\"44\" y=\"76\" font-size=\"26\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🦆</text><text x=\"76\" y=\"76\" font-size=\"26\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🦆</text><text x=\"108\" y=\"76\" font-size=\"26\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🦆</text><text x=\"110\" y=\"100\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">6마리가 헤엄쳐 왔어요</text><text x=\"26\" y=\"136\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🦆</text><text x=\"60\" y=\"136\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🦆</text><text x=\"94\" y=\"136\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🦆</text><text x=\"128\" y=\"136\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🦆</text><text x=\"162\" y=\"136\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🦆</text><text x=\"196\" y=\"136\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🦆</text></svg>",
+    q:"연못에 오리가 3마리 있어요. 6마리가 더 헤엄쳐 왔어요. 오리는 모두 몇 마리일까요?",
+    o:["8마리", "9마리", "10마리", "12마리"], a:"9마리", why:"3마리에 6마리를 더하면 3+6=9마리예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">한 봉지에 5개씩 · 4봉지</text><rect x=\"12\" y=\"42\" width=\"44\" height=\"70\" rx=\"8\" fill=\"#f2e3ca\" stroke=\"#8a6a3a\" stroke-width=\"3\"/><circle cx=\"22\" cy=\"58\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"42\" cy=\"58\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"22\" cy=\"80\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"42\" cy=\"80\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"22\" cy=\"102\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><rect x=\"64\" y=\"42\" width=\"44\" height=\"70\" rx=\"8\" fill=\"#f2e3ca\" stroke=\"#8a6a3a\" stroke-width=\"3\"/><circle cx=\"74\" cy=\"58\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"94\" cy=\"58\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"74\" cy=\"80\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"94\" cy=\"80\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"74\" cy=\"102\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><rect x=\"116\" y=\"42\" width=\"44\" height=\"70\" rx=\"8\" fill=\"#f2e3ca\" stroke=\"#8a6a3a\" stroke-width=\"3\"/><circle cx=\"126\" cy=\"58\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"146\" cy=\"58\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"126\" cy=\"80\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"146\" cy=\"80\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"126\" cy=\"102\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><rect x=\"168\" y=\"42\" width=\"44\" height=\"70\" rx=\"8\" fill=\"#f2e3ca\" stroke=\"#8a6a3a\" stroke-width=\"3\"/><circle cx=\"178\" cy=\"58\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"198\" cy=\"58\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"178\" cy=\"80\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"198\" cy=\"80\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><circle cx=\"178\" cy=\"102\" r=\"7\" fill=\"#ff9aa2\" stroke=\"#e2604a\" stroke-width=\"1.6\"/><text x=\"110\" y=\"136\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">사탕은 모두 몇 개?</text></svg>",
+    q:"사탕이 한 봉지에 5개씩 들어 있어요. 4봉지면 사탕은 모두 몇 개일까요?",
+    o:["9개", "15개", "20개", "25개"], a:"20개", why:"5개씩 4봉지라서 5+5+5+5=20개예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">연필 12자루</text><rect x=\"28\" y=\"42\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"56,42 62,46 56,50\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"23\" y=\"42\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"72\" y=\"42\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"100,42 106,46 100,50\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"67\" y=\"42\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"116\" y=\"42\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"144,42 150,46 144,50\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"111\" y=\"42\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"160\" y=\"42\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"188,42 194,46 188,50\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"155\" y=\"42\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"28\" y=\"68\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"56,68 62,72 56,76\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"23\" y=\"68\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"72\" y=\"68\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"100,68 106,72 100,76\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"67\" y=\"68\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"116\" y=\"68\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"144,68 150,72 144,76\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"111\" y=\"68\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"160\" y=\"68\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"188,68 194,72 188,76\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"155\" y=\"68\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"28\" y=\"94\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"56,94 62,98 56,102\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"23\" y=\"94\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"72\" y=\"94\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"100,94 106,98 100,102\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"67\" y=\"94\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"116\" y=\"94\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"144,94 150,98 144,102\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"111\" y=\"94\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><rect x=\"160\" y=\"94\" width=\"28\" height=\"8\" rx=\"3\" fill=\"#ffd166\" stroke=\"#d9a521\" stroke-width=\"1.6\"/><polygon points=\"188,94 194,98 188,102\" fill=\"#f0b3a8\" stroke=\"#d08e80\" stroke-width=\"1.2\"/><rect x=\"155\" y=\"94\" width=\"5\" height=\"8\" rx=\"1.5\" fill=\"#f3a3c0\" stroke=\"#c9789a\" stroke-width=\"1.2\"/><text x=\"110\" y=\"132\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">3명이 똑같이 나누면</text><text x=\"110\" y=\"150\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">한 명은 몇 자루씩?</text></svg>",
+    q:"연필 12자루를 3명에게 똑같이 나누어 주면 한 명은 몇 자루씩 받을까요?",
+    o:["3자루", "4자루", "5자루", "6자루"], a:"4자루", why:"4자루씩 3명이면 4+4+4=12자루라서 한 명은 4자루예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"24\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">500원짜리 동전 3개</text><circle cx=\"50\" cy=\"86\" r=\"26\" fill=\"#ffe08a\" stroke=\"#c9a03c\" stroke-width=\"3\"/><text x=\"50\" y=\"92\" font-size=\"14\" font-weight=\"800\" fill=\"#8a6a1a\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">500</text><circle cx=\"110\" cy=\"86\" r=\"26\" fill=\"#ffe08a\" stroke=\"#c9a03c\" stroke-width=\"3\"/><text x=\"110\" y=\"92\" font-size=\"14\" font-weight=\"800\" fill=\"#8a6a1a\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">500</text><circle cx=\"170\" cy=\"86\" r=\"26\" fill=\"#ffe08a\" stroke=\"#c9a03c\" stroke-width=\"3\"/><text x=\"170\" y=\"92\" font-size=\"14\" font-weight=\"800\" fill=\"#8a6a1a\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">500</text><text x=\"110\" y=\"138\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">모두 얼마일까?</text></svg>",
+    q:"500원짜리 동전이 3개 있어요. 모두 얼마일까요?",
+    o:["1000원", "1200원", "1500원", "2000원"], a:"1500원", why:"500원씩 3개라서 500+500+500=1500원이에요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">몇 시 몇 분일까?</text><circle cx=\"110\" cy=\"92\" r=\"54\" fill=\"#ffffff\" stroke=\"#2f8fc4\" stroke-width=\"4\"/><circle cx=\"110\" cy=\"92\" r=\"47\" fill=\"none\" stroke=\"#cfe6f7\" stroke-width=\"2\"/><text x=\"110\" y=\"50.6\" font-size=\"11\" font-weight=\"800\" fill=\"#5b7f96\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">12</text><text x=\"155.4\" y=\"96\" font-size=\"11\" font-weight=\"800\" fill=\"#5b7f96\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">3</text><text x=\"110\" y=\"141.4\" font-size=\"11\" font-weight=\"800\" fill=\"#5b7f96\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">6</text><text x=\"64.6\" y=\"96\" font-size=\"11\" font-weight=\"800\" fill=\"#5b7f96\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">9</text><line x1=\"110\" y1=\"92\" x2=\"134.0\" y2=\"98.4\" stroke=\"#2b5d7d\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"110\" y1=\"92\" x2=\"110.0\" y2=\"125.5\" stroke=\"#e2604a\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"92\" r=\"3.4\" fill=\"#2b5d7d\"/></svg>",
+    q:"짧은바늘이 3과 4 사이, 긴바늘이 6을 가리켜요. 몇 시 몇 분일까요?",
+    o:["3시", "3시 30분", "4시 30분", "6시 30분"], a:"3시 30분", why:"긴바늘이 6이면 30분이고, 짧은바늘은 3과 4 사이에 있어서 3시 30분이에요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">오늘은 수요일</text><rect x=\"6\" y=\"40\" width=\"48\" height=\"56\" rx=\"8\" fill=\"#9fd8f5\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><text x=\"30\" y=\"60\" font-size=\"10\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">오늘</text><text x=\"30\" y=\"86\" font-size=\"20\" font-weight=\"800\" fill=\"#12587f\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">수</text><rect x=\"60\" y=\"40\" width=\"48\" height=\"56\" rx=\"8\" fill=\"#c8f0d4\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><text x=\"84\" y=\"60\" font-size=\"10\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">1일 뒤</text><text x=\"84\" y=\"86\" font-size=\"20\" font-weight=\"800\" fill=\"#12587f\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">목</text><rect x=\"114\" y=\"40\" width=\"48\" height=\"56\" rx=\"8\" fill=\"#c8f0d4\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><text x=\"138\" y=\"60\" font-size=\"10\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">2일 뒤</text><text x=\"138\" y=\"86\" font-size=\"20\" font-weight=\"800\" fill=\"#12587f\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">금</text><rect x=\"168\" y=\"40\" width=\"48\" height=\"56\" rx=\"8\" fill=\"#ffe08a\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><text x=\"192\" y=\"60\" font-size=\"10\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">3일 뒤</text><text x=\"192\" y=\"86\" font-size=\"20\" font-weight=\"800\" fill=\"#12587f\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">?</text><text x=\"110\" y=\"130\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">3일 뒤는 무슨 요일?</text></svg>",
+    q:"오늘은 수요일이에요. 3일 뒤는 무슨 요일일까요?",
+    o:["금요일", "토요일", "일요일", "월요일"], a:"토요일", why:"수요일 다음은 목요일, 그다음 금요일, 그다음이 토요일이에요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">해율이 앞에 5명 · 뒤에 2명</text><text x=\"14\" y=\"88\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🧒</text><text x=\"38\" y=\"88\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🧒</text><text x=\"62\" y=\"88\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🧒</text><text x=\"86\" y=\"88\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🧒</text><text x=\"110\" y=\"88\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🧒</text><text x=\"138\" y=\"88\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">👧</text><text x=\"168\" y=\"88\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🧒</text><text x=\"196\" y=\"88\" font-size=\"20\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🧒</text><circle cx=\"138\" cy=\"81\" r=\"16\" fill=\"none\" stroke=\"#e2604a\" stroke-width=\"3\"/><text x=\"110\" y=\"122\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">줄은 모두 몇 명?</text></svg>",
+    q:"줄을 서 있는데 해율이 앞에 5명이 있어요. 해율이 뒤에 2명이 더 있으면 줄은 모두 몇 명일까요?",
+    o:["6명", "7명", "8명", "9명"], a:"8명", why:"앞의 5명, 해율이 1명, 뒤의 2명을 더하면 5+1+2=8명이에요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">과자 20개</text><text x=\"22\" y=\"44\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"40\" y=\"44\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"58\" y=\"44\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"76\" y=\"44\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"94\" y=\"44\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"112\" y=\"44\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"130\" y=\"44\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"148\" y=\"44\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"166\" y=\"44\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"184\" y=\"44\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"22\" y=\"70\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"40\" y=\"70\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"58\" y=\"70\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"76\" y=\"70\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"94\" y=\"70\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"112\" y=\"70\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"130\" y=\"70\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"148\" y=\"70\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"166\" y=\"70\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"184\" y=\"70\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍪</text><text x=\"110\" y=\"112\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">8개를 먹었어요 · 남은 과자는?</text></svg>",
+    q:"과자가 20개 있어요. 그중 8개를 먹었어요. 남은 과자는 몇 개일까요?",
+    o:["10개", "11개", "12개", "14개"], a:"12개", why:"20개에서 8개를 빼면 20-8=12개예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">7씩 커지는 수</text><circle cx=\"24\" cy=\"84\" r=\"18\" fill=\"#eaf6ff\" stroke=\"#8fc6e8\" stroke-width=\"3\"/><text x=\"24\" y=\"90\" font-size=\"14\" font-weight=\"800\" fill=\"#12587f\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">7</text><text x=\"45\" y=\"56\" font-size=\"11\" font-weight=\"800\" fill=\"#8aa6b8\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">+7</text><circle cx=\"66\" cy=\"84\" r=\"18\" fill=\"#eaf6ff\" stroke=\"#8fc6e8\" stroke-width=\"3\"/><text x=\"66\" y=\"90\" font-size=\"14\" font-weight=\"800\" fill=\"#12587f\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">14</text><text x=\"87\" y=\"56\" font-size=\"11\" font-weight=\"800\" fill=\"#8aa6b8\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">+7</text><circle cx=\"108\" cy=\"84\" r=\"18\" fill=\"#eaf6ff\" stroke=\"#8fc6e8\" stroke-width=\"3\"/><text x=\"108\" y=\"90\" font-size=\"14\" font-weight=\"800\" fill=\"#12587f\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">21</text><text x=\"129\" y=\"56\" font-size=\"11\" font-weight=\"800\" fill=\"#8aa6b8\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">+7</text><circle cx=\"150\" cy=\"84\" r=\"18\" fill=\"#eaf6ff\" stroke=\"#8fc6e8\" stroke-width=\"3\"/><text x=\"150\" y=\"90\" font-size=\"14\" font-weight=\"800\" fill=\"#12587f\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">28</text><text x=\"171\" y=\"56\" font-size=\"11\" font-weight=\"800\" fill=\"#8aa6b8\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">+7</text><circle cx=\"192\" cy=\"84\" r=\"18\" fill=\"#ffe6a3\" stroke=\"#e0a92c\" stroke-width=\"3\"/><text x=\"192\" y=\"90\" font-size=\"16\" font-weight=\"800\" fill=\"#12587f\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">?</text><text x=\"110\" y=\"132\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">□에 들어갈 수는?</text></svg>",
+    q:"7, 14, 21, 28, □ 처럼 7씩 커지고 있어요. □에 들어갈 수는 얼마일까요?",
+    o:["30", "32", "35", "42"], a:"35", why:"7씩 커지므로 28 다음 수는 28+7=35예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"58\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">지금은 2시</text><circle cx=\"58\" cy=\"92\" r=\"42\" fill=\"#ffffff\" stroke=\"#2f8fc4\" stroke-width=\"4\"/><circle cx=\"58\" cy=\"92\" r=\"35\" fill=\"none\" stroke=\"#cfe6f7\" stroke-width=\"2\"/><text x=\"58\" y=\"60.7\" font-size=\"11\" font-weight=\"800\" fill=\"#5b7f96\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">12</text><text x=\"93.3\" y=\"96\" font-size=\"11\" font-weight=\"800\" fill=\"#5b7f96\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">3</text><text x=\"58\" y=\"131.3\" font-size=\"11\" font-weight=\"800\" fill=\"#5b7f96\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">6</text><text x=\"22.7\" y=\"96\" font-size=\"11\" font-weight=\"800\" fill=\"#5b7f96\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">9</text><line x1=\"58\" y1=\"92\" x2=\"74.7\" y2=\"82.3\" stroke=\"#2b5d7d\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"58\" y1=\"92\" x2=\"58.0\" y2=\"66.0\" stroke=\"#e2604a\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><circle cx=\"58\" cy=\"92\" r=\"3.4\" fill=\"#2b5d7d\"/><line x1=\"104\" y1=\"92\" x2=\"120\" y2=\"92\" stroke=\"#8a6a3a\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-dasharray=\"4 3\"/><text x=\"168\" y=\"82\" font-size=\"13\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">40분</text><text x=\"168\" y=\"102\" font-size=\"13\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">뒤에는?</text></svg>",
+    q:"지금 2시예요. 40분 뒤는 몇 시 몇 분일까요?",
+    o:["2시 4분", "2시 30분", "2시 40분", "3시 40분"], a:"2시 40분", why:"2시에서 40분이 지나면 2시 40분이에요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">빨간 구슬 8개</text><circle cx=\"28\" cy=\"48\" r=\"9\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"2\"/><circle cx=\"50\" cy=\"48\" r=\"9\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"2\"/><circle cx=\"72\" cy=\"48\" r=\"9\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"2\"/><circle cx=\"94\" cy=\"48\" r=\"9\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"2\"/><circle cx=\"116\" cy=\"48\" r=\"9\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"2\"/><circle cx=\"138\" cy=\"48\" r=\"9\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"2\"/><circle cx=\"160\" cy=\"48\" r=\"9\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"2\"/><circle cx=\"182\" cy=\"48\" r=\"9\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"2\"/><text x=\"110\" y=\"84\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">파란 구슬 5개</text><circle cx=\"46\" cy=\"110\" r=\"9\" fill=\"#6bb7ef\" stroke=\"#2f8fc4\" stroke-width=\"2\"/><circle cx=\"68\" cy=\"110\" r=\"9\" fill=\"#6bb7ef\" stroke=\"#2f8fc4\" stroke-width=\"2\"/><circle cx=\"90\" cy=\"110\" r=\"9\" fill=\"#6bb7ef\" stroke=\"#2f8fc4\" stroke-width=\"2\"/><circle cx=\"112\" cy=\"110\" r=\"9\" fill=\"#6bb7ef\" stroke=\"#2f8fc4\" stroke-width=\"2\"/><circle cx=\"134\" cy=\"110\" r=\"9\" fill=\"#6bb7ef\" stroke=\"#2f8fc4\" stroke-width=\"2\"/><text x=\"110\" y=\"146\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">빨간 구슬이 몇 개 더 많을까?</text></svg>",
+    q:"빨간 구슬 8개와 파란 구슬 5개가 있어요. 빨간 구슬은 파란 구슬보다 몇 개 더 많을까요?",
+    o:["2개", "3개", "4개", "5개"], a:"3개", why:"8개와 5개를 견주면 8-5=3개 더 많아요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">상자에 사과 6개</text><rect x=\"24\" y=\"40\" width=\"172\" height=\"56\" rx=\"10\" fill=\"#f2e3ca\" stroke=\"#8a6a3a\" stroke-width=\"3\"/><text x=\"44\" y=\"76\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"72\" y=\"76\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"100\" y=\"76\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"128\" y=\"76\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"156\" y=\"76\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"184\" y=\"76\" font-size=\"22\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"110\" y=\"116\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">10개가 되려면 몇 개 더?</text></svg>",
+    q:"상자에 사과가 6개 있어요. 10개가 되려면 몇 개를 더 넣어야 할까요?",
+    o:["3개", "4개", "5개", "6개"], a:"4개", why:"6에 4를 더하면 10이 돼요. 그래서 4개를 더 넣어요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">한 묶음에 3개씩 · 6묶음</text><rect x=\"8\" y=\"46\" width=\"62\" height=\"40\" rx=\"8\" fill=\"#eef7fd\" stroke=\"#8fc6e8\" stroke-width=\"2.4\"/><text x=\"21\" y=\"73\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"39\" y=\"73\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"57\" y=\"73\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><rect x=\"78\" y=\"46\" width=\"62\" height=\"40\" rx=\"8\" fill=\"#eef7fd\" stroke=\"#8fc6e8\" stroke-width=\"2.4\"/><text x=\"91\" y=\"73\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"109\" y=\"73\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"127\" y=\"73\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><rect x=\"148\" y=\"46\" width=\"62\" height=\"40\" rx=\"8\" fill=\"#eef7fd\" stroke=\"#8fc6e8\" stroke-width=\"2.4\"/><text x=\"161\" y=\"73\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"179\" y=\"73\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"197\" y=\"73\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><rect x=\"8\" y=\"98\" width=\"62\" height=\"40\" rx=\"8\" fill=\"#eef7fd\" stroke=\"#8fc6e8\" stroke-width=\"2.4\"/><text x=\"21\" y=\"125\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"39\" y=\"125\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"57\" y=\"125\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><rect x=\"78\" y=\"98\" width=\"62\" height=\"40\" rx=\"8\" fill=\"#eef7fd\" stroke=\"#8fc6e8\" stroke-width=\"2.4\"/><text x=\"91\" y=\"125\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"109\" y=\"125\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"127\" y=\"125\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><rect x=\"148\" y=\"98\" width=\"62\" height=\"40\" rx=\"8\" fill=\"#eef7fd\" stroke=\"#8fc6e8\" stroke-width=\"2.4\"/><text x=\"161\" y=\"125\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"179\" y=\"125\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"197\" y=\"125\" font-size=\"15\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⭐</text><text x=\"110\" y=\"152\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">별은 모두 몇 개?</text></svg>",
+    q:"별이 한 묶음에 3개씩 있어요. 6묶음이면 별은 모두 몇 개일까요?",
+    o:["9개", "15개", "18개", "21개"], a:"18개", why:"3개씩 6묶음이라서 3+3+3+3+3+3=18개예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">접시마다 사과 4개 · 옆에 2개 더</text><ellipse cx=\"34\" cy=\"86\" rx=\"26\" ry=\"9\" fill=\"#f3e3c4\" stroke=\"#d9c39c\" stroke-width=\"2\"/><text x=\"24\" y=\"64\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"44\" y=\"64\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"24\" y=\"82\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"44\" y=\"82\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><ellipse cx=\"92\" cy=\"86\" rx=\"26\" ry=\"9\" fill=\"#f3e3c4\" stroke=\"#d9c39c\" stroke-width=\"2\"/><text x=\"82\" y=\"64\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"102\" y=\"64\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"82\" y=\"82\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"102\" y=\"82\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><ellipse cx=\"150\" cy=\"86\" rx=\"26\" ry=\"9\" fill=\"#f3e3c4\" stroke=\"#d9c39c\" stroke-width=\"2\"/><text x=\"140\" y=\"64\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"160\" y=\"64\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"140\" y=\"82\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"160\" y=\"82\" font-size=\"17\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"186\" y=\"94\" font-size=\"16\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"206\" y=\"94\" font-size=\"16\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🍎</text><text x=\"110\" y=\"140\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">사과는 모두 몇 개?</text></svg>",
+    q:"접시 3개에 사과가 4개씩 담겨 있어요. 옆에 사과 2개가 더 있으면 사과는 모두 몇 개일까요?",
+    o:["10개", "12개", "14개", "16개"], a:"14개", why:"4개씩 3접시가 12개이고, 2개를 더하면 12+2=14개예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"그림 문제\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#f7fbff\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">어느 것이 더 무거울까?</text><text x=\"62\" y=\"86\" font-size=\"30\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🪶</text><text x=\"158\" y=\"86\" font-size=\"30\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🪨</text><line x1=\"20\" y1=\"122\" x2=\"200\" y2=\"122\" stroke=\"#dbe7f0\" stroke-width=\"3\" stroke-linecap=\"round\"/><text x=\"62\" y=\"144\" font-size=\"13\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">깃털</text><text x=\"158\" y=\"144\" font-size=\"13\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">돌</text></svg>",
+    q:"깃털 한 개와 돌 하나 중에서 더 무거운 것은 무엇일까요?",
+    o:["깃털", "돌", "둘이 같아요", "알 수 없어요"], a:"돌", why:"돌은 단단하고 깃털은 아주 가벼워서 돌이 더 무거워요." }
 ];
 
 
 /* ---------- 🖼️ 그림 사고력 · 🔺 도형 이름 — 2026-11-24 새 그림 ---------- */
 
 var SHAPE = [
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><rect x="52" y="98" width="96" height="62" rx="4" fill="#f2e3ca" stroke="#8a6a3a" stroke-width="4"/><polygon points="100,26 162,98 38,98" fill="#e2604a" stroke="#a33c2c" stroke-width="4" stroke-linejoin="round"/><rect x="88" y="122" width="24" height="38" rx="3" fill="#8a6a3a" stroke="#5d3a18" stroke-width="2"/></svg>',
-    q:"집의 지붕처럼 생긴 이 도형의 이름은 무엇일까요?",
-    o:["삼각형", "사각형", "원", "오각형"], a:"삼각형", why:"지붕은 곧은 선 세 개로 둘러싸여 있어서 삼각형이에요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><rect x="36" y="58" width="128" height="84" rx="8" fill="#f6d9a8" stroke="#b78a4a" stroke-width="4"/><circle cx="58" cy="82" r="4.5" fill="#c9a03c"/><circle cx="100" cy="82" r="4.5" fill="#c9a03c"/><circle cx="142" cy="82" r="4.5" fill="#c9a03c"/><circle cx="58" cy="108" r="4.5" fill="#c9a03c"/><circle cx="100" cy="108" r="4.5" fill="#c9a03c"/><circle cx="142" cy="108" r="4.5" fill="#c9a03c"/><circle cx="58" cy="134" r="4.5" fill="#c9a03c"/><circle cx="100" cy="134" r="4.5" fill="#c9a03c"/><circle cx="142" cy="134" r="4.5" fill="#c9a03c"/></svg>',
-    q:"네모난 크래커의 겉모양과 같은 도형의 이름은 무엇일까요?",
-    o:["사각형", "삼각형", "원", "육각형"], a:"사각형", why:"곧은 선(변)이 네 개인 도형은 사각형이에요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><text x="100" y="26" font-size="11" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">동그란 사탕 4개 · 네모 초콜릿 3개</text><circle cx="30" cy="70" r="15" fill="#ff9aa2" stroke="#e2604a" stroke-width="3"/><circle cx="76" cy="70" r="15" fill="#ff9aa2" stroke="#e2604a" stroke-width="3"/><circle cx="122" cy="70" r="15" fill="#ff9aa2" stroke="#e2604a" stroke-width="3"/><circle cx="168" cy="70" r="15" fill="#ff9aa2" stroke="#e2604a" stroke-width="3"/><rect x="46" y="112" width="30" height="30" rx="5" fill="#c8b6ff" stroke="#7d5ac8" stroke-width="3"/><rect x="92" y="112" width="30" height="30" rx="5" fill="#c8b6ff" stroke="#7d5ac8" stroke-width="3"/><rect x="138" y="112" width="30" height="30" rx="5" fill="#c8b6ff" stroke="#7d5ac8" stroke-width="3"/><text x="100" y="178" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">모두 몇 개일까요?</text></svg>',
-    q:"동그란 사탕 4개와 네모 초콜릿 3개가 있어요. 모두 몇 개일까요?",
-    o:["6개", "7개", "8개", "9개"], a:"7개", why:"4개에 3개를 더하면 4+3=7개예요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><polygon points="52,44 88,72 74,116 30,116 16,72" fill="#e8f6ff" stroke="#4c9fd6" stroke-width="4" stroke-linejoin="round"/><text x="52" y="146" font-size="12" font-weight="800" fill="#2b5d7d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">변 5개</text><polygon points="160,72 188,124 132,124" fill="#e8f6ff" stroke="#4c9fd6" stroke-width="4" stroke-linejoin="round"/><text x="160" y="146" font-size="12" font-weight="800" fill="#2b5d7d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">변 3개</text></svg>',
-    q:"오각형과 삼각형의 변의 수는 몇 개 차이가 날까요?",
-    o:["1개", "2개", "3개", "4개"], a:"2개", why:"오각형은 변이 5개, 삼각형은 변이 3개라서 5-3=2개 차이예요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><circle cx="46" cy="84" r="26" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="4"/><circle cx="46" cy="140" r="26" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="4"/><rect x="112" y="66" width="24" height="24" rx="4" fill="#ffd166" stroke="#c9a03c" stroke-width="3"/><rect x="140" y="66" width="24" height="24" rx="4" fill="#ffd166" stroke="#c9a03c" stroke-width="3"/><rect x="168" y="66" width="24" height="24" rx="4" fill="#ffd166" stroke="#c9a03c" stroke-width="3"/><text x="140" y="118" font-size="11" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">동그라미 2개 · 네모 3개</text></svg>',
-    q:"동그라미 2개와 네모 3개가 있어요. 네모는 모두 몇 개일까요?",
-    o:["2개", "3개", "5개", "6개"], a:"3개", why:"네모를 세어 보면 3개예요. 동그라미 2개와는 따로 세어요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><polygon points="40,150 100,150 40,90" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="4" stroke-linejoin="round"/><polygon points="100,150 100,90 40,90" fill="#c8f0d4" stroke="#3f9a70" stroke-width="4" stroke-linejoin="round"/><line x1="40" y1="90" x2="100" y2="150" stroke="#8a6a3a" stroke-width="3" stroke-dasharray="6 5"/><text x="70" y="176" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">두 개를 붙이면?</text></svg>',
-    q:"똑같은 세모 두 개를 빗금대로 붙이면 어떤 모양이 될까요?",
-    o:["사각형", "원", "오각형", "육각형"], a:"사각형", why:"세모 두 개를 붙이면 네 변이 있는 사각형이 돼요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><rect x="40" y="44" width="120" height="120" rx="4" fill="#ffb3a8" stroke="#e2604a" stroke-width="4"/><line x1="100" y1="44" x2="100" y2="164" stroke="#8a3f52" stroke-width="3" stroke-dasharray="7 5"/><text x="160" y="118" font-size="26" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">↔️</text><text x="100" y="184" font-size="11" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">점선을 따라 반으로 접어요</text><path d="M100 96 q-8 -8 -16 0" stroke="#8a3f52" stroke-width="3" fill="none"/></svg>',
-    q:"정사각형 색종이를 점선을 따라 반으로 접으면 어떤 모양이 될까요?",
-    o:["직사각형", "삼각형", "원", "오각형"], a:"직사각형", why:"네모를 반으로 접으면 길쭉한 직사각형이 돼요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><rect x="40" y="40" width="120" height="120" rx="4" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="4"/><line x1="100" y1="40" x2="100" y2="160" stroke="#2f8fc4" stroke-width="3" stroke-dasharray="7 5"/><line x1="40" y1="100" x2="160" y2="100" stroke="#2f8fc4" stroke-width="3" stroke-dasharray="7 5"/><text x="70" y="78" font-size="18" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">1</text><text x="130" y="78" font-size="18" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">2</text><text x="70" y="138" font-size="18" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">3</text><text x="130" y="138" font-size="18" font-weight="800" fill="#12587f" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">4</text></svg>',
-    q:"정사각형 종이를 점선대로 두 번 접으면 작은 네모가 몇 개 생길까요?",
-    o:["2개", "3개", "4개", "6개"], a:"4개", why:"반으로 접으면 2개, 한 번 더 접으면 작은 네모가 4개 생겨요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><text x="100" y="26" font-size="11" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">세모 · 네모 · 동그라미가 되풀이돼요</text><polygon points="14,104 38,64 26,104" fill="#ffe6a3" stroke="#c9a03c" stroke-width="3" stroke-linejoin="round"/><rect x="44" y="64" width="24" height="24" rx="3" fill="#ffe6a3" stroke="#c9a03c" stroke-width="3"/><circle cx="86" cy="76" r="13" fill="#ffe6a3" stroke="#c9a03c" stroke-width="3"/><polygon points="104,104 128,64 116,104" fill="#ffe6a3" stroke="#c9a03c" stroke-width="3" stroke-linejoin="round"/><rect x="134" y="64" width="24" height="24" rx="3" fill="#ffe6a3" stroke="#c9a03c" stroke-width="3"/><rect x="163" y="62" width="26" height="28" rx="6" fill="#ffffff" stroke="#e2604a" stroke-width="3"/><text x="176" y="82" font-size="16" font-weight="800" fill="#e2604a" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">?</text><text x="100" y="148" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">다음에 올 모양은?</text></svg>',
-    q:"세모, 네모, 동그라미, 세모, 네모 하고 되풀이돼요. 다음에 올 모양은 무엇일까요?",
-    o:["세모", "네모", "동그라미", "별"], a:"동그라미", why:"세모·네모·동그라미가 세 개씩 되풀이되니 다음은 동그라미예요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><text x="100" y="26" font-size="11" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">큰 네모 · 작은 네모가 되풀이돼요</text><rect x="14" y="54" width="24" height="24" rx="3" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/><rect x="49" y="64" width="14" height="14" rx="3" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="3"/><rect x="74" y="54" width="24" height="24" rx="3" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/><rect x="109" y="64" width="14" height="14" rx="3" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="3"/><rect x="134" y="54" width="24" height="24" rx="3" fill="#c8f0d4" stroke="#3f9a70" stroke-width="3"/><rect x="164" y="54" width="24" height="24" rx="6" fill="#ffffff" stroke="#e2604a" stroke-width="3"/><text x="176" y="74" font-size="15" font-weight="800" fill="#e2604a" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">?</text><text x="100" y="148" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">다음에 올 네모는?</text></svg>',
-    q:"큰 네모, 작은 네모, 큰 네모, 작은 네모, 큰 네모 다음에 올 네모는 무엇일까요?",
-    o:["큰 네모", "작은 네모", "동그라미", "세모"], a:"작은 네모", why:"큰 네모와 작은 네모가 번갈아 나오니 다음은 작은 네모예요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><polygon points="34,66 166,66 166,146 34,146" fill="#f2e3ca" stroke="#8a6a3a" stroke-width="4" stroke-linejoin="round"/><polygon points="34,66 166,66 186,48 54,48" fill="#fbf1dd" stroke="#8a6a3a" stroke-width="4" stroke-linejoin="round"/><polygon points="166,66 186,48 186,128 166,146" fill="#e6d2b0" stroke="#8a6a3a" stroke-width="4" stroke-linejoin="round"/><text x="100" y="176" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">상자를 옆에서 보면?</text></svg>',
-    q:"상자의 옆면처럼 길쭉한 네모 모양의 이름은 무엇일까요?",
-    o:["직사각형", "삼각형", "원", "육각형"], a:"직사각형", why:"길쭉한 네모, 곧 네 변이 있는 도형은 직사각형이에요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><polygon points="100.0,30.0 164.1,67.0 164.1,141.0 100.0,178.0 35.9,141.0 35.9,67.0" fill="#ffd166" stroke="#c9a03c" stroke-width="4" stroke-linejoin="round"/><circle cx="100.0" cy="30.0" r="6" fill="#d97a68"/><circle cx="164.1" cy="67.0" r="6" fill="#d97a68"/><circle cx="164.1" cy="141.0" r="6" fill="#d97a68"/><circle cx="100.0" cy="178.0" r="6" fill="#d97a68"/><circle cx="35.9" cy="141.0" r="6" fill="#d97a68"/><circle cx="35.9" cy="67.0" r="6" fill="#d97a68"/><text x="100" y="194" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">꼭짓점은 몇 개?</text></svg>',
-    q:"이 육각형의 꼭짓점은 모두 몇 개일까요?",
-    o:["5개", "6개", "7개", "8개"], a:"6개", why:"육각형은 꼭짓점이 6개, 변도 6개예요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><polygon points="100,26 152,104 100,182 48,104" fill="#c8b6ff" stroke="#7d5ac8" stroke-width="4" stroke-linejoin="round"/><line x1="100" y1="26" x2="100" y2="182" stroke="#7d5ac8" stroke-width="2" stroke-dasharray="6 5"/><text x="150" y="40" font-size="26" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">🪁</text><text x="100" y="16" font-size="12" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">연 모양</text></svg>',
-    q:"연처럼 생긴 이 도형의 변은 모두 몇 개일까요?",
-    o:["3개", "4개", "5개", "6개"], a:"4개", why:"연 모양도 곧은 선 네 개로 둘러싸여 있어서 사각형이에요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><circle cx="100" cy="96" r="66" fill="#ffe08a" stroke="#c9a03c" stroke-width="5"/><line x1="100" y1="96" x2="166" y2="96" stroke="#a3812c" stroke-width="3" stroke-dasharray="6 5"/><circle cx="100" cy="96" r="4" fill="#a3812c"/><text x="100" y="180" font-size="12" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">곧은 선이 없어요</text></svg>',
-    q:"동그라미 모양인 이 도형의 꼭짓점은 몇 개일까요?",
-    o:["0개", "1개", "2개", "4개"], a:"0개", why:"원은 빙글 둥글어서 꼭짓점도 변도 없어요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><text x="100" y="24" font-size="11" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">동그라미 6개를 2줄에 똑같이</text><circle cx="48" cy="82" r="20" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="3"/><circle cx="100" cy="82" r="20" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="3"/><circle cx="152" cy="82" r="20" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="3"/><circle cx="48" cy="134" r="20" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="3"/><circle cx="100" cy="134" r="20" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="3"/><circle cx="152" cy="134" r="20" fill="#bfe6ff" stroke="#2f8fc4" stroke-width="3"/><text x="100" y="176" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">한 줄에 몇 개씩?</text></svg>',
-    q:"동그라미 6개를 2줄에 똑같이 놓으면 한 줄에 몇 개씩 놓일까요?",
-    o:["2개", "3개", "4개", "6개"], a:"3개", why:"3개씩 2줄이면 3+3=6개라서 한 줄에 3개예요." },
-  { svg:'<svg viewBox="0 0 200 200" role="img" aria-label="도형 그림"><rect width="200" height="200" rx="10" fill="#fffdf6"/><text x="100" y="24" font-size="12" font-weight="800" fill="#41627d" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">네모 블록 8개</text><rect x="32" y="118" width="30" height="30" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><rect x="66" y="118" width="30" height="30" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><rect x="100" y="118" width="30" height="30" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><rect x="134" y="118" width="30" height="30" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><rect x="32" y="84" width="30" height="30" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><rect x="66" y="84" width="30" height="30" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><rect x="100" y="84" width="30" height="30" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><rect x="134" y="84" width="30" height="30" rx="4" fill="#9fd8f5" stroke="#2f8fc4" stroke-width="3"/><text x="100" y="176" font-size="12" font-weight="800" fill="#2f8fc4" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif">한 줄에 4개씩 쌓으면 몇 층?</text></svg>',
-    q:"네모 블록 8개를 한 줄에 4개씩 쌓으면 몇 층이 될까요?",
-    o:["2층", "3층", "4층", "8층"], a:"2층", why:"4개씩 2줄이면 4+4=8개라서 2층이에요." }
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">정지 표지판</text><polygon points=\"110.0,36.0 148.2,51.8 164.0,90.0 148.2,128.2 110.0,144.0 71.8,128.2 56.0,90.0 71.8,51.8\" fill=\"#ffc9c9\" stroke=\"#e2604a\" stroke-width=\"5\" stroke-linejoin=\"round\"/><text x=\"110\" y=\"96\" font-size=\"16\" font-weight=\"800\" fill=\"#b23a28\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">STOP</text></svg>",
+    q:"정지 표지판처럼 생긴 이 도형의 이름은 무엇일까요?",
+    o:["칠각형", "팔각형", "육각형", "원"], a:"팔각형", why:"곧은 선(변)을 세어 보면 여덟 개라서 팔각형이에요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">곧은 선이 일곱 개</text><polygon points=\"110.0,38.0 152.2,58.3 162.6,104.0 133.4,140.7 86.6,140.7 57.4,104.0 67.8,58.3\" fill=\"#e8f6ff\" stroke=\"#4c9fd6\" stroke-width=\"4\" stroke-linejoin=\"round\"/><circle cx=\"110.0\" cy=\"38.0\" r=\"5\" fill=\"#e2604a\"/><circle cx=\"152.2\" cy=\"58.3\" r=\"5\" fill=\"#e2604a\"/><circle cx=\"162.6\" cy=\"104.0\" r=\"5\" fill=\"#e2604a\"/><circle cx=\"133.4\" cy=\"140.7\" r=\"5\" fill=\"#e2604a\"/><circle cx=\"86.6\" cy=\"140.7\" r=\"5\" fill=\"#e2604a\"/><circle cx=\"57.4\" cy=\"104.0\" r=\"5\" fill=\"#e2604a\"/><circle cx=\"67.8\" cy=\"58.3\" r=\"5\" fill=\"#e2604a\"/></svg>",
+    q:"곧은 선이 일곱 개인 이 도형의 이름은 무엇일까요?",
+    o:["육각형", "칠각형", "팔각형", "구각형"], a:"칠각형", why:"변이 일곱 개인 도형은 칠각형이에요. 꼭짓점도 일곱 개예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">네모 4개 · 세모 2개</text><rect x=\"14\" y=\"44\" width=\"30\" height=\"30\" rx=\"5\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><rect x=\"54\" y=\"44\" width=\"30\" height=\"30\" rx=\"5\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><rect x=\"94\" y=\"44\" width=\"30\" height=\"30\" rx=\"5\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><rect x=\"134\" y=\"44\" width=\"30\" height=\"30\" rx=\"5\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><polygon points=\"75.0,88.0 60.0,124.0 90.0,124.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"3\" stroke-linejoin=\"round\"/><polygon points=\"145.0,88.0 130.0,124.0 160.0,124.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"3\" stroke-linejoin=\"round\"/><text x=\"110\" y=\"150\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">도형은 모두 몇 개?</text></svg>",
+    q:"네모 4개와 세모 2개가 있어요. 도형은 모두 몇 개일까요?",
+    o:["5개", "6개", "7개", "8개"], a:"6개", why:"네모 4개에 세모 2개를 더하면 4+2=6개예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">큰 동그라미 안에 세모가 몇 개?</text><circle cx=\"110\" cy=\"92\" r=\"58\" fill=\"none\" stroke=\"#2f8fc4\" stroke-width=\"4\"/><polygon points=\"78.0,70.0 64.0,96.0 92.0,96.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"3\" stroke-linejoin=\"round\"/><polygon points=\"128.0,70.0 114.0,96.0 142.0,96.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"3\" stroke-linejoin=\"round\"/><polygon points=\"103.0,108.0 89.0,134.0 117.0,134.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"3\" stroke-linejoin=\"round\"/></svg>",
+    q:"큰 동그라미 안에 세모가 몇 개 있을까요?",
+    o:["2개", "3개", "4개", "5개"], a:"3개", why:"동그라미 안의 세모를 하나씩 세어 보면 3개예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">점선을 따라 반으로 접으면?</text><polygon points=\"110.0,40.0 60.0,126.0 160.0,126.0\" fill=\"#e8f6ff\" stroke=\"#4c9fd6\" stroke-width=\"4\" stroke-linejoin=\"round\"/><line x1=\"110\" y1=\"40\" x2=\"110\" y2=\"126\" stroke=\"#e2604a\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-dasharray=\"6 4\"/><text x=\"110\" y=\"150\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">어떤 모양이 될까?</text></svg>",
+    q:"세모 색종이를 점선을 따라 반으로 접으면 어떤 모양이 될까요?",
+    o:["네모", "세모", "동그라미", "오각형"], a:"세모", why:"세모를 반으로 접어도 곧은 선이 세 개인 세모가 돼요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">점선대로 한 번 자르면?</text><rect x=\"58\" y=\"42\" width=\"84\" height=\"84\" rx=\"4\" fill=\"#e8f6ff\" stroke=\"#4c9fd6\" stroke-width=\"4\"/><line x1=\"58\" y1=\"42\" x2=\"142\" y2=\"126\" stroke=\"#e2604a\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-dasharray=\"6 4\"/><text x=\"110\" y=\"150\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">세모가 몇 개 생길까?</text></svg>",
+    q:"네모 종이를 점선대로 한 번 자르면 세모가 몇 개 생길까요?",
+    o:["1개", "2개", "3개", "4개"], a:"2개", why:"네모를 대각선으로 한 번 자르면 세모 두 개가 생겨요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">되풀이되는 모양</text><circle cx=\"16\" cy=\"82\" r=\"9\" fill=\"#eaf6ff\" stroke=\"#8fc6e8\" stroke-width=\"2.4\"/><polygon points=\"38.0,72.0 29.0,90.0 47.0,90.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><rect x=\"51\" y=\"73\" width=\"18\" height=\"18\" rx=\"3\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><polygon points=\"82.0,72.0 73.0,90.0 91.0,90.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><circle cx=\"104\" cy=\"82\" r=\"9\" fill=\"#eaf6ff\" stroke=\"#8fc6e8\" stroke-width=\"2.4\"/><polygon points=\"126.0,72.0 117.0,90.0 135.0,90.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><rect x=\"139\" y=\"73\" width=\"18\" height=\"18\" rx=\"3\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><polygon points=\"170.0,72.0 161.0,90.0 179.0,90.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><circle cx=\"192\" cy=\"82\" r=\"9\" fill=\"#ffe6a3\" stroke=\"#e0a92c\" stroke-width=\"2.4\"/><text x=\"75\" y=\"138\" font-size=\"9\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">동그라미·세모·네모·세모가 되풀이돼요</text></svg>",
+    q:"동그라미, 세모, 네모, 세모가 되풀이돼요. 아홉 번째에는 무엇이 올까요?",
+    o:["동그라미", "세모", "네모", "별"], a:"동그라미", why:"네 가지가 되풀이되니 9번째는 5번째와 같은 동그라미예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">동그란 물건을 두 개 골라요</text><text x=\"46\" y=\"74\" font-size=\"26\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">⚽</text><text x=\"112\" y=\"74\" font-size=\"26\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">📕</text><text x=\"170\" y=\"74\" font-size=\"26\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🪙</text><text x=\"46\" y=\"126\" font-size=\"26\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">📦</text><text x=\"112\" y=\"126\" font-size=\"26\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">🪁</text></svg>",
+    q:"그림에서 동그란 물건 두 개를 골라요.",
+    o:["공과 동전", "책과 상자", "공과 책", "동전과 상자"], a:"공과 동전", why:"공과 동전은 빙글 둥글어서 원 모양이에요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">네모는 모두 몇 개?</text><rect x=\"20\" y=\"36\" width=\"52\" height=\"44\" rx=\"4\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.6\"/><rect x=\"92\" y=\"36\" width=\"34\" height=\"34\" rx=\"4\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.6\"/><rect x=\"144\" y=\"36\" width=\"56\" height=\"40\" rx=\"4\" fill=\"#ffe08a\" stroke=\"#c9a03c\" stroke-width=\"2.6\"/><rect x=\"40\" y=\"98\" width=\"48\" height=\"40\" rx=\"4\" fill=\"#f3d7f0\" stroke=\"#b96fb0\" stroke-width=\"2.6\"/><circle cx=\"150\" cy=\"118\" r=\"22\" fill=\"#e8f6ff\" stroke=\"#8fc6e8\" stroke-width=\"2.6\"/></svg>",
+    q:"그림 속 네모는 모두 몇 개일까요?",
+    o:["3개", "4개", "5개", "6개"], a:"4개", why:"네모를 하나씩 세어 보면 4개이고, 동그라미는 세지 않아요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">세모 3개 · 네모 5개</text><polygon points=\"24.0,52.0 13.0,78.0 35.0,78.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><polygon points=\"50.0,52.0 39.0,78.0 61.0,78.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><polygon points=\"76.0,52.0 65.0,78.0 87.0,78.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><rect x=\"16\" y=\"104\" width=\"28\" height=\"28\" rx=\"4\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><rect x=\"56\" y=\"104\" width=\"28\" height=\"28\" rx=\"4\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><rect x=\"96\" y=\"104\" width=\"28\" height=\"28\" rx=\"4\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><rect x=\"136\" y=\"104\" width=\"28\" height=\"28\" rx=\"4\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><rect x=\"176\" y=\"104\" width=\"28\" height=\"28\" rx=\"4\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><text x=\"110\" y=\"150\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">더 많은 도형은?</text></svg>",
+    q:"세모 3개와 네모 5개 중에서 더 많은 도형은 무엇일까요?",
+    o:["세모", "네모", "둘이 같아요", "알 수 없어요"], a:"네모", why:"3개와 5개를 견주면 5가 더 커서 네모가 더 많아요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">긴 네모 두 개를 나란히 이으면?</text><rect x=\"20\" y=\"56\" width=\"90\" height=\"48\" rx=\"4\" fill=\"#e8f6ff\" stroke=\"#4c9fd6\" stroke-width=\"4\"/><rect x=\"110\" y=\"56\" width=\"90\" height=\"48\" rx=\"4\" fill=\"#e8f6ff\" stroke=\"#4c9fd6\" stroke-width=\"4\"/><text x=\"110\" y=\"140\" font-size=\"12\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">어떤 모양이 될까?</text></svg>",
+    q:"직사각형 두 개를 긴 쪽으로 나란히 이으면 어떤 모양이 될까요?",
+    o:["직사각형", "정사각형", "삼각형", "원"], a:"직사각형", why:"길쭉한 네모를 이어 붙이면 더 긴 직사각형이 돼요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">사각형 꼭짓점 4개 · 세모 꼭짓점 3개</text><rect x=\"24\" y=\"44\" width=\"64\" height=\"64\" rx=\"4\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"4\"/><circle cx=\"24\" cy=\"44\" r=\"5\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"1\"/><circle cx=\"88\" cy=\"44\" r=\"5\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"1\"/><circle cx=\"24\" cy=\"108\" r=\"5\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"1\"/><circle cx=\"88\" cy=\"108\" r=\"5\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"1\"/><polygon points=\"150.0,44.0 122.0,108.0 178.0,108.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"4\" stroke-linejoin=\"round\"/><circle cx=\"150\" cy=\"44\" r=\"5\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"1\"/><circle cx=\"122\" cy=\"108\" r=\"5\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"1\"/><circle cx=\"178\" cy=\"108\" r=\"5\" fill=\"#e2604a\" stroke=\"#a33c2c\" stroke-width=\"1\"/><text x=\"110\" y=\"146\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">모두 몇 개일까?</text></svg>",
+    q:"사각형의 꼭짓점 4개와 삼각형의 꼭짓점 3개를 모두 더하면 몇 개일까요?",
+    o:["6개", "7개", "8개", "9개"], a:"7개", why:"4개와 3개를 더하면 4+3=7개예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">동그라미 3개 · 네모 1개</text><circle cx=\"110\" cy=\"88\" r=\"44\" fill=\"#ffe6a3\" stroke=\"#e0a92c\" stroke-width=\"3\"/><circle cx=\"95\" cy=\"78\" r=\"7\" fill=\"#2b5d7d\" stroke=\"#2b5d7d\" stroke-width=\"1\"/><circle cx=\"125\" cy=\"78\" r=\"7\" fill=\"#2b5d7d\" stroke=\"#2b5d7d\" stroke-width=\"1\"/><rect x=\"96\" y=\"100\" width=\"28\" height=\"16\" rx=\"4\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><text x=\"110\" y=\"150\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">도형은 모두 몇 개?</text></svg>",
+    q:"동그라미 3개와 네모 1개로 얼굴을 그렸어요. 도형은 모두 몇 개일까요?",
+    o:["3개", "4개", "5개", "6개"], a:"4개", why:"동그라미 3개에 네모 1개를 더하면 3+1=4개예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">네 변의 길이가 모두 똑같아요</text><rect x=\"62\" y=\"42\" width=\"72\" height=\"72\" rx=\"4\" fill=\"#e8f6ff\" stroke=\"#4c9fd6\" stroke-width=\"4\"/><text x=\"50\" y=\"80\" font-size=\"11\" font-weight=\"800\" fill=\"#e2604a\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">8</text><text x=\"146\" y=\"80\" font-size=\"11\" font-weight=\"800\" fill=\"#e2604a\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">8</text><text x=\"98\" y=\"34\" font-size=\"11\" font-weight=\"800\" fill=\"#e2604a\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">8</text><text x=\"110\" y=\"150\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">이 도형의 이름은?</text></svg>",
+    q:"네 변의 길이가 모두 똑같은 사각형의 이름은 무엇일까요?",
+    o:["정사각형", "직사각형", "삼각형", "오각형"], a:"정사각형", why:"네 변이 모두 같고 네 각이 모두 곧은 사각형은 정사각형이에요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"22\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">되풀이되는 모양</text><rect x=\"9\" y=\"70\" width=\"22\" height=\"22\" rx=\"3\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><polygon points=\"48.0,68.0 37.0,92.0 59.0,92.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><polygon points=\"76.0,68.0 65.0,92.0 87.0,92.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><rect x=\"93\" y=\"70\" width=\"22\" height=\"22\" rx=\"3\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"2.4\"/><polygon points=\"132.0,68.0 121.0,92.0 143.0,92.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><polygon points=\"160.0,68.0 149.0,92.0 171.0,92.0\" fill=\"#c8f0d4\" stroke=\"#3f9a70\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><rect x=\"177\" y=\"70\" width=\"22\" height=\"22\" rx=\"3\" fill=\"#ffe08a\" stroke=\"#c9a03c\" stroke-width=\"2.4\"/><text x=\"60\" y=\"140\" font-size=\"9\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">네모·세모·세모가 되풀이돼요</text></svg>",
+    q:"네모, 세모, 세모, 네모, 세모, 세모 하고 되풀이돼요. 일곱 번째에는 무엇이 올까요?",
+    o:["네모", "세모", "동그라미", "별"], a:"네모", why:"세 가지가 되풀이되니 7번째는 1번째와 같은 네모예요." },
+  { svg:"<svg viewBox=\"0 0 220 160\" role=\"img\" aria-label=\"도형 그림\"><rect width=\"220\" height=\"160\" rx=\"10\" fill=\"#fffdf6\"/><text x=\"110\" y=\"20\" font-size=\"13\" font-weight=\"800\" fill=\"#41627d\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">책을 위에서 내려다보면</text><rect x=\"44\" y=\"48\" width=\"132\" height=\"78\" rx=\"6\" fill=\"#cfe6f7\" stroke=\"#2f8fc4\" stroke-width=\"4\"/><rect x=\"44\" y=\"48\" width=\"24\" height=\"78\" rx=\"4\" fill=\"#9fd8f5\" stroke=\"#2f8fc4\" stroke-width=\"3\"/><line x1=\"80\" y1=\"66\" x2=\"160\" y2=\"66\" stroke=\"#b9d9ec\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"80\" y1=\"86\" x2=\"160\" y2=\"86\" stroke=\"#b9d9ec\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"80\" y1=\"106\" x2=\"140\" y2=\"106\" stroke=\"#b9d9ec\" stroke-width=\"3\" stroke-linecap=\"round\"/><text x=\"110\" y=\"150\" font-size=\"11\" font-weight=\"800\" fill=\"#2f8fc4\" text-anchor=\"middle\" font-family=\"system-ui,-apple-system,sans-serif\">어떤 모양일까?</text></svg>",
+    q:"책을 위에서 내려다보면 어떤 모양일까요?",
+    o:["직사각형", "삼각형", "원", "오각형"], a:"직사각형", why:"책의 위에서 본 모양은 길쭉한 네모, 곧 직사각형이에요." }
 ];
 
 var TS = { ti:0, si:0 };
@@ -19758,14 +19760,14 @@ var LIST = [
   { c:"王", hun:"임금", eum:"왕", g:["starter","g8"], w:[["_","王","임금"],["_국","王國","임금의 나라"],["_자","王子","임금의 아들"]] },
   { c:"敎", hun:"가르칠", eum:"교", g:["g8"], w:[["_실","敎室","공부하는 방"],["_사","敎師","가르치는 사람"],["_육","敎育","가르쳐 기름"]] },
   { c:"校", hun:"학교", eum:"교", g:["g8"], w:[["학_","學校","배우는 곳"],["_문","校門","학교 문"],["_장","校長","학교를 이끄는 사람"]] },
-  { c:"九", hun:"아홉", eum:"구", g:["g8"], w:[["_월","九月","아홉째 달"],["_개","九個","아홉 개"]] },
+  { c:"九", hun:"아홉", eum:"구", g:["g8"], w:[["_월","九月","아홉째 달"],["_개","九個","아홉 개"],["_층","九層","아홉째 층"]] },
   { c:"國", hun:"나라", eum:"국", g:["g8"], w:[["_가","國家","나라"],["한_","韓國","우리나라"],["_어","國語","우리나라 말"]] },
   { c:"軍", hun:"군사", eum:"군", g:["g8"], w:[["_인","軍人","군대 사람"],["육_","陸軍","땅의 군대"]] },
   { c:"南", hun:"남녘", eum:"남", g:["g8"], w:[["_쪽","南쪽","남쪽"],["_산","南山","남쪽 산"]] },
   { c:"女", hun:"계집", eum:"여", g:["g8"], w:[["_자","女子","여자"],["_동생","女동생","여동생"],["_왕","女王","여자 임금"]] },
   { c:"年", hun:"해", eum:"년", g:["g8"], w:[["올_","今年","올해"],["내_","來年","다음 해"],["소_","少年","어린 소년"]] },
   { c:"東", hun:"동녘", eum:"동", g:["g8"], w:[["_쪽","東쪽","동쪽"],["_대문","東大門","동쪽 큰 문"],["_해","東海","동쪽 바다"]] },
-  { c:"六", hun:"여섯", eum:"륙", g:["g8"], w:[["_월","六月","여섯째 달"],["_개","六個","여섯 개"]] },
+  { c:"六", hun:"여섯", eum:"륙", g:["g8"], w:[["_월","六月","여섯째 달"],["_개","六個","여섯 개"],["_십","六十","예순"]] },
   { c:"萬", hun:"일만", eum:"만", g:["g8"], w:[["_원","萬원","만 원"],["_세","萬歲","만세"]] },
   { c:"母", hun:"어미", eum:"모", g:["g8"], w:[["_친","母親","어머니"],["부_","父母","부모"]] },
   { c:"門", hun:"문", eum:"문", g:["g8"], w:[["대_","大門","큰 문"],["출입_","出入口","드나드는 문"]] },
@@ -19773,7 +19775,7 @@ var LIST = [
   { c:"白", hun:"흰", eum:"백", g:["g8"], w:[["_색","白色","흰색"],["_설","白雪","흰 눈"],["_지","白紙","흰 종이"]] },
   { c:"父", hun:"아비", eum:"부", g:["g8"], w:[["_친","父親","아버지"],["_모","父母","부모"],["_자","父子","아버지와 아들"]] },
   { c:"北", hun:"북녘", eum:"북", g:["g8"], w:[["_쪽","北쪽","북쪽"],["_극","北極","북극"]] },
-  { c:"四", hun:"넉", eum:"사", g:["g8"], w:[["_월","四月","넉째 달"],["_계절","四季節","네 계절"]] },
+  { c:"四", hun:"넉", eum:"사", g:["g8"], w:[["_월","四月","넉째 달"],["_계절","四季節","네 계절"],["_각형","四角形","네모 모양"]] },
   { c:"生", hun:"날", eum:"생", g:["g8"], w:[["_일","生日","태어난 날"],["학_","學生","배우는 사람"]] },
   { c:"西", hun:"서녘", eum:"서", g:["g8"], w:[["_쪽","西쪽","서쪽"],["_대문","西大門","서쪽 큰 문"]] },
   { c:"先", hun:"먼저", eum:"선", g:["g8"], w:[["_생","先生","가르치는 사람"],["_배","先輩","먼저 온 사람"]] },
@@ -35493,63 +35495,70 @@ function smCheck(){
 }
 
 /* ---- 하루 셈하기 문제 만들기 (단원별) ---- */
+function jW(n){ var u = Math.abs(n) % 10; return (u === 2 || u === 4 || u === 5 || u === 9) ? "와" : "과"; }
+function jR(n){ var u = Math.abs(n) % 10; return (u === 2 || u === 4 || u === 5 || u === 9) ? "를" : "을"; }
 function smQ2(){
-  var t = rnd(0, 7), q;
-  if (t === 6){ var u6 = rnd(1, 8), b6 = rnd(1, 9 - u6), a6 = 10 + u6;
-    q = { q:a6 + " + □ = " + (a6 + b6), num:b6, hint:"수모형으로 생각해요. " + (a6 + b6) + "에서 " + a6 + "을 빼면 " + b6 + "이에요." }; }
-  else if (t === 7){ var m7 = rnd(2, 5) * 10 + rnd(1, 8), n7 = rnd(1, 6);
-    q = { q:"우유가 " + m7 + "개 있어요. " + n7 + "개를 더 사 오면 모두 몇 개?", num:m7 + n7, hint:"십은 십끼리, 일은 일끼리 더해요. 모두 " + (m7 + n7) + "개예요." }; }
-  else if (t === 0){ var m6 = rnd(1, 4) * 10 + rnd(1, 9), s6 = rnd(2, 9);
-    q = { q:"□ + " + s6 + " = " + (m6 + s6), num:m6, hint:(m6 + s6) + "에서 " + s6 + "을 빼면 " + m6 + "이에요." }; }
-  else if (t === 7){ var f7 = rnd(1, 4) * 10 + rnd(1, 8), g7 = rnd(1, 4) * 10 + rnd(1, 9 - (f7 % 10));
-    q = { q:"사과 " + f7 + "개와 배 " + g7 + "개를 모으면 모두 몇 개?", num:f7 + g7, hint:"십은 십끼리, 일은 일끼리 더해요. 모두 " + (f7 + g7) + "개예요." }; }
-  else if (t === 0){ var u = rnd(1, 7), b = rnd(1, 9 - u), a = rnd(1, 8) * 10 + u;
-    q = { q:a + " + " + b + " = ?", num:a + b, hint:"일의 자리 " + u + "에 " + b + "를 더하면 " + (u + b) + "이에요." }; }
-  else if (t === 1){ var a1 = rnd(1, 4) * 10, b1 = rnd(1, 9 - a1 / 10) * 10;
-    q = { q:a1 + " + " + b1 + " = ?", num:a1 + b1, hint:"십의 자리끼리 더해요. " + (a1 / 10) + " + " + (b1 / 10) + " = " + (a1 + b1) / 10 }; }
-  else if (t === 2){ var ta = rnd(1, 4), ua = rnd(1, 8), tb = rnd(1, 8 - ta), ub = rnd(1, 9 - ua);
+  var t = rnd(0, 5), q;
+  if (t === 0){ var ta = rnd(1, 4), ua = rnd(1, 8), tb = rnd(1, 9 - ta), ub = rnd(1, 9 - ua);
     q = { q:(ta * 10 + ua) + " + " + (tb * 10 + ub) + " = ?", num:ta * 10 + ua + tb * 10 + ub,
+          hint:"십은 십끼리, 일은 일끼리 더해요. " + (ta + tb) + "십 " + (ua + ub) + "이에요." }; }
+  else if (t === 1){ var a1 = rnd(4, 9), b1 = rnd(11 - a1, 9);
+    q = { q:a1 + " + " + b1 + " = ?", num:a1 + b1,
+          hint:a1 + " + " + (10 - a1) + " = 10, 남은 " + (b1 - (10 - a1)) + "을 더하면 " + (a1 + b1) + "이에요." }; }
+  else if (t === 2){ var n2 = rnd(3, 8), tot2 = rnd(n2 + 5, 18);
+    q = { q:"□ + " + n2 + " = " + tot2, num:tot2 - n2, hint:tot2 + "에서 " + n2 + jR(n2) + " 빼면 " + (tot2 - n2) + "이에요." }; }
+  else if (t === 3){ var p3 = rnd(6, 9), d3 = rnd(11 - p3, 9);
+    q = { q:"연필이 " + p3 + "자루 있어요. " + d3 + "자루를 더 받으면 모두 몇 자루?", num:p3 + d3,
+          hint:p3 + " + " + (10 - p3) + " = 10, 남은 " + (d3 - (10 - p3)) + "을 더해 " + (p3 + d3) + "자루예요." }; }
+  else if (t === 4){ var t4 = rnd(2, 4), u4 = rnd(1, 9), f4 = rnd(1, 8 - t4), g4 = rnd(1, 9 - u4);
+    q = { q:(t4 * 10 + u4) + " + " + (f4 * 10 + g4) + " = ?", num:t4 * 10 + u4 + f4 * 10 + g4,
           hint:"십은 십끼리, 일은 일끼리 더해요." }; }
-  else if (t === 3){ var u3 = rnd(2, 9), b3 = rnd(1, u3), a3 = rnd(1, 8) * 10 + u3;
-    q = { q:a3 + " - " + b3 + " = ?", num:a3 - b3, hint:"일의 자리 " + u3 + "에서 " + b3 + "을 빼요." }; }
-  else if (t === 4){ var a4 = rnd(4, 9) * 10, b4 = rnd(1, a4 / 10 - 1) * 10;
-    q = { q:a4 + " - " + b4 + " = ?", num:a4 - b4, hint:"십의 자리끼리 빼요." }; }
-  else { var t5 = rnd(3, 9), u5 = rnd(2, 9), a5 = t5 * 10 + u5;
-    var b5 = rnd(1, t5 - 1) * 10 + rnd(1, u5);
-    q = { q:a5 + " - " + b5 + " = ?", num:a5 - b5, hint:"십은 십끼리, 일은 일끼리 빼요." }; }
+  else { var u5 = rnd(1, 8), b5 = rnd(1, 9 - u5), a5 = 10 + u5;
+    q = { q:a5 + " + □ = " + (a5 + b5), num:b5, hint:(a5 + b5) + "에서 " + a5 + "을 빼면 " + b5 + "이에요." }; }
   return q;
 }
 function smQ4(){
-  var t = rnd(0, 6), q;
-  if (t === 5){ var g5 = rnd(1, 9);
-    q = { q:"10 = " + g5 + " + □", num:10 - g5, hint:"10을 " + g5 + "와 " + (10 - g5) + "로 가르면 돼요." }; }
-  else if (t === 6){ var b6 = rnd(2, 9);
-    q = { q:"빵 10개 중 " + b6 + "개를 먹었어요. 남은 빵은 몇 개?", num:10 - b6, hint:"10 - " + b6 + " = " + (10 - b6) }; }
-  else if (t === 0){ var s5 = rnd(2, 5), t5 = rnd(1, 10 - s5);
-    q = { q:"10 - " + s5 + " - " + t5 + " = ?", num:10 - s5 - t5, hint:"10에서 " + s5 + "를 빼면 " + (10 - s5) + ", 거기서 " + t5 + "를 또 빼요." }; }
-  else if (t === 6){ var g6 = rnd(2, 8);
-    q = { q:"사탕 10개 중 " + g6 + "개를 주었어요. 남은 사탕은 몇 개?", num:10 - g6, hint:"10 - " + g6 + " = " + (10 - g6) }; }
-  else if (t === 0){ var a = rnd(1, 9); q = { q:a + " + □ = 10", num:10 - a, hint:a + "에 " + (10 - a) + "를 더하면 10이에요." }; }
-  else if (t === 1){ var b = rnd(1, 9); q = { q:"10 - " + b + " = ?", num:10 - b, hint:"10을 " + b + "와 " + (10 - b) + "로 가르면 돼요." }; }
-  else if (t === 2){ var a2 = rnd(5, 9), b2 = rnd(11 - a2, 9); q = { q:a2 + " + " + b2 + " = ?", num:a2 + b2, hint:a2 + " + " + (10 - a2) + " = 10, 남은 " + (b2 - (10 - a2)) + "을 더해요." }; }
-  else if (t === 3){ var b3 = rnd(2, 9), a3 = rnd(11, 18); q = { q:a3 + " - " + b3 + " = ?", num:a3 - b3, hint:"10 - " + b3 + " = " + (10 - b3) + ", 거기에 " + (a3 - 10) + "을 더해요." }; }
-  else { var c = rnd(3, 8), d = rnd(1, 9); q = { q:"3 + 7 + " + c + " = ?", num:10 + c, hint:"3 + 7 = 10, 10 + " + c + " = " + (10 + c) }; }
+  var t = rnd(0, 5), q;
+  if (t === 0){ var a0 = rnd(1, 9);
+    q = { q:"10을 " + a0 + jW(a0) + " □로 가르면?", num:10 - a0, hint:"10에서 " + a0 + jR(a0) + " 빼면 " + (10 - a0) + "이에요." }; }
+  else if (t === 1){ var b1 = rnd(2, 9), a1 = rnd(11, 18);
+    q = { q:a1 + " - " + b1 + " = ?", num:a1 - b1,
+          hint:"10 - " + b1 + " = " + (10 - b1) + ", 거기에 " + (a1 - 10) + "을 더하면 " + (a1 - b1) + "이에요." }; }
+  else if (t === 2){ var s2 = rnd(5, 9), r2 = rnd(3, 8);
+    q = { q:"□ - " + s2 + " = " + r2, num:r2 + s2, hint:(r2 + s2) + "에서 " + s2 + jR(s2) + " 빼면 " + r2 + "이에요." }; }
+  else if (t === 3){ var m3 = rnd(12, 16), n3 = rnd(6, 9);
+    q = { q:"초콜릿 " + m3 + "개 중 " + n3 + "개를 먹었어요. 남은 초콜릿은 몇 개?", num:m3 - n3,
+          hint:"10 - " + n3 + " = " + (10 - n3) + ", " + (10 - n3) + " + " + (m3 - 10) + " = " + (m3 - n3) + "개예요." }; }
+  else if (t === 4){ var a4 = rnd(15, 18), b4 = rnd(6, 9), c4 = rnd(1, 4);
+    q = { q:a4 + " - " + b4 + " - " + c4 + " = ?", num:a4 - b4 - c4,
+          hint:a4 + " - " + b4 + " = " + (a4 - b4) + ", " + (a4 - b4) + " - " + c4 + " = " + (a4 - b4 - c4) + "이에요." }; }
+  else { var m5 = rnd(12, 16), n5 = rnd(4, 9);
+    q = { q:"우유 " + m5 + "개 중 " + n5 + "개를 마셨어요. 남은 우유는 몇 개?", num:m5 - n5,
+          hint:"10 - " + n5 + " = " + (10 - n5) + ", " + (10 - n5) + " + " + (m5 - 10) + " = " + (m5 - n5) + "개예요." }; }
   return q;
 }
 function smQ6(){
-  var t = rnd(0, 5), q;
-  if (t === 4){ var c4 = rnd(11, 18), e4 = rnd(2, c4 - 3);
-    q = { q:c4 + " - □ = " + (c4 - e4), num:e4, hint:c4 + "에서 " + (c4 - e4) + "을 빼면 " + e4 + "이에요." }; }
-  else if (t === 5){ var f5 = rnd(11, 15), g6 = rnd(2, 6);
-    q = { q:"주머니에 구슬이 " + f5 + "개 있어요. " + g6 + "개를 더 넣으면 모두 몇 개?", num:f5 + g6, hint:f5 + " + " + g6 + " = " + (f5 + g6) }; }
-  else if (t === 0){ var n4 = rnd(6, 9), tot4 = rnd(n4 + 3, 18);
-    q = { q:"□ + " + n4 + " = " + tot4, num:tot4 - n4, hint:tot4 + "에서 " + n4 + "을 빼면 " + (tot4 - n4) + "이에요." }; }
-  else if (t === 5){ var p5 = rnd(6, 9), d5 = rnd(11 - p5, 9);
-    q = { q:"연필이 " + p5 + "자루 있어요. " + d5 + "자루를 더 받으면 모두 몇 자루?", num:p5 + d5, hint:p5 + " + " + d5 + " = " + (p5 + d5) }; }
-  else if (t === 0){ var a = rnd(1, 9); q = { q:a + " + □ = 10", num:10 - a, hint:"10을 " + a + "와 " + (10 - a) + "로 가르면 돼요." }; }
-  else if (t === 1){ var a2 = rnd(6, 9), b2 = rnd(11 - a2, 9); q = { q:a2 + " + " + b2 + " = ?", num:a2 + b2, hint:a2 + " + " + (10 - a2) + " = 10, 남은 " + (b2 - (10 - a2)) + "을 더해요." }; }
-  else if (t === 2){ var b3 = rnd(2, 9), a3 = rnd(11, 18); q = { q:a3 + " - " + b3 + " = ?", num:a3 - b3, hint:"10 - " + b3 + " = " + (10 - b3) + ", 거기에 " + (a3 - 10) + "을 더해요." }; }
-  else { var a4 = rnd(2, 9), b4 = rnd(2, 9); q = { q:a4 + " + " + b4 + " = ?", num:a4 + b4, hint:a4 + " + " + (10 - a4) + " = 10, 남은 " + (b4 - (10 - a4)) + "을 더해요." }; }
+  var t = rnd(0, 5), sum, q;
+  if (t === 0){ var ua = rnd(5, 9), ub = rnd(11 - ua, 9), ta = rnd(1, 4), tb = rnd(1, 9 - ta);
+    var a0 = ta * 10 + ua, b0 = tb * 10 + ub;
+    q = { q:a0 + " + " + b0 + " = ?", num:a0 + b0,
+          hint:"일의 자리 " + ua + " + " + ub + " = " + (ua + ub) + " — 십의 자리로 10을 올려요. 답은 " + (a0 + b0) + "이에요." }; }
+  else if (t === 1){ var bu = rnd(2, 9), au = rnd(0, bu - 1), at = rnd(4, 9), bt = rnd(1, 3);
+    var a1 = at * 10 + au, b1 = bt * 10 + bu;
+    q = { q:a1 + " - " + b1 + " = ?", num:a1 - b1,
+          hint:"일의 자리 " + au + "에서 " + bu + "를 못 빼서 십을 하나 풀어요. 답은 " + (a1 - b1) + "이에요." }; }
+  else if (t === 2){ var n2 = rnd(2, 4) * 10 + rnd(1, 9), d2 = rnd(11, 39);
+    q = { q:"□ + " + n2 + " = " + (n2 + d2), num:d2, hint:(n2 + d2) + "에서 " + n2 + jR(n2) + " 빼면 " + d2 + "이에요." }; }
+  else if (t === 3){ var a3 = rnd(2, 4) * 10 + rnd(1, 9), b3 = rnd(1, 4) * 10 + rnd(1, 9);
+    q = { q:"사탕이 " + a3 + "개 있어요. " + b3 + "개를 더 받으면 모두 몇 개?", num:a3 + b3,
+          hint:"일의 자리부터 더하고 10이 넘으면 십의 자리로 올려요. 답은 " + (a3 + b3) + "개예요." }; }
+  else if (t === 4){ var au4 = rnd(0, 4), at4 = rnd(6, 9), bu4 = rnd(5, 9), bt4 = rnd(1, 4);
+    var a4 = at4 * 10 + au4, b4 = bt4 * 10 + bu4;
+    q = { q:a4 + " - " + b4 + " = ?", num:a4 - b4,
+          hint:"일의 자리 " + au4 + "에서 " + bu4 + "를 못 빼서 십을 하나 풀어요. 답은 " + (a4 - b4) + "이에요." }; }
+  else { var a5 = rnd(4, 9) * 10, b5 = rnd(11, a5 - 11);
+    q = { q:"지우개가 " + a5 + "개 있어요. " + b5 + "개를 친구에게 나눠 주면 남은 지우개는 몇 개?", num:a5 - b5,
+          hint:"십의 자리에서 빌려 와요. " + a5 + " - " + b5 + " = " + (a5 - b5) + "개예요." }; }
   return q;
 }
 function smMakeQs(unit){
@@ -35637,7 +35646,7 @@ function smBind(){
 /* ==================================================================
    ②③ 기초수학 1 / 2학년 수학 — 단원별 개념 + 6문제
    ================================================================== */
-var B1 = [{"nm":"① 10 만들기·가르기","tip":"10이 되는 두 수를 알면 셈이 아주 빨라져요.","qs":[{"q":"7 + □ = 10","num":3,"hint":"7에 3을 더하면 10이 돼요."},{"q":"6 + 4 = ?","num":10,"hint":"6과 4를 모으면 10이에요."},{"q":"10을 4와 □로 가르면?","num":6,"hint":"10에서 4를 빼면 6이에요."},{"q":"3과 7을 모으면 얼마일까요?","o":["9","10","11"],"a":1,"hint":"3 + 7 = 10"},{"q":"8 + 2 = ?","num":10,"hint":"8에 2를 더하면 10이에요."},{"q":"10을 7과 □로 가르면?","num":3,"hint":"10 - 7 = 3"},{"q":"9 + □ = 10","num":1,"hint":"9에 1을 더하면 10이에요."},{"q":"5 + 5 = ?","num":10,"hint":"5와 5를 모으면 10이에요."},{"q":"10을 2와 □로 가르면?","num":8,"hint":"10 - 2 = 8"},{"q":"4 + 6 = ?","num":10,"hint":"4와 6은 짝이에요."},{"q":"3 + □ = 10","num":7,"hint":"3에 7을 더하면 10이에요."},{"q":"10을 6과 □로 가르면?","num":4,"hint":"10 - 6 = 4"},{"q":"1 + 9 = ?","num":10,"hint":"1과 9를 모으면 10이에요."}],"points":["10이 되는 두 수 찾기 (7+3, 6+4)","10을 두 수로 가르기"],"ex":"7 + 3 = 10 · 10 - 6 = 4"},{"nm":"② 10에서 빼기","tip":"10에서 빼면 남는 수를 바로 알 수 있어요.","qs":[{"q":"10 - 3 = ?","num":7,"hint":"10을 3과 7로 가르면 7이 남아요."},{"q":"10 - 8 = ?","num":2,"hint":"10을 8과 2로 가르면 2가 남아요."},{"q":"10 - 5 = ?","num":5,"hint":"10을 반으로 가르면 5와 5예요."},{"q":"사과 10개 중 4개를 먹었어요. 남은 사과는 몇 개?","num":6,"hint":"10 - 4 = 6"},{"q":"10 - 7 = ?","num":3,"hint":"7에 3을 더하면 10이에요."},{"q":"10 - 9 = ?","num":1,"hint":"9에 1을 더하면 10이에요."},{"q":"10 - 2 = ?","num":8,"hint":"10을 2와 8로 가르면 8"},{"q":"10 - 6 = ?","num":4,"hint":"6에 4를 더하면 10이에요."},{"q":"10 - 1 = ?","num":9,"hint":"10에서 1을 빼면 9"},{"q":"사탕 10개 중 3개를 먹었어요. 남은 사탕은?","num":7,"hint":"10 - 3 = 7"},{"q":"10 - 4 = ?","num":6,"hint":"10을 4와 6으로 가르면 6이 남아요."},{"q":"우유 10개 중 6개를 마셨어요. 남은 우유는?","num":4,"hint":"10 - 6 = 4"},{"q":"10 - □ = 7","num":3,"hint":"10을 7과 3으로 가르면 돼요."}],"points":["10에서 몇을 빼면 얼마 남는지","그림을 보고 빼기"],"ex":"10 - 3 = 7"},{"nm":"③ 한 자리 덧셈·뺄셈","tip":"10을 넘으면 10을 먼저 만들어요.","qs":[{"q":"5 + 8 = ?","num":13,"hint":"5 + 5 = 10, 남은 3을 더하면 13이에요."},{"q":"9 + 6 = ?","num":15,"hint":"9 + 1 = 10, 남은 5를 더하면 15예요."},{"q":"12 - 7 = ?","num":5,"hint":"12를 10과 2로 나누어 10 - 7 = 3, 3 + 2 = 5"},{"q":"14 - 6 = ?","num":8,"hint":"10 - 6 = 4, 4 + 4 = 8"},{"q":"8 + 7 = ?","num":15,"hint":"8 + 2 = 10, 남은 5를 더하면 15예요."},{"q":"13 - 5 = ?","num":8,"hint":"10 - 5 = 5, 5 + 3 = 8"},{"q":"7 + 6 = ?","num":13,"hint":"7 + 3 = 10, 남은 3을 더해 13"},{"q":"9 + 8 = ?","num":17,"hint":"9 + 1 = 10, 남은 7을 더해 17"},{"q":"15 - 8 = ?","num":7,"hint":"10 - 8 = 2, 2 + 5 = 7"},{"q":"11 - 4 = ?","num":7,"hint":"10 - 4 = 6, 6 + 1 = 7"},{"q":"6 + 9 = ?","num":15,"hint":"6 + 4 = 10, 남은 5를 더하면 15예요."},{"q":"14 - 8 = ?","num":6,"hint":"14를 10과 4로 나누어 10 - 8 = 2, 2 + 4 = 6"},{"q":"17 - 9 = ?","num":8,"hint":"10 - 9 = 1, 1 + 7 = 8"}],"points":["10을 넘는 한 자리 덧셈","십몇에서 한 자리 빼기"],"ex":"8 + 7 = 15"},{"nm":"④ 두 자리 수와 자리값","tip":"십의 자리와 일의 자리를 하나씩 살펴봐요.","qs":[{"q":"46은 십 몇 개와 일 몇 개일까요?","o":["십 4개, 일 6개","십 6개, 일 4개","십 4개, 일 4개"],"a":0,"hint":"46에서 4는 십의 자리, 6은 일의 자리예요."},{"q":"73에서 십의 자리 숫자는?","o":["7","3","0"],"a":0,"hint":"73에서 앞에 있는 7이 십의 자리 숫자예요."},{"q":"52에서 일의 자리 숫자는?","num":2,"hint":"52에서 뒤에 있는 2가 일의 자리 숫자예요."},{"q":"10이 3개, 1이 5개인 수는?","num":35,"hint":"십 3개는 30, 일 5개는 5 — 모두 35예요."},{"q":"80 + 7 = ?","num":87,"hint":"80에 7을 더하면 87이에요."},{"q":"90은 십 몇 개일까요?","num":9,"hint":"90은 십이 9개 모인 수예요."},{"q":"68은 십 몇 개와 일 몇 개일까요?","o":["십 6개, 일 8개","십 8개, 일 6개","십 6개, 일 6개"],"a":0,"hint":"앞이 십, 뒤가 일이에요."},{"q":"95에서 십의 자리 숫자는?","num":9,"hint":"앞에 있는 9가 십의 자리"},{"q":"70 + 5 = ?","num":75,"hint":"70에 5를 더하면 75"},{"q":"10이 8개인 수는?","num":80,"hint":"십이 8개면 80"},{"q":"10이 9개, 1이 2개인 수는?","num":92,"hint":"90 + 2 = 92"},{"q":"84에서 십의 자리 숫자는?","num":8,"hint":"앞에 있는 8이 십의 자리 숫자예요."},{"q":"60 + 9 = ?","num":69,"hint":"60에 9를 더하면 69"}],"points":["십의 자리 숫자·일의 자리 숫자","10이 몇 개, 1이 몇 개인지"],"ex":"46 = 십 4개 + 일 6개"},{"nm":"⑤ 두 수 크기 비교","tip":"큰 수를 먼저 보고 >, < 를 골라요.","qs":[{"q":"74 ○ 77 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"74는 77보다 작아요."},{"q":"56 ○ 65 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"십의 자리 5와 6을 먼저 비교해요."},{"q":"90 ○ 89 에 들어갈 말은?","o":["<",">","="],"a":1,"hint":"90은 89보다 커요."},{"q":"48 ○ 48 에 들어갈 말은?","o":["<",">","="],"a":2,"hint":"두 수가 똑같아요."},{"q":"가장 큰 수는 어느 것일까요?","o":["67","76","70"],"a":1,"hint":"십의 자리가 7인 수 중에서 6이 큰 수예요."},{"q":"가장 작은 수는 어느 것일까요?","o":["58","85","80"],"a":0,"hint":"십의 자리가 5인 수가 가장 작아요."},{"q":"45 ○ 54 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"십의 자리 4와 5를 비교해요."},{"q":"88 ○ 88 에 들어갈 말은?","o":["<",">","="],"a":2,"hint":"두 수가 똑같아요."},{"q":"39 ○ 31 에 들어갈 말은?","o":["<",">","="],"a":1,"hint":"십의 자리는 같고 일의 자리 9 > 1"},{"q":"가장 큰 수는?","o":["72","27","70"],"a":0,"hint":"십의 자리가 가장 큰 수예요."},{"q":"76 ○ 67 에 들어갈 말은?","o":["<",">","="],"a":1,"hint":"76은 67보다 커요."},{"q":"가장 작은 수는?","o":["73","37","70"],"a":1,"hint":"십의 자리가 3인 수가 가장 작아요."},{"q":"91 ○ 91 에 들어갈 말은?","o":["<",">","="],"a":2,"hint":"두 수가 똑같아요."}],"points":["두 수의 크기를 >, < 로 비교","가장 큰 수·가장 작은 수"],"ex":"74 < 77"},{"nm":"⑥ 시계 보기","tip":"짧은바늘은 시, 긴바늘은 분을 가리켜요.","qs":[{"q":"시계가 가리키는 시각은?","clk":"5,0","o":["5시","6시","12시"],"a":0,"hint":"짧은바늘이 5, 긴바늘이 12를 가리켜요."},{"q":"시계가 가리키는 시각은?","clk":"11,0","o":["1시","11시","10시"],"a":1,"hint":"짧은바늘이 11에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"3,0","o":["3시","12시","9시"],"a":0,"hint":"짧은바늘이 3, 긴바늘이 12예요."},{"q":"시계가 가리키는 시각은?","clk":"8,0","o":["7시","8시","9시"],"a":1,"hint":"짧은바늘이 8에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"2,30","o":["2시 30분","3시 30분","2시 6분"],"a":0,"hint":"긴바늘이 6이면 30분이에요."},{"q":"시계가 가리키는 시각은?","clk":"9,30","o":["9시","9시 30분","8시 30분"],"a":1,"hint":"긴바늘이 6을 가리키면 30분이에요."},{"q":"시계가 가리키는 시각은?","clk":"4,0","o":["4시","5시","12시"],"a":0,"hint":"긴바늘이 12면 정각이에요."},{"q":"시계가 가리키는 시각은?","clk":"10,30","o":["10시 30분","11시 30분","10시 6분"],"a":0,"hint":"긴바늘이 6이면 30분"},{"q":"시계가 가리키는 시각은?","clk":"7,0","o":["6시","7시","8시"],"a":1,"hint":"짧은바늘이 7에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"12,0","o":["12시","1시","6시"],"a":0,"hint":"두 바늘이 모두 12를 가리켜요."},{"q":"시계가 가리키는 시각은?","clk":"6,30","o":["6시 30분","7시 30분","6시 6분"],"a":0,"hint":"짧은바늘은 6과 7 사이, 긴바늘은 6(30분)을 가리켜요."},{"q":"시계가 가리키는 시각은?","clk":"10,0","o":["9시","10시","11시"],"a":1,"hint":"짧은바늘이 10, 긴바늘이 12를 가리켜요."},{"q":"시계가 가리키는 시각은?","clk":"3,30","o":["3시 30분","4시 30분","3시 6분"],"a":0,"hint":"긴바늘이 6이면 30분이에요."}],"points":["몇 시·몇 시 30분 읽기","짧은바늘은 시, 긴바늘은 분"],"ex":"짧은바늘 5, 긴바늘 12 → 5시"}];
+var B1 = [{"nm":"① 10 만들기·가르기","tip":"10이 되는 두 수를 알면 셈이 아주 빨라져요.","qs":[{"q":"7 + □ = 10","num":3,"hint":"7에 3을 더하면 10이 돼요."},{"q":"6 + 4 = ?","num":10,"hint":"6과 4를 모으면 10이에요."},{"q":"10을 4와 □로 가르면?","num":6,"hint":"10에서 4를 빼면 6이에요."},{"q":"3과 7을 모으면 얼마일까요?","o":["9","10","11"],"a":1,"hint":"3 + 7 = 10"},{"q":"8 + 2 = ?","num":10,"hint":"8에 2를 더하면 10이에요."},{"q":"10을 7과 □로 가르면?","num":3,"hint":"10 - 7 = 3"},{"q":"9 + □ = 10","num":1,"hint":"9에 1을 더하면 10이에요."},{"q":"5 + 5 = ?","num":10,"hint":"5와 5를 모으면 10이에요."},{"q":"10을 2와 □로 가르면?","num":8,"hint":"10 - 2 = 8"},{"q":"4 + 6 = ?","num":10,"hint":"4와 6은 짝이에요."},{"q":"2 + □ = 10","num":8,"hint":"2에 8을 더하면 10이 돼요."},{"q":"10을 8과 □로 가르면?","num":2,"hint":"10에서 8을 빼면 2가 남아요."},{"q":"형광펜 10자루 중 4자루를 친구에게 줬어요. 남은 형광펜은?","num":6,"hint":"10 - 4 = 6"}],"points":["10이 되는 두 수 찾기 (7+3, 6+4)","10을 두 수로 가르기"],"ex":"7 + 3 = 10 · 10 - 6 = 4"},{"nm":"② 10에서 빼기","tip":"10에서 빼면 남는 수를 바로 알 수 있어요.","qs":[{"q":"10 - 3 = ?","num":7,"hint":"10을 3과 7로 가르면 7이 남아요."},{"q":"10 - 8 = ?","num":2,"hint":"10을 8과 2로 가르면 2가 남아요."},{"q":"10 - 5 = ?","num":5,"hint":"10을 반으로 가르면 5와 5예요."},{"q":"사과 10개 중 4개를 먹었어요. 남은 사과는 몇 개?","num":6,"hint":"10 - 4 = 6"},{"q":"10 - 7 = ?","num":3,"hint":"7에 3을 더하면 10이에요."},{"q":"10 - 9 = ?","num":1,"hint":"9에 1을 더하면 10이에요."},{"q":"10 - 2 = ?","num":8,"hint":"10을 2와 8로 가르면 8"},{"q":"10 - 6 = ?","num":4,"hint":"6에 4를 더하면 10이에요."},{"q":"10 - 1 = ?","num":9,"hint":"10에서 1을 빼면 9"},{"q":"사탕 10개 중 3개를 먹었어요. 남은 사탕은?","num":7,"hint":"10 - 3 = 7"},{"q":"10 - □ = 2","num":8,"hint":"10을 2와 8로 가르면 돼요."},{"q":"풍선 10개 중 7개가 하늘로 날아갔어요. 남은 풍선은?","num":3,"hint":"10 - 7 = 3"},{"q":"10 - 3 - 2 = ?","num":5,"hint":"10 - 3 = 7, 7 - 2 = 5"}],"points":["10에서 몇을 빼면 얼마 남는지","그림을 보고 빼기"],"ex":"10 - 3 = 7"},{"nm":"③ 한 자리 덧셈·뺄셈","tip":"10을 넘으면 10을 먼저 만들어요.","qs":[{"q":"5 + 8 = ?","num":13,"hint":"5 + 5 = 10, 남은 3을 더하면 13이에요."},{"q":"9 + 6 = ?","num":15,"hint":"9 + 1 = 10, 남은 5를 더하면 15예요."},{"q":"12 - 7 = ?","num":5,"hint":"12를 10과 2로 나누어 10 - 7 = 3, 3 + 2 = 5"},{"q":"14 - 6 = ?","num":8,"hint":"10 - 6 = 4, 4 + 4 = 8"},{"q":"8 + 7 = ?","num":15,"hint":"8 + 2 = 10, 남은 5를 더하면 15예요."},{"q":"13 - 5 = ?","num":8,"hint":"10 - 5 = 5, 5 + 3 = 8"},{"q":"7 + 6 = ?","num":13,"hint":"7 + 3 = 10, 남은 3을 더해 13"},{"q":"9 + 8 = ?","num":17,"hint":"9 + 1 = 10, 남은 7을 더해 17"},{"q":"15 - 8 = ?","num":7,"hint":"10 - 8 = 2, 2 + 5 = 7"},{"q":"11 - 4 = ?","num":7,"hint":"10 - 4 = 6, 6 + 1 = 7"},{"q":"8 + 9 = ?","num":17,"hint":"8 + 2 = 10, 남은 7을 더하면 17이에요."},{"q":"16 - 9 = ?","num":7,"hint":"10 - 9 = 1, 1 + 6 = 7"},{"q":"13 - 4 = ?","num":9,"hint":"10 - 4 = 6, 6 + 3 = 9"}],"points":["10을 넘는 한 자리 덧셈","십몇에서 한 자리 빼기"],"ex":"8 + 7 = 15"},{"nm":"④ 두 자리 수와 자리값","tip":"십의 자리와 일의 자리를 하나씩 살펴봐요.","qs":[{"q":"46은 십 몇 개와 일 몇 개일까요?","o":["십 4개, 일 6개","십 6개, 일 4개","십 4개, 일 4개"],"a":0,"hint":"46에서 4는 십의 자리, 6은 일의 자리예요."},{"q":"73에서 십의 자리 숫자는?","o":["7","3","0"],"a":0,"hint":"73에서 앞에 있는 7이 십의 자리 숫자예요."},{"q":"52에서 일의 자리 숫자는?","num":2,"hint":"52에서 뒤에 있는 2가 일의 자리 숫자예요."},{"q":"10이 3개, 1이 5개인 수는?","num":35,"hint":"십 3개는 30, 일 5개는 5 — 모두 35예요."},{"q":"80 + 7 = ?","num":87,"hint":"80에 7을 더하면 87이에요."},{"q":"90은 십 몇 개일까요?","num":9,"hint":"90은 십이 9개 모인 수예요."},{"q":"68은 십 몇 개와 일 몇 개일까요?","o":["십 6개, 일 8개","십 8개, 일 6개","십 6개, 일 6개"],"a":0,"hint":"앞이 십, 뒤가 일이에요."},{"q":"95에서 십의 자리 숫자는?","num":9,"hint":"앞에 있는 9가 십의 자리"},{"q":"70 + 5 = ?","num":75,"hint":"70에 5를 더하면 75"},{"q":"10이 8개인 수는?","num":80,"hint":"십이 8개면 80"},{"q":"57에서 십의 자리 숫자는?","num":5,"hint":"앞에 있는 5가 십의 자리 숫자예요."},{"q":"10이 6개, 1이 1개인 수는?","num":61,"hint":"60 + 1 = 61"},{"q":"40 + 8 = ?","num":48,"hint":"40에 8을 더하면 48이에요."}],"points":["십의 자리 숫자·일의 자리 숫자","10이 몇 개, 1이 몇 개인지"],"ex":"46 = 십 4개 + 일 6개"},{"nm":"⑤ 두 수 크기 비교","tip":"큰 수를 먼저 보고 >, < 를 골라요.","qs":[{"q":"74 ○ 77 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"74는 77보다 작아요."},{"q":"56 ○ 65 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"십의 자리 5와 6을 먼저 비교해요."},{"q":"90 ○ 89 에 들어갈 말은?","o":["<",">","="],"a":1,"hint":"90은 89보다 커요."},{"q":"48 ○ 48 에 들어갈 말은?","o":["<",">","="],"a":2,"hint":"두 수가 똑같아요."},{"q":"가장 큰 수는 어느 것일까요?","o":["67","76","70"],"a":1,"hint":"십의 자리가 7인 수 중에서 6이 큰 수예요."},{"q":"가장 작은 수는 어느 것일까요?","o":["58","85","80"],"a":0,"hint":"십의 자리가 5인 수가 가장 작아요."},{"q":"45 ○ 54 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"십의 자리 4와 5를 비교해요."},{"q":"88 ○ 88 에 들어갈 말은?","o":["<",">","="],"a":2,"hint":"두 수가 똑같아요."},{"q":"39 ○ 31 에 들어갈 말은?","o":["<",">","="],"a":1,"hint":"십의 자리는 같고 일의 자리 9 > 1"},{"q":"가장 큰 수는?","o":["72","27","70"],"a":0,"hint":"십의 자리가 가장 큰 수예요."},{"q":"63 ○ 36 에 들어갈 말은?","o":["<",">","="],"a":1,"hint":"십의 자리 6과 3을 비교해요."},{"q":"가장 큰 수는 어느 것일까요?","o":["45","54","49"],"a":1,"hint":"십의 자리가 5인 수가 가장 커요."},{"q":"19 ○ 91 에 들어갈 말은?","o":["<",">","="],"a":0,"hint":"십의 자리 1과 9를 비교해요."}],"points":["두 수의 크기를 >, < 로 비교","가장 큰 수·가장 작은 수"],"ex":"74 < 77"},{"nm":"⑥ 시계 보기","tip":"짧은바늘은 시, 긴바늘은 분을 가리켜요.","qs":[{"q":"시계가 가리키는 시각은?","clk":"5,0","o":["5시","6시","12시"],"a":0,"hint":"짧은바늘이 5, 긴바늘이 12를 가리켜요."},{"q":"시계가 가리키는 시각은?","clk":"11,0","o":["1시","11시","10시"],"a":1,"hint":"짧은바늘이 11에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"3,0","o":["3시","12시","9시"],"a":0,"hint":"짧은바늘이 3, 긴바늘이 12예요."},{"q":"시계가 가리키는 시각은?","clk":"8,0","o":["7시","8시","9시"],"a":1,"hint":"짧은바늘이 8에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"2,30","o":["2시 30분","3시 30분","2시 6분"],"a":0,"hint":"긴바늘이 6이면 30분이에요."},{"q":"시계가 가리키는 시각은?","clk":"9,30","o":["9시","9시 30분","8시 30분"],"a":1,"hint":"긴바늘이 6을 가리키면 30분이에요."},{"q":"시계가 가리키는 시각은?","clk":"4,0","o":["4시","5시","12시"],"a":0,"hint":"긴바늘이 12면 정각이에요."},{"q":"시계가 가리키는 시각은?","clk":"10,30","o":["10시 30분","11시 30분","10시 6분"],"a":0,"hint":"긴바늘이 6이면 30분"},{"q":"시계가 가리키는 시각은?","clk":"7,0","o":["6시","7시","8시"],"a":1,"hint":"짧은바늘이 7에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"12,0","o":["12시","1시","6시"],"a":0,"hint":"두 바늘이 모두 12를 가리켜요."},{"q":"시계가 가리키는 시각은?","clk":"5,30","o":["5시 30분","6시 30분","5시 6분"],"a":0,"hint":"긴바늘이 6이면 30분이에요."},{"q":"시계가 가리키는 시각은?","clk":"8,30","o":["8시","8시 30분","9시 30분"],"a":1,"hint":"짧은바늘은 8과 9 사이에 있어요."},{"q":"시계가 가리키는 시각은?","clk":"12,30","o":["12시 30분","1시 30분","12시 6분"],"a":0,"hint":"긴바늘이 6이면 30분이에요."}],"points":["몇 시·몇 시 30분 읽기","짧은바늘은 시, 긴바늘은 분"],"ex":"짧은바늘 5, 긴바늘 12 → 5시"}];
 /* ===== 2️⃣ 2학년 수학 — 교육과정 순서대로, 하루 1문제 + 큰 그림 설명 ===== */
 var G2 = [
  { nm:"① 세 자리 수", sem:"2-1", art:"p3", tip:"백·십·일 자리를 하나씩 보면 큰 수도 쉽게 읽어요.",
@@ -35654,10 +35663,14 @@ var G2 = [
       st:["백의 자리 5 → 오백", "십의 자리 0 → (읽지 않아요)", "일의 자리 8 → 팔", "그래서 '오백팔'"] },
     { q:"324 ○ 342 에 들어갈 말은 무엇일까요?", o:["<", ">", "="], a:0, art:"p3", show:324,
       st:["백의 자리는 둘 다 3이라 같아요.", "십의 자리를 비교해요: 2 < 4", "그래서 324 < 342"] },
-    { q:"100이 7개, 10이 4개, 1이 9개인 수는 얼마일까요?", num:749, art:"p3", show:749, d:1124,
+    { q:"100이 7개, 10이 4개, 1이 9개인 수는 얼마일까요?", num:749, art:"p3", show:749,
       st:["100이 7개 → 700", "10이 4개 → 40", "1이 9개 → 9", "700 + 40 + 9 = 749"] },
-    { q:"600 + 80 + 3 = ?", num:683, art:"p3", show:683, d:1124,
-      st:["백의 자리 6 → 600", "십의 자리 8 → 80", "일의 자리 3 → 3", "그래서 683"] }
+    { q:"600 + 80 + 3 = ?", num:683, art:"p3", show:683,
+      st:["백의 자리 6 → 600", "십의 자리 8 → 80", "일의 자리 3 → 3", "그래서 683"] },
+    { q:"100이 8개, 10이 2개, 1이 5개인 수는 얼마일까요?", num:825, art:"p3", show:825, d:1125,
+      st:["100이 8개 → 800", "10이 2개 → 20", "1이 5개 → 5", "800 + 20 + 5 = 825"] },
+    { q:"900 + 40 + 6 = ?", num:946, art:"p3", show:946, d:1125,
+      st:["백의 자리 9 → 900", "십의 자리 4 → 40", "일의 자리 6 → 6", "그래서 946"] }
    ]},
  { nm:"② 여러 가지 도형", sem:"2-1", art:"shape", tip:"곧은 선은 변, 선이 만나는 점은 꼭짓점이에요.",
    qs:[
@@ -35673,10 +35686,14 @@ var G2 = [
       st:["'육'은 여섯을 뜻해요.", "육각형은 변이 6개, 꼭짓점이 6개예요."] },
     { q:"곧은 선 3개로 둘러싸인 도형은 무엇일까요?", o:["삼각형", "사각형", "원"], a:0, art:"shape", shape:"tri",
       st:["곧은 선이 3개 → 변이 3개", "변이 3개인 도형은 삼각형이에요."] },
-    { q:"오각형의 변은 몇 개일까요?", num:5, art:"shape", shape:"penta", d:1124,
+    { q:"오각형의 변은 몇 개일까요?", num:5, art:"shape", shape:"penta",
       st:["'오'는 다섯을 뜻해요.", "오각형은 곧은 선(변)이 5개예요.", "꼭짓점도 5개예요."] },
-    { q:"육각형의 꼭짓점은 몇 개일까요?", num:6, art:"shape", shape:"hexa", d:1124,
-      st:["'육'은 여섯을 뜻해요.", "육각형은 변이 6개, 꼭짓점도 6개예요."] }
+    { q:"육각형의 꼭짓점은 몇 개일까요?", num:6, art:"shape", shape:"hexa",
+      st:["'육'은 여섯을 뜻해요.", "육각형은 변이 6개, 꼭짓점도 6개예요."] },
+    { q:"삼각형의 꼭짓점은 몇 개일까요?", num:3, art:"shape", shape:"tri", d:1125,
+      st:["두 변이 만나는 점이 꼭짓점이에요.", "삼각형은 꼭짓점이 3개, 변도 3개예요."] },
+    { q:"네모 두 개를 위아래로 붙이면 어떤 도형이 될까요?", o:["직사각형", "삼각형", "원"], a:0, art:"shape", shape:"quad", d:1125,
+      st:["네모 두 개를 이어 붙여요.", "위아래로 붙이면 길쭉한 네모가 돼요.", "길쭉한 네모는 직사각형이에요."] }
    ]},
  { nm:"③ 덧셈과 뺄셈", sem:"2-1", art:"add", tip:"일의 자리부터 계산하고, 10이 넘으면 윗자리로 올려요.",
    qs:[
@@ -35692,10 +35709,14 @@ var G2 = [
       st:["일의 자리: 10 - 4 = 6 (십에서 하나 내려 받아요)", "십의 자리: 5 - 3 = 2", "그래서 60 - 34 = 26"] },
     { q:"어머니가 사과 28개를, 딸이 15개를 땄어요. 모두 몇 개일까요?", num:43, art:"add", a1:28, a2:15, op:"+",
       st:["28 + 15를 계산해요.", "일의 자리: 8 + 5 = 13 → 3을 쓰고 1을 올려요.", "십의 자리: 2 + 1 + 1 = 4", "그래서 모두 43개"] },
-    { q:"58 + 34 = ?", num:92, art:"add", a1:58, a2:34, op:"+", d:1124,
+    { q:"58 + 34 = ?", num:92, art:"add", a1:58, a2:34, op:"+",
       st:["일의 자리: 8 + 4 = 12 → 2를 쓰고 10은 십의 자리로 올려요.", "십의 자리: 5 + 3 + 1(올림) = 9", "그래서 92"] },
-    { q:"73 - 26 = ?", num:47, art:"add", a1:73, a2:26, op:"-", d:1124,
-      st:["일의 자리: 3에서 6을 뺄 수 없어 10을 빌려와요 → 13 - 6 = 7", "십의 자리: 6 - 2 = 4", "그래서 47"] }
+    { q:"73 - 26 = ?", num:47, art:"add", a1:73, a2:26, op:"-",
+      st:["일의 자리: 3에서 6을 뺄 수 없어 10을 빌려와요 → 13 - 6 = 7", "십의 자리: 6 - 2 = 4", "그래서 47"] },
+    { q:"47 + 28 = ?", num:75, art:"add", a1:47, a2:28, op:"+", d:1125,
+      st:["일의 자리: 7 + 8 = 15 → 5를 쓰고 10은 십의 자리로 올려요.", "십의 자리: 4 + 2 + 1 = 7", "그래서 75"] },
+    { q:"61 - 36 = ?", num:25, art:"add", a1:61, a2:36, op:"-", d:1125,
+      st:["일의 자리 1에서 6을 못 빼서 십을 하나 풀어요.", "11 - 6 = 5", "십의 자리: 5 - 3 = 2", "그래서 25"] }
    ]},
  { nm:"④ 길이 재기(cm)", sem:"2-1", art:"ruler", tip:"자는 0에 맞추고 반대쪽 끝의 눈금을 읽어요.",
    qs:[
@@ -35711,10 +35732,14 @@ var G2 = [
       st:["두 수를 비교해요.", "15 > 9", "더 긴 것은 15cm"] },
     { q:"20cm 테이프를 5cm씩 자르면 몇 도막이 될까요?", num:4, art:"ruler", cm:20,
       st:["20 안에 5가 몇 번 들어가는지 세요.", "5, 10, 15, 20 → 4번", "그래서 4도막"] },
-    { q:"9cm + 8cm = ?", num:17, art:"ruler", cm:17, d:1124,
+    { q:"9cm + 8cm = ?", num:17, art:"ruler", cm:17,
       st:["9cm 막대와 8cm 막대를 이어 붙여요.", "9 + 8 = 17", "그래서 17cm"] },
-    { q:"16cm - 7cm = ?", num:9, art:"ruler", cm:9, d:1124,
-      st:["16cm에서 7cm만큼 덜어 내요.", "16 - 7 = 9", "그래서 9cm"] }
+    { q:"16cm - 7cm = ?", num:9, art:"ruler", cm:9,
+      st:["16cm에서 7cm만큼 덜어 내요.", "16 - 7 = 9", "그래서 9cm"] },
+    { q:"12cm - 4cm = ?", num:8, art:"ruler", cm:8, d:1125,
+      st:["12cm에서 4cm를 덜어 내요.", "12 - 4 = 8", "그래서 8cm"] },
+    { q:"7cm + 8cm = ?", num:15, art:"ruler", cm:15, d:1125,
+      st:["7cm에 8cm를 더해요.", "7 + 8 = 15", "그래서 15cm"] }
    ]},
  { nm:"⑤ 분류하기", sem:"2-1", art:"classify", tip:"같은 점끼리 모아 세면 빠르고 정확해요.",
    qs:[
@@ -35730,10 +35755,14 @@ var G2 = [
       st:["12를 3묶음으로 나눠요.", "4, 4, 4 → 한 가지에 4개"] },
     { q:"사과 6명, 수박 5명, 바나나 8명 중에서 가장 적은 것은?", o:["사과", "수박", "바나나"], a:1, art:"classify", g:[[6, "🍎"], [5, "🍉"], [8, "🍌"]],
       st:["6, 5, 8을 비교해요.", "가장 작은 수는 5", "그래서 수박"] },
-    { q:"딸기 7명, 바나나 4명, 수박 9명이면 모두 몇 명일까요?", num:20, art:"classify", g:[[7, "🍓"], [4, "🍌"], [9, "🍉"]], d:1124,
+    { q:"딸기 7명, 바나나 4명, 수박 9명이면 모두 몇 명일까요?", num:20, art:"classify", g:[[7, "🍓"], [4, "🍌"], [9, "🍉"]],
       st:["딸기 7명 + 바나나 4명 = 11명", "11명 + 수박 9명 = 20명", "모두 20명이에요."] },
-    { q:"딸기 7명, 바나나 4명, 수박 9명 중에서 가장 적은 것은?", o:["딸기", "바나나", "수박"], a:1, art:"classify", g:[[7, "🍓"], [4, "🍌"], [9, "🍉"]], d:1124,
-      st:["7명, 4명, 9명을 견주어요.", "가장 작은 수는 4예요.", "그래서 바나나가 가장 적어요."] }
+    { q:"딸기 7명, 바나나 4명, 수박 9명 중에서 가장 적은 것은?", o:["딸기", "바나나", "수박"], a:1, art:"classify", g:[[7, "🍓"], [4, "🍌"], [9, "🍉"]],
+      st:["7명, 4명, 9명을 견주어요.", "가장 작은 수는 4예요.", "그래서 바나나가 가장 적어요."] },
+    { q:"사과 6명, 배 3명, 감 8명이면 모두 몇 명일까요?", num:17, art:"classify", g:[[6, "🍎"], [3, "🍐"], [8, "🍊"]], d:1125,
+      st:["사과 6명 + 배 3명 = 9명", "9명 + 감 8명 = 17명", "모두 17명이에요."] },
+    { q:"사과 6명, 배 3명, 감 8명 중에서 가장 많은 것은?", o:["사과", "배", "감"], a:2, art:"classify", g:[[6, "🍎"], [3, "🍐"], [8, "🍊"]], d:1125,
+      st:["6, 3, 8을 견주어요.", "가장 큰 수는 8이에요.", "그래서 감이 가장 많아요."] }
    ]},
  { nm:"⑥ 곱셈", sem:"2-1", art:"times", tip:"같은 수씩 묶여 있으면 곱셈으로 나타내요.",
    qs:[
@@ -35749,10 +35778,14 @@ var G2 = [
       st:["3이 3번 더해져요.", "같은 수를 여러 번 더한 것은 곱셈으로 써요.", "그래서 3 × 3"] },
     { q:"사탕 2개씩 5봉지에 들어 있어요. 모두 몇 개일까요?", num:10, art:"times", per:2, groups:5,
       st:["2개씩 5묶음이에요.", "2 × 5 = 10", "그래서 10개"] },
-    { q:"4개씩 5묶음은 모두 몇 개일까요?", num:20, art:"times", per:4, groups:5, d:1124,
+    { q:"4개씩 5묶음은 모두 몇 개일까요?", num:20, art:"times", per:4, groups:5,
       st:["4개씩 5묶음이에요.", "4 + 4 + 4 + 4 + 4 = 20", "4 × 5 = 20"] },
-    { q:"6 × 3 = ?", num:18, art:"times", per:6, groups:3, d:1124,
-      st:["6개씩 3묶음이에요.", "6 + 6 + 6 = 18", "6 × 3 = 18"] }
+    { q:"6 × 3 = ?", num:18, art:"times", per:6, groups:3,
+      st:["6개씩 3묶음이에요.", "6 + 6 + 6 = 18", "6 × 3 = 18"] },
+    { q:"8개씩 3묶음은 모두 몇 개일까요?", num:24, art:"times", per:8, groups:3, d:1125,
+      st:["8개씩 3묶음이에요.", "8 + 8 + 8 = 24", "8 × 3 = 24개"] },
+    { q:"5 × 6 = ?", num:30, art:"times", per:5, groups:6, d:1125,
+      st:["5개씩 6묶음이에요.", "5 + 5 + 5 + 5 + 5 + 5 = 30", "그래서 5 × 6 = 30"] }
    ]},
  { nm:"① 네 자리 수", sem:"2-2", art:"p4", tip:"천·백·십·일, 네 자리까지 읽어 봐요.",
    qs:[
@@ -35768,10 +35801,14 @@ var G2 = [
       st:["자리별로 모아요.", "3000 + 400 = 3400", "3400 + 20 + 6 = 3426"] },
     { q:"5821 ○ 5812 에 들어갈 말은?", o:["<", ">", "="], a:1, art:"p4", show:5821,
       st:["천·백의 자리는 같아요.", "십의 자리를 비교해요: 2 > 1", "그래서 5821 > 5812"] },
-    { q:"3000 + 700 + 50 + 2 = ?", num:3752, art:"p4", show:3752, d:1124,
+    { q:"3000 + 700 + 50 + 2 = ?", num:3752, art:"p4", show:3752,
       st:["천의 자리 3 → 3000", "백의 자리 7 → 700", "십의 자리 5 → 50, 일의 자리 2 → 2", "모두 3752"] },
-    { q:"4000보다 1 큰 수는 얼마일까요?", num:4001, art:"p4", show:4001, d:1124,
-      st:["4000 다음에 오는 수를 세어 봐요.", "4000 → 4001", "1 큰 수는 바로 다음 수예요."] }
+    { q:"4000보다 1 큰 수는 얼마일까요?", num:4001, art:"p4", show:4001,
+      st:["4000 다음에 오는 수를 세어 봐요.", "4000 → 4001", "1 큰 수는 바로 다음 수예요."] },
+    { q:"2000 + 900 + 30 + 4 = ?", num:2934, art:"p4", show:2934, d:1125,
+      st:["천의 자리 2 → 2000", "백의 자리 9 → 900", "십의 자리 3 → 30, 일의 자리 4 → 4", "그래서 2934"] },
+    { q:"5000보다 1 작은 수는 얼마일까요?", num:4999, art:"p4", show:4999, d:1125,
+      st:["5000 바로 앞에 오는 수를 찾아요.", "5000 - 1 = 4999", "그래서 4999"] }
    ]},
  { nm:"② 곱셈구구 (손에 잡히는 곱셈구구)", sem:"2-2", art:"gugu", tip:"뛰어 세기 → 묶어 세기 → 곱셈식 순서로 익혀요.",
    qs:[
@@ -35799,10 +35836,14 @@ var G2 = [
       st:["7씩 7묶음", "7, 14, 21, 28, 35, 42, 49", "그래서 49"] },
     { q:"0 × 7 = ?", num:0, art:"gugu", per:0, groups:7,
       st:["0이 7번 더해져도 0이에요.", "어떤 수에 0을 곱하면 모두 0!"] },
-    { q:"9씩 뛰어 세어요. 9, 18, 27, □ 에 들어갈 수는?", num:36, art:"gugu", per:9, groups:4, d:1124,
+    { q:"9씩 뛰어 세어요. 9, 18, 27, □ 에 들어갈 수는?", num:36, art:"gugu", per:9, groups:4,
       st:["9씩 커지는 규칙이에요.", "27 + 9 = 36", "9 × 4 = 36"] },
-    { q:"4 × 7 = ?", num:28, art:"gugu", per:4, groups:7, d:1124,
-      st:["4씩 7묶음이에요.", "4 + 4 + 4 + 4 + 4 + 4 + 4 = 28", "4 × 7 = 28"] }
+    { q:"4 × 7 = ?", num:28, art:"gugu", per:4, groups:7,
+      st:["4씩 7묶음이에요.", "4 + 4 + 4 + 4 + 4 + 4 + 4 = 28", "4 × 7 = 28"] },
+    { q:"6 × 8 = ?", num:48, art:"gugu", per:6, groups:8, d:1125,
+      st:["6씩 8번 더해요.", "6 × 8 = 48", "6 × 4 = 24니까 24 + 24 = 48이에요."] },
+    { q:"7씩 뛰어 세어요. 7, 14, 21, □ 에 들어갈 수는?", num:28, art:"gugu", per:7, groups:4, d:1125,
+      st:["7씩 커지는 규칙이에요.", "21 + 7 = 28", "그래서 28"] }
    ]},
  { nm:"③ 길이 재기 (m·cm)", sem:"2-2", art:"meter", tip:"1m는 100cm예요. 큰 길이는 m로 재요.",
    qs:[
@@ -35818,10 +35859,14 @@ var G2 = [
       st:["3m - 1m = 2m", "2m = 200cm"] },
     { q:"80cm + 120cm는 몇 m일까요?", num:2, art:"meter", mv:2,
       st:["80 + 120 = 200cm", "200cm = 2m"] },
-    { q:"4m는 몇 cm일까요?", num:400, art:"meter", mv:4, d:1124,
+    { q:"4m는 몇 cm일까요?", num:400, art:"meter", mv:4,
       st:["1m는 100cm예요.", "4m는 100cm가 4개예요.", "100 × 4 = 400cm"] },
-    { q:"250cm는 몇 m 몇 cm일까요? (몇 m만 답해요)", num:2, art:"meter", mv:2.5, d:1124,
-      st:["100cm가 2개면 200cm예요.", "250cm = 200cm + 50cm", "그래서 2m 50cm — 몇 m만 답하면 2"] }
+    { q:"250cm는 몇 m 몇 cm일까요? (몇 m만 답해요)", num:2, art:"meter", mv:2.5,
+      st:["100cm가 2개면 200cm예요.", "250cm = 200cm + 50cm", "그래서 2m 50cm — 몇 m만 답하면 2"] },
+    { q:"3m는 몇 cm일까요?", num:300, art:"meter", mv:3, d:1125,
+      st:["1m는 100cm예요.", "3m는 100cm가 3개", "100 + 100 + 100 = 300cm"] },
+    { q:"180cm는 몇 m 몇 cm일까요? (몇 m만 답해요)", num:1, art:"meter", mv:1.8, d:1125,
+      st:["100cm가 1m예요.", "180cm = 100cm + 80cm", "그래서 1m 80cm — 몇 m만 답하면 1"] }
    ]},
  { nm:"④ 시각과 시간", sem:"2-2", art:"clock", tip:"짧은바늘은 '시', 긴바늘은 '분'을 가리켜요.",
    qs:[
@@ -35839,10 +35884,14 @@ var G2 = [
       st:["50분 + 20분 = 70분 → 1시간 10분", "9시 + 1시간 = 10시, 남은 10분", "그래서 10시 10분"] },
     { q:"1주일은 며칠일까요?", num:7, art:"clock", h:12, m:0,
       st:["월·화·수·목·금·토·일", "그래서 7일"] },
-    { q:"짧은바늘이 7과 8 사이, 긴바늘이 6을 가리켜요. 몇 시 몇 분일까요?", o:["7시 30분", "8시 30분", "7시 6분"], a:0, art:"clock", h:7, m:30, d:1124,
+    { q:"짧은바늘이 7과 8 사이, 긴바늘이 6을 가리켜요. 몇 시 몇 분일까요?", o:["7시 30분", "8시 30분", "7시 6분"], a:0, art:"clock", h:7, m:30,
       st:["짧은바늘이 7과 8 사이면 7시예요.", "긴바늘이 6을 가리키면 30분이에요.", "그래서 7시 30분"] },
-    { q:"2시간은 몇 분일까요?", num:120, art:"clock", h:2, m:0, d:1124,
-      st:["1시간은 60분이에요.", "2시간은 60분이 2개예요.", "60 + 60 = 120분"] }
+    { q:"2시간은 몇 분일까요?", num:120, art:"clock", h:2, m:0,
+      st:["1시간은 60분이에요.", "2시간은 60분이 2개예요.", "60 + 60 = 120분"] },
+    { q:"짧은바늘이 9와 10 사이, 긴바늘이 6을 가리켜요. 몇 시 몇 분일까요?", o:["9시 30분", "10시 30분", "9시 6분"], a:0, art:"clock", h:9, m:30, d:1125,
+      st:["긴바늘이 6이면 30분이에요.", "짧은바늘은 9와 10 사이에 있어요.", "그래서 9시 30분"] },
+    { q:"1시간은 몇 분일까요?", num:60, art:"clock", h:1, m:0, d:1125,
+      st:["긴바늘이 한 바퀴 도는 시간이 1시간이에요.", "한 바퀴는 60분", "그래서 1시간은 60분"] }
    ]},
  { nm:"⑤ 표와 그래프", sem:"2-2", art:"graph", tip:"표로 세면 빠뜨리지 않고, 그래프로 보면 한눈에 보여요.",
    qs:[
@@ -35856,10 +35905,14 @@ var G2 = [
       st:["1칸 = 1명이면 3칸 = 3명"] },
     { q:"축구 6명, 야구 5명일 때 모두 몇 명일까요?", num:11, art:"graph", g:[[6, "축구"], [5, "야구"]],
       st:["6 + 5 = 11"] },
-    { q:"딸기 7명, 바나나 4명, 수박 9명이면 모두 몇 명일까요?", num:20, art:"graph", g:[[7, "딸기"], [4, "바나나"], [9, "수박"]], d:1124,
+    { q:"딸기 7명, 바나나 4명, 수박 9명이면 모두 몇 명일까요?", num:20, art:"graph", g:[[7, "딸기"], [4, "바나나"], [9, "수박"]],
       st:["딸기 7명 + 바나나 4명 = 11명", "11명 + 수박 9명 = 20명", "모두 20명이에요."] },
-    { q:"딸기 7명, 바나나 4명, 수박 9명 중에서 가장 많은 것은?", o:["딸기", "바나나", "수박"], a:2, art:"graph", g:[[7, "딸기"], [4, "바나나"], [9, "수박"]], d:1124,
-      st:["7명, 4명, 9명을 견주어요.", "가장 큰 수는 9예요.", "그래서 수박이 가장 많아요."] }
+    { q:"딸기 7명, 바나나 4명, 수박 9명 중에서 가장 많은 것은?", o:["딸기", "바나나", "수박"], a:2, art:"graph", g:[[7, "딸기"], [4, "바나나"], [9, "수박"]],
+      st:["7명, 4명, 9명을 견주어요.", "가장 큰 수는 9예요.", "그래서 수박이 가장 많아요."] },
+    { q:"사과 5명, 귤 8명, 포도 6명이면 모두 몇 명일까요?", num:19, art:"graph", g:[[5, "사과"], [8, "귤"], [6, "포도"]], d:1125,
+      st:["사과 5명 + 귤 8명 = 13명", "13명 + 포도 6명 = 19명", "모두 19명이에요."] },
+    { q:"사과 5명, 귤 8명, 포도 6명 중에서 가장 적은 것은?", o:["사과", "귤", "포도"], a:0, art:"graph", g:[[5, "사과"], [8, "귤"], [6, "포도"]], d:1125,
+      st:["5, 8, 6을 견주어요.", "가장 작은 수는 5예요.", "그래서 사과가 가장 적어요."] }
    ]},
  { nm:"⑥ 규칙 찾기", sem:"2-2", art:"pattern", tip:"얼마씩 커지는지, 줄어드는지 찾으면 규칙이 보여요.",
    qs:[
@@ -35873,10 +35926,14 @@ var G2 = [
       st:["10씩 작아지는 규칙이에요.", "80 - 10 = 70"] },
     { q:"5, 10, 15, 20, □ 에 들어갈 수는?", num:25, art:"pattern", start:5, step:5, n:5,
       st:["5씩 커져요.", "20 + 5 = 25"] },
-    { q:"4, 8, 12, 16, □ 에 들어갈 수는?", num:20, art:"pattern", start:4, step:4, n:5, d:1124,
+    { q:"4, 8, 12, 16, □ 에 들어갈 수는?", num:20, art:"pattern", start:4, step:4, n:5,
       st:["4씩 커지는 규칙이에요.", "16 + 4 = 20", "그래서 20"] },
-    { q:"30, 27, 24, □ 에 들어갈 수는?", num:21, art:"pattern", start:30, step:-3, n:4, d:1124,
-      st:["3씩 작아지는 규칙이에요.", "24 - 3 = 21", "그래서 21"] }
+    { q:"30, 27, 24, □ 에 들어갈 수는?", num:21, art:"pattern", start:30, step:-3, n:4,
+      st:["3씩 작아지는 규칙이에요.", "24 - 3 = 21", "그래서 21"] },
+    { q:"6, 12, 18, 24, □ 에 들어갈 수는?", num:30, art:"pattern", start:6, step:6, n:5, d:1125,
+      st:["6씩 커지는 규칙이에요.", "24 + 6 = 30", "그래서 30"] },
+    { q:"50, 45, 40, □ 에 들어갈 수는?", num:35, art:"pattern", start:50, step:-5, n:4, d:1125,
+      st:["5씩 작아지는 규칙이에요.", "40 - 5 = 35", "그래서 35"] }
    ]}
 ];
 
@@ -36256,19 +36313,19 @@ function esc(s){
 }
 function todayKey(){ try { return SB.today(); } catch(e){ return ""; } }
 
-var DATA = [{"no":"01","sem":"3학년 1학기","sub":"사회","topic":"우리가 사는 곳","chars":[["生","태어나다","생"],["場","마당","장"],["學","배우다","학"],["店","가게","점"],["安","편안하다","안"]],"words":[{"w":"생활","h":"生活","m":"일정한 환경에서 활동하며 살아감","f":"生(태어나다 생) + 活(살다 활)"},{"w":"안전","h":"安全","m":"위험이 생기거나 사고가 날 염려가 없음","f":"安(편안하다 안) + 全(온전하다 전)"},{"w":"학교","h":"學校","m":"학생에게 교육을 실시하는 기관","f":"學(배우다 학) + 校(학교 교)"},{"w":"서점","h":"書店","m":"책을 갖추어 놓고 팔거나 사는 가게","f":"書(글 서) + 店(가게 점)"},{"w":"장소","h":"場所","m":"어떤 일이 이루어지거나 일어나는 곳","f":"場(마당 장) + 所(바, 곳 소)"}]},{"no":"02","sem":"3학년 1학기","sub":"사회","topic":"일상에서 만나는 과거","chars":[["日","날","일"],["年","해","년(연)"],["間","사이","간"],["記","기록하다","기"],["來","오다","래(내)"]],"words":[{"w":"일상","h":"日常","m":"날마다 반복되는 생활","f":"日(날 일) + 常(항상 상)"},{"w":"미래","h":"未來","m":"앞으로 올 때","f":"未(아니다 미) + 來(오다 래)"},{"w":"시간","h":"時間","m":"시각과 시각의 사이, 시간의 어느 한 시점","f":"時(때 시) + 間(사이 간)"},{"w":"일기","h":"日記","m":"날마다 겪은 일이나 생각, 느낌을 적는 개인의 기록","f":"日(날 일) + 記(기록하다 기)"},{"w":"연표","h":"年表","m":"역사상 발생한 사건을 연대순으로 배열하여 적은 표","f":"年(해 년) + 表(겉, 표 표)"}]},{"no":"01","sem":"3학년 2학기","sub":"사회","topic":"사회 변화와 다양한 문화","chars":[["人","사람","인"],["高","높다","고"],["文","글","문"],["家","집","가"],["知","알다","지"]],"words":[{"w":"가구","h":"家口","m":"한 집에서 생계를 함께하는 식구","f":"家(집 가) + 口(입 구)"},{"w":"문화","h":"文化","m":"사람들이 지혜를 모아 만들어 온 모든 생활 모습","f":"文(글 문) + 化(되다 화)"},{"w":"노인","h":"老人","m":"나이가 들어 늙은 사람","f":"老(늙다 로) + 人(사람 인)"},{"w":"지능","h":"知能","m":"생각하고 배우며 문제를 해결하는 능력","f":"知(알다 지) + 能(능하다 능)"},{"w":"고령화","h":"高齡化","m":"노인의 인구 비율이 높은 상태로 나타나는 일","f":"高(높다 고) + 齡(나이 령) + 化(되다 화)"}]},{"no":"02","sem":"3학년 2학기","sub":"사회","topic":"옛날과 오늘날의 생활 모습","chars":[["風","바람","풍"],["時","때","시"],["通","통하다","통"],["車","수레","차/거"],["交","사귀다","교"]],"words":[{"w":"풍습","h":"風習","m":"옛날부터 전해 내려와 사람들이 당연하게 지키는 생활 습관","f":"風(바람 풍) + 習(익히다 습)"},{"w":"교통","h":"交通","m":"차나 비행기 등을 타고 사람이 오고 가거나 물건을 옮기는 일","f":"交(사귀다 교) + 通(통하다 통)"},{"w":"통신","h":"通信","m":"편지나 전신, 전화 따위로 정보나 의사를 전달함","f":"通(통하다 통) + 信(믿다 신)"},{"w":"자동차","h":"自動車","m":"엔진의 힘으로 땅 위를 스스로 움직이는 차","f":"自(스스로 자) + 動(움직이다 동) + 車(수레 차)"},{"w":"세시","h":"歲時","m":"한 해의 절기나 달, 계절에 따른 때","f":"歲(해 세) + 時(때 시)"}]},{"no":"01","sem":"3학년 1학기","sub":"과학","topic":"힘과 우리 생활","chars":[["物","만물","물"],["平","평평하다","평"],["面","낯","면"],["龍","용","룡(용)"]],"words":[{"w":"빗면","h":"빗面","m":"비스듬히 기운 면","f":"빗(순우리말) + 面(낯 면)"},{"w":"수평","h":"水平","m":"물처럼 기울지 않고 평평한 상태","f":"水(물 수) + 平(평평하다 평)"},{"w":"물체","h":"物體","m":"구체적인 형태를 가지고 있는 것","f":"物(만물 물) + 體(몸 체)"},{"w":"용수철","h":"龍鬚鐵","m":"용의 수염처럼 늘어나고 줄어드는 탄력이 있는 나선형 쇠줄","f":"龍(용 룡) + 鬚(턱수염 수) + 鐵(쇠 철)"}]},{"no":"02","sem":"3학년 1학기","sub":"과학","topic":"동물의 생활","chars":[["動","움직이다","동"],["分","나누다","분"],["用","쓰다","용"],["水","물","수"]],"words":[{"w":"사용","h":"使用","m":"일정한 목적이나 기능에 맞게 씀","f":"使(부리다 사) + 用(쓰다 용)"},{"w":"동물","h":"動物","m":"스스로 움직이고 감각을 느끼며 다른 생물을 먹어 영양분을 얻는 생명체","f":"動(움직이다 동) + 物(만물 물)"},{"w":"분류","h":"分類","m":"종류에 따라서 나눔","f":"分(나누다 분) + 類(무리 류)"},{"w":"호수","h":"湖水","m":"땅이 우묵하게 들어가 물이 괴어 있는 곳","f":"湖(호수 호) + 水(물 수)"}]},{"no":"03","sem":"3학년 1학기","sub":"과학","topic":"식물의 생활","chars":[["山","산","산"],["沙","모래","사"],["品","물건","품"],["玉","구슬","옥"]],"words":[{"w":"용품","h":"用品","m":"어떤 일이나 목적과 관련하여 쓰이는 물품","f":"用(쓰다 용) + 品(물건 품)"},{"w":"사막","h":"沙漠","m":"강수량이 적어 식물이 보이지 않거나 적고, 인간의 활동도 제약되는 지역","f":"沙(모래 사) + 漠(사막 막)"},{"w":"한라산","h":"漢拏山","m":"제주특별자치도 중앙에 있는 산","f":"漢(은하수 한) + 拏(붙잡다 나) + 山(산 산)"},{"w":"부레옥잠","h":"부레玉簪","m":"물옥잠과의 여러해살이풀","f":"부레(순우리말) + 玉(구슬 옥) + 簪(비녀 잠)"}]},{"no":"04","sem":"3학년 1학기","sub":"과학","topic":"생물의 한살이","chars":[["育","기르다","육"],["溫","따뜻하다","온"],["蟲","벌레","충"],["必","반드시","필"]],"words":[{"w":"사육","h":"飼育","m":"어린 가축이나 짐승이 자라도록 먹이어 기름","f":"飼(먹이다 사) + 育(기르다 육)"},{"w":"필요","h":"必要","m":"반드시 요구되는 바가 있음","f":"必(반드시 필) + 要(요긴하다 요)"},{"w":"온도","h":"溫度","m":"따뜻함과 차가움의 정도","f":"溫(따뜻하다 온) + 度(법도 도)"},{"w":"곤충","h":"昆蟲","m":"곤충강에 속한 동물을 통틀어 이르는 말","f":"昆(벌레 곤) + 蟲(벌레 충)"}]},{"no":"01","sem":"3학년 2학기","sub":"과학","topic":"물체와 물질","chars":[["性","성품","성"],["體","몸","체"],["氣","기운","기"],["液","진","액"]],"words":[{"w":"고체","h":"固體","m":"일정한 모양과 부피가 있으며 쉽게 변형되지 않는 물질의 상태","f":"固(굳다 고) + 體(몸 체)"},{"w":"액체","h":"液體","m":"일정한 부피는 가졌으나 일정한 형태를 가지지 못한 물질","f":"液(진 액) + 體(몸 체)"},{"w":"성질","h":"性質","m":"사물이나 현상이 가지고 있는 고유의 특성","f":"性(성품 성) + 質(바탕 질)"},{"w":"기체","h":"氣體","m":"공기나 김처럼 일정한 모양 없이 자유롭게 퍼지는 상태의 물질","f":"氣(기운 기) + 體(몸 체)"}]},{"no":"02","sem":"3학년 2학기","sub":"과학","topic":"지구와 바다","chars":[["大","크다","대"],["地","땅","지"],["形","모양","형"],["表","겉","표"]],"words":[{"w":"지형","h":"地形","m":"땅의 생긴 모양","f":"地(땅 지) + 形(모양 형)"},{"w":"지구","h":"地球","m":"태양에서 셋째로 가까운 행성","f":"地(땅 지) + 球(공 구)"},{"w":"대기","h":"大氣","m":"지구의 표면을 둘러싸고 있는 기체","f":"大(크다 대) + 氣(기운 기)"},{"w":"표면","h":"表面","m":"사물의 가장 바깥쪽, 또는 가장 윗부분","f":"表(겉 표) + 面(낯 면)"}]},{"no":"03","sem":"3학년 2학기","sub":"과학","topic":"소리의 성질","chars":[["樂","노래","악"],["傳","전하다","전"],["空","비다","공"],["音","소리","음"]],"words":[{"w":"소음","h":"騷音","m":"불규칙하게 뒤섞여 불쾌하고 시끄러운 소리","f":"騷(떠들다 소) + 音(소리 음)"},{"w":"전달","h":"傳達","m":"지시, 명령, 물품 따위를 사람이나 기관에 전하여 이르게 함","f":"傳(전하다 전) + 達(통달하다 달)"},{"w":"악기","h":"樂器","m":"음악을 연주하는 데 쓰는 기구를 통틀어 이르는 말","f":"樂(노래 악) + 器(그릇 기)"},{"w":"공기","h":"空氣","m":"지구를 둘러싼 대기를 구성하는 투명한 기체","f":"空(비다 공) + 氣(기운 기)"}]},{"no":"04","sem":"3학년 2학기","sub":"과학","topic":"감염병과 건강한 생활","chars":[["飛","날다","비"],["習","익히다","습"],["防","막다","방"],["守","지키다","수"]],"words":[{"w":"예방","h":"豫防","m":"질병이나 재해 따위가 일어나기 전에 미리 대처하여 막는 일","f":"豫(미리 예) + 防(막다 방)"},{"w":"습관","h":"習慣","m":"오랫동안 되풀이하는 과정에서 저절로 익혀진 행동 방식","f":"習(익히다 습) + 慣(버릇 관)"},{"w":"비말","h":"飛沫","m":"날아 흩어지거나 튀어 오르는 물방울","f":"飛(날다 비) + 沫(거품 말)"},{"w":"수칙","h":"守則","m":"행동이나 절차에 관하여 지켜야 할 사항을 정한 규칙","f":"守(지키다 수) + 則(법칙 칙)"}]},{"no":"05","sem":"3학년 1학기","sub":"사회","topic":"과거·현재·미래","chars":[["過","지날","과"],["去","가다","거"],["現","나타날","현"],["在","있다","재"]],"words":[{"w":"과거","h":"過去","m":"지나간 지난 때","f":"過(지날 과) + 去(갈 거)"},{"w":"현재","h":"現在","m":"지금 이 때","f":"現(나타날 현) + 在(있을 재)"}]},{"no":"06","sem":"3학년 2학기","sub":"사회","topic":"우리 고장의 모습","chars":[["東","동녘","동"],["西","서녘","서"],["南","남녘","남"],["北","북녘","북"]],"words":[{"w":"동서","h":"東西","m":"동쪽과 서쪽","f":"東(동녘 동) + 西(서녘 서)","d":1123},{"w":"남북","h":"南北","m":"남쪽과 북쪽","f":"南(남녘 남) + 北(북녘 북)","d":1123},{"w":"동남","h":"東南","m":"동쪽과 남쪽","f":"東(동녘 동) + 南(남녘 남)"},{"w":"서북","h":"西北","m":"서쪽과 북쪽","f":"西(서녘 서) + 北(북녘 북)"}]},{"no":"07","sem":"3학년 2학기","sub":"과학","topic":"계절과 날씨","chars":[["春","봄","춘"],["夏","여름","하"],["秋","가을","추"],["冬","겨울","동"]],"words":[{"w":"춘하추동","h":"春夏秋冬","m":"봄·여름·가을·겨울의 네 계절","f":"春(봄 춘) + 夏(여름 하) + 秋(가을 추) + 冬(겨울 동)","d":1124},{"w":"추석","h":"秋夕","m":"음력 팔월 보름날의 명절","f":"秋(가을 추) + 夕(저녁 석)","d":1124},{"w":"동지","h":"冬至","m":"겨울에 밤이 가장 긴 날","f":"冬(겨울 동) + 至(이르다 지)"}]}];
+var DATA = [{"no":"01","sem":"3학년 1학기","sub":"사회","topic":"우리가 사는 곳","chars":[["生","태어나다","생"],["場","마당","장"],["學","배우다","학"],["店","가게","점"],["安","편안하다","안"]],"words":[{"w":"생활","h":"生活","m":"일정한 환경에서 활동하며 살아감","f":"生(태어나다 생) + 活(살다 활)"},{"w":"안전","h":"安全","m":"위험이 생기거나 사고가 날 염려가 없음","f":"安(편안하다 안) + 全(온전하다 전)"},{"w":"학교","h":"學校","m":"학생에게 교육을 실시하는 기관","f":"學(배우다 학) + 校(학교 교)"},{"w":"서점","h":"書店","m":"책을 갖추어 놓고 팔거나 사는 가게","f":"書(글 서) + 店(가게 점)"},{"w":"장소","h":"場所","m":"어떤 일이 이루어지거나 일어나는 곳","f":"場(마당 장) + 所(바, 곳 소)"}]},{"no":"02","sem":"3학년 1학기","sub":"사회","topic":"일상에서 만나는 과거","chars":[["日","날","일"],["年","해","년(연)"],["間","사이","간"],["記","기록하다","기"],["來","오다","래(내)"]],"words":[{"w":"일상","h":"日常","m":"날마다 반복되는 생활","f":"日(날 일) + 常(항상 상)"},{"w":"미래","h":"未來","m":"앞으로 올 때","f":"未(아니다 미) + 來(오다 래)"},{"w":"시간","h":"時間","m":"시각과 시각의 사이, 시간의 어느 한 시점","f":"時(때 시) + 間(사이 간)"},{"w":"일기","h":"日記","m":"날마다 겪은 일이나 생각, 느낌을 적는 개인의 기록","f":"日(날 일) + 記(기록하다 기)"},{"w":"연표","h":"年表","m":"역사상 발생한 사건을 연대순으로 배열하여 적은 표","f":"年(해 년) + 表(겉, 표 표)"}]},{"no":"01","sem":"3학년 2학기","sub":"사회","topic":"사회 변화와 다양한 문화","chars":[["人","사람","인"],["高","높다","고"],["文","글","문"],["家","집","가"],["知","알다","지"]],"words":[{"w":"가구","h":"家口","m":"한 집에서 생계를 함께하는 식구","f":"家(집 가) + 口(입 구)"},{"w":"문화","h":"文化","m":"사람들이 지혜를 모아 만들어 온 모든 생활 모습","f":"文(글 문) + 化(되다 화)"},{"w":"노인","h":"老人","m":"나이가 들어 늙은 사람","f":"老(늙다 로) + 人(사람 인)"},{"w":"지능","h":"知能","m":"생각하고 배우며 문제를 해결하는 능력","f":"知(알다 지) + 能(능하다 능)"},{"w":"고령화","h":"高齡化","m":"노인의 인구 비율이 높은 상태로 나타나는 일","f":"高(높다 고) + 齡(나이 령) + 化(되다 화)"}]},{"no":"02","sem":"3학년 2학기","sub":"사회","topic":"옛날과 오늘날의 생활 모습","chars":[["風","바람","풍"],["時","때","시"],["通","통하다","통"],["車","수레","차/거"],["交","사귀다","교"]],"words":[{"w":"풍습","h":"風習","m":"옛날부터 전해 내려와 사람들이 당연하게 지키는 생활 습관","f":"風(바람 풍) + 習(익히다 습)"},{"w":"교통","h":"交通","m":"차나 비행기 등을 타고 사람이 오고 가거나 물건을 옮기는 일","f":"交(사귀다 교) + 通(통하다 통)"},{"w":"통신","h":"通信","m":"편지나 전신, 전화 따위로 정보나 의사를 전달함","f":"通(통하다 통) + 信(믿다 신)"},{"w":"자동차","h":"自動車","m":"엔진의 힘으로 땅 위를 스스로 움직이는 차","f":"自(스스로 자) + 動(움직이다 동) + 車(수레 차)"},{"w":"세시","h":"歲時","m":"한 해의 절기나 달, 계절에 따른 때","f":"歲(해 세) + 時(때 시)"}]},{"no":"01","sem":"3학년 1학기","sub":"과학","topic":"힘과 우리 생활","chars":[["物","만물","물"],["平","평평하다","평"],["面","낯","면"],["龍","용","룡(용)"]],"words":[{"w":"빗면","h":"빗面","m":"비스듬히 기운 면","f":"빗(순우리말) + 面(낯 면)"},{"w":"수평","h":"水平","m":"물처럼 기울지 않고 평평한 상태","f":"水(물 수) + 平(평평하다 평)"},{"w":"물체","h":"物體","m":"구체적인 형태를 가지고 있는 것","f":"物(만물 물) + 體(몸 체)"},{"w":"용수철","h":"龍鬚鐵","m":"용의 수염처럼 늘어나고 줄어드는 탄력이 있는 나선형 쇠줄","f":"龍(용 룡) + 鬚(턱수염 수) + 鐵(쇠 철)"}]},{"no":"02","sem":"3학년 1학기","sub":"과학","topic":"동물의 생활","chars":[["動","움직이다","동"],["分","나누다","분"],["用","쓰다","용"],["水","물","수"]],"words":[{"w":"사용","h":"使用","m":"일정한 목적이나 기능에 맞게 씀","f":"使(부리다 사) + 用(쓰다 용)"},{"w":"동물","h":"動物","m":"스스로 움직이고 감각을 느끼며 다른 생물을 먹어 영양분을 얻는 생명체","f":"動(움직이다 동) + 物(만물 물)"},{"w":"분류","h":"分類","m":"종류에 따라서 나눔","f":"分(나누다 분) + 類(무리 류)"},{"w":"호수","h":"湖水","m":"땅이 우묵하게 들어가 물이 괴어 있는 곳","f":"湖(호수 호) + 水(물 수)"}]},{"no":"03","sem":"3학년 1학기","sub":"과학","topic":"식물의 생활","chars":[["山","산","산"],["沙","모래","사"],["品","물건","품"],["玉","구슬","옥"]],"words":[{"w":"용품","h":"用品","m":"어떤 일이나 목적과 관련하여 쓰이는 물품","f":"用(쓰다 용) + 品(물건 품)"},{"w":"사막","h":"沙漠","m":"강수량이 적어 식물이 보이지 않거나 적고, 인간의 활동도 제약되는 지역","f":"沙(모래 사) + 漠(사막 막)"},{"w":"한라산","h":"漢拏山","m":"제주특별자치도 중앙에 있는 산","f":"漢(은하수 한) + 拏(붙잡다 나) + 山(산 산)"},{"w":"부레옥잠","h":"부레玉簪","m":"물옥잠과의 여러해살이풀","f":"부레(순우리말) + 玉(구슬 옥) + 簪(비녀 잠)"}]},{"no":"04","sem":"3학년 1학기","sub":"과학","topic":"생물의 한살이","chars":[["育","기르다","육"],["溫","따뜻하다","온"],["蟲","벌레","충"],["必","반드시","필"]],"words":[{"w":"사육","h":"飼育","m":"어린 가축이나 짐승이 자라도록 먹이어 기름","f":"飼(먹이다 사) + 育(기르다 육)"},{"w":"필요","h":"必要","m":"반드시 요구되는 바가 있음","f":"必(반드시 필) + 要(요긴하다 요)"},{"w":"온도","h":"溫度","m":"따뜻함과 차가움의 정도","f":"溫(따뜻하다 온) + 度(법도 도)"},{"w":"곤충","h":"昆蟲","m":"곤충강에 속한 동물을 통틀어 이르는 말","f":"昆(벌레 곤) + 蟲(벌레 충)"}]},{"no":"01","sem":"3학년 2학기","sub":"과학","topic":"물체와 물질","chars":[["性","성품","성"],["體","몸","체"],["氣","기운","기"],["液","진","액"]],"words":[{"w":"고체","h":"固體","m":"일정한 모양과 부피가 있으며 쉽게 변형되지 않는 물질의 상태","f":"固(굳다 고) + 體(몸 체)"},{"w":"액체","h":"液體","m":"일정한 부피는 가졌으나 일정한 형태를 가지지 못한 물질","f":"液(진 액) + 體(몸 체)"},{"w":"성질","h":"性質","m":"사물이나 현상이 가지고 있는 고유의 특성","f":"性(성품 성) + 質(바탕 질)"},{"w":"기체","h":"氣體","m":"공기나 김처럼 일정한 모양 없이 자유롭게 퍼지는 상태의 물질","f":"氣(기운 기) + 體(몸 체)"}]},{"no":"02","sem":"3학년 2학기","sub":"과학","topic":"지구와 바다","chars":[["大","크다","대"],["地","땅","지"],["形","모양","형"],["表","겉","표"]],"words":[{"w":"지형","h":"地形","m":"땅의 생긴 모양","f":"地(땅 지) + 形(모양 형)"},{"w":"지구","h":"地球","m":"태양에서 셋째로 가까운 행성","f":"地(땅 지) + 球(공 구)"},{"w":"대기","h":"大氣","m":"지구의 표면을 둘러싸고 있는 기체","f":"大(크다 대) + 氣(기운 기)"},{"w":"표면","h":"表面","m":"사물의 가장 바깥쪽, 또는 가장 윗부분","f":"表(겉 표) + 面(낯 면)"}]},{"no":"03","sem":"3학년 2학기","sub":"과학","topic":"소리의 성질","chars":[["樂","노래","악"],["傳","전하다","전"],["空","비다","공"],["音","소리","음"]],"words":[{"w":"소음","h":"騷音","m":"불규칙하게 뒤섞여 불쾌하고 시끄러운 소리","f":"騷(떠들다 소) + 音(소리 음)"},{"w":"전달","h":"傳達","m":"지시, 명령, 물품 따위를 사람이나 기관에 전하여 이르게 함","f":"傳(전하다 전) + 達(통달하다 달)"},{"w":"악기","h":"樂器","m":"음악을 연주하는 데 쓰는 기구를 통틀어 이르는 말","f":"樂(노래 악) + 器(그릇 기)"},{"w":"공기","h":"空氣","m":"지구를 둘러싼 대기를 구성하는 투명한 기체","f":"空(비다 공) + 氣(기운 기)"}]},{"no":"04","sem":"3학년 2학기","sub":"과학","topic":"감염병과 건강한 생활","chars":[["飛","날다","비"],["習","익히다","습"],["防","막다","방"],["守","지키다","수"]],"words":[{"w":"예방","h":"豫防","m":"질병이나 재해 따위가 일어나기 전에 미리 대처하여 막는 일","f":"豫(미리 예) + 防(막다 방)"},{"w":"습관","h":"習慣","m":"오랫동안 되풀이하는 과정에서 저절로 익혀진 행동 방식","f":"習(익히다 습) + 慣(버릇 관)"},{"w":"비말","h":"飛沫","m":"날아 흩어지거나 튀어 오르는 물방울","f":"飛(날다 비) + 沫(거품 말)"},{"w":"수칙","h":"守則","m":"행동이나 절차에 관하여 지켜야 할 사항을 정한 규칙","f":"守(지키다 수) + 則(법칙 칙)"}]},{"no":"05","sem":"3학년 1학기","sub":"사회","topic":"과거·현재·미래","chars":[["過","지날","과"],["去","가다","거"],["現","나타날","현"],["在","있다","재"]],"words":[{"w":"과거","h":"過去","m":"지나간 지난 때","f":"過(지날 과) + 去(갈 거)"},{"w":"현재","h":"現在","m":"지금 이 때","f":"現(나타날 현) + 在(있을 재)"}]},{"no":"06","sem":"3학년 2학기","sub":"사회","topic":"우리 고장의 모습","chars":[["東","동녘","동"],["西","서녘","서"],["南","남녘","남"],["北","북녘","북"]],"words":[{"w":"동서","h":"東西","m":"동쪽과 서쪽","f":"東(동녘 동) + 西(서녘 서)","d":1123},{"w":"남북","h":"南北","m":"남쪽과 북쪽","f":"南(남녘 남) + 北(북녘 북)","d":1123},{"w":"동남","h":"東南","m":"동쪽과 남쪽","f":"東(동녘 동) + 南(남녘 남)"},{"w":"서북","h":"西北","m":"서쪽과 북쪽","f":"西(서녘 서) + 北(북녘 북)"}]},{"no":"07","sem":"3학년 2학기","sub":"과학","topic":"계절과 날씨","chars":[["春","봄","춘"],["夏","여름","하"],["秋","가을","추"],["冬","겨울","동"]],"words":[{"w":"춘하추동","h":"春夏秋冬","m":"봄·여름·가을·겨울의 네 계절","f":"春(봄 춘) + 夏(여름 하) + 秋(가을 추) + 冬(겨울 동)","d":1124},{"w":"추석","h":"秋夕","m":"음력 팔월 보름날의 명절","f":"秋(가을 추) + 夕(저녁 석)","d":1124},{"w":"동지","h":"冬至","m":"겨울에 밤이 가장 긴 날","f":"冬(겨울 동) + 至(이르다 지)"}]},{"no":"08","sem":"3학년 2학기","sub":"수학","topic":"도형과 방향","chars":[["左","왼쪽","좌"],["右","오른쪽","우"],["前","앞","전"],["後","뒤","후"]],"words":[{"w":"좌우","h":"左右","m":"왼쪽과 오른쪽","f":"左(왼쪽 좌) + 右(오른쪽 우)","d":1125},{"w":"전후","h":"前後","m":"앞과 뒤","f":"前(앞 전) + 後(뒤 후)","d":1125},{"w":"전진","h":"前進","m":"앞으로 나아감","f":"前(앞 전) + 進(나아갈 진)"}]}];
 /* ---------- 🌟 오늘의 두 낱말 — 글자 그림 → 낱말 그림 ---------- */
 var CHPIC = {"生":"🌱","場":"🏞","學":"🏫","店":"🏪","安":"🛡","日":"☀️","年":"📅","間":"↔️","記":"📝","來":"👋",
  "人":"👤","高":"⬆️","文":"📖","家":"🏠","知":"💡","風":"🌬","時":"🕐","通":"🔄","車":"🚗","交":"🤝",
  "物":"🧸","平":"➖","面":"🟦","龍":"🐉","動":"🏃","分":"➗","用":"🔧","水":"💧","山":"⛰","沙":"🏖",
  "品":"🎁","玉":"💎","育":"🌿","溫":"🌡","蟲":"🐛","必":"❗","性":"🧬","體":"🧍","氣":"💨","液":"🧪",
- "大":"🐘","地":"🌍","形":"🔷","表":"🪧","樂":"🎵","傳":"📣","空":"☁️","音":"🔊","飛":"🕊","習":"🔁","防":"🛡","守":"🔒","過":"⏮","東":"🌅","西":"🌇","南":"🧭","北":"❄️","去":"🚶","現":"📍","在":"🧭","春":"🌸","夏":"🌞","秋":"🍁","冬":"⛄","夕":"🌆"};
+ "大":"🐘","地":"🌍","形":"🔷","表":"🪧","樂":"🎵","傳":"📣","空":"☁️","音":"🔊","飛":"🕊","習":"🔁","防":"🛡","守":"🔒","過":"⏮","東":"🌅","西":"🌇","南":"🧭","北":"❄️","去":"🚶","現":"📍","在":"🧭","春":"🌸","夏":"🌞","秋":"🍁","冬":"⛄","夕":"🌆","左":"👈","右":"👉","前":"⏩","後":"⏪"};
 var WEM = {"생활":"🏡","안전":"🦺","학교":"🏫","서점":"📚","장소":"📍","일상":"📆","미래":"🔭","시간":"⏰","일기":"📔","연표":"📜",
  "가구":"🛋","문화":"🎭","노인":"👴","지능":"🧠","고령화":"👵","풍습":"🎎","교통":"🚌","통신":"📱","자동차":"🚗","세시":"🎉",
  "빗면":"🛝","수평":"📏","물체":"🧊","용수철":"🌀","사용":"🖐","동물":"🐾","분류":"🗂","호수":"🏞",
  "용품":"🎒","사막":"🏜","한라산":"🗻","부레옥잠":"🌿","사육":"🐣","필요":"❗","온도":"🌡","곤충":"🐜",
  "고체":"🧱","액체":"🥤","성질":"🔍","기체":"💨","지형":"🗺","지구":"🌍","대기":"☁️","표면":"🪞",
- "소음":"📢","전달":"📣","악기":"🎻","공기":"🌬","예방":"🧼","습관":"🪥","비말":"💦","수칙":"📋","과거":"🕰","동서":"↔️","남북":"↕️","동남":"↘️","서북":"↖️","현재":"📌","춘하추동":"🗓","추석":"🌕","동지":"🍲"};
+ "소음":"📢","전달":"📣","악기":"🎻","공기":"🌬","예방":"🧼","습관":"🪥","비말":"💦","수칙":"📋","과거":"🕰","동서":"↔️","남북":"↕️","동남":"↘️","서북":"↖️","현재":"📌","춘하추동":"🗓","추석":"🌕","동지":"🍲","좌우":"↔️","전후":"🔃"};
 var HTS = { pick:[], done:[false,false], solved:0 };
 function htAllWords(){
   var out = [];
