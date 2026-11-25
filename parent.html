@@ -318,6 +318,13 @@ main{padding:14px 12px 40px; max-width:1080px; margin:0 auto}
 .stchip.on[data-st=plan]{background:#eef5fa;border-color:#cfe0ec;color:#4a6d86}
 .stchip.on[data-st=doing]{background:#fff2d4;border-color:#ffd98a;color:#7c5000}
 .stchip.on[data-st=done]{background:var(--mint-soft);border-color:rgba(55,189,139,.5);color:#0d6b4c}
+/* 📘 문제집 추가 모달의 요일 칩 — 켜진 요일이 한눈에 보이게 (예전에는 스타일이 없어 눌러도 그대로였다) */
+.stchip.on[data-st=day]{background:var(--mint);border-color:#22a276;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),0 2px 6px rgba(55,189,139,.28)}
+.stchip.on[data-st=day]::after{content:"✓";margin-left:3px;font-size:.76em;opacity:.95}
+.stchip[data-st=day]:active{transform:scale(.96)}
+/* 요일 7칸은 한 줄에 고르게 — 좁은 폰에서도 일요일이 따로 떨어지지 않게 */
+.stchips#dDays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.stchips#dDays .stchip{height:36px;padding:0;font-size:.8rem;display:flex;align-items:center;justify-content:center;gap:1px}
 .hint{font-size:.72rem;font-weight:700;color:var(--muted);line-height:1.5;margin:2px 0 8px}
 .hint.warn{color:#a8641d;background:#fff8ea;border-radius:9px;padding:7px 9px}
 .sheet-a{display:flex;gap:7px;margin-top:6px;flex-wrap:wrap}
@@ -1091,7 +1098,23 @@ function shelfMap(k){
 function cnt(o){ var n = 0; for (var k in (o || {})) if (o[k]) n++; return n; }
 function money(){ var m = pick(cloud().money, lsGet(K.money, null)); return (m && typeof m === "object") ? m : { piggy:0, bank:[], log:[] }; }
 function stars(){ var s = pick(cloud().stars, lsGet(K.stars, null)); return (s && typeof s === "object") ? num(s.total, 0) : 0; }
-function wbData(){ var w = pick(cloud().wb, lsGet(K.wb, null)); return { v:1, list: wbListOf(w) }; }
+function wbData(){
+  var l = lsGet(K.wb, null), c = cloud().wb;
+  var hasCloud = (c !== undefined && c !== null);
+  var list = wbListOf(hasCloud ? c : l);
+  /* 이 기기에서 방금 추가해 아직 가족 기록에 못 올린 문제집은 그대로 보여 준다 */
+  var pend = wbSyncState().ids;
+  if (hasCloud && pend.length){
+    var have = wbIdsOf(c), loc = {};
+    wbListOf(l).forEach(function(w){ loc[w.id] = w; });
+    for (var i = 0; i < pend.length; i++){
+      var id = pend[i];
+      if (have[id] || !loc[id]) continue;
+      list.push(loc[id]); have[id] = 1;
+    }
+  }
+  return { v:1, list: wbListOf({ v:1, list:list }) };
+}
 function annualData(){
   var a = pick(cloud().annual, lsGet(K.annual, null));
   a = (a && typeof a === "object") ? a : { v:1, subs:[], years:{}, del:{} };
@@ -1388,6 +1411,10 @@ function hwToday(){
     /* 📱 패드 학습 — 보드가 올린 요약(hwday)이 낡았어도 부모가 바꾼 요일이 바로 보이게 맞춘다 */
     var pdi = dayIdxOf(t), pads = padItemsFor(pdi), pmap = {}, seenP = {}, src = [], i0;
     for (i0 = 0; i0 < pads.length; i0++) pmap[pads[i0].id] = pads[i0];
+    /* 📘 지면 문제집 — 보드가 올린 요약(hwday)이 예전 것이어도, 부모 페이지에서 방금 추가했거나
+       요일을 바꾼 문제집이 '오늘의 숙제'에 바로 뜨도록 지금 문제집 목록으로 다시 맞춘다 */
+    var wbs = wbItemsFor(pdi, t), wmap = {}, seenW = {};
+    for (i0 = 0; i0 < wbs.length; i0++) wmap[wbs[i0].id] = wbs[i0];
     var pl0 = pick(cloud().hwplan, lsGet(K.hwplan, {})) || {};
     var pu0 = pick(cloud().hwplanUn, lsGet(K.hwplanUn, {})) || {};
     var pc0 = (pl0[t] && typeof pl0[t] === "object") ? pl0[t] : {};
@@ -1397,6 +1424,12 @@ function hwToday(){
       if (hg === "t"){
         if (!pmap[hid]) continue;          /* 부모가 요일에서 뺀 패드 학습은 오늘 목록에서도 뺀다 */
         seenP[hid] = 1;
+      } else if (hid.indexOf("wb:") === 0){
+        var wv = wmap[hid];
+        if (!wv) continue;                 /* 지운 문제집·오늘 안 하는 문제집은 오늘 목록에서도 뺀다 */
+        seenW[hid] = 1;
+        src.push({ id:hid, s:wv.s, t:wv.t, g:"p", ok:!!hx.ok, c:!!hx.c, m:!!hx.m });  /* 쪽수는 지금 진도로 */
+        continue;
       }
       src.push(hx);
     }
@@ -1405,6 +1438,12 @@ function hwToday(){
       var ts0 = num(pc0[pads[i0].id]), un0 = num(pn0[pads[i0].id]);
       var ok0 = !!ts0 && !(un0 && un0 >= ts0);
       src.push({ id:pads[i0].id, s:pads[i0].s, t:pads[i0].t, g:"t", ok:ok0 ? 1 : 0, c:0, m:0 });
+    }
+    for (i0 = 0; i0 < wbs.length; i0++){
+      if (seenW[wbs[i0].id]) continue;     /* 새로 추가·요일이 바뀐 문제집 — 체크 기록이 있으면 완료로 */
+      var wt0 = num(pc0[wbs[i0].id]), wu0 = num(pn0[wbs[i0].id]);
+      var wok0 = !!wt0 && !(wu0 && wu0 >= wt0);
+      src.push({ id:wbs[i0].id, s:wbs[i0].s, t:wbs[i0].t, g:"p", ok:wok0 ? 1 : 0, c:0, m:0 });
     }
     var bw = [], bt = 0, bd = 0, i2;
     for (i2 = 0; i2 < src.length; i2++){
@@ -1750,9 +1789,8 @@ function wbMonthSave(id){
   var em = auto ? Math.max(sm, new Date().getMonth() + 1) : Math.min(12, Math.max(sm, emv));
   var w = wbById(id);
   if (!w) return;
-  commit(function(d){ putWbMonth(d, w, sm, em, auto); }).then(function(ok){
-    if (ok) toast("🗓️ " + w.nm + " · " + sm + "월~" + (auto ? (em + "월(자동)") : (em + "월")) + " · 연간 진도표에 반영");
-  });
+  wbCommit(function(d){ putWbMonth(d, w, sm, em, auto); },
+    "🗓️ " + w.nm + " · " + sm + "월~" + (auto ? (em + "월(자동)") : (em + "월")) + " · 연간 진도표에 반영");
 }
 function renderWB(){
   if (editingForm()) return;              /* 숫자를 입력 중이면 다시 그리지 않는다 */
@@ -1830,7 +1868,7 @@ function readWBInputs(){
 function applyWBEdits(edits){
   var ids = Object.keys(edits || {});
   if (!ids.length) return;
-  commit(function(d){
+  wbCommit(function(d){
     var list = wbListOf(d.wb);
     var changed = false;
     ids.forEach(function(id){
@@ -1860,13 +1898,13 @@ function wbSaveOne(id){
     cur:(e.cur !== undefined ? Math.min(e.cur, total) : Math.min(w.cur, total)),
     daily:(e.daily !== undefined ? Math.max(1, e.daily) : w.daily),
     days:w.days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv });
-  commit(function(d){
+  wbCommit(function(d){
     var list2 = wbListOf(d.wb), found = false;
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id){ list2[j] = next; found = true; }
     if (!found) list2.push(next);
     d.wb = { v:1, list:list2 };
     ensureWbAnnual(d, next);
-  }).then(function(ok){ if (ok) toast("📘 " + next.nm + " 저장 · " + next.cur + "/" + next.total + "쪽"); });
+  }, "📘 " + next.nm + " 저장 · " + next.cur + "/" + next.total + "쪽");
 }
 function wbToggleDay(id, idx){
   var edits = readWBInputs(), e = edits[id] || {};
@@ -1882,16 +1920,13 @@ function wbToggleDay(id, idx){
     cur:(e.cur !== undefined ? Math.min(e.cur, e.total !== undefined ? e.total : w.total) : w.cur),
     daily:(e.daily !== undefined ? Math.max(1, e.daily) : w.daily),
     days:days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv });
-  commit(function(d){
+  var added = (next.days.indexOf(idx) >= 0);
+  wbCommit(function(d){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
     d.wb = { v:1, list:list2 };
     ensureWbAnnual(d, next);
-  }).then(function(ok){
-    if (!ok) return;
-    var added = (next.days.indexOf(idx) >= 0);
-    toast("📘 " + next.nm + " · " + dayLabel(next.days) + (next.hw ? (added ? " 추가 · 오늘의 숙제·시간표·연간 진도표에 바로 반영" : " 해제 · 오늘의 숙제·시간표·연간 진도표에 바로 반영") : ""));
-  });
+  }, "📘 " + next.nm + " · " + dayLabel(next.days) + (next.hw ? (added ? " 추가 · 오늘의 숙제·시간표·연간 진도표에 바로 반영" : " 해제 · 오늘의 숙제·시간표·연간 진도표에 바로 반영") : ""));
 }
 function wbPreset(id, key){
   var edits = readWBInputs(), e = edits[id] || {};
@@ -1904,12 +1939,12 @@ function wbPreset(id, key){
     cur:(e.cur !== undefined ? Math.min(e.cur, e.total !== undefined ? e.total : w.total) : w.cur),
     daily:(e.daily !== undefined ? Math.max(1, e.daily) : w.daily),
     days:days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv });
-  commit(function(d){
+  wbCommit(function(d){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
     d.wb = { v:1, list:list2 };
     ensureWbAnnual(d, next);
-  }).then(function(ok){ if (ok) toast("📘 " + next.nm + " · " + dayLabel(next.days) + " · 학습계획에 바로 반영"); });
+  }, "📘 " + next.nm + " · " + dayLabel(next.days) + " · 학습계획에 바로 반영");
 }
 function wbToggleHW(id, on){
   var list = wbData().list, w = null;
@@ -1917,11 +1952,11 @@ function wbToggleHW(id, on){
   if (!w) return;
   var next = wbNorm({ id:w.id, nm:w.nm, sub:w.sub, total:w.total, cur:w.cur, daily:w.daily,
     days:w.days, hw:(on ? 1 : 0), at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv });
-  commit(function(d){
+  wbCommit(function(d){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
     d.wb = { v:1, list:list2 };
-  }).then(function(ok){ if (ok) toast(on ? "📘 오늘의 숙제에 넣었어요 · 시간표·연간 진도표에 바로 반영" : "📘 오늘의 숙제에서 뺐어요 (연간 진도표에는 남아요)"); });
+  }, on ? "📘 오늘의 숙제에 넣었어요 · 시간표·연간 진도표에 바로 반영" : "📘 오늘의 숙제에서 뺐어요 (연간 진도표에는 남아요)");
 }
 function wbReset(id){
   var list = wbData().list, w = null;
@@ -1929,11 +1964,11 @@ function wbReset(id){
   if (!w) return;
   var next = wbNorm({ id:w.id, nm:w.nm, sub:w.sub, total:w.total, cur:0, daily:w.daily,
     days:w.days, hw:w.hw, at:Date.now(), alerted:0, dismissed:"", adv:{} });
-  commit(function(d){
+  wbCommit(function(d){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
     d.wb = { v:1, list:list2 };
-  }).then(function(ok){ if (ok) toast("📘 " + next.nm + " · 새 권(p.0)으로 시작해요"); });
+  }, "📘 " + next.nm + " · 새 권(p.0)으로 시작해요");
 }
 function wbDismiss(id){
   var list = wbData().list, w = null;
@@ -1941,20 +1976,20 @@ function wbDismiss(id){
   if (!w) return;
   var next = wbNorm({ id:w.id, nm:w.nm, sub:w.sub, total:w.total, cur:w.cur, daily:w.daily,
     days:w.days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:todayIso(), adv:w.adv });
-  commit(function(d){
+  wbCommit(function(d){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
     d.wb = { v:1, list:list2 };
-  }).then(function(ok){ if (ok) toast("🛒 알림은 내일 다시 보여 드릴게요"); });
+  }, "🛒 알림은 내일 다시 보여 드릴게요");
 }
 function wbDelete(id){
   var list = wbData().list, w = null;
   for (var i = 0; i < list.length; i++) if (list[i].id === id) w = list[i];
   if (!w) return;
-  commit(function(d){
+  wbCommit(function(d){
     d.wb = { v:1, list: wbListOf(d.wb).filter(function(x){ return x.id !== id; }) };
     dropWbMonth(d, id);
-  }).then(function(ok){ if (ok) toast("문제집을 지웠어요"); });
+  }, "문제집을 지웠어요");
 }
 function openAddWb(){
   WBDRAFT = { nm:"", sub:"국어", total:"", cur:"", daily:"", days:[0,1,2,3,4], hw:1 };
@@ -1969,12 +2004,94 @@ function openAddWb(){
       monthOpts(new Date().getMonth() + 1, false, false) + '</select></div>' +
     '<div class="field"><span>종료 월</span><select id="dEm">' +
       monthOpts(new Date().getMonth() + 1, true, true) + '</select></div></div>' +
-    '<div class="field"><span>요일</span><div class="stchips" id="dDays">' +
-      DAYN.map(function(d, i){ return '<button type="button" class="stchip' + (i < 5 ? " on" : "") + '" data-dday="' + i + '" data-st="day">' +
+    '<div class="field"><span>요일 <em style="font-style:normal;font-weight:800;color:#15805a">· 누르면 켜지고 한 번 더 누르면 꺼져요</em></span><div class="stchips" id="dDays">' +
+      DAYN.map(function(d, i){ return '<button type="button" class="stchip' + (i < 5 ? " on" : "") + '" aria-pressed="' + (i < 5 ? "true" : "false") + '" data-dday="' + i + '" data-st="day">' +
         d + '</button>'; }).join("") + '</div></div>' +
     '<label class="tog"><input type="checkbox" id="dHw" checked> 오늘의 숙제에 넣기</label>' +
     '<div class="sheet-a"><button class="btn ghost" type="button" data-close="1">취소</button>' +
     '<button class="btn pri" type="button" id="dSave">문제집 등록</button></div>');
+}
+/* =====================================================================
+   📘 문제집 저장 — 이 기기에 먼저 반영하고, 가족 코드가 있으면 클라우드에도 올린다
+   · 예전에는 commit() 만 불러서 ① 가족 코드가 없거나 ② 다른 동기화(pull)가
+     돌고 있으면 아무것도 저장되지 않고 모달도 닫히지 않았다
+     → "문제집 추가했는데 부모칸에서 안 뜬다"의 원인.
+   · 이제는 lsSet → CLOUD 사본 → 화면(renderWB·renderCheck·renderAnnual) 순서로
+     바로 반영하고, 클라우드 반영은 뒤따라가며 실패하면 dirty 로 남겨 다시 올린다.
+   ===================================================================== */
+var WBSYNC = "haeyuli.wbsync.v1";
+function wbSyncState(){
+  var s = lsGet(WBSYNC, null);
+  if (!s || typeof s !== "object") return { dirty:false, ids:[] };
+  return { dirty:!!s.dirty, ids:(Array.isArray(s.ids) ? s.ids.slice(0, 80) : []) };
+}
+function wbSyncSave(dirty, ids){
+  ids = Array.isArray(ids) ? ids.slice(0, 80) : [];
+  if (!dirty && !ids.length){ try { localStorage.removeItem(WBSYNC); } catch(e){} return; }
+  lsSet(WBSYNC, { v:1, dirty:!!dirty, ids:ids, at:Date.now() });
+}
+function wbIdsOf(wb){
+  var out = {}, list = wbListOf(wb);
+  for (var i = 0; i < list.length; i++) out[list[i].id] = 1;
+  return out;
+}
+function wbApplyToDoc(doc, mut){
+  var box = (doc && typeof doc === "object") ? doc : {};
+  try { mut(box); } catch(e){}
+  box.wb = { v:1, list: wbListOf(box.wb) };
+  return box;
+}
+function wbMarkSynced(ok){
+  if (!ok) return;
+  var st = wbSyncState(), after = wbIdsOf(cloud().wb);
+  var left = st.ids.filter(function(id){ return !after[id]; });
+  wbSyncSave(left.length > 0, left);
+}
+function wbCommit(mut, okMsg){
+  /* 1) 이 기기 저장소 — 인터넷이나 가족 코드가 없어도 바로 저장·표시 */
+  var ldoc = wbApplyToDoc({ wb:{ v:1, list: wbListOf(lsGet(K.wb, null)) },
+                            annual: mergeAnnual(lsGet(K.annual, null), null) }, mut);
+  lsSet(K.wb, ldoc.wb);
+  if (ldoc.annual && typeof ldoc.annual === "object") lsSet(K.annual, ldoc.annual);
+  /* 2) 화면은 클라우드 사본을 먼저 읽는다 — 그쪽에도 같은 변경을 반영해야 바로 보인다 */
+  var st = wbSyncState(), ids = st.ids.slice();
+  var before = wbIdsOf(cloud().wb);
+  wbListOf(ldoc.wb).forEach(function(w){ if (!before[w.id] && ids.indexOf(w.id) < 0) ids.push(w.id); });
+  if (CLOUD && typeof CLOUD === "object"){
+    var cdoc = wbApplyToDoc({ wb:{ v:1, list: wbListOf(CLOUD.wb) },
+                              annual: (CLOUD.annual && typeof CLOUD.annual === "object") ? CLOUD.annual : null }, mut);
+    CLOUD.wb = cdoc.wb;
+    if (cdoc.annual && typeof cdoc.annual === "object") CLOUD.annual = cdoc.annual;
+  }
+  wbSyncSave(true, ids);
+  try { renderWB(); renderCheck(); renderAnnual(); } catch(e){}
+  return new Promise(function(resolve){
+    if (!famCode()){
+      if (okMsg) toast(okMsg + " · 이 기기에 저장했어요 (가족 코드를 연결하면 보드에도 보여요)");
+      resolve(false); return;
+    }
+    var tries = 0;
+    (function go(){
+      if (SYNC.busy && tries < 30){ tries++; setTimeout(go, 120); return; }
+      commit(mut).then(function(ok){
+        wbMarkSynced(ok);
+        try { renderWB(); renderCheck(); renderAnnual(); } catch(e){}
+        if (okMsg) toast(ok ? okMsg : okMsg + " · 이 기기에 저장했어요 (가족 기록은 조금 뒤 다시 맞춰요)");
+        resolve(ok);
+      });
+    })();
+  });
+}
+/* 클라우드에 못 올린 문제집 변경을 다시 올린다 (10초 자동 동기화·새로고침 때) */
+function wbFlush(){
+  var st = wbSyncState();
+  if (!st.dirty || !famCode() || SYNC.busy) return Promise.resolve(false);
+  var loc = wbListOf(lsGet(K.wb, null));
+  if (!loc.length) { wbSyncSave(false, []); return Promise.resolve(false); }
+  return commit(function(d){
+    d.wb = mergeWb({ v:1, list: loc }, d.wb);
+    for (var i = 0; i < loc.length; i++) ensureWbAnnual(d, loc[i]);
+  }).then(function(ok){ wbMarkSynced(ok); return ok; });
 }
 function addWbFromSheet(){
   var nm = String(($("dNm") || {}).value || "").trim();
@@ -1994,16 +2111,16 @@ function addWbFromSheet(){
   if (cur > total) cur = total;
   if (!days.length){ toast("요일을 하루 이상 골라 주세요"); return; }
   var w = wbNorm({ nm:nm, sub:sub, total:total, cur:cur, daily:daily, days:days, hw:hw, at:Date.now() });
-  commit(function(d){
-    var list = wbListOf(d.wb);
+  closeSheet();                       /* 등록을 누르면 바로 닫고 목록에 카드가 나타난다 */
+  var today = todayIso(), inToday = !!hw && days.indexOf(dayIdxOf(today)) >= 0;
+  wbCommit(function(d){
+    var list = wbListOf(d.wb).filter(function(x){ return x.id !== w.id; });   /* 같은 id 는 한 번만 */
     list.push(w);
     d.wb = { v:1, list:list };
     putWbMonth(d, w, smVal, emVal, emAuto);
-  }).then(function(ok){
-    if (!ok) return;
-    closeSheet();
-    toast("📘 " + nm + " 등록 · 오늘의 숙제에 나와요");
-  });
+  }, "📘 " + nm + " 등록" + (inToday ? " · 오늘의 숙제에 나와요" : ""));
+  var card = document.querySelector('[data-card="' + w.id + '"]');
+  if (card && card.scrollIntoView){ try { card.scrollIntoView({ block:"center", behavior:"smooth" }); } catch(e){} }
 }
 
 /* =====================================================================
@@ -2965,10 +3082,14 @@ document.addEventListener("click", function(e){
   if (dd){
     var ix = num(dd.getAttribute("data-dday"), 0);
     var at2 = WBDRAFT.days.indexOf(ix);
-    if (at2 >= 0){ if (WBDRAFT.days.length === 1) return; WBDRAFT.days.splice(at2, 1); }
-    else WBDRAFT.days.push(ix);
+    if (at2 >= 0){
+      if (WBDRAFT.days.length === 1){ toast("요일은 하루 이상 골라 주세요"); return; }
+      WBDRAFT.days.splice(at2, 1);
+    } else WBDRAFT.days.push(ix);
     WBDRAFT.days.sort();
-    dd.classList.toggle("on");
+    var onNow = WBDRAFT.days.indexOf(ix) >= 0;
+    dd.classList.toggle("on", onNow);
+    dd.setAttribute("aria-pressed", onNow ? "true" : "false");
     return;
   }
   var day = t.closest("[data-wbday]");
@@ -3076,7 +3197,7 @@ function autoSync(){
   clearInterval(SYNC.timer);
   SYNC.timer = setInterval(function(){
     if (document.hidden || !famCode() || SYNC.busy) return;
-    pull(false);
+    pull(false).then(function(){ wbFlush(); });
   }, 10000);
 }
 document.addEventListener("visibilitychange", function(){ if (!document.hidden && famCode()) pull(false); });
@@ -3093,7 +3214,7 @@ renderAll();
 switchTab(CURTAB);
 paintSync();
 autoSync();
-if (famCode()) setTimeout(function(){ pull(false); }, 250);
+if (famCode()) setTimeout(function(){ pull(false).then(function(){ wbFlush(); }); }, 250);
 })();
 </script>
 </body>
