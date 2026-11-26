@@ -11323,6 +11323,48 @@ SB.markAttendance = function(src, sub){
   return gave;
 };
 SB.hasAtt = hasAtt;
+/* 가족 동기화 — 날짜마다 도장 기록 { src:{...}, at, star } 을 최댓값으로 합친다
+   (대시보드 index.html 의 mergeAttend 와 같은 규칙 · star 는 한 번만)
+   · 이 코어 안에서만 attData·ATT 에 닿을 수 있어 여기에 둔다 (SB 로 열어 둔다) */
+function attNum(v){ var n = Number(v); return isFinite(n) ? n : 0; }
+function mergeAttend(l, c){
+  var ld = ((l && l.days) && typeof l.days === "object") ? l.days : {};
+  var cd = ((c && c.days) && typeof c.days === "object") ? c.days : {};
+  var out = {}, seen = {}, k, s;
+  for (k in ld) seen[k] = 1;
+  for (k in cd) seen[k] = 1;
+  Object.keys(seen).sort().forEach(function(key){
+    var a = ld[key], b = cd[key], src = {}, sk = {};
+    if (!a || typeof a !== "object"){ if (b && typeof b === "object") out[key] = b; return; }
+    if (!b || typeof b !== "object"){ out[key] = a; return; }
+    var sa = (a.src && typeof a.src === "object") ? a.src : {};
+    var sb = (b.src && typeof b.src === "object") ? b.src : {};
+    for (s in sa) sk[s] = 1;
+    for (s in sb) sk[s] = 1;
+    Object.keys(sk).forEach(function(x){ src[x] = Math.max(attNum(sa[x]), attNum(sb[x])); });
+    var rec = { src:src, at:Math.max(attNum(a.at), attNum(b.at), 1) };
+    var st = Math.max(attNum(a.star), attNum(b.star));
+    if (st) rec.star = st;
+    out[key] = rec;
+  });
+  var ks = Object.keys(out).sort(); while (ks.length > 400) delete out[ks.shift()];
+  return { days: out };
+}
+/* 이 기기 출석 기록 그대로 (가족 문서에 올릴 모양) */
+function attendDoc(){ return attData(); }
+/* 다른 기기(대시보드)가 찍은 도장을 이 기기 출석판·홈 카드에 바로 ⭐ 로 */
+function applyAttend(cloud){
+  if (!cloud || typeof cloud !== "object") return false;
+  var cur = attData(), m = mergeAttend(cur, cloud);
+  if (JSON.stringify(m.days) === JSON.stringify(cur.days)) return false;
+  writeJSON(ATT, m);
+  try { if (SB.renderAttend) SB.renderAttend(); } catch(e){}
+  try { if (SB.onAttend) SB.onAttend(); } catch(e){}
+  return true;
+}
+SB.mergeAttend = mergeAttend;
+SB.attendDoc = attendDoc;
+SB.applyAttend = applyAttend;
 
 /* ---------------------------- 오늘 한 과목 ---------------------------- */
 /* 오늘(현지 날짜) 어느 과목을 한 번이라도 했는지 — 홈 체크표의 근거 */
@@ -12401,7 +12443,7 @@ function renderTestResult(){
    출석 도장판
    ===================================================================== */
 var ATTM = { y:0, m:0 };
-var SRC_LABEL = { book:"📖 그림 동화책", sight:"👀 사이트워드", phonics:"🔤 파닉스·문장 읽기", words:"🃏 단어카드·테스트", talk:"💬 영어 대화", call:"📞 전화 영어", ko:"📖 국어 공부", math:"🔢 수학 공부", hanja:"漢 한자", history:"🏛️ 역사", room:"구치파치 방", check:"🐾 출석 도장" };
+var SRC_LABEL = { book:"📖 그림 동화책", sight:"👀 사이트워드", phonics:"🔤 파닉스·문장 읽기", words:"🃏 단어카드·테스트", talk:"💬 영어 대화", call:"📞 전화 영어", ko:"📖 국어 공부", math:"🔢 수학 공부", hanja:"漢 한자", history:"🏛️ 역사", room:"구치파치 방", check:"🐾 출석 도장", dash:"📅 대시보드 도장" };
 SB.renderAttend = function(){
   var info = SB.attendInfo(), days = info.days;
   var set = SB.attendedSet ? SB.attendedSet() : {};
@@ -23781,13 +23823,14 @@ function snap(){
     hwday: hwdaySnap(),
     momnote: momNotes(),
     carry: read("haeyuli.hwcarry.v1", null),
+    attend: (SB.attendDoc ? SB.attendDoc() : null),
     padplan: (padApi() ? padApi().load() : null)
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry, engread:d.engread, engwb:d.engwb, swwb:d.swwb, nirwb:d.nirwb, padplan:d.padplan });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry, attend:d.attend, engread:d.engread, engwb:d.engwb, swwb:d.swwb, nirwb:d.nirwb, padplan:d.padplan });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry, s.engread, s.engwb, s.swwb, s.nirwb, s.padplan]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry, s.attend, s.engread, s.engwb, s.swwb, s.nirwb, s.padplan]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -24423,6 +24466,7 @@ function buildDoc(local, cloud, base, code){
     swwb: mergeEngDone(local.swwb, c.swwb),
     nirwb: mergeEngDone(local.nirwb, c.nirwb),
     carry: mergeCarry(local.carry, c.carry),
+    attend: (SB.mergeAttend ? SB.mergeAttend(local.attend, c.attend) : null),
     padplan: (padApi() ? padApi().merge(local.padplan, c.padplan)
                         : (c.padplan || local.padplan || null)),
     hwday: local.hwday || c.hwday || null,
@@ -24573,6 +24617,10 @@ function applyDoc(doc){
       try { if (SB.hwplanRefresh) SB.hwplanRefresh(); } catch(e){}
     }
   }
+  /* 📅 출석 도장 — 대시보드(index.html)가 찍은 도장도 이 기기 출석판에 ⭐ 로 */
+  if (doc.attend && typeof doc.attend === "object" && SB.applyAttend){
+    if (SB.applyAttend(doc.attend)) changed = true;
+  }
   /* 📱 패드 학습 요일 — 부모 페이지에서 바꾼 요일·새로 추가한 패드 학습을 이 기기 오늘의 숙제·주간 시간표에 바로 */
   var padApiRef = padApi();
   if (padApiRef && doc.padplan && typeof doc.padplan === "object"){
@@ -24674,7 +24722,7 @@ function pullPush(manual){
         ntfy:local.ntfy, sg:local.sg, sgu:local.sgu, fg:local.fg, fgu:local.fgu, nir:local.nir, niru:local.niru, ort:local.ort, ortu:local.ortu, wb:local.wb,
         hwplan:local.hwplan, hwplanUn:local.hwplanUn,
         tama:local.tama, room:local.room, rides:local.rides, rp:local.rp,
-        annual:local.annual, shelves:local.shelves, hwday:local.hwday, momnote:local.momnote, carry:local.carry, at:Date.now()
+        annual:local.annual, shelves:local.shelves, hwday:local.hwday, momnote:local.momnote, carry:local.carry, attend:local.attend, at:Date.now()
       };
       return apiPut(f.code, doc).then(function(){ return true; });
     }
@@ -24747,7 +24795,7 @@ function createCode(){
   saveFam({ code:code, base:num(s.money.piggy), lastSync:0, sig:"", lastError:"", at:Date.now() });
   paint();
   setState("가족 코드를 만들었어요 · 클라우드에 올리는 중…");
-  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, fg:s.fg, fgu:s.fgu, ort:s.ort, ortu:s.ortu, curri:s.curri, hwplan:s.hwplan, hwplanUn:s.hwplanUn, tama:s.tama, room:s.room, rides:s.rides, rp:s.rp, annual:s.annual, shelves:s.shelves, hwday:s.hwday, momnote:s.momnote, carry:s.carry, at:Date.now() })
+  apiPut(code, { v:1, code:code, plan:s.plan, hw:s.hw, money:s.money, done:s.done, study:s.study, coupons:s.coupons, rb:s.rb, mathset:s.mathset, ntfy:s.ntfy, sg:s.sg, sgu:s.sgu, fg:s.fg, fgu:s.fgu, ort:s.ort, ortu:s.ortu, curri:s.curri, hwplan:s.hwplan, hwplanUn:s.hwplanUn, tama:s.tama, room:s.room, rides:s.rides, rp:s.rp, annual:s.annual, shelves:s.shelves, hwday:s.hwday, momnote:s.momnote, carry:s.carry, attend:(SB.attendDoc ? SB.attendDoc() : null), at:Date.now() })
     .then(function(){
       var g = fam();
       g.base = num(s.money.piggy); g.lastSync = Date.now(); g.sig = sigOf(s); g.lastError = "";
@@ -24779,6 +24827,8 @@ function joinCode(){
     }
     if (cloud.coupons) write(K.coupons, cloud.coupons);
     if (cloud.mathset && typeof cloud.mathset === "object"){ write(K.mathset, cloud.mathset); try { if (SB.mathSetChanged) SB.mathSetChanged(); } catch(e){} }
+    /* 📅 출석 도장 — 다른 기기(대시보드)가 찍은 도장도 이 기기 출석판에 */
+    if (cloud.attend && typeof cloud.attend === "object" && SB.applyAttend) SB.applyAttend(cloud.attend);
     /* 🥚 다마고치·방·놀이기구·🎬 음독 목록 — 연결하는 순간 이 기기에도 합친다 */
     try {
       if (cloud.tama || cloud.room || cloud.rides || cloud.rp){
