@@ -1559,93 +1559,6 @@ body.mob .gd-foot{padding-bottom:.4rem;}
   .wg-opt{height:3.4rem;font-size:1.05rem;}
 }
 
-/* ===== 국어 글자 키보드 (자음 + 모음 조합) ===== */
-/* 두벌식 자판 배치 */
-.kk-kbrow{display:grid;gap:.34vh .36vh;padding:.22vh .5vh;width:100%;justify-items:stretch;}
-.kk-r1{grid-template-columns:repeat(10,minmax(0,1fr));}
-.kk-r2{grid-template-columns:repeat(9,minmax(0,1fr));padding-left:calc(.5vh + 4%);padding-right:4%;}
-.kk-r3{grid-template-columns:repeat(7,minmax(0,1fr));padding-left:calc(.5vh + 10%);padding-right:10%;}
-.kk-key{position:relative;width:100%;min-width:0;height:clamp(2.3rem,5.4vh,3.3rem);border-radius:.9vh;
-  background:#fff;color:#0f4c66;font-size:clamp(1rem,2.4vh,1.35rem);font-weight:900;
-  box-shadow:inset 0 0 0 1.8px #d8e8f4, 0 .18vh .3vh rgba(24,80,120,.08);}
-.kk-key:active{transform:translateY(.1vh) scale(.98);}
-.kk-key .kk-ks{display:none;position:absolute;top:.1vh;right:.25vh;font-size:.62em;color:#9ec6dd;font-weight:800;}
-.kk-key.hassh .kk-ks{display:block;}
-.kk-key.shifted{background:#e8f4ff;box-shadow:inset 0 0 0 2px #74bde6;}
-.kk-key.shifted .kk-ks{display:none;}
-.kk-key.on{background:#dcefff;box-shadow:inset 0 0 0 2.4px #4c9fd6;color:#0a4f78;}
-.kk-act.kk-shift{min-width:2.6rem;background:#f4f9ff;color:#1d6d99;font-size:clamp(.95rem,2.2vh,1.2rem);}
-.kk-act.kk-shift.on{background:#1d6d99;color:#fff;}
-.kokview{display:flex;flex-direction:column;gap:.7vh;min-height:0;height:100%;}
-.kk-wrap{display:flex;flex-direction:column;gap:.7vh;width:100%;max-width:60rem;margin:0 auto;min-height:0;height:100%;}
-.kk-qpanel{flex:1 1 auto;padding-bottom:.55vh;}
-.kk-qrow{display:flex;align-items:center;gap:.9vh;padding:.45vh 1.1vh 0;}
-.kk-qemoji{flex:0 0 auto;font-size:clamp(1.7rem,4.8vh,2.9rem);line-height:1;}
-.kk-ask{margin:0;flex:1 1 auto;min-width:0;font-size:clamp(1.02rem,2.35vh,1.45rem);font-weight:900;color:#134d6b;
-  letter-spacing:-.03em;line-height:1.3;word-break:keep-all;}
-.kk-mini{flex:0 0 auto;height:clamp(1.95rem,4.1vh,2.5rem);padding:0 .8rem;border-radius:999px;background:#f1f8ff;color:#1d6d99;
-  font-size:clamp(.72rem,1.5vh,.92rem);font-weight:900;box-shadow:inset 0 0 0 1px #cfe6f7;white-space:nowrap;}
-.kk-say{flex:1 1 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.3rem;min-height:clamp(3.4rem,8.2vh,4.8rem);
-  margin:.5vh 1.1vh 0;padding:.35vh .6vh;border-radius:1.2vh;background:#f7fbff;box-shadow:inset 0 0 0 2px #d8ecfa;}
-.kk-syl{font-family:"Apple SD Gothic Neo","Noto Sans CJK KR",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;
-  font-size:clamp(1.9rem,6.2vh,3.1rem);font-weight:900;color:#0f4c66;line-height:1.15;letter-spacing:.02em;}
-.kk-syl.pend{color:#1f86b8;opacity:.72;border-bottom:3px dashed #9fd2ee;padding:0 .08em;}
-.kk-say-ph{font-size:clamp(.78rem,1.7vh,.98rem);font-weight:800;color:#8aa8bb;}
-.kk-pend{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.3rem;min-height:clamp(1.6rem,3.4vh,2.1rem);
-  padding:0 1.1vh;font-weight:900;}
-.kk-hint{font-size:clamp(.72rem,1.5vh,.9rem);font-weight:800;color:#9ab3c4;}
-.kk-chip{font-family:"Apple SD Gothic Neo","Noto Sans CJK KR",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;
-  display:inline-flex;align-items:center;justify-content:center;min-width:clamp(1.7rem,2.9vh,2.2rem);
-  padding:.15vh .5vh;border-radius:.7vh;font-size:clamp(.92rem,1.95vh,1.2rem);font-weight:900;
-  background:#fff;color:#2b5d7d;box-shadow:inset 0 0 0 2px #dbeaf6;}
-.kk-chip.on{background:#e6f4ff;color:#0d6f9e;box-shadow:inset 0 0 0 2px #7cc3e8;}
-.kk-chip.ghost{background:#f4f9fd;color:#a9c1d1;box-shadow:inset 0 0 0 2px #e6f0f8;font-size:clamp(.76rem,1.6vh,.95rem);}
-.kk-chip.res{background:#e9faf1;color:#0b6b47;box-shadow:inset 0 0 0 2px #8fd9b4;}
-.kk-op{font-size:clamp(.8rem,1.7vh,1rem);font-weight:900;color:#a8c3d4;}
-.kk-fb{margin:.55vh 1.1vh .1vh;padding:.7vh .9vh;border-radius:1.1vh;background:#eefaf3;box-shadow:inset 0 0 0 2px #bfe8d4;
-  color:#0d5a3f;font-weight:800;line-height:1.42;font-size:clamp(.82rem,1.75vh,1.02rem);}
-.kk-fb.no{background:#fff5f2;box-shadow:inset 0 0 0 2px #ffcabd;color:#96382b;}
-.kk-fbt{display:block;font-size:clamp(.98rem,2.1vh,1.25rem);font-weight:900;margin-bottom:.25vh;}
-.kk-fbp{margin:0;word-break:keep-all;}
-.kk-fbp em{font-style:normal;font-weight:900;color:#0b6b47;background:#fff;border-radius:.4vh;padding:0 .25em;box-shadow:inset 0 0 0 1.5px #bfe8d4;}
-.kk-fb.no .kk-fbp em{color:#96382b;box-shadow:inset 0 0 0 1.5px #ffcabd;}
-.kk-syls{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.35rem;margin-top:.45vh;}
-.kk-sbox{display:inline-flex;flex-direction:column;align-items:center;background:#fff;border-radius:.8vh;padding:.15vh .55vh;
-  box-shadow:inset 0 0 0 1.6px #cbe9db;}
-.kk-sbox b{font-size:clamp(1.1rem,2.6vh,1.6rem);color:#0f4c66;line-height:1.1;}
-.kk-sbox em{font-style:normal;font-size:clamp(.66rem,1.4vh,.82rem);color:#5c8a76;font-weight:900;}
-.kk-plus{color:#a8cbbd;font-weight:900;}
-.kk-fbbtns{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:.55vh;}
-.kk-kbpanel{gap:.45vh;padding:.7vh .8vh .8vh;}
-.kk-kbrow{display:grid;gap:.4vh;width:100%;}
-.kk-cons{grid-template-columns:repeat(10,minmax(0,1fr));}
-.kk-vow{grid-template-columns:repeat(6,minmax(0,1fr));}
-.kk-vow2{grid-template-columns:repeat(7,minmax(0,1fr));}
-.kk-key{font-family:"Apple SD Gothic Neo","Noto Sans CJK KR",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;
-  min-height:clamp(2.05rem,4.5vh,2.9rem);border-radius:.8vh;background:#fff;font-size:clamp(.95rem,2.05vh,1.25rem);
-  font-weight:900;color:#21526d;box-shadow:inset 0 0 0 1.8px #dbeaf6;transition:transform .1s,background .12s,color .12s;}
-.kk-key:active{transform:scale(.95);}
-.kk-key.on{background:#e6f4ff;color:#0d6f9e;box-shadow:inset 0 0 0 2.4px #7cc3e8;}
-.kk-acts{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:.45vh;margin-top:.3vh;}
-.kk-act{min-height:clamp(2.3rem,4.8vh,3rem);padding:0 1rem;border-radius:.9vh;background:#f3f9fd;white-space:nowrap;
-  font-size:clamp(.85rem,1.9vh,1.1rem);font-weight:900;color:#2b5d7d;box-shadow:inset 0 0 0 1.8px #d6e8f5;}
-.kk-act.kk-go{background:linear-gradient(135deg,#3fb3e8,#1f86b8);color:#fff;box-shadow:0 .3vh .8vh rgba(31,134,184,.28);}
-@media (min-width:1000px){
-  .kk-cons{grid-template-columns:repeat(19,minmax(0,1fr));}
-  .kk-vow{grid-template-columns:repeat(12,minmax(0,1fr));}
-}
-@media (max-width:560px){
-  .kk-cons{grid-template-columns:repeat(7,minmax(0,1fr));}
-  .kk-acts{grid-template-columns:1fr 1fr;grid-template-areas:"a b" "g g";}
-  .kk-acts .kk-act:nth-child(1){grid-area:a;}
-  .kk-acts .kk-act:nth-child(2){grid-area:b;}
-  .kk-acts .kk-act.kk-go{grid-area:g;}
-}
-@media (max-width:820px), (max-width:960px) and (orientation:portrait){
-  .kokview{height:auto;}
-  .kk-wrap{height:auto;}
-}
-
 /* ===== 국어 문장 쓰기 · 띄어쓰기 (원고지 따라쓰기) ===== */
 .kwview{display:flex;flex-direction:column;gap:.7vh;min-height:0;height:100%;}
 .kw-wrap{display:flex;flex-direction:column;gap:.5vh;width:100%;max-width:64rem;margin:0 auto;min-height:0;height:100%;}
@@ -1709,7 +1622,7 @@ body.mob .kw-note{padding:0 .7rem;}
 body.mob .kw-acts{padding:.6rem .7rem .8rem;gap:.4rem;}
 body.mob .kw-btn{min-height:2.7rem;font-size:.9rem;border-radius:.8rem;}
 
-/* ===== 🌱 국어 어휘·개념 (어휘싹 · 개념싹 · 알맹이 읽기) ===== */
+/* ===== 🌱 국어 · 초등 어휘·낱말놀이 (10문제 · 낱말 놀이 · 교과 개념) ===== */
 
 .vc-pic{display:block;width:100%;max-width:26rem;margin:.2vh auto .5vh;border-radius:1.1vh;
   background:#fff;box-shadow:0 .3vh .8vh rgba(20,70,110,.14);}
@@ -6888,7 +6801,6 @@ body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
 .wg-st{margin-left:auto;font-size:clamp(11px,1.5vh,16px);font-weight:900;color:#8a6410;}
 .wg-face{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4vh;
   background:linear-gradient(180deg,#f4fbff,#eef7fd);border-radius:18px;padding:1.4vh 1vh;box-shadow:inset 0 0 0 1px #e2eef7;}
-.wg-em{font-size:clamp(38px,8vh,86px);line-height:1.05;}
 .wg-en{font-size:clamp(28px,5.2vh,58px);font-weight:900;color:#1b4c6b;letter-spacing:-.01em;word-break:break-word;text-align:center;}
 .wg-ko{font-size:clamp(24px,4.2vh,44px);font-weight:900;color:#1b4c6b;}
 .wg-spk{font-size:clamp(17px,2.4vh,26px);background:#fff;border-radius:999px;padding:.28em .7em;box-shadow:inset 0 0 0 1.5px #cfe6f4;color:#3b7fa5;}
@@ -6949,7 +6861,6 @@ body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
 .wg-wlist{display:flex;flex-direction:column;gap:.4vh;}
 .wg-wrow{display:flex;align-items:center;gap:.55vh;padding:.6vh .7vh;border-radius:12px;background:#fff7f7;
   box-shadow:inset 0 0 0 1px #ffe1e1;text-align:left;}
-.wg-wem{font-size:clamp(15px,2.1vh,22px);}
 .wg-wrow b{font-size:clamp(13px,1.8vh,20px);color:#173f59;font-weight:900;}
 .wg-wrow span{font-size:clamp(11px,1.45vh,16px);font-weight:800;color:#7f9aab;}
 .wg-wn{margin-left:auto;font-style:normal;font-size:clamp(10px,1.3vh,14px);font-weight:900;color:#c05252;background:#ffe8e8;
@@ -6970,9 +6881,78 @@ body.mob .storyview,body.mob .storyview .pbk-stage{height:auto;}
   .wg-bars{height:7vh;}
 }
 @media (max-height:720px){
-  .wg-em{font-size:clamp(32px,6.4vh,64px);}
   .wg-en{font-size:clamp(24px,4.4vh,46px);}
 }
+</style>
+
+<style id="tabs1126css">
+/* ===== 2026-11-26 · 국어·수학 탭 정리 ===== */
+/* 💬 명언 + 낱말퀴즈 — 한 흐름으로 세로 배치 */
+.koview[data-sec="quote"]{display:flex;flex-direction:column;gap:.7vh;height:100%;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.koview[data-sec="quote"]>.ko-col{height:auto;min-height:0;max-width:none;flex:0 0 auto;width:100%;margin:0;}
+.koview[data-sec="quote"]>.ko-col[data-secblock="quote kquiz"]:last-child{flex:1 1 auto;min-height:52vh;}
+/* 🌱 초등 어휘 10문제 */
+.vcq-wrap{width:100%;max-width:52rem;margin:auto;display:flex;flex-direction:column;align-items:center;gap:.4vh;padding:.4vh 0 1.2vh;}
+.vcq-head{display:flex;align-items:center;gap:.5vh;justify-content:center;padding-top:.4vh;}
+.vcq-kind{font-size:clamp(11px,1.4vh,15px);font-weight:900;color:#2f7a5e;background:#eef8f2;border-radius:999px;padding:.25em .8em;}
+.vcq-spk{width:clamp(28px,3.2vh,40px);height:clamp(28px,3.2vh,40px);border-radius:999px;background:#fff;color:#3b7fa5;
+  font-size:clamp(13px,1.7vh,19px);box-shadow:inset 0 0 0 1.5px #cfe6f4;}
+.vcq-sent{margin:.5vh 0 0;padding:.7vh .9vh;border-radius:1.1vh;background:#f6fbff;box-shadow:inset 0 0 0 1px #e2eef7;
+  font-size:clamp(14px,1.9vh,21px);font-weight:800;color:#4a6b80;line-height:1.5;text-align:center;word-break:keep-all;}
+.vcq-sent b{color:#c1553a;font-weight:900;}
+.vcq-ask{margin:.6vh 0 0;font-size:clamp(17px,2.4vh,30px);font-weight:900;color:#134d6b;text-align:center;line-height:1.35;word-break:keep-all;}
+.vcq-opts{width:100%;max-width:46rem;margin:.9vh auto 0;display:grid;grid-template-columns:1fr 1fr;gap:.6vh;}
+.vcq-opt{min-height:5.4vh;padding:.7vh .8vh;border-radius:1.2vh;background:#fff;color:#21526d;
+  font-size:clamp(14px,1.95vh,23px);font-weight:900;box-shadow:inset 0 0 0 1.5px #dbe9f2;word-break:keep-all;line-height:1.3;}
+.vcq-opt:active{transform:scale(.985);}
+.vcq-opt.ok{background:#eefbf4;box-shadow:inset 0 0 0 2.5px #63c79a;color:#1f7a52;}
+.vcq-opt.no{background:#fff4f4;box-shadow:inset 0 0 0 2.5px #ffb3b3;color:#c05252;}
+.vcq-fb{width:100%;max-width:46rem;margin:.7vh auto 0;}
+.vcq-res{font-size:clamp(13px,1.8vh,20px);font-weight:900;}
+.vcq-res.ok{color:#1f8a5c;}
+.vcq-res.no{color:#b85555;}
+.vcq-res b{color:#173f59;}
+.vcq-card2{display:flex;flex-wrap:wrap;align-items:baseline;gap:.3em .7em;margin-top:.5vh;padding:.7vh .9vh;border-radius:1.1vh;
+  background:#fbfdff;box-shadow:inset 0 0 0 1px #eaf2f8;}
+.vcq-w{font-size:clamp(16px,2.2vh,24px);color:#1b4c6b;}
+.vcq-m{font-size:clamp(13px,1.75vh,18px);font-weight:800;color:#5b7f96;}
+.vcq-e{flex:1 1 100%;font-size:clamp(12px,1.6vh,17px);font-weight:800;color:#7f9aab;}
+.vcq-say{height:clamp(26px,3vh,34px);padding:0 .8em;border-radius:999px;background:#eef8fe;color:#2f7ea6;
+  font-size:clamp(11px,1.4vh,15px);font-weight:900;box-shadow:inset 0 0 0 1.3px #cfe6f4;}
+.vcq-next{margin-top:.7vh;min-height:4.4vh;padding:0 1.6em;border-radius:999px;background:#2f8b6b;color:#fff;
+  font-size:clamp(13px,1.8vh,20px);font-weight:900;box-shadow:0 .3vh .8vh rgba(47,139,107,.3);}
+.vcq-done{display:flex;flex-direction:column;align-items:center;gap:.5vh;padding:2.4vh 1vh;text-align:center;}
+.vcq-done b{font-size:clamp(17px,2.5vh,28px);color:#1e5478;}
+.vcq-score{font-size:clamp(15px,2.1vh,24px);font-weight:900;color:#2f8b6b;}
+.vcq-msg{font-size:clamp(12px,1.7vh,18px);font-weight:800;color:#7f9aab;}
+.vcq-star{font-size:clamp(13px,1.8vh,20px);font-weight:900;color:#a06a12;}
+.vcq-btns{display:flex;gap:.5vh;flex-wrap:wrap;justify-content:center;margin-top:.6vh;}
+.vcq-btn{min-height:4.4vh;padding:0 1.3em;border-radius:999px;background:#f2f8fc;color:#2f5f78;
+  font-size:clamp(13px,1.8vh,19px);font-weight:900;box-shadow:inset 0 0 0 1.5px #dbe9f2;}
+.vcq-btn.pri{background:linear-gradient(135deg,#46b98a,#2f8b6b);color:#fff;box-shadow:0 .3vh .8vh rgba(47,139,107,.3);}
+/* 🎴 낱말 놀이를 어휘 묶음 안으로 */
+.vc-ngrid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 34%;gap:.8vh;}
+.vc-ngame,.vc-nlist{min-height:0;overflow:hidden;}
+body.mob .vc-ngrid{grid-template-columns:1fr;}
+@media (max-width:820px), (max-width:960px) and (orientation:portrait){
+  .vc-ngrid{grid-template-columns:1fr;grid-template-rows:minmax(30vh,1fr) auto;}
+}
+/* 🧮 하루셈·수세기 — 한 화면에 함께 */
+.sm-wrap{overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.sm-main{flex:0 0 auto;min-height:min(58vh,540px);}
+.sm-concept{flex:0 0 auto;margin-top:.6vh;min-height:0;}
+.sm-concept .cs-body{padding:.3vh .4vh .8vh;}
+/* 태블릿 세로(768)에서도 보드·문제를 나란히 — 아래에 수세기 카드가 이어 붙는다 */
+@media (min-width:640px){
+  .sm-main{grid-template-columns:minmax(0,45%) minmax(0,1fr);min-height:min(52vh,470px);}
+}
+.koview[data-sec="quote"]>.ko-col{width:100%;margin:0;}
+
+/* 🎯 무브무브·구구단 — 한 화면에 이어서 */
+.mmvview{overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.mmvview>.mmv-wrap{flex:0 0 auto;min-height:0;max-height:min(56vh,520px);overflow-y:auto;}
+.mmvview>.gugu-panel{flex:0 0 auto;margin-top:.7vh;border-radius:var(--r);
+  background:rgba(255,255,255,.94);box-shadow:var(--shadow-sm);padding:.6vh .8vh 1.2vh;}
 </style>
 
 <style id="egread1123css">
@@ -8407,7 +8387,7 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
 
     <!-- ================= 🇰🇷 국어 ================= -->
     <section class="view koview" id="viewKo" data-view="ko" hidden>
-      <div class="ko-col" data-secblock="quote">
+      <div class="ko-col" data-secblock="quote kquiz">
         <div class="ko-head"><b>💬 오늘의 명언</b><span class="k" id="koDayNo">1일차</span></div>
         <div class="ko-qcard">
           <div class="ko-qemoji" id="koEmoji">🌱</div>
@@ -8422,7 +8402,7 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
           <button class="t pk" type="button" id="koNext" aria-label="다음 문장">▶</button>
         </div>
       </div>
-      <div class="ko-col" data-secblock="kquiz">
+      <div class="ko-col" data-secblock="quote kquiz">
         <div class="ko-head"><b>❓ 낱말 퀴즈</b><span class="k" id="koQuizScore">0 / 5</span></div>
         <div class="ko-qbody" id="koQuiz"></div>
       </div>
@@ -8434,22 +8414,6 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
 
     <!-- ================= 🔢 수학 ================= -->
     <section class="view mathview" id="viewMath" data-view="math" hidden>
-      <div class="panel math-concept" data-secblock="concept">
-        <div class="panel-h"><b>🔢 수세기</b><span class="ph-no2" id="mcLevel">레벨 1 · 50~100</span></div>
-        <div class="mc-tabs" id="conceptTabs">
-          <button class="mini on" type="button" data-cm2="count">🔢 수세기</button>
-          <button class="mini" type="button" data-cm2="ten">🔟 10 만들기</button>
-          <button class="mini" type="button" data-cm2="split">🍎 가르기·모으기</button>
-        </div>
-        <div class="cs-body" id="countBody"></div>
-        <div class="mc-body" id="mcOld" hidden>
-          <div class="tenframe" id="tenFrame"></div>
-          <div class="mc-split" id="mcSplit" hidden></div>
-          <div class="mc-count"><b id="mcCount">0</b><span>개</span></div>
-          <div class="mc-task" id="mcTask"></div>
-          <div class="mc-answer" id="mcAnswer"></div>
-        </div>
-      </div>
       <div class="panel math-calc" data-secblock="calc">
         <div class="panel-h"><b>➕ 기탄 연산 드릴</b><span class="ph-no2" id="calcProg">0 / 10</span></div>
         <div class="gd-wrap" id="gitanDrill"></div>
@@ -8458,17 +8422,16 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
         <div class="panel think-panel" id="thinkPanel" data-secblock="think"></div>
         <div class="panel shape-panel" id="shapePanel" data-secblock="shape"></div>
         <div class="panel clock-panel" id="clockPanel" data-secblock="clock"></div>
-        <div class="panel gugu-panel" id="guguPanel" data-secblock="gugu"></div>
       </div>
     </section>
 
-    <!-- ================= 🧮 하루 셈하기 (대전교육청) ================= -->
+    <!-- ================= 🧮 하루 셈하기 + 수세기 ================= -->
     <section class="view smview" id="viewMathSaem" data-view="math-saem" hidden>
       <div class="sm-wrap">
         <div class="sm-top">
-          <b>🧮 하루 셈하기</b>
+          <b>🧮 하루 셈하기 · 수세기</b>
           <span class="sm-src">대전광역시교육청 「술술 풀리는 하루 셈하기」 &lt;1-2&gt;</span>
-          <span class="sm-csa">구체물 → 반구체물 → 추상물</span>
+          <span class="sm-csa">오늘 3문제</span>
         </div>
         <div class="sm-units" id="smUnits" role="group" aria-label="하루 셈하기 단원 고르기">
           <button class="on" type="button" data-smu="2">2단원 · 몇십 몇 + 몇</button>
@@ -8497,8 +8460,24 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
             <div class="sm-fb" id="smFb"></div>
           </div>
           <div class="panel sm-quiz">
-            <div class="sm-qh"><b>오늘의 셈 10문제</b><span id="smProg">1 / 10</span></div>
+            <div class="sm-qh"><b>오늘의 셈 3문제</b><span id="smProg">1 / 3</span></div>
             <div id="smQBody"></div>
+          </div>
+        </div>
+        <div class="panel sm-concept">
+          <div class="panel-h"><b>🔢 수세기 · 수 개념</b><span class="ph-no2" id="mcLevel">레벨 1 · 50~100</span></div>
+          <div class="mc-tabs" id="conceptTabs">
+            <button class="mini on" type="button" data-cm2="count">🔢 수세기</button>
+            <button class="mini" type="button" data-cm2="ten">🔟 10 만들기</button>
+            <button class="mini" type="button" data-cm2="split">🍎 가르기·모으기</button>
+          </div>
+          <div class="cs-body" id="countBody"></div>
+          <div class="mc-body" id="mcOld" hidden>
+            <div class="tenframe" id="tenFrame"></div>
+            <div class="mc-split" id="mcSplit" hidden></div>
+            <div class="mc-count"><b id="mcCount">0</b><span>개</span></div>
+            <div class="mc-task" id="mcTask"></div>
+            <div class="mc-answer" id="mcAnswer"></div>
           </div>
         </div>
       </div>
@@ -8543,6 +8522,7 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
     <!-- ================= 🎯 무브무브 곱셈·나눗셈 ================= -->
     <section class="view mmvview" id="viewMathMove" data-view="math-move" hidden>
       <div class="mmv-wrap" id="mmvWrap"></div>
+      <div class="panel gugu-panel" id="guguPanel"></div>
     </section>
 
     <!-- ================= 🎬 수학 영상 (매스버스 · 키출판사) ================= -->
@@ -8589,45 +8569,6 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
             <b>😅 매스버스가 이 화면 안에는 안 들어와요</b>
             <p>매스버스 사이트가 화면 속 보기를 막아 두었어요. 아래 버튼을 누르면 새 창에서 바로 열려요.</p>
             <a class="mv-go2" id="mvNoEmbGo" href="https://mathbus.co.kr/lecture_view/lecture_view.html?c1_code=62&amp;selm=" target="_blank" rel="noopener">📺 새 창으로 바로 열기 ↗</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= 🇰🇷 국어 · 낱말 놀이 ================= -->
-    <section class="view kowview" id="viewKoWord" data-view="ko-word" hidden>
-      <div class="panel word-game">
-        <div class="panel-h"><b>🎴 낱말 놀이</b><span class="ph-no2" id="kwgProg">0 / 8</span></div>
-        <div class="wg-body" id="kwgBody"></div>
-      </div>
-      <aside class="panel word-list">
-        <div class="panel-h"><b>📚 오늘의 낱말</b><span class="ph-no2">뜻도 함께 봐요</span></div>
-        <div class="wg-list" id="kwgList"></div>
-      </aside>
-    </section>
-
-    <!-- ================= ⌨️ 국어 · 글자 키보드 ================= -->
-    <section class="view kokview" id="viewKoKey" data-view="ko-key" hidden>
-      <div class="kk-wrap">
-        <div class="panel kk-qpanel">
-          <div class="panel-h"><b>⌨️ 글자 키보드</b><span class="ph-no2" id="kkProg">1 / 8</span></div>
-          <div class="kk-qrow">
-            <div class="kk-qemoji" id="kkEmoji" aria-hidden="true">⌨️</div>
-            <p class="kk-ask" id="kkAsk">문제를 불러오는 중…</p>
-            <button class="kk-mini" type="button" id="kkHear" data-kk="hear">🔊 문제 듣기</button>
-          </div>
-          <div class="kk-say" id="kkSay" aria-live="polite"><span class="kk-say-ph">자음 → 모음 순서로 눌러서 글자를 만들어요</span></div>
-          <div class="kk-pend" id="kkPend" aria-live="polite"></div>
-          <div class="kk-fb" id="kkFb" aria-live="polite" hidden></div>
-        </div>
-        <div class="panel kk-kbpanel">
-          <div class="kk-kbrow kk-r1" id="kkRow1" role="group" aria-label="첫째 줄 ㅂㅈㄷㄱㅅ ㅛㅕㅑㅐㅔ"></div>
-          <div class="kk-kbrow kk-r2" id="kkRow2" role="group" aria-label="둘째 줄 ㅁㄴㅇㄹㅎ ㅗㅓㅏㅣ"></div>
-          <div class="kk-kbrow kk-r3" id="kkRow3" role="group" aria-label="셋째 줄 ㅋㅌㅊㅍ ㅠㅜㅡ"></div>
-          <div class="kk-acts">
-            <button class="kk-act kk-shift" type="button" id="kkShift" data-kk="shift" aria-pressed="false" aria-label="쌍자음·겹모음">⇧</button>
-            <button class="kk-act" type="button" id="kkBack" data-kk="back">⌫ 지우기</button>
-            <button class="kk-act kk-go" type="button" id="kkCheck" data-kk="check">✓ 확인</button>
           </div>
         </div>
       </div>
@@ -8684,30 +8625,36 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
       </div>
     </section>
 
-    <!-- ================= 🌱 국어 · 어휘·개념 (어휘싹 · 개념싹 — 책 속 그림 그대로) ================= -->
+    <!-- ================= 🌱 국어 · 초등 어휘·낱말놀이 (10문제 · 낱말 놀이 · 교과 개념) ================= -->
     <section class="view vcview" id="viewKoVocab" data-view="ko-vocab" hidden>
       <div class="vc-wrap">
-        <div class="vc-steps" id="vcSteps" role="group" aria-label="어휘·개념 단계">
-          <button class="vc-step on" type="button" data-vstep="1">① 어휘싹 1학년</button>
-          <button class="vc-step" type="button" data-vstep="2">② 개념싹 3학년</button>
+        <div class="vc-steps" id="vcSteps" role="group" aria-label="어휘 학습 묶음">
+          <button class="vc-step on" type="button" data-vstep="1">① 오늘의 어휘 10문제</button>
+          <button class="vc-step" type="button" data-vstep="2">② 낱말 놀이</button>
+          <button class="vc-step" type="button" data-vstep="3">③ 교과 개념</button>
         </div>
         <div class="vc-body">
           <div class="vc-pane" id="vcPane1">
             <div class="vc-panel">
-              <div class="vc-ph"><b>🌱 어휘싹 1학년</b><span id="vc1Prog">1 / 10</span></div>
-              <div class="vc-sets" id="vc1Sets"></div>
+              <div class="vc-ph"><b>🌱 초등 1·2학년 어휘</b><span id="vc1Prog">1 / 10</span></div>
               <div class="vc-card" id="vc1Card"></div>
-              <div class="vc-acts">
-                <button class="vc-btn" type="button" data-v1="prev">◀ 이전</button>
-                <button class="vc-btn" type="button" data-v1="quiz">❓ 뜻 맞히기</button>
-                <button class="vc-btn" type="button" data-v1="next">다음 ▶</button>
-                <button class="vc-btn done" type="button" data-v1="done">✓ 이 세트 다 봤어요 (⭐ +2)</button>
-              </div>
             </div>
           </div>
           <div class="vc-pane" id="vcPane2" hidden>
+            <div class="vc-ngrid">
+              <div class="vc-panel vc-ngame">
+                <div class="vc-ph"><b>🎴 낱말 놀이</b><span id="kwgProg">0 / 8</span></div>
+                <div class="wg-body" id="kwgBody"></div>
+              </div>
+              <div class="vc-panel vc-nlist">
+                <div class="vc-ph"><b>📚 오늘의 낱말</b><span>뜻도 함께 봐요</span></div>
+                <div class="wg-list" id="kwgList"></div>
+              </div>
+            </div>
+          </div>
+          <div class="vc-pane" id="vcPane3" hidden>
             <div class="vc-panel">
-              <div class="vc-ph"><b>📘 개념싹 3학년</b><span id="vc2Prog">1 / 9</span></div>
+              <div class="vc-ph"><b>📘 교과 개념</b><span id="vc2Prog">1 / 9</span></div>
               <div class="vc-sets" id="vc2Sets"></div>
               <div class="vc-card" id="vc2Card"></div>
               <div class="vc-acts">
@@ -8718,7 +8665,7 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
               </div>
             </div>
           </div>
-                  </div>
+        </div>
       </div>
     </section>
 
@@ -12158,10 +12105,10 @@ SB.ntfySubject = function(sub){
    온라인 공부 안에서 과목(영어·국어·수학·사회·과학·한자)을 고르고,
    과목 안에서 하위 학습 메뉴를 하나씩 크게 본다. */
 var SUBJECTS = [
-  { k:"math",    em:"🔢", nm:"수학", desc:"연산 · 도형·시계 · 사고력 · 1·2학년", sec:"concept" },
+  { k:"math",    em:"🔢", nm:"수학", desc:"하루셈·수세기 · 연산·시계 · 무브무브·구구단 · 사고력·도형", sec:"saem" },
   { k:"en",      em:"🔤", nm:"영어", desc:"나우 아임 리딩 · ORT · 사이트워드 · 파닉스 · 단계별 읽기 · 문장 워크북 · 월팸", sec:"sight" },
   { k:"hanja",   em:"漢", nm:"한자", desc:"오늘의 한자 · 따라쓰기 · 낱말 빈칸", sec:"trace" },
-  { k:"ko",      em:"📖", nm:"국어", desc:"오늘의 명언 · 낱말 퀴즈 · 고전 4줄 · 글자 키보드 · 문장 쓰기 · 어휘·개념", sec:"quote" },
+  { k:"ko",      em:"📖", nm:"국어", desc:"명언·낱말퀴즈 · 고전 4줄 · 초등 어휘·낱말놀이 · 받아쓰기", sec:"quote" },
   { k:"history", em:"🏛️", nm:"역사", desc:"연도표 · 왕 계보 · 사진 퀴즈 · 영상 · 세계사", sec:"timeline" }
 ];
 /* 2026-11-22 · 중국어·일본어도 같은 과목 줄에서 고른다 (200원 보상 과목에는 넣지 않는다) */
@@ -12181,29 +12128,24 @@ function chipLabel(s){
 }
 var SECS = {
   en:      [["nir", "📘 나우 아임 리딩"], ["ort", "🌳 ORT"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["read", "📖 단계별 읽기"], ["wb", "✍️ 문장 워크북"], ["call", "📞 전화 영어"], ["wordgrow", "🦉 단어키우기"], ["video", "🎬 영어 영상"], ["wolpaem", "🏰 월팸"]],
-  ko:      [["quote", "💬 오늘의 명언"], ["kquiz", "❓ 낱말 퀴즈"], ["classic", "📜 고전 4줄"], ["word", "🧩 낱말 놀이"], ["key", "⌨️ 글자 키보드"], ["write", "✍️ 받아쓰기"], ["vocab", "🌱 어휘·개념"]],
-  /* 수학은 큰 탭 5개(GROUPS)로 묶고, 그 안에서 알약 전환기로 10가지를 그대로 쓴다 */
-  math:    [["calc", "➕ 기탄 연산"], ["saem", "🧮 하루 셈하기"], ["concept", "🔢 수세기"], ["gugu", "✖️ 구구단 원리"],
-            ["shape", "🔺 도형 이름"], ["clock", "⏰ 시계 읽기"],
-            ["think", "🧠 그림 사고력"],
-            ["base1", "📘 1학년 현행"], ["grade2", "2️⃣ 2학년 선행"],
-            ["video", "🎬 수학 영상"],
-            ["mv", "🎯 무브무브 곱셈"]],
+  ko:      [["quote", "💬 명언·낱말퀴즈"], ["classic", "📜 고전 4줄"], ["vocab", "🌱 초등 어휘·낱말놀이"], ["write", "✍️ 받아쓰기"]],
+  /* 수학은 큰 묶음 탭(GROUPS) 4개 — 그 안에서 알약 전환기로 코너를 고른다 */
+  math:    [["saem", "🧮 하루셈·수세기"], ["calc", "➕ 기탄 연산"], ["clock", "⏰ 시계 읽기"],
+            ["think", "🧠 사고력"], ["shape", "🔺 도형"],
+            ["mv", "🎯 무브무브"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말·뜻 쓰기"], ["text", "🏫 교과서 핵심한자"]],
   history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["war", "⚔️ 전쟁사"], ["video", "🎬 역사 영상"],
             ["world", "🌍 세계사 연표"], ["compare", "⚖️ 한국 vs 세계"]],
   cn:      [["cards", "🗂️ 단어 카드"], ["talk", "💬 일상대화 연습"], ["quiz", "📞 메이쌤 음성퀴즈"]],
   jp:      [["cards", "🗂️ 단어 카드"], ["talk", "💬 일상대화 연습"], ["quiz", "📞 유미쌤 음성퀴즈"]]
 };
-/* 수학 하위 탭 10개 → 5개 큰 탭. 큰 탭을 누르면 그 안의 알약 전환기(secs)가 열린다 */
+/* 수학 큰 묶음 탭 4개. 큰 탭을 누르면 그 안의 알약 전환기(secs)가 열린다 */
 var GROUPS = {
   math: [
-    { k:"g_calc",   em:"🔢", nm:"연산",         secs:["calc", "saem", "concept", "gugu"] },
-    { k:"g_move",   em:"🎯", nm:"무브무브 곱셈", secs:["mv"] },
-    { k:"g_shape",  em:"📐", nm:"도형·시계",    secs:["shape", "clock"] },
-    { k:"g_think",  em:"🧩", nm:"사고력",       secs:["think"] },
-    { k:"g_course", em:"📘", nm:"1·2학년 과정", secs:["base1", "grade2"] },
-    { k:"g_video",  em:"🎬", nm:"수학 영상",    secs:["video"] }
+    { k:"g_saem",  em:"🧮", nm:"하루셈·수세기",   secs:["saem"] },
+    { k:"g_ops",   em:"➕", nm:"연산·시계",       secs:["calc", "clock"] },
+    { k:"g_move",  em:"🎯", nm:"무브무브·구구단", secs:["mv"] },
+    { k:"g_think", em:"🧠", nm:"사고력·도형",     secs:["think", "shape"] }
   ]
 };
 function grpOf(subject, sec){
@@ -12227,13 +12169,14 @@ var VIEWID = {
   "study:jp:cards":"viewJp", "study:jp:talk":"viewJp", "study:jp:quiz":"viewJp",
   "study:en:video":"viewEnVideo", "study:en:sight":"viewEnSight", "study:en:talk":"viewEnWords", "study:en:phonics":"viewEnPhonics", "study:en:call":"viewEnCall",
   "study:en:nir":"viewEnShelf", "study:en:ort":"viewEnShelf",
-  "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:word":"viewKoWord", "study:ko:key":"viewKoKey", "study:ko:write":"viewKoWrite", "study:ko:vocab":"viewKoVocab",
+  "study:ko:quote":"viewKo", "study:ko:kquiz":"viewKo", "study:ko:classic":"viewKo", "study:ko:write":"viewKoWrite", "study:ko:vocab":"viewKoVocab",
   "study:en:wolpaem":"viewEnWolpaem", "study:en:wordgrow":"viewWordGrow",
   "study:en:read":"viewEnRead", "study:en:wb":"viewEnWb",
-  "study:math:concept":"viewMath", "study:math:calc":"viewMath", "study:math:think":"viewMath",
-  "study:math:shape":"viewMath", "study:math:clock":"viewMath", "study:math:gugu":"viewMath",
-  "study:math:saem":"viewMathSaem", "study:math:base1":"viewMathBase1",
-  "study:math:grade2":"viewMathG2",
+  "study:math:calc":"viewMath", "study:math:think":"viewMath",
+  "study:math:shape":"viewMath", "study:math:clock":"viewMath",
+  "study:math:saem":"viewMathSaem", "study:math:concept":"viewMathSaem",
+  "study:math:gugu":"viewMathMove",
+  "study:math:base1":"viewMathBase1", "study:math:grade2":"viewMathG2",
   "study:math:video":"viewMathVideo",
   "study:math:mv":"viewMathMove",
   "study:hanja:trace":"viewHanja", "study:hanja:word":"viewHanja", "study:hanja:text":"viewHanja",
@@ -12246,7 +12189,7 @@ var VIEWID = {
 var LEGACY = { en:"en", ko:"ko", math:"math", social:"social", science:"science", hanja:"hanja" };
 SB.current = "home";
 SB.subject = "";
-SB.sub = { home:"main", en:"sight", ko:"quote", math:"concept", hanja:"trace", history:"timeline",
+SB.sub = { home:"main", en:"sight", ko:"quote", math:"saem", hanja:"trace", history:"timeline",
            attend:"main", room:"main", book:"main", piggy:"main", bank:"main", diary:"main" };
 SB.onShow = {};
 SB.subjects = SUBJECTS;
@@ -15544,7 +15487,7 @@ SB.cxRead = { state:function(){ return { pos:CXV.pos, total:CXV.total, on:CXV.on
 SB.ko = { days:DAYS, classic:CLASSIC, dayIdx:dayIdx, q:QZ, quote:function(){ return DAYS[dayIdx()]; } };
 SB.onShow.ko = function(sub){
   renderQuote();
-  if (sub === "kquiz") { if (QZ.day !== dayIdx() || !QZ.qs.length) { QZ.live = false; QZ.qs = DAYS[dayIdx()].blanks.concat([]); renderQuiz(); } }
+  if (sub === "kquiz" || sub === "quote") { if (QZ.day !== dayIdx() || !QZ.qs.length) { QZ.live = false; QZ.qs = DAYS[dayIdx()].blanks.concat([]); renderQuiz(); } }
   renderClassic();
 };
 function initKo(){
@@ -15594,22 +15537,35 @@ function optsFrom(correct, pool, n){
   }
   return SB.shuffle(out);
 }
+function poolNow(){
+  var src = (window.SB && SB.koWords && SB.koWords.length) ? SB.koWords : null;
+  if (!src) return { opp:OPP, sim:SIM, mean:MEAN };
+  var opp = [], sim = [], mean = [];
+  for (var i = 0; i < src.length; i++){
+    var x = src[i];
+    if (x.a) opp.push([x.w, x.a]);
+    if (x.s) sim.push([x.w, x.s]);
+    mean.push([x.w, x.m]);
+  }
+  return { opp:opp, sim:sim, mean:mean };
+}
 function build(){
   var qs = [];
-  pick(OPP, 4).forEach(function(p){
+  var P = poolNow();
+  pick(P.opp, 4).forEach(function(p){
     var flip = Math.random() < 0.5 ? [p[1], p[0]] : p;
     var pool = [];
-    OPP.forEach(function(x){ pool.push(x[0], x[1]); });
+    P.opp.forEach(function(x){ pool.push(x[0], x[1]); });
     qs.push({ kind:"opp", ask:"‘" + flip[0] + "’의 반대말은?", a:flip[1], opts:optsFrom(flip[1], pool), pair:flip });
   });
-  pick(SIM, 2).forEach(function(p){
+  pick(P.sim, 2).forEach(function(p){
     var flip = Math.random() < 0.5 ? [p[1], p[0]] : p;
     var pool = [];
-    SIM.forEach(function(x){ pool.push(x[0], x[1]); });
+    P.sim.forEach(function(x){ pool.push(x[0], x[1]); });
     qs.push({ kind:"sim", ask:"‘" + flip[0] + "’와 비슷한 말은?", a:flip[1], opts:optsFrom(flip[1], pool), pair:flip });
   });
-  pick(MEAN, 2).forEach(function(p){
-    var pool = MEAN.map(function(x){ return x[1]; });
+  pick(P.mean, 2).forEach(function(p){
+    var pool = P.mean.map(function(x){ return x[1]; });
     qs.push({ kind:"mean", ask:"‘" + p[0] + "’의 뜻은 무엇일까요?", a:p[1], opts:optsFrom(p[1], pool), pair:p });
   });
   W.qs = qs; W.i = 0; W.score = 0; W.live = true;
@@ -15671,13 +15627,8 @@ function end(){
   if (got) { SB.confetti(); SB.toast("🎴 낱말 놀이 " + sc + "/8 · ⭐ +" + got); }
 }
 
-SB.wordGame = { opp:OPP, sim:SIM, mean:MEAN, state:W, build:build };
-SB.onShow.ko = (function(prev){
-  return function(sub){
-    if (prev) prev(sub);
-    if (sub === "word") render();
-  };
-})(SB.onShow.ko);
+SB.wordGame = { opp:OPP, sim:SIM, mean:MEAN, state:W, build:build, render:render };
+
 function init(){ render(); }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
 else init();
@@ -16439,7 +16390,7 @@ else init();
 })();
 
 /* =====================================================================
-   🌱 국어 · 어휘·개념 — ① 어휘싹 1학년(대구교육청) ② 개념싹 3학년
+   🌱 국어 · 초등 어휘·낱말놀이 — ① 오늘의 어휘 10문제 ② 낱말 놀이 ③ 교과 개념
    ③ 알맹이 읽기(인천교육청 읽기 유창성 방식)
    낱말 카드 · 뜻 맞히기 · 소리로 듣기 · 읽기 타이머 · ⭐ 보상
    ===================================================================== */
@@ -16462,71 +16413,265 @@ function shuffle(a){
   return a;
 }
 
-/* ---------------- ① 어휘싹 1학년 — 60낱말 중 30개 ---------------- */
-var VOC = [
-  { w:"날개", em:"🕊️", m:"새나 곤충이 하늘로 날아오르도록 몸에 달린 것",
-    e:"참새가 날개를 퍼덕이며 날아갔어요." },
-  { w:"낱말", em:"🔤", m:"뜻을 가진, 말의 가장 작은 덩어리",
-    e:"‘학교’도 낱말이고 ‘가다’도 낱말이에요." },
-  { w:"누리다", em:"🍂", m:"좋은 것을 마음껏 맛보고 즐기다",
-    e:"가을 햇살을 누리며 소풍을 갔어요." },
-  { w:"눈여겨보다", em:"👀", m:"관심을 두고 자세히 살펴보다",
-    e:"동생이 새끼 고양이를 눈여겨보았어요." },
-  { w:"다듬다", em:"✏️", m:"거칠거나 틀린 곳을 고쳐 매끄럽게 하다",
-    e:"선생님이 내 일기를 다듬어 주셨어요." },
-  { w:"닮다", em:"👩‍👧", m:"서로 비슷하게 생기거나 같은 점이 있다",
-    e:"나는 엄마를 쏙 닮았어요." },
-  { w:"닿다", em:"🤚", m:"무엇에 가까이 가서 서로 맞붙다",
-    e:"손끝이 문에 살짝 닿았어요." },
-  { w:"되풀이되다", em:"🔁", m:"같은 일이 자꾸 다시 일어나다",
-    e:"같은 실수가 되풀이되면 고쳐야 해요." },
-  { w:"둘러보다", em:"🔄", m:"여기저기 고개를 돌려 살펴보다",
-    e:"새 교실을 둘러보았어요." },
-  { w:"드러나다", em:"🌤️", m:"숨었던 것이 밖으로 나타나 보이다",
-    e:"구름 사이로 해가 드러났어요." },
-  { w:"머쓱하다", em:"😅", m:"쑥스럽고 어색하다",
-    e:"친구 이름을 잊어버려서 머쓱했어요." },
-  { w:"문학", em:"📖", m:"시, 동화, 소설처럼 마음을 담아 쓴 글",
-    e:"문학 시간에 재미있는 동시를 읽었어요." },
-  { w:"미끼", em:"🐟", m:"물고기나 짐승을 잡으려고 먹이로 쓰는 것",
-    e:"낚싯바늘에 미끼를 달았어요." },
-  { w:"방치하다", em:"🪴", m:"돌보지 않고 그냥 내버려 두다",
-    e:"화분을 방치하면 시들어 버려요." },
-  { w:"배출", em:"💨", m:"안에 있던 것을 밖으로 내보냄",
-    e:"공장에서 더러운 물을 배출하면 안 돼요." },
-  { w:"분리배출", em:"♻️", m:"버릴 때 종류별로 나누어 버리는 일",
-    e:"플라스틱과 종이는 분리배출 해요." },
-  { w:"서두르다", em:"🏃", m:"빨리 하려고 마음을 졸이며 급히 하다",
-    e:"서두르다가 지갑을 두고 왔어요." },
-  { w:"실리다", em:"🎒", m:"무엇 위에 오르거나 안에 담기다",
-    e:"가방에 책이 가득 실렸어요." },
-  { w:"쓰임", em:"🍽️", m:"쓰이는 일이나 쓰는 방법",
-    e:"그릇마다 쓰임이 달라요." },
-  { w:"역사", em:"🏛️", m:"지금까지 지나온 일, 또는 그것을 적은 것",
-    e:"우리 동네 역사를 배웠어요." },
-  { w:"이삭", em:"🌾", m:"벼나 보리처럼 곡식 알갱이가 붙어 있는 부분",
-    e:"가을 들판에 벼 이삭이 노래요." },
-  { w:"입김", em:"❄️", m:"입에서 내쉬는 김이나 숨",
-    e:"손에 입김을 불며 손을 비볐어요." },
-  { w:"적용", em:"📐", m:"알맞은 곳에 써 넣음",
-    e:"새로 만든 규칙을 적용했어요." },
-  { w:"차례", em:"🔢", m:"일이 일어나는 순서나 정해진 순서",
-    e:"차례를 지키며 미끄럼틀을 탔어요." },
-  { w:"체험", em:"🏺", m:"직접 몸으로 겪어 봄",
-    e:"도예 마을에서 그릇 만들기를 체험했어요." },
-  { w:"침착하다", em:"🧘", m:"마음이 가라앉아 차분하다",
-    e:"급할 때일수록 침착해야 해요." },
-  { w:"탐스럽다", em:"🍎", m:"넘칠 만큼 넉넉하고 보기 좋다",
-    e:"나무에 탐스러운 사과가 열렸어요." },
-  { w:"파악하다", em:"🔎", m:"사정이나 내용을 확실히 알다",
-    e:"어디에서 불이 났는지 파악했어요." },
-  { w:"활용하다", em:"🧰", m:"잘 써서 이롭게 하다",
-    e:"빈 상자를 필통으로 활용했어요." },
-  { w:"공손하다", em:"🙇", m:"말이나 행동이 예의 바르다",
-    e:"어른께 공손하게 인사했어요." }
+/* ---------------- 🌱 초등 1·2학년 어휘 — 하루 10문제 ----------------
+   · 생활 어휘 · 문맥 속 뜻 · 반대말/비슷한 말을 골고루
+   · 날짜(일일 시드)마다 10문제가 새로 나오고, 낱말은 한 바퀴 돌 때까지 겹치지 않는다
+   · 낱말 놀이(반대말 · 비슷한 말 · 뜻)도 이 목록을 그대로 쓴다
+   ------------------------------------------------------------------ */
+var WORDS = [
+  { w:"아침", m:"날이 밝아 하루가 시작되는 때", e:"아침에 일찍 일어나 세수했어요.", a:"저녁" },
+  { w:"저녁", m:"해가 지고 날이 어두워지는 때", e:"저녁에 가족과 함께 밥을 먹어요.", a:"아침" },
+  { w:"기쁘다", m:"마음이 즐겁고 좋다", e:"생일 선물을 받아서 기뻤어요.", a:"슬프다", s:"즐겁다" },
+  { w:"슬프다", m:"마음이 아프고 서운하다", e:"친구가 이사를 가서 슬펐어요.", a:"기쁘다" },
+  { w:"무섭다", m:"겁이 나서 두렵다", e:"깜깜한 방에 혼자 있으니 무서웠어요.", s:"두렵다" },
+  { w:"다정하다", m:"마음이 따뜻하고 말씨가 부드럽다", e:"다정한 말로 울던 동생을 달랬어요.", s:"상냥하다" },
+  { w:"친절하다", m:"남을 잘 도와주고 상냥하다", e:"길을 잃은 저에게 친절한 아주머니가 알려 주셨어요." },
+  { w:"씩씩하다", m:"기운차고 힘찬 모습이다", e:"해율이는 씩씩하게 손을 들고 발표했어요.", s:"힘차다" },
+  { w:"용감하다", m:"무서운 것도 이겨 내는 마음이 있다", e:"용감하게 어두운 길을 걸었어요." },
+  { w:"조용하다", m:"소리가 없이 고요하다", e:"도서관에서는 조용히 책을 읽어요.", a:"시끄럽다" },
+  { w:"시끄럽다", m:"소리가 크고 떠들썩하다", e:"쉬는 시간 복도는 시끄러워요.", a:"조용하다" },
+  { w:"깨끗하다", m:"때가 묻지 않고 말끔하다", e:"손을 비누로 씻어 깨끗해졌어요.", a:"더럽다" },
+  { w:"더럽다", m:"때가 묻어 지저분하다", e:"흙놀이를 하고 나니 손이 더러웠어요.", a:"깨끗하다" },
+  { w:"넓다", m:"펼쳐진 곳이 아주 크다", e:"우리 학교 운동장은 아주 넓어요.", a:"좁다" },
+  { w:"좁다", m:"드나들 자리가 작다", e:"골목길이 좁아서 한 사람만 지나갈 수 있어요.", a:"넓다" },
+  { w:"높다", m:"위로 솟은 길이가 길다", e:"뒷산이 높아서 구름이 걸려 있어요.", a:"낮다" },
+  { w:"낮다", m:"위아래 길이가 짧다", e:"낮은 의자에 앉으니 발이 바닥에 닿아요.", a:"높다" },
+  { w:"무겁다", m:"무게가 많이 나간다", e:"책가방이 무거워서 어깨가 아팠어요.", a:"가볍다" },
+  { w:"가볍다", m:"무게가 적어 들기 쉽다", e:"새의 깃털은 아주 가벼워요.", a:"무겁다" },
+  { w:"빠르다", m:"움직이는 속도가 이르다", e:"토끼는 달리기가 빨라요.", a:"느리다" },
+  { w:"느리다", m:"움직이는 속도가 더디다", e:"거북이는 느리게 걸어요.", a:"빠르다" },
+  { w:"뜨겁다", m:"온도가 아주 높아 손대기 어렵다", e:"국이 뜨거워서 입김을 불며 먹었어요.", a:"차갑다" },
+  { w:"차갑다", m:"온도가 낮아 손이 시리다", e:"냉장고에서 막 꺼낸 우유는 차가워요.", a:"뜨겁다" },
+  { w:"딱딱하다", m:"눌러도 들어가지 않고 단단하다", e:"마른 빵은 딱딱해서 이가 아팠어요.", a:"부드럽다" },
+  { w:"부드럽다", m:"만지면 보들보들하고 말랑하다", e:"강아지 털은 아주 부드러워요.", a:"딱딱하다" },
+  { w:"달다", m:"꿀처럼 맛이 좋다", e:"여름 수박은 아주 달아요.", a:"쓰다" },
+  { w:"쓰다", m:"맛이 써서 먹기 힘들다", e:"약이 너무 써서 얼굴이 찡그려졌어요.", a:"달다" },
+  { w:"짜다", m:"소금기가 많아 입이 텁텁하다", e:"국이 짜서 물을 한 잔 마셨어요." },
+  { w:"시다", m:"이가 시릴 만큼 새콤하다", e:"레몬을 먹으니 너무 셔서 눈이 감겼어요." },
+  { w:"달리다", m:"두 발을 빠르게 움직여 뛰다", e:"운동장을 힘껏 달렸어요.", s:"뛰다" },
+  { w:"걷다", m:"두 발을 번갈아 내딛어 나아가다", e:"엄마와 손을 잡고 천천히 걸었어요." },
+  { w:"앉다", m:"몸을 낮추어 자리에 올라가다", e:"의자에 바르게 앉아요.", a:"서다" },
+  { w:"서다", m:"몸을 곧게 펴고 발로 딛다", e:"줄을 바르게 서서 기다렸어요.", a:"앉다" },
+  { w:"열다", m:"닫힌 것을 벌려 트다", e:"창문을 열어 방 안 공기를 바꿨어요.", a:"닫다" },
+  { w:"닫다", m:"열린 것을 막아 걸다", e:"나갈 때 문을 조용히 닫아요.", a:"열다" },
+  { w:"밀다", m:"앞쪽으로 힘을 주어 움직이다", e:"무거운 상자를 힘껏 밀었어요.", a:"당기다" },
+  { w:"당기다", m:"자기 쪽으로 끌어오다", e:"줄을 잡고 힘껏 당겼어요.", a:"밀다" },
+  { w:"접다", m:"펼친 것을 겹쳐 포개다", e:"색종이를 반으로 접었어요.", a:"펴다" },
+  { w:"펴다", m:"접힌 것을 늘여 트다", e:"지도를 책상 위에 활짝 폈어요.", a:"접다" },
+  { w:"씻다", m:"물로 때를 없애다", e:"밥을 먹기 전에 손을 씻어요." },
+  { w:"닦다", m:"문질러 깨끗하게 하다", e:"걸레로 책상을 닦았어요." },
+  { w:"빗다", m:"머리카락을 가지런하게 하다", e:"아침마다 머리를 빗어요." },
+  { w:"신다", m:"발에 신발을 넣어 걸치다", e:"운동화를 신고 운동장으로 나갔어요.", a:"벗다" },
+  { w:"벗다", m:"몸에 걸친 것을 풀어 내다", e:"집에 들어오면 신발을 벗어요." },
+  { w:"입다", m:"몸에 옷을 걸치다", e:"추운 날이라 두꺼운 옷을 입었어요.", a:"벗다" },
+  { w:"먹다", m:"음식을 입에 넣어 삼키다", e:"아침을 맛있게 먹었어요." },
+  { w:"마시다", m:"물이나 음료를 입에 넣어 삼키다", e:"목이 말라 물을 벌컥 마셨어요." },
+  { w:"웃다", m:"기쁘거나 재미있어 얼굴을 환하게 하다", e:"만화를 보고 깔깔 웃었어요.", a:"울다" },
+  { w:"울다", m:"슬퍼서 눈물을 흘리다", e:"무릎이 아파서 울었어요.", a:"웃다" },
+  { w:"노래하다", m:"목소리로 곡조를 내다", e:"생일 축하 노래를 크게 노래했어요." },
+  { w:"춤추다", m:"음악에 맞추어 몸을 움직이다", e:"신나는 노래에 맞춰 춤췄어요." },
+  { w:"그리다", m:"연필이나 붓으로 모양을 나타내다", e:"크레용으로 나무를 그렸어요." },
+  { w:"만들다", m:"재료를 모아 새로운 것을 이루다", e:"종이로 비행기를 만들었어요." },
+  { w:"고치다", m:"잘못되거나 망가진 것을 바로잡다", e:"망가진 자전거를 아빠가 고쳤어요.", s:"수리하다" },
+  { w:"지키다", m:"약속이나 규칙을 그대로 따르다", e:"친구와 한 약속을 꼭 지켰어요." },
+  { w:"돕다", m:"남의 일을 거들어 주다", e:"할머니를 도와 장바구니를 들었어요." },
+  { w:"나누다", m:"여럿으로 가르거나 함께 가지다", e:"과자를 동생과 사이좋게 나누었어요." },
+  { w:"찾다", m:"잃어버린 것을 보려고 살피다", e:"잃어버린 양말을 서랍에서 찾았어요." },
+  { w:"기다리다", m:"오기를 바라며 시간을 보내다", e:"버스 정류장에서 엄마를 기다렸어요." },
+  { w:"시작하다", m:"처음으로 어떤 일을 하다", e:"수업이 아홉 시에 시작해요.", a:"끝내다" },
+  { w:"끝내다", m:"하던 일을 마지막까지 다 하다", e:"숙제를 다 끝내고 놀았어요.", a:"시작하다" },
+  { w:"배우다", m:"가르침을 받아 익히다", e:"요즘 피아노를 배우고 있어요." },
+  { w:"가르치다", m:"아는 것을 남에게 알려 주다", e:"동생에게 한글을 가르쳤어요." },
+  { w:"대답하다", m:"묻는 말에 답을 하다", e:"선생님 질문에 크게 대답했어요." },
+  { w:"약속", m:"만나기로 하거나 하기로 정한 일", e:"친구와 놀이터에서 만나기로 약속했어요." },
+  { w:"규칙", m:"여럿이 함께 지키기로 정한 일", e:"교실 규칙을 잘 지켜요." },
+  { w:"차례", m:"일이 이어지는 정해진 순서", e:"차례를 지키며 미끄럼틀을 탔어요.", s:"순서" },
+  { w:"순서", m:"앞뒤가 이어지는 차례", e:"그림을 순서대로 나란히 놓았어요.", s:"차례" },
+  { w:"가운데", m:"한가운데가 되는 자리", e:"원의 가운데에 점을 하나 찍었어요.", s:"중간" },
+  { w:"위", m:"어떤 것보다 높은 쪽", e:"책이 책상 위에 놓여 있어요.", a:"아래" },
+  { w:"아래", m:"어떤 것보다 낮은 쪽", e:"신발이 의자 아래에 있어요.", a:"위" },
+  { w:"앞", m:"얼굴이 향한 쪽", e:"버스 앞자리에 앉았어요.", a:"뒤" },
+  { w:"뒤", m:"등을 보이는 쪽", e:"칠판 뒤에 몸을 숨겼어요.", a:"앞" },
+  { w:"옆", m:"바로 곁에 붙은 자리", e:"친구 옆에 나란히 서서 걸었어요.", s:"곁" },
+  { w:"봄", m:"꽃이 피고 날이 따뜻해지는 계절", e:"봄이 오자 마당에 꽃이 피었어요." },
+  { w:"여름", m:"날이 아주 더운 계절", e:"여름에는 시원한 물놀이를 해요." },
+  { w:"가을", m:"곡식이 익고 날이 서늘한 계절", e:"가을에는 나뭇잎이 빨갛게 물들어요." },
+  { w:"겨울", m:"춥고 눈이 내리는 계절", e:"겨울에는 눈사람을 만들어요." },
+  { w:"햇빛", m:"해에서 나오는 밝은 빛", e:"햇빛이 따뜻해서 기분이 좋았어요." },
+  { w:"구름", m:"하늘에 떠 있는 물방울 덩어리", e:"하얀 구름이 바람을 타고 흘러갔어요." },
+  { w:"비", m:"구름에서 물방울이 떨어지는 것", e:"비가 와서 우산을 쓰고 갔어요." },
+  { w:"바람", m:"움직이는 공기", e:"바람이 불어 나뭇잎이 흔들려요." },
+  { w:"무지개", m:"비가 그친 뒤 하늘에 뜨는 일곱 빛깔", e:"비가 그치자 하늘에 무지개가 떴어요." },
+  { w:"강아지", m:"개의 새끼", e:"강아지가 꼬리를 신나게 흔들어요." },
+  { w:"고양이", m:"야옹 하고 울며 쥐를 잡는 동물", e:"고양이가 창가에서 낮잠을 자요." },
+  { w:"새", m:"날개가 있어 하늘을 나는 동물", e:"새가 지저귀며 나무로 날아갔어요." },
+  { w:"물고기", m:"물속에서 헤엄쳐 사는 동물", e:"어항 속 물고기가 헤엄쳐요." },
+  { w:"나무", m:"줄기와 가지가 있고 잎이 달린 큰 식물", e:"마당에 나무를 한 그루 심었어요." },
+  { w:"꽃", m:"향기와 예쁜 빛깔을 가진 식물의 부분", e:"화분에 빨간 꽃이 피었어요." },
+  { w:"풀", m:"들이나 마당에 나는 키 작은 초록 식물", e:"마당에 풀이 무성하게 자랐어요." },
+  { w:"열매", m:"나무나 풀에서 열려 먹을 수 있는 것", e:"가을에 나무에서 열매를 땄어요." },
+  { w:"모자", m:"머리에 쓰고 햇빛이나 추위를 막는 물건", e:"햇빛이 강해서 모자를 쓰고 나갔어요." },
+  { w:"가방", m:"물건을 넣어 들거나 메는 것", e:"가방에 책과 연필을 챙겨 넣었어요." },
+  { w:"의자", m:"앉을 수 있게 만든 가구", e:"의자를 당겨 책상 앞에 앉았어요." },
+  { w:"책상", m:"공부하거나 글을 쓸 때 앞에 두는 상", e:"책상 위를 가지런히 정리했어요." },
+  { w:"연필", m:"글씨를 쓰거나 그림을 그리는 도구", e:"연필로 일기를 썼어요." },
+  { w:"지우개", m:"연필로 쓴 글자를 지우는 물건", e:"틀린 글자를 지우개로 지웠어요." },
+  { w:"가위", m:"종이나 천을 자르는 도구", e:"가위로 색종이를 오려 냈어요." },
+  { w:"물풀", m:"종이를 붙이는 데 쓰는 물건", e:"물풀을 발라 그림을 붙였어요." },
+  { w:"시계", m:"시간이 얼마나 흘렀는지 알려 주는 물건", e:"벽에 걸린 시계를 보고 시간을 알았어요." },
+  { w:"창문", m:"방 안으로 빛과 바람이 들어오게 낸 문", e:"창문을 열면 시원한 바람이 들어와요." },
+  { w:"계단", m:"오르내릴 수 있게 여러 층으로 만든 길", e:"계단을 하나씩 올라갔어요." },
+  { w:"불", m:"타면서 빛과 열을 내는 것", e:"불을 조심해서 다뤄야 해요." },
+  { w:"병원", m:"아프거나 다친 사람을 고쳐 주는 곳", e:"기침이 심해서 병원에 다녀왔어요." },
+  { w:"학교", m:"선생님과 학생이 함께 배우는 곳", e:"아침에 학교에 가서 친구를 만나요." },
+  { w:"도서관", m:"책을 모아 두고 빌려 보는 곳", e:"도서관에서 재미있는 책을 빌렸어요." },
+  { w:"시장", m:"여러 가지 물건을 사고파는 곳", e:"시장에서 과일과 채소를 샀어요." },
+  { w:"놀이터", m:"아이들이 놀 수 있게 만든 곳", e:"놀이터에서 그네를 탔어요." }
 ];
-var VOCSET = [[0,10],[10,20],[20,30]];
-/* ── 어휘싹·개념싹 책 속 실제 그림 (PDF에서 잘라 냄) ── */
+var DAYBASE = new Date(2026, 8, 1);
+function dayStamp(){
+  var s = ""; try { s = SB.today ? SB.today() : ""; } catch(e){ s = ""; }
+  var p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || "");
+  if (p) return Math.floor((new Date(+p[1], +p[2] - 1, +p[3]) - DAYBASE) / 86400000);
+  var d = new Date();
+  return Math.floor((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - DAYBASE) / 86400000);
+}
+function seededRand(seed){
+  var x = seed >>> 0 || 1;
+  return function(){ x = (x * 1664525 + 1013904223) >>> 0; return x / 4294967296; };
+}
+function seededShuffle(arr, rnd){
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(rnd() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+var WORDER = seededShuffle(WORDS.map(function(_, i){ return i; }), seededRand(20260901));
+function dayWords(){
+  var n = WORDS.length, start = ((dayStamp() * 10) % n + n) % n, out = [];
+  for (var i = 0; i < 10; i++) out.push(WORDS[WORDER[(start + i) % n]]);
+  return out;
+}
+var WQ = { day:-1, qs:[], i:0, right:0, got:0, picked:false, done:false, cur:null };
+
+function vqOptions(correct, pool, rnd){
+  var out = [correct], seen = {};
+  seen[correct] = 1;
+  var p = seededShuffle(pool, rnd);
+  for (var i = 0; i < p.length && out.length < 4; i++){
+    if (!p[i] || seen[p[i]]) continue;
+    seen[p[i]] = 1; out.push(p[i]);
+  }
+  return seededShuffle(out, rnd);
+}
+function buildDay(){
+  var ws = dayWords(), rnd = seededRand(dayStamp() * 7919 + 13);
+  var meanPool = WORDS.map(function(x){ return x.m; });
+  var wordPool = WORDS.map(function(x){ return x.w; });
+  var antPool = WORDS.filter(function(x){ return x.a; }).map(function(x){ return x.a; });
+  var simPool = WORDS.filter(function(x){ return x.s; }).map(function(x){ return x.s; });
+  var qs = [];
+  for (var i = 0; i < ws.length; i++){
+    var w = ws[i], kind;
+    if (i < 3) kind = "mean";
+    else if (i < 5) kind = "word";
+    else if (i < 8) kind = w.a ? "ant" : (w.s ? "sim" : "mean");
+    else kind = "ctx";
+    var q = { kind:kind, w:w };
+    if (kind === "mean"){
+      q.ask = "‘" + w.w + "’의 뜻은 무엇일까요?";
+      q.ans = w.m; q.opts = vqOptions(w.m, meanPool.filter(function(m){ return m !== w.m; }), rnd);
+    } else if (kind === "word"){
+      q.ask = "‘" + w.m + "’이라는 뜻을 가진 낱말은 무엇일까요?";
+      q.ans = w.w; q.opts = vqOptions(w.w, wordPool.filter(function(x){ return x !== w.w; }), rnd);
+    } else if (kind === "ant"){
+      q.ask = "‘" + w.w + "’의 반대말은 무엇일까요?";
+      q.ans = w.a; q.opts = vqOptions(w.a, antPool.filter(function(x){ return x !== w.a && x !== w.w; }), rnd);
+    } else if (kind === "sim"){
+      q.ask = "‘" + w.w + "’와 비슷한 말은 무엇일까요?";
+      q.ans = w.s; q.opts = vqOptions(w.s, simPool.filter(function(x){ return x !== w.s && x !== w.w; }), rnd);
+    } else {
+      q.ask = "이 문장에 쓰인 ‘" + w.w + "’의 뜻은 무엇일까요?";
+      q.ans = w.m; q.opts = vqOptions(w.m, meanPool.filter(function(m){ return m !== w.m; }), rnd);
+    }
+    qs.push(q);
+  }
+  WQ.day = dayStamp(); WQ.qs = qs; WQ.i = 0; WQ.right = 0; WQ.got = 0;
+  WQ.picked = false; WQ.done = false;
+}
+function vqKindName(k){
+  return k === "mean" ? "뜻 고르기" : k === "word" ? "낱말 고르기" : k === "ant" ? "반대말" : k === "sim" ? "비슷한 말" : "문장 속 뜻";
+}
+function renderVoc(){
+  var card = $("vc1Card"); if (!card) return;
+  if (!WQ.qs.length || WQ.day !== dayStamp()) buildDay();
+  if (!WQ.qs.length) return;
+  if (WQ.done) return renderVocDone();
+  var q = WQ.qs[WQ.i]; if (!q) return renderVocDone();
+  setProg("vc1Prog", WQ.i + 1, 10);
+  var h = '<div class="vcq-head"><span class="vcq-kind">' + vqKindName(q.kind) + "</span>"
+        + '<button class="vcq-spk" type="button" data-vsay="1" aria-label="문제 듣기">🔊</button></div>';
+  if (q.kind === "ctx") h += '<p class="vcq-sent">' + esc(q.w.e).replace(esc(q.w.w), "<b>" + esc(q.w.w) + "</b>") + "</p>";
+  h += '<p class="vcq-ask">' + esc(q.ask) + "</p>";
+  h += '<div class="vcq-opts">' + q.opts.map(function(o){
+        return '<button class="vcq-opt" type="button" data-vq="' + esc(o) + '">' + esc(o) + "</button>";
+      }).join("") + "</div>";
+  h += '<div class="vcq-fb" id="vcqFb"></div>';
+  card.innerHTML = '<div class="vcq-wrap">' + h + "</div>";
+}
+function vqAnswer(btn){
+  if (WQ.picked || WQ.done) return;
+  var q = WQ.qs[WQ.i]; if (!q) return;
+  var ok = btn.getAttribute("data-vq") === q.ans;
+  var all = document.querySelectorAll("#vc1Card .vcq-opt");
+  for (var i = 0; i < all.length; i++){
+    all[i].disabled = true;
+    if (all[i].getAttribute("data-vq") === q.ans) all[i].classList.add("ok");
+  }
+  WQ.picked = true;
+  if (ok) WQ.right++;
+  else btn.classList.add("no");
+  var fb = $("vcqFb"), w = q.w;
+  if (fb){
+    fb.innerHTML = '<div class="vcq-res ' + (ok ? "ok" : "no") + '">'
+      + (ok ? "딱 맞았어! 🎉" : "아쉬워요 · 정답은 <b>" + esc(q.ans) + "</b>")
+      + "</div>"
+      + '<div class="vcq-card2"><b class="vcq-w">' + esc(w.w) + "</b>"
+      + '<span class="vcq-m">' + esc(w.m) + "</span>"
+      + '<span class="vcq-e">“' + esc(w.e) + "”</span>"
+      + '<button class="vcq-say" type="button" data-vsay2="1">🔊 낱말 듣기</button></div>'
+      + '<button class="vcq-next" type="button" data-vnext="1">' + (WQ.i + 1 >= 10 ? "결과 보기 ➡️" : "다음 문제 ➡️") + "</button>";
+  }
+  try { SB.speak(q.ans, false, "ko-KR"); } catch(e){}
+}
+function vqNext(){
+  if (!WQ.picked) return;
+  WQ.picked = false;
+  WQ.i++;
+  if (WQ.i >= 10) return vqFinish();
+  renderVoc();
+}
+function vqFinish(){
+  WQ.done = true;
+  var got = 0;
+  try { got = SB.earn(todayKey() + "|ko|vocab10", 3) || 0; } catch(e){ got = 0; }
+  WQ.got = got;
+  try { SB.markAttendance("ko"); } catch(e){}
+  try { if (SB.markDaily) SB.markDaily("ko"); } catch(e){}
+  renderVocDone();
+  try { if (got) SB.confetti(); } catch(e){}
+  try { SB.toast("🌱 오늘의 어휘 " + WQ.right + "/10" + (got ? " · ⭐ +" + got : "")); } catch(e){}
+}
+function renderVocDone(){
+  var card = $("vc1Card"); if (!card) return;
+  card.innerHTML = '<div class="vcq-done"><b>오늘의 어휘 10문제 끝!</b>'
+    + '<span class="vcq-score">' + WQ.right + " / 10 · " + Math.round(WQ.right * 10) + "%</span>"
+    + '<span class="vcq-msg">' + (WQ.right >= 9 ? "거의 다 맞혔어요! 정말 대단해요 🌟" : WQ.right >= 6 ? "잘했어요! 틀린 낱말은 내일 또 나와요 💪" : "한 번 더 하면 더 잘할 거예요 🌱") + "</span>"
+    + (WQ.got ? '<span class="vcq-star">⭐ +' + WQ.got + "</span>" : "")
+    + '<div class="vcq-btns"><button class="vcq-btn" type="button" data-vagain="1">🔁 다시 풀기</button>'
+    + '<button class="vcq-btn pri" type="button" data-vstep="2">🎴 낱말 놀이 이어서</button></div></div>';
+}
+
+/* ── 교과 개념 책 속 실제 그림 (PDF에서 잘라 냄) ── */
 var VOCIMG = {
 "공손하다":"vs_01.webp",
 "날개":"vs_02.webp",
@@ -16594,7 +16739,7 @@ function vcPic(en, map){
   return f ? '<img class="vc-pic" src="vocab-img/' + f + '" alt="' + esc(en) + ' 그림" loading="lazy">' : "";
 }
 
-/* ---------------- ② 개념싹 3학년 — 사회 · 수학 · 과학 교과 어휘 ---------------- */
+/* ---------------- ③ 교과 개념 — 사회 · 수학 · 과학 교과 어휘 ---------------- */
 var CON = [
   { w:"고장", h:"", k:"사회",
     m:"사람들이 모여 사는 곳",
@@ -16763,44 +16908,7 @@ var S = { step:1, vset:0, vi:0, vq:null, cset:0, ci:0, cq:null,
 
 function setProg(id, a, b){ var e = $(id); if (e) e.textContent = a + " / " + b; }
 
-/* ---------------- ① 어휘싹 ---------------- */
-function vocSets(){
-  var box = $("vc1Sets"); if (!box) return;
-  box.innerHTML = VOCSET.map(function(r, i){
-    return '<button class="vc-set' + (i === S.vset ? " on" : "") + '" type="button" data-vset="' + i + '">'
-      + (r[0] + 1) + "~" + r[1] + "</button>";
-  }).join("");
-}
-function vocQuizHTML(){
-  var q = VOC[S.vi], pool = [], i;
-  for (i = 0; i < VOC.length; i++) if (i !== S.vi && VOC[i].m !== q.m) pool.push(VOC[i].m);
-  shuffle(pool);
-  var opts = shuffle([{ t:q.m, ok:1 }, { t:pool[0], ok:0 }, { t:pool[1], ok:0 }]);
-  return '<div class="vc-quiz"><p class="vc-q">‘' + esc(q.w) + "’의 뜻은 무엇일까요?</p><div class=\"vc-opts\">"
-    + opts.map(function(o){
-        return '<button class="vc-opt" type="button" data-vo="' + (o.ok ? 1 : 0) + '">' + esc(o.t) + "</button>";
-      }).join("")
-    + "</div></div>";
-}
-function renderVoc(){
-  var card = $("vc1Card"); if (!card) return;
-  var r = VOCSET[S.vset];
-  setProg("vc1Prog", S.vi - r[0] + 1, r[1] - r[0]);
-  vocSets();
-  if (S.vq === null){
-    var q = VOC[S.vi];
-    card.innerHTML = vcPic(q.w, VOCIMG)
-      + '<button class="vc-word" type="button" data-v1="say" aria-label="' + esc(q.w) + ' 듣기">'
-      + '<span class="vc-em" aria-hidden="true">' + q.em + "</span><span>" + esc(q.w) + '</span>'
-      + '<span class="vc-spk" aria-hidden="true">🔊</span></button>'
-      + '<p class="vc-mean">' + esc(q.m) + "</p>"
-      + '<p class="vc-ex">“' + esc(q.e).replace(esc(q.w), "<b>" + esc(q.w) + "</b>") + "”</p>";
-  } else {
-    card.innerHTML = vocQuizHTML();
-  }
-}
-
-/* ---------------- ② 개념싹 ---------------- */
+/* ---------------- ③ 교과 개념 ---------------- */
 function conSets(){
   var box = $("vc2Sets"); if (!box) return;
   box.innerHTML = CONSET.map(function(r, i){
@@ -16896,17 +17004,10 @@ function showStep(n){
   S.step = n;
   var i, steps = document.querySelectorAll("[data-vstep]");
   for (i = 0; i < steps.length; i++) steps[i].classList.toggle("on", Number(steps[i].getAttribute("data-vstep")) === n);
-  for (i = 1; i <= 2; i++){ var p = $("vcPane" + i); if (p) p.hidden = (i !== n); }
+  for (i = 1; i <= 3; i++){ var p = $("vcPane" + i); if (p) p.hidden = (i !== n); }
   if (n === 1) renderVoc();
-  if (n === 2) renderCon();
-}
-function vocGo(d){
-  var r = VOCSET[S.vset];
-  S.vq = null;
-  S.vi += d;
-  if (S.vi >= r[1]){ S.vi = r[0]; }
-  if (S.vi < r[0]) S.vi = r[1] - 1;
-  renderVoc();
+  if (n === 2) { try { if (SB.wordGame && SB.wordGame.render) SB.wordGame.render(); } catch(e){} }
+  if (n === 3) renderCon();
 }
 function conGo(d){
   var r = CONSET[S.cset];
@@ -16929,27 +17030,17 @@ function onClick(e){
   if (!t || !t.closest) return;
   var el;
   if ((el = t.closest("[data-vstep]"))){ showStep(Number(el.getAttribute("data-vstep"))); return; }
-  if ((el = t.closest("[data-vset]"))){
-    S.vset = Number(el.getAttribute("data-vset")); S.vi = VOCSET[S.vset][0]; S.vq = null; renderVoc(); return;
-  }
   if ((el = t.closest("[data-cset]"))){
     S.cset = Number(el.getAttribute("data-cset")); S.ci = CONSET[S.cset][0]; S.cq = null; renderCon(); return;
   }
   if ((el = t.closest("[data-rset]"))){
     S.rset = Number(el.getAttribute("data-rset")); S.ri = READSET[S.rset][0]; renderRead(); return;
   }
-  if ((el = t.closest("[data-vo]"))){
-    var ok = el.getAttribute("data-vo") === "1";
-    el.classList.add(ok ? "ok" : "no");
-    if (ok){
-      try { SB.toast("🎉 정답이에요!"); } catch(err){}
-      setTimeout(function(){ vocGo(1); }, 700);
-    } else {
-      var all = document.querySelectorAll("#vc1Card .vc-opt");
-      for (var i = 0; i < all.length; i++) if (all[i].getAttribute("data-vo") === "1") all[i].classList.add("ok");
-    }
-    return;
-  }
+  if ((el = t.closest("[data-vq]"))){ vqAnswer(el); return; }
+  if ((el = t.closest("[data-vnext]"))){ vqNext(); return; }
+  if ((el = t.closest("[data-vagain]"))){ buildDay(); renderVoc(); return; }
+  if ((el = t.closest("[data-vsay2]"))){ var wq = WQ.qs[WQ.i]; if (wq){ say(wq.w.w, false); setTimeout(function(){ say(wq.w.e, false); }, 800); } return; }
+  if ((el = t.closest("[data-vsay]"))){ var qq = WQ.qs[WQ.i]; if (qq) say(qq.kind === "ctx" ? qq.w.e : qq.ask, false); return; }
   if ((el = t.closest("[data-co]"))){
     var pick = Number(el.getAttribute("data-co")), ans = Number(el.getAttribute("data-a"));
     var nodes = document.querySelectorAll("#vc2Card .vc-opt");
@@ -16981,16 +17072,6 @@ function onClick(e){
     say(p2.lines[li], false);
     return;
   }
-  var b = t.closest("[data-v1]");
-  if (b){
-    var a = b.getAttribute("data-v1");
-    if (a === "prev") vocGo(-1);
-    else if (a === "next") vocGo(1);
-    else if (a === "say"){ say(VOC[S.vi].w, false); setTimeout(function(){ say(VOC[S.vi].e, false); }, 900); }
-    else if (a === "quiz"){ S.vq = 1; renderVoc(); }
-    else if (a === "done") reward("vocab", "vocab|" + S.vset, "🌱 어휘 " + (VOCSET[S.vset][0] + 1) + "~" + VOCSET[S.vset][1] + " 다 봤어요!");
-    return;
-  }
   var b2 = t.closest("[data-v2]");
   if (b2){
     var a2 = b2.getAttribute("data-v2");
@@ -17014,7 +17095,7 @@ function onClick(e){
 
 function start(){
   if (!S.drawn.v){ S.drawn.v = 1; showStep(S.step); }
-  else { if (S.step === 1) renderVoc(); else renderCon(); }
+  else { if (S.step === 1) renderVoc(); else if (S.step === 2) { try { if (SB.wordGame && SB.wordGame.render) SB.wordGame.render(); } catch(e){} } else renderCon(); }
   var box = document.getElementById("subs2");
   if (box){
     var on = box.querySelector(".subtab.on");
@@ -17030,7 +17111,8 @@ function bind(){
   root.setAttribute("data-vcb", "1");
   root.addEventListener("click", onClick);
 }
-SB.vocabBoard = { VOC:VOC, CON:CON, READ:READ, state:S, go:showStep };
+SB.vocabBoard = { WORDS:WORDS, CON:CON, READ:READ, state:S, day:WQ, go:showStep };
+try { SB.koWords = WORDS; } catch(e){}
 SB.onShow.ko = (function(prev){
   return function(sub){
     if (prev) { try { prev.apply(this, arguments); } catch(e){} }
@@ -17038,8 +17120,8 @@ SB.onShow.ko = (function(prev){
   };
 })(SB.onShow.ko);
 bind();
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); if (!S.drawn.v){ renderVoc(); renderCon(); S.drawn.v = 1; } });
-else { if (!S.drawn.v){ renderVoc(); renderCon(); S.drawn.v = 1; } }
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ bind(); if (!S.drawn.v){ S.drawn.v = 1; } });
+else { if (!S.drawn.v){ S.drawn.v = 1; } }
 })();
 
 
@@ -35857,7 +35939,7 @@ function smQ6(){
 }
 function smMakeQs(unit){
   var out = [], seen = {}, gen = unit === 2 ? smQ2 : (unit === 4 ? smQ4 : smQ6), guard = 0, q;
-  while (out.length < 10 && guard++ < 300){
+  while (out.length < 3 && guard++ < 200){
     q = gen();
     if (!q || !isFinite(q.num) || q.num < 0) continue;
     if (seen[q.q]) continue;
@@ -37185,7 +37267,7 @@ function showQ(){
         + badge
         + '<span class="wg-st">⭐ <b data-stars>' + ((SB.starsNow && SB.starsNow()) || 0) + "</b></span></div>";
   if (mode === "spell"){
-    html += '<div class="wg-face"><span class="wg-em">' + esc(w[2]) + '</span>'
+    html += '<div class="wg-face">'
           + '<span class="wg-ko">' + esc(w[1]) + '</span>'
           + '<button class="wg-spk" type="button" data-say="1" aria-label="' + esc(disp(w[0])) + ' 듣기">🔊</button></div>'
           + '<div class="wg-slots" id="wgSlots">' + slotsHTML(w[0]) + "</div>"
@@ -37194,7 +37276,7 @@ function showQ(){
           + '<div class="wg-fb" id="wgFb"></div>';
   } else {
     var opts = optionsFor(w, poolOf(ST.theme).length >= 4 ? poolOf(ST.theme) : ALL);
-    html += '<div class="wg-face"><span class="wg-em">' + esc(w[2]) + '</span>'
+    html += '<div class="wg-face">'
           + '<span class="wg-en">' + esc(disp(w[0])) + '</span>'
           + '<button class="wg-spk" type="button" data-say="1" aria-label="' + esc(disp(w[0])) + ' 듣기">🔊</button></div>'
           + '<div class="wg-opts" id="wgOpts">' + opts.map(function(o){
@@ -37355,7 +37437,6 @@ function renderReport(){
   else s += '<div class="wg-wlist">' + wrongs.map(function(x){
       var w = BYEN[x[0]], n = x[1].n || 1;
       return '<button class="wg-wrow" type="button" data-sayw="' + esc(w[0]) + '">'
-        + '<span class="wg-wem">' + esc(w[2]) + "</span>"
         + "<b>" + esc(disp(w[0])) + "</b><span>" + esc(w[1]) + "</span>"
         + '<i class="wg-wn">' + n + "번</i>🔊</button>";
     }).join("") + "</div>";
@@ -39144,8 +39225,8 @@ var SCHED = [
     B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en","call"]),
     B("enwg","영어","단어키우기 10문제", ["study","en","wordgrow"]),
     PADSLOT,
-    B("mathsaem","수학","하루 셈하기", ["study","math","saem"]),
-    B("kovocab","국어","어휘·개념", ["study","ko","vocab"]),
+    B("mathsaem","수학","하루셈·수세기 3문제", ["study","math","saem"]),
+    B("kovocab","국어","초등 어휘 10문제·낱말놀이", ["study","ko","vocab"]),
     B("cntalk","중국어","일상대화 따라 말하고 녹음", ["study","cn","talk"]),
     K("read","책","한글책 1권 + 영어책 1권", ["book","main"])
   ],
@@ -39154,7 +39235,6 @@ var SCHED = [
     PADSLOT,
     B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en","call"]),
     B("enword","영어","단어카드·게임", ["study","en","talk"]),
-    B("mathbase1","수학","1학년 기초수학", ["study","math","base1"]),
     B("histworld","역사","세계사 연표", ["study","history","world"]),
     K("read","책","한글책 1권 + 영어책 1권", ["book","main"])
   ],
@@ -39162,7 +39242,6 @@ var SCHED = [
   [
     B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en","call"]),
     B("enwol","영어","월팸", ["study","en","wolpaem"]),
-    B("mathg2","수학","2학년 선행", ["study","math","grade2"]),
     B("cncard","중국어","단어 카드 10개", ["study","cn","cards"]),
     PADSLOT,
     PADSLOT,
@@ -39174,7 +39253,7 @@ var SCHED = [
   [
     B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en","call"]),
     B("enbook","영어","그림 동화책(AR) 1권", ["study","en","book"]),
-    B("mathgugu","수학","구구단 원리", ["study","math","gugu"]),
+    B("mathgugu","수학","무브무브·구구단", ["study","math","mv"]),
     B("hanjatext","한자","교과서 핵심한자", ["study","hanja","text"]),
     PADSLOT,
     PADSLOT,
