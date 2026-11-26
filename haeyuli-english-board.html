@@ -14236,6 +14236,28 @@ function bind(){
   });
 }
 
+/* 📚 책을 읽으면 다마고치가 간식을 받아요 — 책 탭의 '책 읽기 3종'이 부른다
+   (하루 3권 상한·같은 책 하루 한 번은 부르는 쪽에서 막고, 여기서는 하루 성장 상한만 지킨다) */
+function bookSnackTama(o){
+  o = o || {};
+  var p = pet();
+  var dk = (SB.today ? SB.today() : todayKey());
+  if (!p.dayGrow || typeof p.dayGrow !== "object" || p.dayGrow.d !== dk) p.dayGrow = { d:dk, n:0 };
+  var left = Math.max(0, CARE_DAY_MAX - (Number(p.dayGrow.n) || 0));
+  var want = Math.max(0, Math.round(Number(o.grow) || 0));
+  var add = Math.min(want, left);
+  var joy = Math.round(Number(o.joy) || 0), hun = Math.round(Number(o.hunger) || 0);
+  if (p.stage > 0){ p.joy = clamp(p.joy + joy, 0, 100); p.hunger = clamp(p.hunger + hun, 0, 100); }
+  /* 알일 때는 기분·배고픔이 없어요 — 따뜻해지며 자라기만 해요 */
+  if (add > 0){ p.grow += add; p.dayGrow.n = (Number(p.dayGrow.n) || 0) + add; }
+  savePet(p);
+  try { tryEvolve(); } catch(e){}
+  try { paint(); } catch(e){}
+  try { paintGauges(); } catch(e){}
+  try { if (SB.current === "room"){ setDog("eating", { say:false }); say(o.say || "냠냠~ 책 간식 맛있다!"); } } catch(e){}
+  return { grow:add, joy:(p.stage > 0 ? joy : 0), left:left, stage:p.stage };
+}
+
 /* ---------------------------- 공개 API ---------------------------- */
 SB.room = {
   food:FOOD, toys:TOYS, acc:ACC, items:ITEMS,
@@ -14255,7 +14277,8 @@ SB.room = {
   render:paint, encourage:encourage,
   status:function(){ return statusOf(pet()); },
   gauge:function(){ var p = pet(); return { hunger:p.hunger, joy:p.joy }; },
-  auto:function(on){ autoOn = !!on; if (on) scheduleNext(600); else clearTimeout(autoTimer); }
+  auto:function(on){ autoOn = !!on; if (on) scheduleNext(600); else clearTimeout(autoTimer); },
+  snack:bookSnackTama
 };
 SB.tamaPaint = paint;
 SB.onShow.room = function(){ paint(); scheduleNext(1200); setTimeout(function(){ encourage(); }, 900); noticeDaily(); };
@@ -46033,6 +46056,481 @@ if (document.readyState === "loading") document.addEventListener("DOMContentLoad
 else hook();
 })();
 
+</script>
+
+<style id="bkpcCss1126">
+/* ===== 📚 책 읽기 3종 — ① 책→다마고치 간식 ② 오늘 읽을 책 3권 뽑기 ③ 이번 달 책 챌린지 ===== */
+#bkPickWrap{order:-2;grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);
+  gap:.9vh;flex:0 0 auto;min-width:0;}
+#bkPickWrap.bkpc-off{display:none !important;}
+.bkpc-p{background:rgba(255,255,255,.95);border-radius:var(--r);box-shadow:var(--shadow-sm);
+  padding:.8vh .95vh;display:flex;flex-direction:column;gap:.42vh;min-width:0;}
+.bkpc-h{display:flex;align-items:center;gap:.5vh;min-width:0;}
+.bkpc-h b{font-size:1.5vh;font-weight:900;color:#22303f;white-space:nowrap;letter-spacing:-.02em;}
+.bkpc-h span{font-size:1.1vh;font-weight:800;color:#7f8b99;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+.bkpc-draw{margin-left:auto;flex:0 0 auto;border:0;cursor:pointer;border-radius:99px;padding:.46vh 1.05vh;
+  font:inherit;font-size:1.12vh;font-weight:900;color:#fff;background:linear-gradient(135deg,#ffb43f,#ff8a3d);
+  box-shadow:0 .18vh .6vh rgba(255,138,61,.32);white-space:nowrap;}
+.bkpc-draw:active{transform:translateY(1px);}
+.bkpc-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55vh;min-width:0;}
+.bkpc-card{display:flex;align-items:center;gap:.45vh;background:#fffaf0;border-radius:1.05vh;padding:.45vh .6vh;
+  box-shadow:inset 0 0 0 .18vh #f3e2c8;min-width:0;cursor:pointer;text-align:left;}
+.bkpc-card.read{background:#f1fbf4;box-shadow:inset 0 0 0 .18vh #cfe9d6;}
+.bkpc-em{flex:0 0 auto;font-size:1.75vh;line-height:1;}
+.bkpc-tx{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;}
+.bkpc-tx b{font-size:1.14vh;font-weight:900;color:#22303f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bkpc-tx span{font-size:.94vh;font-weight:700;color:#8a97a5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bkpc-ck{flex:0 0 auto;border:0;cursor:pointer;border-radius:99px;padding:.4vh .72vh;font:inherit;
+  font-size:.98vh;font-weight:900;color:#31566f;background:#e8f4fd;box-shadow:inset 0 0 0 .15vh #cfe6f7;white-space:nowrap;}
+.bkpc-card.read .bkpc-ck{color:#2b7a4b;background:#e6f8ec;box-shadow:inset 0 0 0 .15vh #bfe6cc;}
+.bkpc-note{font-size:.92vh;font-weight:700;color:#9aa7b4;}
+.bkpc-empty{font-size:1.05vh;font-weight:800;color:#9aa7b4;padding:.4vh;}
+/* 🌳 챌린지 판 */
+.bkpc-dots{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:.22vh .22vh;margin-top:.15vh;}
+.bkpc-dot{display:flex;align-items:center;justify-content:center;height:2.05vh;border-radius:99px;
+  font-size:1.02vh;font-weight:900;color:#c6d2dc;background:#f0f5f9;box-shadow:inset 0 0 0 .12vh #e2ebf2;line-height:1;}
+.bkpc-dot.on{background:#eaf8ee;box-shadow:inset 0 0 0 .12vh #bfe6cc;color:#2b7a4b;font-size:1.15vh;}
+.bkpc-dot.mile{box-shadow:inset 0 0 0 .18vh #ffce7a;background:#fff8ea;color:#b8860b;}
+.bkpc-dot.mile.on{background:linear-gradient(135deg,#ffe9b8,#ffd27a);box-shadow:inset 0 0 0 .18vh #f0b74a;}
+.bkpc-miles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4vh;margin-top:.15vh;}
+.bkpc-mile{display:flex;flex-direction:column;align-items:center;gap:.05vh;border-radius:.9vh;padding:.3vh .2vh;
+  background:#f4f8fb;box-shadow:inset 0 0 0 .14vh #e3edf4;font-size:.86vh;font-weight:800;color:#8a97a5;line-height:1.15;}
+.bkpc-mile b{font-size:.98vh;font-weight:900;color:#4a6a80;}
+.bkpc-mile.on{background:#fff5e0;box-shadow:inset 0 0 0 .16vh #ffd27a;color:#b8860b;}
+.bkpc-mile.on b{color:#a5690a;}
+.bkpc-msg{font-size:.98vh;font-weight:800;color:#5a6b7a;}
+.bkpc-msg b{color:#2b7a4b;}
+/* 홈 '오늘 읽을 책' 카드 안 — 책 탭의 3권 뽑기로 바로 가는 작은 버튼 */
+.rb-hpick{align-self:flex-start;margin-top:.25vh;border:0;cursor:pointer;border-radius:99px;padding:.36vh .9vh;
+  font:inherit;font-size:1.05vh;font-weight:900;color:#8a5a12;background:linear-gradient(135deg,#fff3dc,#ffe4bd);
+  box-shadow:inset 0 0 0 .15vh #f6d9a6;white-space:nowrap;line-height:1.25;max-width:100%;overflow:hidden;
+  text-overflow:ellipsis;}
+.rb-hpick b{color:#b8860b;font-weight:900;}
+.rb-hpick:active{transform:translateY(1px);}
+/* 좁은 화면 — 위아래로 쌓고 글자를 조금 키운다 */
+@media (max-width:900px){
+  #bkPickWrap{grid-template-columns:minmax(0,1fr);gap:.6rem;}
+  .bkpc-p{padding:.6rem .7rem;gap:.4rem;border-radius:.9rem;}
+  .bkpc-h b{font-size:1rem;}
+  .bkpc-h span{font-size:.72rem;}
+  .bkpc-draw{font-size:.78rem;padding:.35rem .8rem;}
+  .bkpc-cards{grid-template-columns:minmax(0,1fr);gap:.35rem;}
+  .bkpc-card{padding:.4rem .55rem;border-radius:.6rem;}
+  .bkpc-em{font-size:1.2rem;}
+  .bkpc-tx b{font-size:.95rem;}
+  .bkpc-tx span{font-size:.72rem;}
+  .bkpc-ck{font-size:.76rem;padding:.32rem .6rem;}
+  .bkpc-note{font-size:.7rem;}
+  .bkpc-dots{gap:.16rem;}
+  .bkpc-dot{height:1.55rem;font-size:.7rem;border-radius:.4rem;}
+  .bkpc-dot.on{font-size:.8rem;}
+  .bkpc-mile{font-size:.62rem;padding:.25rem .1rem;}
+  .bkpc-mile b{font-size:.72rem;}
+  .bkpc-msg{font-size:.74rem;}
+  .rb-hpick{font-size:.8rem;padding:.34rem .75rem;}
+}
+@media (max-width:400px){
+  .bkpc-h b{font-size:.95rem;}
+  .bkpc-h span{display:none;}
+}
+@media print{#bkPickWrap{display:none;}}
+</style>
+
+<script id="bkpc1126">
+/* =====================================================================
+   📚 책 읽기 3종 — 해율이 보드 (아이패드판·모바일판 공통)
+   ① 🥚 책을 읽으면 다마고치가 바로 간식을 받아요 (하루 3권까지 · 같은 책은 하루 한 번)
+   ② 🎲 오늘 읽을 책 3권 뽑기  — 집 책장(2,180권)에서 '아직 안 읽은 책'을 먼저 뽑고,
+        뽑은 3권은 오늘 날짜로 저장(새로고침해도 그대로) · 카드에서 바로 '읽었어요' 체크
+   ③ 🌳 이번 달 책 챌린지 판 — 10·20·30권 마일스톤 + ⭐ 보너스(원장 키로 1회만)
+   읽은 날짜는 기존 독서 장부 study.readlog.v1(가족 동기화 rb.log)에 함께 남긴다
+   저장: haeyuli.bookpick.v1(오늘 뽑은 3권) · haeyuli.booksnack.v1(하루 3권 상한)
+   ===================================================================== */
+(function(){
+"use strict";
+if (window.__BKPC1126) return;
+window.__BKPC1126 = 1;
+var SB = window.SB; if (!SB) return;
+
+var PICKK = "haeyuli.bookpick.v1", SNACKK = "haeyuli.booksnack.v1";
+var LOGK = "study.readlog.v1", TREEK = "study.books.v1";
+var MAX_BOOKS = 3;                        /* 다마고치 책 간식은 하루 3권까지 */
+var MILE = [[10,5],[20,8],[30,12]];       /* 10·20·30권 → ⭐ 보너스 */
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function dkey(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate()); }
+function today(){
+  try { var t = SB.today && SB.today(); if (/^\d{4}-\d{2}-\d{2}$/.test(String(t || ""))) return String(t); } catch(e){}
+  return dkey(new Date());
+}
+function dayLabel(){
+  var d = new Date(today() + "T00:00:00");
+  if (!isFinite(d.getTime())) d = new Date();
+  return (d.getMonth()+1) + "/" + d.getDate() + " (" + ["일","월","화","수","목","금","토"][d.getDay()] + ")";
+}
+function monthLabel(){ var t = today(); return t.slice(5,7).replace(/^0/, "") + "월"; }
+function rj(k, fb){ try { var v = JSON.parse(localStorage.getItem(k) || "null"); return (v == null) ? fb : v; } catch(e){ return fb; } }
+function wj(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+
+/* ---------------- ① 책 → 다마고치 간식 ---------------- */
+function bookId(key){
+  var k = String(key || ""), m;
+  if ((m = /^\d{4}-\d{2}-\d{2}\|book\|(.+)$/.exec(k))) return "rp:" + m[1];
+  if ((m = /^rb\|read\|(.+)$/.exec(k))) return "rp:" + m[1];
+  if ((m = /^bk\|read\|(.+)$/.exec(k))) return "bk:" + m[1];
+  if ((m = /^sg\|read\|(.+)$/.exec(k))) return "sg:" + m[1];
+  if ((m = /^fr\|read\|(.+)$/.exec(k))) return "fr:" + m[1];
+  if ((m = /^sh\|([^|]+)\|read\|(.+)$/.exec(k))) return "sh:" + m[1] + ":" + m[2];
+  return "";
+}
+/* 빨간펜·북트리는 자기 장부(study.readlog.v1)에 이미 날짜를 남기므로 여기서 또 쓰지 않는다 */
+function ownLog(id){ return id.indexOf("rp:") !== 0 && id.indexOf("bk:") !== 0; }
+
+function snackState(){
+  var s = rj(SNACKK, null); if (!s || typeof s !== "object" || Array.isArray(s)) s = {};
+  if (!s.k || typeof s.k !== "object" || Array.isArray(s.k)) s.k = {};
+  if (String(s.d) !== today()){ s.d = today(); s.n = 0; s.k = {}; }
+  s.v = 1;
+  return s;
+}
+function bookSnack(id){
+  if (!id) return 0;
+  var s = snackState();
+  if (s.k[id]) return 0;                                  /* 같은 날 같은 책은 한 번만 */
+  if ((Number(s.n) || 0) >= MAX_BOOKS){ wj(SNACKK, s); return 0; }   /* 하루 3권 상한 */
+  s.k[id] = Date.now(); s.n = (Number(s.n) || 0) + 1; s.at = Date.now();
+  wj(SNACKK, s);
+  var third = (s.n >= MAX_BOOKS), egg = false, res = null;
+  try {
+    if (SB.room && SB.room.snack){
+      res = SB.room.snack({ joy: third ? 20 : 10, hunger: third ? -20 : -12, grow: third ? 3 : 1,
+        say: third ? "🎁 책 3권! 스페셜 간식 고마워~" : "냠냠~ 책 간식 맛있다!" });
+      egg = !!(res && res.stage === 0);
+    }
+  } catch(e){}
+  var msg = egg
+    ? (third ? "🎁 오늘 책 " + MAX_BOOKS + "권! 알이 팡팡 — 스페셜 간식이에요 🥚" : "📚 책 읽고 알이 따뜻해졌어요! 🥚")
+    : (third ? "🎁 오늘 책 " + MAX_BOOKS + "권! 다마고치 스페셜 간식 +2 🥚"
+             : "📚 책 읽고 다마고치 간식 +1! 🥚 신나요");
+  setTimeout(function(){                                    /* ⭐ 완독 안내 뒤에 이어서 보이게 */
+    try { if (SB.toast) SB.toast(msg); } catch(e){}
+    if (third){ try { if (SB.confetti) SB.confetti(); } catch(e){} }
+  }, third ? 1500 : 1100);
+  return s.n;
+}
+
+/* ---------------- ③ 이번 달 책 챌린지 ---------------- */
+function monthKeys(){
+  var ym = today().slice(0,7), seen = {}, out = [], d, k, b;
+  var log = rj(LOGK, null) || {}, days = (log && log.days) || {};
+  for (d in days){
+    if (String(d).slice(0,7) !== ym) continue;
+    b = days[d] || {};
+    for (k in b){ if (!b[k] || seen[k]) continue; seen[k] = 1; out.push(k); }
+  }
+  var tree = rj(TREEK, []); if (!Array.isArray(tree)) tree = [];
+  for (var i = 0; i < tree.length; i++){
+    var t = tree[i]; if (!t || !t.date) continue;
+    if (String(t.date).slice(0,7) !== ym) continue;
+    var tk = "bk:" + (t.id || t.title || i);
+    if (seen[tk]) continue; seen[tk] = 1; out.push(tk);
+  }
+  return out;
+}
+function monthCount(){ try { return monthKeys().length; } catch(e){ return 0; } }
+function awardChal(){
+  var n = monthCount(), ym = today().slice(0,7), got = 0, hit = 0;
+  for (var i = 0; i < MILE.length; i++){
+    if (n < MILE[i][0]) continue;
+    try {
+      var g = SB.earn("bookchal|" + ym + "|" + MILE[i][0], MILE[i][1]);
+      if (g > 0){ got += g; hit = MILE[i][0]; }
+    } catch(e){}
+  }
+  if (got > 0){
+    try { if (SB.confetti) SB.confetti(); } catch(e){}
+    if (SB.toast) SB.toast("🌳 이번 달 책 " + hit + "권 달성! ⭐ +" + got);
+  }
+  return got;
+}
+
+/* ---------------- ② 오늘 읽을 책 3권 뽑기 ---------------- */
+function index(){
+  var out = [], i, j, b, d;
+  try {
+    var RB = window.RB;
+    if (RB && RB.series) for (i = 0; i < RB.series.length; i++){
+      var ser = RB.series[i];
+      for (j = 0; j < ser.books.length; j++){
+        b = ser.books[j];
+        out.push({ src:"rb", key:b.key, t:b.t, s:ser.n, em:ser.e || "📚", num:b.n });
+      }
+    }
+  } catch(e){}
+  try {
+    var defs = (SB.shelf && SB.shelf.defs) ? SB.shelf.defs : [];
+    for (i = 0; i < defs.length; i++){
+      d = defs[i]; if (!d || !d.b) continue;
+      for (j = 0; j < d.b.length; j++){
+        b = d.b[j];
+        out.push({ src:"sh", def:d.k, key:String(b[0]), t:b[3], s:d.n, em:d.e || "📚", num:b[2] });
+      }
+    }
+  } catch(e){}
+  try {
+    var sg = (SB.sg && SB.sg.books) ? SB.sg.books : [];
+    for (i = 0; i < sg.length; i++){
+      b = sg[i];
+      out.push({ src:"sg", key:String(b[0]), t:b[2], s:"프뢰벨 삼국지", em:"⚔️", num:b[0] });
+    }
+  } catch(e){}
+  try {
+    var fr = (SB.fr && SB.fr.books) ? SB.fr.books : [];
+    for (i = 0; i < fr.length; i++){
+      b = fr[i];
+      out.push({ src:"fr", key:String(b[0]), t:b[2], s:"프뢰벨 책장", em:"📕", num:b[0] });
+    }
+  } catch(e){}
+  return out;
+}
+function isRead(e){
+  try {
+    if (e.src === "rb") return !!(window.RB && window.RB.isRead(e.key));
+    if (e.src === "sg"){ var a = rj("haeyuli.samgukji.read.v1", {}) || {}; return !!a[e.key]; }
+    if (e.src === "fr"){ var f = rj("haeyuli.froebel.read.v1", {}) || {}; return !!f[e.key]; }
+    if (e.src === "sh"){ var d = SB.shelf.def(e.def); return d ? !!SB.shelf.isRead(d, e.key) : false; }
+  } catch(err){}
+  return false;
+}
+function toggleBook(e){
+  try {
+    if (e.src === "rb"){ if (!window.RB) return false; window.RB.setRead(e.key, !isRead(e)); return true; }
+    if (e.src === "sg"){ SB.sg.toggle(e.key); return true; }
+    if (e.src === "fr"){ SB.fr.toggle(e.key); return true; }
+    if (e.src === "sh"){ var d = SB.shelf.def(e.def); if (d){ SB.shelf.toggle(d, e.key); return true; } }
+  } catch(err){}
+  return false;
+}
+function pickStore(){
+  var s = rj(PICKK, null); if (!s || typeof s !== "object" || Array.isArray(s)) s = {};
+  if (!Array.isArray(s.p)) s.p = [];
+  return s;
+}
+function drawPick(){
+  var all = index(), unread = [], i;
+  for (i = 0; i < all.length; i++) if (!isRead(all[i])) unread.push(all[i]);
+  var pool = (unread.length >= MAX_BOOKS) ? unread.slice() : all.slice();
+  var pick = [], used = {}, guard = 0;
+  while (pick.length < MAX_BOOKS && pool.length && guard++ < 5000){
+    var e = pool[Math.floor(Math.random() * pool.length)];
+    var k = e.src + "|" + (e.def || "") + "|" + e.key;
+    if (used[k]) continue;
+    used[k] = 1; pick.push(e);
+  }
+  var s = { v:1, d:today(), p:pick, at:Date.now() };
+  wj(PICKK, s);
+  return s;
+}
+function pickToday(refresh){
+  var s = pickStore();
+  if (!refresh && String(s.d) === today() && s.p.length) return s;
+  return drawPick();
+}
+
+/* ---------------- 그리기 ---------------- */
+function pickHTML(){
+  var s = pickToday(false);
+  var cards = "";
+  for (var i = 0; i < s.p.length; i++){
+    var e = s.p[i], on = isRead(e);
+    cards += '<div class="bkpc-card' + (on ? " read" : "") + '" data-bkpc-card="' + i + '">'
+      + '<span class="bkpc-em" aria-hidden="true">' + esc(e.em || "📚") + '</span>'
+      + '<span class="bkpc-tx"><b>' + esc(e.t) + '</b><span>' + esc(e.s) + " · " + esc(e.num) + '권</span></span>'
+      + '<button class="bkpc-ck" type="button" data-bkpc-ck="' + i + '">' + (on ? "✓ 완독" : "읽었어요") + '</button>'
+      + '</div>';
+  }
+  return '<div class="bkpc-p bkpc-pick">'
+    + '<div class="bkpc-h"><b>🎲 오늘 읽을 책 3권</b><span>' + dayLabel() + ' · 아직 안 읽은 책에서 뽑았어요</span>'
+    + '<button class="bkpc-draw" type="button" id="bkpcDraw">🔄 다시 뽑기</button></div>'
+    + '<div class="bkpc-cards" id="bkpcCards">' + (cards || '<span class="bkpc-empty">책장을 아직 읽지 못했어요 — 새로고침해 보세요</span>') + '</div>'
+    + '<div class="bkpc-note">마음에 드는 책부터 한 권만 읽어도 좋아요 · 체크하면 다마고치가 간식을 받아요 🥚</div>'
+    + '</div>';
+}
+function chalHTML(){
+  var n = monthCount(), i, dots = "", miles = "", next = 0, left = 0;
+  for (i = 1; i <= 30; i++){
+    var on = n >= i, mile = (i === 10 || i === 20 || i === 30);
+    var face = mile ? (i === 10 ? "🌰" : i === 20 ? "🍎" : "🏆") : (on ? "🍃" : "");
+    dots += '<span class="bkpc-dot' + (on ? " on" : "") + (mile ? " mile" : "") + '" title="' + i + '권">' + face + '</span>';
+  }
+  for (i = 0; i < MILE.length; i++){
+    var done = n >= MILE[i][0];
+    miles += '<span class="bkpc-mile' + (done ? " on" : "") + '"><b>' + (done ? "✓ " : "") + MILE[i][0] + '권</b>'
+      + '<span>' + (MILE[i][0] === 10 ? "🌰" : MILE[i][0] === 20 ? "🍎" : "🏆") + ' ⭐+' + MILE[i][1] + '</span></span>';
+  }
+  for (i = 0; i < MILE.length; i++) if (n < MILE[i][0]){ next = MILE[i][0]; left = next - n; break; }
+  var msg = (n >= 30) ? '<b>🎉 30권 완주!</b> 이번 달 책 대장이에요'
+          : (next ? '다음 목표 <b>' + next + '권</b>까지 <b>' + left + '권</b> 남았어요' : '');
+  return '<div class="bkpc-p bkpc-chal">'
+    + '<div class="bkpc-h"><b>🌳 이번 달 책 챌린지</b><span>' + monthLabel() + ' · ' + n + '권 읽었어요</span></div>'
+    + '<div class="bkpc-dots" id="bkpcDots">' + dots + '</div>'
+    + '<div class="bkpc-miles" id="bkpcMiles">' + miles + '</div>'
+    + '<div class="bkpc-msg" id="bkpcMsg">' + msg + '</div>'
+    + '</div>';
+}
+function renderAll(){
+  var w = $("bkPickWrap"); if (!w) return;
+  w.innerHTML = pickHTML() + chalHTML();
+  updateHome();
+}
+function updateHome(){
+  var el = $("bkpcHomeN"); if (!el) return;
+  var s = pickToday(false), done = 0;
+  for (var i = 0; i < s.p.length; i++) if (isRead(s.p[i])) done++;
+  el.textContent = done + "/" + s.p.length;
+}
+function softRefresh(){
+  try { if (SB.readlog && SB.readlog.render) SB.readlog.render(); } catch(e){}
+  setTimeout(function(){ try { renderAll(); } catch(e){} }, 30);
+}
+
+/* ---------------- 동작 ---------------- */
+function togglePick(i){
+  var s = pickToday(false), e = s.p[i];
+  if (!e) return;
+  var was = isRead(e);
+  if (!toggleBook(e)){
+    if (SB.toast) SB.toast("이 책은 여기서 체크할 수 없어요 — 책장에서 눌러 주세요");
+    return;
+  }
+  softRefresh();
+  if (was && SB.toast) SB.toast(e.em + " " + e.t + " — 읽었어요 표시를 풀었어요");
+}
+
+function bindWrap(){
+  var w = $("bkPickWrap");
+  if (!w || w.getAttribute("data-bkpc-b")) return;
+  w.setAttribute("data-bkpc-b", "1");
+  w.addEventListener("click", function(ev){
+    var el = ev.target;
+    if (!el || !el.closest) return;
+    if (el.closest("#bkpcDraw")){
+      ev.preventDefault();
+      drawPick(); renderAll();
+      if (SB.toast) SB.toast("🎲 오늘 읽을 책을 새로 뽑았어요!");
+      return;
+    }
+    var ck = el.closest("[data-bkpc-ck]");
+    if (ck){ ev.preventDefault(); ev.stopPropagation(); togglePick(parseInt(ck.getAttribute("data-bkpc-ck"), 10)); return; }
+    var card = el.closest("[data-bkpc-card]");
+    if (card){ togglePick(parseInt(card.getAttribute("data-bkpc-card"), 10)); return; }
+  });
+}
+function mount(){
+  var view = $("viewBook"); if (!view) return false;
+  if (!$("bkPickWrap")){
+    var w = document.createElement("div");
+    w.id = "bkPickWrap"; w.className = "bkpc";
+    w.innerHTML = pickHTML() + chalHTML();
+    var dash = $("bkDash");
+    if (dash && dash.parentNode === view) view.insertBefore(w, dash);
+    else view.insertBefore(w, view.firstChild);
+  }
+  bindWrap();
+  updateHome();
+  return true;
+}
+function goPicker(){
+  try { if (SB.go) SB.go("book", (SB.sub && SB.sub.book) || "main"); } catch(e){}
+  setTimeout(function(){
+    var w = $("bkPickWrap");
+    if (w && w.scrollIntoView){ try { w.scrollIntoView({ block:"center", behavior:"smooth" }); } catch(e){ try { w.scrollIntoView(); } catch(e2){} } }
+  }, 140);
+}
+/* 홈 '오늘 읽을 책' 카드에 🎲 3권 뽑기 바로가기를 붙인다 (카드가 다시 그려져도 다시 붙인다) */
+function mountHome(){
+  var card = $("rbHome"); if (!card) return;
+  if (card.querySelector(".rb-hpick")) return;
+  var hi = card.querySelector(".rb-hi");
+  if (!hi) return;
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "rb-hpick";
+  b.innerHTML = '🎲 3권 뽑기 <b id="bkpcHomeN">0/3</b>';
+  b.addEventListener("click", function(ev){
+    if (ev){ try { ev.preventDefault(); ev.stopPropagation(); } catch(e){} }
+    goPicker();
+  });
+  hi.appendChild(b);
+  updateHome();
+}
+var homeMO = null;
+function watchHome(){
+  var card = $("rbHome");
+  try {
+    if (card && window.MutationObserver && !homeMO){
+      homeMO = new MutationObserver(function(){ try { mountHome(); } catch(e){} });
+      homeMO.observe(card, { childList:true });
+    }
+  } catch(e){}
+  mountHome();
+}
+
+/* ---------------- 책 읽기 감지 (SB.earn 한 겹 감싸기) ---------------- */
+try {
+  var baseEarn = SB.earn;
+  SB.earn = function(key, n, opts){
+    var got = 0;
+    got = baseEarn.apply(this, arguments);
+    try {
+      if (got > 0){
+        var id = bookId(key);
+        if (id){
+          if (ownLog(id)){
+            try { if (SB.readlog && SB.readlog.mark) SB.readlog.mark(id, true, Date.now()); } catch(e){}
+          }
+          bookSnack(id);
+          try { awardChal(); } catch(e){}
+          softRefresh();
+        }
+      }
+    } catch(e){}
+    return got;
+  };
+} catch(e){}
+
+/* ---------------- 시작 ---------------- */
+function boot(){
+  mount();
+  watchHome();
+  try { awardChal(); } catch(e){}
+  renderAll();
+  setTimeout(function(){ mount(); watchHome(); renderAll(); }, 600);
+  setTimeout(function(){ mount(); watchHome(); renderAll(); }, 1800);
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+else setTimeout(boot, 0);
+/* 책 탭에 들어올 때마다 오늘 뽑은 3권·챌린지 판을 최신으로 */
+(function(){
+  if (typeof SB.onShow !== "object" || !SB.onShow) return;
+  var prev = SB.onShow.book;
+  SB.onShow.book = function(){
+    if (prev){ try { prev.apply(this, arguments); } catch(e){} }
+    mount();
+    setTimeout(function(){ mount(); watchHome(); renderAll(); }, 80);
+  };
+})();
+window.SB.bookPick26 = {
+  pick: function(fresh){ return fresh ? drawPick() : pickToday(false); },
+  refresh: renderAll,
+  monthCount: monthCount,
+  snack: function(){ return snackState(); },
+  index: index,
+  isRead: isRead
+};
+})();
 </script>
 </body>
 </html>
