@@ -6790,6 +6790,7 @@ var K = {
   padp:"haeyuli.padplan.v1", wb:"haeyuli.workbooks.v1",
   att:"haeyuli.attend.v1", sd:"haeyuli.studydays.v1", streak:"haeyuli.hwstreak.v1",
   done:"haeyuli.hwdone.v1", ddone:"yuli.dashdone.v1",
+  attDash:"haeyuli.attend.dash.v1",
   tama:"haeyuli.tama.v1", mood:"haeyuli.mood.v1", stars:"yuli.stars.v2", ledger:"yuli.starledger.v2"
 };
 var BOARD = "haeyuli-english-board.html";
@@ -7181,6 +7182,8 @@ function attendedSet(){
   for (k in ln) if (ln[k] && ln[k].d) out[k] = out[k] || "done";
   return out;
 }
+/* 대시보드가 직접 찍은 도장만 가족 코드 문서로 보낸다 (보드가 찍은 도장은 보드 기기에 그대로) */
+function dashAttData(){ var d = obj(rd(K.attDash, null)); d.days = obj(d.days); return d; }
 function markAttendance(src){
   var a = attData(), t = iso(), d = a.days[t];
   if (!d || typeof d !== "object"){ d = a.days[t] = { src:{}, at:Date.now() }; }
@@ -7189,6 +7192,12 @@ function markAttendance(src){
   var gave = 0;
   if (!d.star){ d.star = 1; wr(K.att, a); gave = 1; }
   else wr(K.att, a);
+  try {
+    var dd = dashAttData();
+    dd.days[t] = { at:Date.now() };
+    var ks = Object.keys(dd.days).sort(); while (ks.length > 120) delete dd.days[ks.shift()];
+    wr(K.attDash, dd);
+  } catch(e){}
   if (gave){
     var key = t + "|eng|attend";
     if (!ledgerHas(key)){
@@ -7468,7 +7477,13 @@ function mergeMoodLocal(cloud){
 function mergeAttendLocal(cloud){
   var m = mergeAttend(attData(), cloud);
   wr(K.att, m);
-  return m;
+  /* 다른 기기 대시보드가 찍은 도장은 이 기기에도 (대시보드가 찍은 날로 표시해 둔다) */
+  var dd = dashAttData(), src = obj(cloud && cloud.days), k;
+  for (k in src) if (src[k] && !dd.days[k]) dd.days[k] = { at:num(src[k].at) };
+  wr(K.attDash, dd);
+  var out = { days:{} };
+  for (k in dd.days) if (m.days[k]) out.days[k] = m.days[k];
+  return out;
 }
 /* 구름의 숙제 완료(done)를 이 기기 달력용으로 캐시 */
 function cacheDone(cloudDone){
