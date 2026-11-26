@@ -12129,23 +12129,24 @@ function chipLabel(s){
 var SECS = {
   en:      [["nir", "📘 나우 아임 리딩"], ["ort", "🌳 ORT"], ["sight", "👀 사이트워드"], ["talk", "🃏 단어카드·게임"], ["phonics", "🔤 파닉스·문장"], ["read", "📖 단계별 읽기"], ["wb", "✍️ 문장 워크북"], ["call", "📞 전화 영어"], ["wordgrow", "🦉 단어키우기"], ["video", "🎬 영어 영상"], ["wolpaem", "🏰 월팸"]],
   ko:      [["quote", "💬 명언·낱말퀴즈"], ["classic", "📜 고전 4줄"], ["vocab", "🌱 초등 어휘·낱말놀이"], ["write", "✍️ 받아쓰기"]],
-  /* 수학은 큰 묶음 탭(GROUPS) 4개 — 그 안에서 알약 전환기로 코너를 고른다 */
+  /* 수학은 큰 묶음 탭(GROUPS) 5개 — 그 안에서 알약 전환기로 코너를 고른다 (🎬 수학 영상 포함) */
   math:    [["saem", "🧮 하루셈·수세기"], ["calc", "➕ 기탄 연산"], ["clock", "⏰ 시계 읽기"],
             ["think", "🧠 사고력"], ["shape", "🔺 도형"],
-            ["mv", "🎯 무브무브"]],
+            ["mv", "🎯 무브무브"], ["video", "🎬 수학 영상"]],
   hanja:   [["trace", "✍️ 따라 쓰기"], ["word", "📝 낱말·뜻 쓰기"], ["text", "🏫 교과서 핵심한자"]],
   history: [["timeline", "📜 전체 연도표"], ["goryeo", "👑 고려 왕조"], ["joseon", "👑 조선 왕조"], ["quiz", "🎯 역사 퀴즈"], ["war", "⚔️ 전쟁사"], ["video", "🎬 역사 영상"],
             ["world", "🌍 세계사 연표"], ["compare", "⚖️ 한국 vs 세계"]],
   cn:      [["cards", "🗂️ 단어 카드"], ["talk", "💬 일상대화 연습"], ["quiz", "📞 메이쌤 음성퀴즈"]],
   jp:      [["cards", "🗂️ 단어 카드"], ["talk", "💬 일상대화 연습"], ["quiz", "📞 유미쌤 음성퀴즈"]]
 };
-/* 수학 큰 묶음 탭 4개. 큰 탭을 누르면 그 안의 알약 전환기(secs)가 열린다 */
+/* 수학 큰 묶음 탭 5개. 큰 탭을 누르면 그 안의 알약 전환기(secs)가 열린다 */
 var GROUPS = {
   math: [
     { k:"g_saem",  em:"🧮", nm:"하루셈·수세기",   secs:["saem"] },
     { k:"g_ops",   em:"➕", nm:"연산·시계",       secs:["calc", "clock"] },
     { k:"g_move",  em:"🎯", nm:"무브무브·구구단", secs:["mv"] },
-    { k:"g_think", em:"🧠", nm:"사고력·도형",     secs:["think", "shape"] }
+    { k:"g_think", em:"🧠", nm:"사고력·도형",     secs:["think", "shape"] },
+    { k:"g_video", em:"🎬", nm:"수학 영상",       secs:["video"] }   /* 2026-11-26 다시 살림 */
   ]
 };
 function grpOf(subject, sec){
@@ -38624,6 +38625,19 @@ var SEED = [
 function pad2(n){ return n < 10 ? "0" + n : "" + n; }
 function iso(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
 function diIdx(d){ return ((d || new Date()).getDay() + 6) % 7; }           /* 월=0 … 일=6 */
+/* 📅 등록일(startDate, YYYY-MM-DD) — 부모 페이지에서 문제집·패드 학습을 새로 등록하거나
+   요일을 새로 정한 날. 그 날보다 앞선 날짜에는 그 항목을 숙제로 내보내지 않는다 */
+function dateOnly(v){
+  v = String(v == null ? "" : v).slice(0, 10);
+  return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : "";
+}
+function startsAfter(v, ds){
+  var s0 = dateOnly(v);
+  if (!s0) return false;                      /* 시작일이 없는 예전 항목은 그대로 */
+  var d0 = String(ds == null ? "" : ds).slice(0, 10);
+  return !!d0 && d0 < s0;
+}
+
 function dayFromIso(s){ return diIdx(new Date(String(s) + "T00:00:00")); }
 function num(n, fb){
   if (n === "" || n === null || n === undefined) return (fb === undefined ? 0 : fb);
@@ -38656,7 +38670,8 @@ function norm(w){
     at: num(w.at, 0),
     alerted: num(w.alerted, 0),
     dismissed: String(w.dismissed || ""),
-    adv: (w.adv && typeof w.adv === "object" && !Array.isArray(w.adv)) ? w.adv : {}
+    adv: (w.adv && typeof w.adv === "object" && !Array.isArray(w.adv)) ? w.adv : {},
+    startDate: dateOnly(w.startDate)          /* 📅 부모 페이지에서 등록한 날 */
   };
   if (o.cur > o.total) o.cur = o.total;
   if (!o.daily) o.daily = 1;
@@ -38739,6 +38754,7 @@ function itemsFor(di, ds){
     var w = d.list[i];
     if (!w.hw) continue;
     if (w.days.indexOf(target) < 0) continue;
+    if (startsAfter(w.startDate, dayKey)) continue;   /* 등록일보다 앞선 날짜에는 안 나온다 */
     var base = w.cur;
     var a = (w.adv && w.adv[today]) ? w.adv[today] : null;
     if (dayKey === today && a && typeof a.from === "number") base = a.from;   /* 오늘 체크한 뒤에도 그날 쪽을 그대로 보여 준다 */
@@ -38994,7 +39010,8 @@ function addWb(){
   var d = load();
   var id = "c" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36);
   var w = norm({ id:id, nm:nm, sub:draft.sub, total:total, cur:cur, daily:daily,
-                 days:ndays.slice(), hw:draft.hw ? 1 : 0, at:Date.now() });
+                 days:ndays.slice(), hw:draft.hw ? 1 : 0, at:Date.now(),
+                 startDate: iso() });        /* 📅 보드에서 등록해도 등록일부터 */
   d.list.push(w);
   save(d, true);
   alertPush(find(d, id));
@@ -39056,7 +39073,7 @@ function onClick(e){
     var k = num(m[1], -1), ix = w.days.indexOf(k);
     if (ix >= 0){ if (w.days.length === 1) return; w.days.splice(ix, 1); }
     else w.days.push(k);
-    w.days.sort(); w.at = Date.now();
+    w.days.sort(); w.at = Date.now(); w.startDate = w.startDate || iso();   /* 요일을 새로 정한 날부터 */
     save(d); render(); return;
   }
   var pre = t.closest("[data-wbpreset]");
@@ -39065,7 +39082,7 @@ function onClick(e){
     var dd = readInputs(), w2 = find(dd, p[0]);
     if (!w2) return;
     w2.days = (PRESET[p[1]] || PRESET["5"]).slice();
-    w2.at = Date.now();
+    w2.at = Date.now(); w2.startDate = w2.startDate || iso();
     save(dd); render(); return;
   }
   var nd = t.closest("[data-wbnday]");
@@ -39165,6 +39182,19 @@ function esc(s){
 function pad2(n){ return n < 10 ? "0" + n : "" + n; }
 function iso(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
 function dayIdx(){ return (new Date().getDay() + 6) % 7; }         /* 월=0 … 일=6 */
+/* 📅 등록일(startDate, YYYY-MM-DD) — 부모 페이지에서 문제집·패드 학습을 새로 등록하거나
+   요일을 새로 정한 날. 그 날보다 앞선 날짜에는 그 항목을 숙제로 내보내지 않는다 */
+function dateOnly(v){
+  v = String(v == null ? "" : v).slice(0, 10);
+  return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : "";
+}
+function startsAfter(v, ds){
+  var s0 = dateOnly(v);
+  if (!s0) return false;                      /* 시작일이 없는 예전 항목은 그대로 */
+  var d0 = String(ds == null ? "" : ds).slice(0, 10);
+  return !!d0 && d0 < s0;
+}
+
 var KEY = "haeyuli.hwplan.v1";
 var UNKEY = "haeyuli.hwplan.un.v1";   /* 마지막에 숙제 체크를 '푼' 시각 — 기기끼리 합칠 때 쓴다 */
 var CARRY_KEY = "haeyuli.hwcarry.v1";   /* ➡️ 내일로 미룬 숙제 — 날짜별로 내보낸/받은 기록 */
@@ -39328,7 +39358,7 @@ function padpMerge(local, cloud){
         subject:String(x.subject == null ? (x.sub || "패드") : x.subject).slice(0, 10),
         days:pDays(x.days),
         on:!(x.on === 0 || x.on === false),
-        builtIn:!!x.builtIn, at:at
+        builtIn:!!x.builtIn, startDate:dateOnly(x.startDate), at:at
       };
       order.push(id);
       return;
@@ -39339,6 +39369,7 @@ function padpMerge(local, cloud){
     prev.days = pDays(x.days);
     prev.on = !(x.on === 0 || x.on === false);
     prev.builtIn = !!x.builtIn;
+    prev.startDate = dateOnly(x.startDate) || prev.startDate;   /* 옛 기기가 덮어써도 시작일은 남긴다 */
     prev.at = at;
   }
   A.list.forEach(put); B.list.forEach(put);
@@ -39375,15 +39406,22 @@ function padpSave(doc){
 }
 function padpList(){ return padpMerge(padpLoad(), null).list; }
 /* 그 요일(월=0 … 일=6)에 나오는 패드 학습 */
-function padpItems(di){
-  var out = [], list = padpList();
+function padpItems(di, ds){
+  var out = [], list = padpList(), day = dateOnly(ds) || iso();
   for (var i = 0; i < list.length; i++){
     var p = list[i];
     if (!p.on) continue;
     if (p.days.indexOf(di) < 0) continue;
+    if (startsAfter(p.startDate, day)) continue;   /* 등록일보다 앞선 날짜에는 안 나온다 */
     out.push({ id:p.id, s:p.subject, t:p.name, tag:"t", go:(PADP_GO[p.id] || null) });
   }
   return out;
+}
+/* 그 패드 학습을 등록한 날 — SCHED 에 섞여 들어온 패드 항목을 날짜로 걸러 낼 때 쓴다 */
+function padStart(id){
+  var list = padpList();
+  for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i].startDate || "";
+  return "";
 }
 /* SCHED 를 padplan 으로 다시 채운다 — 원래 패드 항목이 있던 자리에 그날의 패드 학습을 넣는다 */
 var PADP_BASE = null;
@@ -39452,7 +39490,10 @@ function wbDay(di, ds){
 }
 /* 미루기를 반영하기 전의 기본 목록 */
 function itemsBase(di, ds){
-  var base = SCHED[di] || [];
+  var dayKey = ds || iso();
+  var base = (SCHED[di] || []).filter(function(it){
+    return !(it && it.tag === "t" && startsAfter(padStart(it.id), dayKey));   /* 등록일 전에는 빼고 */
+  });
   var wb = wbDay(di, ds);
   if (!wb.length) return base.slice();
   var out = [], seen = {}, used = {}, i, j;

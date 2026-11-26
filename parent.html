@@ -659,6 +659,20 @@ footer p{margin:0;font-size:.68rem;font-weight:700;color:var(--muted)}
 function $(id){ return document.getElementById(id); }
 function pad2(n){ return n < 10 ? "0" + n : "" + n; }
 function iso(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+/* 📅 등록일(startDate, YYYY-MM-DD) — 문제집·패드 학습을 새로 등록하거나 요일을 새로 정한 날.
+   그 날보다 앞선 날짜에는 그 항목을 숙제로 내보내지 않는다
+   (목요일에 월·수·금 문제집을 넣었는데 지나간 월·수요일에까지 뜨던 문제) */
+function dateOnly(v){
+  v = String(v == null ? "" : v).slice(0, 10);
+  return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : "";
+}
+function startsAfter(v, ds){
+  var s0 = dateOnly(v);
+  if (!s0) return false;                      /* 시작일이 없는 예전 항목은 그대로 */
+  var d0 = String(ds == null ? "" : ds).slice(0, 10);
+  return !!d0 && d0 < s0;
+}
+function ymdShort(v){ v = dateOnly(v); return v ? (v.slice(5, 7) + "/" + v.slice(8, 10)) : ""; }
 function num(v, fb){
   if (v === "" || v === null || v === undefined) return (fb === undefined ? 0 : fb);
   v = Number(v);
@@ -880,7 +894,8 @@ function wbNorm(w){
     at:num(w.at, 0),
     alerted:num(w.alerted, 0),
     dismissed:String(w.dismissed || ""),
-    adv:(w.adv && typeof w.adv === "object" && !Array.isArray(w.adv)) ? w.adv : {}
+    adv:(w.adv && typeof w.adv === "object" && !Array.isArray(w.adv)) ? w.adv : {},
+    startDate:dateOnly(w.startDate)
   };
   if (o.cur > o.total) o.cur = o.total;
   if (!o.daily) o.daily = 1;
@@ -1207,7 +1222,8 @@ function padMerge(local, cloud){
       map[id] = { id:id,
         name:String(x.name == null ? (x.nm || "") : x.name).slice(0, 40),
         subject:String(x.subject == null ? (x.sub || "패드") : x.subject).slice(0, 10),
-        days:padDays(x.days), on:!(x.on === 0 || x.on === false), builtIn:!!x.builtIn, at:at };
+        days:padDays(x.days), on:!(x.on === 0 || x.on === false), builtIn:!!x.builtIn,
+        startDate:dateOnly(x.startDate), at:at };
       order.push(id);
       return;
     }
@@ -1217,6 +1233,7 @@ function padMerge(local, cloud){
     prev.days = padDays(x.days);
     prev.on = !(x.on === 0 || x.on === false);
     prev.builtIn = !!x.builtIn;
+    prev.startDate = dateOnly(x.startDate) || prev.startDate;   /* 옛 기기가 덮어써도 시작일은 남긴다 */
     prev.at = at;
   }
   A.list.forEach(put); B.list.forEach(put);
@@ -1253,19 +1270,20 @@ function padById(id){
   return null;
 }
 /* 그 요일(월=0 … 일=6)에 나오는 패드 학습 — 보드 SB.hw5.items 와 같은 규칙 */
-function padItemsFor(di){
-  var out = [], list = padList();
+function padItemsFor(di, ds){
+  var out = [], list = padList(), day = dateOnly(ds) || todayIso();
   for (var i = 0; i < list.length; i++){
     var p = list[i];
     if (!p.on) continue;
     if (p.days.indexOf(di) < 0) continue;
+    if (startsAfter(p.startDate, day)) continue;   /* 등록일보다 앞선 날짜에는 안 나온다 */
     out.push({ id:p.id, s:p.subject, t:p.name, tag:"t" });
   }
   return out;
 }
 /* 기본 숙제표에서 고정 패드 항목 자리에 그날의 패드 학습을 끼워 넣는다 */
-function schedFor(di){
-  var base = SCHED[di] || [], pads = padItemsFor(di), out = [], placed = false, i, j;
+function schedFor(di, ds){
+  var base = SCHED[di] || [], pads = padItemsFor(di, ds), out = [], placed = false, i, j;
   for (i = 0; i < base.length; i++){
     var it = base[i];
     if (it.tag === "t"){
@@ -1305,7 +1323,7 @@ function completeDays(){
   for (k in picked){
     var dt = new Date(String(k) + "T00:00:00");
     if (!dt || isNaN(dt.getTime())) continue;
-    var need = schedFor(dayIdxOf(k)).length;
+    var need = schedFor(dayIdxOf(k), k).length;
     if (need > 0 && picked[k] >= need) out[k] = 1;
   }
   return out;
@@ -1374,6 +1392,7 @@ function wbItemsFor(di, ds){
     var w = list[i];
     if (!w.hw) continue;
     if (w.days.indexOf(di) < 0) continue;
+    if (startsAfter(w.startDate, ds || today)) continue;   /* 등록일보다 앞선 날짜에는 안 나온다 */
     var base = w.cur;
     var a = (w.adv && w.adv[today]) ? w.adv[today] : null;
     if (ds === today && a && typeof a.from === "number") base = a.from;
@@ -1386,9 +1405,9 @@ function wbItemsFor(di, ds){
   return out;
 }
 /* 기본 목록 (문제집은 같은 과목 첫 항목 앞에 끼워 넣는다 — 보드와 같은 순서) */
-function itemsBase(di){
-  var base = schedFor(di);                 /* 📱 패드 학습은 부모가 정한 요일대로 */
-  var wb = wbItemsFor(di, todayIso());
+function itemsBase(di, ds){
+  var base = schedFor(di, ds);             /* 📱 패드 학습은 부모가 정한 요일대로 */
+  var wb = wbItemsFor(di, ds || todayIso());
   if (!wb.length) return base.slice();
   var out = [], seen = {}, used = {}, i, j;
   for (i = 0; i < base.length; i++){
@@ -1404,7 +1423,7 @@ function itemsBase(di){
 }
 /* 오늘 목록 + 어제 미룬 숙제(받음) + 오늘 내일로 미룸(표시) */
 function itemsList(di, ds){
-  var base = itemsBase(di), out = [], i;
+  var base = itemsBase(di, ds), out = [], i;
   for (i = 0; i < base.length; i++) out.push({ id:base[i].id, s:base[i].s, t:base[i].t, g:base[i].tag || "p" });
   var cr = carryData(), dayKey = ds || todayIso();
   var mvOut = (cr.out[dayKey] && typeof cr.out[dayKey] === "object") ? cr.out[dayKey] : {};
@@ -1431,7 +1450,7 @@ function hwToday(){
   var h = hwday(), t = todayIso();
   if (h && h.date === t && Array.isArray(h.items)){
     /* 📱 패드 학습 — 보드가 올린 요약(hwday)이 낡았어도 부모가 바꾼 요일이 바로 보이게 맞춘다 */
-    var pdi = dayIdxOf(t), pads = padItemsFor(pdi), pmap = {}, seenP = {}, src = [], i0;
+    var pdi = dayIdxOf(t), pads = padItemsFor(pdi, t), pmap = {}, seenP = {}, src = [], i0;
     for (i0 = 0; i0 < pads.length; i0++) pmap[pads[i0].id] = pads[i0];
     /* 📘 지면 문제집 — 보드가 올린 요약(hwday)이 예전 것이어도, 부모 페이지에서 방금 추가했거나
        요일을 바꾼 문제집이 '오늘의 숙제'에 바로 뜨도록 지금 문제집 목록으로 다시 맞춘다 */
@@ -1844,7 +1863,8 @@ function renderWB(){
     return '<div class="wbcard" data-card="' + esc(w.id) + '">' +
       '<div class="wb-h"><span class="em">' + (SUBEM[w.sub] || "📘") + '</span>' +
         '<div class="nm"><b>' + esc(w.nm) + '</b><span>' + esc(w.sub) + ' · ' + dayLabel(w.days) +
-          ' · 하루 ' + w.daily + '쪽 · 🗓️ ' + mo.sm + '월~' + mo.em + '월</span></div>' +
+          ' · 하루 ' + w.daily + '쪽 · 🗓️ ' + mo.sm + '월~' + mo.em + '월' +
+          (w.startDate ? ' · 📅 ' + ymdShort(w.startDate) + '부터' : '') + '</span></div>' +
         '<button class="btn sm warn" type="button" data-wbdel="' + esc(w.id) + '">삭제</button></div>' +
       '<div class="wb-bar"><i style="width:' + wbPct(w) + '%"></i></div>' +
       '<div class="wb-meta"><b>' + w.cur + ' / ' + w.total + '쪽</b><span>' + wbPct(w) + '%</span>' +
@@ -1919,7 +1939,8 @@ function wbSaveOne(id){
   var next = wbNorm({ id:w.id, nm:w.nm, sub:w.sub, total:total,
     cur:(e.cur !== undefined ? Math.min(e.cur, total) : Math.min(w.cur, total)),
     daily:(e.daily !== undefined ? Math.max(1, e.daily) : w.daily),
-    days:w.days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv });
+    days:w.days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv,
+    startDate:w.startDate });
   wbCommit(function(d){
     var list2 = wbListOf(d.wb), found = false;
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id){ list2[j] = next; found = true; }
@@ -1941,7 +1962,8 @@ function wbToggleDay(id, idx){
     total:(e.total !== undefined ? e.total : w.total),
     cur:(e.cur !== undefined ? Math.min(e.cur, e.total !== undefined ? e.total : w.total) : w.cur),
     daily:(e.daily !== undefined ? Math.max(1, e.daily) : w.daily),
-    days:days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv });
+    days:days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv,
+    startDate:(w.startDate || todayIso()) });   /* 요일을 새로 정한 날부터 (처음 등록일이 있으면 그대로) */
   var added = (next.days.indexOf(idx) >= 0);
   wbCommit(function(d){
     var list2 = wbListOf(d.wb);
@@ -1960,7 +1982,8 @@ function wbPreset(id, key){
     total:(e.total !== undefined ? e.total : w.total),
     cur:(e.cur !== undefined ? Math.min(e.cur, e.total !== undefined ? e.total : w.total) : w.cur),
     daily:(e.daily !== undefined ? Math.max(1, e.daily) : w.daily),
-    days:days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv });
+    days:days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv,
+    startDate:(w.startDate || todayIso()) });
   wbCommit(function(d){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
@@ -1973,7 +1996,8 @@ function wbToggleHW(id, on){
   for (var i = 0; i < list.length; i++) if (list[i].id === id) w = list[i];
   if (!w) return;
   var next = wbNorm({ id:w.id, nm:w.nm, sub:w.sub, total:w.total, cur:w.cur, daily:w.daily,
-    days:w.days, hw:(on ? 1 : 0), at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv });
+    days:w.days, hw:(on ? 1 : 0), at:Date.now(), alerted:w.alerted, dismissed:w.dismissed, adv:w.adv,
+    startDate:w.startDate });
   wbCommit(function(d){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
@@ -1985,7 +2009,7 @@ function wbReset(id){
   for (var i = 0; i < list.length; i++) if (list[i].id === id) w = list[i];
   if (!w) return;
   var next = wbNorm({ id:w.id, nm:w.nm, sub:w.sub, total:w.total, cur:0, daily:w.daily,
-    days:w.days, hw:w.hw, at:Date.now(), alerted:0, dismissed:"", adv:{} });
+    days:w.days, hw:w.hw, at:Date.now(), alerted:0, dismissed:"", adv:{}, startDate:w.startDate });
   wbCommit(function(d){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
@@ -1997,7 +2021,8 @@ function wbDismiss(id){
   for (var i = 0; i < list.length; i++) if (list[i].id === id) w = list[i];
   if (!w) return;
   var next = wbNorm({ id:w.id, nm:w.nm, sub:w.sub, total:w.total, cur:w.cur, daily:w.daily,
-    days:w.days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:todayIso(), adv:w.adv });
+    days:w.days, hw:w.hw, at:Date.now(), alerted:w.alerted, dismissed:todayIso(), adv:w.adv,
+    startDate:w.startDate });
   wbCommit(function(d){
     var list2 = wbListOf(d.wb);
     for (var j = 0; j < list2.length; j++) if (list2[j].id === next.id) list2[j] = next;
@@ -2152,7 +2177,8 @@ function addWbFromSheet(){
   if (recent){ toast("📘 " + nm + " · 방금 등록했어요 (같은 문제집이 두 번 들어가지 않게 막았어요)"); closeSheet(); return; }
   WBADDING = true; WBLASTADD = { key:key, at:nowMs };
   setTimeout(function(){ WBADDING = false; }, 4000);
-  var w = wbNorm({ nm:nm, sub:sub, total:total, cur:cur, daily:daily, days:days, hw:hw, at:nowMs });
+  var w = wbNorm({ nm:nm, sub:sub, total:total, cur:cur, daily:daily, days:days, hw:hw, at:nowMs,
+                   startDate:todayIso() });   /* 📅 등록한 날 — 이 날부터 숙제에 나온다 */
   closeSheet();                       /* 등록을 누르면 바로 닫고 목록에 카드가 나타난다 */
   var today = todayIso(), inToday = !!hw && days.indexOf(dayIdxOf(today)) >= 0;
   wbCommit(function(d){
@@ -2243,6 +2269,7 @@ function renderPad(){
     return '<div class="wbcard padcard' + (p.on ? '' : ' off') + '" data-padcard="' + esc(p.id) + '">' +
       '<div class="wb-h"><span class="em">' + (SUBEM[p.subject] || "📱") + '</span>' +
         '<div class="nm"><b>' + esc(p.name) + '</b><span>' + esc(p.subject) + ' · ' + dayLabel(p.days) +
+          (p.startDate ? ' · 📅 ' + ymdShort(p.startDate) + '부터' : '') +
           (p.builtIn ? '' : ' · 직접 추가') + '</span></div>' +
         '<button class="btn sm warn" type="button" data-paddel="' + esc(p.id) + '">삭제</button>' +
       '</div>' +
@@ -2274,13 +2301,13 @@ function padToggleDay(id, idx){
   else days.push(idx);
   days.sort();
   var added = (days.indexOf(idx) >= 0);
-  padSet(id, { days:days }, "📱 " + p.name + " · " + dayLabel(days) +
+  padSet(id, { days:days, startDate:(p.startDate || todayIso()) }, "📱 " + p.name + " · " + dayLabel(days) +
     (added ? " 추가 · 오늘의 숙제·시간표에 바로 반영" : " 해제 · 오늘의 숙제·시간표에 바로 반영"));
 }
 function padPreset(id, key){
   var p = padById(id); if (!p) return;
   var days = (PRESET[key] || PRESET["5"]).slice();
-  padSet(id, { days:days }, "📱 " + p.name + " · " + dayLabel(days) + " · 학습계획에 바로 반영");
+  padSet(id, { days:days, startDate:(p.startDate || todayIso()) }, "📱 " + p.name + " · " + dayLabel(days) + " · 학습계획에 바로 반영");
 }
 function padToggleOn(id, on){
   var p = padById(id); if (!p) return;
@@ -2328,7 +2355,8 @@ function addPadFromSheet(){
   var id = "pad" + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36);
   var days = PADDRAFT.days.slice(), now = Date.now();
   padCommit(function(doc){
-    doc.list.push({ id:id, name:nm, subject:sb, days:days, on:true, builtIn:false, at:now });
+    doc.list.push({ id:id, name:nm, subject:sb, days:days, on:true, builtIn:false, at:now,
+                    startDate:todayIso() });   /* 📅 오늘 등록 — 오늘부터 숙제에 나온다 */
   }, "📱 " + nm + " 추가 · " + dayLabel(days) + " 숙제에 나와요").then(function(ok){
     if (ok) closeSheet();
   });
