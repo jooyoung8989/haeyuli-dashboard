@@ -1216,6 +1216,8 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
       <button class="tab active" data-tab="home" aria-selected="true">🏠 대시보드</button>
       <button class="tab" data-tab="school" aria-selected="false">🎒 등원</button>
       <button class="tab" data-tab="puppy" aria-selected="false">🐾 강아지</button>
+      <button class="tab" data-tab="homework" aria-selected="false">📝 숙제</button>
+      <button class="tab" data-tab="attend" aria-selected="false">📅 출석</button>
       <button class="tab" data-tab="dad" aria-selected="false">👮 아빠 출근표</button>
       <button class="tab" data-tab="money" aria-selected="false">🐷 용돈주기</button>
       <button class="tab" data-tab="settings" aria-selected="false">⚙️ 설정</button>
@@ -1607,6 +1609,12 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
       </div>
     </div>
   </section>
+
+  <!-- ================= 📝 숙제 (스터디 보드 오늘의 숙제 · 다마고치 · 칭찬 스티커) ================= -->
+  <section class="pane" id="pane-homework" aria-label="해율이 오늘의 숙제"></section>
+
+  <!-- ================= 📅 출석 (월간 도장판 · 연속 잭팟 사다리 · 다마고치) ================= -->
+  <section class="pane" id="pane-attend" aria-label="해율이 출석 도장판"></section>
 
   <!-- ================= 설정 ================= -->
   <section class="pane" id="pane-settings">
@@ -3495,6 +3503,16 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
       bWriteMoney(merged);
       /* ⭐ 별도 같은 문서(haeyuli-<코드>)의 stars·sled 를 스터디 보드와 똑같은 규칙으로 맞춘다 */
       var stM = bMergeStars(starState, ledger, cdoc && cdoc.stars, cdoc && cdoc.sled);
+      /* 📝 오늘의 숙제 체크도 같은 문서(haeyuli-<코드>)로 — 스터디 보드와 똑같은 규칙으로 합친다 */
+      var hwM = null;
+      try {
+        if (window.HWPLAN){
+          hwM = HWPLAN.mergePlanLocal(cdoc && cdoc.hwplan, cdoc && cdoc.hwplanUn);
+          HWPLAN.cacheDone(cdoc && cdoc.done);
+          HWPLAN.cacheStudy(cdoc && cdoc.study);
+          HWPLAN.adoptPlans(cdoc && cdoc.wb, cdoc && cdoc.padplan);
+        }
+      } catch(e){ hwM = null; }
       var curT = Math.max(0, Math.round(Number(starState.total) || 0));
       var starChanged = (stM.total !== curT) || !bSameLed(ledger, stM.led);
       if (starChanged){
@@ -3512,14 +3530,18 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
       doc.v = 1; doc.code = code; doc.money = merged;
       doc.stars = { total: stM.total };
       doc.sled = stM.led;
+      if (hwM){ doc.hwplan = hwM.check; doc.hwplanUn = hwM.un; }
       doc.at = Date.now();
       bSync.last = Date.now(); bSync.err = "";
       renderWallet();
       if (starChanged) renderStars(false);
+      try { if (window.HWPLAN) HWPLAN.cloudApplied(); } catch(e){}
       var same = !!cdoc &&
         JSON.stringify(cdoc.money || null) === JSON.stringify(merged) &&
         Math.max(0, Math.round(Number((cdoc.stars && cdoc.stars.total) || 0) || 0)) === stM.total &&
-        bSameLed(cdoc.sled, stM.led);
+        bSameLed(cdoc.sled, stM.led) &&
+        (!hwM || (JSON.stringify(cdoc.hwplan || null) === JSON.stringify(hwM.check) &&
+                  JSON.stringify(cdoc.hwplanUn || null) === JSON.stringify(hwM.un)));
       if (same) return true;
       return mbPut(code, doc).then(function(){ return true; });
     }).catch(function(e){
@@ -4896,6 +4918,9 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
     }
     if (name === "puppy") { renderPuppy(); renderStars(false); puppySay(puppyName() + "랑 놀자! 🐾", 2200); }
     if (name === "dad") renderCalendar();
+    if (name === "homework") { try { if (window.HWPLAN) HWPLAN.render(); } catch(e){} }
+    if (name === "attend") { try { if (window.HWPLAN) HWPLAN.renderAttend(); } catch(e){} }
+    if ((name === "homework" || name === "attend")) { try { if (window.YULI && YULI.hwSync) YULI.hwSync(); } catch(e){} }
     if (name === "money") renderWallet();
     if (name === "settings") renderStars(false);
     if (name === "home") { renderHome(); }
@@ -5020,6 +5045,27 @@ body{background:linear-gradient(180deg,#FFFDF7 0%,#FFFBEF 48%,#FFF6E2 100%);}
       try { if (typeof bSyncNow === "function") bSyncNow(false); } catch(e){}
       try { if (typeof renderStars === "function") renderStars(false); } catch(e){}
     },
+    /* 📝 숙제·📅 출석 화면이 쓰는 다리 — 별은 스터디 보드와 같은 원장 키로 */
+    hwAward: function(key, n){
+      key = String(key || ""); if (!key || ledger[key]) return false;
+      var nn = Math.max(1, Math.round(Number(n) || 1));
+      ledger[key] = nn; addStars(nn); return true;
+    },
+    hwTake: function(key){
+      key = String(key || ""); if (!key || !ledger[key]) return false;
+      var nn = Math.max(0, Number(ledger[key]) || 0);
+      delete ledger[key]; addStars(-nn); return true;
+    },
+    hwBonus: function(date){
+      var rid = "hwday-" + String(date || "");
+      var d = bReadMoney(), log = Array.isArray(d.log) ? d.log : [];
+      for (var i = 0; i < log.length; i++) if (log[i] && log[i].rid === rid) return false;
+      return moneyApply(500, "📅 오늘 숙제 다 함", { rid:rid });
+    },
+    hwPush: function(){ try { bPushSoon(); } catch(e){} },
+    hwSync: function(){ try { return bSyncNow(false); } catch(e){ return null; } },
+    hwStars: function(){ return starState.total; },
+    toast: function(m){ toastMsg(m); },
     refresh: function(){ renderCards(); renderDashBottom(); renderCountdown(new Date()); renderNow(); }
   };
 
@@ -5419,10 +5465,22 @@ function syncOnce(manual){
         ntf = NTFY.doc();
       }
     } catch(e){ ntf = null; }
+    /* 🌤️ 오늘의 감정 · 📅 출석 도장도 같은 문서로 (마지막에 고른 감정 · 합친 도장이 남는다) */
+    var nmood = null, natt = null;
+    try {
+      if (window.HWPLAN){
+        nmood = HWPLAN.mergeMoodLocal(remote && typeof remote === "object" ? remote.mood : null);
+        natt = HWPLAN.mergeAttendLocal(remote && typeof remote === "object" ? remote.attend : null);
+      }
+    } catch(e){ nmood = null; natt = null; }
     var doc = { v:1, code:F.code, name:kidName(), at: Date.now(), days: out, now: nnow, ntfy: ntf };
+    if (nmood) doc.mood = nmood;
+    if (natt) doc.attend = natt;
     var changed = !rdays || JSON.stringify(out) !== JSON.stringify(rdays) ||
                   JSON.stringify(nnow) !== JSON.stringify(rnow || {}) ||
                   JSON.stringify(ntf) !== JSON.stringify((remote && remote.ntfy) || null) ||
+                  (!!nmood && JSON.stringify(nmood) !== JSON.stringify((remote && remote.mood) || null)) ||
+                  (!!natt && JSON.stringify(natt) !== JSON.stringify((remote && remote.attend) || null)) ||
                   !remote || remote.code !== doc.code || remote.name !== doc.name;
     var step = changed ? apiPut(F.code, doc) : Promise.resolve(true);
     return step.then(function(){
@@ -5430,6 +5488,7 @@ function syncOnce(manual){
       F.lastError = "";
       saveF();
       paint();
+      try { if (window.HWPLAN) HWPLAN.refresh(); } catch(e){}
       if (manual) toastMsg("🔄 가족 등원 준비를 맞췄어요");
       return true;
     });
@@ -6491,6 +6550,1298 @@ window.YULI_BGM = (function(){
       };
     }
   };
+})();
+</script>
+
+<style id="hw1126css">
+/* ================= 📝 숙제 · 📅 출석 (2026-11-26) ================= */
+.hw-wrap,.at-wrap{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:1.2vh;}
+.at-wrap{grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);}
+.hw-col,.at-col{min-width:0;min-height:0;display:flex;flex-direction:column;gap:1.05vh;}
+.hw-card{background:#fff;border-radius:2vh;box-shadow:var(--card-shadow);padding:.95vh 1.15vh;
+  min-height:0;display:flex;flex-direction:column;gap:.5vh;overflow:hidden;}
+.hw-pethd{display:flex;align-items:center;gap:.6vh;flex-wrap:wrap;row-gap:.25vh;}
+.hw-pethd b{font-size:1.6vh;font-weight:900;color:#2f3a35;}
+.hw-hint{font-size:1.12vh;font-weight:800;color:#93a49b;line-height:1.3;}
+.hw-pethd .hw-hint{margin-left:auto;}
+.hw-board{margin-left:auto;font-size:1.12vh;font-weight:900;color:#1f6b45;background:#e7f7ec;
+  border-radius:999px;padding:.35vh .85vh;text-decoration:none;white-space:nowrap;box-shadow:inset 0 0 0 .16vh #cfe9da;}
+.hw-board:active{transform:scale(.97);}
+
+/* --- 오늘의 기록 배너 --- */
+.hw-banner{flex:0 0 auto;background:linear-gradient(135deg,#fffdf2,#fff3d2 55%,#ffe8b8);
+  box-shadow:inset 0 0 0 .2vh #f6e2ac,var(--card-shadow);gap:.45vh;}
+.hw-bh{display:flex;align-items:baseline;gap:.8vh;flex-wrap:wrap;}
+.hw-bh b{font-size:1.85vh;font-weight:900;color:#8a5f06;letter-spacing:.01vh;}
+.hw-date{margin-left:auto;font-size:1.25vh;font-weight:900;color:#a8811c;}
+.hw-sum{display:flex;align-items:center;gap:.8vh;flex-wrap:wrap;}
+.hw-num{font-size:1.3vh;font-weight:800;color:#7a6a4a;}
+.hw-num b{font-size:2vh;font-weight:900;color:#217a4b;}
+.hw-doneall{font-size:1.25vh;font-weight:900;color:#8a5f06;background:#fff6d8;border-radius:999px;padding:.3vh .9vh;
+  box-shadow:inset 0 0 0 .16vh #f2d075;}
+.hw-bar{height:1.35vh;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 .16vh #f0dcae;overflow:hidden;}
+.hw-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#8fd7ae,#3aa96c);transition:width .35s ease;}
+
+/* --- 숙제 목록 --- */
+.hw-listbox{flex:1 1 auto;}
+.hw-list{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;
+  gap:.3vh;padding-right:.3vh;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.hw-list::-webkit-scrollbar{display:none;}
+.hw-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:.5vh;
+  padding:.32vh .5vh;border-radius:1vh;background:#fafcfb;box-shadow:inset 0 0 0 .14vh #eef4f0;}
+.hw-row.done{background:#f1fbf5;box-shadow:inset 0 0 0 .14vh #d4eede;}
+.hw-row.moved{background:#fffaf0;box-shadow:inset 0 0 0 .14vh #f4e5c4;}
+.hw-ck{flex:0 0 auto;width:2.9vh;height:2.9vh;border-radius:50%;display:grid;place-items:center;
+  font-size:1.45vh;font-weight:900;background:#fff;color:#c2d2c8;box-shadow:inset 0 0 0 .2vh #dfeae3;transition:transform .12s;}
+.hw-ck:active{transform:scale(.92);}
+.hw-row.done .hw-ck{background:var(--green);color:#fff;box-shadow:none;}
+.hw-row.moved .hw-ck{background:#fff3d4;color:#b8860b;box-shadow:inset 0 0 0 .2vh #f0d59a;font-size:1.2vh;}
+.hw-rowth{display:flex;align-items:center;gap:.45vh;min-width:0;text-decoration:none;color:inherit;}
+.hw-subj{flex:0 0 auto;font-size:.98vh;font-weight:900;color:#fff;background:#9db9ab;border-radius:.65vh;
+  padding:.16vh .5vh;letter-spacing:.02vh;}
+.hw-subj.en{background:#5aa9d6;}.hw-subj.math{background:#e08a2e;}.hw-subj.ko{background:#7f8cd6;}
+.hw-subj.hanja{background:#b06f5a;}.hw-subj.cn{background:#c05a7a;}.hw-subj.hist{background:#8a7a55;}
+.hw-subj.book{background:#6aab7c;}.hw-subj.pad{background:#8d8fb0;}
+.hw-tx{font-size:1.36vh;font-weight:800;color:#33413a;line-height:1.25;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.hw-row.done .hw-tx{color:#8aa99a;text-decoration:line-through;}
+.hw-mv{flex:0 0 auto;font-size:.95vh;font-weight:900;color:#b8860b;background:#fff3d4;border-radius:999px;padding:.1vh .5vh;}
+.hw-mv.cy{color:#1f6b45;background:#e7f7ec;}
+.hw-tag2{flex:0 0 auto;font-size:.9vh;font-weight:900;color:#8fa196;background:#f2f7f4;border-radius:.6vh;
+  padding:.14vh .45vh;white-space:nowrap;letter-spacing:.02vh;}
+.hw-tag2.t-p{background:#fdf6e6;color:#b08a2e;}
+.hw-tag2.t-k{background:#eef7f1;color:#4d8a63;}
+.hw-tag2.t-t{background:#f0f1fa;color:#6f74a8;}
+.hw-tag2.t-v{background:#fdeef1;color:#b06a7c;}
+.hw-mvbtn{flex:0 0 auto;width:2.5vh;height:2.5vh;border-radius:.8vh;font-size:1.05vh;
+  background:#f3f8f5;box-shadow:inset 0 0 0 .14vh #e2ece6;color:#7a8c82;}
+.hw-mvbtn:active{transform:scale(.94);}
+.hw-empty{font-size:1.3vh;font-weight:800;color:#9aa8a0;text-align:center;padding:2vh 0;}
+
+/* --- 다마고치 --- */
+.hw-pet{flex:0 0 auto;background:linear-gradient(160deg,#f2fbff,#f4fff6 60%,#fffdf3);}
+.hw-petbody{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:.9vh;}
+.hw-petpic{width:11.5vh;height:11.5vh;border-radius:1.8vh;background:rgba(255,255,255,.72);
+  box-shadow:inset 0 0 0 .2vh #dcefe6;display:grid;place-items:center;flex:0 0 auto;padding:.6vh;}
+.hw-petpic:active{transform:scale(.97);}
+.hw-petimg{width:100%;height:100%;object-fit:contain;display:block;}
+.hw-egg{font-size:6vh;line-height:1;}
+.hw-petinfo{min-width:0;display:flex;flex-direction:column;gap:.45vh;}
+.hw-say{background:#fff;border-radius:1.3vh;padding:.55vh .8vh;box-shadow:inset 0 0 0 .16vh #e2efe8;}
+.hw-say b{display:block;font-size:1.25vh;font-weight:900;color:#217a4b;}
+.hw-say span{display:block;font-size:1.16vh;font-weight:800;color:#5b6f66;line-height:1.35;}
+.hw-petmeta{display:flex;flex-wrap:wrap;gap:.35vh;}
+.hw-pill{font-size:1.02vh;font-weight:900;color:#1f6b45;background:#e7f7ec;border-radius:999px;padding:.22vh .65vh;white-space:nowrap;}
+.hw-pill.soft{color:#7a6a4a;background:#fdf6e4;}
+.hw-grow{display:flex;align-items:center;gap:.5vh;}
+.hw-grow .hw-mlb{flex:0 0 auto;}
+.hw-meters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4vh;}
+.hw-meter{display:flex;align-items:center;gap:.35vh;min-width:0;}
+.hw-mlb{font-size:1vh;font-weight:900;color:#8aa094;white-space:nowrap;}
+.hw-mbar{flex:1 1 auto;min-width:1.4vh;height:.95vh;border-radius:999px;background:#eef4f0;overflow:hidden;
+  box-shadow:inset 0 0 0 .12vh #e2ece6;}
+.hw-mbar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#8fd7ae,#3aa96c);transition:width .3s;}
+.hw-meter.warn .hw-mbar i{background:linear-gradient(90deg,#ffd08a,#f09030);}
+.hw-meter b{font-size:1vh;font-weight:900;color:#7a8c82;}
+
+/* --- 감정 --- */
+.hw-moodbox{flex:0 0 auto;}
+.hw-moods{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.4vh;}
+.hw-mood{display:flex;flex-direction:column;align-items:center;gap:.15vh;padding:.45vh .2vh;border-radius:1.2vh;
+  background:#f7fbf8;box-shadow:inset 0 0 0 .16vh #e6efe9;transition:transform .12s,background .18s;}
+.hw-mood:active{transform:scale(.95);}
+.hw-mood.on{background:linear-gradient(135deg,#fff8dd,#ffe9a8);box-shadow:inset 0 0 0 .2vh #f0cf78;}
+.hw-mem{font-size:2.1vh;line-height:1;}
+.hw-mnm{font-size:.95vh;font-weight:900;color:#7a8c82;white-space:nowrap;}
+.hw-mood.on .hw-mnm{color:#8a5f06;}
+
+/* --- 칭찬 스티커 판 --- */
+.hw-stkcard{flex:0 0 auto;}
+.hw-stkbox{display:flex;flex-direction:column;gap:.5vh;align-items:center;}
+.hw-goal{font-size:1.2vh;font-weight:900;color:#8a5f08;}
+.hw-goal.on{color:#1f6b45;}
+.hw-stks{display:grid;grid-template-columns:repeat(5,1fr);gap:.55vh;width:100%;max-width:30vh;margin:0 auto;}
+.hw-stk{aspect-ratio:1/1;border-radius:50%;background:#f6faf7;box-shadow:inset 0 0 0 .18vh #e3eee8;
+  display:grid;place-items:center;font-size:1.7vh;line-height:1;}
+.hw-stk.on{background:linear-gradient(135deg,#fff3c4,#ffd75e);box-shadow:inset 0 0 0 .18vh #f0c34a;}
+
+/* ================= 📅 출석 ================= */
+.at-calcard{flex:1 1 auto;gap:.35vh;}
+.at-nav{margin-left:auto;display:flex;gap:.35vh;}
+.at-nav button{width:2.8vh;height:2.8vh;border-radius:.9vh;background:#f3f8f5;box-shadow:inset 0 0 0 .16vh #e2ece6;
+  color:#7a8c82;font-size:1.1vh;}
+.at-nav button:active{transform:scale(.94);}
+.at-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:.25vh;padding:.1vh 0;}
+.at-dow span{text-align:center;font-size:1vh;font-weight:900;color:#9aada2;}
+.at-dow span:first-child{color:#d08a8a;}
+.at-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.3vh;flex:1 1 auto;grid-auto-rows:minmax(5vh,1fr);}
+.at-day{position:relative;height:100%;border-radius:.9vh;background:#fafcfb;box-shadow:inset 0 0 0 .14vh #eef4f0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;min-width:0;}
+.at-day.pad{background:transparent;box-shadow:none;}
+.at-day em{font-style:normal;font-size:1.25vh;font-weight:900;color:#a9b6ae;line-height:1;}
+.at-day i{font-style:normal;font-size:1.55vh;line-height:1;min-height:1.55vh;}
+.at-day.on{background:#fffdf2;box-shadow:inset 0 0 0 .18vh #f2e0b0;}
+.at-day.on em{color:#8a6a1a;}
+.at-day.stud{background:#f4fbf7;box-shadow:inset 0 0 0 .16vh #dcefe3;}
+.at-day.today{box-shadow:inset 0 0 0 .28vh #3aa96c;}
+.at-day.sun em{color:#d08a8a;}
+.at-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.4vh;padding-top:.35vh;}
+.at-stats span{display:flex;flex-direction:column;align-items:center;gap:.1vh;font-size:.95vh;font-weight:900;color:#9aada2;
+  background:#f7fbf8;border-radius:1vh;padding:.35vh .2vh;box-shadow:inset 0 0 0 .14vh #eef4f0;}
+.at-stats b{font-size:1.45vh;font-weight:900;color:#2f6b4f;}
+
+.at-stampcard{flex:0 0 auto;}
+.at-stamp{width:100%;min-height:5vh;border-radius:1.5vh;font-size:1.6vh;font-weight:900;color:#fff;
+  background:linear-gradient(135deg,#54bd85,#2f9660);box-shadow:0 .3vh .8vh rgba(47,150,96,.28);}
+.at-stamp:active{transform:scale(.98);}
+.at-stamp.done{color:#8a5f06;background:linear-gradient(135deg,#fff6d8,#ffe0a0);box-shadow:inset 0 0 0 .2vh #f2c96a;cursor:default;}
+.at-todaylbl{font-size:1.1vh;font-weight:800;color:#7a8c82;line-height:1.35;}
+
+.at-lad{flex:0 0 auto;}
+.at-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.4vh;}
+.at-step{display:flex;flex-direction:column;align-items:center;gap:.1vh;padding:.5vh .2vh;border-radius:1vh;
+  background:#f7fbf8;box-shadow:inset 0 0 0 .16vh #e9f1ec;color:#9aada2;}
+.at-step b{font-size:1.15vh;font-weight:900;}
+.at-step em{font-style:normal;font-size:.95vh;font-weight:900;}
+.at-step.hit{background:linear-gradient(135deg,#fff8dd,#ffe9a8);box-shadow:inset 0 0 0 .18vh #f0cf78;color:#8a5f06;}
+.at-step.now{background:linear-gradient(135deg,#e9f9ef,#cdf1dc);box-shadow:inset 0 0 0 .22vh #7fd3a4;color:#1f6b45;}
+.at-next{font-size:1.1vh;font-weight:900;color:#8a5f08;text-align:center;}
+
+.at-pet{flex:1 1 auto;justify-content:center;gap:.7vh;background:linear-gradient(160deg,#f4fbff,#f6fff8 60%,#fffdf3);}
+.at-badgecard{flex:0 0 auto;}
+.at-weekcard{flex:0 0 auto;}
+.at-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.4vh;}
+.at-wd{display:flex;flex-direction:column;align-items:center;gap:.25vh;padding:.35vh .1vh;border-radius:1vh;
+  background:#f7fbf8;box-shadow:inset 0 0 0 .14vh #eef4f0;}
+.at-wd b{font-size:1.02vh;font-weight:900;color:#9aada2;}
+.at-wd i{display:flex;align-items:flex-end;width:1.5vh;height:4.2vh;border-radius:.5vh;background:#e9f1ec;overflow:hidden;}
+.at-wd i em{display:block;width:100%;background:linear-gradient(180deg,#8fd7ae,#3aa96c);border-radius:.5vh;}
+.at-wd span{font-size:.95vh;font-weight:900;color:#9aada2;white-space:nowrap;}
+.at-wd.all{background:linear-gradient(135deg,#fff8dd,#ffe9a8);box-shadow:inset 0 0 0 .18vh #f0cf78;}
+.at-wd.all b{color:#8a5f06;}
+.at-wd.today{box-shadow:inset 0 0 0 .24vh #3aa96c;}
+.at-badges{display:flex;flex-wrap:wrap;gap:.4vh;}
+.at-badge{font-size:1.1vh;font-weight:900;color:#9aada2;background:#f7fbf8;border-radius:999px;
+  padding:.3vh .8vh;box-shadow:inset 0 0 0 .14vh #eef4f0;white-space:nowrap;}
+.at-badge.on{color:#8a5f06;background:linear-gradient(135deg,#fff8dd,#ffe9a8);box-shadow:inset 0 0 0 .18vh #f0cf78;}
+.at-next.soft{color:#8fa196;font-weight:800;font-size:1.02vh;}
+.at-petrow{display:flex;align-items:center;gap:1vh;min-width:0;justify-content:center;}
+.at-petrow .hw-petimg,.at-petrow .hw-egg{width:13vh;height:13vh;font-size:7vh;flex:0 0 auto;
+  background:rgba(255,255,255,.7);border-radius:1.3vh;box-shadow:inset 0 0 0 .18vh #dcefe6;padding:.35vh;object-fit:contain;}
+.at-petrow div{min-width:0;display:flex;flex-direction:column;gap:.15vh;}
+.at-petrow b{font-size:1.6vh;font-weight:900;color:#217a4b;}
+.at-petrow span{font-size:1.25vh;font-weight:800;color:#5b6f66;}
+.at-petrow em{font-style:normal;font-size:1.15vh;font-weight:900;color:#8a5f08;}
+
+/* 탭이 8개 — 좁은 가로 화면에서도 넘치지 않고 옆으로 밀린다 */
+@media (min-width:901px) and (max-width:1180px){
+  .tabs{min-width:0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+}
+
+/* --- 세로 아이패드·폰: 한 줄로 쌓고 넘겨 본다 --- */
+@media (max-width:900px){
+  .hw-wrap,.at-wrap{grid-template-columns:minmax(0,1fr);grid-auto-rows:auto;align-content:start;
+    overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-right:.35vh;scrollbar-width:none;}
+  .hw-wrap::-webkit-scrollbar,.at-wrap::-webkit-scrollbar{display:none;}
+  .hw-col,.at-col{min-height:auto;}
+  .hw-card{flex:0 0 auto;}
+  .hw-list{overflow:visible;max-height:none;}
+  .hw-petpic{width:10.5vh;height:10.5vh;}
+  .hw-mem{font-size:2.4vh;}
+  .at-day{min-height:4.6vh;}
+}
+@media (max-width:640px){
+  .hw-wrap,.at-wrap{gap:.9vh;}
+  .hw-card{border-radius:1.6vh;padding:.85vh 1vh;}
+  .hw-bh b{font-size:2vh;}
+  .hw-banner{padding:1vh 1.1vh;}
+  .hw-tx{font-size:1.6vh;}
+  .hw-ck{width:3.4vh;height:3.4vh;font-size:1.6vh;}
+  .hw-mvbtn{width:3.2vh;height:3.2vh;}
+  .hw-moods{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .hw-mnm{font-size:1.1vh;}
+  .at-day{min-height:5vh;}
+  .at-day em{font-size:1.05vh;}
+  .at-day i{font-size:1.4vh;}
+  .at-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .at-step b{font-size:1.25vh;}
+}
+@media (max-height:760px){
+  .hw-petpic{width:9.5vh;height:9.5vh;}
+  .hw-mem{font-size:1.9vh;}
+}
+</style>
+
+<script id="hw1126js">
+/* =====================================================================
+   📝 숙제 · 📅 출석 — 해율이 스터디 보드(haeyuli-english-board.html)와 같은 기록
+   · 오늘의 숙제: haeyuli.hwplan.v1 / .un.v1 · haeyuli.hwcarry.v1
+                  haeyuli.padplan.v1 (패드 학습 요일) · haeyuli.workbooks.v1 (지면 문제집)
+   · 출석:       haeyuli.attend.v1 (도장) · haeyuli.studydays.v1 (공부한 날) · haeyuli.hwstreak.v1
+   · 다마고치:   haeyuli.tama.v1 — 읽기만 한다 (세대 eggs 를 되돌리지 않게)
+   · 감정:       haeyuli.mood.v1 (가족 코드 문서 haeyuli-dash-<코드> 의 mood 로도 오간다)
+   ===================================================================== */
+window.HWPLAN = (function(){
+"use strict";
+
+var K = {
+  plan:"haeyuli.hwplan.v1", un:"haeyuli.hwplan.un.v1", carry:"haeyuli.hwcarry.v1",
+  padp:"haeyuli.padplan.v1", wb:"haeyuli.workbooks.v1",
+  att:"haeyuli.attend.v1", sd:"haeyuli.studydays.v1", streak:"haeyuli.hwstreak.v1",
+  done:"haeyuli.hwdone.v1", ddone:"yuli.dashdone.v1",
+  tama:"haeyuli.tama.v1", mood:"haeyuli.mood.v1", stars:"yuli.stars.v2", ledger:"yuli.starledger.v2"
+};
+var BOARD = "haeyuli-english-board.html";
+var TH = [8, 40, 110, 240, 420];
+var LADDER = [[5, 1000], [14, 1000], [21, 1000], [30, 10000]];
+var DAYN = ["월","화","수","목","금","토","일"];
+
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+function num(v, fb){ var n = Number(v); return isFinite(n) ? n : (fb === undefined ? 0 : fb); }
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function iso(d){ d = d || new Date(); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+function dayIdx(d){ return ((d || new Date()).getDay() + 6) % 7; }        /* 월=0 … 일=6 */
+function shift(ds, n){
+  var p = String(ds).split("-"), d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  d.setDate(d.getDate() + n); return iso(d);
+}
+function rd(k, fb){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; } }
+function wr(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+function obj(v){ return (v && typeof v === "object" && !Array.isArray(v)) ? v : {}; }
+function toast(m){ try { if (window.YULI && YULI.toast) YULI.toast(m); } catch(e){} }
+
+/* ------------------------------------------------------------------
+   요일별 기본 숙제 — 스터디 보드 SCHED 와 같은 순서·같은 id
+   ------------------------------------------------------------------ */
+var PADSLOT = { __pad:1 };
+function P(id, s, t, go){ return { id:id, s:s, t:t, tag:"p", go:go || null }; }
+function B(id, s, t, go){ return { id:id, s:s, t:t, tag:"b", go:go || null }; }
+function KB(id, s, t, go){ return { id:id, s:s, t:t, tag:"k", go:go || null }; }
+function T(id, s, t, go){ return { id:id, s:s, t:t, tag:"t", go:go || null }; }
+function V(id, s, t, go){ return { id:id, s:s, t:t, tag:"v", go:go || null }; }
+var TAG = { p:"지면", b:"보드", k:"책", t:"패드", v:"영상" };
+
+var SCHED = [
+  [ PADSLOT,
+    B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en"]),
+    B("mathgit","수학","기탄 연산 10문제", ["study","math"]),
+    KB("read","책","한글책 1권 + 영어책 1권", ["book"]) ],
+  [ PADSLOT,
+    B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en"]),
+    B("ensight","영어","사이트워드 1단계", ["study","en"]),
+    PADSLOT,
+    B("mathshape","수학","도형·시계", ["study","math"]),
+    B("hanjaw","한자","낱말·뜻 쓰기", ["study","hanja"]),
+    KB("read","책","한글책 1권 + 영어책 1권", ["book"]) ],
+  [ PADSLOT,
+    B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en"]),
+    B("kowrite","국어","받아쓰기", ["study","ko"]),
+    B("histquiz","역사","역사 퀴즈", ["study","history"]),
+    B("maththink","수학","그림 사고력", ["study","math"]),
+    KB("read","책","한글책 1권 + 영어책 1권", ["book"]) ],
+  [ PADSLOT,
+    B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en"]),
+    B("enwg","영어","단어키우기 10문제", ["study","en"]),
+    PADSLOT,
+    B("mathsaem","수학","하루 셈하기", ["study","math"]),
+    B("kovocab","국어","어휘·개념", ["study","ko"]),
+    B("cntalk","중국어","일상대화 따라 말하고 녹음", ["study","cn"]),
+    KB("read","책","한글책 1권 + 영어책 1권", ["book"]) ],
+  [ PADSLOT,
+    B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en"]),
+    B("enword","영어","단어카드·게임", ["study","en"]),
+    B("mathbase1","수학","1학년 기초수학", ["study","math"]),
+    B("histworld","역사","세계사 연표", ["study","history"]),
+    KB("read","책","한글책 1권 + 영어책 1권", ["book"]) ],
+  [ B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en"]),
+    B("enwol","영어","월팸", ["study","en"]),
+    B("mathg2","수학","2학년 선행", ["study","math"]),
+    B("cncard","중국어","단어 카드 10개", ["study","cn"]),
+    PADSLOT, PADSLOT, PADSLOT, PADSLOT,
+    KB("read","책","한글책 2권 + 영어책 1권", ["book"]) ],
+  [ B("encall","영어","📞 전화영어 (엠마쌤/피클과 영어 대화)", ["study","en"]),
+    B("enbook","영어","그림 동화책(AR) 1권", ["study","en"]),
+    B("mathgugu","수학","구구단 원리", ["study","math"]),
+    B("hanjatext","한자","교과서 핵심한자", ["study","hanja"]),
+    PADSLOT, PADSLOT, PADSLOT,
+    KB("read","책","한글책 1권", ["book"]) ]
+];
+/* 평일(월~금)만 영상 숙제 두 가지 — 스터디 보드와 같다 */
+(function(){
+  for (var d = 0; d < 5; d++){
+    SCHED[d].push(V("vidread","책","책 음독 영상 찍기 (월~금)"));
+    SCHED[d].push(V("videng","영어","영어책 영상 찍기 (월~금)"));
+  }
+})();
+
+/* ---------------- 📱 패드 학습 요일별 설정 (haeyuli.padplan.v1) ---------------- */
+var PADP_DEF = [
+  { id:"padam",   name:"아이캔두 학습 (아침)", subject:"패드",   days:[0,1,2,3,4] },
+  { id:"padmath", name:"아이캔두 수학",        subject:"수학",   days:[5,6] },
+  { id:"razkids", name:"라즈키즈 영어",        subject:"영어",   days:[1,3,5] },
+  { id:"doyoen",  name:"도요새 영어",          subject:"영어",   days:[5,6] },
+  { id:"doyocn",  name:"도요새 중국어",        subject:"중국어", days:[5,6] }
+];
+function pDays(v){
+  var out = [], src = Array.isArray(v) ? v : [];
+  for (var i = 0; i < src.length; i++){
+    var n = num(src[i], -1);
+    if (n >= 0 && n < 7 && out.indexOf(n) < 0) out.push(n);
+  }
+  return out.sort();
+}
+function pRaw(v){
+  v = obj(v);
+  return { list: Array.isArray(v.list) ? v.list : [], del: obj(v.del) };
+}
+function pDef(id){ for (var i = 0; i < PADP_DEF.length; i++) if (PADP_DEF[i].id === id) return PADP_DEF[i]; return null; }
+/* 스터디 보드 padpMerge 와 같은 규칙 — id 별 at 최신, del 이 더 최근이면 지운다 */
+function padpMerge(local, cloud){
+  var A = pRaw(local), C = pRaw(cloud), map = {}, order = [], del = {};
+  [A, C].forEach(function(o){ for (var k in o.del) del[k] = Math.max(num(del[k]), num(o.del[k])); });
+  function put(x){
+    if (!x || typeof x !== "object") return;
+    var id = String(x.id || "").slice(0, 40); if (!id) return;
+    var at = num(x.at), prev = map[id];
+    if (!prev){
+      map[id] = { id:id, name:String(x.name == null ? (x.nm || "") : x.name).slice(0, 40),
+                  subject:String(x.subject == null ? (x.sub || "패드") : x.subject).slice(0, 10),
+                  days:pDays(x.days), on:!(x.on === 0 || x.on === false), builtIn:!!x.builtIn, at:at };
+      order.push(id); return;
+    }
+    if (at <= prev.at) return;
+    prev.name = String(x.name == null ? prev.name : x.name).slice(0, 40);
+    prev.subject = String(x.subject == null ? prev.subject : x.subject).slice(0, 10);
+    prev.days = pDays(x.days); prev.on = !(x.on === 0 || x.on === false);
+    prev.builtIn = !!x.builtIn; prev.at = at;
+  }
+  A.list.forEach(put); C.list.forEach(put);
+  var out = [];
+  PADP_DEF.forEach(function(d0){
+    var e = map[d0.id];
+    if (num(del[d0.id]) > 0 && num(del[d0.id]) >= (e ? num(e.at) : 0)) return;
+    if (!e) e = { id:d0.id, name:d0.name, subject:d0.subject, days:d0.days.slice(), on:true, builtIn:true, at:0 };
+    if (!e.name) e.name = d0.name;
+    e.builtIn = true; out.push(e);
+  });
+  order.forEach(function(id){
+    if (pDef(id)) return;
+    var e = map[id]; if (!e) return;
+    if (num(del[id]) > 0 && num(del[id]) >= e.at) return;
+    if (!e.name) e.name = "패드 학습";
+    out.push(e);
+  });
+  return { v:1, list:out, del:del };
+}
+function padpList(){ return padpMerge(rd(K.padp, null), null).list; }
+function padpItems(di){
+  var out = [], list = padpList();
+  for (var i = 0; i < list.length; i++){
+    var p = list[i];
+    if (!p.on || p.days.indexOf(di) < 0) continue;
+    out.push({ id:p.id, s:p.subject, t:p.name, tag:"t", go:null });
+  }
+  return out;
+}
+var SCHED_CACHE = null;
+function schedFor(di){
+  if (!SCHED_CACHE){
+    SCHED_CACHE = SCHED.map(function(a){ return a.slice(); });
+  }
+  var base = SCHED_CACHE[di] || [], pads = padpItems(di), out = [], placed = false, i, j;
+  for (i = 0; i < base.length; i++){
+    var it = base[i];
+    if (it && it.__pad){
+      if (!placed){ placed = true; for (j = 0; j < pads.length; j++) out.push(pads[j]); }
+      continue;
+    }
+    out.push(it);
+  }
+  if (!placed) for (j = 0; j < pads.length; j++) out.push(pads[j]);
+  return out;
+}
+
+/* ---------------- 📘 지면 문제집 (haeyuli.workbooks.v1) ---------------- */
+function wbNorm(w){
+  w = obj(w);
+  var days = Array.isArray(w.days) ? w.days.map(function(x){ return num(x, -1); }) : [];
+  days = days.filter(function(x){ return x >= 0 && x < 7; });
+  if (!days.length) days = [0,1,2,3,4];
+  days = days.filter(function(x, i){ return days.indexOf(x) === i; }).sort();
+  var o = { id:String(w.id || ("c" + Date.now().toString(36))), nm:String(w.nm || "새 문제집").slice(0, 40),
+    sub:String(w.sub || "기타"), total:num(w.total), cur:num(w.cur), daily:num(w.daily, 1), days:days,
+    hw:(w.hw === 0 || w.hw === false) ? 0 : 1, at:num(w.at), alerted:num(w.alerted),
+    dismissed:String(w.dismissed || ""), adv:obj(w.adv) };
+  if (o.cur > o.total) o.cur = o.total;
+  if (!o.daily) o.daily = 1;
+  return o;
+}
+function wbLoad(){
+  var raw = rd(K.wb, null), del = obj(raw && raw.del), list = Array.isArray(raw && raw.list) ? raw.list : [];
+  var out = [];
+  for (var i = 0; i < list.length; i++){
+    var x = wbNorm(list[i]), t = num(del[x.id]);
+    if (t > 0 && t >= num(x.at)) continue;
+    out.push(x);
+  }
+  return { v:1, list:out, del:del };
+}
+function wbSave(d){ wr(K.wb, { v:1, list:d.list.map(wbNorm), del:obj(d.del) }); }
+function wbFind(d, id){ for (var i = 0; i < d.list.length; i++) if (d.list[i].id === id) return d.list[i]; return null; }
+function wbRange(w, ds, base){
+  if (base === null || base === undefined) base = w.cur;
+  if (base >= w.total) return null;
+  var today = iso(), k = 0;
+  if (ds && ds !== today){
+    if (ds < today) return { past:true };
+    var t = new Date(today + "T00:00:00"), g = new Date(String(ds) + "T00:00:00");
+    t.setDate(t.getDate() + 1);
+    while (t < g){ if (w.days.indexOf(dayIdx(t)) >= 0) k++; t.setDate(t.getDate() + 1); }
+  }
+  var start = base + w.daily * k + 1;
+  if (start > w.total) return null;
+  return { start:start, end:Math.min(start + w.daily - 1, w.total) };
+}
+function wbItemsFor(di, ds){
+  var d = wbLoad(), out = [], today = iso(), dayKey = ds || today;
+  var target = (di === null || di === undefined) ? (ds ? dayIdx(new Date(String(ds) + "T00:00:00")) : dayIdx()) : num(di, dayIdx());
+  for (var i = 0; i < d.list.length; i++){
+    var w = d.list[i];
+    if (!w.hw || w.days.indexOf(target) < 0) continue;
+    var base = w.cur;
+    var a = (w.adv && w.adv[today]) ? w.adv[today] : null;
+    if (dayKey === today && a && typeof a.from === "number") base = a.from;
+    var r = wbRange(w, dayKey, base), txt;
+    if (!r) txt = w.nm + " · 다 풀었어요 🎉";
+    else if (r.past) txt = w.nm;
+    else txt = w.nm + " · p." + r.start + "~" + r.end + " (" + (r.end - r.start + 1) + "쪽)";
+    out.push({ id:"wb:" + w.id, s:w.sub, t:txt, tag:"p", go:null });
+  }
+  return out;
+}
+function wbAdvance(id, dateKey){
+  var d = wbLoad(), w = wbFind(d, id); if (!w) return false;
+  var from = w.cur, to = Math.min(w.total, w.cur + w.daily);
+  w.cur = to; w.at = Date.now();
+  if (!w.adv) w.adv = {};
+  w.adv[dateKey] = { from:from, to:to };
+  var ks = Object.keys(w.adv).sort(); while (ks.length > 24) delete w.adv[ks.shift()];
+  wbSave(d); return true;
+}
+function wbRollback(id, dateKey){
+  var d = wbLoad(), w = wbFind(d, id); if (!w) return false;
+  var a = (w.adv && w.adv[dateKey]) ? w.adv[dateKey] : null;
+  w.cur = (a && typeof a.from === "number") ? Math.max(0, Math.min(w.total, a.from)) : Math.max(0, w.cur - w.daily);
+  if (w.adv) delete w.adv[dateKey];
+  w.at = Date.now(); wbSave(d); return true;
+}
+
+/* ---------------- ➡️ 미룬 숙제 (haeyuli.hwcarry.v1) ---------------- */
+function carryLoad(){
+  var v = rd(K.carry, null);
+  if (!v || typeof v !== "object" || Array.isArray(v)) v = { v:1, out:{}, in:{} };
+  v.out = obj(v.out); v.in = obj(v.in);
+  return v;
+}
+function carrySave(v){ v.v = 1; v.at = Date.now(); wr(K.carry, v); }
+
+/* ---------------- 그날 숙제 = 기본 + 어제 미룬 것 ---------------- */
+function itemsBase(di, ds){
+  var base = schedFor(di), wb = wbItemsFor(di, ds);
+  if (!wb.length) return base.slice();
+  var out = [], seen = {}, used = {}, i, j;
+  for (i = 0; i < base.length; i++){
+    var it = base[i];
+    if (!seen[it.s]){
+      seen[it.s] = 1;
+      for (j = 0; j < wb.length; j++) if (wb[j].s === it.s && !used[wb[j].id]){ used[wb[j].id] = 1; out.push(wb[j]); }
+    }
+    out.push(it);
+  }
+  for (j = 0; j < wb.length; j++) if (!used[wb[j].id]) out.push(wb[j]);
+  return out;
+}
+function items(di, ds){
+  var base = itemsBase(di, ds), out = [], b;
+  for (b = 0; b < base.length; b++){
+    var src = base[b];
+    out.push({ id:src.id, s:src.s, t:src.t, tag:src.tag, go:src.go || null });
+  }
+  var dayKey = ds || iso(), cr = carryLoad();
+  var mvOut = obj(cr.out[dayKey]), mvIn = obj(cr.in[dayKey]);
+  var have = {}, i;
+  for (i = 0; i < out.length; i++) have[out[i].id] = 1;
+  Object.keys(mvIn).sort().forEach(function(id){
+    var r = mvIn[id];
+    if (!r || typeof r !== "object" || r.del) return;
+    if (have[id]){
+      for (var j = 0; j < out.length; j++) if (out[j].id === id){ out[j].carry = 1; out[j].from = String(r.f || ""); }
+      return;
+    }
+    out.push({ id:id, s:String(r.s || ""), t:String(r.t || ""), tag:(r.g || "b"), go:null, carry:1, from:String(r.f || "") });
+    have[id] = 1;
+  });
+  for (i = 0; i < out.length; i++){
+    var o = mvOut[out[i].id];
+    if (o && typeof o === "object" && !o.del){ out[i].moved = 1; out[i].to = String(o.to || ""); }
+  }
+  return out;
+}
+
+/* ---------------- 체크 기록 (haeyuli.hwplan.v1 / .un.v1) ---------------- */
+function planLoad(){ var v = rd(K.plan, null); return (v && typeof v === "object" && !Array.isArray(v)) ? v : {}; }
+function unLoad(){ return obj(rd(K.un, null)); }
+function markUn(date, id, ts){
+  var u = unLoad();
+  if (!u[date]) u[date] = {};
+  u[date][id] = ts;
+  var ks = Object.keys(u).sort(); while (ks.length > 60) delete u[ks.shift()];
+  wr(K.un, u);
+}
+function clearUn(date, id){
+  var u = unLoad(), d = obj(u[date]);
+  if (!d[id]) return;
+  delete d[id];
+  if (Object.keys(d).length) u[date] = d; else delete u[date];
+  wr(K.un, u);
+}
+function dayDone(date){
+  var v = planLoad()[date];
+  if (!v || typeof v !== "object") return {};
+  var u = obj(unLoad()[date]), out = {}, k;
+  for (k in v){
+    var t = Number(v[k]) || 0;
+    if (!t) continue;
+    if (u[k] && Number(u[k]) >= t) continue;
+    out[k] = t;
+  }
+  return out;
+}
+function status(){
+  var d = iso(), di = dayIdx(), list = items(di), done = dayDone(d);
+  var n = 0, act = 0, moved = 0;
+  for (var i = 0; i < list.length; i++){
+    if (list[i].moved){ moved++; continue; }
+    act++;
+    if (done[list[i].id]) n++;
+  }
+  return { date:d, day:di, list:list, done:done, n:n, total:act, moved:moved, all:(act > 0 && n === act) };
+}
+
+/* ---------------- 별 · 저금통 (스터디 보드와 같은 눈금) ---------------- */
+function ledgerHas(key){ var l = obj(rd(K.ledger, null)); return !!l[key]; }
+function starTotal(){ var s = obj(rd(K.stars, null)); return Math.max(0, Math.round(num(s.total))); }
+/* 숙제 하나 = ⭐ +1 (보드와 같은 원장 키 — 두 기기에서 겹쳐도 한 번만) */
+function awardHwStar(date, id){
+  var key = "auto2|hw5|" + date + "|" + id;
+  if (ledgerHas(key)) return 0;
+  try {
+    if (window.YULI && YULI.hwAward) return YULI.hwAward(key, 1) ? 1 : 0;
+  } catch(e){}
+  return 0;
+}
+function takeHwStar(date, id){
+  var key = "auto2|hw5|" + date + "|" + id;
+  if (!ledgerHas(key)) return false;
+  try { if (window.YULI && YULI.hwTake) return !!YULI.hwTake(key); } catch(e){}
+  return false;
+}
+/* 오늘 숙제를 다 채운 순간 — +500원(하루 한 번 · 보드와 같은 rid) */
+function bonusAllDone(date){
+  try {
+    if (window.YULI && YULI.hwBonus) return !!YULI.hwBonus(date);
+  } catch(e){}
+  return false;
+}
+
+/* ---------------- 📅 출석 ---------------- */
+function attData(){
+  var a = obj(rd(K.att, null));
+  a.days = obj(a.days);
+  return a;
+}
+function attToday(){ var a = attData(); return a.days[iso()] || null; }
+function studyDays(){ return obj(rd(K.sd, null)); }
+/* 구름에서 받은 '숙제 다 한 날'(hwdone) 캐시 — 다른 기기 보드의 기록도 달력에 보인다 */
+function doneCache(){ return obj(rd(K.ddone, null)); }
+function attendedSet(){
+  var out = {}, a = attData().days, k;
+  for (k in a) if (a[k]) out[k] = "attend";
+  var sd = studyDays();
+  for (k in sd) if (sd[k]) out[k] = out[k] || "study";
+  var dn = doneCache();
+  for (k in dn) if (dn[k] && dn[k].d) out[k] = out[k] || "done";
+  var ln = obj(rd(K.done, null));
+  for (k in ln) if (ln[k] && ln[k].d) out[k] = out[k] || "done";
+  return out;
+}
+function markAttendance(src){
+  var a = attData(), t = iso(), d = a.days[t];
+  if (!d || typeof d !== "object"){ d = a.days[t] = { src:{}, at:Date.now() }; }
+  if (!d.src || typeof d.src !== "object") d.src = {};
+  d.src[src] = (d.src[src] || 0) + 1;
+  var gave = 0;
+  if (!d.star){ d.star = 1; wr(K.att, a); gave = 1; }
+  else wr(K.att, a);
+  if (gave){
+    var key = t + "|eng|attend";
+    if (!ledgerHas(key)){
+      try { if (window.YULI && YULI.hwAward) YULI.hwAward(key, 1); } catch(e){}
+    }
+  }
+  return gave;
+}
+function attendanceInfo(){
+  var a = attData(), days = a.days;
+  var keys = Object.keys(days).filter(function(k){ return days[k] && days[k].star; }).sort();
+  var d = new Date();
+  if (!days[iso(d)]) d.setDate(d.getDate() - 1);
+  var streak = 0, guard = 0;
+  while (days[iso(d)] && guard++ < 4000){ streak++; d.setDate(d.getDate() - 1); }
+  var month = iso().slice(0, 7);
+  var monthCount = keys.filter(function(k){ return k.slice(0, 7) === month; }).length;
+  return { days:days, total:keys.length, streak:streak, month:monthCount };
+}
+/* 연속 숙제 사다리 — 보드와 같은 셈 (숙제를 다 한 날 + 보드의 연속 기록) */
+function streakDays(){
+  var set = {}, k;
+  var sk = obj(rd(K.streak, null));
+  var sdays = obj(sk.days);
+  for (k in sdays) if (sdays[k]) set[k] = 1;
+  var dn = obj(rd(K.done, null));
+  for (k in dn) if (dn[k] && dn[k].d) set[k] = 1;
+  var c = doneCache();
+  for (k in c) if (c[k] && c[k].d) set[k] = 1;
+  var t = iso(), n = 0;
+  if (!set[t]) t = shift(t, -1);
+  var guard = 0;
+  while (set[t] && guard++ < 4000){ n++; t = shift(t, -1); }
+  return n;
+}
+/* 이번 주(월~일) 숙제 기록 — 날짜별 완료/전체 */
+function weekStrip(){
+  var out = [], t = new Date(), wd = (t.getDay() + 6) % 7;
+  var mon = new Date(t.getTime()); mon.setDate(mon.getDate() - wd);
+  for (var i = 0; i < 7; i++){
+    var d = new Date(mon.getTime()); d.setDate(d.getDate() + i);
+    var ds = iso(d), list = items(dayIdx(d), ds), done = dayDone(ds), n = 0, act = 0;
+    for (var j = 0; j < list.length; j++){
+      if (list[j].moved) continue;
+      act++;
+      if (done[list[j].id]) n++;
+    }
+    out.push({ ds:ds, day:i, n:n, total:act, all:(act > 0 && n === act) });
+  }
+  return out;
+}
+function weekStripHTML(){
+  var wk = weekStrip();
+  var cells = wk.map(function(x){
+    var pc = x.total ? Math.round(x.n / x.total * 100) : 0;
+    return '<span class="at-wd' + (x.all ? " all" : "") + (x.ds === iso() ? " today" : "") + '">' +
+      '<b>' + DAYN[x.day] + "</b>" +
+      '<i><em style="height:' + pc + '%"></em></i>' +
+      '<span>' + (x.all ? "🎉" : (x.total ? x.n + "/" + x.total : "·")) + "</span></span>";
+  }).join("");
+  return '<div class="at-week">' + cells + "</div>";
+}
+function needTh(p){ return TH[Math.min(num(p.stage), TH.length - 1)] || 0; }
+function studyMonthCount(){
+  var set = attendedSet(), mk = iso().slice(0, 7), n = 0;
+  for (var k in set) if (k.slice(0, 7) === mk) n++;
+  return n;
+}
+
+/* ---------------- 🥚 다마고치 (읽기 전용) ---------------- */
+var STAGES = [
+  { k:"egg", nm:"알", em:"🥚" }, { k:"baby", nm:"베이비", em:"👶" },
+  { k:"kid", nm:"키즈", em:"🌱" }, { k:"young", nm:"영", em:"⭐" },
+  { k:"adult", nm:"어덜트", em:"👑" }, { k:"secret", nm:"시크릿", em:"✨" }
+];
+var FIELD = { land:{ nm:"육지", em:"🌿" }, water:{ nm:"수중", em:"🌊" }, sky:{ nm:"하늘", em:"☁️" } };
+var CH = {
+  baby:{ no:500, nm:"베이비마루치" },
+  kid:{ land:{no:501,nm:"랜드 키드"}, water:{no:502,nm:"워터 키드"}, sky:{no:503,nm:"스카이 키드"} },
+  young:{ land:{no:504,nm:"로어 영"}, water:{no:508,nm:"글라이드 영"}, sky:{no:512,nm:"처프 영"} },
+  adult:{ land:{S:{no:529,nm:"후라와치"},A:{no:531,nm:"포츠넨치"},B:{no:530,nm:"투스투스치"},C:{no:532,nm:"시게미상"}},
+          water:{S:{no:545,nm:"쿠라라치"},A:{no:546,nm:"멘다코치"},B:{no:547,nm:"아메후라치"},C:{no:548,nm:"구소쿠치"}},
+          sky:{S:{no:561,nm:"젬치"},A:{no:562,nm:"오레타치"},B:{no:563,nm:"이시코로치"},C:{no:564,nm:"마그마치"}} },
+  secret:{ land:{no:565,nm:"초도라치"}, water:{no:566,nm:"머마린치"}, sky:{no:567,nm:"야야콘치"} }
+};
+var NAMES = {};
+(function(){
+  function reg(o){ if (o && o.no) NAMES[o.no] = o.nm; }
+  reg(CH.baby);
+  ["land","water","sky"].forEach(function(f){
+    reg(CH.kid[f]); reg(CH.young[f]); reg(CH.secret[f]);
+    ["S","A","B","C"].forEach(function(t){ reg(CH.adult[f][t]); });
+  });
+})();
+function tamaRaw(){ return obj(rd(K.tama, null)); }
+/* 화면 표시용 — 저장은 하지 않고 시간이 지난 만큼만 계산해 보여 준다 */
+function tamaNow(){
+  var p = tamaRaw();
+  if (!p || p.v !== 1) return { stage:0, field:null, no:null, grow:0, joy:64, hunger:28, clean:72, eggs:1, on:false };
+  var out = {
+    stage: Math.max(0, Math.min(5, num(p.stage))),
+    field: FIELD[p.field] ? p.field : null,
+    no: num(p.no) || 0,
+    tier: p.tier || null,
+    grow: Math.max(0, num(p.grow)),
+    joy: Math.max(0, Math.min(100, num(p.joy, 64))),
+    hunger: Math.max(0, Math.min(100, num(p.hunger, 28))),
+    clean: Math.max(0, Math.min(100, num(p.clean, 72))),
+    eggs: Math.max(1, num(p.eggs, 1)),
+    school: p.school || null,
+    on: true
+  };
+  var hrs = Math.max(0, (Date.now() - num(p.ts, Date.now())) / 3600000);
+  if (hrs > 0.02){
+    out.hunger = Math.max(0, Math.min(100, out.hunger + hrs * 7));
+    out.joy = Math.max(0, Math.min(100, out.joy - hrs * 4));
+    out.clean = Math.max(0, Math.min(100, out.clean - hrs * 2.4));
+  }
+  return out;
+}
+function tierOf(p){
+  var j = p.joy;
+  return j >= 80 ? "S" : (j >= 62 ? "A" : (j >= 45 ? "B" : "C"));
+}
+function stageNoOf(p){
+  if (!p) return CH.baby.no;
+  var st = num(p.stage) || 0;
+  if (st <= 0) return null;
+  var f = (p.field && CH.kid[p.field]) ? p.field : "land";
+  if (st === 1) return CH.baby.no;
+  if (st === 2) return p.field ? CH.kid[f].no : CH.baby.no;
+  if (st === 3) return CH.young[f].no;
+  if (st === 4){ var t = p.tier || tierOf(p); return (CH.adult[f][t] || CH.adult[f].S).no; }
+  return CH.secret[f].no;
+}
+function tamaNo(p){ if (!p || num(p.stage) === 0) return null; return num(p.no) > 0 ? num(p.no) : stageNoOf(p); }
+function tamaLabel(p){
+  if (num(p.stage) === 0) return "알";
+  if (num(p.stage) === 2 && !p.field) return "키즈";
+  var no = tamaNo(p);
+  return (no && NAMES[no]) ? NAMES[no] : (STAGES[num(p.stage)] || STAGES[0]).nm;
+}
+function tamaStatus(p){
+  if (num(p.stage) === 0) return { t:"알 속에서 꿈틀꿈틀", em:"🥚", cls:"ok" };
+  if (p.hunger >= 70) return { t:"배고파요", em:"🥺", cls:"hungry" };
+  if (p.joy <= 30) return { t:"심심해요", em:"😶", cls:"bored" };
+  if (p.clean <= 30) return { t:"씻고 싶어요", em:"🫧", cls:"soft" };
+  if (p.hunger >= 45) return { t:"간식 생각나요", em:"🍖", cls:"soft" };
+  if (p.joy >= 75) return { t:"신나요", em:"😆", cls:"joy" };
+  return { t:"기분 좋아요", em:"💚", cls:"ok" };
+}
+function tamaImgHTML(p, cls){
+  var no = tamaNo(p);
+  if (num(p.stage) === 0 || !no) return '<span class="hw-egg' + (cls ? " " + cls : "") + '">🥚</span>';
+  return '<img class="hw-petimg' + (cls ? " " + cls : "") + '" src="tama-img/' + no + '.webp" alt="' + esc(tamaLabel(p)) + '" draggable="false">';
+}
+function tamaSay(p, st){
+  if (num(p.stage) === 0) return "🥚 알 속에서 꿈틀꿈틀! 곧 만날 수 있어요~";
+  if (st && st.all) return "오늘 숙제 다 했다며?! 최고야! 🎉";
+  if (p.hunger >= 70) return "배가 고픈가 봐요 🍚 다마고치 방에서 밥을 줄까요?";
+  if (p.joy <= 30) return "심심해요… 같이 놀아 줄래요? 🎾";
+  if (p.clean <= 30) return "씻고 싶대요 🫧 반짝반짝 씻겨 줄까요?";
+  var left = st ? Math.max(0, st.total - st.n) : 0;
+  if (st && st.n > 0) return "숙제 " + left + "개 남았어요! 같이 화이팅! ⭐";
+  return "오늘도 함께 공부하자! ⭐";
+}
+
+/* ---------------- 🌤️ 오늘의 감정 ---------------- */
+var MOODS = [
+  { m:"🤩", nm:"최고!" }, { m:"😊", nm:"좋아요" }, { m:"🙂", nm:"괜찮아요" },
+  { m:"😴", nm:"피곤해요" }, { m:"😢", nm:"속상해요" }, { m:"😤", nm:"화나요" }
+];
+function moodData(){ var d = obj(rd(K.mood, null)); d.days = obj(d.days); return d; }
+function moodToday(){ var d = moodData(); return d.days[iso()] || null; }
+function setMood(m){
+  var d = moodData();
+  d.v = 1;
+  if (m) d.days[iso()] = { m:String(m).slice(0, 8), at:Date.now() };
+  else delete d.days[iso()];
+  var ks = Object.keys(d.days).sort(); while (ks.length > 60) delete d.days[ks.shift()];
+  wr(K.mood, d);
+  try { if (window.FAMSYNC && FAMSYNC.quiet) FAMSYNC.quiet(); } catch(e){}
+}
+
+/* ---------------- 합치기 규칙 (가족 코드 · 스터디 보드와 같다) ---------------- */
+function mergePlan(lc, lu, cc, cu){
+  lc = obj(lc); cc = obj(cc); lu = obj(lu); cu = obj(cu);
+  var dates = {}, out = {}, outUn = {};
+  [lc, cc, lu, cu].forEach(function(o){ Object.keys(o).forEach(function(x){ dates[x] = 1; }); });
+  Object.keys(dates).sort().forEach(function(d){
+    var a = obj(lc[d]), b = obj(cc[d]), au = obj(lu[d]), bu = obj(cu[d]);
+    var ids = {}, rec = {}, un = {};
+    Object.keys(a).forEach(function(x){ ids[x] = 1; });
+    Object.keys(b).forEach(function(x){ ids[x] = 1; });
+    Object.keys(ids).sort().forEach(function(id){
+      var t = Math.max(num(a[id]), num(b[id]));
+      if (!t) return;
+      var u = Math.max(num(au[id]), num(bu[id]));
+      if (u >= t){ un[id] = u; return; }
+      rec[id] = t;
+    });
+    [au, bu].forEach(function(m){
+      Object.keys(m).forEach(function(id){
+        var u = num(m[id]);
+        if (u && !rec[id]) un[id] = Math.max(num(un[id]), u);
+      });
+    });
+    if (Object.keys(rec).length) out[d] = rec;
+    if (Object.keys(un).length) outUn[d] = un;
+  });
+  var dk = Object.keys(out).sort(); while (dk.length > 60) delete out[dk.shift()];
+  var uk = Object.keys(outUn).sort(); while (uk.length > 60) delete outUn[uk.shift()];
+  return { check: out, un: outUn };
+}
+function mergeAttend(local, cloud){
+  var A = obj(local), C = obj(cloud), ad = obj(A.days), cd = obj(C.days), out = {}, dates = {};
+  Object.keys(ad).forEach(function(k){ dates[k] = 1; });
+  Object.keys(cd).forEach(function(k){ dates[k] = 1; });
+  Object.keys(dates).sort().forEach(function(k){
+    var a = obj(ad[k]), b = obj(cd[k]);
+    if (!ad[k] && !cd[k]) return;
+    var as = obj(a.src), bs = obj(b.src), src = {}, sk = {};
+    Object.keys(as).forEach(function(s){ sk[s] = 1; });
+    Object.keys(bs).forEach(function(s){ sk[s] = 1; });
+    Object.keys(sk).forEach(function(s){ src[s] = Math.max(num(as[s]), num(bs[s])); });
+    var star = Math.max(num(a.star), num(b.star));
+    if (!star && !Object.keys(src).length) return;
+    out[k] = { src:src, at:Math.max(num(a.at), num(b.at), 1) };
+    if (star) out[k].star = star;
+  });
+  return { days: out };
+}
+function mergeMood(local, cloud){
+  var A = obj(local), C = obj(cloud), ad = obj(A.days), cd = obj(C.days), out = {}, dates = {};
+  Object.keys(ad).forEach(function(k){ dates[k] = 1; });
+  Object.keys(cd).forEach(function(k){ dates[k] = 1; });
+  Object.keys(dates).sort().forEach(function(k){
+    var a = obj(ad[k]), b = obj(cd[k]), pick = null;
+    if (ad[k] && cd[k]) pick = (num(b.at) >= num(a.at)) ? b : a;
+    else pick = ad[k] ? a : b;
+    if (pick && pick.m) out[k] = { m:String(pick.m).slice(0, 8), at:num(pick.at) };
+  });
+  return { v:1, days: out };
+}
+
+/* ---------------- 동기화 다리 (bSyncNow / FAMSYNC 가 부른다) ---------------- */
+/* 스터디 보드 문서(haeyuli-<코드>)의 hwplan·hwplanUn 과 이 기기 기록을 합친다 */
+function mergePlanLocal(cloudPlan, cloudUn){
+  var m = mergePlan(planLoad(), unLoad(), cloudPlan, cloudUn);
+  wr(K.plan, m.check); wr(K.un, m.un);
+  return m;
+}
+/* 이 기기에 문제집·패드 학습 목록이 아직 없으면(엄마 폰 등) 구름의 것을 그대로 받아 온다
+   — 이미 있으면 손대지 않아 이 기기의 진도·체크를 덮어쓰지 않는다 */
+function adoptPlans(cloudWb, cloudPad){
+  try {
+    if (!localStorage.getItem(K.wb) && cloudWb && typeof cloudWb === "object") wr(K.wb, cloudWb);
+    if (!localStorage.getItem(K.padp) && cloudPad && typeof cloudPad === "object") wr(K.padp, cloudPad);
+  } catch(e){}
+}
+/* 구름의 '공부한 날'(studydays)도 달력에 보이게 합친다 */
+function cacheStudy(cloudStudy){
+  var cur = studyDays(), src = obj(cloudStudy), changed = false, k;
+  for (k in src){
+    var n = num(src[k]);
+    if (n > num(cur[k])){ cur[k] = n; changed = true; }
+  }
+  if (changed) wr(K.sd, cur);
+  return changed;
+}
+/* 감정·출석도 가족 코드(대시보드 문서 haeyuli-dash-<코드>)로 오간다 */
+function mergeMoodLocal(cloud){
+  var m = mergeMood(moodData(), cloud);
+  wr(K.mood, m);
+  return m;
+}
+function mergeAttendLocal(cloud){
+  var m = mergeAttend(attData(), cloud);
+  wr(K.att, m);
+  return m;
+}
+/* 구름의 숙제 완료(done)를 이 기기 달력용으로 캐시 */
+function cacheDone(cloudDone){
+  var c = doneCache(), src = obj(cloudDone), k, changed = false;
+  for (k in src){
+    var d = src[k];
+    if (!d || typeof d !== "object") continue;
+    var prev = c[k];
+    if (!prev || (!!prev.d) !== (!!d.d) || num(prev.t) < num(d.t)){ c[k] = { d:!!d.d, t:num(d.t) }; changed = true; }
+  }
+  var ks = Object.keys(c).sort(); while (ks.length > 90) delete c[ks.shift()];
+  if (changed) wr(K.ddone, c);
+  return changed;
+}
+
+/* ---------------- 그리기 : 📝 숙제 ---------------- */
+function stickerHTML(st){
+  var pct = st.total ? st.n / st.total : 0;
+  var filled = Math.round(pct * 10);
+  var cells = "";
+  for (var i = 0; i < 10; i++){
+    cells += '<span class="hw-stk' + (i < filled ? " on" : "") + '">' + (i < filled ? (i === 9 ? "🏆" : "⭐") : "") + "</span>";
+  }
+  var goal = st.all ? '<b class="hw-goal on">🎉 오늘 목표 달성!</b>'
+    : '<b class="hw-goal">' + st.n + " / " + st.total + " · 스티커 " + filled + "/10</b>";
+  return '<div class="hw-stkbox">' + goal + '<div class="hw-stks">' + cells + "</div></div>";
+}
+function meterHTML(lb, em, v, tone){
+  var pc = Math.max(0, Math.min(100, Math.round(v)));
+  return '<div class="hw-meter ' + (tone || "") + '"><span class="hw-mlb">' + em + " " + lb + "</span>" +
+    '<span class="hw-mbar"><i style="width:' + pc + '%"></i></span><b>' + pc + "</b></div>";
+}
+function petCardHTML(st){
+  var p = tamaNow(), s = tamaStatus(p);
+  var stage = STAGES[num(p.stage)] || STAGES[0];
+  var need = TH[Math.min(num(p.stage), TH.length - 1)] || 0;
+  var cur = Math.min(p.grow, need || p.grow);
+  var gpc = need ? Math.round(cur / need * 100) : 100;
+  var nm = tamaLabel(p);
+  var fieldTxt = (num(p.stage) >= 2 && p.field) ? (" · " + FIELD[p.field].em + " " + FIELD[p.field].nm) : "";
+  var eggs = num(p.eggs, 1);
+  return '<div class="hw-card hw-pet">' +
+      '<div class="hw-pethd"><b>🥚 해율이 다마고치</b>' +
+        '<a class="hw-board" href="' + BOARD + '#room">다마고치 방 ▶</a></div>' +
+      '<div class="hw-petbody">' +
+        '<button class="hw-petpic" type="button" data-hwpet="1" aria-label="' + esc(nm) + ' 쓰다듬기">' + tamaImgHTML(p) + "</button>" +
+        '<div class="hw-petinfo">' +
+          '<div class="hw-say"><b>' + esc(nm) + "</b><span>" + esc(tamaSay(p, st)) + "</span></div>" +
+          '<div class="hw-petmeta"><span class="hw-pill">' + stage.em + " " + esc(stage.nm) + fieldTxt + "</span>" +
+            '<span class="hw-pill soft">' + s.em + " " + esc(s.t) + "</span>" +
+            (eggs > 1 ? '<span class="hw-pill soft">' + (eggs - 1) + "대째</span>" : "") + "</div>" +
+        "</div>" +
+      "</div>" +
+      '<div class="hw-grow"><span class="hw-mlb">🌱 성장</span><span class="hw-mbar"><i style="width:' + gpc + '%"></i></span>' +
+        '<b>' + cur + " / " + (need || "MAX") + "</b></div>" +
+      '<div class="hw-meters">' +
+        meterHTML("배고픔", "🍚", p.hunger, p.hunger >= 70 ? "warn" : "") +
+        meterHTML("신남", "💛", p.joy) +
+        meterHTML("깨끗함", "🫧", p.clean) +
+      "</div>" +
+    "</div>";
+}
+function moodHTML(){
+  var cur = moodToday(), m = cur ? String(cur.m) : "";
+  var btns = MOODS.map(function(x){
+    var on = x.m === m;
+    return '<button type="button" class="hw-mood' + (on ? " on" : "") + '" data-hwmood="' + x.m + '" aria-pressed="' + (on ? "true" : "false") + '">' +
+      '<span class="hw-mem">' + x.m + "</span><span class=\"hw-mnm\">" + x.nm + "</span></button>";
+  }).join("");
+  return '<div class="hw-card hw-moodbox"><div class="hw-pethd"><b>🌤️ 오늘의 감정</b>' +
+    '<span class="hw-hint">' + (m ? "골라 두면 가족에게도 보여요" : "지금 기분을 눌러 보세요") + "</span></div>" +
+    '<div class="hw-moods">' + btns + "</div></div>";
+}
+var SCLS = { "영어":"en", "수학":"math", "국어":"ko", "한자":"hanja", "중국어":"cn", "역사":"hist", "책":"book", "패드":"pad" };
+function rowHTML(it, st){
+  var on = !!st.done[it.id], mv = !!it.moved, cy = !!it.carry;
+  var go = it.go && it.go.length ? (it.go[0] === "study" && it.go[1] ? it.go[1] : it.go[0]) : "home";
+  return '<div class="hw-row' + (on ? " done" : "") + (mv ? " moved" : "") + '">' +
+    '<button type="button" class="hw-ck" data-hwtog="' + esc(it.id) + '" aria-pressed="' + (on ? "true" : "false") +
+      '" aria-label="' + esc(it.t) + (on ? " 완료 취소" : " 완료") + '">' + (on ? "✓" : (mv ? "➡️" : "")) + "</button>" +
+    '<a class="hw-rowth" href="' + BOARD + "#" + esc(go) + '" title="스터디 보드로 가기">' +
+      '<span class="hw-subj ' + (SCLS[it.s] || "etc") + '">' + esc(it.s || "기타") + "</span>" +
+      '<span class="hw-tx">' + esc(it.t) + "</span>" +
+      (mv ? '<span class="hw-mv">내일로 미룸</span>' : (cy ? '<span class="hw-mv cy">➡️ 어제 미뤄 둔 숙제</span>' : "")) +
+    "</a>" +
+    '<span class="hw-tag2 t-' + esc(it.tag || "b") + '">' + (TAG[it.tag] || "") + "</span>" +
+    '<button type="button" class="hw-mvbtn" data-hwmv="' + esc(it.id) + '" aria-label="' + (mv ? "미루기 취소" : "내일로 미루기") + '">' + (mv ? "↩︎" : "➡️") + "</button>" +
+  "</div>";
+}
+function render(){
+  var box = $("pane-homework");
+  if (!box) return;
+  var st = status(), d = new Date();
+  var pct = st.total ? Math.round(st.n / st.total * 100) : 0;
+  var rows = st.list.map(function(it){ return rowHTML(it, st); }).join("");
+  var html =
+    '<div class="hw-wrap">' +
+      '<div class="hw-col">' +
+        '<div class="hw-card hw-banner">' +
+          '<div class="hw-bh"><b>✨ 반짝이는 ' + esc(kidName()) + '의 오늘의 기록</b>' +
+            '<span class="hw-date">' + (d.getMonth() + 1) + "월 " + d.getDate() + "일 " + DAYN[dayIdx()] + "요일</span></div>" +
+          '<div class="hw-sum"><span class="hw-num"><b>' + st.n + "</b> / " + st.total + " 개 완료</span>" +
+            (st.all ? '<span class="hw-doneall">🎉 전부 끝! +500원 🐷</span>'
+              : (st.moved && st.n === st.total ? '<span class="hw-hint">➡️ ' + st.moved + "개는 내일로 미뤘어요</span>"
+                : '<span class="hw-hint">체크할 때마다 ⭐ +1</span>')) + "</div>" +
+          '<div class="hw-bar"><i style="width:' + pct + '%"></i></div>' +
+        "</div>" +
+        '<div class="hw-card hw-listbox">' +
+          '<div class="hw-pethd"><b>📝 오늘 해야 할 숙제</b><span class="hw-hint">' + st.n + "/" + st.total + " 완료</span></div>" +
+          '<div class="hw-list">' + (rows || '<p class="hw-empty">오늘은 숙제가 없어요 🌿</p>') + "</div>" +
+        "</div>" +
+      "</div>" +
+      '<div class="hw-col">' +
+        petCardHTML(st) +
+        moodHTML() +
+        '<div class="hw-card hw-stkcard">' + '<div class="hw-pethd"><b>🌟 오늘의 칭찬 스티커 판</b><span class="hw-hint">숙제 하나 = 스티커 하나</span></div>' + stickerHTML(st) + "</div>" +
+      "</div>" +
+    "</div>";
+  box.innerHTML = html;
+}
+function kidName(){
+  try { if (window.YULI && YULI.name) return YULI.name() || "해율이"; } catch(e){}
+  return "해율이";
+}
+
+/* ---------------- 그리기 : 📅 출석 ---------------- */
+var ATM = { y:0, m:0 };
+function renderAttend(){
+  var box = $("pane-attend");
+  if (!box) return;
+  var info = attendanceInfo(), set = attendedSet();
+  var now = new Date(), y = ATM.y || now.getFullYear(), m = ATM.m || (now.getMonth() + 1);
+  var first = new Date(y, m - 1, 1), last = new Date(y, m, 0);
+  var pad = first.getDay(), cells = "";
+  for (var i = 0; i < pad; i++) cells += '<span class="at-day pad"></span>';
+  for (var dd = 1; dd <= last.getDate(); dd++){
+    var k = y + "-" + pad2(m) + "-" + pad2(dd);
+    var rec = info.days[k], stud = !!set[k], wd = new Date(y, m - 1, dd).getDay();
+    var mark = (rec && rec.star) ? (k === iso() ? "🐶" : "⭐") : (stud ? "✔" : "");
+    cells += '<span class="at-day' + ((rec && rec.star) || stud ? " on" : "") + (stud && !(rec && rec.star) ? " stud" : "") +
+      (k === iso() ? " today" : "") + (wd === 0 ? " sun" : "") + '"><em>' + dd + "</em><i>" + mark + "</i></span>";
+  }
+  var sdays = streakDays(), next = null;
+  for (var j = 0; j < LADDER.length; j++) if (LADDER[j][0] > sdays){ next = LADDER[j]; break; }
+  var steps = LADDER.map(function(x){
+    var hit = sdays >= x[0], cur = (sdays === x[0]);
+    return '<span class="at-step' + (cur ? " now" : (hit ? " hit" : "")) + '"><b>' + x[0] + "일</b><em>+" + x[1].toLocaleString("ko-KR") + "원</em></span>";
+  }).join("");
+  var t = attToday(), stamped = !!(t && t.star);
+  var todayLbl = t ? Object.keys(t.src || {}).map(function(s){
+    return ({ book:"📖 그림 동화책", sight:"👀 사이트워드", phonics:"🔤 파닉스", words:"🃏 단어카드", talk:"💬 영어 대화",
+              call:"📞 전화 영어", ko:"📖 국어", math:"🔢 수학", hanja:"漢 한자", history:"🏛️ 역사", room:"구치파치 방",
+              check:"🐾 출석 도장" })[s] || s;
+  }).join(" · ") : "";
+  var p = tamaNow(), s = tamaStatus(p);
+  var badges = [
+    ["첫 출석", info.total >= 1], ["3일 연속", info.streak >= 3], ["7일 연속", info.streak >= 7],
+    ["14일 연속", info.streak >= 14], ["이번 달 10일", info.month >= 10], ["30일 연속", info.streak >= 30]
+  ];
+  var badgeHTML = badges.map(function(x){
+    return '<span class="at-badge' + (x[1] ? " on" : "") + '">' + (x[1] ? "🏅 " : "· ") + x[0] + "</span>";
+  }).join("");
+  var html =
+    '<div class="at-wrap">' +
+      '<div class="at-col">' +
+        '<div class="hw-card at-calcard">' +
+          '<div class="hw-pethd"><b>📅 ' + y + "년 " + m + "월 출석 도장판</b>" +
+            '<span class="at-nav"><button type="button" data-atnav="-1" aria-label="이전 달">◀</button>' +
+            '<button type="button" data-atnav="1" aria-label="다음 달">▶</button></span></div>' +
+          '<div class="at-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>' +
+          '<div class="at-grid">' + cells + "</div>" +
+          '<div class="at-stats"><span><b>' + info.total + "</b>전체 출석</span>" +
+            '<span><b>' + info.month + "</b>이번 달 도장</span>" +
+            '<span><b>' + studyMonthCount() + "</b>이번 달 공부한 날</span>" +
+            '<span><b>' + info.streak + "</b>연속 출석</span></div>" +
+        "</div>" +
+        '<div class="hw-card at-pet">' +
+          '<div class="hw-pethd"><b>🥚 다마고치도 함께</b><a class="hw-board" href="' + BOARD + '#room">다마고치 방 ▶</a></div>' +
+          '<div class="at-petrow">' + tamaImgHTML(p) +
+            "<div><b>" + esc(tamaLabel(p)) + "</b><span>" + s.em + " " + esc(s.t) + "</span>" +
+            '<em>출석 ' + info.streak + "일째 · 별 " + starTotal() + "개 · 성장 " + p.grow + (needTh(p) ? " / " + needTh(p) : "") + "</em></div>" +
+          "</div>" +
+        "</div>" +
+      "</div>" +
+      '<div class="at-col">' +
+        '<div class="hw-card at-stampcard">' +
+          '<div class="hw-pethd"><b>🐾 오늘 출석</b><span class="hw-hint">' + (stamped ? "이미 찍었어요!" : "숙제를 다 하면 저절로 찍혀요") + "</span></div>" +
+          '<button type="button" class="at-stamp' + (stamped ? " done" : "") + '" data-atstamp="1"' + (stamped ? " disabled" : "") + ">" +
+            (stamped ? "⭐ 오늘 출석 완료!" : "🐾 오늘 출석 도장 찍기") + "</button>" +
+          '<div class="at-todaylbl">' + (todayLbl ? "오늘 한 공부: " + esc(todayLbl) : "아직 오늘 도장이 없어요 · 첫 도장을 찍어 보아요!") + "</div>" +
+        "</div>" +
+        '<div class="hw-card at-lad">' +
+          '<div class="hw-pethd"><b>🔥 연속 숙제 잭팟 사다리</b><span class="hw-hint">' + sdays + "일 연속</span></div>" +
+          '<div class="at-steps">' + steps + "</div>" +
+          '<div class="at-next">' + (next ? ("다음 잭팟 " + next[0] + "일 · +" + next[1].toLocaleString("ko-KR") + "원 (" + (next[0] - sdays) + "일 남음)")
+            : "사다리 끝까지 왔어요! 🏆") + "</div>" +
+        "</div>" +
+        '<div class="hw-card at-weekcard">' +
+          '<div class="hw-pethd"><b>📈 이번 주 기록</b><span class="hw-hint">월~일 숙제 완료</span></div>' +
+          weekStripHTML() +
+        "</div>" +
+        '<div class="hw-card at-badgecard">' +
+          '<div class="hw-pethd"><b>🏅 출석 배지</b><span class="hw-hint">모으는 재미</span></div>' +
+          '<div class="at-badges">' + badgeHTML + "</div>" +
+          '<div class="at-next soft">숙제를 다 한 날은 보드에서 저절로 도장이 찍혀요</div>' +
+        "</div>" +
+      "</div>" +
+    "</div>";
+  box.innerHTML = html;
+}
+
+/* ---------------- 동작 ---------------- */
+function toggle(id){
+  var st = status(), d = st.date, s = planLoad();
+  var it = null;
+  for (var i = 0; i < st.list.length; i++) if (st.list[i].id === id) it = st.list[i];
+  if (!it) return;
+  if (it.moved){ postpone(id); return; }        /* 내일로 미룬 숙제를 누르면 되돌리기 */
+  var isWb = String(id).indexOf("wb:") === 0;
+  if (!s[d] || typeof s[d] !== "object") s[d] = {};
+  var nowOn = !s[d][id];
+  if (nowOn){
+    s[d][id] = Date.now();
+    clearUn(d, id);
+    if (isWb) wbAdvance(id.slice(3), d);
+    var got = awardHwStar(d, id);
+    toast(got ? ("⭐ +1 · " + it.t + " (지금 별 " + starTotal() + "개)") : ("✓ " + it.t));
+  } else {
+    delete s[d][id];
+    markUn(d, id, Date.now());
+    if (isWb) wbRollback(id.slice(3), d);
+    takeHwStar(d, id);
+    toast("↩︎ " + it.t + " 체크를 풀었어요");
+  }
+  var keys = Object.keys(s).sort(); while (keys.length > 60) delete s[keys.shift()];
+  wr(K.plan, s);
+
+  var st2 = status();
+  if (st2.all){
+    if (bonusAllDone(st2.date)) toast("📅 오늘 숙제 전부 완료! 저금통에 500원 🐷");
+    /* 스터디 보드와 같은 규칙 — 오늘 숙제를 다 하면 출석 도장도 함께 */
+    if (markAttendance("check")) toast("🐾 숙제를 다 했으니 출석 도장도 찍었어요!");
+  }
+  render();
+  try { if (window.YULI && YULI.hwPush) YULI.hwPush(); } catch(e){}
+  try { if (window.FAMSYNC && FAMSYNC.quiet) FAMSYNC.quiet(); } catch(e){}
+}
+function postpone(id){
+  var st = status(), d = st.date, cr = carryLoad();
+  var it = null;
+  for (var i = 0; i < st.list.length; i++) if (st.list[i].id === id) it = st.list[i];
+  if (!it) return;
+  var to = shift(d, 1);
+  if (!cr.out[d] || typeof cr.out[d] !== "object") cr.out[d] = {};
+  if (!cr.in[to] || typeof cr.in[to] !== "object") cr.in[to] = {};
+  var cur = cr.out[d][id];
+  if (cur && !cur.del){                                    /* 되돌리기 */
+    cr.out[d][id] = { to:to, at:Date.now(), del:1 };
+    if (cr.in[to][id]) cr.in[to][id] = { f:d, s:it.s, t:it.t, g:it.tag, at:Date.now(), del:1 };
+    toast("↩︎ " + it.t + " 미루기를 취소했어요");
+  } else {
+    cr.out[d][id] = { to:to, at:Date.now() };
+    cr.in[to][id] = { f:d, s:it.s, t:it.t, g:it.tag, at:Date.now() };
+    toast("➡️ " + it.t + " 를 내일로 미뤘어요");
+  }
+  carrySave(cr);
+  render();
+  try { if (window.FAMSYNC && FAMSYNC.quiet) FAMSYNC.quiet(); } catch(e){}
+}
+function bind(){
+  var hw = $("pane-homework");
+  if (hw && !hw.__hwB){
+    hw.__hwB = 1;
+    hw.addEventListener("click", function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var tg = t.closest("[data-hwtog]");
+      if (tg){ e.preventDefault(); toggle(tg.getAttribute("data-hwtog")); return; }
+      var mv = t.closest("[data-hwmv]");
+      if (mv){ e.preventDefault(); postpone(mv.getAttribute("data-hwmv")); return; }
+      var md = t.closest("[data-hwmood]");
+      if (md){
+        e.preventDefault();
+        var m = md.getAttribute("data-hwmood"), cur = moodToday();
+        setMood(cur && String(cur.m) === m ? "" : m);
+        render();
+        return;
+      }
+      var pet = t.closest("[data-hwpet]");
+      if (pet){
+        e.preventDefault();
+        var p = tamaNow();
+        toast(tamaSay(p, status()));
+        return;
+      }
+    });
+  }
+  var at = $("pane-attend");
+  if (at && !at.__atB){
+    at.__atB = 1;
+    at.addEventListener("click", function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var nav = t.closest("[data-atnav]");
+      if (nav){
+        e.preventDefault();
+        var now = new Date(), y = ATM.y || now.getFullYear(), m = ATM.m || (now.getMonth() + 1);
+        m += Number(nav.getAttribute("data-atnav"));
+        if (m < 1){ m = 12; y--; } if (m > 12){ m = 1; y++; }
+        ATM.y = y; ATM.m = m; renderAttend(); return;
+      }
+      var stp = t.closest("[data-atstamp]");
+      if (stp){
+        e.preventDefault();
+        var got = markAttendance("check");
+        renderAttend();
+        toast(got ? "🐾 오늘 출석 도장! ⭐ +1" : "오늘은 이미 도장을 찍었어요!");
+        try { if (window.YULI && YULI.hwPush) YULI.hwPush(); } catch(e2){}
+        try { if (window.FAMSYNC && FAMSYNC.quiet) FAMSYNC.quiet(); } catch(e2){}
+        return;
+      }
+    });
+  }
+}
+
+/* 스터디 보드·부모 페이지가 바뀌면(같은 주소라 localStorage 를 같이 쓴다) 화면도 따라간다 */
+function refresh(){
+  bind();
+  var hw = $("pane-homework"), at = $("pane-attend");
+  if (hw && hw.classList.contains("active")) render();
+  if (at && at.classList.contains("active")) renderAttend();
+}
+/* 구름에서 받은 기록이 붙은 뒤 — 보이는 화면만 다시 그린다 */
+function cloudApplied(){
+  if (!$("pane-homework") && !$("pane-attend")) return;
+  refresh();
+}
+function start(){
+  bind();
+  /* 앱을 열면 스터디 보드가 올려 둔 체크·별을 한 번 받아 온다 */
+  setTimeout(function(){ try { if (window.YULI && YULI.hwSync) YULI.hwSync(); } catch(e){} }, 1600);
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden) return;
+    try { if (window.YULI && YULI.hwSync) YULI.hwSync(); } catch(e){}
+  });
+  window.addEventListener("storage", function(e){
+    if (!e || !e.key) return;
+    if ([K.plan, K.un, K.carry, K.att, K.sd, K.tama, K.wb, K.padp, K.mood].indexOf(e.key) < 0) return;
+    refresh();
+  });
+  /* 다른 기기의 체크를 20초마다 맞춘다 (숙제·출석 화면을 보고 있을 때만) */
+  setInterval(function(){
+    if (document.hidden) return;
+    var hw = $("pane-homework"), at = $("pane-attend");
+    if (!(hw && hw.classList.contains("active")) && !(at && at.classList.contains("active"))) return;
+    try { if (window.YULI && YULI.hwSync) YULI.hwSync(); } catch(e){}
+  }, 20000);
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+else start();
+
+return {
+  render: render, renderAttend: renderAttend, refresh: refresh, bind: bind,
+  status: status, items: items, toggle: toggle, postpone: postpone,
+  mergePlanLocal: mergePlanLocal, mergeAttend: mergeAttend, mergeMood: mergeMood,
+  mergeAttendLocal: mergeAttendLocal, mergeMoodLocal: mergeMoodLocal,
+  cacheDone: cacheDone, cacheStudy: cacheStudy, adoptPlans: adoptPlans,
+  cloudApplied: cloudApplied,
+  att: { data: attData, info: attendanceInfo, mark: markAttendance, streak: streakDays },
+  tama: tamaNow, mood: { today: moodToday, set: setMood },
+  keys: K
+};
 })();
 </script>
 
