@@ -65,6 +65,15 @@ h1,h2,h3{margin:0}
 .btn.code{background:#fff6ed;border-color:#f0d5bb;color:#a5551f}
 .btn.code b{font-family:ui-monospace,Menlo,monospace;letter-spacing:.09em;font-size:.8rem}
 .btn.code.ok{background:#eaf8f0;border-color:#b6e3c9;color:#1d7a4f}
+.btn.code.need{
+  background:linear-gradient(180deg,#ffe3bd,#ffbe80);border-color:#ef9a4d;color:#7a3c0c;
+  font-size:.85rem;font-weight:900;padding:9px 14px;box-shadow:0 3px 12px rgba(224,130,74,.35);
+  animation:needPulse 2.4s ease-in-out infinite;
+}
+.btn.code.need .btxt{display:inline}
+.btn.code.need b{display:none}
+.btn.code.ok b{font-size:.88rem}
+@keyframes needPulse{0%,100%{box-shadow:0 3px 12px rgba(224,130,74,.3)}50%{box-shadow:0 3px 18px rgba(224,130,74,.62)}}
 .btn.refresh{font-size:.95rem;padding:6px 9px}
 .btn.refresh.spin{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -244,14 +253,39 @@ body.zoomed .frames{padding:6px}
 .gate{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:18px;
   background:rgba(48,36,24,.42);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .gate[hidden]{display:none}
-.gcard{width:min(430px,100%);background:var(--card);border-radius:20px;padding:20px 18px;box-shadow:0 20px 50px rgba(60,40,20,.3);text-align:center}
-.gcard h2{font-size:1.06rem;font-weight:900;margin-bottom:6px}
-.gcard p{font-size:.82rem;font-weight:700;color:var(--muted);line-height:1.55;margin:0 0 14px}
-.gcard input{width:100%;text-align:center;font-size:1.3rem;font-weight:900;letter-spacing:.22em;text-transform:uppercase;
-  padding:12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-family:ui-monospace,Menlo,monospace}
-.gcard .btns{display:flex;gap:8px;margin-top:12px}
-.gcard .btns .btn{flex:1;justify-content:center;padding:11px}
-.gnote{font-size:.7rem;font-weight:800;color:var(--muted);margin-top:12px;line-height:1.6}
+.gcard{width:min(470px,100%);max-height:94dvh;overflow:auto;background:var(--card);border-radius:22px;
+  padding:18px 16px 16px;box-shadow:0 20px 50px rgba(60,40,20,.3);text-align:left}
+.ghead{text-align:center;margin-bottom:14px}
+.ghead h2{font-size:1.1rem;font-weight:900;margin-bottom:6px;letter-spacing:-.01em}
+.ghead p{font-size:.79rem;font-weight:700;color:var(--muted);line-height:1.55;margin:0}
+.ghead p b{color:#a5551f}
+.gblock{border:1.5px solid var(--line);border-radius:16px;padding:13px 13px 12px;background:#fffdf8}
+.gblock + .gblock{margin-top:10px}
+.gblock.gen{border-color:#f0c8a0;background:linear-gradient(180deg,#fffaf3,#ffeeda);box-shadow:0 6px 18px rgba(224,130,74,.13)}
+.gblock h3{font-size:.88rem;font-weight:900;display:flex;align-items:center;gap:5px;margin-bottom:4px;letter-spacing:-.01em}
+.gblock .hint{font-size:.72rem;font-weight:700;color:var(--muted);line-height:1.55;margin:0 0 10px}
+.gblock .hint b{color:#a5551f}
+.big-btn{display:flex;width:100%;align-items:center;justify-content:center;gap:7px;
+  font-size:.96rem;font-weight:900;padding:14px 10px;border-radius:13px;
+  background:linear-gradient(180deg,#ffb37a,#ec7f42);color:#fff;border:1px solid #e0793d;
+  box-shadow:0 6px 16px rgba(224,130,74,.34);transition:transform .08s,box-shadow .15s}
+.big-btn:active{transform:scale(.985)}
+.big-btn.alt{background:#fff;color:#a5551f;border:1.5px solid #eccba9;box-shadow:0 2px 8px rgba(120,90,60,.1)}
+.gsplit{display:flex;align-items:center;gap:10px;margin:12px 4px;color:#a2958a;font-size:.7rem;font-weight:900;letter-spacing:.04em}
+.gsplit:before,.gsplit:after{content:"";flex:1;height:1px;background:var(--line)}
+.ginrow{display:flex;gap:7px;align-items:stretch}
+.ginrow input{flex:1;min-width:0;text-align:center;font-family:ui-monospace,Menlo,monospace;
+  font-size:1.12rem;font-weight:900;letter-spacing:.18em;text-transform:uppercase;
+  padding:12px 8px;border-radius:12px;border:1.5px solid var(--line);background:#fff}
+.ginrow input:focus{outline:2px solid #f4c39c;outline-offset:1px}
+.ginrow .btn{flex:0 0 auto;justify-content:center;padding:0 15px;font-size:.84rem;border-radius:12px}
+.copyrow{display:flex;gap:7px;margin:9px 0 8px}
+.copyrow .btn{flex:1;justify-content:center;padding:10px 8px;font-size:.8rem;border-radius:11px}
+.gnote2{font-size:.69rem;font-weight:800;color:var(--muted);margin-top:11px;line-height:1.6;text-align:center}
+.gate .later{display:flex;width:100%;justify-content:center;margin-top:4px;font-size:.76rem}
+.sheet-foot{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.sheet-foot .btn{padding:8px 12px;font-size:.76rem;border-radius:10px}
+#sheetStatus{font-size:.69rem;font-weight:800;color:var(--muted);line-height:1.5;flex:1}
 
 .modal{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-end;justify-content:center;background:rgba(40,28,16,.38)}
 .modal[hidden]{display:none}
@@ -263,11 +297,9 @@ body.zoomed .frames{padding:6px}
   padding:12px;border-radius:14px;background:#fff5e9;border:1px dashed #eac9a5;color:#a5551f;margin-bottom:10px}
 .linkbox{display:flex;gap:6px;margin-bottom:12px}
 .linkbox input{flex:1;min-width:0;font-size:.7rem;font-weight:700;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;color:#6b5a44}
-.sheet .row{display:flex;gap:6px;margin-bottom:8px}
 .sheet input.txt{flex:1;min-width:0;font-size:.9rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;
   padding:10px;border-radius:10px;border:1px solid var(--line);background:#fff;font-family:ui-monospace,Menlo,monospace;text-align:center}
 .sheet .btn{justify-content:center}
-.sync-line{font-size:.7rem;font-weight:800;color:var(--muted);margin-top:10px;line-height:1.6}
 
 .toast{
   position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,20px);
@@ -275,6 +307,8 @@ body.zoomed .frames{padding:6px}
   padding:10px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:88vw;text-align:center;
 }
 .toast.on{opacity:1;transform:translate(-50%,0)}
+.toast.above{top:calc(14px + env(safe-area-inset-top));bottom:auto;transform:translate(-50%,-16px)}
+.toast.above.on{transform:translate(-50%,0)}
 
 /* ---------- 반응형 ---------- */
 @media (max-width:900px){
@@ -313,7 +347,10 @@ body.zoomed .frames{padding:6px}
   #fromHint{display:none}
   .msgIn{font-size:.84rem;min-height:42px}
   .note .txt{font-size:.88rem}
-  .gcard input{font-size:1.1rem}
+  .gcard{padding:15px 13px 14px;border-radius:18px}
+  .gblock{padding:11px 11px 10px}
+  .big-btn{font-size:.9rem;padding:13px 8px}
+  .ginrow input{font-size:1rem;letter-spacing:.14em}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -330,7 +367,7 @@ body.zoomed .frames{padding:6px}
       <span id="statusDot" class="dot wait" title="연결 상태"></span>
     </div>
     <div class="tb-right">
-      <button id="btnCode" class="btn code" type="button"><span>👨‍👩‍👧‍👦</span><b id="codeVal">코드 연결</b></button>
+      <button id="btnCode" class="btn code need" type="button" title="가족 코드를 만들거나 연결해 주세요"><span class="ic" id="codeIcon">🔑</span><span class="btxt" id="codeLabel">가족 코드 연결 / 생성</span><b id="codeVal"></b></button>
       <button id="btnRefresh" class="btn refresh" type="button" title="가족 사진·메시지 새로고침" aria-label="새로고침">🔄</button>
       <button id="btnFrame" class="btn" type="button">🖼️ <span class="btxt">액자 모드</span></button>
       <a class="btn ghost" href="index.html">🏠 <span class="btxt">대시보드</span></a>
@@ -472,15 +509,7 @@ body.zoomed .frames{padding:6px}
 </div>
 
 <div class="gate" id="gate" hidden>
-  <div class="gcard">
-    <h2>👨‍👩‍👧‍👦 가족 코드를 연결해 주세요</h2>
-    <p>가족 코드를 넣으면 할머니·할아버지 댁, 사촌 누나들 기기와<br>같은 사진·메시지를 함께 봐요.</p>
-    <input id="gateCode" type="text" maxlength="10" placeholder="가족 코드" autocomplete="off" spellcheck="false">
-    <div class="btns">
-      <button class="btn primary" id="gateGo" type="button">연결하기</button>
-    </div>
-    <div class="gnote">가족에게 받은 <b>?code=XXXXXX</b> 링크로 열면 자동으로 연결돼요.</div>
-  </div>
+  <div class="gcard" id="gateCard"><div id="gateBody"></div></div>
 </div>
 
 <div class="modal" id="modal" hidden><div class="sheet" id="sheetBody"></div></div>
@@ -540,7 +569,10 @@ function dk(d){ d = d||new Date(); return d.getFullYear()+"-"+pad2(d.getMonth()+
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 function toast(msg){
   var t = $("toast"); if(!t) return;
-  t.textContent = msg; t.classList.add("on");
+  t.textContent = msg;
+  var m = $("modal");
+  t.classList.toggle("above", !!(m && !m.hidden));   /* 코드 시트를 열어 둔 채면 위쪽에 띄워 버튼을 가리지 않게 */
+  t.classList.add("on");
   clearTimeout(toast._t); toast._t = setTimeout(function(){ t.classList.remove("on"); }, 2600);
 }
 function fmtHM(ts){
@@ -686,6 +718,7 @@ function commit(mut){
 function pull(manual){
   if(!S.code){
     $("gate").hidden = false;
+    showGate("");
     if(manual) toast("가족 코드를 먼저 연결해 주세요");
     paintStatus();
     return Promise.resolve(false);
@@ -772,13 +805,22 @@ function hydrateImages(){
 /* ---------------- 상태 표시 ---------------- */
 function paintStatus(){
   var b = $("btnCode"), v = $("codeVal"), dot = $("statusDot");
-  if(b && v){
+  var label = $("codeLabel"), ic = $("codeIcon");
+  if(b){
     if(S.code){
-      v.textContent = S.code;
-      b.classList.add("ok");
+      b.classList.add("ok"); b.classList.remove("need");
+      if(ic) ic.textContent = "👥";
+      if(label){ label.textContent = "가족 코드"; label.style.display = "none"; }
+      if(v){ v.textContent = S.code; v.style.display = "inline"; }
+      b.title = "가족 코드 " + S.code + " · 눌러서 공유 링크 복사·코드 바꾸기";
+      b.setAttribute("aria-label", "가족 코드 " + S.code + " · 공유·설정 열기");
     } else {
-      v.textContent = "코드 연결";
-      b.classList.remove("ok");
+      b.classList.remove("ok"); b.classList.add("need");
+      if(ic) ic.textContent = "🔑";
+      if(label){ label.textContent = "가족 코드 연결 / 생성"; label.style.display = ""; }
+      if(v){ v.textContent = ""; v.style.display = "none"; }
+      b.title = "가족 코드를 만들거나 연결해 주세요";
+      b.setAttribute("aria-label", "가족 코드 연결 / 생성");
     }
   }
   if(dot){
@@ -786,6 +828,7 @@ function paintStatus(){
     dot.title = S.busy ? "동기화 중" : (!S.code ? "코드 연결 안 됨"
               : (S.err ? "연결 오류: " + S.err : "연결됨 · " + fmtHM(S.last)));
   }
+  paintSheetStatus();
   var info = $("albInfo");
   if(info){
     var kb = 0;
@@ -1137,47 +1180,117 @@ function renderAll(){
   renderMsgs();
 }
 
-/* ---------------- 가족 코드 시트 ---------------- */
+/* ---------------- 가족 코드 시트 · 첫 화면 ---------------- */
+function copyText(txt, okMsg){
+  var done = function(){ toast(okMsg || "복사했어요"); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done, function(){ fallbackCopy(txt, done); });
+  } else fallbackCopy(txt, done);
+}
+function statusHTML(){
+  var st = S.busy ? "동기화 중…"
+         : (S.err ? "⚠️ 연결 오류 · " + esc(S.err)
+                  : (S.last ? "✅ 마지막으로 받은 시각 " + fmtHM(S.last) : "⏳ 아직 받아 오지 않았어요"));
+  return st + "<br>사진 " + S.doc.photos.length + "장 · 메시지 " + S.doc.messages.length + "개";
+}
+function paintSheetStatus(){
+  var el = $("sheetStatus");
+  if(el && !$("modal").hidden) el.innerHTML = statusHTML();
+}
+
+/* 새 코드 자동 생성 · 기존 코드 입력 — 첫 화면과 상단 시트가 같은 모양을 쓴다 */
+function codeBlocksHTML(code){
+  code = code || "";
+  var h = "";
+  if(code){
+    h +=
+        '<div class="gblock gen">'
+      +   '<h3>🔑 지금 쓰는 가족 코드</h3>'
+      +   '<div class="bigcode" id="bigCode">' + esc(code) + '</div>'
+      +   '<div class="copyrow">'
+      +     '<button class="btn" id="btnCopyCode" type="button">📋 코드 복사</button>'
+      +     '<button class="btn primary" id="btnCopy" type="button">📋 링크 복사</button>'
+      +   '</div>'
+      +   '<div class="linkbox"><input id="shareIn" readonly value="' + esc(shareLink(code)) + '" aria-label="가족 공유 링크"></div>'
+      +   '<p class="hint" style="margin:8px 0 0">이 코드를 넣거나 위 링크를 보내면 가족 기기에서 바로 열려요.</p>'
+      + '</div>';
+  }
+  h +=
+      '<div class="gblock gen"' + (code ? ' style="margin-top:10px"' : '') + '>'
+    +   '<h3>✨ 새 가족 코드 만들기</h3>'
+    +   '<p class="hint">누르면 <b>6자리 코드</b>가 바로 만들어지고 연결돼요. 이어서 나오는 <b>공유 링크</b>를 가족에게 보내면 끝!</p>'
+    +   '<button class="big-btn" id="btnGen" type="button">✨ 새 가족 코드 자동 생성</button>'
+    + '</div>'
+    + '<div class="gsplit">또는</div>'
+    + '<div class="gblock">'
+    +   '<h3>⌨️ 기존 가족 코드 입력</h3>'
+    +   '<p class="hint">가족이 이미 쓰던 코드를 그대로 넣어 주세요. 예: 스터디 보드에서 쓰던 <b>N4XBNC</b> 같은 6자리 코드' + (code ? ' · 지금 코드 <b>' + esc(code) + '</b>도 그대로 쓸 수 있어요' : '') + '</p>'
+    +   '<div class="ginrow">'
+    +     '<input id="codeIn" type="text" maxlength="10" placeholder="가족 코드" value="' + esc(code) + '" autocomplete="off" spellcheck="false" autocapitalize="characters">'
+    +     '<button class="btn primary" id="btnJoin" type="button">연결하기</button>'
+    +   '</div>'
+    + '</div>';
+  return h;
+}
+function wireCodeBlocks(root){
+  root = root || document;
+  function q(id){ return root.querySelector("#" + id); }
+  var gen = q("btnGen");
+  if(gen) gen.addEventListener("click", genAndJoin);
+  var cIn = q("codeIn"), go = q("btnJoin");
+  if(go && cIn) go.addEventListener("click", function(){ join(cIn.value); });
+  if(cIn) cIn.addEventListener("keydown", function(e){ if(e.key === "Enter") join(cIn.value); });
+  var cc = q("btnCopyCode");
+  if(cc) cc.addEventListener("click", function(){ copyText(S.code, "가족 코드 " + S.code + " 를 복사했어요"); });
+  var cl = q("btnCopy");
+  if(cl) cl.addEventListener("click", function(){ copyText(shareLink(S.code), "공유 링크를 복사했어요 · 가족에게 붙여 넣어 보내 주세요"); });
+  var sh = q("shareIn");
+  if(sh) sh.addEventListener("focus", function(){ sh.select(); });
+}
+function renderGate(note){
+  var body = $("gateBody");
+  if(!body) return;
+  body.innerHTML =
+      '<div class="ghead">'
+    +   '<h2>👨‍👩‍👧‍👦 가족 코드로 함께 보기</h2>'
+    +   '<p>' + (note ? esc(note) + '<br>' : '')
+    +     '할머니·할아버지 댁, 사촌 누나들 기기와 <b>같은 사진·메시지</b>를 함께 봐요.<br>'
+    +     '<b>새로 만들거나</b>, 이미 쓰던 코드를 넣으면 돼요.</p>'
+    + '</div>'
+    + codeBlocksHTML(S.code)
+    + '<div class="gnote2">가족에게 받은 <b>?code=XXXXXX</b> 링크로 열면 자동으로 연결돼요.</div>'
+    + '<button class="btn ghost later" id="gateLater" type="button">나중에 연결하고 둘러볼게요</button>';
+  wireCodeBlocks(body);
+  var later = $("gateLater");
+  if(later) later.addEventListener("click", function(){
+    hideGate();
+    toast("🔑 위쪽 가족 코드 버튼을 누르면 언제든 연결할 수 있어요");
+  });
+}
+function showGate(note){
+  var body = $("gateBody");
+  if(body && !body.children.length) renderGate(note);
+  $("gate").hidden = false;
+}
+function hideGate(){
+  $("gate").hidden = true;
+  var body = $("gateBody");
+  if(body) body.innerHTML = "";   /* 숨긴 화면은 비워 시트와 id가 겹치지 않게 */
+}
 function openCodeSheet(note){
-  var code = S.code;
+  var code = S.code || "";
   var body = $("sheetBody");
   body.innerHTML =
       '<h3>👨‍👩‍👧‍👦 가족 공유 코드</h3>'
     + '<div class="sub">' + (note ? esc(note) + '<br>' : '')
-    +   '할머니·할아버지 댁, 사촌 누나들 기기에 <b>같은 코드</b>를 넣으면 같은 사진·메시지를 함께 봐요.</div>'
-    + (code
-        ? '<div class="bigcode">' + esc(code) + '</div>'
-          + '<div class="linkbox"><input id="shareIn" readonly value="' + esc(shareLink(code)) + '">'
-          + '<button class="btn primary" id="btnCopy" type="button">📋 링크 복사</button></div>'
-        : '<div class="sub" style="color:#a5551f;font-weight:800">아직 연결된 코드가 없어요. 아래에 코드를 넣어 주세요.</div>')
-    + '<div class="sub" style="margin-bottom:6px"><b>코드로 연결</b></div>'
-    + '<div class="row"><input class="txt" id="codeIn" maxlength="10" placeholder="가족 코드" value="' + esc(code) + '">'
-    +   '<button class="btn primary" id="btnJoin" type="button">연결</button></div>'
-    + '<div class="row"><button class="btn" id="btnNew" type="button">새 코드 만들기</button>'
-    +   '<button class="btn" id="btnSyncNow" type="button">🔄 지금 새로고침</button></div>'
-    + '<div class="sync-line">'
-    +   (S.busy ? "동기화 중…" : (S.err ? "⚠️ " + esc(S.err) : (S.last ? "✅ 마지막으로 받은 시각 · " + fmtHM(S.last) : "아직 받아 오지 않았어요")))
-    +   '<br>사진 ' + S.doc.photos.length + '장 · 메시지 ' + S.doc.messages.length + '개'
+    +   '같은 코드를 넣은 기기끼리 같은 사진·메시지를 봐요.</div>'
+    + codeBlocksHTML(code)
+    + '<div class="sheet-foot">'
+    +   '<button class="btn" id="btnSyncNow" type="button">🔄 지금 새로고침</button>'
+    +   '<span id="sheetStatus">' + statusHTML() + '</span>'
     + '</div>';
   $("modal").hidden = false;
-
-  var copy = $("btnCopy");
-  if(copy){
-    copy.addEventListener("click", function(){
-      var txt = shareLink(code);
-      var done = function(){ toast("공유 링크를 복사했어요 · 가족에게 붙여 넣어 보내 주세요"); };
-      if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(txt).then(done, function(){ fallbackCopy(txt, done); });
-      } else fallbackCopy(txt, done);
-    });
-  }
-  $("btnJoin").addEventListener("click", function(){ join($("codeIn").value); });
-  $("codeIn").addEventListener("keydown", function(e){ if(e.key === "Enter") join($("codeIn").value); });
-  $("btnNew").addEventListener("click", function(){
-    var c = newCode();
-    $("codeIn").value = c;
-    join(c);
-  });
+  wireCodeBlocks(body);
   $("btnSyncNow").addEventListener("click", function(){ closeModal(); pull(true); });
 }
 function fallbackCopy(txt, done){
@@ -1190,20 +1303,37 @@ function fallbackCopy(txt, done){
     done();
   }catch(e){ toast("복사가 안 되면 링크를 길게 눌러 복사해 주세요"); }
 }
-function join(raw){
+function genAndJoin(){
+  var c = newCode();
+  join(c, {keep:true, fresh:true});
+}
+function join(raw, opt){
+  opt = opt || {};
   var c = normCode(raw);
   if(c.length < 4){ toast("가족 코드를 4자 이상 넣어 주세요"); return; }
+  var prev = S.code || "";
   saveCode(c);
   S.code = c;
   S.doc = freshDoc(); S.imgs = {};
   S.fi = [0,1,2];
-  closeModal();
   $("gate").hidden = true;
+  var gb = $("gateBody");
+  if(gb) gb.innerHTML = "";
+  if(opt.keep){
+    openCodeSheet(opt.fresh
+      ? (prev && prev !== c
+          ? "✨ 새 코드 " + c + " 를 만들어 연결했어요. 이전 코드 " + prev + "의 사진·메시지는 그대로 남아 있어요."
+          : "✨ 새 코드 " + c + " 를 만들어 연결했어요. 아래 공유 링크를 가족에게 보내면 끝!")
+      : "🔗 " + c + " 코드로 연결했어요");
+  } else closeModal();
   applyImageCache();
   renderAll();
-  pull(true).then(function(ok){
-    if(!ok) toast("코드를 저장했어요 · 인터넷을 확인하고 🔄를 눌러 주세요");
-    else if(!photos().length && !S.doc.messages.length) toast("연결됐어요 · 첫 사진과 메시지를 남겨 보세요");
+  pull(false).then(function(ok){
+    renderAll();
+    if(opt.fresh) toast("✨ 새 가족 코드 " + c + " 를 만들었어요");
+    else if(!ok) toast("코드를 저장했어요 · 인터넷을 확인하고 🔄를 눌러 주세요");
+    else if(!photos().length && !S.doc.messages.length) toast("🔗 " + c + " 코드로 연결됐어요 · 첫 사진과 메시지를 남겨 보세요");
+    else toast("🔗 " + c + " 코드로 연결됐어요");
   });
 }
 function closeModal(){ $("modal").hidden = true; }
@@ -1323,8 +1453,6 @@ function bind(){
       renderMsgs();
     });
   });
-  $("gateGo").addEventListener("click", function(){ join($("gateCode").value); });
-  $("gateCode").addEventListener("keydown", function(e){ if(e.key === "Enter") join($("gateCode").value); });
   $("modal").addEventListener("click", function(e){ if(e.target === $("modal")) closeModal(); });
   document.addEventListener("keydown", function(e){
     if(e.key === "Escape"){
@@ -1391,8 +1519,7 @@ function boot(){
   setInterval(tick, 15000);
 
   if(!S.code){
-    $("gate").hidden = false;
-    $("gateCode").focus();
+    showGate("");
     paintStatus();
     renderAll();
     return;
