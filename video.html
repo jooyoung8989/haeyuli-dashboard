@@ -1043,9 +1043,10 @@ function startCamera(facing){
 /* ---------- 마이크 / 전환 / 시네마 바 ---------- */
 function updateMicBtn(){
   var b = $("btnMic");
-  b.classList.toggle("off", S.muted);
-  b.classList.toggle("on", !S.muted && !!micTrack);
-  b.title = S.muted ? "음소거" : "소리 켜짐";
+  var off = S.muted || !micTrack;
+  b.classList.toggle("off", off);
+  b.classList.toggle("on", !off);
+  b.title = micTrack ? (S.muted ? "음소거" : "소리 켜짐") : "마이크 없음";
 }
 function setMuted(m){
   S.muted = m;
@@ -1269,8 +1270,6 @@ function probeDuration(v){
   setTimeout(fin, 1600);
 }
 impVideo.addEventListener("timeupdate", updateImpTime);
-impVideo.addEventListener("seeked", updateImpTime);
-impVideo.addEventListener("ended", onImpEnded);
 
 $("impSeek").addEventListener("input", function(){
   if (S.exporting) return;
@@ -1603,6 +1602,7 @@ function extOf(type){
 }
 function showSheet(item){
   var v = $("shotVid");
+  v.setAttribute("preload", "metadata");
   if (v.dataset.url){ try{ URL.revokeObjectURL(v.dataset.url); }catch(e){} }
   var url = URL.createObjectURL(item.blob);
   v.dataset.url = url;
