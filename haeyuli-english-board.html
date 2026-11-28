@@ -7446,6 +7446,10 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
   <div class="views">
     <!-- ================= 💻 온라인 공부 (과목 고르기) ================= -->
     <section class="view studyhub" id="viewStudyHub" data-view="study-hub" hidden>
+      <!-- 🎯 요일별 오늘의 퀘스트 (이 화면의 첫 화면) -->
+      <div class="q-dash" id="questDash"></div>
+      <!-- 📚 기존 과목 목록 — 📚 과목별 자유 학습으로 열린다 -->
+      <div class="hub-classic" id="hubClassic" hidden>
       <div class="hub2">
         <div class="hub2-top">
           <b>오늘 뭐 공부할까?</b><span>카드를 누르면 바로 시작해요</span>
@@ -7492,6 +7496,7 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
           <span class="ebs-go">새 창으로 열기 ↗</span>
         </a>
 
+      </div>
       </div>
     </section>
 
@@ -7610,6 +7615,9 @@ body.mob .sg-rbtn{font-size:2.5vw;padding:1.3vw 2.2vw;}
           </div>
         </div>
       </aside>
+
+      <!-- 🎯 오늘의 온라인 학습 — 요일별 퀘스트 바로가기 -->
+      <button class="q-banner" id="questBanner" type="button" aria-label="오늘의 온라인 학습 퀘스트 열기"></button>
 
       <!-- 오늘 공부 진행 — 과목마다 학습 3개를 채우면 완료(+200원) -->
       <div class="home-prog" id="homeProg" role="group" aria-label="오늘 공부 진행"></div>
@@ -14225,6 +14233,10 @@ SB.room = {
   snack:bookSnackTama
 };
 SB.tamaPaint = paint;
+/* 🎯 오늘의 퀘스트 카드가 함께 쓰는 다마고치 정보 (그림·이름·단계·성장도) */
+SB.room.petNo = function(){ try { return petNo(pet()); } catch(e){ return null; } };
+SB.room.stageInfo = function(){ try { return stageInfo(pet()); } catch(e){ return null; } };
+SB.room.need = function(){ try { return needOf(pet()); } catch(e){ return 0; } };
 SB.onShow.room = function(){ paint(); scheduleNext(1200); setTimeout(function(){ encourage(); }, 900); noticeDaily(); };
 SB.onStars = function(){ if (SB.current === "room") paintShop(); paintGrow(); };
 
@@ -23882,6 +23894,71 @@ function padSchedSig(){
 function padApi(){
   try { return (window.SB && SB.pad) ? SB.pad : null; } catch(e){ return null; }
 }
+
+/* =====================================================================
+   🎯 오늘의 퀘스트(haeyuli.quest.v1) — 아이패드·폰이 같은 진행을 본다
+   · 모양: { v:1, sel:"sat", days:{ "2026-11-28|sat": {done:[0,1], cur:1, at} },
+              bonus:{ "2026-11-28":1 }, at }
+   · done 은 합집합, cur 는 더 최근에 손댄 쪽, bonus 는 한 번이라도 있으면 유지
+   ===================================================================== */
+var QUEST_KEY = "haeyuli.quest.v1";
+function questRead(){
+  try {
+    var v = JSON.parse(localStorage.getItem(QUEST_KEY) || "null");
+    if (!v || typeof v !== "object" || Array.isArray(v)) return null;
+    if (!v.days || typeof v.days !== "object" || Array.isArray(v.days)) v.days = {};
+    if (!v.bonus || typeof v.bonus !== "object" || Array.isArray(v.bonus)) v.bonus = {};
+    return v;
+  } catch(e){ return null; }
+}
+function questNum(v){ var n = Number(v); return isFinite(n) ? n : 0; }
+function mergeQuest(l, c){
+  l = (l && typeof l === "object" && !Array.isArray(l)) ? l : {};
+  c = (c && typeof c === "object" && !Array.isArray(c)) ? c : {};
+  var ld = (l.days && typeof l.days === "object") ? l.days : {};
+  var cd = (c.days && typeof c.days === "object") ? c.days : {};
+  var keys = {}, k;
+  for (k in ld) keys[k] = 1;
+  for (k in cd) keys[k] = 1;
+  var days = {};
+  Object.keys(keys).sort().forEach(function(key){
+    var a = (ld[key] && typeof ld[key] === "object") ? ld[key] : {};
+    var b = (cd[key] && typeof cd[key] === "object") ? cd[key] : {};
+    var done = [], i, v;
+    var al = Array.isArray(a.done) ? a.done : [], bl = Array.isArray(b.done) ? b.done : [];
+    for (i = 0; i < al.length; i++){ v = Math.round(questNum(al[i])); if (v >= 0 && v < 20 && done.indexOf(v) < 0) done.push(v); }
+    for (i = 0; i < bl.length; i++){ v = Math.round(questNum(bl[i])); if (v >= 0 && v < 20 && done.indexOf(v) < 0) done.push(v); }
+    done.sort(function(p, q){ return p - q; });
+    var aa = questNum(a.at), ba = questNum(b.at);
+    days[key] = {
+      done: done,
+      cur: (ba > aa) ? Math.round(questNum(b.cur)) : Math.round(questNum(a.cur)),
+      at: Math.max(aa, ba, 1)
+    };
+  });
+  var dk = Object.keys(days).sort();
+  while (dk.length > 60) delete days[dk.shift()];
+  var la = questNum(l.at), ca = questNum(c.at);
+  return {
+    v: 1,
+    sel: String(((ca > la) ? c.sel : l.sel) || c.sel || l.sel || ""),
+    days: days,
+    bonus: (function(){
+      var out = {}, b = {};
+      var x, y;
+      var lb = (l.bonus && typeof l.bonus === "object") ? l.bonus : {};
+      var cb = (c.bonus && typeof c.bonus === "object") ? c.bonus : {};
+      for (x in lb) b[x] = 1;
+      for (y in cb) b[y] = 1;
+      Object.keys(b).sort().forEach(function(d){ out[d] = 1; });
+      var ks = Object.keys(out).sort();
+      while (ks.length > 60) delete out[ks.shift()];
+      return out;
+    })(),
+    at: Math.max(la, ca, 1)
+  };
+}
+
 function snap(){
   var pl = read(K.plan, { days:{} });
   try { if (SB.week && SB.week.plan) pl = SB.week.plan(); } catch(e){}
@@ -23930,13 +24007,14 @@ function snap(){
     momnote: momNotes(),
     carry: read("haeyuli.hwcarry.v1", null),
     attend: (SB.attendDoc ? SB.attendDoc() : null),
-    padplan: (padApi() ? padApi().load() : null)
+    padplan: (padApi() ? padApi().load() : null),
+    quest: questRead()
   };
 }
 function body(d){
-  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry, attend:d.attend, engread:d.engread, engwb:d.engwb, swwb:d.swwb, nirwb:d.nirwb, padplan:d.padplan });
+  return JSON.stringify({ plan:d.plan, hw:d.hw, money:d.money, done:d.done, study:d.study, coupons:d.coupons, rb:d.rb, mathset:d.mathset, ntfy:d.ntfy, wg:d.wg, sg:d.sg, sgu:d.sgu, fg:d.fg, fgu:d.fgu, nir:d.nir, niru:d.niru, ort:d.ort, ortu:d.ortu, ortreset:d.ortreset, curri:d.curri, wb:d.wb, stars:d.stars, sled:d.sled, hwplan:d.hwplan, hwplanUn:d.hwplanUn, tama:d.tama, room:d.room, rides:d.rides, rp:d.rp, annual:d.annual, shelves:d.shelves, momnote:d.momnote, carry:d.carry, attend:d.attend, engread:d.engread, engwb:d.engwb, swwb:d.swwb, nirwb:d.nirwb, padplan:d.padplan, quest:d.quest });
 }
-function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry, s.attend, s.engread, s.engwb, s.swwb, s.nirwb, s.padplan]); }
+function sigOf(s){ return JSON.stringify([s.plan, s.hw, s.money, s.done, s.study, s.coupons, s.rb, s.mathset, s.ntfy, s.wg, s.sg, s.sgu, s.fg, s.fgu, s.nir, s.niru, s.ort, s.ortu, s.curri, s.wb, s.stars, s.sled, s.hwplan, s.hwplanUn, s.tama, s.room, s.rides, s.rp, s.annual, s.shelves, s.momnote, s.carry, s.attend, s.engread, s.engwb, s.swwb, s.nirwb, s.padplan, s.quest]); }
 
 /* 📐 수학 진도(기탄 단계 · 수세기 레벨) — 엄마가 마지막으로 바꾼 쪽(at 최신)이 이긴다 */
 function mergeMathset(l, c){
@@ -24575,6 +24653,7 @@ function buildDoc(local, cloud, base, code){
     attend: (SB.mergeAttend ? SB.mergeAttend(local.attend, c.attend) : null),
     padplan: (padApi() ? padApi().merge(local.padplan, c.padplan)
                         : (c.padplan || local.padplan || null)),
+    quest: mergeQuest(local.quest, c.quest),
     hwday: local.hwday || c.hwday || null,
     at: Date.now()
   };
@@ -24792,6 +24871,15 @@ function applyDoc(doc){
   if (frChanged) { try { if (window.SB && SB.fr && SB.fr.reload) SB.fr.reload(); } catch(e){} }
   if (nirChanged) { try { if (window.SB && SB.shelf && SB.shelf.reload) SB.shelf.reload(); } catch(e){} }
   if (curriChanged) { try { if (window.SB && SB.call && SB.call.paintCurri) SB.call.paintCurri(); } catch(e){} }
+  /* 🎯 오늘의 퀘스트 — 다른 기기(아이패드·폰)에서 끝낸 단계를 이 기기에도 */
+  if (doc.quest && typeof doc.quest === "object"){
+    var qNow = questRead(), qNew = mergeQuest(qNow, doc.quest);
+    if (JSON.stringify(qNew) !== JSON.stringify(qNow)){
+      try { localStorage.setItem(QUEST_KEY, JSON.stringify(qNew)); } catch(e){}
+      changed = true;
+      try { if (SB.quest && SB.quest.paint) SB.quest.paint(); } catch(e){}
+    }
+  }
   if (changed) rerender(rbChanged);
   if (mathChanged) { try { if (SB.mathSetChanged) SB.mathSetChanged(); } catch(e){} }
   return changed;
@@ -46796,6 +46884,755 @@ window.SB.bookPick26 = {
   isRead: isRead
 };
 })();
+</script>
+
+<style id="questCss">
+/* =====================================================================
+   🎯 오늘의 온라인 학습 — 요일별 연속 퀘스트 (슈퍼듀퍼 스타일)
+   · 💻 온라인 공부 탭 첫 화면 = 이 대시보드, 기존 과목 목록은 📚 자유 학습으로 접어 둔다
+   · 🏠 홈에는 바로 들어가는 배너 한 줄
+   · 퀘스트를 시작하면 화면 아래 고정 바에서 [완료하고 다음으로 →]로 끝까지 이어진다
+   ===================================================================== */
+.view.studyhub{gap:.9vh;}
+.q-dash{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  display:flex;flex-direction:column;gap:.85vh;padding:.2vh .2vh 1.2vh;}
+.hub-classic{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  display:flex;flex-direction:column;gap:1.1vh;}
+
+/* ---------- 머리줄 ---------- */
+.q-head{flex:0 0 auto;display:flex;align-items:center;gap:.8vh;flex-wrap:wrap;min-width:0;}
+.q-head .q-title{display:flex;align-items:center;gap:.5vh;font-size:clamp(17px,2.15vh,26px);font-weight:900;
+  color:#1f2a33;letter-spacing:-.03em;line-height:1.15;}
+.q-head .q-sub{font-size:clamp(11px,1.32vh,15px);font-weight:800;color:#8b98a4;letter-spacing:-.02em;}
+.q-head .q-free{margin-left:auto;align-self:flex-start;flex:0 0 auto;display:flex;align-items:center;gap:.4vh;height:3.9vh;padding:0 1.35vh;
+  border-radius:999px;background:#fff;box-shadow:inset 0 0 0 .18vh #dfeaf3,0 .25vh .8vh rgba(58,104,140,.08);
+  font-size:clamp(11px,1.28vh,14px);font-weight:900;color:#4d7f9e;white-space:nowrap;}
+.q-head .q-free:active{transform:scale(.97);}
+
+/* ---------- 요일 칩 ---------- */
+.q-days{flex:0 0 auto;display:flex;align-items:center;gap:.45vh;overflow-x:auto;padding:.15vh .1vh .25vh;}
+.q-days::-webkit-scrollbar{height:0;}
+.q-day{flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:.35vh;height:4.4vh;padding:0 .7vh;border-radius:999px;
+  background:#fff;box-shadow:inset 0 0 0 .18vh #e3ecf3;font-size:clamp(12px,1.42vh,16px);font-weight:900;color:#6b8497;
+  white-space:nowrap;transition:background .16s,color .16s,box-shadow .16s,transform .12s;}
+.q-day:active{transform:scale(.97);}
+.q-day .qd-em{font-size:1.05em;line-height:1;}
+.q-day .qd-dot{width:.85vh;height:.85vh;border-radius:50%;background:#37bd8b;display:block;}
+.q-day .qd-done{font-size:.86em;font-weight:900;color:#31a276;background:#e8faf1;border-radius:999px;padding:.12em .45em;}
+.q-day.on{color:#fff;background:linear-gradient(135deg,#ffa163,#ff7043);box-shadow:0 .4vh 1.1vh rgba(255,112,67,.34);}
+.q-day.on .qd-done{color:#8a3a12;background:#fff2e6;}
+.q-day.today{box-shadow:inset 0 0 0 .3vh #ffb27a,0 .35vh 1vh rgba(255,150,90,.22);}
+.q-day.today.on{box-shadow:0 .4vh 1.2vh rgba(255,112,67,.4);}
+.q-day .qd-today{font-size:.8em;font-weight:900;background:#fff2e6;color:#c2551f;border-radius:999px;padding:.1em .45em;}
+.q-day.on .qd-today{background:#fff;color:#e2601f;}
+
+/* ---------- 본문 2단 ---------- */
+.q-main{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.06fr);grid-template-rows:minmax(0,1fr);gap:.9vh;align-items:stretch;}
+
+/* ---------- 왼쪽: 캐릭터 + 오늘의 퀘스트 ---------- */
+.q-card{position:relative;min-height:0;display:flex;flex-direction:column;gap:.55vh;padding:1.15vh 1.3vh 1.1vh;
+  border-radius:2.1vh;overflow:hidden;
+  background:radial-gradient(120% 90% at 88% 6%, #fff6e9 0%, rgba(255,246,233,0) 58%),
+             linear-gradient(158deg,#fff8f3 0%, #ffeade 54%, #ffe1d2 100%);
+  box-shadow:inset 0 0 0 1px #ffe1cf,0 .5vh 1.5vh rgba(200,120,80,.13);}
+.q-bub{flex:0 0 auto;align-self:flex-start;position:relative;max-width:96%;padding:.75vh 1.2vh;border-radius:1.4vh;
+  background:#fff;font-size:clamp(12px,1.5vh,17px);font-weight:900;color:#8a5b3a;letter-spacing:-.02em;line-height:1.35;
+  box-shadow:0 .3vh .9vh rgba(180,120,80,.14);}
+.q-bub::after{content:"";position:absolute;left:1.7vh;bottom:-.75vh;width:1.5vh;height:1.5vh;background:#fff;
+  transform:rotate(45deg);border-radius:.2vh;box-shadow:.25vh .25vh .6vh rgba(180,120,80,.08);}
+.q-stagewrap{flex:1 1 auto;min-height:10vh;position:relative;display:grid;place-items:center;padding-top:.6vh;}
+.q-stagewrap::after{content:"";position:absolute;left:8%;right:8%;bottom:.4vh;height:1.5vh;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(196,132,92,.28),rgba(196,132,92,0));}
+.q-pet{position:relative;z-index:1;height:auto;max-height:27vh;max-width:84%;width:auto;object-fit:contain;
+  filter:drop-shadow(0 .7vh .9vh rgba(150,90,60,.24));animation:qBob 3.4s ease-in-out infinite;}
+@keyframes qBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-.7vh)}}
+.q-egg{font-size:clamp(56px,20vh,220px);line-height:1;position:relative;z-index:1;animation:qBob 3.4s ease-in-out infinite;}
+.q-stagechip{position:absolute;right:0;top:.4vh;z-index:2;font-size:clamp(10px,1.16vh,13px);font-weight:900;color:#a1652f;
+  background:rgba(255,255,255,.86);border-radius:999px;padding:.3vh .9vh;box-shadow:inset 0 0 0 .12vh #ffdcc4;white-space:nowrap;}
+.q-meta{flex:0 0 auto;display:flex;align-items:center;gap:.6vh;min-width:0;}
+.q-meta .q-mlabel{font-size:clamp(9.5px,1.1vh,12px);font-weight:900;color:#b98a63;letter-spacing:-.02em;white-space:nowrap;}
+.q-meta .q-name{font-size:clamp(13px,1.62vh,19px);font-weight:900;color:#5d3a22;letter-spacing:-.03em;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+.q-meta .q-lv{flex:0 0 auto;font-size:clamp(9.5px,1.1vh,12px);font-weight:900;color:#fff;background:#f0a165;
+  border-radius:999px;padding:.24vh .75vh;white-space:nowrap;}
+.q-meta .q-star{margin-left:auto;flex:0 0 auto;display:flex;align-items:center;gap:.3vh;font-size:clamp(11px,1.32vh,15px);
+  font-weight:900;color:#8a5c00;background:#fff5d9;border-radius:999px;padding:.3vh .85vh;box-shadow:inset 0 0 0 .14vh #f3d992;}
+.q-grow{flex:0 0 auto;height:1.15vh;border-radius:999px;background:#f6ddcb;overflow:hidden;box-shadow:inset 0 0 0 .12vh #f1d3bf;}
+.q-grow i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#ffc76e,#ff9a5c);transition:width .5s ease;}
+.q-prog{flex:0 0 auto;margin-top:.15vh;padding:.75vh 1vh .8vh;border-radius:1.4vh;background:rgba(255,255,255,.82);
+  box-shadow:inset 0 0 0 .14vh #ffe2d0;display:flex;flex-direction:column;gap:.5vh;}
+.q-progtop{display:flex;align-items:baseline;gap:.5vh;}
+.q-progtop b{font-size:clamp(12px,1.44vh,16px);font-weight:900;color:#8a4a24;letter-spacing:-.03em;}
+.q-progtop span{margin-left:auto;font-size:clamp(12px,1.5vh,17px);font-weight:900;color:#e2601f;white-space:nowrap;}
+.q-progbar{height:1.35vh;border-radius:999px;background:#ffe5d5;overflow:hidden;box-shadow:inset 0 0 0 .12vh #ffd8c3;}
+.q-progbar i{display:block;height:100%;width:0;border-radius:999px;
+  background:linear-gradient(90deg,#ffb066,#ff7043);transition:width .55s cubic-bezier(.2,1.2,.3,1);}
+.q-start{flex:0 0 auto;margin-top:.15vh;width:100%;min-height:5.6vh;border-radius:1.6vh;
+  background:linear-gradient(135deg,#ff9d5c,#ff6f3d);color:#fff;font-size:clamp(14px,1.78vh,21px);font-weight:900;
+  letter-spacing:-.03em;box-shadow:0 .55vh 1.3vh rgba(255,110,60,.36);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;padding:0 1vh;transition:transform .12s;animation:qPulse 2.6s ease-in-out infinite;}
+.q-start:active{transform:scale(.98);}
+.q-start.done{background:linear-gradient(135deg,#5bd6a4,#22b07a);box-shadow:0 .55vh 1.3vh rgba(40,180,130,.32);animation:none;}
+@keyframes qPulse{0%,100%{box-shadow:0 .55vh 1.3vh rgba(255,110,60,.36)}50%{box-shadow:0 .7vh 2vh rgba(255,110,60,.5)}}
+.q-freelink{flex:0 0 auto;align-self:center;font-size:clamp(10.5px,1.2vh,14px);font-weight:900;color:#a8815f;
+  text-decoration:underline;text-underline-offset:.3vh;padding:.2vh .5vh;}
+
+/* ---------- 오른쪽: 요일별 코스 ---------- */
+.q-list{min-height:0;display:flex;flex-direction:column;justify-content:flex-start;gap:.65vh;padding:.2vh 0;}
+.q-listhd{flex:0 0 auto;display:flex;align-items:baseline;gap:.6vh;padding:0 .2vh;}
+.q-listhd b{font-size:clamp(13px,1.6vh,19px);font-weight:900;color:#1f2a33;letter-spacing:-.03em;}
+.q-listhd span{font-size:clamp(10.5px,1.2vh,14px);font-weight:800;color:#94a5b3;}
+.q-listhd .ql-count{margin-left:auto;font-weight:900;color:#e2601f;}
+.q-step{flex:0 0 auto;min-height:6.2vh;display:flex;align-items:center;gap:.85vh;padding:.7vh 1.1vh;border-radius:1.5vh;
+  background:#fff;box-shadow:inset 0 0 0 1px #e7eef4,0 .25vh .8vh rgba(58,104,140,.06);text-align:left;min-width:0;
+  transition:transform .12s,box-shadow .16s;}
+.q-step:active{transform:scale(.99);}
+.q-step .qs-badge{flex:0 0 auto;width:3.9vh;height:3.9vh;border-radius:1.15vh;display:grid;place-items:center;
+  font-size:clamp(13px,1.6vh,19px);font-weight:900;letter-spacing:0;}
+.q-step .qs-tx{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.15vh;}
+.q-step .qs-tx b{font-size:clamp(12px,1.44vh,17px);font-weight:900;color:#22323d;letter-spacing:-.03em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.q-step .qs-tx span{font-size:clamp(10px,1.14vh,13px);font-weight:800;color:#93a6b4;letter-spacing:-.02em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.q-step .qs-mark{flex:0 0 auto;width:3vh;height:3vh;border-radius:50%;display:grid;place-items:center;
+  font-size:clamp(10px,1.2vh,14px);font-weight:900;background:#f1f7fb;color:#7fa3ba;}
+.q-step.now{background:linear-gradient(135deg,#fff8f2,#fff1e6);box-shadow:inset 0 0 0 .26vh #ffb27a,0 .4vh 1.1vh rgba(255,150,90,.18);}
+.q-step.now .qs-mark{background:#ff8f5c;color:#fff;}
+.q-step.ok{background:#f7fbf9;box-shadow:inset 0 0 0 1px #dcece4;}
+.q-step.ok .qs-tx b{color:#7d9a8c;}
+.q-step.ok .qs-tx span{color:#a8bcb2;}
+.q-step.ok .qs-mark{background:#d9f5e7;color:#1e9d6e;}
+.q-step.ok .qs-badge{opacity:.62;}
+.s-ko{background:#e9f1ff;color:#2b5fd0;}
+.s-math{background:#ffe9ee;color:#cf3f5c;}
+.s-en{background:#e5f7ef;color:#12805f;}
+.s-hanja{background:#fff2d9;color:#a86a00;}
+.s-history{background:#f0ecff;color:#6b45c0;}
+.s-cn{background:#ffe9ea;color:#c8342c;}
+.s-jp{background:#eaf0ff;color:#3b53b5;}
+
+/* ---------- 🏠 홈 배너 ---------- */
+.q-banner{grid-column:1 / -1;display:flex;align-items:center;gap:.9vh;width:100%;min-height:6.4vh;padding:.7vh 1.4vh;
+  border-radius:var(--r);text-align:left;background:linear-gradient(120deg,#fff6ee 0%,#ffe9da 46%,#ffe2cf 100%);
+  box-shadow:inset 0 0 0 1px #ffdcc6,0 .45vh 1.3vh rgba(210,130,80,.14);overflow:hidden;}
+.q-banner:active{transform:scale(.995);}
+.q-banner .qb-em{flex:0 0 auto;font-size:clamp(20px,3vh,34px);line-height:1;filter:drop-shadow(0 .3vh .5vh rgba(200,120,70,.25));}
+.q-banner .qb-tx{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.1vh;}
+.q-banner .qb-tx b{font-size:clamp(13px,1.62vh,19px);font-weight:900;color:#82431f;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.q-banner .qb-tx span{font-size:clamp(10px,1.18vh,14px);font-weight:800;color:#b07d57;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.q-banner .qb-prog{flex:0 0 auto;font-size:clamp(12px,1.5vh,17px);font-weight:900;color:#e2601f;background:rgba(255,255,255,.8);
+  border-radius:999px;padding:.4vh 1vh;box-shadow:inset 0 0 0 .12vh #ffd9c4;white-space:nowrap;}
+.q-banner .qb-go{flex:0 0 auto;font-size:clamp(11px,1.3vh,15px);font-weight:900;color:#fff;border-radius:999px;
+  padding:.55vh 1.4vh;background:linear-gradient(135deg,#ff9d5c,#ff6f3d);box-shadow:0 .35vh 1vh rgba(255,110,60,.3);white-space:nowrap;}
+
+/* ---------- 퀘스트 진행 바 (화면 아래 고정) ---------- */
+.q-bar{position:fixed;left:50%;transform:translateX(-50%) translateY(140%);bottom:calc(1.2vh + env(safe-area-inset-bottom));
+  z-index:65;width:min(94vw,112vh);display:flex;align-items:center;gap:.8vh;padding:.7vh .9vh .7vh 1.3vh;
+  border-radius:1.8vh;background:rgba(23,38,50,.94);color:#fff;
+  box-shadow:0 1.1vh 3vh rgba(10,30,50,.36);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  transition:transform .28s cubic-bezier(.2,1.1,.4,1),opacity .2s;opacity:0;pointer-events:none;}
+.q-bar.on{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto;}
+.q-bar .qb-l{display:flex;align-items:center;gap:.55vh;min-width:0;}
+.q-bar .qb-badge{flex:0 0 auto;font-size:clamp(10px,1.18vh,13px);font-weight:900;color:#ffd0b0;
+  background:rgba(255,143,92,.18);border-radius:999px;padding:.32vh .85vh;white-space:nowrap;}
+.q-bar .qb-step{flex:0 0 auto;font-size:clamp(11px,1.3vh,15px);font-weight:900;color:#ffb27a;white-space:nowrap;}
+.q-bar .qb-now{min-width:0;font-size:clamp(11px,1.34vh,15px);font-weight:900;color:#fff;letter-spacing:-.02em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.q-bar .qb-dots{flex:0 0 auto;display:flex;align-items:center;gap:.35vh;margin-left:auto;}
+.q-bar .qb-dots i{width:1.1vh;height:1.1vh;border-radius:50%;background:rgba(255,255,255,.24);display:block;}
+.q-bar .qb-dots i.ok{background:#5bd6a4;}
+.q-bar .qb-dots i.now{background:#ffb27a;box-shadow:0 0 0 .28vh rgba(255,178,122,.28);}
+.q-bar .qb-next{flex:0 0 auto;height:4.6vh;padding:0 1.6vh;border-radius:1.3vh;
+  background:linear-gradient(135deg,#ff9d5c,#ff6f3d);color:#fff;font-size:clamp(11px,1.32vh,15px);font-weight:900;
+  letter-spacing:-.02em;white-space:nowrap;box-shadow:0 .4vh 1.1vh rgba(255,110,60,.35);}
+.q-bar .qb-next:active{transform:scale(.97);}
+.q-bar .qb-next.ready{animation:qPulse 1.8s ease-in-out infinite;}
+.q-bar .qb-x{flex:0 0 auto;width:4vh;height:4vh;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;
+  font-size:1.5vh;font-weight:900;display:grid;place-items:center;}
+body.questing .mobnav{transform:translateY(140%) !important;pointer-events:none;transition:transform .25s;}
+
+/* ---------- 완료 축하 ---------- */
+.q-sheet{width:min(56vh,92vw);}
+.q-fin{display:flex;flex-direction:column;align-items:center;gap:.7vh;padding:2.2vh 2vh 1vh;text-align:center;}
+.q-fin .q-fin-em{font-size:clamp(34px,7vh,76px);line-height:1;animation:qPop .6s cubic-bezier(.2,1.6,.4,1) both;}
+@keyframes qPop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.q-fin b{font-size:clamp(17px,2.5vh,30px);font-weight:900;color:#9a3f14;letter-spacing:-.03em;}
+.q-fin p{margin:0;font-size:clamp(12px,1.42vh,17px);font-weight:800;color:#8b6a52;line-height:1.45;}
+.q-fin .q-fin-star{font-size:clamp(16px,2.2vh,26px);font-weight:900;color:#8a5c00;background:#fff5d9;border-radius:999px;
+  padding:.55vh 1.6vh;box-shadow:inset 0 0 0 .16vh #f3d992;}
+.q-fin .q-fin-rows{display:flex;flex-direction:column;gap:.4vh;width:100%;margin-top:.3vh;}
+.q-fin .q-fin-rows div{display:flex;align-items:center;justify-content:flex-start;text-align:left;gap:.6vh;padding:.55vh .9vh;border-radius:1.1vh;
+  background:#f7fbfd;font-size:clamp(11px,1.28vh,15px);font-weight:900;color:#43606f;}
+.q-fin .q-fin-rows div span{margin-left:auto;font-weight:900;color:#2f8b6b;}
+
+/* ---------- 좁은 화면 (휴대폰·세로) ---------- */
+@media (max-width:660px){
+  .q-main{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;gap:.8vh;}
+  .q-card{padding:1.2vh 1.3vh 1.1vh;gap:.5vh;}
+  .q-stagewrap{min-height:9vh;}
+  .q-pet{max-height:13.5vh;}
+  .q-egg{font-size:clamp(48px,10vh,110px);}
+  .q-step{min-height:5.6vh;}
+  .q-list{gap:.55vh;}
+  .q-step{flex:0 0 auto;padding:.8vh 1.1vh;}
+  .q-bar{width:calc(100vw - 2.2vh);flex-wrap:wrap;gap:.5vh;padding:.7vh .9vh;}
+  .q-bar .qb-now{flex:1 1 40%;}
+  .q-bar .qb-dots{display:none;}
+  .q-bar .qb-next{flex:1 1 46%;height:4.4vh;}
+  .q-dash{padding-bottom:9vh;}
+}
+@media (max-height:700px){
+  .q-bub{font-size:1.3vh;}
+  .q-start{min-height:5.2vh;}
+}
+
+/* 넓은 화면에서는 카드·코스가 화면 높이를 채우게 (세로 여백이 남지 않도록) */
+@media (min-width:661px){
+  .q-dash{min-height:calc(100dvh - 15.5vh);}
+}
+
+.hub-classic #qBack{align-self:flex-start;margin:0 0 .4vh .2vh;}
+/* 퀘스트 바가 화면 아래 내용을 가리지 않게 앱 아래에 자리를 비워 둔다 */
+body.questing .app{padding-bottom:8.4vh;}
+body.questing.mob .app{padding-bottom:9.2vh;}
+
+/* 오른쪽 코스 아래 — 완주 보상 안내 */
+.q-reward{margin-top:auto;display:flex;flex-direction:column;gap:.3vh;padding:.9vh 1.2vh;border-radius:1.4vh;
+  background:linear-gradient(135deg,#fff8ea,#fff3dd);box-shadow:inset 0 0 0 1px #f6e3bc;}
+.q-reward b{font-size:clamp(11.5px,1.32vh,15px);font-weight:900;color:#9a6a1e;letter-spacing:-.02em;}
+.q-reward span{font-size:clamp(10px,1.16vh,13px);font-weight:800;color:#b08a52;letter-spacing:-.02em;}
+.q-reward .qr-row{display:flex;align-items:center;gap:.5vh;flex-wrap:wrap;}
+
+</style>
+
+<script id="questScript">
+/* =====================================================================
+   🎯 요일별 오늘의 퀘스트 — 아이가 시작 버튼 하나로 그날 분량을 끝까지
+   · 월~토 코스(하루 4~5단계)를 실제 스터디 보드 화면으로 연결한다
+   · 진행은 haeyuli.quest.v1 (날짜|요일 칸) → 가족 코드로 아이패드·폰이 같이 본다
+   · 마지막 단계를 마치면 ⭐+2 (하루 1회, 별 원장 키 quest-<날짜>) + 다마고치 간식
+   ===================================================================== */
+(function(){
+"use strict";
+var SB = window.SB = window.SB || {};
+if (SB.quest) return;
+
+var KEY = "haeyuli.quest.v1";
+var BONUS = 2;
+
+var SUB = {
+  ko:      { nm:"국어",   em:"📖", ch:"국", cls:"s-ko" },
+  math:    { nm:"수학",   em:"🔢", ch:"수", cls:"s-math" },
+  en:      { nm:"영어",   em:"🔤", ch:"영", cls:"s-en" },
+  hanja:   { nm:"한자",   em:"漢", ch:"한", cls:"s-hanja" },
+  history: { nm:"역사",   em:"🏛️", ch:"역", cls:"s-history" },
+  cn:      { nm:"중국어", em:"🐼", ch:"중", cls:"s-cn" },
+  jp:      { nm:"일본어", em:"🗾", ch:"일", cls:"s-jp" }
+};
+
+/* 요일별 온라인 학습 코스 — 초1 과정에 맞춘 하루 4~5단계 */
+var COURSE = {
+  mon: [
+    { s:"ko",   sec:"quote",   t:"명언·낱말퀴즈",      d:"오늘의 명언 + 낱말 퀴즈" },
+    { s:"math", sec:"saem",    t:"하루셈·수세기",      d:"하루셈 한 장" },
+    { s:"en",   sec:"nir",     t:"나우 아임 리딩",     d:"그림책 한 권 듣고 따라 읽기" },
+    { s:"hanja",sec:"text",    t:"교과서 핵심한자",    d:"오늘의 세 낱말" }
+  ],
+  tue: [
+    { s:"ko",   sec:"classic", t:"고전 4줄 읽기",      d:"옛이야기 네 줄 읽고 뜻 풀이" },
+    { s:"math", sec:"calc",    t:"연산·시계",          d:"기탄 연산 한 장 · 시계 읽기" },
+    { s:"en",   sec:"phonics", t:"파닉스·문장",        d:"음가 하나 + 문장 세 개" },
+    { s:"cn",   sec:"cards",   t:"메이쌤 낱말",        d:"중국어 낱말 카드 10개" }
+  ],
+  wed: [
+    { s:"ko",   sec:"vocab",   t:"초등 어휘·낱말놀이", d:"낱말 놀이 한 판" },
+    { s:"math", sec:"think",   t:"사고력·도형",        d:"사고력 3문제" },
+    { s:"en",   sec:"ort",     t:"ORT 책 읽기",        d:"ORT 한 권 듣고 따라 읽기" },
+    { s:"history",sec:"timeline", t:"연도표·퀴즈",     d:"연도표 훑고 역사 퀴즈" }
+  ],
+  thu: [
+    { s:"ko",   sec:"write",   t:"받아쓰기",           d:"받아쓰기 한 급수" },
+    { s:"math", sec:"mv",      t:"무브무브·구구단",    d:"구구단 놀이 한 판" },
+    { s:"en",   sec:"sight",   t:"사이트워드 워크북",  d:"사이트워드 낱말 세 개" },
+    { s:"hanja",sec:"trace",   t:"따라 쓰기",          d:"오늘의 세 글자 따라 쓰기" }
+  ],
+  fri: [
+    { s:"ko",   sec:"classic", t:"고전 4줄 읽기",      d:"옛이야기 네 줄 읽고 뜻 풀이" },
+    { s:"math", sec:"shape",   t:"도형 3문제",         d:"도형 문제 세 개" },
+    { s:"en",   sec:"wolpaem", t:"나우 아임 리딩 · 월팸", d:"월팸 단어카드 + 책 한 권" },
+    { s:"jp",   sec:"cards",   t:"유미쌤 낱말",        d:"일본어 낱말 카드 10개" }
+  ],
+  sat: [
+    { s:"ko",   sec:"vocab",   t:"초등 어휘·낱말놀이", d:"낱말 놀이 한 판" },
+    { s:"math", sec:"saem",    t:"하루셈·수세기",      d:"하루셈 한 장" },
+    { s:"math", sec:"mv",      t:"무브무브·구구단",    d:"구구단 놀이 한 판" },
+    { s:"en",   sec:"wordgrow",t:"단어키우기",         d:"단어 퀴즈 10개" },
+    { s:"hanja",sec:"text",    t:"교과서 핵심한자",    d:"오늘의 세 낱말" }
+  ]
+};
+var DAYLIST = ["mon","tue","wed","thu","fri","sat"];
+var DAYNM = { mon:"월", tue:"화", wed:"수", thu:"목", fri:"금", sat:"토" };
+var DAYFULL = { mon:"월요일", tue:"화요일", wed:"수요일", thu:"목요일", fri:"금요일", sat:"토요일" };
+var DAYEM = { mon:"🌱", tue:"📗", wed:"🧭", thu:"✏️", fri:"🎨", sat:"🏆" };
+
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function todayStr(){
+  try { if (SB.today) return SB.today(); } catch(e){}
+  var d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+function jsDayKey(){ return ["sun","mon","tue","wed","thu","fri","sat"][new Date().getDay()] || "sat"; }
+function isSunday(){ return new Date().getDay() === 0; }
+/* 오늘 기본 코스 — 일요일은 토요일 복습 */
+function defaultDay(){ var k = jsDayKey(); return (k === "sun") ? "sat" : k; }
+function listOf(day){ return COURSE[day] || []; }
+
+/* ---------------------------- 저장 ---------------------------- */
+function read(){
+  var v = null;
+  try { v = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e){ v = null; }
+  if (!v || typeof v !== "object" || Array.isArray(v)) v = {};
+  if (!v.days || typeof v.days !== "object" || Array.isArray(v.days)) v.days = {};
+  if (!v.bonus || typeof v.bonus !== "object" || Array.isArray(v.bonus)) v.bonus = {};
+  if (!v.sel || !COURSE[v.sel]) v.sel = defaultDay();
+  return v;
+}
+function save(v){ v.at = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(v)); } catch(e){} }
+function slotKey(date, day){ return date + "|" + day; }
+function slotData(day, date){
+  var d = date || todayStr(), st = read(), k = slotKey(d, day);
+  var s = st.days[k];
+  if (!s || typeof s !== "object") s = { done:[], cur:0, at:0 };
+  if (!Array.isArray(s.done)) s.done = [];
+  return s;
+}
+function selDay(){ return read().sel || defaultDay(); }
+function doneCount(day){ var s = slotData(day), n = 0, i, list = listOf(day);
+  for (i = 0; i < list.length; i++) if (s.done.indexOf(i) >= 0) n++;
+  return n; }
+function nextIndex(day){
+  var s = slotData(day), list = listOf(day), i;
+  for (i = 0; i < list.length; i++) if (s.done.indexOf(i) < 0) return i;
+  return -1;
+}
+
+/* ---------------------------- 그리기 ---------------------------- */
+function esc(s){ return SB.esc ? SB.esc(s) : String(s == null ? "" : s); }
+function q(id){ return document.getElementById(id); }
+
+function bubbleFor(day){
+  var n = listOf(day).length, k = doneCount(day);
+  if (!n) return "오늘은 쉬어 가는 날이에요";
+  if (k >= n) return "오늘 퀘스트 클리어! 정말 대단해 🎉";
+  if (k === 0) return (new Date().getHours() < 12) ? "좋은 아침! 오늘 공부 시작해 볼까?" : "오늘 공부 시작해 볼까?";
+  if (k * 2 >= n) return "절반 넘었어! 파이팅! 💪";
+  return "잘하고 있어! 조금만 더 가자! ✨";
+}
+
+function petHTML(){
+  var p = null, nm = "다마고치", stage = 0, need = 0, pct = 0, stg = null, no = null;
+  try { p = (SB.room && SB.room.pet) ? SB.room.pet() : null; } catch(e){ p = null; }
+  try { nm = (SB.room && SB.room.label) ? SB.room.label() : nm; } catch(e){}
+  try { stg = (SB.room && SB.room.stageInfo) ? SB.room.stageInfo() : null; } catch(e){}
+  try { no = (SB.room && SB.room.petNo) ? SB.room.petNo() : null; } catch(e){}
+  try { need = (SB.room && SB.room.need) ? SB.room.need() : 0; } catch(e){}
+  stage = p ? (Number(p.stage) || 0) : 0;
+  if (need > 0 && p) pct = Math.max(0, Math.min(100, Math.round((Number(p.grow) || 0) / need * 100)));
+  var stageNm = stg ? stg.nm : (stage === 0 ? "알" : "키즈");
+  var stageEm = stg ? stg.em : "🥚";
+  var img = (stage === 0 || !no)
+    ? '<span class="q-egg" aria-hidden="true">🥚</span>'
+    : '<img class="q-pet" src="tama-img/' + Number(no) + '.webp" alt="' + esc(nm) + '" draggable="false" onerror="this.onerror=null;this.src=\'tama-img/501.webp\'">';
+  return '' +
+    '<div class="q-stagewrap">' + img +
+      '<span class="q-stagechip">' + stageEm + ' ' + esc(stageNm) + '</span>' +
+    '</div>' +
+    '<div class="q-meta">' +
+      '<span class="q-mlabel">내 다마고치</span>' +
+      '<b class="q-name">' + esc(nm) + '</b>' +
+      '<span class="q-lv">Lv.' + (stage + 1) + '</span>' +
+      '<span class="q-star">⭐ <b data-stars>' + (SB.starsNow ? SB.starsNow() : 0) + '</b></span>' +
+    '</div>' +
+    '<div class="q-grow" title="다음 진화까지 ' + pct + '%"><i style="width:' + pct + '%"></i></div>';
+}
+
+function startLabel(day){
+  var n = listOf(day).length, k = doneCount(day), s = slotData(day);
+  if (k >= n) return { txt:"🎉 오늘 퀘스트 완료!", done:true };
+  var nx = nextIndex(day);
+  if (k > 0 || Number(s.cur) > 0){
+    var nx2 = (nx < 0) ? 0 : nx;
+    return { txt:"이어서 하기 · " + listOf(day)[nx2].t, done:false };
+  }
+  return { txt:"오늘의 퀘스트 시작 · " + DAYNM[day] + "요일", done:false };
+}
+
+function stepsHTML(day){
+  var list = listOf(day), s = slotData(day), out = "", i;
+  var nx = nextIndex(day);
+  for (i = 0; i < list.length; i++){
+    var it = list[i], meta = SUB[it.s] || { ch:"?", cls:"s-ko", nm:"" };
+    var ok = s.done.indexOf(i) >= 0;
+    var now = (!ok && i === nx && (Number(s.cur) === i || doneCount(day) > 0));
+    out += '<button class="q-step' + (ok ? " ok" : (now ? " now" : "")) + '" type="button" data-qstep="' + i + '">' +
+             '<span class="qs-badge ' + meta.cls + '" aria-hidden="true">' + meta.ch + '</span>' +
+             '<span class="qs-tx"><b>' + esc(it.t) + '</b><span>' + esc(it.d) + '</span></span>' +
+             '<span class="qs-mark" aria-hidden="true">' + (ok ? "✓" : "▶") + '</span>' +
+           '</button>';
+  }
+  return out;
+}
+
+function dashHTML(){
+  var day = selDay(), list = listOf(day), n = list.length, k = doneCount(day);
+  var st = startLabel(day);
+  var today = jsDayKey();
+  var pct = n ? Math.round(k / n * 100) : 0;
+  var chips = "";
+  for (var i = 0; i < DAYLIST.length; i++){
+    var d = DAYLIST[i], dn = doneCount(d), tot = listOf(d).length;
+    var cls = "q-day" + (d === day ? " on" : "") + (d === today ? " today" : "");
+    chips += '<button class="' + cls + '" type="button" data-qday="' + d + '" aria-pressed="' + (d === day ? "true" : "false") + '">' +
+               DAYNM[d] +
+               (d === today ? '<span class="qd-today">오늘</span>' : '') +
+               (dn > 0 ? (dn >= tot ? '<span class="qd-done">✓</span>' : '<i class="qd-dot"></i>') : '') +
+             '</button>';
+  }
+  var sundayNote = isSunday() ? ' · 일요일은 토요일 복습이에요' : '';
+  return '' +
+  '<div class="q-head">' +
+    '<span class="q-title">🎯 오늘의 온라인 학습</span>' +
+    '<span class="q-sub">' + DAYFULL[day] + ' 코스 · ' + n + '단계' + sundayNote + '</span>' +
+    '<button class="q-free" id="qFree" type="button">📚 과목별 자유 학습</button>' +
+  '</div>' +
+  '<div class="q-days" role="group" aria-label="요일 고르기">' + chips + '</div>' +
+  '<div class="q-main">' +
+    '<div class="q-card">' +
+      '<div class="q-bub" id="qBub">' + esc(bubbleFor(day)) + '</div>' +
+      petHTML() +
+      '<div class="q-prog">' +
+        '<div class="q-progtop"><b>🎯 오늘의 퀘스트</b><span>' + k + ' / ' + n + '</span></div>' +
+        '<div class="q-progbar"><i style="width:' + pct + '%"></i></div>' +
+      '</div>' +
+      '<button class="q-start' + (st.done ? " done" : "") + '" id="qStart" type="button">' + esc(st.txt) + '</button>' +
+      '<button class="q-freelink" type="button" data-qfree="1">📚 과목별 자유 학습으로 가기</button>' +
+    '</div>' +
+    '<div class="q-list">' +
+      '<div class="q-listhd"><b>' + DAYNM[day] + '요일 온라인 코스</b><span>누르면 바로 그 화면으로</span>' +
+        '<span class="ql-count">' + k + ' / ' + n + '</span></div>' +
+      stepsHTML(day) +
+      '<div class="q-reward">' +
+        '<b>🎁 퀘스트 완주 보상</b>' +
+        '<span>⭐ +2 · 다마고치 간식까지 (하루 한 번)</span>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function bannerHTML(){
+  var day = selDay(), n = listOf(day).length, k = doneCount(day);
+  var txt = (k >= n) ? "오늘 퀘스트 완료! 🎉" : "시작 ▶";
+  return '<span class="qb-em" aria-hidden="true">🎯</span>' +
+    '<span class="qb-tx"><b>오늘의 온라인 학습</b><span>' + DAYFULL[day] + ' · ' + n + '단계' +
+      (k >= n ? ' 모두 끝냈어요' : (k > 0 ? ' · ' + k + '단계 끝냈어요' : '')) + '</span></span>' +
+    '<span class="qb-prog">' + k + ' / ' + n + '</span>' +
+    '<span class="qb-go">' + txt + '</span>';
+}
+
+function paint(){
+  var day = selDay(), list = listOf(day), n = list.length, k = doneCount(day), s = slotData(day);
+  var dash = q("questDash");
+  if (dash) dash.innerHTML = dashHTML();
+  var ban = q("questBanner");
+  if (ban) ban.innerHTML = bannerHTML();
+  var bar = q("questBar");
+  if (bar && bar.classList.contains("on")){
+    var i = Number(s.cur) || 0;
+    if (i >= n) i = Math.max(0, n - 1);
+    var it = list[i] || list[0];
+    var tag = q("qbDay"), step = q("qbStep"), now = q("qbNow"), dots = q("qbDots"), nx = q("qbNext");
+    if (tag) tag.textContent = "🎯 " + DAYNM[day] + "요일 퀘스트";
+    if (step) step.textContent = (i + 1) + " / " + n;
+    if (now && it) now.textContent = "현재: " + it.t;
+    if (dots){
+      var h = "";
+      for (var j = 0; j < n; j++) h += '<i class="' + (s.done.indexOf(j) >= 0 ? "ok" : (j === i ? "now" : "")) + '"></i>';
+      dots.innerHTML = h;
+    }
+    if (nx){
+      var last = (i >= n - 1);
+      var ready = s.done.indexOf(i) >= 0;
+      nx.textContent = ready ? (last ? "🎉 퀘스트 마무리!" : "✅ 다 했어! 다음 단계로 →") : (last ? "완료하고 마무리 →" : "완료하고 다음으로 →");
+      nx.classList.toggle("ready", ready);
+    }
+  }
+}
+
+/* ---------------------------- 진행 ---------------------------- */
+var barOn = false;
+function setBar(on){
+  barOn = !!on;
+  var bar = q("questBar");
+  if (bar) bar.classList.toggle("on", barOn);
+  try { document.body.classList.toggle("questing", barOn); } catch(e){}
+}
+function topOfPage(){
+  try { window.scrollTo({ top:0, behavior:"auto" }); } catch(e){}
+  try { var d = q("questDash"); if (d) d.scrollTop = 0; } catch(e){}
+  try { var v = document.querySelector(".views"); if (v) v.scrollTop = 0; } catch(e){}
+}
+function goStep(day, i){
+  var list = listOf(day);
+  if (!list.length) return;
+  if (i < 0) i = 0;
+  if (i >= list.length) i = list.length - 1;
+  var st = read(), key = slotKey(todayStr(), day);
+  if (!st.days[key] || typeof st.days[key] !== "object") st.days[key] = { done:[], cur:0, at:0 };
+  st.days[key].cur = i;
+  st.days[key].at = Date.now();
+  st.sel = day;
+  save(st);
+  setBar(true);
+  try { SB.go("study", list[i].s, list[i].sec); } catch(e){}
+  paint();
+  topOfPage();
+}
+function markStep(day, i){
+  var st = read(), key = slotKey(todayStr(), day);
+  if (!st.days[key] || typeof st.days[key] !== "object") st.days[key] = { done:[], cur:i, at:0 };
+  if (st.days[key].done.indexOf(i) < 0) st.days[key].done.push(i);
+  st.days[key].at = Date.now();
+  st.sel = day;
+  save(st);
+  try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
+}
+function startQuest(){
+  var day = selDay(), list = listOf(day);
+  if (!list.length) return;
+  var k = doneCount(day);
+  if (k >= list.length){ showDone(day); return; }
+  var nx = nextIndex(day);
+  if (nx < 0) nx = 0;
+  goStep(day, nx);
+}
+function nextStep(){
+  var day = selDay(), list = listOf(day);
+  if (!list.length) return;
+  var s = slotData(day), i = Number(s.cur) || 0;
+  markStep(day, i);
+  if (i >= list.length - 1){
+    paint();
+    finish(day);
+    return;
+  }
+  goStep(day, i + 1);
+  try { SB.toast("➡️ " + (i + 2) + "단계 · " + list[i + 1].t); } catch(e){}
+}
+function finish(day){
+  var date = todayStr(), st = read(), first = !st.bonus[date];
+  if (first){ st.bonus[date] = 1; save(st); }
+  var got = 0;
+  if (first){
+    try { got = SB.earn ? SB.earn("quest-" + date, BONUS, { skipStudyBonus:true }) : 0; } catch(e){ got = 0; }
+    try { if (SB.room && SB.room.snack) SB.room.snack({ grow:5, joy:12, hunger:-8, say:"🎯 오늘 퀘스트 클리어! 간식 받자~" }); } catch(e){}
+    try { if (SB.confetti) SB.confetti(); } catch(e){}
+    try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
+  }
+  showDone(day, got);
+}
+function showDone(day, got){
+  var list = listOf(day), s = slotData(day), rows = "", i;
+  for (i = 0; i < list.length; i++){
+    var meta = SUB[list[i].s] || { ch:"?" };
+    rows += '<div><span class="qs-badge ' + (meta.cls || "") + '" aria-hidden="true" style="width:2.6vh;height:2.6vh;border-radius:.8vh;font-size:1.1vh">' +
+            meta.ch + '</span>' + esc(list[i].t) + '<span>' + (s.done.indexOf(i) >= 0 ? "✓ 완료" : "다음에") + '</span></div>';
+  }
+  var m = q("questDone");
+  if (!m) return;
+  var t = q("qFinTitle"), sub = q("qFinSub"), star = q("qFinStar"), rw = q("qFinRows");
+  if (t) t.textContent = DAYNM[day] + "요일 퀘스트 클리어!";
+  if (sub) sub.textContent = list.length + "단계를 모두 마쳤어요. 해율이 최고! 🎉";
+  if (star) star.textContent = "⭐ +" + BONUS + (got > 0 ? " 받았어요" : " (오늘은 이미 받았어요)");
+  if (rw) rw.innerHTML = rows;
+  m.hidden = false;
+  try { SB.confetti(); } catch(e){}
+}
+
+/* ---------------------------- 화면 갈아 끼우기 ---------------------------- */
+function showClassic(on){
+  var dash = q("questDash"), clas = q("hubClassic");
+  if (!dash || !clas) return;
+  dash.hidden = !!on;
+  clas.hidden = !on;
+  if (on && SB.renderHub){ try { SB.renderHub(); } catch(e){} }
+  if (!on) paint();
+  topOfPage();
+}
+
+/* ---------------------------- 이벤트 ---------------------------- */
+document.addEventListener("click", function(e){
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var d = t.closest("[data-qday]");
+  if (d){
+    var st = read(); st.sel = d.getAttribute("data-qday"); save(st);
+    setBar(false);
+    paint(); topOfPage();
+    return;
+  }
+  var free = t.closest("#qFree") || t.closest("[data-qfree]");
+  if (free){ showClassic(true); return; }
+  var back = t.closest("#qBack");
+  if (back){ showClassic(false); return; }
+  if (t.closest("#qStart")){ startQuest(); return; }
+  var stp = t.closest("[data-qstep]");
+  if (stp){
+    var i = parseInt(stp.getAttribute("data-qstep"), 10) || 0;
+    goStep(selDay(), i);
+    return;
+  }
+  if (t.closest("#qbNext")){ nextStep(); return; }
+  if (t.closest("#qbX")){ setBar(false); try { SB.go("study", ""); } catch(e){} paint(); return; }
+  if (t.closest("#questBanner")){ try { SB.go("study", ""); } catch(e){} paint(); window.scrollTo(0,0); return; }
+  if (t.closest("#qFinClose")){ var m1 = q("questDone"); if (m1) m1.hidden = true; setBar(false); try { SB.go("study", ""); } catch(e){} paint(); return; }
+  if (t.closest("#qFinRoom")){ var m2 = q("questDone"); if (m2) m2.hidden = true; setBar(false); try { SB.go("room", "main"); } catch(e){} return; }
+}, true);
+
+/* 온라인 학습 활동이 시작되면 그 단계는 '끝낸 것'으로 표시 (다음 단계 버튼이 바뀐다) */
+(function(){
+  var prev = SB.onDaily;
+  SB.onDaily = function(sub){
+    try {
+      if (barOn){
+        var day = selDay(), list = listOf(day), s = slotData(day), i = Number(s.cur) || 0;
+        if (list[i] && list[i].s === sub && s.done.indexOf(i) < 0){
+          markStep(day, i);
+          paint();
+          try { SB.toast("👏 " + (i + 1) + "단계 완료! [다음 단계로]를 눌러요"); } catch(e){}
+        }
+      }
+    } catch(e){}
+    if (prev){ try { return prev.apply(this, arguments); } catch(e){} }
+  };
+})();
+/* 별이 바뀌면 카드의 별도 같이 */
+(function(){
+  var prev = SB.onStars;
+  SB.onStars = function(){
+    try { if (prev) prev.apply(this, arguments); } catch(e){}
+    try { paint(); } catch(e){}
+  };
+})();
+/* 온라인 공부·홈 화면이 열릴 때마다 최신으로 */
+(function(){
+  if (!SB.onShow) SB.onShow = {};
+  var ps = SB.onShow.study, ph = SB.onShow.home;
+  SB.onShow.study = function(){
+    try { if (ps) ps.apply(this, arguments); } catch(e){}
+    try { paint(); } catch(e){}
+  };
+  SB.onShow.home = function(){
+    try { if (ph) ph.apply(this, arguments); } catch(e){}
+    try { paint(); } catch(e){}
+  };
+})();
+/* 탭을 옮기면 퀘스트 바는 잠시 내린다 (진행은 그대로 저장) */
+(function(){
+  var prev = SB.go;
+  if (typeof prev !== "function") return;
+  SB.go = function(tab, sub, sec){
+    var r = prev.apply(this, arguments);
+    try {
+      if (tab !== "study") setBar(false);
+      else if (sub === "" || sub === "hub") setBar(false);   /* 과목 목록(대시보드)으로 나오면 바는 내린다 */
+    } catch(e){}
+    return r;
+  };
+})();
+try {
+  document.addEventListener("visibilitychange", function(){ if (!document.hidden) { try { paint(); } catch(e){} } });
+} catch(e){}
+
+/* ---------------------------- 시작 ---------------------------- */
+function mount(){
+  var dash = q("questDash");
+  if (!dash) return false;
+  dash.className = "q-dash";
+  var clas = q("hubClassic");
+  if (clas) clas.className = "hub-classic";
+  /* 퀘스트 바 · 축하 모달은 한 번만 만든다 */
+  if (!q("questBar")){
+    var bar = document.createElement("div");
+    bar.id = "questBar";
+    bar.className = "q-bar";
+    bar.setAttribute("role", "region");
+    bar.setAttribute("aria-label", "오늘의 퀘스트 진행");
+    bar.innerHTML = '<span class="qb-badge" id="qbDay">🎯 퀘스트</span>' +
+      '<span class="qb-step" id="qbStep">1 / 4</span>' +
+      '<b class="qb-now" id="qbNow">현재 단계</b>' +
+      '<span class="qb-dots" id="qbDots"></span>' +
+      '<button class="qb-next" id="qbNext" type="button">완료하고 다음으로 →</button>' +
+      '<button class="qb-x" id="qbX" type="button" aria-label="퀘스트 그만 보기">✕</button>';
+    document.body.appendChild(bar);
+  }
+  if (!q("questDone")){
+    var m = document.createElement("div");
+    m.id = "questDone";
+    m.className = "modal";
+    m.hidden = true;
+    m.innerHTML = '<div class="sheet q-sheet" role="dialog" aria-modal="true" aria-labelledby="qFinTitle">' +
+        '<div class="q-fin">' +
+          '<div class="q-fin-em" aria-hidden="true">🎉</div>' +
+          '<b id="qFinTitle">퀘스트 클리어!</b>' +
+          '<p id="qFinSub"></p>' +
+          '<div class="q-fin-star" id="qFinStar">⭐ +2</div>' +
+          '<div class="q-fin-rows" id="qFinRows"></div>' +
+        '</div>' +
+        '<div class="sheet-foot">' +
+          '<button class="btn primary" id="qFinRoom" type="button">🐣 다마고치 만나러 가기</button>' +
+          '<button class="btn ghost" id="qFinClose" type="button">닫기</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(m);
+  }
+  return true;
+}
+
+function boot(){
+  if (!mount()) return;
+  try {
+    var clas = q("hubClassic");
+    if (clas && !q("qBack")){
+      var back = document.createElement("button");
+      back.id = "qBack";
+      back.type = "button";
+      back.className = "q-free";
+      back.style.marginLeft = "0";
+      back.textContent = "← 오늘의 퀘스트로 돌아가기";
+      clas.insertBefore(back, clas.firstChild);
+    }
+  } catch(e){}
+  paint();
+  if (SB.quest) SB.quest.paint = paint;
+}
+SB.quest = {
+  key: KEY,
+  course: COURSE,
+  days: DAYLIST,
+  paint: paint,
+  start: startQuest,
+  step: function(i){ goStep(selDay(), i); },
+  next: nextStep,
+  showClassic: showClassic,
+  state: function(){ return read(); },
+  progress: function(day){ day = day || selDay(); return { day:day, done:doneCount(day), need:listOf(day).length, cur:Number(slotData(day).cur) || 0 }; }
+};
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+else setTimeout(boot, 0);
+setTimeout(function(){ try { paint(); } catch(e){} }, 800);
+})();
+
 </script>
 </body>
 </html>
