@@ -5685,6 +5685,10 @@ body.mob .rb-canvas-box canvas{height:34vw;}
 .hw-item .hw-mv{flex:0 0 auto;font-size:.64rem;font-weight:900;color:#8a5a08;background:#fff2d4;
   border-radius:.4rem;padding:.14rem .36rem;box-shadow:inset 0 0 0 1px #ffd587;letter-spacing:-.01em;}
 .hw-item.carry .hw-mv{background:#e9f6ff;color:#256e9c;box-shadow:inset 0 0 0 1px #bfe0f4;}
+/* 💻 오늘의 온라인 학습 — 퀘스트 진행 뱃지 */
+.hw-item .hw-onb{flex:0 0 auto;font-size:.64rem;font-weight:900;color:#2a5fb8;background:#eaf2ff;
+  border-radius:.4rem;padding:.14rem .36rem;box-shadow:inset 0 0 0 1px #c6ddff;letter-spacing:-.01em;white-space:nowrap;}
+.hw-item .hw-onb.ok{color:#0f7a3d;background:#e6f7ec;box-shadow:inset 0 0 0 1px #b6e6c6;}
 .hw-ck.mv{background:#fff2d4;color:#8a5a08;box-shadow:inset 0 0 0 .12rem #ffd587;}
 .wp-t.wp-carry{background:#fff1d2;color:#8a5a08;box-shadow:inset 0 0 0 1px #ffd587;}
 body #weekBoard .wp-list li.moved span{color:#b09257;}
@@ -39446,6 +39450,81 @@ function carrySave(v){
 var DAYN = ["월", "화", "수", "목", "금", "토", "일"];
 var TAG = { p:"📖 지면", b:"💻 보드", k:"📚 책", t:"📱 패드", v:"🎥 영상" };
 
+/* 💻 오늘의 온라인 학습 — 오늘의 숙제에서 보드 안 온라인 학습을 한 줄로 묶는다 (2026-11-28)
+   · 국어·수학·영어·한자·중국어·일본어·역사 보드 학습(💻 보드 · study 화면으로 가는 항목)만 묶는다
+   · 📖 지면 문제집 · 📚 종이책 · 📱 패드 학습 · 🎥 영상 · 📞 전화영어는 그대로 따로 남는다
+   · 🎯 오늘의 퀘스트를 다 마치면 이 한 줄이 자동으로 ✓ 된다 */
+var ONLINE_ID = "boonline";
+var ONLINE_TITLE = "💻 오늘의 온라인 학습";
+var ONLINE_OFF = { "en/call":1 };            /* 전화영어는 보드 학습 묶음이 아니다 */
+function onlineHwItem(it){
+  if (!it || it.tag !== "b" || !it.go) return false;
+  if (it.go[0] !== "study") return false;
+  return !ONLINE_OFF[it.go[1] + "/" + it.go[2]];
+}
+/* 그날 보드 학습 항목들을 한 줄로 — 처음 나온 자리에 놓고 나머지는 parts 로 모아 둔다 */
+function mergeOnlineItems(list){
+  var out = [], merged = null, i;
+  for (i = 0; i < list.length; i++){
+    if (onlineHwItem(list[i])){
+      if (!merged){
+        merged = { id:ONLINE_ID, s:"온라인 학습", t:ONLINE_TITLE, tag:"b", go:null, online:1, parts:[] };
+        out.push(merged);
+      }
+      merged.parts.push(list[i].id);
+      continue;
+    }
+    out.push(list[i]);
+  }
+  return out;
+}
+function onlineItemIn(list){
+  list = list || [];
+  for (var i = 0; i < list.length; i++) if (list[i] && list[i].id === ONLINE_ID) return list[i];
+  return null;
+}
+/* 옆에 붙는 퀘스트 진행 뱃지 — 2/5 처럼, 다 하면 ✓ */
+function onlineBadge(it){
+  if (!it || it.id !== ONLINE_ID) return "";
+  var p = null;
+  try { p = (SB.quest && SB.quest.todayProgress) ? SB.quest.todayProgress() : null; } catch(e){ p = null; }
+  if (!p || !p.need) return "";
+  var txt = "퀘스트 " + p.done + "/" + p.need;
+  return '<span class="hw-onb' + (p.done >= p.need ? " ok" : "") + '">' + txt + (p.done >= p.need ? " ✓" : "") + '</span>';
+}
+/* 💻 오늘의 온라인 학습 한 줄 체크 — 모듈별 체크도 함께 남겨 대시보드·부모 페이지가 그대로 알아보게 */
+function toggleOnlineHw(){
+  var st = status(), d = st.date, item = onlineItemIn(st.list);
+  var parts = (item && item.parts) ? item.parts : [], i;
+  if (!parts.length) return;
+  var on = !st.done[ONLINE_ID], s = load(), now = Date.now();
+  if (!s[d] || typeof s[d] !== "object") s[d] = {};
+  for (i = 0; i < parts.length; i++){
+    if (on){ s[d][parts[i]] = now; clearUn(d, parts[i]); }
+    else { delete s[d][parts[i]]; markUn(d, parts[i], now); }
+  }
+  if (on){ s[d][ONLINE_ID] = now; clearUn(d, ONLINE_ID); }
+  else { delete s[d][ONLINE_ID]; markUn(d, ONLINE_ID, now); }
+  var ks = Object.keys(s).sort();
+  while (ks.length > 60) delete s[ks.shift()];
+  save(s);
+  if (on){
+    try { if (SB.earn) SB.earn("auto2|hw5|" + d + "|" + ONLINE_ID, 1); } catch(e){}
+    try { if (SB.toast) SB.toast("⭐ +1 · " + ONLINE_TITLE); } catch(e){}
+  }
+  try { if (SB.week && SB.week.markTodayDone) SB.week.markTodayDone(); } catch(e){}
+  render();
+  var st2 = status(), jkw = 0;
+  if (st2.all){
+    if (bonusCheck(st2)) jkw = 500;
+    alertCheck(st2);
+  }
+  try { if (SB.streak && SB.streak.note && SB.week && SB.week.todayStatus) SB.streak.note(SB.week.todayStatus()); } catch(e){}
+  try { if (st2.all && SB.onAllHw) SB.onAllHw(st2, jkw); } catch(e){}
+  touchFam();
+}
+
+
 /* 숙제 하나 = { id, s(과목), t(할 일), tag, go(누르면 갈 곳) } */
 function P(id, s, t, go){ return { id:id, s:s, t:t, tag:"p", go:go || null }; }
 function B(id, s, t, go){ return { id:id, s:s, t:t, tag:"b", go:go || null }; }
@@ -39715,6 +39794,22 @@ function dayDone(date){
     if (u[k] && Number(u[k]) >= t) continue;      /* 다른 기기에서 마지막에 푼 숙제 */
     out[k] = t;
   }
+  /* 💻 오늘의 온라인 학습 — 예전처럼 모듈별로 다 체크해 둔 날도 완료로 본다 */
+  if (!out[ONLINE_ID] && !(Number(u[ONLINE_ID]) > 0)){
+    try {
+      var ds0 = dateOnly(date) || iso();
+      var dt0 = new Date(ds0 + "T00:00:00");
+      if (!isNaN(dt0.getTime())){
+        var it0 = onlineItemIn(items((dt0.getDay() + 6) % 7, ds0));
+        var pts = (it0 && it0.parts) ? it0.parts : [], all = pts.length > 0, z;
+        for (z = 0; z < pts.length; z++){
+          var tp = Number(v[pts[z]]) || 0;
+          if (!tp || (u[pts[z]] && Number(u[pts[z]]) >= tp)){ all = false; break; }
+        }
+        if (all) out[ONLINE_ID] = 1;
+      }
+    } catch(e){}
+  }
   return out;
 }
 /* 📘 공부 설정에 등록한 문제집도 그날 숙제로 함께 나온다 (p.시작~끝) */
@@ -39770,7 +39865,7 @@ function items(di, ds){
     var o = mvOut[out[i].id];
     if (o && typeof o === "object" && !o.del){ out[i].moved = 1; out[i].to = String(o.to || ""); }
   }
-  return out;
+  return mergeOnlineItems(out);
 }
 
 function status(){
@@ -39811,6 +39906,7 @@ function alertCheck(st){
   } catch(e){}
 }
 function toggle(id){
+  if (id === ONLINE_ID){ toggleOnlineHw(); return; }
   var st = status(), d = st.date, s = load();
   if (!s[d] || typeof s[d] !== "object") s[d] = {};
   var it = null;
@@ -39853,7 +39949,8 @@ function toggle(id){
 SB.pad = { list:padpList, items:padpItems, merge:padpMerge, load:padpLoad, save:padpSave,
            rebuild:rebuildSched, def:PADP_DEF, key:PADP_KEY };
 SB.hw5 = { status:status, toggle:toggle, sched:SCHED, ladder:LADDER,
-           items:items, dayDone:dayDone, iso:iso, dayIdx:dayIdx, tag:TAG, wb:wbDay };
+           items:items, dayDone:dayDone, iso:iso, dayIdx:dayIdx, tag:TAG, wb:wbDay,
+           onlineId:ONLINE_ID, onlineItem:function(){ return onlineItemIn(status().list); } };
 SB.hw5.render = render;
 /* 가족 코드로 다른 기기의 숙제 체크를 받으면 화면에 바로 그린다 (SB.family.applyDoc) */
 SB.hwplanRefresh = function(){ try { render(); } catch(e){} };
@@ -39898,7 +39995,7 @@ function groupsHTML(st){
           '<button class="hw-ck' + (mv ? " mv" : "") + '" type="button" data-hw5="' + esc(it.id) + '" aria-pressed="' + (on ? "true" : "false") +
             '" aria-label="' + esc(it.t) + lbl + '">' + (on ? "✓" : (mv ? "➡️" : "")) + '</button>' +
           '<span class="hw-tag ' + it.tag + '">' + TAG[it.tag] + '</span>' +
-          '<span class="hw-tx">' + esc(it.t) + '</span>' +
+          '<span class="hw-tx">' + esc(it.t) + '</span>' + onlineBadge(it) +
           (mv ? '<span class="hw-mv">내일로 미룸</span>'
               : (cy ? '<span class="hw-mv">➡️ 어제 미룬 숙제</span>' : "")) +
           (it.go ? '<button class="hw-go" type="button" data-hwgo="' + esc(it.id) + '">바로 가기 ▶</button>' : "") +
@@ -39984,6 +40081,10 @@ function tomorrowOf(ds){
 }
 /* 숙제 하나만 내일로 */
 function carryOne(id){
+  if (id === ONLINE_ID){
+    try { if (SB.toast) SB.toast("💻 온라인 학습은 오늘 안에서 체크해요"); } catch(e){}
+    return false;
+  }
   var st = status(), it = null;
   for (var i = 0; i < st.list.length; i++) if (st.list[i].id === id) it = st.list[i];
   if (!it || st.done[id] || it.moved) return false;
@@ -47948,6 +48049,9 @@ function markStep(day, i){
   st.sel = day;
   save(st);
   try { if (SB.family && SB.family.touch) SB.family.touch(); } catch(e){}
+  /* 🎯 → 📅 오늘의 숙제 '💻 오늘의 온라인 학습' 한 줄 (진행 뱃지 · 완주하면 자동 ✓) */
+  try { if (SB.hw5 && SB.hw5.render) SB.hw5.render(); } catch(e){}
+  syncOnlineHomework(day);
 }
 function startQuest(){
   var day = selDay(), list = listOf(day);
@@ -48077,6 +48181,7 @@ document.addEventListener("click", function(e){
   SB.onShow.home = function(){
     try { if (ph) ph.apply(this, arguments); } catch(e){}
     try { paint(); } catch(e){}
+    try { if (SB.hw5 && SB.hw5.render) SB.hw5.render(); } catch(e){}
   };
 })();
 /* 탭을 옮기면 퀘스트 바는 잠시 내린다 (진행은 그대로 저장) */
@@ -48156,7 +48261,30 @@ function boot(){
     }
   } catch(e){}
   paint();
+  try { if (SB.hw5 && SB.hw5.render) SB.hw5.render(); } catch(e){}
   if (SB.quest) SB.quest.paint = paint;
+}
+/* 오늘(요일 기본값 — 일요일은 토요일 복습) 퀘스트 진행 — 홈 숙제 뱃지가 읽는다 */
+function todayProgress(){
+  var d = defaultDay();
+  return { day:d, done:doneCount(d), need:listOf(d).length };
+}
+/* 📅 오늘의 숙제의 '💻 오늘의 온라인 학습' 한 줄과 잇는다
+   · 오늘 요일 퀘스트를 다 마쳤을 때만, 이미 체크돼 있으면 그대로 (별 중복 없음)
+   · 다른 요일 탭을 미리 보다 마친 것은 오늘 숙제를 건드리지 않는다 */
+function syncOnlineHomework(day){
+  try {
+    if (day !== defaultDay()) return;
+    var list = listOf(day);
+    if (!list.length || doneCount(day) < list.length) return;
+    if (!(SB.hw5 && SB.hw5.status && SB.hw5.toggle)) return;
+    var oid = SB.hw5.onlineId || "boonline";
+    var st = SB.hw5.status(), has = null, i;
+    for (i = 0; i < st.list.length; i++) if (st.list[i].id === oid) has = st.list[i];
+    if (!has) return;
+    if (st.done[oid]) return;
+    SB.hw5.toggle(oid);
+  } catch(e){}
 }
 SB.quest = {
   key: KEY,
@@ -48168,7 +48296,9 @@ SB.quest = {
   next: nextStep,
   showClassic: showClassic,
   state: function(){ return read(); },
-  progress: function(day){ day = day || selDay(); return { day:day, done:doneCount(day), need:listOf(day).length, cur:Number(slotData(day).cur) || 0 }; }
+  progress: function(day){ day = day || selDay(); return { day:day, done:doneCount(day), need:listOf(day).length, cur:Number(slotData(day).cur) || 0 }; },
+  todayProgress: todayProgress,
+  syncHomework: function(){ syncOnlineHomework(defaultDay()); }
 };
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
