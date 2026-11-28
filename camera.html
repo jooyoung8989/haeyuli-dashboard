@@ -66,13 +66,28 @@
   }
   .stage .badge.show{opacity:1}
   .stage .hint{
-    position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
+    position:absolute;left:50%;bottom:58px;transform:translateX(-50%);
     font-size:11px;color:rgba(255,255,255,.82);background:rgba(0,0,0,.42);
     padding:5px 10px;border-radius:20px;white-space:nowrap;
     backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
     transition:opacity .5s;pointer-events:none;
   }
   .stage .hint.hide{opacity:0}
+  .stage .zoomctl{
+    position:absolute;left:50%;bottom:11px;transform:translateX(-50%);z-index:4;
+    display:flex;align-items:center;gap:2px;padding:3px;border-radius:999px;
+    background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.14);
+    box-shadow:0 2px 12px rgba(0,0,0,.32);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  }
+  .stage .zbtn{
+    appearance:none;border:0;background:transparent;color:rgba(255,255,255,.80);
+    font:inherit;font-size:11.5px;font-weight:700;letter-spacing:.1px;line-height:1.3;
+    padding:4px 10px;border-radius:999px;min-width:34px;
+    transition:background .16s,color .16s,transform .1s;
+  }
+  .stage .zbtn.on{background:#e9ddc6;color:#15171a;box-shadow:0 1px 6px rgba(0,0,0,.28)}
+  .stage .zbtn:active{transform:scale(.9)}
   .flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:60}
   .flash.go{animation:fl .32s ease-out}
   @keyframes fl{0%{opacity:.95}100%{opacity:0}}
@@ -251,6 +266,11 @@
       <canvas id="view"></canvas>
       <div class="badge" id="badge">원본</div>
       <div class="hint" id="hint">화면을 길게 누르면 원본 · 셔터로 촬영</div>
+      <div class="zoomctl" id="zoomCtl" role="group" aria-label="줌 배율">
+        <button class="zbtn on" type="button" data-zoom="1" aria-label="1배율">1x</button>
+        <button class="zbtn" type="button" data-zoom="2" aria-label="2배율">2x</button>
+        <button class="zbtn" type="button" data-zoom="3" aria-label="3배율">3x</button>
+      </div>
       <div class="perm" id="perm">
         <div class="ico">📷</div>
         <h3 id="permTitle">카메라를 켤 수 없어요</h3>
@@ -409,6 +429,7 @@ var FS_SRC = [
 "varying vec2 vUV;",
 "uniform sampler2D uTex;",
 "uniform vec2  uCover;",
+"uniform float uZoom;",
 "uniform vec2  uPx;",
 "uniform float uMirror;",
 "uniform float uStrength;",
@@ -454,6 +475,7 @@ var FS_SRC = [
 "void main(){",
 "  vec2 uv = vUV;",
 "  uv = (uv - 0.5) * uCover + 0.5;",
+"  if (uZoom > 1.0001) uv = (uv - 0.5) / uZoom + 0.5;",
 "  if (uMirror > 0.5) uv.x = 1.0 - uv.x;",
 "  uv = clamp(uv, 0.0, 1.0);",
 "  vec3 orig = texture2D(uTex, uv).rgb;",
@@ -594,7 +616,7 @@ function GLRenderer(canvas, preserve){
   var u = {};
   ["uTex","uCover","uPx","uMirror","uStrength","uExposure","uContrast","uSat","uFade","uRoll",
    "uWarmth","uTint","uShadowTint","uShadowAmt","uHighTint","uHighAmt","uFloor","uGreen","uBlue",
-   "uVig","uClarity","uGrain","uGrainScale","uSeed","uMono","uGreenHue","uRed"].forEach(function(n){ u[n] = gl.getUniformLocation(prog, n); });
+   "uVig","uClarity","uGrain","uGrainScale","uSeed","uMono","uGreenHue","uRed","uZoom"].forEach(function(n){ u[n] = gl.getUniformLocation(prog, n); });
   this.u = u;
   gl.uniform1i(u.uTex, 0);
   gl.clearColor(0,0,0,1);
@@ -644,6 +666,7 @@ GLRenderer.prototype.render = function(src, P, o){
   gl.uniform1f(u.uMono, P.mono);
   gl.uniform1f(u.uGreenHue, P.greenHue || 0);
   gl.uniform1f(u.uRed, P.red || 0);
+  gl.uniform1f(u.uZoom, (o.zoom && o.zoom > 1.0001) ? o.zoom : 1.0);
 
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };
@@ -681,9 +704,12 @@ C2DRenderer.prototype.render = function(src, P, o){
   if (P.warmth>0) filt += " sepia(" + Math.min(0.5,P.warmth*1.6).toFixed(3) + ")";
   if (ctx.filter !== undefined) ctx.filter = filt;
   if (o.mirror){ ctx.translate(W,0); ctx.scale(-1,1); }
-  var scale = Math.max(W/sw, H/sh);
-  var dw = sw*scale, dh = sh*scale;
-  ctx.drawImage(src, (W-dw)/2, (H-dh)/2, dw, dh);
+  var z = (o && o.zoom && o.zoom > 1) ? o.zoom : 1;
+  var ssw = sw / z, ssh = sh / z;
+  var sx0 = (sw - ssw) / 2, sy0 = (sh - ssh) / 2;
+  var scale = Math.max(W/ssw, H/ssh);
+  var dw = ssw*scale, dh = ssh*scale;
+  ctx.drawImage(src, sx0, sy0, ssw, ssh, (W-dw)/2, (H-dh)/2, dw, dh);
   ctx.restore();
   ctx.filter = "none";
   if (P.fade>0.001){
@@ -718,7 +744,7 @@ C2DRenderer.prototype.render = function(src, P, o){
   if (o.strength < 0.999){
     ctx.globalAlpha = 1 - o.strength;
     if (o.mirror){ ctx.save(); ctx.translate(W,0); ctx.scale(-1,1); }
-    ctx.drawImage(src, (W-dw)/2, (H-dh)/2, dw, dh);
+    ctx.drawImage(src, sx0, sy0, ssw, ssh, (W-dw)/2, (H-dh)/2, dw, dh);
     if (o.mirror) ctx.restore();
     ctx.globalAlpha = 1;
   }
@@ -736,6 +762,7 @@ var S = {
   grainOn: true,
   mirror: false,
   facing: "environment",
+  zoom: 1, hwZoom: 1,
   mode: "camera",
   comparing: false,
   ready: false
@@ -863,7 +890,7 @@ function draw(){
   var P = buildParams();
   var strength = S.comparing ? 0 : (S.strength / 100);
   var gs = Math.max(1.4, Math.min(view.width, view.height) / 620);
-  var o = { cover: cov.cover, mirror: S.mirror, strength: strength, seed: seed, grainScale: gs };
+  var o = { cover: cov.cover, mirror: S.mirror, strength: strength, seed: seed, grainScale: gs, zoom: shaderZoom() };
   if (renderer) renderer.render(source, P, o);
 }
 
@@ -917,6 +944,7 @@ function startCamera(facing){
         hidePerm();
         document.body.classList.remove("albummode");
         $("btnAlbum").innerHTML = ALBUM_BTN_HTML;
+        setZoom(S.zoom, true);
         resolve(true);
       };
       if (video.readyState >= 2) done();
@@ -932,7 +960,7 @@ function startCamera(facing){
           .then(function(s){
             stream = s; video.srcObject = s;
             video.play().catch(function(){});
-            S.mode = "camera"; source = video; S.ready = true; hidePerm(); resolve(true);
+            S.mode = "camera"; source = video; S.ready = true; hidePerm(); setZoom(S.zoom, true); resolve(true);
           }).catch(function(){
             showPerm("카메라를 찾지 못했어요", "기기 카메라를 확인하거나 앨범 사진을 불러와 주세요.");
             resolve(false);
@@ -952,6 +980,7 @@ var ALBUM_BTN_HTML = $("btnAlbum").innerHTML;
 $("btnFlip").addEventListener("click", function(){
   S.facing = (S.facing === "environment") ? "user" : "environment";
   S.mirror = (S.facing === "user");
+  S.zoom = 1; S.hwZoom = 1; paintZoom();
   updateMirror();
   toast(S.facing === "user" ? "전면 카메라" : "후면 카메라");
   startCamera(S.facing);
@@ -1005,6 +1034,67 @@ $("btnTune").addEventListener("click", function(){
   setTimeout(layout, 40);
 });
 
+/* ---------- 줌 (1x · 2x · 3x) ---------- */
+var zoomCtl = $("zoomCtl");
+var zoomBtns = zoomCtl ? Array.prototype.slice.call(zoomCtl.querySelectorAll(".zbtn")) : [];
+
+function videoTrack(){
+  if (!stream || !stream.getVideoTracks) return null;
+  var ts = stream.getVideoTracks();
+  return (ts && ts.length) ? ts[0] : null;
+}
+function zoomCap(){
+  var tr = videoTrack();
+  if (!tr || typeof tr.getCapabilities !== "function") return null;
+  var caps = null;
+  try { caps = tr.getCapabilities(); } catch(e){ return null; }
+  return (caps && caps.zoom && typeof caps.zoom.max === "number") ? caps.zoom : null;
+}
+/* target 배율까지 하드웨어 줌으로 당기고, 실제 적용된 배율을 돌려줍니다. */
+function hwZoomFor(target){
+  var tr = videoTrack(), z = zoomCap();
+  if (!tr || !z || typeof tr.applyConstraints !== "function") return Promise.resolve(1);
+  var max = z.max, min = (typeof z.min === "number") ? z.min : 1;
+  var step = (typeof z.step === "number" && z.step > 0) ? z.step : 0;
+  var want = Math.min(target, max);
+  if (step) want = min + Math.round((want - min) / step) * step;
+  want = Math.max(min, Math.min(max, want));
+  if (want < 1) want = 1;
+  try {
+    var p = tr.applyConstraints({ advanced: [{ zoom: want }] });
+    if (p && p.then) return p.then(function(){ return want; }, function(){ return 1; });
+    return Promise.resolve(want);
+  } catch(e){ return Promise.resolve(1); }
+}
+/* 화면에 남은 배율 = 요청 배율 / 하드웨어가 당긴 배율 → 셰이더 UV 크롭 */
+function shaderZoom(){
+  var z = S.zoom / (S.hwZoom || 1);
+  return z > 1.0001 ? z : 1;
+}
+function paintZoom(){
+  zoomBtns.forEach(function(b){ b.classList.toggle("on", parseFloat(b.dataset.zoom) === S.zoom); });
+}
+function setZoom(target, quiet){
+  target = (target === 2 || target === 3) ? target : 1;
+  S.zoom = target;
+  paintZoom();
+  if (S.mode !== "camera" || !stream){ S.hwZoom = 1; return; }
+  if (!zoomCap()){ S.hwZoom = 1; return; }
+  hwZoomFor(target).then(function(hz){
+    if (S.zoom !== target) return;
+    S.hwZoom = hz;
+    if (!quiet && hz < target) toast(target + "배율 · 디지털 줌");
+  });
+}
+zoomBtns.forEach(function(b){
+  b.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+  b.addEventListener("click", function(e){
+    e.stopPropagation();
+    setZoom(parseFloat(b.dataset.zoom));
+  });
+});
+paintZoom();
+
 /* ---------- 원본 비교 ---------- */
 function setCompare(on){
   if (S.comparing === on) return;
@@ -1014,6 +1104,7 @@ function setCompare(on){
 }
 var cmpTimer = null, cmpDown = false;
 function cmpStart(e){
+  if (e && e.target && zoomCtl && zoomCtl.contains(e.target)){ cmpDown = false; clearTimeout(cmpTimer); return; }
   if (e && e.cancelable) e.preventDefault();
   cmpDown = true;
   clearTimeout(cmpTimer);
@@ -1070,6 +1161,7 @@ function loadPhoto(file){
     photoCanvas = c;
     URL.revokeObjectURL(url);
     S.mode = "photo";
+    S.hwZoom = 1;
     source = photoCanvas;
     S.ready = true;
     hidePerm();
@@ -1109,7 +1201,7 @@ function captureDataURL(){
   r.render(source, P, {
     cover: cov.cover, mirror: S.mirror,
     strength: S.comparing ? 0 : (S.strength / 100),
-    seed: 137.0, grainScale: gs
+    seed: 137.0, grainScale: gs, zoom: shaderZoom()
   });
   return { url: r.canvas.toDataURL("image/jpeg", 0.94), w: outW, h: outH };
 }
