@@ -23937,7 +23937,7 @@ function mergeQuest(l, c){
     };
   });
   var dk = Object.keys(days).sort();
-  while (dk.length > 60) delete days[dk.shift()];
+  while (dk.length > 30) delete days[dk.shift()];
   var la = questNum(l.at), ca = questNum(c.at);
   return {
     v: 1,
@@ -23952,7 +23952,7 @@ function mergeQuest(l, c){
       for (y in cb) b[y] = 1;
       Object.keys(b).sort().forEach(function(d){ out[d] = 1; });
       var ks = Object.keys(out).sort();
-      while (ks.length > 60) delete out[ks.shift()];
+      while (ks.length > 30) delete out[ks.shift()];
       return out;
     })(),
     at: Math.max(la, ca, 1)
@@ -24916,7 +24916,7 @@ function pullPush(manual){
         ntfy:local.ntfy, sg:local.sg, sgu:local.sgu, fg:local.fg, fgu:local.fgu, nir:local.nir, niru:local.niru, ort:local.ort, ortu:local.ortu, wb:local.wb,
         hwplan:local.hwplan, hwplanUn:local.hwplanUn,
         tama:local.tama, room:local.room, rides:local.rides, rp:local.rp,
-        annual:local.annual, shelves:local.shelves, hwday:local.hwday, momnote:local.momnote, carry:local.carry, attend:local.attend, at:Date.now()
+        annual:local.annual, shelves:local.shelves, hwday:local.hwday, momnote:local.momnote, carry:local.carry, attend:local.attend, quest:local.quest, at:Date.now()
       };
       return apiPut(f.code, doc).then(function(){ return true; });
     }
