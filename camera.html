@@ -1211,7 +1211,12 @@ function boot(){
 
   renderer = new GLRenderer(view, false);
   isGL = renderer.ok;
-  if (isGL) renderer.setSize(view.width, view.height);
+  if (!isGL) {
+    // WebGL을 못 쓰는 환경: Canvas2D 근사 폴백
+    renderer = new C2DRenderer(view);
+    console.warn("WebGL unavailable - Canvas2D fallback");
+  }
+  if (renderer && renderer.ok) renderer.setSize(view.width, view.height);
 
   window.addEventListener("resize", layout);
   window.addEventListener("orientationchange", function(){ setTimeout(layout, 260); });
