@@ -350,6 +350,22 @@ var PRESETS = [
       shadow:[0.006,0.020,0.026], shadowAmt:0.32,
       high:[0.022,0.014,0.002], highAmt:0.34,
       green:0.30, blue:-0.20, vig:0.14, grainMul:0.35, mono:0, clarity:0.32 } },
+  /* 3 · 후지 클래식 네거티브 — 묵직하게 가라앉은 암부의 청록·에메랄드 + 따뜻한 앰버 하이라이트 */
+  { id:"neg", name:"후지 네거티브", p:{
+      exposure:0.020, contrast:0.74, sat:0.95, fade:0.026, roll:0.32,
+      warmth:0.028, tint:-0.012,
+      shadow:[0.000,0.038,0.030], shadowAmt:0.85,
+      high:[0.072,0.040,0.006], highAmt:0.90,
+      green:0.50, blue:0.28, vig:0.15, grainMul:1.05, mono:0, clarity:0.14,
+      greenHue:0.045, red:0.12 } },
+  /* 4 · 리코 GR 포지티브 필름 — 짱짱한 블랙·강한 S커브·코발트 블루와 선명한 레드, 그레인 최소 */
+  { id:"gr", name:"리코 GR", p:{
+      exposure:0.010, contrast:0.90, sat:1.12, fade:0.000, roll:0.06,
+      warmth:0.008, tint:0.004,
+      shadow:[0.002,0.004,0.010], shadowAmt:0.20,
+      high:[0.012,0.009,0.004], highAmt:0.24,
+      green:0.16, blue:-0.36, vig:0.19, grainMul:0.18, mono:0, clarity:0.50,
+      red:0.28 } },
   { id:"sun", name:"Zf 햇살", p:{
       exposure:0.12, contrast:0.44, sat:0.96, fade:0.070, roll:0.62,
       warmth:0.075, tint:0.006,
@@ -409,6 +425,8 @@ var FS_SRC = [
 "uniform float uGrainScale;",
 "uniform float uSeed;",
 "uniform float uMono;",
+"uniform float uGreenHue;",
+"uniform float uRed;",
 
 "vec3 rgb2hsv(vec3 c){",
 "  vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);",
@@ -485,7 +503,10 @@ var FS_SRC = [
 "    float bW = smoothstep(0.50, 0.58, h) - smoothstep(0.71, 0.79, h);",
 "    hsv.y *= 1.0 - uGreen * gW - uBlue * bW;",
 "    hsv.y = max(hsv.y, 0.0);",
+"    float rW = max(1.0 - smoothstep(0.0, 0.075, h), smoothstep(0.94, 1.0, h));",
+"    hsv.y = min(hsv.y * (1.0 + uRed * rW), 1.0);",
 "    hsv.x -= 0.018 * gW;",
+"    hsv.x += uGreenHue * gW;",
 "    hsv.x -= 0.013 * bW;",
 "    col = hsv2rgb(hsv);",
 "    float lb = luma(col);",
@@ -565,7 +586,7 @@ function GLRenderer(canvas, preserve){
   var u = {};
   ["uTex","uCover","uPx","uMirror","uStrength","uExposure","uContrast","uSat","uFade","uRoll",
    "uWarmth","uTint","uShadowTint","uShadowAmt","uHighTint","uHighAmt","uFloor","uGreen","uBlue",
-   "uVig","uClarity","uGrain","uGrainScale","uSeed","uMono"].forEach(function(n){ u[n] = gl.getUniformLocation(prog, n); });
+   "uVig","uClarity","uGrain","uGrainScale","uSeed","uMono","uGreenHue","uRed"].forEach(function(n){ u[n] = gl.getUniformLocation(prog, n); });
   this.u = u;
   gl.uniform1i(u.uTex, 0);
   gl.clearColor(0,0,0,1);
@@ -613,6 +634,8 @@ GLRenderer.prototype.render = function(src, P, o){
   gl.uniform1f(u.uGrainScale, o.grainScale);
   gl.uniform1f(u.uSeed, o.seed);
   gl.uniform1f(u.uMono, P.mono);
+  gl.uniform1f(u.uGreenHue, P.greenHue || 0);
+  gl.uniform1f(u.uRed, P.red || 0);
 
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };
@@ -781,7 +804,9 @@ function buildParams(){
     vig: p.vig,
     grain: g * p.grainMul,
     mono: p.mono,
-    clarity: p.clarity || 0
+    clarity: p.clarity || 0,
+    greenHue: p.greenHue || 0,
+    red: p.red || 0
   };
 }
 function sourceSize(src){
